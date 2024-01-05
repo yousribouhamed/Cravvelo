@@ -39,6 +39,7 @@ export const NavBar: FC = ({}) => {
               {links.map((item) => {
                 return (
                   <Button
+                    key={item.name}
                     variant="link"
                     className="font-bold text-xl leading-[40px]"
                   >
