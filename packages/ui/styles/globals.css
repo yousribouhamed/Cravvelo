@@ -66,9 +66,28 @@
   }
 }
 
+@font-face {
+  font-family: star;
+  src: url(//msaaq.com/wp-content/themes/blocksy/static/bundle/../fonts/stars.woff2)
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.abdullah-shadow {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.pink__gradient {
+  background: linear-gradient(90deg, #b5cec9 0%, #43766c 100%);
+  filter: blur(900px);
+}
+
 @layer base {
   * {
     @apply border-border;
+    font-family: "star", sans-serif !important;
   }
   body {
     @apply bg-background text-foreground;
