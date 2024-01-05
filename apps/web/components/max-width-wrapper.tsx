@@ -1,9 +1,23 @@
-import type { FC } from "react";
+import { cn } from "@ui/lib/utils";
+import { ReactNode } from "react";
 
-interface MaxWidthWrapperAbdullahProps {}
-
-const MaxWidthWrapper: FC = ({}) => {
-  return <div>max-width-wrapper</div>;
+const MaxWidthWrapper = ({
+  className,
+  children,
+}: {
+  className?: string;
+  children: ReactNode;
+}) => {
+  return (
+    <div
+      className={cn(
+        "mx-auto w-full max-w-[2500px] px-2.5 md:px-20 overflow-x-hidden h-fit",
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
 };
 
 export default MaxWidthWrapper;
