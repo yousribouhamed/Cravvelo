@@ -66,3 +66,7 @@
   font-style: normal;
   font-display: swap;
 }
+
+.qatar-semibold {
+  font-family: "Qatar2022 Arabic" !important;
+}
