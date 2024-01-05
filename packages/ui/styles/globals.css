@@ -66,28 +66,92 @@
   }
 }
 
-@font-face {
+/* @font-face {
   font-family: star;
   src: url(//msaaq.com/wp-content/themes/blocksy/static/bundle/../fonts/stars.woff2)
     format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-}
+} */
 
 .abdullah-shadow {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
-.pink__gradient {
-  background: linear-gradient(90deg, #b5cec9 0%, #43766c 100%);
-  filter: blur(900px);
+@font-face {
+  font-family: "Qatar2022 Arabic bold";
+  src: url("../font/Qatar2022Arabic-Heavy.eot");
+  src: local("../font/Qatar2022 Arabic Heavy"), local("Qatar2022Arabic-Heavy"),
+    url("../font/Qatar2022Arabic-Heavy.eot?#iefix") format("embedded-opentype"),
+    url("../font/Qatar2022Arabic-Heavy.woff2") format("woff2"),
+    url("../font/Qatar2022Arabic-Heavy.woff") format("woff"),
+    url("../font/Qatar2022Arabic-Heavy.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Qatar2022 Arabic";
+  src: url("../font/Qatar2022Arabic-Bold.eot");
+  src: local("../font/Qatar2022 Arabic Bold"), local("Qatar2022Arabic-Bold"),
+    url("../font/Qatar2022Arabic-Bold.eot?#iefix") format("embedded-opentype"),
+    url("../font/Qatar2022Arabic-Bold.woff2") format("woff2"),
+    url("../font/Qatar2022Arabic-Bold.woff") format("woff"),
+    url("../font/Qatar2022Arabic-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Qatar2022 Arabic";
+  src: url("../font/Qatar2022Arabic-Thin.eot");
+  src: local("../font/Qatar2022 Arabic Thin"), local("Qatar2022Arabic-Thin"),
+    url("../font/Qatar2022Arabic-Thin.eot?#iefix") format("embedded-opentype"),
+    url("../font/Qatar2022Arabic-Thin.woff2") format("woff2"),
+    url("../font/Qatar2022Arabic-Thin.woff") format("woff"),
+    url("../font/Qatar2022Arabic-Thin.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Qatar2022 Arabic";
+  src: url("../font/Qatar2022Arabic-Medium.eot");
+  src: local("../font/Qatar2022 Arabic Medium"), local("Qatar2022Arabic-Medium"),
+    url("../font/Qatar2022Arabic-Medium.eot?#iefix") format("embedded-opentype"),
+    url("../font/Qatar2022Arabic-Medium.woff2") format("woff2"),
+    url("../font/Qatar2022Arabic-Medium.woff") format("woff"),
+    url("../font/Qatar2022Arabic-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Qatar2022 Arabic Book";
+  src: url("../font/Qatar2022Arabic-Book.eot");
+  src: local("../font/Qatar2022 Arabic Book"), local("Qatar2022Arabic-Book"),
+    url("../font/Qatar2022Arabic-Book.eot?#iefix") format("embedded-opentype"),
+    url("../font/Qatar2022Arabic-Book.woff2") format("woff2"),
+    url("../font/Qatar2022Arabic-Book.woff") format("woff"),
+    url("../font/Qatar2022Arabic-Book.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.qatar-bold {
+  font-family: "Qatar2022 Arabic bold" !important;
 }
 
 @layer base {
   * {
     @apply border-border;
-    font-family: "star", sans-serif !important;
+    font-family: "Qatar2022 Arabic Book", sans-serif !important;
   }
   body {
     @apply bg-background text-foreground;
