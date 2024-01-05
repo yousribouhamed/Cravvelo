@@ -1,5 +1,4 @@
 import type { FC } from "react";
-import MaxWidthWrapper from "./max-width-wrapper";
 import { Button } from "@ui/components/button";
 interface HeaderAbdullahProps {}
 
