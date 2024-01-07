@@ -7,6 +7,7 @@ import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import SideBarMenu from "./MobilMenu";
+import Logo from "./Logo";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -16,20 +17,24 @@ export function Sidebar({ className }: SidebarProps) {
   const path = usePathname();
 
   return (
-    <div className={cn("pb-12 hidden md:block bg-[#294943] ", className)}>
-      <div className="space-y-4 py-2">
-        <div className="px-3 pb-2">
-          <div className="w-full  h-[50px] relative ">
-            <Button
-              size="lg"
-              className="text-[#294943] text-xl w-full font-bold bg-white "
-            >
-              إضافة جديد
-            </Button>
-          </div>
-          <div className="space-y-2 mt-5">
-            <SideBarMenu />
-            {/* <Link href={"/admin"}>
+    <>
+      <div className={cn("pb-12 hidden md:block   ", className)}>
+        <div className="w-full h-[100px]  flex items-center justify-center">
+          <Logo />
+        </div>
+        <div className="space-y-4 py-2 bg-[#294943] rounded-[17px]  ">
+          <div className="px-3 pb-2">
+            <div className="w-full  h-[50px] relative ">
+              <Button
+                size="lg"
+                className="text-[#294943] text-xl w-full font-bold bg-white "
+              >
+                إضافة جديد
+              </Button>
+            </div>
+            <div className="space-y-2 mt-5">
+              <SideBarMenu />
+              {/* <Link href={"/admin"}>
               <Button
                 variant={"ghost"}
                 className={`w-full justify-start  ${
@@ -51,9 +56,10 @@ export function Sidebar({ className }: SidebarProps) {
                 دورة تدريبية
               </Button>
             </Link> */}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -34,12 +34,12 @@ export function SearcInput() {
       <div
         className={cn(
           buttonVariants({ variant: "ghost" }),
-          ` relative h-7 w-[300px] bg-white p-0 border  xl:justify-start xl:h-10 xl:px-3 xl:py-2 `
+          ` relative flex gap-x-4 h-7 w-[300px] bg-white p-0 border  xl:justify-start xl:h-10 xl:px-3 xl:py-2 `
         )}
       >
-        <Icons.search />
-        <span className="hidden xl:inline-flex text-muted-foreground">
-          ابحث عن أيَّ شيء داخل الأكاديمية...
+        <Icons.search className="w-4 h-4 text-[#43766C]" />
+        <span className="hidden xl:inline-flex text-muted-foreground text-[#8A8A8A]">
+          ابحث ...
         </span>
         <span className="sr-only">ابحث عن أيَّ شيء داخل الأكاديمية</span>
       </div>

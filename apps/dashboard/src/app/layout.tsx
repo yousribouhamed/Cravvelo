@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning dir="rtl" lang="ar">
       <head />
-      <body>
+      <body className={`selection:bg-[#43766C] selection:text-white`}>
         <Providers>{children}</Providers>
       </body>
       <Script src="//code.tidio.co/f4ntqdkrkcmkov2pbgapiuevig4fhtbq.js" async />

@@ -9,7 +9,7 @@ export default function AdminLayout({
 }) {
   return (
     <div className="flex w-full min-h-screen gap-x-2 bg-[#FAFAFA] ">
-      <Sidebar className=" hidden md:block w-[250px] fixed right-5  rounded-[17px]  top-[96px] bottom-5 " />
+      <Sidebar className=" hidden md:block w-[250px] fixed right-5  top-0  bottom-5 " />
 
       <main className=" w-full md:w-[calc(100%-250px)] md:mr-[200px]  ">
         {children}

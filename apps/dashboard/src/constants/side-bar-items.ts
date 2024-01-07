@@ -9,8 +9,8 @@ export const SIDE_BAR_ITEMS = [
   },
   {
     title: "ادارة محتوى",
-    slug: "/",
-    icon: Icons.Home,
+    slug: "/courses",
+    icon: Icons.Academy,
     subitems: [
       {
         title: "الدورات التدريبية",
@@ -39,33 +39,6 @@ export const SIDE_BAR_ITEMS = [
     title: "تخصيص الأكاديمية",
 
     icon: Icons.customize,
-    subitems: [],
-  },
-  {
-    title: "مساق باي",
-    icon: Icons.pay,
-    subitems: [],
-  },
-  {
-    title: "التسويق",
-    icon: Icons.market,
-    subitems: [],
-  },
-
-  {
-    title: "تجربة الطلاب",
-
-    icon: Icons.students,
-    subitems: [],
-  },
-  {
-    title: "التحليلات",
-    icon: Icons.analylics,
-    subitems: [],
-  },
-  {
-    title: "سوق التطبيقات",
-    icon: Icons.pice,
     subitems: [],
   },
 

@@ -23,10 +23,7 @@ const AccordionTrigger = React.forwardRef<
   <AccordionPrimitive.Header className="flex">
     <AccordionPrimitive.Trigger
       ref={ref}
-      className={cn(
-        " transition-all  [&[data-state=open]>svg]:rotate-180",
-        className
-      )}
+      className={cn(" transition-all  ", className)}
       {...props}
     >
       {children}

@@ -9,7 +9,11 @@ import {
   AccordionTrigger,
 } from "@ui/components/ui/accordion";
 import { Menu } from "lucide-react";
-import { useSelectedLayoutSegment } from "next/navigation";
+import {
+  usePathname,
+  useRouter,
+  useSelectedLayoutSegment,
+} from "next/navigation";
 import React from "react";
 import { Button, buttonVariants } from "@ui/components/ui/button";
 
@@ -23,6 +27,7 @@ interface MobileLinkProps extends React.PropsWithChildren {
   disabled?: boolean;
   segment: string;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isSelected: boolean;
 }
 
 function MobileLink({
@@ -31,6 +36,7 @@ function MobileLink({
   disabled,
   segment,
   setIsOpen,
+  isSelected,
 }: MobileLinkProps) {
   return (
     <Link
@@ -42,6 +48,8 @@ function MobileLink({
       onClick={() => setIsOpen(false)}
     >
       {children}
+
+      {isSelected && <div className="w-1.5 h-full bg-yellow-500" />}
     </Link>
   );
 }
@@ -51,41 +59,45 @@ interface MobilManueAbdullahProps {}
 const SideBarMenu: FC = ({}) => {
   const segment = useSelectedLayoutSegment();
   const [isOpen, setIsOpen] = React.useState(false);
+  const router = useRouter();
+  const path = usePathname();
 
   return (
-    <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-4">
+    <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 ">
       <div className="w-full">
-        <Accordion
-          type="multiple"
-          defaultValue={SIDE_BAR_ITEMS.map((item) => item.title)}
-          className="w-full"
-        >
+        <Accordion type="multiple" className="w-full space-y-2">
           {SIDE_BAR_ITEMS?.map((item, index) => (
             <AccordionItem value={item.title} key={index}>
               <AccordionTrigger
                 className={cn(
                   buttonVariants({ variant: "ghost" }),
-                  "w-full flex items-center justify-end qatar-semibold text-xl text-white gap-x-2 hover:!bg-transparent hover:!text-white "
+                  "w-full flex items-center justify-end qatar-semibold text-lg  gap-x-2 hover:!bg-transparent hover:!text-white text-[#A9B9B6] ",
+                  {
+                    "text-white bg-white/5": path === item.slug,
+                  }
                 )}
               >
                 {item.title}
-                <item.icon className="w-5 h-5 text-white" />
+                <item.icon className="w-5 h-5 !text-white" />
               </AccordionTrigger>
-              <AccordionContent>
-                <div className="flex flex-col pr-4 space-y-2">
-                  {item.subitems?.map((subItem, index) => (
-                    <MobileLink
-                      key={index}
-                      href={String(subItem.slug)}
-                      segment={String(segment)}
-                      setIsOpen={setIsOpen}
-                      disabled={false}
-                    >
-                      {subItem.title}
-                    </MobileLink>
-                  ))}
-                </div>
-              </AccordionContent>
+              {item.subitems?.length > 0 && (
+                <AccordionContent>
+                  <div className="flex flex-col pr-4 space-y-2">
+                    {item.subitems?.map((subItem, index) => (
+                      <MobileLink
+                        isSelected={true}
+                        key={index}
+                        href={String(subItem.slug)}
+                        segment={String(segment)}
+                        setIsOpen={setIsOpen}
+                        disabled={false}
+                      >
+                        {subItem.title}
+                      </MobileLink>
+                    ))}
+                  </div>
+                </AccordionContent>
+              )}
             </AccordionItem>
           ))}
         </Accordion>
