@@ -16,6 +16,7 @@ const Providers = ({ children }: PropsWithChildren) => {
           url: absoluteUrl("/api/trpc"),
         }),
       ],
+      transformer: undefined,
     })
   );
 

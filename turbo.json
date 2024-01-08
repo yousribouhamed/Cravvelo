@@ -5,7 +5,14 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"],
-      "env": ["VERCEL_URL", "VERCEL_ENV", "STAGING", "NODE_ENV", "DATABASE_URL"]
+      "env": [
+        "VERCEL_URL",
+        "VERCEL_ENV",
+        "STAGING",
+        "NODE_ENV",
+        "DATABASE_URL",
+        "PORT"
+      ]
     },
     "lint": {},
     "dev": {
