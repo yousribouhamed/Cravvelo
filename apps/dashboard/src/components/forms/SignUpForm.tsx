@@ -5,6 +5,14 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@ui/components/ui/button";
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@ui/components/ui/card";
+import {
   Form,
   FormControl,
   FormDescription,
@@ -21,7 +29,7 @@ const formSchema = z.object({
   }),
 });
 
-export function SignInForm() {
+export function SignUnForm() {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,26 +46,34 @@ export function SignInForm() {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
+    <Card className="w-[350px]">
+      <CardHeader>
+        <CardTitle>Create project</CardTitle>
+        <CardDescription>Deploy your new project in one-click.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input placeholder="shadcn" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    This is your public display name.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit">Submit</Button>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }

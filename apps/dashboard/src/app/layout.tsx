@@ -3,6 +3,7 @@ import "@ui/styles/globals.css";
 import "@ui/font/stylesheet.css";
 import Providers from "../components/Providers";
 import Script from "next/script";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "جدارة",
@@ -15,12 +16,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html suppressHydrationWarning dir="rtl" lang="ar">
-      <head />
-      <body className={`selection:bg-[#43766C] selection:text-white`}>
-        <Providers>{children}</Providers>
-      </body>
-      <Script src="//code.tidio.co/f4ntqdkrkcmkov2pbgapiuevig4fhtbq.js" async />
-    </html>
+    <ClerkProvider>
+      <html suppressHydrationWarning dir="rtl" lang="ar">
+        <head />
+        <body className={`selection:bg-[#43766C] selection:text-white`}>
+          <Providers>{children}</Providers>
+        </body>
+        <Script
+          src="//code.tidio.co/f4ntqdkrkcmkov2pbgapiuevig4fhtbq.js"
+          async
+        />
+        <Script
+          src="https://unpkg.com/@material-tailwind/html@latest/scripts/ripple.js"
+          async
+        />
+      </html>
+    </ClerkProvider>
   );
 }
