@@ -4,12 +4,17 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**"],
+      "env": ["VERCEL_URL", "VERCEL_ENV", "STAGING", "NODE_ENV", "DATABASE_URL"]
     },
     "lint": {},
     "dev": {
+      "dependsOn": ["@repo/db#db:generate"],
       "cache": false,
       "persistent": true
+    },
+    "clean": {
+      "cache": false
     }
   }
 }
