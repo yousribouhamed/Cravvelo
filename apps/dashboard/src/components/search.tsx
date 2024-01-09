@@ -21,9 +21,8 @@ import {
 } from "@ui/components/ui/command";
 import React from "react";
 import { cn } from "@ui/lib/utils";
-import { isMacOs } from "../lib/utils";
-import { Input } from "@ui/components/ui/input";
-import { Button, buttonVariants } from "@ui/components/button";
+
+import { buttonVariants } from "@ui/components/button";
 import { Icons } from "./Icons";
 
 export function SearcInput() {
@@ -34,7 +33,7 @@ export function SearcInput() {
       <div
         className={cn(
           buttonVariants({ variant: "ghost" }),
-          ` relative flex gap-x-4 h-7 w-[300px] bg-white p-0 border  xl:justify-start xl:h-10 xl:px-3 xl:py-2 `
+          ` relative hidden md:flex gap-x-4  w-[641px] border-[#E6E6E6] h-[88px] bg-white p-0 border  xl:justify-start xl:h-10 xl:px-3 xl:py-2 `
         )}
       >
         <Icons.search className="w-4 h-4 text-[#43766C]" />

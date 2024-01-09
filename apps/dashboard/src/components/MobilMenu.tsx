@@ -73,7 +73,7 @@ const SideBarMenu: FC = ({}) => {
                   buttonVariants({ variant: "ghost" }),
                   "w-full flex items-center justify-end qatar-semibold text-lg  gap-x-2 hover:!bg-transparent hover:!text-white text-[#A9B9B6] ",
                   {
-                    "text-white bg-white/5": path === item.slug,
+                    "text-white bg-[#325951]": path === item.slug,
                   }
                 )}
               >

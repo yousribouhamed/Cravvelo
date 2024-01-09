@@ -14,9 +14,10 @@ import {
   UserPlus,
   Users,
 } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@ui/components/ui/avatar";
 
-import { Button } from "@ui/components/ui/button";
+import { Button, buttonVariants } from "@ui/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,12 +37,18 @@ export default function UserNav() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="w-[180px] flex items-center justify-end gap-x-4">
+        <div
+          className={` ${buttonVariants({
+            variant: "ghost",
+            size: "lg",
+          })}  cursor-pointer flex items-center justify-end gap-x-2 !p-2`}
+        >
           <Avatar>
             <AvatarImage />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <p className="text-md text-black">مرحباً Yousri</p>
+          <ChevronDown className="w-4 h-4 text-black hover:text-accent-foreground " />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
