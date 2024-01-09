@@ -1,7 +1,10 @@
-import MaxWidthWrapper from "../../components/MaxWidthWrapper";
 import Header from "@/src/components/Header";
+import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
+import type { FC } from "react";
 
-export default async function Home() {
+interface pageAbdullahProps {}
+
+const page: FC = ({}) => {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex ">
@@ -10,4 +13,6 @@ export default async function Home() {
       </main>
     </MaxWidthWrapper>
   );
-}
+};
+
+export default page;
