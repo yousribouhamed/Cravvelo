@@ -12,13 +12,13 @@ const Header: FC<Props> = ({ title }) => {
   return (
     <div className="w-full h-[96px] flex justify-between items-center  px-4">
       <div className="w-[25%] h-full flex items-center justify-start gap-x-2">
-        <Button
+        {/* <Button
           size="icon"
           className="!bg-[#EDEDED] rounded-[8px]"
           variant="ghost"
         >
           <Icons.bell className="w-4 h-4 text-[#43766C]" />
-        </Button>
+        </Button> */}
         <h1 className="text-xl font-bold text-start">{title}</h1>
       </div>
       <div className="w-[50%] h-full flex items-center justify-center">
