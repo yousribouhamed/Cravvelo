@@ -25,7 +25,7 @@ export function Sidebar({ className }: SidebarProps) {
         <div className="space-y-4 py-2 bg-[#43766C] h-full rounded-lg  ">
           <div className="px-3 pb-2 pt-6">
             <div className="w-full  h-[50px] relative ">
-              <Button className="text-[#43766C] text-lg flex justify-between items-center  hover:bg-[#FFB800] hover:text-white rounded-lg h-12 w-full font-bold bg-white ">
+              <Button className="text-[#43766C] text-lg flex justify-between items-center  hover:bg-[#FFB800] hover:text-white rounded-lg h-12 w-full font-bold bg-[#F8FAE5] ">
                 إضافة جديد
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
