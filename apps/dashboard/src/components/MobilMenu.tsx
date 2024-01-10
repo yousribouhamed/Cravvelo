@@ -40,10 +40,13 @@ function MobileLink({
 }: MobileLinkProps) {
   return (
     <Link
-      href={`/collection/${href}`}
+      href={`/courses`}
       className={cn(
         buttonVariants({ variant: "ghost" }),
-        "w-full flex items-center justify-end text-lg pr-4  hover:!bg-transparent hover:!text-white text-white gap-x-2 hover:bg-none"
+        "w-full flex items-center justify-end text-md pr-4  hover:!bg-transparent hover:!text-white text-white gap-x-2 hover:bg-none",
+        {
+          "text-[#A9B9B6] ": disabled,
+        }
       )}
       onClick={() => setIsOpen(false)}
     >
@@ -78,19 +81,23 @@ const SideBarMenu: FC = ({}) => {
                 )}
               >
                 {item.title}
-                <item.icon className="w-5 h-5 !text-white" />
+                <item.icon
+                  className={`w-5 h-5  ${
+                    path === item.slug ? "!text-white" : "!text-[#A9B9B6] "
+                  }`}
+                />
               </AccordionTrigger>
               {item.subitems?.length > 0 && (
                 <AccordionContent>
-                  <div className="flex flex-col pr-4 space-y-2">
+                  <div className="flex flex-col pr-4 space-y-1">
                     {item.subitems?.map((subItem, index) => (
                       <MobileLink
-                        isSelected={true}
+                        isSelected={path === subItem.slug}
                         key={index}
-                        href={String(subItem.slug)}
+                        href={subItem.slug}
                         segment={String(segment)}
                         setIsOpen={setIsOpen}
-                        disabled={false}
+                        disabled={!(path === subItem.slug)}
                       >
                         {subItem.title}
                       </MobileLink>

@@ -16,7 +16,7 @@
     },
     "lint": {},
     "dev": {
-      "dependsOn": ["@repo/db#db:generate"],
+      "dependsOn": ["database#db:generate"],
       "cache": false,
       "persistent": true
     },

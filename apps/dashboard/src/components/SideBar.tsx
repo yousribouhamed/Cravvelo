@@ -23,7 +23,7 @@ export function Sidebar({ className }: SidebarProps) {
           <Logo />
         </div>
         <div className="space-y-4 py-2 bg-[#43766C] h-[90%] rounded-[17px]  ">
-          <div className="px-3 pb-2">
+          <div className="px-3 pb-2 pt-6">
             <div className="w-full  h-[50px] relative ">
               <Button
                 size="lg"

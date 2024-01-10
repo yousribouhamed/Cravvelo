@@ -28,6 +28,7 @@ const Providers = ({ children }: PropsWithChildren) => {
           color="#54756c"
           options={{ showSpinner: false }}
           showOnShallow
+          startPosition={0.3}
         />
         {children}
       </QueryClientProvider>

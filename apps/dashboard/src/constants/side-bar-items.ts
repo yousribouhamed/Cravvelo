@@ -15,7 +15,7 @@ export const SIDE_BAR_ITEMS = [
       {
         title: "الدورات التدريبية",
         icon: Icons.Home,
-        slug: "t-shirts",
+        slug: "/courses",
       },
       {
         title: "المنتجات الرقمية",
