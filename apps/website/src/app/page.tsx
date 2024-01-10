@@ -5,10 +5,10 @@ import TextTyper from "../components/text-typer";
 
 export default function Page() {
   return (
-    <MaxWidthWrapper className="mt-8">
-      <div className=" isolate w-full  hidden lg:block bg-white pt-20 px-6 lg:px-0">
+    <MaxWidthWrapper className="mt-8 h-fit">
+      <div className=" isolate w-full h-screen hidden   lg:block bg-white pt-20 px-6 lg:px-0">
         {/* this is the title  */}
-        <div className="mx-auto w-full place-items-center grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
+        <div className="mx-auto w-full h-full place-items-center grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
           <div className="lg:col-span-2  lg:col-start-1 lg:row-start-1 lg:ml-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 ">
             <div className="lg:max-w-lg pr-4 ">
               <h1 className="mt-12 text-[49px] text-start qatar-bold font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -25,7 +25,7 @@ export default function Page() {
               <div className="w-full my-4 h-[60px] flex items-end justify-start gap-x-8">
                 <Button
                   size="lg"
-                  className="bg-[#43766C] text-xl py-4 px-6 text-white font-bold "
+                  className="bg-[#43766C] hover:bg-[#61AFA0] text-xl py-4 px-6 h-12  text-white font-bold "
                 >
                   ابدء تجربتك المجانية
                 </Button>
@@ -37,7 +37,7 @@ export default function Page() {
           </div>
           {/* <WaterDropGrid /> */}
 
-          <div className="-ml-12 -mt-12    lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 ">
+          <div className="-ml-12 -mt-12   z-[-5]  lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 ">
             <img
               className="w-[32rem] max-w-none rounded-xl    sm:w-[48rem]"
               src="/Snap.png"
@@ -47,9 +47,8 @@ export default function Page() {
         </div>
 
         {/* this is the gradian */}
-
-        <div className="absolute bottom-0  w-fit -z-10 h-fit right-0 ">
-          <Gradian width="1000" height="800" />
+        <div className="absolute bottom-0   -z-10 w-full h-full  right-0 ">
+          <Gradian width="100%" height="100%" />
         </div>
       </div>
 

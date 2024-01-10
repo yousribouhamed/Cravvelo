@@ -19,9 +19,9 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning dir="rtl" lang="ar">
-      <body className={inter.className + "min-h-screen w-full"}>
+      <body className={inter.className + "min-h-screen h-fit  w-full"}>
         <NavBar />
-        {children}
+        <div className=" mt-52 h-fit min-h-full">{children}</div>
       </body>
       {/* <Script src="//code.tidio.co/f4ntqdkrkcmkov2pbgapiuevig4fhtbq.js" async /> */}
     </html>
