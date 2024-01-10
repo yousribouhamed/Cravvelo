@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
+import { Checkbox } from "@ui/components/ui/checkbox";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Payment = {
@@ -23,20 +24,49 @@ export type Payment = {
 
 export const columns: ColumnDef<Payment>[] = [
   {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        //@ts-ignore
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+        className="!mr-4"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+        className="!mr-4"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
     accessorKey: "status",
-    header: "الدورات التدريبية",
+    header: "عنوان الدورة",
   },
   {
     accessorKey: "email",
-    header: "الدورات ",
+    header: "السعر ",
   },
   {
     accessorKey: "amount",
-    header: "الدورات التدريبية",
+    header: "إجمالي الأرباح",
   },
   {
     accessorKey: "amount",
-    header: "الدورات التدريبية",
+    header: "المدربين",
+  },
+  {
+    accessorKey: "amount",
+    header: "عدد الطلاب الملتحقين",
   },
   {
     id: "actions",
@@ -46,7 +76,7 @@ export const columns: ColumnDef<Payment>[] = [
       return (
         <div className="w-full h-10 flex items-center justify-end gap-x-4">
           <Button variant="secondary" size="sm">
-            modify
+            تعديل
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -55,16 +85,47 @@ export const columns: ColumnDef<Payment>[] = [
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuContent align="end">
               <DropdownMenuItem
+                className="w-full h-full flex justify-end items-center px-2"
                 onClick={() => navigator.clipboard.writeText(payment.id)}
               >
-                Copy payment ID
+                تعديل
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>View customer</DropdownMenuItem>
-              <DropdownMenuItem>View payment details</DropdownMenuItem>
+              <DropdownMenuItem className="w-full h-full flex justify-end items-center px-2 ">
+                {" "}
+                مشاركة الدورة
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="w-full h-full flex justify-end items-center  px-2">
+                {" "}
+                معاينة كطالب
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem className="w-full h-full flex justify-end items-center px-2">
+                {" "}
+                استنساخ
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem className="w-full h-full flex justify-end items-center px-2">
+                {" "}
+                عرض الطلاب
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem className="w-full h-full flex justify-end items-center px-2">
+                {" "}
+                عرض التقييمات
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem className="w-full h-full flex justify-end items-center px-2">
+                {" "}
+                حذف الدورة
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
