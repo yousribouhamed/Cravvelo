@@ -22,17 +22,15 @@ export function Sidebar({ className }: SidebarProps) {
         <div className="w-full h-[100px]  flex items-center justify-center">
           <Logo />
         </div>
-        <div className="space-y-4 py-2 bg-[#43766C] h-[90%] rounded-[17px]  ">
+        <div className="space-y-4 py-2 bg-[#43766C] h-full rounded-lg  ">
           <div className="px-3 pb-2 pt-6">
             <div className="w-full  h-[50px] relative ">
-              <Button
-                size="lg"
-                className="text-[#43766C] text-xl qatar-bold hover:bg-[#FFB800] hover:text-white rounded-[17px] h-14 w-full font-bold bg-white "
-              >
+              <Button className="text-[#43766C] text-lg flex justify-between items-center  hover:bg-[#FFB800] hover:text-white rounded-lg h-12 w-full font-bold bg-white ">
+                إضافة جديد
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="30"
-                  height="31"
+                  width="25"
+                  height="26"
                   viewBox="0 0 49 50"
                   fill="none"
                 >
@@ -53,7 +51,6 @@ export function Sidebar({ className }: SidebarProps) {
                     fill="#F8FAE5"
                   />
                 </svg>
-                إضافة جديد
               </Button>
             </div>
             <div className="space-y-2 mt-5">

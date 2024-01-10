@@ -1,9 +1,7 @@
 import Header from "@/src/components/Header";
 import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
-import CoursesShell, { Payment } from "@/src/components/shells/CoursesShell";
-import type { FC } from "react";
-
-interface pageAbdullahProps {}
+import { DataTable } from "@/src/components/data-table";
+import { Payment, columns } from "@/src/components/data-table/columns/courses";
 
 async function getData(): Promise<Payment[]> {
   // Fetch data from your API here.
@@ -18,14 +16,15 @@ async function getData(): Promise<Payment[]> {
   ];
 }
 
+interface pageAbdullahProps {}
+
 const page = async ({}) => {
   const data = await getData();
-
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
         <Header title="الدورات التدريبية" />
-        <CoursesShell data={data} />
+        <DataTable columns={columns} data={data} />
       </main>
     </MaxWidthWrapper>
   );

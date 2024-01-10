@@ -43,7 +43,7 @@ function MobileLink({
       href={`/courses`}
       className={cn(
         buttonVariants({ variant: "ghost" }),
-        "w-full flex items-center justify-end text-md pr-4  hover:!bg-transparent hover:!text-white text-white gap-x-2 hover:bg-none",
+        "w-full flex items-center justify-end text-sm pr-4  hover:!bg-transparent hover:!text-white text-white gap-x-2 hover:bg-none",
         {
           "text-[#A9B9B6] ": disabled,
         }
@@ -74,7 +74,7 @@ const SideBarMenu: FC = ({}) => {
               <AccordionTrigger
                 className={cn(
                   buttonVariants({ variant: "ghost" }),
-                  "w-full flex items-center justify-end qatar-semibold text-lg  gap-x-2 hover:!bg-transparent hover:!text-white text-[#A9B9B6] ",
+                  "w-full flex items-center justify-end qatar-semibold text-md  gap-x-2 hover:!bg-transparent hover:!text-white text-[#A9B9B6] ",
                   {
                     "text-white bg-[#325951]": path === item.slug,
                   }
@@ -82,7 +82,7 @@ const SideBarMenu: FC = ({}) => {
               >
                 {item.title}
                 <item.icon
-                  className={`w-5 h-5  ${
+                  className={`w-4 h-4  ${
                     path === item.slug ? "!text-white" : "!text-[#A9B9B6] "
                   }`}
                 />
