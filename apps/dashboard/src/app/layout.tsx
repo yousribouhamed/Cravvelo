@@ -4,6 +4,7 @@ import "@ui/font/stylesheet.css";
 import Providers from "../components/Providers";
 import Script from "next/script";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@ui/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "جدارة",
@@ -22,6 +23,7 @@ export default function RootLayout({
         <body className={`selection:bg-[#43766C] selection:text-white`}>
           <Providers>{children}</Providers>
         </body>
+        <Toaster />
         <Script
           src="//code.tidio.co/f4ntqdkrkcmkov2pbgapiuevig4fhtbq.js"
           async
