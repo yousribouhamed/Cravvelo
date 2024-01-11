@@ -7,11 +7,11 @@ export default function Page() {
   return (
     <>
       <MaxWidthWrapper className="mt-8 h-fit">
-        <div className=" isolate w-full h-screen hidden  pt-20 lg:block  px-6 lg:px-0">
+        <div className=" isolate w-full h-fit min-h-screen hidden  pt-20 lg:block  px-6 lg:px-0">
           {/* this is the title  */}
-          <div className="mx-auto w-full h-full place-items-center grid  grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
-            <div className="lg:col-span-2  lg:col-start-1 lg:row-start-1 lg:ml-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 ">
-              <div className="max-w-2xl h-[152px]   ">
+          <div className="mx-auto w-full min-h-full h-fit place-items-center grid z-20 grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
+            <div className="lg:col-span-2 z-20  lg:col-start-1 lg:row-start-1 lg:ml-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 ">
+              <div className="max-w-2xl h-[152px]  z-20  ">
                 <h1 className="mt-12 text-[49px] leading-[78.40px] text-right  qatar-bold font-bold tracking-tight text-black sm:text-4xl">
                   إنشاء، بيع، إدارة <TextTyper />
                 </h1>
@@ -39,9 +39,9 @@ export default function Page() {
             </div>
             {/* <WaterDropGrid /> */}
 
-            <div className="-ml-20 -mt-12   z-[10]    lg:col-start-2 lg:row-span-2 lg:row-start-1 ">
+            <div className="-ml-20 -mt-12   z-[10]  overflow-hidden  lg:col-start-2 lg:row-span-2 lg:row-start-1 ">
               <img
-                className="w-[32rem] max-w-none rounded-xl    sm:w-[55rem]"
+                className="w-[32rem] max-w-none rounded-xl    sm:w-[60rem]"
                 src="/Snap.png"
                 alt=""
               />
@@ -81,7 +81,7 @@ export default function Page() {
           </div>
         </div>
       </MaxWidthWrapper>
-      <div className="absolute top-0 left-0 bottom-0 h-screen w-full">
+      <div className="absolute top-0 left-0 bottom-0 z-[-20] h-screen w-full">
         <svg
           width="100%"
           height="100%"
