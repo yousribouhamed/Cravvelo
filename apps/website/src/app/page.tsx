@@ -2,12 +2,14 @@ import { Button } from "@ui/components/ui/button";
 import MaxWidthWrapper from "../components/max-width-wrapper";
 import { Gradian } from "../components/icons";
 import TextTyper from "../components/text-typer";
+import Reviews from "../components/reviews";
+import WhatYouCanDo from "../components/sections/what-you-can-do";
 
 export default function Page() {
   return (
     <>
       <MaxWidthWrapper className="mt-8 h-fit">
-        <div className=" isolate w-full h-fit min-h-screen hidden  pt-20 lg:block  px-6 lg:px-0">
+        <div className=" isolate w-full h-fit hidden  pt-20 lg:block  px-6 lg:px-0">
           {/* this is the title  */}
           <div className="mx-auto w-full min-h-full h-fit place-items-center grid z-20 grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
             <div className="lg:col-span-2 z-20  lg:col-start-1 lg:row-start-1 lg:ml-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 ">
@@ -34,7 +36,7 @@ export default function Page() {
                     14 يومًا تجريبيًّا
                   </span>
                 </div>
-                <div className="w-[445.71px] h-[174.93px] p-[31.07px] bg-white rounded-[24.86px] shadow flex-col justify-center items-start gap-[18.64px] inline-flex "></div>
+                <Reviews />
               </div>
             </div>
             {/* <WaterDropGrid /> */}
@@ -214,6 +216,7 @@ export default function Page() {
           </defs>
         </svg>
       </div>
+      <WhatYouCanDo />
     </>
   );
 }
