@@ -25,7 +25,7 @@ export const NavBar: FC = ({}) => {
   return (
     <div className="w-full h-[120px] z-[999] fixed top-4 ">
       <div className="mx-auto w-full   lg:max-w-screen-2xl  px-2.5 md:px-20">
-        <div className=" flex items-center  bg-[#F8FAE5] justify-between rounded-xl abdullah-shadow gap-x-2 w-full h-[90px] lg:h-[100px] px-4 mt-8 ">
+        <div className=" flex items-center  bg-white justify-between rounded-xl abdullah-shadow gap-x-2 w-full h-[90px] lg:h-[110px] px-4 mt-8 ">
           {/* this section is for the logo */}
           <div className="w-[20%] h-full flex items-center justify-start ">
             <span className="text-3xl qatar-bold text-[#43766C] font-bold ">
