@@ -76,7 +76,7 @@ export function ResetPasswordStep2Form() {
   return (
     <Card className="w-[480px] pt-4 min-h-[250px] h-fit ">
       <CardHeader>
-        <CardTitle>مرحبًا بعودتك!</CardTitle>
+        <CardTitle>غير كلمة المرور الخاصة بك</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -95,9 +95,7 @@ export function ResetPasswordStep2Form() {
                 </FormItem>
               )}
             />
-            <FormDescription>
-              enter the code that we have send to you
-            </FormDescription>
+            <FormDescription>أدخل الرمز الذي أرسلناه لك</FormDescription>
 
             <FormField
               control={form.control}
@@ -118,7 +116,7 @@ export function ResetPasswordStep2Form() {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel> confirme password</FormLabel>
+                  <FormLabel>تأكيد كلمة المرور</FormLabel>
                   <FormControl>
                     <PasswordInput placeholder="أدخِل كلمة المرور" {...field} />
                   </FormControl>
@@ -135,7 +133,7 @@ export function ResetPasswordStep2Form() {
               size="lg"
               className="w-full text-white font-bold bg-[#43766C]"
             >
-              تسجيل الدخول
+              تغيير كلمة المرور
               {isPending && (
                 <Icons.spinner
                   className="ml-2 h-4 w-4 animate-spin"

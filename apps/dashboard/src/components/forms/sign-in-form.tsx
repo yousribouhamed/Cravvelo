@@ -131,6 +131,7 @@ export function SignInForm() {
               </Link>
             </div>
             <Button
+              data-ripple-light="true"
               type="submit"
               size="lg"
               disabled={isLoading}
