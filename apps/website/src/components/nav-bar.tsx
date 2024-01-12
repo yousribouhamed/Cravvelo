@@ -1,5 +1,7 @@
 import type { FC } from "react";
-import { Button } from "@ui/components/button";
+import { Button, buttonVariants } from "@ui/components/button";
+import Link from "next/link";
+import { cn } from "@ui/lib/utils";
 interface HeaderAbdullahProps {}
 
 const links = [
@@ -40,20 +42,29 @@ export const NavBar: FC = ({}) => {
           <div className="w-[70%] h-full flex items-center justify-center ">
             {links.map((item) => {
               return (
-                <Button
+                <Link
+                  href={"/"}
                   key={item.name}
-                  variant="link"
-                  className="font-bold text-2xl leading-[40px]"
+                  className={cn(
+                    buttonVariants({ variant: "link" }),
+                    "font-bold text-2xl leading-[40px]"
+                  )}
                 >
                   {item.name}
-                </Button>
+                </Link>
               );
             })}
           </div>
           <div className="w-[20%] h-full flex items-center justify-end">
-            <Button className="bg-[#43766C]  text-xl py-6  h-14 rounded-[17px]  text-white qatar-bold  hover:bg-[#61AFA0]">
+            <Link
+              href={"https://jadara-dashboard.vercel.app/sign-up"}
+              className={cn(
+                buttonVariants(),
+                "bg-[#43766C]  text-xl py-6  h-14 rounded-[17px]  text-white qatar-bold  hover:bg-[#61AFA0]"
+              )}
+            >
               انشاء حساب
-            </Button>
+            </Link>
           </div>
         </div>
         <div className="w-[50%] lg:hidden h-full flex items-center justify-end pl-4">

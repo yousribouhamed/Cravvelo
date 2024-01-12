@@ -1,8 +1,9 @@
 import { Sidebar } from "@/src/components/SideBar";
+import { redirect } from "next/navigation";
 
 import { Metadata } from "next";
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;

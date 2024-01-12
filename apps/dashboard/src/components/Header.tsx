@@ -3,12 +3,14 @@ import { SearcInput } from "./search";
 import UserNav from "./user-nav";
 import { Button } from "@ui/components/ui/button";
 import { Icons } from "./Icons";
+import type { User } from "@clerk/nextjs/server";
 
 interface Props {
   title: string;
+  user: User;
 }
 
-const Header: FC<Props> = ({ title }) => {
+const Header: FC<Props> = ({ title, user }) => {
   return (
     <div className="w-full h-[96px] flex justify-between items-center  px-4">
       <div className="w-[25%] h-full flex items-center justify-start gap-x-2">
@@ -29,7 +31,7 @@ const Header: FC<Props> = ({ title }) => {
         <Button size="icon" variant="ghost">
           <Icons.bell className="w-4 h-4 text-[#353E5C]" />
         </Button>
-        <UserNav />
+        <UserNav user={user} />
       </div>
     </div>
   );
