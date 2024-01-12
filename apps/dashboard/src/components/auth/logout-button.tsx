@@ -30,13 +30,7 @@ const LogoutButton: FC = ({}) => {
   }
 
   return (
-    <SignOutButton
-      signOutCallback={() =>
-        startTransition(() => {
-          router.push(`${window.location.origin}/?redirect=false`);
-        })
-      }
-    >
+    <SignOutButton signOutCallback={() => router.push(`/sign-in`)}>
       <DropdownMenuItem className="w-full h-full flex justify-end items-center p-3 ">
         <span className="text-red-500">تسجيل الخروج</span>
         <LogOut className="ml-2 h-4 w-4 text-red-500" />
