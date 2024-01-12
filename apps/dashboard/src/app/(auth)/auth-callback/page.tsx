@@ -1,10 +1,36 @@
+"use client";
+
+import { useRouter, useSearchParams } from "next/navigation";
+import { trpc } from "../../_trpc/client";
+
 import type { FC } from "react";
 
 interface pageAbdullahProps {}
 
-const page: FC = ({}) => {
+const AuthCallBack: FC = ({}) => {
+  const router = useRouter();
+
+  trpc.authCallback.useQuery(undefined, {
+    onSuccess: ({ success }) => {
+      if (success) {
+        // user is synced to db
+        router.push("/");
+      }
+    },
+    onError: (err) => {
+      //@ts-ignore
+      if (err.data?.code === "UNAUTHORIZED") {
+        router.push("/sign-in");
+      }
+    },
+    retry: true,
+    retryDelay: 500,
+  });
   return (
-    <div className="w-full h-screen flex flex-col items-center justify-center gap-y-4">
+    <div
+      aria-label="Loading"
+      className="w-full h-screen flex flex-col items-center justify-center gap-y-4"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 200 200"
@@ -68,4 +94,4 @@ const page: FC = ({}) => {
   );
 };
 
-export default page;
+export default AuthCallBack;

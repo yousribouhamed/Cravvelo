@@ -25,4 +25,5 @@ model Academy {
   courses Json
   createdAt              DateTime            @default(now())
   updatedAt              DateTime            @updatedAt
+    userId      String 
 }
