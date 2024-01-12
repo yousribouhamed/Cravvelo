@@ -9,15 +9,12 @@ import React from "react";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@ui/components/ui/card";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -61,7 +58,7 @@ export function VerifyEmail() {
         if (completeSignUp.status === "complete") {
           await setActive({ session: completeSignUp.createdSessionId });
 
-          router.push(`${window.location.origin}/`);
+          router.push(`/auth-callback`);
         }
       } catch (err) {
         console.log(err);

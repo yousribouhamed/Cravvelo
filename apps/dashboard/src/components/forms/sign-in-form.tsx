@@ -60,8 +60,7 @@ export function SignInForm() {
 
       if (result.status === "complete") {
         await setActive({ session: result.createdSessionId });
-
-        router.push(`${window.location.origin}/`);
+        router.push(`/auth-callback`);
       } else {
         /*Investigate why the login hasn't completed */
         console.log(result);
