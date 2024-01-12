@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@ui/components/ui/button";
 import { Checkbox } from "@ui/components/ui/checkbox";
+import { toast } from "@ui/lib/utils";
 import {
   Card,
   CardContent,
@@ -30,8 +31,9 @@ import Link from "next/link";
 import { PasswordInput } from "../password-input";
 import { authSchema } from "@/src/lib/validators/auth";
 import { useRouter } from "next/navigation";
-import { useToast } from "@ui/components/ui/use-toast";
+
 import { Icons } from "../Icons";
+import { catchClerkError, catchError } from "@/src/lib/utils";
 
 type Inputs = z.infer<typeof authSchema>;
 
@@ -40,7 +42,6 @@ export function SignUpForm() {
   const router = useRouter();
   const [isPending, startTransition] = React.useTransition();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const { toast } = useToast();
 
   // react-hook-form
   const form = useForm<Inputs>({
@@ -70,14 +71,12 @@ export function SignUpForm() {
         });
 
         router.push("/sign-up/verify-email");
-        toast({
-          title: "Check your email",
-          description: "We sent you a 6-digit verification code.",
+
+        toast.success("Check your email", {
+          description: "We sent you a 6-digit verification code",
         });
       } catch (err) {
-        toast({
-          title: "error",
-        });
+        catchClerkError(err);
         console.log(err);
       } finally {
         setIsLoading(false);

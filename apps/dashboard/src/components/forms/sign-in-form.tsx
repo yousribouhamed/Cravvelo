@@ -27,12 +27,15 @@ import { useRouter } from "next/navigation";
 import { useSignIn } from "@clerk/nextjs";
 import { authSchemaLogin } from "@/src/lib/validators/auth";
 import { catchClerkError } from "@/src/lib/utils";
+import { Icons } from "../Icons";
+import { toast } from "@ui/lib/utils";
 
 type Inputs = z.infer<typeof authSchemaLogin>;
 export function SignInForm() {
   const router = useRouter();
   const { isLoaded, signIn, setActive } = useSignIn();
   const [isPending, startTransition] = React.useTransition();
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const form = useForm<Inputs>({
     resolver: zodResolver(authSchemaLogin),
@@ -44,10 +47,20 @@ export function SignInForm() {
 
   // 2. Define a submit handler.
   function onSubmit(data: z.infer<typeof authSchemaLogin>) {
-    if (!isLoaded) return;
+    console.log(data);
+    if (!isLoaded) {
+      toast.error("unmanted");
+      return;
+    }
+
+    if (isLoaded) {
+      toast.success("this is very good");
+      return;
+    }
 
     startTransition(async () => {
       try {
+        setIsLoading(true);
         const result = await signIn.create({
           identifier: data.email,
           password: data.password,
@@ -62,7 +75,10 @@ export function SignInForm() {
           console.log(result);
         }
       } catch (err) {
+        console.log(err);
         catchClerkError(err);
+      } finally {
+        setIsLoading(false);
       }
     });
   }
@@ -74,7 +90,10 @@ export function SignInForm() {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form
+            onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
+            className="space-y-8"
+          >
             <FormField
               control={form.control}
               name="email"
@@ -121,11 +140,17 @@ export function SignInForm() {
               </Link>
             </div>
             <Button
-              data-ripple-light="true"
               type="submit"
               size="lg"
+              disabled={isLoading}
               className="w-full text-white font-bold bg-[#43766C]"
             >
+              {isLoading && (
+                <Icons.spinner
+                  className="ml-2 h-4 w-4 animate-spin"
+                  aria-hidden="true"
+                />
+              )}
               تسجيل الدخول
             </Button>
           </form>

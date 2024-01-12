@@ -4,7 +4,7 @@ import "@ui/font/stylesheet.css";
 import Providers from "../components/Providers";
 import Script from "next/script";
 import { ClerkProvider } from "@clerk/nextjs";
-import { Toaster } from "@ui/components/ui/toaster";
+import { Toaster } from "@ui/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "جدارة",
