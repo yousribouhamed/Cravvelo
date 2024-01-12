@@ -1,6 +1,7 @@
 import { isClerkAPIResponseError } from "@clerk/nextjs";
-import { useToast } from "@ui/components/ui/use-toast";
+import type { User } from "@clerk/nextjs/server";
 import { z } from "zod";
+import { toast } from "@ui/lib/utils";
 
 export function absoluteUrl(path: string) {
   if (typeof window !== "undefined") return path;
@@ -14,63 +15,38 @@ export function isMacOs() {
   return window.navigator.userAgent.includes("Mac");
 }
 
+export function getUserEmail(user: User | null) {
+  const email =
+    user?.emailAddresses?.find((e) => e.id === user.primaryEmailAddressId)
+      ?.emailAddress ?? "";
+
+  return email;
+}
+
 export function catchError(err: unknown) {
-  const { toast } = useToast();
   if (err instanceof z.ZodError) {
     const errors = err.issues.map((issue) => {
       return issue.message;
     });
-    toast({
-      variant: "destructive",
-      title: "error",
-      description: errors.join("\n"),
-    });
-    return;
+    return toast.error(errors.join("\n"));
   } else if (err instanceof Error) {
-    toast({
-      variant: "destructive",
-      title: "error",
-      description: err.message,
-    });
-    return;
+    return toast.error(err.message);
   } else {
-    toast({
-      variant: "destructive",
-      title: "error",
-      description: "Something went wrong, please try again later.",
-    });
+    return toast.error("Something went wrong, please try again later.");
   }
 }
 
 export function catchClerkError(err: unknown) {
-  const { toast } = useToast();
-
   const unknownErr = "Something went wrong, please try again later.";
 
   if (err instanceof z.ZodError) {
     const errors = err.issues.map((issue) => {
       return issue.message;
     });
-
-    toast({
-      variant: "destructive",
-      title: "error",
-      description: errors.join("\n"),
-    });
+    return toast.error(errors.join("\n"));
   } else if (isClerkAPIResponseError(err)) {
-    toast({
-      variant: "destructive",
-      title: "error",
-      description: err.errors[0]?.longMessage ?? unknownErr,
-    });
-
-    return;
+    return toast.error(err.errors[0]?.longMessage ?? unknownErr);
   } else {
-    toast({
-      variant: "destructive",
-      title: "error",
-      description: unknownErr,
-    });
-    return;
+    return toast.error(unknownErr);
   }
 }
