@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { trpc } from "../../_trpc/client";
 
 import type { FC } from "react";
+import { setCookie } from "@/src/lib/utils";
 
 interface pageAbdullahProps {}
 
@@ -11,9 +12,10 @@ const AuthCallBack: FC = ({}) => {
   const router = useRouter();
 
   trpc.authCallback.useQuery(undefined, {
-    onSuccess: ({ success }) => {
+    onSuccess: ({ success, academiaId }) => {
       if (success) {
         // user is synced to db
+        setCookie("academiaId", academiaId);
         router.push("/");
       }
     },
@@ -29,13 +31,14 @@ const AuthCallBack: FC = ({}) => {
   return (
     <div
       aria-label="Loading"
+      aria-describedby="loading-description"
       className="w-full h-screen flex flex-col items-center justify-center gap-y-4"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 200 200"
-        width="250"
-        height="250"
+        width="150"
+        height="150"
       >
         <radialGradient
           id="a9"
@@ -86,7 +89,8 @@ const AuthCallBack: FC = ({}) => {
           r="70"
         ></circle>
       </svg>
-      <span className="text-lg  ">
+      <span className="text-xl font-bold">مرحبًا بعودتك ...</span>
+      <span className="text-sm text-gray-500  ">
         أول العلم الصمت والثاني حسن الإستماع والثالث حفظه والرابع العمل به
         والخامس نشر
       </span>

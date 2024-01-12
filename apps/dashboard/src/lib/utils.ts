@@ -50,3 +50,35 @@ export function catchClerkError(err: unknown) {
     return toast.error(unknownErr);
   }
 }
+
+// Get cookie by name
+export function getCookie(cookieName: string): string | null {
+  const name = `${cookieName}=`;
+  const decodedCookie = decodeURIComponent(document.cookie);
+  const cookieArray = decodedCookie.split(";");
+
+  for (let i = 0; i < cookieArray.length; i++) {
+    let cookie = cookieArray[i].trim();
+    if (cookie.indexOf(name) === 0) {
+      return cookie.substring(name.length, cookie.length);
+    }
+  }
+
+  return null;
+}
+
+// Set cookie
+export function setCookie(
+  cookieName: string,
+  cookieValue: string,
+  expirationDays: number = 7
+) {
+  const expirationDate = new Date();
+  expirationDate.setDate(expirationDate.getDate() + expirationDays);
+
+  const cookieString = `${cookieName}=${encodeURIComponent(
+    cookieValue
+  )};expires=${expirationDate.toUTCString()};path=/`;
+
+  document.cookie = cookieString;
+}

@@ -1,5 +1,6 @@
 import { Button } from "@ui/components/ui/button";
 import type { FC } from "react";
+import AddCourse from "../models/add-course";
 
 interface TableHeaderAbdullahProps {}
 
@@ -11,7 +12,7 @@ const TableHeader: FC = ({}) => {
       </div>
       <div className="min-w-[200px] w-fit h-full flex items-center justify-end gap-x-4">
         <Button variant="secondary">تصدير البيانات</Button>
-        <Button>أنشئ دورة جديدة</Button>
+        <AddCourse />
       </div>
     </div>
   );

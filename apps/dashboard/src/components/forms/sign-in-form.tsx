@@ -29,6 +29,7 @@ import { authSchemaLogin } from "@/src/lib/validators/auth";
 import { catchClerkError } from "@/src/lib/utils";
 import { Icons } from "../Icons";
 import { toast } from "@ui/lib/utils";
+import { OAuthSignIn } from "../auth/oauth-signin";
 
 type Inputs = z.infer<typeof authSchemaLogin>;
 export function SignInForm() {
@@ -79,6 +80,7 @@ export function SignInForm() {
         <CardTitle>مرحبًا بعودتك!</CardTitle>
       </CardHeader>
       <CardContent>
+        <OAuthSignIn />
         <Form {...form}>
           <form
             onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}

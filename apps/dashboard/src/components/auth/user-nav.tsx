@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
 import LogoutButton from "./logout-button";
+import { Icons } from "../Icons";
 
 interface UserNavProps {
   user: UserType;
@@ -24,10 +25,9 @@ export default function UserNav({ user }: UserNavProps) {
         <div
           className={` ${buttonVariants({
             variant: "ghost",
-            size: "lg",
-          })}  cursor-pointer flex items-center justify-end gap-x-2 !p-2`}
+          })}  cursor-pointer   flex items-center justify-end gap-x-4 `}
         >
-          <Avatar>
+          <Avatar className="w-8 h-8">
             <AvatarImage src={user?.imageUrl ?? user?.imageUrl} />
             <AvatarFallback>AB</AvatarFallback>
           </Avatar>
@@ -37,10 +37,24 @@ export default function UserNav({ user }: UserNavProps) {
           <ChevronDown className="w-4 h-4 text-black hover:text-accent-foreground " />
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[16rem] ">
-        <div className="w-full h-[70px] bg-gray-100 flex items-center justify-center">
-          <span>{user?.emailAddresses[0].emailAddress}</span>
+      <DropdownMenuContent className=" w-56  ">
+        <div className="w-full h-[70px]  flex items-center justify-center px-2">
+          <Button size="icon" variant="secondary">
+            <Icons.Order className="text-gray-700 w-4 h-4" />
+          </Button>
+          <div
+            className={`  cursor-pointer   flex items-center justify-end gap-x-4  w-full `}
+          >
+            <p className="text-md text-black">
+              {user?.firstName ? user?.firstName : "ah"} اكاديمية
+            </p>
+            <Avatar className="w-8 h-8">
+              <AvatarImage src={user?.imageUrl ?? user?.imageUrl} />
+              <AvatarFallback>AB</AvatarFallback>
+            </Avatar>
+          </div>
         </div>
+        <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem className="w-full  h-full flex justify-end items-center p-3 ">
             <span>الملف الشخصي</span>
@@ -51,6 +65,25 @@ export default function UserNav({ user }: UserNavProps) {
             <span>باقة الأكاديمية</span>
             <CreditCard className="ml-2 h-4 w-4" />
           </DropdownMenuItem>
+          <DropdownMenuSeparator />
+
+          <DropdownMenuItem className="w-full h-full flex justify-end items-center p-3">
+            <span> مركز المساعدة</span>
+            <CreditCard className="ml-2 h-4 w-4" />
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="w-full h-full flex justify-end items-center p-3">
+            <span>معاينة الأكاديمية</span>
+            <CreditCard className="ml-2 h-4 w-4" />
+          </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
+
+          <DropdownMenuItem className="w-full h-full flex justify-end items-center p-3">
+            <span> تحديثات المنتج</span>
+            <CreditCard className="ml-2 h-4 w-4" />
+          </DropdownMenuItem>
+
           <DropdownMenuSeparator />
           <DropdownMenuItem className="w-full h-full flex justify-end items-center p-3 ">
             <span>برنامج شركاء مساق</span>
@@ -64,7 +97,6 @@ export default function UserNav({ user }: UserNavProps) {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
 
-        <DropdownMenuSeparator />
         <LogoutButton />
       </DropdownMenuContent>
     </DropdownMenu>
