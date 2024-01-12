@@ -18,11 +18,13 @@ export function Sidebar({ className }: SidebarProps) {
 
   return (
     <>
-      <div className={cn("pb-12 hidden md:block   ", className)}>
-        <div className="w-full h-[100px]  flex items-center justify-center">
-          <Logo />
-        </div>
-        <div className="space-y-4 py-2 bg-[#43766C] h-full rounded-lg  ">
+      <div
+        className={cn(
+          "pb-12 bg-[#43766C] h-full rounded-lg  mt-4 hidden md:block   ",
+          className
+        )}
+      >
+        <div className="space-y-4 py-2   ">
           <div className="px-3 pb-2 pt-6">
             <div className="w-full  h-[50px] relative ">
               <Button className="text-[#43766C] text-lg flex justify-between items-center  hover:bg-[#FFB800] hover:text-white rounded-lg h-12 w-full font-bold bg-[#F8FAE5] ">

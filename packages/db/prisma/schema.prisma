@@ -11,6 +11,18 @@ datasource db {
 }
 
 
-model user {
-  id String @default(uuid()) @unique
+model Account {
+  id          String @default(uuid()) @unique
+  userId      String 
+  AcademyIds  Json
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+}
+
+model Academy {
+  id      String @default(uuid()) @unique
+  name    String 
+  courses Json
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
 }
