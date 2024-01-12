@@ -13,7 +13,7 @@ export const course = {
       ctx.prisma.course.create({
         data: {
           title: input.title,
-          AcademiaIa: input.academiaId,
+          academiaId: input.academiaId,
         },
       });
     }),
