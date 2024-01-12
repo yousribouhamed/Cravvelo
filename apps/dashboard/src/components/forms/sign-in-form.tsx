@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -8,15 +9,12 @@ import { Checkbox } from "@ui/components/ui/checkbox";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@ui/components/ui/card";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -25,27 +23,48 @@ import {
 import { Input } from "@ui/components/ui/input";
 import Link from "next/link";
 import { PasswordInput } from "../password-input";
+import { useRouter } from "next/navigation";
+import { useSignIn } from "@clerk/nextjs";
+import { authSchemaLogin } from "@/src/lib/validators/auth";
+import { catchClerkError } from "@/src/lib/utils";
 
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-});
-
+type Inputs = z.infer<typeof authSchemaLogin>;
 export function SignInForm() {
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const router = useRouter();
+  const { isLoaded, signIn, setActive } = useSignIn();
+  const [isPending, startTransition] = React.useTransition();
+
+  const form = useForm<Inputs>({
+    resolver: zodResolver(authSchemaLogin),
     defaultValues: {
-      username: "",
+      email: "",
+      password: "",
     },
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  function onSubmit(data: z.infer<typeof authSchemaLogin>) {
+    if (!isLoaded) return;
+
+    startTransition(async () => {
+      try {
+        const result = await signIn.create({
+          identifier: data.email,
+          password: data.password,
+        });
+
+        if (result.status === "complete") {
+          await setActive({ session: result.createdSessionId });
+
+          router.push(`${window.location.origin}/`);
+        } else {
+          /*Investigate why the login hasn't completed */
+          console.log(result);
+        }
+      } catch (err) {
+        catchClerkError(err);
+      }
+    });
   }
 
   return (
@@ -58,7 +77,7 @@ export function SignInForm() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
               control={form.control}
-              name="username"
+              name="email"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>البريد الإلكتروني</FormLabel>
@@ -75,7 +94,7 @@ export function SignInForm() {
             />
             <FormField
               control={form.control}
-              name="username"
+              name="password"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>كلمة المرور</FormLabel>

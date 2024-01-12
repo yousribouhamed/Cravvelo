@@ -1,4 +1,4 @@
-import { SignInForm } from "@/src/components/forms/SignInForm";
+import { SignInForm } from "@/src/components/forms/sign-in-form";
 import type { FC } from "react";
 
 interface pageAbdullahProps {}
