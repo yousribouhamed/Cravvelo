@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
-import LogoutButton from "./auth/logout-button";
+import LogoutButton from "./logout-button";
 
 interface UserNavProps {
   user: UserType;
