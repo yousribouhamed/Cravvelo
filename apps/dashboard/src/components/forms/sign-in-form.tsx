@@ -34,7 +34,6 @@ type Inputs = z.infer<typeof authSchemaLogin>;
 export function SignInForm() {
   const router = useRouter();
   const { isLoaded, signIn, setActive } = useSignIn();
-  const [isPending, startTransition] = React.useTransition();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const form = useForm<Inputs>({
@@ -46,41 +45,33 @@ export function SignInForm() {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(data: z.infer<typeof authSchemaLogin>) {
+  async function onSubmit(data: z.infer<typeof authSchemaLogin>) {
     console.log(data);
     if (!isLoaded) {
-      toast.error("unmanted");
       return;
     }
 
-    if (isLoaded) {
-      toast.success("this is very good");
-      return;
-    }
+    try {
+      setIsLoading(true);
+      const result = await signIn.create({
+        identifier: data.email,
+        password: data.password,
+      });
 
-    startTransition(async () => {
-      try {
-        setIsLoading(true);
-        const result = await signIn.create({
-          identifier: data.email,
-          password: data.password,
-        });
+      if (result.status === "complete") {
+        await setActive({ session: result.createdSessionId });
 
-        if (result.status === "complete") {
-          await setActive({ session: result.createdSessionId });
-
-          router.push(`${window.location.origin}/`);
-        } else {
-          /*Investigate why the login hasn't completed */
-          console.log(result);
-        }
-      } catch (err) {
-        console.log(err);
-        catchClerkError(err);
-      } finally {
-        setIsLoading(false);
+        router.push(`${window.location.origin}/`);
+      } else {
+        /*Investigate why the login hasn't completed */
+        console.log(result);
       }
-    });
+    } catch (err) {
+      console.log(err);
+      catchClerkError(err);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (

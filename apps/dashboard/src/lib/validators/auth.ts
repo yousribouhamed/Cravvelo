@@ -33,8 +33,6 @@ export const authSchemaLogin = z.object({
       message:
         "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character",
     }),
-
-  firstName: z.string(),
 });
 
 export const verifyEmailSchema = z.object({

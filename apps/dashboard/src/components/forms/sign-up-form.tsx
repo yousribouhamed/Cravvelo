@@ -159,20 +159,20 @@ export function SignUpForm() {
               size="lg"
               className="w-full text-white font-bold bg-[#43766C]"
             >
-              أنشئ حسابك مجانًا
               {isLoading && (
                 <Icons.spinner
                   className="ml-2 h-4 w-4 animate-spin"
                   aria-hidden="true"
                 />
               )}
+              أنشئ حسابك مجانًا
             </Button>
           </form>
         </Form>
         <div className="w-full my-4 h-[20px] flex justify-center">
           <span>
             هل لديك حساب؟{" "}
-            <Link href={"/sign-up"}>
+            <Link href={"/sign-in"}>
               <span className="text-[#43766C]">سجّل الدخول.</span>
             </Link>
           </span>
