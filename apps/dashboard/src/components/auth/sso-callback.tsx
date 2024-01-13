@@ -17,7 +17,7 @@ export default function SSOCallback({ searchParams }: SSOCallbackPageProps) {
     <div
       aria-label="Loading"
       aria-describedby="loading-description"
-      className="w-full h-screen flex flex-col items-center justify-center gap-y-4"
+      className="w-full h-screen flex flex-col bg-white items-center justify-center gap-y-4"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
