@@ -2,7 +2,6 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { trpc } from "../../_trpc/client";
-
 import type { FC } from "react";
 import { setCookie } from "@/src/lib/utils";
 
@@ -20,6 +19,7 @@ const AuthCallBack: FC = ({}) => {
       }
     },
     onError: (err) => {
+      console.log(err);
       //@ts-ignore
       if (err.data?.code === "UNAUTHORIZED") {
         router.push("/sign-in");
