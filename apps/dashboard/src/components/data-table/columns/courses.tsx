@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 
-import { Button } from "@ui/components/ui/button";
+import { Button, buttonVariants } from "@ui/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,16 +13,19 @@ import {
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
 import { Checkbox } from "@ui/components/ui/checkbox";
+import Link from "next/link";
+import { cn } from "@ui/lib/utils";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Payment = {
+export type Course = {
   id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
+  title: string;
+  price: string;
+  studenstNbr: string;
+  profit: string;
 };
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Course>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -49,23 +52,23 @@ export const columns: ColumnDef<Payment>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "status",
+    accessorKey: "title",
     header: "عنوان الدورة",
   },
   {
-    accessorKey: "email",
+    accessorKey: "price",
     header: "السعر ",
   },
   {
-    accessorKey: "amount",
+    accessorKey: "profit",
     header: "إجمالي الأرباح",
   },
   {
-    accessorKey: "amount",
+    accessorKey: "profit",
     header: "المدربين",
   },
   {
-    accessorKey: "amount",
+    accessorKey: "studenstNbr",
     header: "عدد الطلاب الملتحقين",
   },
   {
@@ -75,9 +78,12 @@ export const columns: ColumnDef<Payment>[] = [
 
       return (
         <div className="w-full h-10 flex items-center justify-end gap-x-4">
-          <Button variant="secondary" size="sm">
+          <Link
+            href={`/courses/${row.original.id}/chapters`}
+            className={cn(buttonVariants({ variant: "secondary", size: "sm" }))}
+          >
             تعديل
-          </Button>
+          </Link>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" className="h-8 w-10 p-0">

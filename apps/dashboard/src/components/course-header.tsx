@@ -43,7 +43,11 @@ const CourseHeader: FC = ({}) => {
       <div className="w-fit h-full flex items-center justify-start gap-x-4">
         {links.map((item) => (
           <Link
-            className={cn(buttonVariants({ variant: "ghost" }))}
+            key={item.name}
+            className={cn(
+              buttonVariants({ variant: "ghost" }),
+              "border-b-2 border-b-[#F0B110]"
+            )}
             href={item.url}
           >
             {item.name}
@@ -51,7 +55,8 @@ const CourseHeader: FC = ({}) => {
         ))}
       </div>
       <Button size="icon" variant="secondary">
-        <EyeOpenIcon className="h-5 w-5" aria-hidden="true" />
+        معاينة
+        <EyeOpenIcon className="h-4 w-4 text-gray-500" aria-hidden="true" />
         <span className="sr-only">visite website</span>
       </Button>
     </div>

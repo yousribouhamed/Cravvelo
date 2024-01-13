@@ -1,21 +1,20 @@
 import Header from "@/src/components/Header";
 import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
 import { DataTable } from "@/src/components/data-table";
-import { Payment, columns } from "@/src/components/data-table/columns/courses";
+import { columns, Course } from "@/src/components/data-table/columns/courses";
 import { currentUser } from "@clerk/nextjs";
+import { prisma } from "database/src";
 import { redirect } from "next/navigation";
 
-async function getData(): Promise<Payment[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-    // ...
-  ];
+async function getData(): Promise<Course[]> {
+  const data = await prisma.course.findMany();
+  return data.map((item) => ({
+    id: item.id,
+    price: item.price,
+    profit: item.profit,
+    studenstNbr: item.studenstNbr,
+    title: item.title,
+  }));
 }
 
 interface pageAbdullahProps {}

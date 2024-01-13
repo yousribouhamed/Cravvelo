@@ -33,6 +33,10 @@ model Course {
   id                     String @default(uuid()) @unique
   academiaId             String 
   title                  String 
+  price                  String?
+  studenstNbr            String?
+  profit                 String?
+  trainers               String?
   createdAt              DateTime            @default(now())
   updatedAt              DateTime            @updatedAt
 }
