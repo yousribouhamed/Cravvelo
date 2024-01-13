@@ -4,10 +4,7 @@ import type { FC } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@ui/components/ui/dialog";
 import { Button } from "@ui/components/ui/button";
@@ -18,7 +15,6 @@ import * as z from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -27,12 +23,21 @@ import {
 import { Input } from "@ui/components/ui/input";
 import { addCourseSchema } from "@/src/lib/validators/course";
 import { trpc } from "@/src/app/_trpc/client";
+import { getCookie } from "@/src/lib/utils";
+import { useRouter } from "next/navigation";
+import React from "react";
+import { Icons } from "../Icons";
 
 interface AddCourseAbdullahProps {}
 
 const AddCourse: FC = ({}) => {
+  const router = useRouter();
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [isLaoding, setIsLoading] = React.useState(false);
   const mutation = trpc.createCourse.useMutation({
-    onSuccess: () => {},
+    onSuccess: ({ courseId }) => {
+      router.push(`/courses/${courseId}`);
+    },
     onError: () => {},
   });
 
@@ -46,15 +51,20 @@ const AddCourse: FC = ({}) => {
 
   // 2. Define a submit handler.
   async function onSubmit(data: z.infer<typeof addCourseSchema>) {
-    await mutation.mutateAsync({
-      title: data.title,
-      //todo : get the id of the academia in the cookie
-      academiaId: "",
-    });
+    const cookie = getCookie("academiaId");
+    setIsLoading(true);
+    await mutation
+      .mutateAsync({
+        title: data.title,
+        academiaId: cookie,
+      })
+      .then(() => {
+        setIsLoading(false);
+      });
   }
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
       <DialogTrigger asChild>
         <Button>أنشئ دورة جديدة</Button>
       </DialogTrigger>
@@ -81,7 +91,15 @@ const AddCourse: FC = ({}) => {
               />
               <DialogFooter className="w-full h-[50px] flex items-center justify-end gap-x-4">
                 <Button variant="ghost">إلغاء</Button>
-                <Button type="submit">إضافة جديد</Button>
+                <Button type="submit">
+                  {isLaoding && (
+                    <Icons.spinner
+                      className="ml-2 h-4 w-4 animate-spin"
+                      aria-hidden="true"
+                    />
+                  )}
+                  إضافة جديد
+                </Button>
               </DialogFooter>
             </form>
           </Form>

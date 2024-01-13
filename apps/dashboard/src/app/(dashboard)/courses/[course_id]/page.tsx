@@ -1,9 +1,31 @@
-import type { FC } from "react";
+import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
+import Header from "@/src/components/Header";
+import { currentUser } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
+import { Button } from "@ui/components/ui/button";
 
-interface pageAbdullahProps {}
+export default async function Home() {
+  const user = await currentUser();
 
-const page: FC = ({}) => {
-  return <div>page</div>;
-};
+  if (!user) {
+    redirect("/sign-in");
+  }
 
-export default page;
+  console.log(user);
+
+  return (
+    <MaxWidthWrapper>
+      <main className="w-full flex flex-col  justify-start">
+        <Header user={user} title="ui ux" />
+        <div className="w-full h-[70px]  flex items-center justify-between">
+          <div>hado les lies </div>
+          <Button>تعديل الدورة</Button>
+        </div>
+        <div className="w-full min-h-[500px] grid grid-cols-3">
+          <div className="col-span-2 bg-blue-500"></div>
+          <div className="col-span-1 bg-yellow-500"></div>
+        </div>
+      </main>
+    </MaxWidthWrapper>
+  );
+}

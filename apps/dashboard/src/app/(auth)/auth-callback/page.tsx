@@ -5,8 +5,6 @@ import { trpc } from "../../_trpc/client";
 import type { FC } from "react";
 import { setCookie } from "@/src/lib/utils";
 
-interface pageAbdullahProps {}
-
 const AuthCallBack: FC = ({}) => {
   const router = useRouter();
 
@@ -15,6 +13,7 @@ const AuthCallBack: FC = ({}) => {
       if (success) {
         // user is synced to db
         setCookie("academiaId", academiaId);
+
         router.push("/");
       }
     },

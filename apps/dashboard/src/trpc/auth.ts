@@ -16,40 +16,39 @@ export const auth = {
       },
     });
 
-    // if the user has an academy so return it's id to store it in a cookie in the front end
     const academy = await prisma.academy
-      .findFirst({
+      .findMany({
         where: {
           userId: user.id,
         },
       })
       .catch((err) => console.log(err));
 
-    // if (!account && !academy) {
-    //   // create an account in the platform
-    //   const account = await prisma.account.create({
-    //     data: {
-    //       userId: user.id,
-    //       AcademyIds: JSON.stringify([user.id]),
-    //     },
-    //   });
+    if (!account && !academy) {
+      // create an account in the platform
+      const account = await prisma.account.create({
+        data: {
+          userId: user.id,
+          AcademyIds: JSON.stringify([user.id]),
+        },
+      });
 
-    //   // create the the academy and link it to the account
-    //   const academy = await prisma.academy.create({
-    //     data: {
-    //       userId: user.id,
-    //       name: user.firstName,
-    //       courses: JSON.stringify([]),
-    //     },
-    //   });
-    //   console.log("this is the academia id user created value ");
-    //   console.log(academy);
-    //   return { success: true, academiaId: academy.id };
-    // }
+      // create the the academy and link it to the account
+      const academy = await prisma.academy.create({
+        data: {
+          userId: user.id,
+          name: user.firstName,
+          courses: JSON.stringify([]),
+        },
+      });
+      console.log("this is the academia id user created value ");
+      console.log(academy);
+      return { success: true, academiaId: academy.id };
+    }
 
     console.log("this is the academia id user have value");
     console.log(academy);
 
-    return { success: true, academiaId: academy };
+    return { success: true, academiaId: academy ? academy[0]?.id : "" };
   }),
 };

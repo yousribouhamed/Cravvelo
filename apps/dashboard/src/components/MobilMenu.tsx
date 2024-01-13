@@ -40,7 +40,7 @@ function MobileLink({
 }: MobileLinkProps) {
   return (
     <Link
-      href={`/courses`}
+      href={`${href}`}
       className={cn(
         buttonVariants({ variant: "ghost" }),
         "w-full flex items-center justify-end text-sm pr-4  hover:!bg-transparent hover:!text-white text-white gap-x-2 hover:bg-none",
@@ -71,22 +71,49 @@ const SideBarMenu: FC = ({}) => {
         <Accordion type="multiple" className="w-full space-y-2">
           {SIDE_BAR_ITEMS?.map((item, index) => (
             <AccordionItem value={item.title} key={index}>
-              <AccordionTrigger
-                className={cn(
-                  buttonVariants({ variant: "ghost" }),
-                  "w-full flex items-center justify-end qatar-semibold text-md  gap-x-2 hover:!bg-transparent hover:!text-white text-[#A9B9B6] ",
-                  {
-                    "text-white bg-[#325951]": path === item.slug,
-                  }
-                )}
-              >
-                {item.title}
-                <item.icon
-                  className={`w-4 h-4  ${
-                    path === item.slug ? "!text-white" : "!text-[#A9B9B6] "
-                  }`}
-                />
-              </AccordionTrigger>
+              {item.subitems?.length === 0 && (
+                <Link
+                  href={item.slug}
+                  className={cn(
+                    buttonVariants({ variant: "ghost" }),
+                    "w-full flex items-center justify-end qatar-semibold text-md  gap-x-2 hover:!bg-transparent hover:!text-white text-[#A9B9B6] ",
+                    {
+                      "text-white bg-[#325951]": path === item.slug,
+                    }
+                  )}
+                >
+                  {item.title}
+                  <item.icon
+                    className={`w-4 h-4  ${
+                      path === item.slug ? "!text-white" : "!text-[#A9B9B6] "
+                    }`}
+                  />
+                </Link>
+              )}
+
+              {item.subitems?.length > 0 && (
+                <AccordionTrigger
+                  onClick={() => {
+                    if (item.subitems?.length < 0) {
+                      router.push(item.slug);
+                    }
+                  }}
+                  className={cn(
+                    buttonVariants({ variant: "ghost" }),
+                    "w-full flex items-center justify-end qatar-semibold text-md  gap-x-2 hover:!bg-transparent hover:!text-white text-[#A9B9B6] ",
+                    {
+                      "text-white bg-[#325951]": path === item.slug,
+                    }
+                  )}
+                >
+                  {item.title}
+                  <item.icon
+                    className={`w-4 h-4  ${
+                      path === item.slug ? "!text-white" : "!text-[#A9B9B6] "
+                    }`}
+                  />
+                </AccordionTrigger>
+              )}
               {item.subitems?.length > 0 && (
                 <AccordionContent>
                   <div className="flex flex-col pr-4 space-y-1">
