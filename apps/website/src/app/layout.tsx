@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@ui/styles/globals.css";
 import "@ui/font/stylesheet.css";
-import { NavBar } from "../components/nav-bar";
+import { NavBar } from "../components/layout/nav-bar";
 import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -21,7 +21,7 @@ export default function RootLayout({
     <html suppressHydrationWarning dir="rtl" lang="ar">
       <body className={inter.className + "min-h-screen h-fit  w-full"}>
         <NavBar />
-        <div className=" mt-52 h-fit min-h-full">{children}</div>
+        <div className=" mt-52 w-full h-fit min-h-full">{children}</div>
       </body>
       <Script src="//code.tidio.co/f4ntqdkrkcmkov2pbgapiuevig4fhtbq.js" async />
       <Script
