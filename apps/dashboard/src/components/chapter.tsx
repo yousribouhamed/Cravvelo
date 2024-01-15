@@ -11,8 +11,6 @@ import { Card } from "@ui/lib/tremor";
 import { CardContent } from "@ui/components/ui/card";
 import { Button } from "@ui/components/ui/button";
 
-interface ChapterAbdullahProps {}
-
 const Chapter: FC = ({}) => {
   return (
     <Card className="p-0">
@@ -22,7 +20,7 @@ const Chapter: FC = ({}) => {
             <AccordionTrigger asChild>
               <div className="w-full h-[70px]  flex items-center my-auto cursor-pointer py-4">
                 <div className="w-full  h-full flex items-center justify-start  gap-x-4 ">
-                  <Button variant="ghost" size="icon">
+                  <Button className="cursor-grab" variant="ghost" size="icon">
                     <svg
                       width="31"
                       height="30"
@@ -57,45 +55,7 @@ const Chapter: FC = ({}) => {
               </div>
             </AccordionTrigger>
             <AccordionContent className="h-[300px] w-full">
-              <div className="w-full h-[100px] border-2 mt-4 border-dashed p-4 border-gray-950 bg-white rounded-lg mx-auto">
-                <h3 className="text-start font-bold text-xl">
-                  أضف مواد تعليمية جديدة إلى القسم
-                </h3>
-                <div className="w-full h-[50px] flex items-center justify-between">
-                  <Button variant="secondary" size="lg">
-                    فيديو
-                  </Button>
-                  <Button variant="secondary" size="lg">
-                    ملف PDF
-                  </Button>
-                  <Button variant="secondary" size="lg">
-                    صوت
-                  </Button>
-                  <Button variant="secondary" size="lg">
-                    فصل افتراضي
-                  </Button>
-                  <Button variant="secondary" size="lg">
-                    نص
-                  </Button>
-                </div>
-              </div>
-
-              <div className="w-full h-[100px] mt-4 border-2 border-dashed p-4 border-gray-950 bg-white rounded-lg mx-auto">
-                <h3 className="text-start font-bold text-xl">
-                  أضف تدريبات واختبارات
-                </h3>
-                <div className="w-full h-[50px] flex items-center justify-between">
-                  <Button variant="secondary" size="lg">
-                    اختبار
-                  </Button>
-                  <Button variant="secondary" size="lg">
-                    واجب
-                  </Button>
-                  <Button variant="secondary" size="lg">
-                    استبيان
-                  </Button>
-                </div>
-              </div>
+              <AddToChapter />
             </AccordionContent>
           </AccordionItem>
         </Accordion>
@@ -105,3 +65,75 @@ const Chapter: FC = ({}) => {
 };
 
 export default Chapter;
+
+const AddToChapter = () => {
+  return (
+    <div className="w-full h-[200px] border-2 mt-4 border-dashed p-4 border-gray-950 bg-white rounded-lg mx-auto">
+      <h3 className="text-start font-bold text-xl">
+        أضف مواد تعليمية جديدة إلى القسم
+      </h3>
+      <div className="w-full h-[50px] flex items-center justify-start gap-x-6">
+        <Button
+          className="hover:bg-gray-900 hover:text-white cursor-pointer"
+          variant="secondary"
+          size="lg"
+        >
+          فيديو
+        </Button>
+        <Button
+          className="hover:bg-gray-900 hover:text-white cursor-pointer"
+          variant="secondary"
+          size="lg"
+        >
+          ملف PDF
+        </Button>
+        <Button
+          className="hover:bg-gray-900 hover:text-white cursor-pointer"
+          variant="secondary"
+          size="lg"
+        >
+          صوت
+        </Button>
+        <Button
+          className="hover:bg-gray-900 hover:text-white cursor-pointer"
+          variant="secondary"
+          size="lg"
+        >
+          فصل افتراضي
+        </Button>
+        <Button
+          className="hover:bg-gray-900 hover:text-white cursor-pointer"
+          variant="secondary"
+          size="lg"
+        >
+          نص
+        </Button>
+      </div>
+
+      <h3 className="text-start font-bold text-xl">أضف تدريبات واختبارات</h3>
+      <div className="w-full h-[50px] flex items-center justify-start gap-x-6">
+        <Button
+          className="hover:bg-gray-900 hover:text-white cursor-pointer"
+          variant="secondary"
+          size="lg"
+        >
+          اختبار
+        </Button>
+        <Button
+          className="hover:bg-gray-900 hover:text-white cursor-pointer"
+          variant="secondary"
+          size="lg"
+        >
+          واجب
+        </Button>
+        <Button
+          className="hover:bg-gray-900 hover:text-white cursor-pointer"
+          variant="secondary"
+          size="lg"
+        >
+          استبيان
+        </Button>
+      </div>
+    </div>
+  );
+};

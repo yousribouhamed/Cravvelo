@@ -9,6 +9,7 @@ import { ScrollArea, ScrollBar } from "@/registry/new-york/ui/scroll-area"
 
 const examples = [
 {
+
 name: "Mail",
 href: "/examples/mail",
 code: "https://github.com/shadcn/ui/tree/main/apps/www/app/examples/mail",
@@ -56,6 +57,7 @@ export function ExamplesNav({ className, ...props }: ExamplesNavProps) {
 const pathname = usePathname()
 
 return (
+
 <div className="relative">
 <ScrollArea className="max-w-[600px] lg:max-w-none">
 <div className={cn("mb-4 flex items-center", className)} {...props}>
@@ -92,6 +94,7 @@ return null
 }
 
 return (
+
 <Link
       href={example?.code}
       target="_blank"

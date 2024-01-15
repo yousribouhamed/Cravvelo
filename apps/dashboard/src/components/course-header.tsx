@@ -7,58 +7,72 @@ import { EyeOpenIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 
+import { usePathname } from "next/navigation";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
+
+import { ScrollArea, ScrollBar } from "@ui/components/scroll-area";
+
 const links = [
   {
     name: "باني الدورة",
-    url: "",
+    href: "/courses",
   },
   {
     name: "إعدادات الدورة",
-    url: "",
+    href: "/courses",
   },
   {
     name: "المحتوى التدريجي",
-    url: "",
+    href: "/courses",
   },
   {
     name: "التسعير",
-    url: "",
+    href: "/courses",
   },
 
   {
     name: "تفاعل الطلاب",
-    url: "",
+    href: "/courses",
   },
   {
     name: "المعاينة والنشر",
-    url: "",
+    href: "/courses",
   },
 ];
 
-const CourseHeader: FC = ({}) => {
+function CourseHeader({ className, ...props }: ExamplesNavProps) {
+  const pathname = usePathname();
   return (
-    <div className="w-full my-4 bg-white  border flex items-center justify-between pl-4 rounded-lg  h-[60px]">
-      <div className="w-fit h-full flex items-center justify-start gap-x-4">
-        {links.map((item) => (
-          <Link
-            key={item.name}
-            className={cn(
-              buttonVariants({ variant: "ghost" }),
-              "border-b-2 py-0 h-full rounded-[0] text-black font-bold  border-b-[#F0B110]"
-            )}
-            href={item.url}
-          >
-            {item.name}
-          </Link>
-        ))}
-      </div>
-      <Button variant="secondary" className="gap-x-3">
-        معاينة
-        <EyeOpenIcon className="h-4 w-4 text-gray-500" aria-hidden="true" />
-        <span className="sr-only">visite website</span>
-      </Button>
+    <div className="relative">
+      <ScrollArea className="w-full my-4 bg-white  border flex items-center justify-between pl-4 rounded-lg  h-[60px]">
+        <div className={cn("mb-4 flex items-center ", className)} {...props}>
+          {links.map((example, index) => (
+            <Link
+              href={example.href}
+              key={example.href}
+              className={cn(
+                "flex h-full items-center justify-center  px-4 text-center text-sm transition-colors hover:text-primary",
+                pathname?.startsWith(example.href) ||
+                  (index === 0 && pathname === "/")
+                  ? "bg-muted font-medium text-primary"
+                  : "text-muted-foreground"
+              )}
+            >
+              {example.name}
+            </Link>
+          ))}
+        </div>
+        <Button variant="secondary">
+          معاينة
+          <EyeOpenIcon className="h-4 w-4 text-gray-500" aria-hidden="true" />
+          <span className="sr-only">visite website</span>
+        </Button>
+        <ScrollBar orientation="horizontal" className="invisible" />
+      </ScrollArea>
     </div>
   );
-};
+}
 
 export default CourseHeader;
+
+interface ExamplesNavProps extends React.HTMLAttributes<HTMLDivElement> {}

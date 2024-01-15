@@ -83,9 +83,9 @@ const AreaChartOverview: FC = ({}) => {
                   <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="name" />
-              <YAxis />
-              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" tick={{ fill: "gray", fontSize: 10 }} />
+              <YAxis tick={{ fill: "gray", fontSize: 10 }} />
+              <CartesianGrid strokeDasharray="3 " />
               <Tooltip />
               <Area
                 type="monotone"
