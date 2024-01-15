@@ -166,6 +166,7 @@ span.ripple {
   * {
     @apply border-border;
     font-family: "Qatar2022 Arabic Book", sans-serif !important;
+    scroll-behavior: smooth;
   }
   body {
     @apply bg-background text-foreground;

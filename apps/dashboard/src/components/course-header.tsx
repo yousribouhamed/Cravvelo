@@ -35,18 +35,16 @@ const links = [
   },
 ];
 
-interface CourseHeaderAbdullahProps {}
-
 const CourseHeader: FC = ({}) => {
   return (
-    <div className="w-full my-4 bg-white shadow border flex items-center justify-between pl-4 rounded-lg  h-[53px]">
+    <div className="w-full my-4 bg-white  border flex items-center justify-between pl-4 rounded-lg  h-[60px]">
       <div className="w-fit h-full flex items-center justify-start gap-x-4">
         {links.map((item) => (
           <Link
             key={item.name}
             className={cn(
               buttonVariants({ variant: "ghost" }),
-              "border-b-2 border-b-[#F0B110]"
+              "border-b-2 py-0 h-full rounded-[0] text-black font-bold  border-b-[#F0B110]"
             )}
             href={item.url}
           >
@@ -54,7 +52,7 @@ const CourseHeader: FC = ({}) => {
           </Link>
         ))}
       </div>
-      <Button size="icon" variant="secondary">
+      <Button variant="secondary" className="gap-x-3">
         معاينة
         <EyeOpenIcon className="h-4 w-4 text-gray-500" aria-hidden="true" />
         <span className="sr-only">visite website</span>
