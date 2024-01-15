@@ -52,7 +52,11 @@ export const MobilNavBar: FC = ({}) => {
         <Accordion className="mt-12" type="single" collapsible>
           {links.map((item) => {
             return (
-              <AccordionItem className="border-b my-4" value="item-1">
+              <AccordionItem
+                key={item.name}
+                className="border-b my-4"
+                value="item-1"
+              >
                 <AccordionTrigger className="w-full  text-white h-[50px] flex justify-start text-xl font-bold ">
                   {item.name}
                 </AccordionTrigger>
