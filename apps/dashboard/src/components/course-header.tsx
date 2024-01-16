@@ -1,15 +1,10 @@
 "use client";
 
-import type { FC } from "react";
-
-import { Button, buttonVariants } from "@ui/components/ui/button";
+import { Button } from "@ui/components/ui/button";
 import { EyeOpenIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
-
 import { usePathname } from "next/navigation";
-import { ArrowRightIcon } from "@radix-ui/react-icons";
-
 import { ScrollArea, ScrollBar } from "@ui/components/scroll-area";
 
 const links = [
@@ -44,8 +39,11 @@ function CourseHeader({ className, ...props }: ExamplesNavProps) {
   const pathname = usePathname();
   return (
     <div className="relative">
-      <ScrollArea className="w-full my-4 bg-white  border flex items-center justify-between pl-4 rounded-lg  h-[60px]">
-        <div className={cn("mb-4 flex items-center ", className)} {...props}>
+      <ScrollArea className="w-full my-4 bg-white  border flex items-center justify-between pr-4 rounded-lg  h-[60px]">
+        <div
+          className={cn("mb-4 w-fit flex items-center ", className)}
+          {...props}
+        >
           {links.map((example, index) => (
             <Link
               href={example.href}
