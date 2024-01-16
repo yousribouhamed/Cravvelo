@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "@ui/styles/globals.css";
 import "@ui/font/stylesheet.css";
 import { NavBar } from "../components/layout/nav-bar";
 import Script from "next/script";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "جدارة",
@@ -19,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning dir="rtl" lang="ar">
-      <body className={inter.className + "min-h-screen h-fit  w-full"}>
+      <body className={"min-h-screen h-fit  w-full"}>
         <NavBar />
         <div className=" mt-52 w-full h-fit min-h-full">{children}</div>
       </body>
