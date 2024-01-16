@@ -50,57 +50,68 @@ export const NavBar: FC = ({}) => {
   }, []); // The empty dependency array ensures that the effect runs only once, when the component mounts
 
   return (
-    <div className="w-full h-[120px] z-[10] fixed top-4 ">
+    <>
+      <div className="w-full h-[41px] bg-[#43766C] flex justify-center items-center">
+        <p className="text-white text-center text-base">
+          جلسة تعريفية نقدم خلالها لمحة تفصيلية عن مساق ومميزاتها وكيفية عملها
+          وكيف تساعدك في التدريب وبيع المنتجات الرقمية، سنجيب أيضًا على أي أسئلة
+          لديك
+        </p>
+      </div>
       <div
-        className={cn(
-          "mx-auto w-full lg:max-w-screen-2xl     px-2.5 md:px-20",
-          {
-            "shadow-2xl rounded-xl bg-[#FDF8F1] ": hasShadow,
-          }
-        )}
+        className={`w-full h-[120px] z-[99] fixed top-0 ${
+          hasShadow ? "top-0" : "top-[41px]"
+        } `}
       >
-        <div className=" flex items-center mx-auto   justify-between rounded-xl gap-x-2 w-full h-[90px] lg:h-[110px] px-4 ">
-          {/* this section is for the logo */}
-          <div className="w-[20%] h-full flex items-center justify-start ">
-            <span className="text-3xl qatar-bold text-[#43766C] font-bold ">
-              جدارة{" "}
-            </span>
-          </div>
+        <div
+          //
+          className={cn("mx-auto w-full    px-2.5 md:px-20", {
+            "shadow-lg border-b bg-[#FDF8F1] ": hasShadow,
+          })}
+        >
+          <div className=" flex items-center mx-auto lg:max-w-screen-2xl 2xl:px-20 px-2.5  justify-between rounded-xl gap-x-2 w-full lg:h-[80px]  ">
+            {/* this section is for the logo */}
+            <div className="w-[20%] h-full flex items-center justify-start ">
+              <span className="text-2xl qatar-bold text-black font-bold ">
+                جدارة{" "}
+              </span>
+            </div>
 
-          {/* this section is for the nav menu and the action button */}
+            {/* this section is for the nav menu and the action button */}
 
-          <div className="w-[70%] hidden h-full lg:flex items-center justify-center ">
-            {links.map((item) => {
-              return (
-                <Link
-                  href={"/"}
-                  key={item.name}
-                  className={cn(
-                    buttonVariants({ variant: "link" }),
-                    "font-bold text-2xl leading-[40px]"
-                  )}
-                >
-                  {item.name}
-                </Link>
-              );
-            })}
-          </div>
-          <div className="w-[20%] hidden h-full lg:flex items-center justify-end">
-            <Link
-              href={"https://jadara-dashboard.vercel.app/sign-up"}
-              className={cn(
-                buttonVariants(),
-                "bg-[#43766C]  text-xl py-6  h-14 rounded-[17px]  text-white qatar-bold  hover:bg-[#61AFA0]"
-              )}
-            >
-              انشاء حساب
-            </Link>
-          </div>
-          <div className=" w-fit lg:hidden h-full flex items-center justify-end pl-4">
-            <MobilNavBar />
+            <div className="w-[70%] hidden h-full lg:flex items-center justify-center ">
+              {links.map((item) => {
+                return (
+                  <Link
+                    href={"/"}
+                    key={item.name}
+                    className={cn(
+                      buttonVariants({ variant: "link" }),
+                      "font-bold text-lg leading-[40px]"
+                    )}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
+            </div>
+            <div className="w-[20%] hidden h-full lg:flex items-center justify-end">
+              <Link
+                href={"https://jadara-dashboard.vercel.app/sign-up"}
+                className={cn(
+                  buttonVariants(),
+                  "bg-[#43766C]  text-xl py-4  h-12 rounded-[17px]  text-white font-bold  hover:bg-[#61AFA0]"
+                )}
+              >
+                انشاء حساب
+              </Link>
+            </div>
+            <div className=" w-fit lg:hidden h-full flex items-center justify-end pl-4">
+              <MobilNavBar />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
