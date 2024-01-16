@@ -67,7 +67,7 @@ const loading: FC = ({}) => {
       <span className="text-xl font-bold">مرحبًا بعودتك ...</span>
       <span className="text-sm text-gray-500  ">
         أول العلم الصمت والثاني حسن الإستماع والثالث حفظه والرابع العمل به
-        والخامس نشر
+        والخامس نشره
       </span>
     </div>
   );

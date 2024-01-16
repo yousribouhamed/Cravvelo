@@ -64,14 +64,13 @@ const AreaChartOverview: FC = ({}) => {
   return (
     <Card className="col-span-2 w-full h-full p-0">
       <CardContent className="p-0  w-full h-full">
-        <div className="w-full h-[50px] "></div>
-        <div dir="ltr" className="w-full h-full">
-          <ResponsiveContainer width="100%" height={350}>
+        <div dir="ltr" className="w-full h-full ">
+          <ResponsiveContainer width="100%" height={400}>
             <AreaChart
               width={730}
               height={250}
               data={data}
-              margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+              margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
             >
               <defs>
                 <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
@@ -83,8 +82,8 @@ const AreaChartOverview: FC = ({}) => {
                   <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="name" tick={{ fill: "gray", fontSize: 10 }} />
-              <YAxis tick={{ fill: "gray", fontSize: 10 }} />
+              {/* <XAxis dataKey="name" tick={{ fill: "gray", fontSize: 10 }} /> */}
+              {/* <YAxis tick={{ fill: "gray", fontSize: 10 }} /> */}
               <CartesianGrid strokeDasharray="3 " />
               <Tooltip />
               <Area

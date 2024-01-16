@@ -1,20 +1,18 @@
 "use client";
 
 import { Button } from "@ui/components/ui/button";
-import { EyeOpenIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { usePathname } from "next/navigation";
-import { ScrollArea, ScrollBar } from "@ui/components/scroll-area";
 
 const links = [
   {
     name: "باني الدورة",
-    href: "/courses",
+    href: "/courses/id/chapters",
   },
   {
     name: "إعدادات الدورة",
-    href: "/courses",
+    href: "/",
   },
   {
     name: "المحتوى التدريجي",
@@ -38,35 +36,29 @@ const links = [
 function CourseHeader({ className, ...props }: ExamplesNavProps) {
   const pathname = usePathname();
   return (
-    <div className="relative">
-      <ScrollArea className="w-full my-4 bg-white  border flex items-center justify-between pr-4 rounded-lg  h-[60px]">
-        <div
-          className={cn("mb-4 w-fit flex items-center ", className)}
-          {...props}
-        >
-          {links.map((example, index) => (
-            <Link
-              href={example.href}
-              key={example.href}
-              className={cn(
-                "flex h-full items-center justify-center  px-4 text-center text-sm transition-colors hover:text-primary",
-                pathname?.startsWith(example.href) ||
-                  (index === 0 && pathname === "/")
-                  ? "bg-muted font-medium text-primary"
-                  : "text-muted-foreground"
-              )}
-            >
-              {example.name}
-            </Link>
-          ))}
-        </div>
-        <Button variant="secondary">
-          معاينة
-          <EyeOpenIcon className="h-4 w-4 text-gray-500" aria-hidden="true" />
-          <span className="sr-only">visite website</span>
-        </Button>
-        <ScrollBar orientation="horizontal" className="invisible" />
-      </ScrollArea>
+    <div className="relative w-full my-4 h-[60px]">
+      <div
+        className={cn(
+          "mb-4 w-fit flex items-center ",
+          ` w-full  bg-white  border flex items-center justify-start   rounded-lg  h-full`
+        )}
+      >
+        {links.map((example, index) => (
+          <Link
+            href={example.href}
+            key={example.href}
+            className={cn(
+              "flex h-[60px] items-center justify-center border-b px-4 text-center text-sm transition-colors hover:text-primary",
+              pathname?.startsWith(example.href) ||
+                (index === 0 && pathname === "/")
+                ? "border-b-2 border-[#F0B110] text-black font-bold"
+                : ""
+            )}
+          >
+            {example.name}
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }
