@@ -29,6 +29,7 @@ const WhatYouCanDo: FC = ({}) => {
         <div className="border border-[#FFB800] col-span-1 transition-all duration-100 ease-in-out bg-white grid grid-rows-4 gap-y-1  rounded-lg">
           {what_to_do.map((item, index) => (
             <div
+              key={item.title}
               onClick={() => setSelected(index)}
               className={`w-[95%] mx-auto rounded-xl h-full flex cursor-pointer ${
                 selected === index ? "bg-[#D7E26F]" : "bg-transparent"
