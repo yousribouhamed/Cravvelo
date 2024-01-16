@@ -4,7 +4,7 @@ interface reviewsAbdullahProps {}
 
 const Reviews: FC = ({}) => {
   return (
-    <div className="w-[445.71px] h-[174.93px] p-4 bg-white rounded-[24.86px] shadow flex-col justify-center items-end  inline-flex">
+    <div className="w-[445.71px] h-[174.93px] p-8 bg-white rounded-[24.86px] shadow-lg flex-col justify-center items-end  inline-flex">
       <div className="justify-end items-center gap-[18.64px] inline-flex w-full h-[70px] ">
         <svg
           width="110"
@@ -41,10 +41,34 @@ const Reviews: FC = ({}) => {
           25{" "}
         </span>
       </div>
-      <div className="w-full   h-[180px] flex items-center justify-end gap-x-4 ">
+      <div className="w-full   h-[180px] gap-[18.64px] flex items-center justify-end  ">
+        <div className="flex w-full  justify-end items-center  -space-x-2 ">
+          <div className=" h-16 w-16 rounded-full ring-2 flex items-center justify-center bg-[#43766C] ring-[#43766C]">
+            {" "}
+            <span className="text-white text-xl font-bold">+12</span>{" "}
+          </div>
+          <img
+            className="inline-block h-16 w-16 rounded-full ring-2 ring-[#43766C]"
+            src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+            alt=""
+          />
+          <img
+            className="inline-block h-16 w-16 rounded-full ring-2 ring-[#43766C]"
+            src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
+            alt=""
+          />
+          <img
+            className="inline-block h-16 w-16 rounded-full ring-2 ring-[#43766C]"
+            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+            alt=""
+          />
+        </div>
+        <span className="text-black text-3xl font-extrabold  leading-[31.07px]">
+          4.9
+        </span>
         <svg
-          width="38"
-          height="38"
+          width="58"
+          height="58"
           viewBox="0 0 38 38"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -64,32 +88,6 @@ const Reviews: FC = ({}) => {
             stroke-linejoin="round"
           />
         </svg>
-        <span className="text-black text-[24.86px] font-extrabold font-['Manrope'] leading-[31.07px]">
-          4.9
-        </span>
-        <div className="flex -space-x-2 overflow-hidden">
-          <img
-            className="inline-block h-8 w-8 rounded-full ring-2 ring-white"
-            src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-            alt=""
-          />
-          <img
-            className="inline-block h-8 w-8 rounded-full ring-2 ring-white"
-            src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-            alt=""
-          />
-          <img
-            className="inline-block h-8 w-8 rounded-full ring-2 ring-white"
-            src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
-            alt=""
-          />
-          <img
-            className="inline-block h-8 w-8 rounded-full ring-2 ring-white"
-            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-            alt=""
-          />
-        </div>
-        ;
       </div>
     </div>
   );

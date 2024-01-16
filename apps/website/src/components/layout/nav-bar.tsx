@@ -1,7 +1,7 @@
 "use client";
 
 import React, { type FC } from "react";
-import { Button, buttonVariants } from "@ui/components/button";
+import { buttonVariants } from "@ui/components/button";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { MobilNavBar } from "./mobil-nav-bar";
@@ -10,6 +10,14 @@ interface HeaderAbdullahProps {}
 const links = [
   {
     name: "الرئيسية",
+    slug: "/",
+  },
+  {
+    name: "المنتج",
+    slug: "/",
+  },
+  {
+    name: "المصادر",
     slug: "/",
   },
   {
@@ -51,18 +59,18 @@ export const NavBar: FC = ({}) => {
 
   return (
     <>
-      <div className="w-full h-[41px] bg-[#43766C] flex justify-center items-center">
-        <p className="text-white text-center text-base">
-          جلسة تعريفية نقدم خلالها لمحة تفصيلية عن مساق ومميزاتها وكيفية عملها
-          وكيف تساعدك في التدريب وبيع المنتجات الرقمية، سنجيب أيضًا على أي أسئلة
-          لديك
-        </p>
-      </div>
       <div
-        className={`w-full h-[120px] z-[99] fixed top-0 ${
-          hasShadow ? "top-0" : "top-[41px]"
-        } `}
+        className={`w-full h-[120px] z-[99] fixed top-0 
+         
+         `}
       >
+        <div className="w-full h-[41px] bg-[#43766C] flex justify-center items-center">
+          <p className="text-white text-center text-base">
+            جلسة تعريفية نقدم خلالها لمحة تفصيلية عن مساق ومميزاتها وكيفية عملها
+            وكيف تساعدك في التدريب وبيع المنتجات الرقمية، سنجيب أيضًا على أي
+            أسئلة لديك
+          </p>
+        </div>
         <div
           //
           className={cn("mx-auto w-full    px-2.5 md:px-20", {
@@ -71,7 +79,7 @@ export const NavBar: FC = ({}) => {
         >
           <div className=" flex items-center mx-auto lg:max-w-screen-2xl 2xl:px-20 px-2.5  justify-between rounded-xl gap-x-2 w-full lg:h-[80px]  ">
             {/* this section is for the logo */}
-            <div className="w-[20%] h-full flex items-center justify-start ">
+            <div className="w-[10%] h-full flex items-center justify-start ">
               <span className="text-2xl qatar-bold text-black font-bold ">
                 جدارة{" "}
               </span>
@@ -79,7 +87,7 @@ export const NavBar: FC = ({}) => {
 
             {/* this section is for the nav menu and the action button */}
 
-            <div className="w-[70%] hidden h-full lg:flex items-center justify-center ">
+            <div className="w-[80%] hidden h-full lg:flex items-center justify-start ">
               {links.map((item) => {
                 return (
                   <Link
@@ -97,13 +105,13 @@ export const NavBar: FC = ({}) => {
             </div>
             <div className="w-[20%] hidden h-full lg:flex items-center justify-end">
               <Link
-                href={"https://jadara-dashboard.vercel.app/sign-up"}
+                href={"https://jadara-dashboard.vercel.app/sign-in"}
                 className={cn(
                   buttonVariants(),
                   "bg-[#43766C]  text-xl py-4  h-12 rounded-[17px]  text-white font-bold  hover:bg-[#61AFA0]"
                 )}
               >
-                انشاء حساب
+                تسجيل الدخول
               </Link>
             </div>
             <div className=" w-fit lg:hidden h-full flex items-center justify-end pl-4">

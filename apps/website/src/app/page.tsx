@@ -5,7 +5,6 @@ import Reviews from "../components/reviews";
 import WhatYouCanDo from "../components/sections/what-you-can-do";
 import HeroLights from "../components/svgs/hero-lights";
 import Image from "next/image";
-import { what_to_do } from "../constants/data";
 
 export default function Page() {
   return (
