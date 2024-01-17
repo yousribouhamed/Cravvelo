@@ -17,7 +17,8 @@ import { cn } from "@ui/lib/utils";
 
 const Chapter: FC = ({}) => {
   const path = usePathname();
-  const router = useRouter();
+
+  // const router = useRouter();
 
   return (
     <Card className="p-0">
@@ -74,7 +75,7 @@ const Chapter: FC = ({}) => {
 export default Chapter;
 
 const AddToChapter = ({ path }: { path: string }) => {
-  const courseId = getValueFromUrl(path, 3);
+  const courseId = getValueFromUrl(path, 2);
 
   const maps = [
     {

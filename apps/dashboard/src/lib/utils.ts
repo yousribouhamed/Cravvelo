@@ -87,7 +87,7 @@ export function getValueFromUrl(
   pathname: string,
   index: number
 ): string | null {
-  const pathSegments = pathname.split("/").filter((segment) => segment !== "");
+  const pathSegments = pathname.split("/");
 
   if (index >= 0 && index < pathSegments.length) {
     return pathSegments[index];
