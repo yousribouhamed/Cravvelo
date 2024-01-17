@@ -1,7 +1,5 @@
 import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
 import Header from "@/src/components/Header";
-import CourseHeader from "@/src/components/course-header";
-import Chapter from "@/src/components/chapter";
 import { User } from "@clerk/nextjs/dist/types/server";
 import AddTextForm from "@/src/components/forms/add-text-form";
 
