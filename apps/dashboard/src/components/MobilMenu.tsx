@@ -15,7 +15,7 @@ import {
   useSelectedLayoutSegment,
 } from "next/navigation";
 import React from "react";
-import { Button, buttonVariants } from "@ui/components/ui/button";
+import { buttonVariants } from "@ui/components/ui/button";
 
 import { ScrollArea } from "@ui/components/ui/scroll-area";
 import { cn } from "@ui/lib/utils";
@@ -100,7 +100,7 @@ const SideBarMenu: FC = ({}) => {
                   }}
                   className={cn(
                     buttonVariants({ variant: "ghost" }),
-                    "w-full flex items-center justify-end qatar-semibold text-md  gap-x-2 hover:!bg-transparent hover:!text-white text-[#A9B9B6] ",
+                    "w-full flex items-center justify-end qatar-semibold group text-md  gap-x-2 hover:!bg-transparent hover:!text-white text-[#A9B9B6] ",
                     {
                       "text-white bg-[#325951]": path === item.slug,
                     }
@@ -108,7 +108,7 @@ const SideBarMenu: FC = ({}) => {
                 >
                   {item.title}
                   <item.icon
-                    className={`w-4 h-4  ${
+                    className={`w-4 h-4 group-hover:text-white  ${
                       path === item.slug ? "!text-white" : "!text-[#A9B9B6] "
                     }`}
                   />

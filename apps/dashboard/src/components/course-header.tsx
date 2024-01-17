@@ -36,7 +36,7 @@ const links = [
 function CourseHeader({ className, ...props }: ExamplesNavProps) {
   const pathname = usePathname();
   return (
-    <div className="relative w-full my-4 h-[60px]">
+    <div className="relative shadow w-full my-4 h-[60px]">
       <div
         className={cn(
           "mb-4 w-fit flex items-center ",
