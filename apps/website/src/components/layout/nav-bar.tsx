@@ -5,6 +5,7 @@ import { buttonVariants } from "@ui/components/button";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { MobilNavBar } from "./mobil-nav-bar";
+import { useRouter, usePathname } from "next/navigation";
 interface HeaderAbdullahProps {}
 
 const links = [
@@ -14,23 +15,23 @@ const links = [
   },
   {
     name: "المنتج",
-    slug: "/",
+    slug: "/product",
   },
   {
     name: "المصادر",
-    slug: "/",
+    slug: "/resources",
   },
   {
     name: "الخدمات",
-    slug: "/",
+    slug: "/services",
   },
   {
     name: "الاسعار",
-    slug: "/",
+    slug: "/pricing",
   },
   {
     name: "جدارة +",
-    slug: "/",
+    slug: "/jadara+",
   },
 ];
 
@@ -38,6 +39,7 @@ const links = [
 
 export const NavBar: FC = ({}) => {
   const [hasShadow, setHasShadow] = React.useState(false);
+  const path = usePathname();
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -74,7 +76,7 @@ export const NavBar: FC = ({}) => {
         <div
           //
           className={cn("mx-auto w-full    px-2.5 md:px-20", {
-            "shadow-lg border-b bg-[#FDF8F1] ": hasShadow,
+            "shadow-lg border-b bg-white ": hasShadow,
           })}
         >
           <div className=" flex items-center mx-auto lg:max-w-screen-2xl 2xl:px-20 px-2.5  justify-between rounded-xl gap-x-2 w-full lg:h-[80px]  ">
@@ -95,7 +97,11 @@ export const NavBar: FC = ({}) => {
                     key={item.name}
                     className={cn(
                       buttonVariants({ variant: "link" }),
-                      "font-bold text-lg leading-[40px]"
+                      "font-bold text-lg leading-[40px]",
+                      {
+                        "border-[#FFB700] border-1 rounded-full bg-[#FFEEC5]":
+                          item.slug === path,
+                      }
                     )}
                   >
                     {item.name}
