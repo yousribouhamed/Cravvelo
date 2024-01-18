@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning dir="rtl" lang="ar">
-      <body className={"min-h-screen h-fit  w-full"}>
+      <body className={"min-h-screen h-fit  bg-[#FAFAFA] w-full"}>
         <NavBar />
         <div className=" mt-52 w-full h-fit min-h-full">{children}</div>
       </body>

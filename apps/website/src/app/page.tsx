@@ -5,6 +5,7 @@ import Reviews from "../components/reviews";
 import WhatYouCanDo from "../components/sections/what-you-can-do";
 import HeroLights from "../components/svgs/hero-lights";
 import Image from "next/image";
+import Pricing from "../components/pricing";
 
 export default function Page() {
   return (
@@ -393,6 +394,9 @@ export default function Page() {
             </p>
           </div>
         </div>
+      </MaxWidthWrapper>
+      <MaxWidthWrapper>
+        <Pricing />
       </MaxWidthWrapper>
       <MaxWidthWrapper className="my-8 relative  pt-[100px] h-[600px]">
         <div className="w-full mx-auto h-[500px]  bg-[#43766C] grid grid-cols-2 rounded-3xl">
