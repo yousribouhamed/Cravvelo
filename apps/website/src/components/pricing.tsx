@@ -10,7 +10,10 @@ const Pricing: FC = ({}) => {
       <div className="w-full max-w-6xl mx-auto h-[800px] grid grid-cols-3 gap-10 ">
         {PLANS.map((item) => {
           return (
-            <div className="w-full h-full bg-white shadow-2xl border rounded-2xl py-2 px-4 flex flex-col ">
+            <div
+              key={item.plan}
+              className="w-full h-full bg-white shadow-2xl border rounded-2xl py-2 px-4 flex flex-col "
+            >
               <div className="w-full h-[100px] flex items-center justify-start gap-x-4 ">
                 <svg
                   width="63"
