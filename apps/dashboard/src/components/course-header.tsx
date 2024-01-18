@@ -4,37 +4,47 @@ import { Button } from "@ui/components/ui/button";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { usePathname } from "next/navigation";
+import { getValueFromUrl } from "../lib/utils";
 
-const links = [
-  {
-    name: "باني الدورة",
-    href: "/courses/id/chapters",
-  },
-  {
-    name: "إعدادات الدورة",
-    href: "/",
-  },
-  {
-    name: "المحتوى التدريجي",
-    href: "/courses",
-  },
-  {
-    name: "التسعير",
-    href: "/courses",
-  },
+const getLinks = ({ id }: { id: string }) => {
+  const links = [
+    {
+      name: "باني الدورة",
+      href: `/courses/${id}/chapters`,
+    },
+    {
+      name: "إعدادات الدورة",
+      href: `/courses/${id}/settings`,
+    },
+    {
+      name: "المحتوى التدريجي",
+      href: `/courses/${id}/drip-content`,
+    },
+    {
+      name: "التسعير",
+      href: `/courses/${id}/pricing`,
+    },
 
-  {
-    name: "تفاعل الطلاب",
-    href: "/courses",
-  },
-  {
-    name: "المعاينة والنشر",
-    href: "/courses",
-  },
-];
+    {
+      name: "تفاعل الطلاب",
+      href: `/courses/${id}/students-management`,
+    },
+    {
+      name: "المعاينة والنشر",
+      href: `/courses/${id}/publishing`,
+    },
+  ];
+
+  return links;
+};
 
 function CourseHeader({ className, ...props }: ExamplesNavProps) {
   const pathname = usePathname();
+
+  const courseId = getValueFromUrl(pathname, 2);
+
+  const links = getLinks({ id: courseId });
+
   return (
     <div className="relative shadow w-full my-4 h-[60px]">
       <div
@@ -43,19 +53,18 @@ function CourseHeader({ className, ...props }: ExamplesNavProps) {
           ` w-full  bg-white  border flex items-center justify-start   rounded-lg  h-full`
         )}
       >
-        {links.map((example, index) => (
+        {links.map((item, index) => (
           <Link
-            href={example.href}
-            key={example.href}
+            href={item.href}
+            key={item.href}
             className={cn(
               "flex h-[60px] items-center justify-center border-b px-4 text-center text-sm transition-colors hover:text-primary",
-              pathname?.startsWith(example.href) ||
-                (index === 0 && pathname === "/")
+              pathname?.includes(item.href) || (index === 0 && pathname === "/")
                 ? "border-b-2 border-[#F0B110] text-black font-bold"
                 : ""
             )}
           >
-            {example.name}
+            {item.name}
           </Link>
         ))}
       </div>

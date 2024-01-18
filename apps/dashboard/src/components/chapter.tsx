@@ -15,7 +15,11 @@ import { getValueFromUrl } from "../lib/utils";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 
-const Chapter: FC = ({}) => {
+interface ChapterProps {
+  title: string;
+  chapterID: string;
+}
+const Chapter: FC<ChapterProps> = ({ chapterID, title }) => {
   const path = usePathname();
 
   // const router = useRouter();
@@ -55,7 +59,7 @@ const Chapter: FC = ({}) => {
                     </svg>
                   </Button>
                   <div className=" flex flex-col items-start justify-center gap-y-1">
-                    <h2 className="text-sm font-bold">عناصر واجهات المستخدم</h2>
+                    <h2 className="text-sm font-bold">{title}</h2>
                     <span className="text-xs text-gray-500">مواد0</span>
                   </div>
                 </div>
