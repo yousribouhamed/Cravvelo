@@ -28,7 +28,9 @@ const ChaptersBoard: FC<ChaptersBoardAbdullahProps> = ({ initialData }) => {
   return (
     <div className="w-full flex flex-col gap-y-4 min-h-[100px] ">
       {data?.map((item) => {
-        return <Chapter title={item?.title} chapterID={item.id} />;
+        return (
+          <Chapter key={item.id} title={item?.title} chapterID={item.id} />
+        );
       })}
 
       <div className="w-full h-[100px] flex items-center justify-center py-2">

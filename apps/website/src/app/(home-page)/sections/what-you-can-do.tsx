@@ -1,7 +1,7 @@
 "use client";
 
 import type { FC } from "react";
-import MaxWidthWrapper from "../max-width-wrapper";
+import MaxWidthWrapper from "../../../components/max-width-wrapper";
 import { what_to_do } from "@/src/constants/data";
 import * as React from "react";
 
