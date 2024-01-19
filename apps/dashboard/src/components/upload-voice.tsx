@@ -8,7 +8,7 @@ import { useUploadThing } from "../lib/uploadthing";
 import { toast } from "@ui/lib/utils";
 import { XCircle } from "lucide-react";
 
-export const JadaraUploadDropzone = ({
+export const JadaraVoiceUpLoader = ({
   onChnage,
 }: {
   onChnage: (richTeact: any) => void;

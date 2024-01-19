@@ -1,6 +1,7 @@
 "use client";
 
 import * as z from "zod";
+import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { trpc } from "@/src/app/_trpc/client";
@@ -15,16 +16,17 @@ import {
 } from "@ui/components/ui/form";
 import { Input } from "@ui/components/ui/input";
 import { Card, CardContent } from "@ui/components/ui/card";
-import Tiptap from "../tiptap";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
+import { JadaraUploadDropzone } from "../../upload-dropzone";
 
-const addTextSchema = z.object({
+const addPDFSchema = z.object({
   title: z.string().min(2).max(50),
-  content: z.any(),
+  // content: z.any(),
+  fileUrl: z.string(),
 });
 
-function AddTextForm() {
+function AddPdfForm() {
   const router = useRouter();
   const path = usePathname();
   const chapterID = getValueFromUrl(path, 4);
@@ -34,21 +36,23 @@ function AddTextForm() {
     onError: () => {},
   });
 
-  const form = useForm<z.infer<typeof addTextSchema>>({
+  const form = useForm<z.infer<typeof addPDFSchema>>({
     mode: "onChange",
-    resolver: zodResolver(addTextSchema),
+    resolver: zodResolver(addPDFSchema),
     defaultValues: {
       title: "",
-      content: JSON.stringify(""),
+      fileUrl: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof addTextSchema>) {
+  async function onSubmit(values: z.infer<typeof addPDFSchema>) {
+    console.log("here it is file url");
+    console.log(values);
     await mutation.mutateAsync({
       chapterID: chapterID,
-      content: values.content,
-      fileType: "TEXT",
-      fileUrl: "",
+      content: "",
+      fileType: "PDF",
+      fileUrl: values.fileUrl,
       title: values.title,
     });
   }
@@ -68,7 +72,7 @@ function AddTextForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    عنوان النص <span className="text-red-600 text-xl">*</span>
+                    عنوان الملف <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input placeholder="shadcn" {...field} />
@@ -78,24 +82,27 @@ function AddTextForm() {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
-              name="content"
+              name="fileUrl"
               render={({ field }) => (
-                <FormItem className="w-full ">
+                <FormItem>
                   <FormLabel>
-                    محتوى <span className="text-red-600 text-xl">*</span>
+                    إضافة ملف pdf{" "}
+                    <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Tiptap
-                      description={field.name}
-                      onChnage={field.onChange}
-                    />
+                    <JadaraUploadDropzone onChnage={field.onChange} />
                   </FormControl>
+
                   <FormMessage />
                 </FormItem>
               )}
             />
+            {/* <div>
+           
+            </div> */}
           </form>
         </Form>
       </div>
@@ -128,4 +135,4 @@ function AddTextForm() {
   );
 }
 
-export default AddTextForm;
+export default AddPdfForm;
