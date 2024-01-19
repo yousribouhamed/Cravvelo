@@ -45,6 +45,8 @@ model Chapter {
   id                     String @default(uuid()) @unique
   courseID               String
   title                  String 
+  modules                Json?
+  orderNumber            Int
   createdAt              DateTime            @default(now())
   updatedAt              DateTime            @updatedAt 
 }

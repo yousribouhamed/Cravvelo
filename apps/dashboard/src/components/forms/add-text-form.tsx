@@ -1,10 +1,9 @@
 "use client";
 
 import * as z from "zod";
-import type { FC } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
+import { trpc } from "@/src/app/_trpc/client";
 import { Button } from "@ui/components/ui/button";
 import {
   Form,
@@ -17,6 +16,8 @@ import {
 import { Input } from "@ui/components/ui/input";
 import { Card, CardContent } from "@ui/components/ui/card";
 import Tiptap from "../tiptap";
+import { usePathname, useRouter } from "next/navigation";
+import { getValueFromUrl } from "@/src/lib/utils";
 
 const addTextSchema = z.object({
   title: z.string().min(2).max(50),
@@ -24,6 +25,15 @@ const addTextSchema = z.object({
 });
 
 function AddTextForm() {
+  const router = useRouter();
+  const path = usePathname();
+  const chapterID = getValueFromUrl(path, 4);
+
+  const mutation = trpc.createModule.useMutation({
+    onSuccess: () => {},
+    onError: () => {},
+  });
+
   const form = useForm<z.infer<typeof addTextSchema>>({
     mode: "onChange",
     resolver: zodResolver(addTextSchema),
@@ -33,8 +43,14 @@ function AddTextForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof addTextSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof addTextSchema>) {
+    await mutation.mutateAsync({
+      chapterID: chapterID,
+      content: values.content,
+      fileType: "TEXT",
+      fileUrl: "",
+      title: values.title,
+    });
   }
 
   return (
@@ -86,11 +102,22 @@ function AddTextForm() {
       <div className="col-span-1 w-full h-full ">
         <Card>
           <CardContent className="w-full h-fit flex flex-col p-6  space-y-4">
-            <Button type="submit" form="add-text" className="w-full" size="lg">
+            <Button
+              disabled={mutation.isLoading}
+              type="submit"
+              form="add-text"
+              className="w-full"
+              size="lg"
+            >
               {" "}
               حفظ والمتابعة
             </Button>
-            <Button className="w-full" variant="secondary" size="lg">
+            <Button
+              onClick={() => router.back()}
+              className="w-full"
+              variant="secondary"
+              size="lg"
+            >
               {" "}
               إلغاء والعودة
             </Button>

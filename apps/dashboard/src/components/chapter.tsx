@@ -14,12 +14,14 @@ import { useRouter, usePathname } from "next/navigation";
 import { getValueFromUrl } from "../lib/utils";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
+import { Module } from "../types";
 
 interface ChapterProps {
   title: string;
   chapterID: string;
+  modules: Module[];
 }
-const Chapter: FC<ChapterProps> = ({ chapterID, title }) => {
+const Chapter: FC<ChapterProps> = ({ chapterID, title, modules }) => {
   const path = usePathname();
 
   // const router = useRouter();
@@ -60,14 +62,24 @@ const Chapter: FC<ChapterProps> = ({ chapterID, title }) => {
                   </Button>
                   <div className=" flex flex-col items-start justify-center gap-y-1">
                     <h2 className="text-sm font-bold">{title}</h2>
-                    <span className="text-xs text-gray-500">مواد0</span>
+                    <span className="text-xs text-gray-500">
+                      مواد{modules.length}
+                    </span>
                   </div>
                 </div>
-                <div></div>
               </div>
             </AccordionTrigger>
             <AccordionContent className="h-[300px] w-full">
-              <AddToChapter path={path} />
+              <div>
+                {modules?.map((item) => {
+                  return (
+                    <div className="w-full h-[50px] flex items-center bg-[#dbdede] ">
+                      <span className="font-bold text-xl">{item.title}</span>
+                    </div>
+                  );
+                })}
+              </div>
+              <AddToChapter path={path} chapterID={chapterID} />
             </AccordionContent>
           </AccordionItem>
         </Accordion>
@@ -78,13 +90,19 @@ const Chapter: FC<ChapterProps> = ({ chapterID, title }) => {
 
 export default Chapter;
 
-const AddToChapter = ({ path }: { path: string }) => {
+const AddToChapter = ({
+  path,
+  chapterID,
+}: {
+  path: string;
+  chapterID: string;
+}) => {
   const courseId = getValueFromUrl(path, 2);
 
   const maps = [
     {
       name: "فيديو",
-      url: `/courses/${courseId}/chapters/123/add-vedio`,
+      url: `/courses/${courseId}/chapters/${chapterID}/add-vedio`,
       icon: () => (
         <svg
           width="16"
@@ -104,7 +122,7 @@ const AddToChapter = ({ path }: { path: string }) => {
     },
     {
       name: "ملف PDF",
-      url: `/courses/${courseId}/chapters/123/add-pdf`,
+      url: `/courses/${courseId}/chapters/${chapterID}/add-pdf`,
       icon: () => (
         <svg
           width="11"
@@ -125,7 +143,7 @@ const AddToChapter = ({ path }: { path: string }) => {
     },
     {
       name: " صوت",
-      url: `/courses/${courseId}/chapters/123/add-vioce`,
+      url: `/courses/${courseId}/chapters/${chapterID}/add-vioce`,
       icon: () => (
         <svg
           width="17"
@@ -158,7 +176,7 @@ const AddToChapter = ({ path }: { path: string }) => {
     },
     {
       name: "فصل افتراضي",
-      url: `/courses/${courseId}/chapters/123/add-vioce`,
+      url: `/courses/${courseId}/chapters/${chapterID}/add-vioce`,
       icon: () => (
         <svg
           width="17"
@@ -179,7 +197,7 @@ const AddToChapter = ({ path }: { path: string }) => {
     },
     {
       name: " نص",
-      url: `/courses/${courseId}/chapters/123/add-text`,
+      url: `/courses/${courseId}/chapters/${chapterID}/add-text`,
       icon: () => (
         <svg
           width="17"

@@ -11,6 +11,7 @@ import { Button } from "@ui/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 import {
   Form,
@@ -66,7 +67,24 @@ const AddCourse: FC = ({}) => {
   return (
     <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
       <DialogTrigger asChild>
-        <Button>أنشئ دورة جديدة</Button>
+        <Button>
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 18 18"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.8575 3.61523V14.0404M14.0701 8.82784H3.6449"
+              stroke="white"
+              stroke-width="1.04252"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          أنشئ دورة جديدة
+        </Button>
       </DialogTrigger>
       <DialogContent title="إضافة دورة جديدة">
         <div className="w-full px-4 pb-6">
@@ -91,14 +109,8 @@ const AddCourse: FC = ({}) => {
               />
               <DialogFooter className="w-full h-[50px] flex items-center justify-end gap-x-4">
                 <Button variant="ghost">إلغاء</Button>
-                <Button type="submit">
-                  {isLaoding && (
-                    <Icons.spinner
-                      className="ml-2 h-4 w-4 animate-spin"
-                      aria-hidden="true"
-                    />
-                  )}
-                  إضافة جديد
+                <Button disabled={isLaoding} type="submit">
+                  {isLaoding ? <LoadingSpinner /> : "إضافة جديد"}
                 </Button>
               </DialogFooter>
             </form>

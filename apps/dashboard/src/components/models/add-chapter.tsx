@@ -30,9 +30,10 @@ import { Icons } from "../Icons";
 
 interface Props {
   refetch: () => Promise<any>;
+  chaptersNumber: number;
 }
 
-const AddChapter: FC<Props> = ({ refetch }) => {
+const AddChapter: FC<Props> = ({ refetch, chaptersNumber }) => {
   const router = useRouter();
   const path = usePathname();
   const courseID = getValueFromUrl(path, 2);
@@ -62,6 +63,7 @@ const AddChapter: FC<Props> = ({ refetch }) => {
       .mutateAsync({
         title: data.title,
         courseId: courseID,
+        orderNumber: chaptersNumber + 1,
       })
       .then(() => {
         setIsLoading(false);

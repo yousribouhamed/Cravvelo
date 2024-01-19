@@ -16,7 +16,7 @@ export default async function Home() {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
-        <Header user={user} title="ui ux" />
+        <Header goBack user={user} title="ui ux" />
         <div className="w-full h-[70px]  flex items-center justify-between">
           <div>hado les lies </div>
           <Button>تعديل الدورة</Button>
