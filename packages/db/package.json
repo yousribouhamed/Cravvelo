@@ -6,7 +6,9 @@
   "scripts": {
     "db:format": "dotenv -e ../../.env prisma format",
     "db:generate": "dotenv -e ../../.env prisma generate",
-    "db:push": "dotenv -e ../../.env prisma db push"
+    "db:push": "dotenv -e ../../.env prisma db push",
+    "db:reset": "dotenv -e ../../.env prisma db push -- --force-reset",
+    "db:studio": "dotenv -e ../../.env prisma studio"
   },
   "dependencies": {
     "@prisma/client": "latest"
