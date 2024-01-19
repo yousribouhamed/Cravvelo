@@ -73,7 +73,10 @@ const Chapter: FC<ChapterProps> = ({ chapterID, title, modules }) => {
               <div>
                 {modules?.map((item) => {
                   return (
-                    <div className="w-full h-[50px] flex items-center bg-[#dbdede] ">
+                    <div
+                      key={item.orderNumber + item.title}
+                      className="w-full h-[50px] flex items-center bg-[#dbdede] "
+                    >
                       <span className="font-bold text-xl">{item.title}</span>
                     </div>
                   );

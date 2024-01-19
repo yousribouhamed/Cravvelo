@@ -30,7 +30,6 @@ function AddPdfForm() {
   const router = useRouter();
   const path = usePathname();
   const chapterID = getValueFromUrl(path, 4);
-  const [fileUrl, setFileUrl] = React.useState<string>("");
 
   const mutation = trpc.createModule.useMutation({
     onSuccess: () => {},
@@ -49,13 +48,13 @@ function AddPdfForm() {
   async function onSubmit(values: z.infer<typeof addPDFSchema>) {
     console.log("here it is file url");
     console.log(values);
-    // await mutation.mutateAsync({
-    //   chapterID: chapterID,
-    //   content: values.content,
-    //   fileType: "TEXT",
-    //   fileUrl: "",
-    //   title: values.title,
-    // });
+    await mutation.mutateAsync({
+      chapterID: chapterID,
+      content: "",
+      fileType: "PDF",
+      fileUrl: values.fileUrl,
+      title: values.title,
+    });
   }
 
   return (

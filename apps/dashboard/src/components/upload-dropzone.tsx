@@ -18,7 +18,7 @@ export const JadaraUploadDropzone = ({
   const [uploadProgress, setUploadProgress] = React.useState<number>(0);
   const [isError, setIsError] = React.useState<boolean>(false);
 
-  const { startUpload } = useUploadThing("pdfUploader");
+  const { startUpload } = useUploadThing("imageUploader");
 
   const startSimulatedProgress = () => {
     setUploadProgress(0);
@@ -50,6 +50,7 @@ export const JadaraUploadDropzone = ({
         });
 
         if (!res) {
+          console.log(res);
           setIsError(true);
           toast("Something went wrong");
           return;

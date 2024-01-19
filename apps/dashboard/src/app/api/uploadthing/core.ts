@@ -21,6 +21,30 @@ export const ourFileRouter = {
         file,
       };
     }),
+  imageUploader: f({ pdf: { maxFileSize: "1024MB" } })
+    // .middleware(async ({ req }) => {
+    //   const user = await auth();
+    //   if (!user) throw new Error("Unauthorized");
+    //   return { userId: user.id };
+    // })
+    .onUploadComplete(async ({ file }) => {
+      // here i need to save the file to the currect module
+      return {
+        file,
+      };
+    }),
+  voiceUploader: f({ audio: { maxFileSize: "1024GB" } })
+    // .middleware(async ({ req }) => {
+    //   const user = await auth();
+    //   if (!user) throw new Error("Unauthorized");
+    //   return { userId: user.id };
+    // })
+    .onUploadComplete(async ({ file }) => {
+      // here i need to save the file to the currect module
+      return {
+        file,
+      };
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
