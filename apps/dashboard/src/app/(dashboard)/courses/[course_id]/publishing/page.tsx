@@ -6,6 +6,7 @@ import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { prisma } from "database/src";
 import ChaptersBoard from "@/src/components/chapters-board";
+import PublishCourseForm from "@/src/components/forms/course-forms/publish-form";
 
 const getChapters = async () => {
   try {
@@ -32,6 +33,7 @@ export default async function Home() {
       <main className="w-full flex flex-col  justify-start">
         <Header user={{ user } as unknown as User} title="ui ux" />
         <CourseHeader />
+        <PublishCourseForm />
       </main>
     </MaxWidthWrapper>
   );

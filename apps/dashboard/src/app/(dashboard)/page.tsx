@@ -19,8 +19,6 @@ export default async function Home() {
     redirect("/sign-in");
   }
 
-  console.log(user);
-
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col overflow-y-hidden h-fit  justify-start">
