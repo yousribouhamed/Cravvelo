@@ -8,6 +8,7 @@ export default authMiddleware({
     "/sign-up(.*)",
     "/sso-callback(.*)",
     "/courses(.*)",
+    "/api/uploadthing(.*)",
   ],
 });
 

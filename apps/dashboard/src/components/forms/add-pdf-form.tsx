@@ -22,7 +22,8 @@ import { JadaraUploadDropzone } from "../upload-dropzone";
 
 const addPDFSchema = z.object({
   title: z.string().min(2).max(50),
-  content: z.any(),
+  // content: z.any(),
+  fileUrl: z.string(),
 });
 
 function AddPdfForm() {
@@ -41,18 +42,20 @@ function AddPdfForm() {
     resolver: zodResolver(addPDFSchema),
     defaultValues: {
       title: "",
-      content: JSON.stringify(""),
+      fileUrl: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof addPDFSchema>) {
-    await mutation.mutateAsync({
-      chapterID: chapterID,
-      content: values.content,
-      fileType: "TEXT",
-      fileUrl: "",
-      title: values.title,
-    });
+    console.log("here it is file url");
+    console.log(values);
+    // await mutation.mutateAsync({
+    //   chapterID: chapterID,
+    //   content: values.content,
+    //   fileType: "TEXT",
+    //   fileUrl: "",
+    //   title: values.title,
+    // });
   }
 
   return (
@@ -70,7 +73,7 @@ function AddPdfForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    عنوان النص <span className="text-red-600 text-xl">*</span>
+                    عنوان الملف <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input placeholder="shadcn" {...field} />
@@ -80,9 +83,27 @@ function AddPdfForm() {
                 </FormItem>
               )}
             />
-            <div>
-              <JadaraUploadDropzone setFileUrl={setFileUrl} fileUrl={fileUrl} />
-            </div>
+
+            <FormField
+              control={form.control}
+              name="fileUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    إضافة ملف pdf{" "}
+                    <span className="text-red-600 text-xl">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <JadaraUploadDropzone onChnage={field.onChange} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* <div>
+           
+            </div> */}
           </form>
         </Form>
       </div>

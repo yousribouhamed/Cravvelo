@@ -4,7 +4,7 @@ import * as React from "react";
 import Dropzone from "react-dropzone";
 import { Cloud, File } from "lucide-react";
 import { Progress } from "@ui/components/ui/progress";
-import { useUploadThing } from "../lib/uploadthing";
+import { useUploadThing } from "./uploadthing";
 import { toast } from "@ui/lib/utils";
 
 import { XCircle } from "lucide-react";
