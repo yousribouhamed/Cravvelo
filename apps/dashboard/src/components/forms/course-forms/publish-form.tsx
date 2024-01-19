@@ -3,12 +3,6 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@ui/components/ui/tabs";
 import { Button } from "@ui/components/ui/button";
 import {
   Form,
@@ -45,7 +39,7 @@ const selectionButtoms = [
   },
   {
     title: "خاص",
-    description: "لا يمكن الوصول إليه إلا من خلال عنوان url",
+    description: " إلا من خلال عنوان url",
     value: "PRIVATE",
   },
 ];
@@ -97,7 +91,7 @@ function PublishCourseForm() {
       </div>
       <div className="col-span-1 w-full h-full ">
         <Card>
-          <CardContent className="w-full bg-[#F2F4F4]  h-fit flex flex-col  space-y-2">
+          <CardContent className="w-full bg-[#F2F4F4]  h-fit flex flex-col pt-4  space-y-2">
             {selectionButtoms.map((item) => (
               <Button
                 key={item.value}
@@ -106,15 +100,20 @@ function PublishCourseForm() {
                 onClick={() => setSelectedItem(item.value)}
                 variant="secondary"
                 size="lg"
-                className={`bg-white flex items-center gap-x-4 text-lg border text-black h-12 ${
+                className={`bg-white flex items-start justify-center flex-col gap-x-4 text-lg border text-black h-16 ${
                   selectedItem === item.value ? "border-[#43766C] border-2" : ""
                 }`}
               >
-                دورة تدريبية
+                <span className="text-md font-bold text-start">
+                  {item.title}
+                </span>
+                <p className="text-gray-500 text-sm text-start my-1">
+                  {item.description}
+                </p>
               </Button>
             ))}
 
-            <div>
+            <div className="space-y-4">
               <Button
                 type="submit"
                 form="add-text"
