@@ -19,15 +19,17 @@ import { Card, CardContent } from "@ui/components/ui/card";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
 
-import { JadaraVoiceUpLoader } from "../upload-voice";
+import { JadaraVoiceUpLoader } from "../../upload-voice";
+import VedioUploader from "../../uploaders/VedioUploader";
+import Tiptap from "../../tiptap";
 
-const addPDFSchema = z.object({
+const addVedioSchema = z.object({
   title: z.string().min(2).max(50),
-  // content: z.any(),
+  content: z.any(),
   fileUrl: z.string(),
 });
 
-function AddVoiceForm() {
+function AddVedioForm() {
   const router = useRouter();
   const path = usePathname();
   const chapterID = getValueFromUrl(path, 4);
@@ -37,22 +39,22 @@ function AddVoiceForm() {
     onError: () => {},
   });
 
-  const form = useForm<z.infer<typeof addPDFSchema>>({
+  const form = useForm<z.infer<typeof addVedioSchema>>({
     mode: "onChange",
-    resolver: zodResolver(addPDFSchema),
+    resolver: zodResolver(addVedioSchema),
     defaultValues: {
       title: "",
       fileUrl: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof addPDFSchema>) {
+  async function onSubmit(values: z.infer<typeof addVedioSchema>) {
     console.log("here it is file url");
     console.log(values);
     await mutation.mutateAsync({
       chapterID: chapterID,
       content: "",
-      fileType: "VOICE",
+      fileType: "VEDIO",
       fileUrl: values.fileUrl,
       title: values.title,
     });
@@ -73,7 +75,8 @@ function AddVoiceForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    عنوان الملف <span className="text-red-600 text-xl">*</span>
+                    عنوان مقطع الفيديو{" "}
+                    <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input placeholder="shadcn" {...field} />
@@ -90,20 +93,35 @@ function AddVoiceForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    إضافة ملف voice{" "}
+                    إضافة ملف فيديو{" "}
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <JadaraVoiceUpLoader onChnage={field.onChange} />
+                    <VedioUploader onChange={field.onChange} />
                   </FormControl>
 
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/* <div>
-           
-            </div> */}
+            <FormField
+              control={form.control}
+              name="content"
+              render={({ field }) => (
+                <FormItem className="w-full ">
+                  <FormLabel>
+                    فيديو الوصف <span className="text-red-600 text-xl">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Tiptap
+                      description={field.name}
+                      onChnage={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </form>
         </Form>
       </div>
@@ -136,4 +154,4 @@ function AddVoiceForm() {
   );
 }
 
-export default AddVoiceForm;
+export default AddVedioForm;

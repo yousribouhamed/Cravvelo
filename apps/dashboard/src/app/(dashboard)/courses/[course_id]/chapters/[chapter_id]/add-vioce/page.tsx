@@ -5,7 +5,7 @@ import AddTextForm from "@/src/components/forms/course-forms/add-text-form";
 import PathBuilder from "@/src/components/path-builder";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-import AddVoiceForm from "@/src/components/forms/add-voice-form";
+import AddVoiceForm from "@/src/components/forms/course-forms/add-voice-form";
 
 export default async function Home() {
   const user = await currentUser();
@@ -17,7 +17,7 @@ export default async function Home() {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
-        <Header goBack user={{} as unknown as User} title="ui ux" />
+        <Header goBack user={user} title="ui ux" />
 
         <div className="w-full pt-8 min-h-[100px] ">
           <PathBuilder

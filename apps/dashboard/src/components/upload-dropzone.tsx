@@ -111,7 +111,7 @@ export const JadaraUploadDropzone = ({
                           uploadProgress === 100 ? "bg-green-500" : ""
                         }
                         value={uploadProgress}
-                        className="h-2 w-full bg-[#EFEFEF]"
+                        className="h-1 w-full bg-[#EFEFEF]"
                       />
                       {uploadProgress === 100 ? (
                         <div className="flex gap-1 items-center justify-center text-sm text-zinc-700 text-center pt-2">
