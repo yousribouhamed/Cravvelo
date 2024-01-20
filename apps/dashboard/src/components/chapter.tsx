@@ -15,6 +15,8 @@ import { getValueFromUrl } from "../lib/utils";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { Module } from "../types";
+import { ChevronDown } from "lucide-react";
+import React from "react";
 
 interface ChapterProps {
   title: string;
@@ -25,6 +27,8 @@ const Chapter: FC<ChapterProps> = ({ chapterID, title, modules }) => {
   const path = usePathname();
 
   // const router = useRouter();
+
+  const [isOpen, setIsOpen] = React.useState(false);
 
   return (
     <Card className="p-0">
@@ -66,6 +70,10 @@ const Chapter: FC<ChapterProps> = ({ chapterID, title, modules }) => {
                       مواد{modules.length}
                     </span>
                   </div>
+                </div>
+                <div className="w-[100px] h-full flex items-center justify-end">
+                  
+                  <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200  " />
                 </div>
               </div>
             </AccordionTrigger>
