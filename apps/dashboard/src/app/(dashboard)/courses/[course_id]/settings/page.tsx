@@ -6,17 +6,7 @@ import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { prisma } from "database/src";
 import ChaptersBoard from "@/src/components/chapters-board";
-
-const getChapters = async () => {
-  try {
-    const chapters = await prisma.chapter.findMany();
-
-    return chapters;
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-};
+import { CourseSettingsForm } from "@/src/components/forms/course-forms/course-settings";
 
 export default async function Home() {
   const user = await currentUser();
@@ -25,13 +15,12 @@ export default async function Home() {
     redirect("/sign-in");
   }
 
-  const chapters = await getChapters();
-
   return (
-    <MaxWidthWrapper>
-      <main className="w-full flex flex-col  justify-start">
+    <MaxWidthWrapper className="h-fit">
+      <main className="w-full flex flex-col h-fit justify-start">
         <Header user={{ user } as unknown as User} title="ui ux" />
         <CourseHeader />
+        <CourseSettingsForm />
       </main>
     </MaxWidthWrapper>
   );

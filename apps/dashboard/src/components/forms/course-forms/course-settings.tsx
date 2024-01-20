@@ -1,0 +1,306 @@
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Card, CardContent } from "@ui/components/ui/card";
+import { Button } from "@ui/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@ui/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@ui/components/ui/form";
+import { Input } from "@ui/components/ui/input";
+import Tiptap from "../../tiptap";
+import { usePathname, useRouter } from "next/navigation";
+import { getValueFromUrl } from "@/src/lib/utils";
+
+const formSchema = z.object({
+  username: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
+});
+
+export function CourseSettingsForm() {
+  const router = useRouter();
+  const path = usePathname();
+  const chapterID = getValueFromUrl(path, 4);
+
+  // 1. Define your form.
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+    },
+  });
+
+  // 2. Define a submit handler.
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    console.log(values);
+  }
+
+  return (
+    <div className="w-full  grid grid-cols-3 mt-4 gap-x-8 ">
+      <div className="col-span-2 w-full min-h-full h-fit">
+        <Form {...form}>
+          <form
+            id="add-text"
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-8"
+          >
+            <FormLabel className="text-3xl  block font-bold text-black">
+              اعدادات عامة
+            </FormLabel>
+            <FormLabel className="text-xl block  text-gray-600">
+              ادر اعدادات دورتك التدريبية بما في ذالك عنوانها و رابطها و الخصائص
+              و اسماء المدرين و امكانية الوصول اليها و العديد من المميزات الاخرى{" "}
+            </FormLabel>
+
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    عنوان الدورة <span className="text-red-600 text-xl">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="shadcn" {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    رابط الدورة <span className="text-red-600 text-xl">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="shadcn" {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem className="w-full ">
+                  <FormLabel>
+                    المدرسين <span className="text-red-600 text-xl">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Select>
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Theme" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="light">Light</SelectItem>
+                        <SelectItem value="dark">Dark</SelectItem>
+                        <SelectItem value="system">System</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem className="w-full ">
+                  <FormLabel>
+                    الوقت المقدر لاكمال الدورة{" "}
+                    <span className="text-red-600 text-xl">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="shadcn" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem className="w-full ">
+                  <FormLabel>
+                    تخصيص صفجة هبوط لدورة{" "}
+                    <span className="text-red-600 text-xl">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="shadcn" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="w-full h-0.5 bg-gray-500 " />
+            <FormLabel className="text-3xl  block font-bold text-black">
+              تفاصيل الدورة{" "}
+            </FormLabel>
+            <FormLabel className="text-xl block  text-gray-600">
+              من السهل تخصيص المظهر العام لدورتك عن طريق وضع صورة فريدة لها و
+              اظافة وصف تعريفي يجذب الزوار عند زيارة صفحة الهبوط لدورة
+            </FormLabel>
+
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem className="w-full ">
+                  <FormLabel>
+                    الصورة البارزة لدورة{" "}
+                    <span className="text-red-600 text-xl">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="shadcn" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem className="w-full ">
+                  <FormLabel>
+                    الفيديو الدعائي (youtube رابط ){" "}
+                    <span className="text-red-600 text-xl">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="shadcn" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem className="w-full ">
+                  <FormLabel>
+                    ملخص الدورة <span className="text-red-600 text-xl">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="shadcn" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem className="w-full ">
+                  <FormLabel>
+                    الوصف الكامل لدورة{" "}
+                    <span className="text-red-600 text-xl">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="shadcn" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem className="w-full ">
+                  <FormLabel>
+                    ماذا يستفيد الطالب{" "}
+                    <span className="text-red-600 text-xl">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="shadcn" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem className="w-full ">
+                  <FormLabel>
+                    ماهي متطلباات حضور الدورة{" "}
+                    <span className="text-red-600 text-xl">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="shadcn" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="w-full h-0.5 bg-gray-500 " />
+            <FormLabel className="text-3xl  block font-bold text-black">
+              تهيئة محركات البحث seo{" "}
+            </FormLabel>
+            <FormLabel className="text-xl block  text-gray-600">
+              من السهل تخصيص المظهر العام لدورتك عن طريق وضع صورة فريدة لها و
+              اظافة وصف تعريفي يجذب الزوار عند زيارة صفحة الهبوط لدورة
+            </FormLabel>
+          </form>
+        </Form>
+      </div>
+      <div className="col-span-1 w-full h-full ">
+        <Card>
+          <CardContent className="w-full h-fit flex flex-col p-6  space-y-4">
+            <Button type="submit" form="add-text" className="w-full" size="lg">
+              {" "}
+              حفظ والمتابعة
+            </Button>
+            <Button
+              onClick={() => router.back()}
+              className="w-full"
+              variant="secondary"
+              size="lg"
+            >
+              {" "}
+              إلغاء والعودة
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}
