@@ -12,7 +12,7 @@ export function Sidebar({ className }: SidebarProps) {
     <>
       <div
         className={cn(
-          "pb-12  bg-[#43766C] h-full rounded-lg  mt-4 hidden md:block   ",
+          "pb-12  bg-[#43766C] h-full rounded-lg  mt-4 hidden   ",
           className
         )}
       >

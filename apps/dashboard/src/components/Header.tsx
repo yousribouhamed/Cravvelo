@@ -1,12 +1,13 @@
 "use client";
 
 import type { FC } from "react";
-import { SearcInput } from "./search";
+import { SearchInput } from "./search";
 import UserNav from "./auth/user-nav";
 import { Button } from "@ui/components/ui/button";
 import { Icons } from "./Icons";
 import type { User } from "@clerk/nextjs/server";
 import { useRouter } from "next/navigation";
+import MobildSideBard from "./MobildSideBard";
 interface Props {
   title: string;
   user: User;
@@ -18,6 +19,9 @@ const Header: FC<Props> = ({ title, user, goBack }) => {
   return (
     <div className="w-full h-[96px] flex justify-between items-center border-b  ">
       <div className="w-[25%] h-full flex items-center justify-start gap-x-2">
+        <div className="lg:hidden">
+          <MobildSideBard />
+        </div>
         {goBack && (
           <Button onClick={() => router.back()} variant="secondary" size="icon">
             <svg
@@ -46,8 +50,8 @@ const Header: FC<Props> = ({ title, user, goBack }) => {
         )}
         <h1 className="text-xl font-bold text-start">{title}</h1>
       </div>
-      <div className="w-[50%] h-full flex items-center justify-center px-4">
-        <SearcInput />
+      <div className="w-[50%] h-[88px] flex items-center justify-center px-4">
+        <SearchInput />
       </div>
 
       <div className="w-[25%]  h-full flex items-center justify-end gap-x-2">

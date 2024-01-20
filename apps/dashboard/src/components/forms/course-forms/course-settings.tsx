@@ -25,7 +25,7 @@ import { Input } from "@ui/components/ui/input";
 import Tiptap from "../../tiptap";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
-
+import { Textarea } from "@ui/components/ui/textarea";
 const formSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
@@ -53,8 +53,8 @@ export function CourseSettingsForm() {
   }
 
   return (
-    <div className="w-full  grid grid-cols-3 mt-4 gap-x-8 ">
-      <div className="col-span-2 w-full min-h-full h-fit">
+    <div className="w-full  h-fit grid grid-cols-3 mt-4 gap-x-8 ">
+      <div className="col-span-2 w-full min-h-full h-fit pb-6">
         <Form {...form}>
           <form
             id="add-text"
@@ -213,7 +213,13 @@ export function CourseSettingsForm() {
                     ملخص الدورة <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Textarea
+                      id="description"
+                      rows={3}
+                      placeholder="short sleeve shirts"
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -230,7 +236,10 @@ export function CourseSettingsForm() {
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Tiptap
+                      description={field.name}
+                      onChnage={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -279,6 +288,46 @@ export function CourseSettingsForm() {
               من السهل تخصيص المظهر العام لدورتك عن طريق وضع صورة فريدة لها و
               اظافة وصف تعريفي يجذب الزوار عند زيارة صفحة الهبوط لدورة
             </FormLabel>
+
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem className="w-full ">
+                  <FormLabel>
+                    عوان الموقع عند محرك البحث
+                    <span className="text-red-600 text-xl">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="shadcn" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem className="w-full ">
+                  <FormLabel>
+                    اضف وصفا للموقع
+                    <span className="text-red-600 text-xl">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      id="description"
+                      rows={3}
+                      placeholder="short sleeve shirts"
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </form>
         </Form>
       </div>
