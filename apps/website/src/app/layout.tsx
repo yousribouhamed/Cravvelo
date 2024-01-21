@@ -18,7 +18,7 @@ export default function RootLayout({
     <html suppressHydrationWarning dir="rtl" lang="ar">
       <body className={"min-h-screen h-fit  bg-[#FAFAFA] w-full"}>
         <NavBar />
-        <div className=" mt-52 w-full h-fit min-h-full">{children}</div>
+        <div className="  w-full h-fit min-h-full">{children}</div>
       </body>
       <Script src="//code.tidio.co/f4ntqdkrkcmkov2pbgapiuevig4fhtbq.js" async />
       <Script

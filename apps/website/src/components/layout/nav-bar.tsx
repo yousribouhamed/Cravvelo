@@ -1,11 +1,12 @@
 "use client";
 
 import React, { type FC } from "react";
-import { buttonVariants } from "@ui/components/button";
+import { Button, buttonVariants } from "@ui/components/button";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { MobilNavBar } from "./mobil-nav-bar";
 import { useRouter, usePathname } from "next/navigation";
+import { X } from "lucide-react";
 interface HeaderAbdullahProps {}
 
 const links = [
@@ -39,6 +40,7 @@ const links = [
 
 export const NavBar: FC = ({}) => {
   const [hasShadow, setHasShadow] = React.useState(false);
+  const [close, setClose] = React.useState(false);
   const path = usePathname();
 
   React.useEffect(() => {
@@ -66,20 +68,27 @@ export const NavBar: FC = ({}) => {
          
          `}
       >
-        <div className="w-full h-[41px] bg-[#43766C] flex justify-center items-center">
-          <p className="text-white text-center text-base">
-            جلسة تعريفية نقدم خلالها لمحة تفصيلية عن مساق ومميزاتها وكيفية عملها
-            وكيف تساعدك في التدريب وبيع المنتجات الرقمية، سنجيب أيضًا على أي
-            أسئلة لديك
-          </p>
-        </div>
+        {!close && (
+          <div className="w-full h-[31px] bg-[#F0B110] flex justify-center gap-x-20   items-center">
+            <p className="text-black font-bold text-center text-base">
+              ابدأ رحلتك اليوم وقم ببناء أكاديميتك
+            </p>
+            <Button
+              onClick={() => setClose(true)}
+              size="icon"
+              className="bg-transparent hover:bg-transparent"
+            >
+              <X className="w-4 h-4 text-black" />
+            </Button>
+          </div>
+        )}
         <div
           //
           className={cn("mx-auto w-full    px-2.5 md:px-20", {
             "shadow-lg border-b bg-white ": hasShadow,
           })}
         >
-          <div className=" flex items-center mx-auto lg:max-w-screen-2xl 2xl:px-20 px-2.5  justify-between rounded-xl gap-x-2 w-full lg:h-[80px]  ">
+          <div className=" flex items-center mx-auto lg:max-w-screen-2xl 2xl:px-20 px-2.5  justify-between rounded-xl gap-x-2 w-full h-[80px]  ">
             {/* this section is for the logo */}
             <div className="w-[10%] h-full flex items-center justify-start ">
               <span className="text-2xl qatar-bold text-black font-bold ">
@@ -89,17 +98,17 @@ export const NavBar: FC = ({}) => {
 
             {/* this section is for the nav menu and the action button */}
 
-            <div className="w-[80%] hidden h-full lg:flex items-center justify-start ">
+            <div className="w-[80%] hidden h-full lg:flex items-center justify-center ">
               {links.map((item) => {
                 return (
                   <Link
                     href={"/"}
                     key={item.name}
                     className={cn(
-                      buttonVariants({ variant: "link" }),
-                      "font-bold text-lg leading-[40px]",
+                      buttonVariants({ variant: "ghost" }),
+                      "font-bold text-lg leading-[40px] rounded-full ",
                       {
-                        "border-[#FFB700] border-1 rounded-full bg-[#FFEEC5]":
+                        "border-[#FFB700] border-2  bg-[#FFEEC5]":
                           item.slug === path,
                       }
                     )}

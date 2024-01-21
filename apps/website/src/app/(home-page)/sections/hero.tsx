@@ -4,81 +4,52 @@ import TextTyper from "@/src/components/text-typer";
 import { Button } from "@ui/components/ui/button";
 import type { FC } from "react";
 
-interface heroAbdullahProps {}
-
 const Hero: FC = ({}) => {
   return (
-    <MaxWidthWrapper className="mt-8 h-fit">
-      <div className=" isolate w-full h-fit hidden  pt-20 lg:block  px-6 lg:px-0">
-        {/* this is the title  */}
-        <div className="mx-auto w-full min-h-full h-fit place-items-center grid z-20 grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
-          <div className="lg:col-span-2 z-20  lg:col-start-1 lg:row-start-1 lg:ml-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 ">
-            <div className="max-w-2xl h-[152px]  z-20  ">
-              <h1 className="mt-12 text-[49px]  text-right  qatar-bold font-bold tracking-tight text-black sm:text-4xl">
-                إنشاء، بيع، إدارة <TextTyper />
-              </h1>
-              <h1 className="text-[49px] qatar-bold mt-2 text-start font-bold tracking-tight text-black sm:text-4xl">
-                من مكان واحد، بسهولة كبيرة
-              </h1>
-              <p className="mt-6   text-[25px] font-thin    text-start text-black">
+    <MaxWidthWrapper className="mt-32">
+      <div className="isolate w-full h-fit min-h-[700px] pt-4 lg:pt-16 px-4 lg:px-0">
+        {/* Hero content grid */}
+        <div className="mx-auto w-full min-h-full h-fit sm:place-items-center place-content-start grid grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
+          {/* Left column */}
+          <div className="lg:col-span-2 z-20 lg:col-start-1 lg:row-start-1 lg:ml-auto lg:grid w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 grid-cols-1">
+            <div className="w-full sm:max-w-[34rem] 2xl:max-w-2xl z-20">
+              <div className="w-full sm:min-h-[100px] sm:h-fit h-[250px] mt-12 overflow-hidden">
+                <h1 className="text-center sm:text-start qatar-bold font-bold tracking-tight text-black text-3xl 2xl:text-4xl">
+                  إنشاء، بيع، إدارة <TextTyper />
+                </h1>
+                <h1 className="qatar-bold mt-2 text-center sm:text-start font-bold tracking-tight text-black text-3xl 2xl:text-4xl">
+                  من مكان واحد، بسهولة كبيرة
+                </h1>
+              </div>
+              <p className="sm:mt-10 text-md font-thin 2xl:text-lg text-center sm:text-start text-black">
                 من البناء بلا برمجة إلى التسويق والبيع بدون خبرة، مساق توفّر لك
                 كل الأدوات التي تحتاجها لإنشاء منصتك التعليمية وتنمية أعمالك عبر
                 الإنترنت.
               </p>
-              <div className="w-full my-4 h-[60px] flex items-end justify-start gap-x-8">
+
+              <div className="w-full my-4 h-[60px] flex flex-col sm:flex-row items-center mt-8 gap-y-6 sm:items-end justify-center sm:justify-start gap-x-8">
                 <Button
                   size="lg"
-                  className="bg-[#43766C]  text-xl py-6  h-14 rounded-[17px]  text-white qatar-bold  hover:bg-[#61AFA0]"
+                  className="bg-[#43766C] text-xl py-6 h-14 rounded-[17px] text-white qatar-bold hover:bg-[#61AFA0]"
                 >
                   ابدء تجربتك المجانية
                 </Button>
-                <span className="   text-xl leading-8 mb-3  block text-black">
+                <span className="text-xl leading-8 mb-3 block text-black">
                   14 يومًا تجريبيًّا
                 </span>
               </div>
+
               <Reviews />
             </div>
           </div>
-          {/* <WaterDropGrid /> */}
 
-          <div className="-ml-20 -mt-12   z-[10]  overflow-hidden  lg:col-start-2 lg:row-span-2 lg:row-start-1 ">
+          {/* Right column - Image */}
+          <div className="xl:ml-20 lg:-ml-10 h-fit sm:-ml-24 z-[10] lg:mt-0 lg:col-start-2 lg:row-span-2 lg:row-start-1">
             <img
-              className="w-[32rem] max-w-none rounded-xl    sm:w-[60rem]"
+              className="w-[32rem] max-w-none rounded-xl sm:w-[40rem] xl:w-[57rem] 2xl:w-[60rem]"
               src="/Snap.png"
-              alt=""
+              alt="hero image of the application"
             />
-          </div>
-        </div>
-      </div>
-
-      {/* this is the mobil view */}
-      <div className="w-full h-screen lg:hidden flex flex-col justify-center gap-y-4">
-        <div className="mx-auto w-full place-items-center grid max-w-2xl grid-cols-1 gap-x-8 gap-y-12 ">
-          <div className="lg:col-span-2  lg:col-start-1 lg:row-start-1 lg:ml-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 ">
-            <div className="lg:max-w-lg pr-4 ">
-              <h1 className="mt-12 text-[35px] text-center qatar-bold font-bold tracking-tight text-gray-900 sm:text-4xl">
-                إنشاء، بيع، إدارة <TextTyper />
-              </h1>
-              <h1 className="text-[35px] qatar-bold text-center font-bold tracking-tight text-gray-900 sm:text-4xl">
-                من مكان واحد، بسهولة كبيرة
-              </h1>
-              <p className="mt-6 text-md leading-[40px] text-center text-gray-700">
-                من البناء بلا برمجة إلى التسويق والبيع بدون خبرة، مساق توفّر لك
-                كل الأدوات التي تحتاجها لإنشاء منصتك التعليمية وتنمية أعمالك عبر
-                الإنترنت.
-              </p>
-              <div className="w-full my-4 h-[60px] flex flex-col items-center  justify-start gap-y-8">
-                <Button
-                  size="lg"
-                  className="bg-[#43766C] text-xl py-4 px-6 text-white font-bold "
-                >
-                  ابدء تجربتك المجانية
-                </Button>
-                <span className="mt-6   text-xl leading-8  block text-gray-700">
-                  14 يومًا تجريبيًّا
-                </span>
-              </div>
-            </div>
           </div>
         </div>
       </div>

@@ -39,7 +39,11 @@ export const MobilNavBar: FC = ({}) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="secondary" size="icon" className="border-2">
+        <Button
+          variant="secondary"
+          size="icon"
+          className="border-[#FFB700] border-2  bg-[#FFEEC5]"
+        >
           <Menu className="text-black w-8 h-8" />
         </Button>
       </SheetTrigger>
