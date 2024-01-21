@@ -4,7 +4,7 @@ interface reviewsAbdullahProps {}
 
 const Reviews: FC = ({}) => {
   return (
-    <div className="w-[325px] sm:w-[350px] mt-10 h-[144.93px] p-6 bg-white rounded-[24.86px] shadow-lg flex-col justify-center items-end  inline-flex ml-12 sm:ml-0">
+    <div className="w-[325px] sm:w-[350px] mt-10 h-[144.93px] p-6 bg-white rounded-[24.86px] shadow-2xl flex-col justify-center items-end  inline-flex ml-12 sm:ml-0">
       <div className="justify-end items-center gap-[18.64px] inline-flex w-full h-[70px] ">
         <svg
           width="110"

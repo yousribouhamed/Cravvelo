@@ -69,14 +69,14 @@ export const NavBar: FC = ({}) => {
          `}
       >
         {!close && (
-          <div className="w-full h-[31px] bg-[#F0B110] flex justify-center gap-x-20   items-center">
+          <div className="w-full h-[41px] bg-gradient-to-r  from-[#ffeb38] to-[#fab508] flex justify-center gap-x-20   items-center">
             <p className="text-black font-bold text-center text-base">
               ابدأ رحلتك اليوم وقم ببناء أكاديميتك
             </p>
             <Button
               onClick={() => setClose(true)}
               size="icon"
-              className="bg-transparent hover:bg-transparent"
+              className="bg-transparent hover:bg-transparent hover:scale-110 transition-all duration-75"
             >
               <X className="w-4 h-4 text-black" />
             </Button>
@@ -84,9 +84,12 @@ export const NavBar: FC = ({}) => {
         )}
         <div
           //
-          className={cn("mx-auto w-full    px-2.5 md:px-20", {
-            "shadow-lg border-b bg-white ": hasShadow,
-          })}
+          className={cn(
+            "mx-auto w-full    px-2.5 md:px-20 transition-all duration-150 ",
+            {
+              "shadow-lg border-b bg-white ": hasShadow,
+            }
+          )}
         >
           <div className=" flex items-center mx-auto lg:max-w-screen-2xl 2xl:px-20 px-2.5  justify-between rounded-xl gap-x-2 w-full h-[80px]  ">
             {/* this section is for the logo */}
@@ -106,7 +109,7 @@ export const NavBar: FC = ({}) => {
                     key={item.name}
                     className={cn(
                       buttonVariants({ variant: "ghost" }),
-                      "font-bold text-lg leading-[40px] rounded-full ",
+                      "font-bold text-lg leading-[40px] rounded-full transition-all duration-150  ",
                       {
                         "border-[#FFB700] border-2  bg-[#FFEEC5]":
                           item.slug === path,
@@ -123,7 +126,7 @@ export const NavBar: FC = ({}) => {
                 href={"https://jadara-dashboard.vercel.app/sign-in"}
                 className={cn(
                   buttonVariants(),
-                  "bg-[#43766C]  text-xl py-4  h-12 rounded-[17px]  text-white font-bold  hover:bg-[#61AFA0]"
+                  "bg-[#43766C]  text-xl py-4  h-12 rounded-2xl text-white font-bold  hover:bg-[#61AFA0] hover:scale-105 transition-all duration-150 "
                 )}
               >
                 تسجيل الدخول

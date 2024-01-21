@@ -30,7 +30,7 @@ const Hero: FC = ({}) => {
               <div className="w-full my-4 h-[60px] flex flex-col sm:flex-row items-center mt-8 gap-y-6 sm:items-end justify-center sm:justify-start gap-x-8">
                 <Button
                   size="lg"
-                  className="bg-[#43766C] text-xl py-6 h-14 rounded-[17px] text-white qatar-bold hover:bg-[#61AFA0]"
+                  className="bg-[#43766C] text-xl py-6 h-14 rounded-2xl text-white qatar-bold hover:bg-[#61AFA0] hover:scale-105 transition-all duration-150 "
                 >
                   ابدء تجربتك المجانية
                 </Button>

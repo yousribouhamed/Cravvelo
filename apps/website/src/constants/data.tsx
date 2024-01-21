@@ -9,8 +9,8 @@ export const what_to_do = [
       "حوّل معرفتك وخبرتك إلى عمل ناجح عبر الإنترنت بسهولة وتجربة عربية استثنائية.",
     icons: () => (
       <svg
-        width="24"
-        height="24"
+        width="22"
+        height="22"
         viewBox="0 0 34 34"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -28,8 +28,8 @@ export const what_to_do = [
       "حوّل معرفتك وخبرتك إلى عمل ناجح عبر الإنترنت بسهولة وتجربة عربية استثنائية.",
     icons: () => (
       <svg
-        width="28"
-        height="24"
+        width="22"
+        height="22"
         viewBox="0 0 38 34"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -47,8 +47,8 @@ export const what_to_do = [
       "حوّل معرفتك وخبرتك إلى عمل ناجح عبر الإنترنت بسهولة وتجربة عربية استثنائية.",
     icons: () => (
       <svg
-        width="28"
-        height="28"
+        width="22"
+        height="22"
         viewBox="0 0 38 38"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -69,8 +69,8 @@ export const what_to_do = [
       "حوّل معرفتك وخبرتك إلى عمل ناجح عبر الإنترنت بسهولة وتجربة عربية استثنائية.",
     icons: () => (
       <svg
-        width="28"
-        height="24"
+        width="22"
+        height="22"
         viewBox="0 0 38 34"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

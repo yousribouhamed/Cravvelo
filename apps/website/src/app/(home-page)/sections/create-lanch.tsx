@@ -20,8 +20,8 @@ const CreateLanch: FC = ({}) => {
             الإنترنت.
           </p>
         </div>
-        <div className=" border border-[#FFB800] rounded-lg p-2 col-span-1">
-          <div className="w-full h-full bg-[#8000FF]" />
+        <div className=" border border-[#FFB800] rounded-2xl p-4 col-span-1">
+          <div className="w-full h-full bg-[#8000FF] rounded-2xl" />
         </div>
       </div>
     </MaxWidthWrapper>

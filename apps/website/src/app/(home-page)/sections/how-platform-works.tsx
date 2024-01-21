@@ -4,7 +4,7 @@ interface HowPlatformWorksAbdullahProps {}
 
 const HowPlatformWorks: FC = ({}) => {
   return (
-    <div className="w-full my-8 py-8 h-[600px] overflow-x-hidden bg-[#43766C] flex flex-col items-center gap-y-6">
+    <div className="w-full my-24 py-8 h-[600px] overflow-x-hidden bg-[#43766C] hidden sm:flex flex-col items-center gap-y-6">
       <h2 className="text-center font-bold text-white text-5xl">
         كيف تعمل المنصة؟
       </h2>
@@ -30,36 +30,38 @@ const HowPlatformWorks: FC = ({}) => {
           </svg>
         </div>
         <div className="w-[250px] h-full ">
-          <div className="bg-yellow-400 w-[250px] h-[250px] flex items-center justify-center pr-10 rounded-full">
+          <div className="bg-[#FFB800] w-[250px] h-[250px] flex items-center justify-center pr-10 rounded-full">
             <p className="text-7xl font-bold text-white z-[20]">١</p>
           </div>
-          <h1 className="text-3xl text-center font-bold my-4 text-white">
+          <h1 className="text-2xl text-center font-bold my-4 text-white">
             انشئ آكاديمية{" "}
           </h1>
-          <p className="text-xl text-white my-4 text-center">
+          <p className="text-base text-white my-4 text-center">
             حوّل معرفتك وخبرتك إلى عمل ناجح عبر الإنترنت بسهولة وتجربة عربية
             استثنائية.{" "}
           </p>
         </div>
         <div className="w-[250px] h-full ">
-          <div className="bg-yellow-400 w-[250px] h-[250px] rounded-full flex items-center justify-center">
+          <div className="bg-[#FFB800] w-[250px] h-[250px] rounded-full flex items-center justify-center">
             <p className="text-7xl font-bold text-white z-[20]  ">٢</p>
           </div>
-          <h1 className="text-3xl text-center font-bold my-4 text-white">
+          <h1 className="text-2xl text-center font-bold my-4 text-white">
             ارفع فيديوهات
           </h1>
-          <p className="text-xl text-white my-4 text-center">
+          <p className="text-base text-white my-4 text-center">
             حوّل معرفتك وخبرتك إلى عمل ناجح عبر الإنترنت بسهولة وتجربة عربية
             استثنائية.
           </p>
         </div>
         <div className="w-[250px] h-full ">
-          <div className="bg-yellow-400 w-[250px] h-[250px] rounded-full"></div>
+          <div className="bg-[#FFB800] w-[250px] h-[250px] flex items-center justify-start pr-20 rounded-full">
+            <p className="text-7xl font-bold text-white z-[20]  ">٣</p>
+          </div>
 
-          <h1 className="text-3xl text-center font-bold my-4 text-white">
+          <h1 className="text-2xl text-center font-bold my-4 text-white">
             حقق آرباح من بيع الدورة
           </h1>
-          <p className="text-xl text-white my-4 text-center">
+          <p className="text-base text-white my-4 text-center">
             حوّل معرفتك وخبرتك إلى عمل ناجح عبر الإنترنت بسهولة وتجربة عربية
             استثنائية.{" "}
           </p>

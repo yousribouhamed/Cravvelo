@@ -56,7 +56,7 @@ export default function Page() {
               تخصيص عالية، وأدوات تسيير المسارات التعليمية فائقة الجودة،
               بالإضافة إلى موقع إلكتروني ومجتمع رقمي خاص، في مكان واحد.
             </p>
-            <div className="w-full h-[400px] rounded-xl border  border-[#FFB800] bg-[#F8FAE5]"></div>
+            <div className="w-full h-[600px] rounded-2xl border  border-[#FFB800] bg-[#F8FAE5]"></div>
           </div>
         </MaxWidthWrapper>
       </FadeIn>
@@ -69,7 +69,7 @@ export default function Page() {
             <h2 className="text-5xl font-bold text-center">
               حافظ على{" "}
               <span className="text-[#FFB700] relative mx-2 inline-block ">
-                <div className="absolute    -left-3.5   ">
+                <div className="absolute    -left-4   ">
                   <svg
                     width="19"
                     height="55"
