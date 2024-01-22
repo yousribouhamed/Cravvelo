@@ -9,6 +9,7 @@ import Chapter from "./chapter";
 
 import AddChapter from "./models/add-chapter";
 import { Module } from "../types";
+import { NotFoundCard } from "./not-found-card";
 
 interface ChaptersBoardAbdullahProps {
   initialData: ChapterType[];
@@ -25,6 +26,17 @@ const ChaptersBoard: FC<ChaptersBoardAbdullahProps> = ({ initialData }) => {
       initialData,
     }
   );
+
+  if (data.length === 0) {
+    return (
+      <>
+        <NotFoundCard />
+        <div className="w-full h-[100px] flex items-center justify-center py-2">
+          <AddChapter chaptersNumber={data.length} refetch={refetch} />
+        </div>
+      </>
+    );
+  }
 
   return (
     <div className="w-full flex flex-col gap-y-4 min-h-[100px] ">

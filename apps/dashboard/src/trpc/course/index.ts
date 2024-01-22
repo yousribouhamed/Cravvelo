@@ -14,6 +14,7 @@ export const course = {
       const course = await ctx.prisma.course
         .create({
           data: {
+            status: "DRAFT",
             title: input.title,
             academiaId: input.academiaId,
           },
@@ -21,6 +22,79 @@ export const course = {
         .catch((err) => {
           console.log(err);
           throw new TRPCError({ code: "NOT_FOUND" });
+        });
+
+      return { success: true, courseId: course.id };
+    }),
+  updateCourseSettings: privateProcedure
+    .input(
+      z.object({
+        courseId: z.string(),
+        courseResume: z.string(),
+        courseDescription: z.any(),
+        courseUrl: z.string(),
+        seoDescription: z.string(),
+        seoTitle: z.string(),
+        thumnailUrl: z.string(),
+        title: z.string(),
+        youtubeUrl: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const course = await ctx.prisma.course
+        .update({
+          where: {
+            id: input.courseId,
+          },
+          data: {
+            courseDescription: JSON.stringify(input.courseDescription),
+            courseResume: input.courseResume,
+            courseUrl: input.courseUrl,
+            seoDescription: input.seoDescription,
+            seoTitle: input.seoTitle,
+            thumnailUrl: input.thumnailUrl,
+            title: input.title,
+            youtubeUrl: input.youtubeUrl,
+          },
+        })
+        .catch((err) => {
+          console.log(err);
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: err?.message
+              ? err?.message
+              : "the error in on update course settings",
+          });
+        });
+
+      return { success: true, courseId: course.id };
+    }),
+
+  launchCourse: privateProcedure
+    .input(
+      z.object({
+        courseId: z.string(),
+        status: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const course = await ctx.prisma.course
+        .update({
+          where: {
+            id: input.courseId,
+          },
+          data: {
+            status: input.status,
+          },
+        })
+        .catch((err) => {
+          console.log(err);
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: err?.message
+              ? err?.message
+              : "the error in on update course settings",
+          });
         });
 
       return { success: true, courseId: course.id };

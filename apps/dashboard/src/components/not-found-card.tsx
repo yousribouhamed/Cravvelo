@@ -15,7 +15,7 @@ interface NotFoundCardAbdullahProps {
 
 export const NotFoundCard: FC<NotFoundCardAbdullahProps> = ({ text }) => {
   return (
-    <Card className="w-full h-full min-h-[200px] min-w-[200px] border-none shadow-none">
+    <Card className="w-full bg-transparent h-full min-h-[200px] min-w-[200px] border-none shadow-none">
       <CardContent className="w-full h-full flex items-center flex-col gap-y-4 justify-center">
         <Image
           src="/mintad.svg"

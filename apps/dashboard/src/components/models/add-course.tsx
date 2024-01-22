@@ -86,7 +86,7 @@ const AddCourse: FC = ({}) => {
           أنشئ دورة جديدة
         </Button>
       </DialogTrigger>
-      <DialogContent title="إضافة دورة جديدة">
+      <DialogContent className="max-w-lg" title="إضافة دورة جديدة">
         <div className="w-full px-4 pb-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

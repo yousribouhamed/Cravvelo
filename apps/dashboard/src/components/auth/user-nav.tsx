@@ -50,7 +50,7 @@ export default function UserNav({ user }: UserNavProps) {
               {user?.firstName ? user?.firstName : "ah"} اكاديمية
             </p>
             <Avatar className="w-8 h-8">
-              <AvatarImage src={user?.imageUrl ?? user?.imageUrl} />
+              <AvatarImage src={user?.imageUrl} />
               <AvatarFallback>AB</AvatarFallback>
             </Avatar>
           </div>

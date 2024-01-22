@@ -26,22 +26,36 @@ import Tiptap from "../../tiptap";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
 import { Textarea } from "@ui/components/ui/textarea";
+import { trpc } from "@/src/app/_trpc/client";
+import { maketoast } from "../../toasts";
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
+  courseResume: z.string(),
+  courseDescription: z.any(),
+  courseUrl: z.string(),
+  seoDescription: z.string(),
+  seoTitle: z.string(),
+  thumnailUrl: z.string(),
+  title: z.string(),
+  youtubeUrl: z.string(),
 });
 
 export function CourseSettingsForm() {
   const router = useRouter();
   const path = usePathname();
-  const chapterID = getValueFromUrl(path, 4);
+  const courseID = getValueFromUrl(path, 2);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
+  });
+
+  const mutation = trpc.updateCourseSettings.useMutation({
+    onSuccess: () => {
+      maketoast.success();
+      router.push(`/courses/${courseID}/settings`);
+    },
+    onError: () => {
+      maketoast.error();
     },
   });
 
@@ -71,14 +85,14 @@ export function CourseSettingsForm() {
 
             <FormField
               control={form.control}
-              name="username"
+              name="title"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
                     عنوان الدورة <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input placeholder="     عنوان الدورة " {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -88,14 +102,14 @@ export function CourseSettingsForm() {
 
             <FormField
               control={form.control}
-              name="username"
+              name="courseUrl"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
                     رابط الدورة <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input placeholder="رابط" {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -105,7 +119,7 @@ export function CourseSettingsForm() {
 
             <FormField
               control={form.control}
-              name="username"
+              name="seoTitle"
               render={({ field }) => (
                 <FormItem className="w-full ">
                   <FormLabel>
@@ -130,7 +144,7 @@ export function CourseSettingsForm() {
 
             <FormField
               control={form.control}
-              name="username"
+              name="seoTitle"
               render={({ field }) => (
                 <FormItem className="w-full ">
                   <FormLabel>
@@ -147,7 +161,7 @@ export function CourseSettingsForm() {
 
             <FormField
               control={form.control}
-              name="username"
+              name="seoTitle"
               render={({ field }) => (
                 <FormItem className="w-full ">
                   <FormLabel>
@@ -172,7 +186,7 @@ export function CourseSettingsForm() {
 
             <FormField
               control={form.control}
-              name="username"
+              name="thumnailUrl"
               render={({ field }) => (
                 <FormItem className="w-full ">
                   <FormLabel>
@@ -189,7 +203,7 @@ export function CourseSettingsForm() {
 
             <FormField
               control={form.control}
-              name="username"
+              name="youtubeUrl"
               render={({ field }) => (
                 <FormItem className="w-full ">
                   <FormLabel>
@@ -206,7 +220,7 @@ export function CourseSettingsForm() {
 
             <FormField
               control={form.control}
-              name="username"
+              name="courseResume"
               render={({ field }) => (
                 <FormItem className="w-full ">
                   <FormLabel>
@@ -229,7 +243,7 @@ export function CourseSettingsForm() {
 
             <FormField
               control={form.control}
-              name="username"
+              name="courseDescription"
               render={({ field }) => (
                 <FormItem className="w-full ">
                   <FormLabel>
@@ -249,7 +263,7 @@ export function CourseSettingsForm() {
 
             <FormField
               control={form.control}
-              name="username"
+              name="seoTitle"
               render={({ field }) => (
                 <FormItem className="w-full ">
                   <FormLabel>
@@ -266,7 +280,7 @@ export function CourseSettingsForm() {
 
             <FormField
               control={form.control}
-              name="username"
+              name="seoTitle"
               render={({ field }) => (
                 <FormItem className="w-full ">
                   <FormLabel>
@@ -292,7 +306,7 @@ export function CourseSettingsForm() {
 
             <FormField
               control={form.control}
-              name="username"
+              name="seoTitle"
               render={({ field }) => (
                 <FormItem className="w-full ">
                   <FormLabel>
@@ -309,7 +323,7 @@ export function CourseSettingsForm() {
 
             <FormField
               control={form.control}
-              name="username"
+              name="seoDescription"
               render={({ field }) => (
                 <FormItem className="w-full ">
                   <FormLabel>
