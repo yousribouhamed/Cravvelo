@@ -1,7 +1,8 @@
 import { isClerkAPIResponseError } from "@clerk/nextjs";
 import type { User } from "@clerk/nextjs/server";
 import { z } from "zod";
-import { toast } from "@ui/lib/utils";
+
+import { maketoast } from "../components/toasts";
 
 export function absoluteUrl(path: string) {
   if (typeof window !== "undefined") return path;
@@ -28,11 +29,11 @@ export function catchError(err: unknown) {
     const errors = err.issues.map((issue) => {
       return issue.message;
     });
-    return toast.error(errors.join("\n"));
+    return maketoast.errorWithTest({ text: errors.join("\n") });
   } else if (err instanceof Error) {
-    return toast.error(err.message);
+    return maketoast.errorWithTest({ text: err.message });
   } else {
-    return toast.error("Something went wrong, please try again later.");
+    return maketoast.error();
   }
 }
 
@@ -43,11 +44,13 @@ export function catchClerkError(err: unknown) {
     const errors = err.issues.map((issue) => {
       return issue.message;
     });
-    return toast.error(errors.join("\n"));
+    return maketoast.errorWithTest({ text: errors.join("\n") });
   } else if (isClerkAPIResponseError(err)) {
-    return toast.error(err.errors[0]?.longMessage ?? unknownErr);
+    return maketoast.errorWithTest({
+      text: err.errors[0]?.longMessage ?? unknownErr,
+    });
   } else {
-    return toast.error(unknownErr);
+    return maketoast.error();
   }
 }
 

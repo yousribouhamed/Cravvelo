@@ -33,10 +33,20 @@ model Course {
   id                     String @default(uuid()) @unique
   academiaId             String 
   title                  String 
-  price                  String?
+  courseUrl              String?    @db.LongText
+  youtubeUrl             String?    @db.LongText
+  thumnailUrl            String?    @db.LongText
+  courseResume           String?     @db.LongText
+  courseDescription      Json?
+  seoTitle               String?
+  seoDescription         String?
+  price                  Float?
+  compairAtPrice         Float?
   studenstNbr            String?
   profit                 String?
   trainers               String?
+  status                 String
+
   createdAt              DateTime            @default(now())
   updatedAt              DateTime            @updatedAt
 }

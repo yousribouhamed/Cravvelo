@@ -17,6 +17,21 @@ export const SIDE_BAR_ITEMS = [
         icon: Icons.Home,
         slug: "/courses",
       },
+      {
+        title: "المنتجات الرقمية",
+        icon: Icons.Home,
+        slug: "/products",
+      },
+      {
+        title: "مكتبة الفيديو",
+        icon: Icons.Home,
+        slug: "/courses",
+      },
+      {
+        title: "بنك الأسئلة",
+        icon: Icons.Home,
+        slug: "/products",
+      },
     ],
   },
   {
@@ -29,13 +44,40 @@ export const SIDE_BAR_ITEMS = [
     title: "تخصيص الأكاديمية",
     slug: "/cutomize",
     icon: Icons.customize,
-    subitems: [],
+    subitems: [
+      {
+        title: "منشئ الموقع",
+        icon: Icons.Home,
+        slug: "/courses",
+      },
+      {
+        title: "مصمم الشهادة",
+        icon: Icons.Home,
+        slug: "/products",
+      },
+    ],
   },
 
   {
     title: "الإعدادات",
     icon: Icons.settings,
-    subitems: [],
+    subitems: [
+      {
+        title: "إعدادات الاكاديمية",
+        icon: Icons.Home,
+        slug: "/courses",
+      },
+      {
+        title: "وسائل الدفع",
+        icon: Icons.Home,
+        slug: "/products",
+      },
+      {
+        title: "باقة الأكاديمية",
+        icon: Icons.Home,
+        slug: "/products",
+      },
+    ],
     slug: "/settings",
   },
 ];

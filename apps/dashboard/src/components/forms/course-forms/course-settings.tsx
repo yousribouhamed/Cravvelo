@@ -113,7 +113,7 @@ export function CourseSettingsForm() {
                   </FormLabel>
                   <FormControl>
                     <Select>
-                      <SelectTrigger className="w-[180px]">
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="Theme" />
                       </SelectTrigger>
                       <SelectContent>
@@ -216,6 +216,7 @@ export function CourseSettingsForm() {
                     <Textarea
                       id="description"
                       rows={3}
+                      className="min-h-[100px]"
                       placeholder="short sleeve shirts"
                       value={field.value}
                       onChange={field.onChange}
@@ -319,6 +320,7 @@ export function CourseSettingsForm() {
                     <Textarea
                       id="description"
                       rows={3}
+                      className="min-h-[100px]"
                       placeholder="short sleeve shirts"
                       value={field.value}
                       onChange={field.onChange}

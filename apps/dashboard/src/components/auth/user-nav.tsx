@@ -13,6 +13,7 @@ import {
 } from "@ui/components/ui/dropdown-menu";
 import LogoutButton from "./logout-button";
 import { Icons } from "../Icons";
+import Link from "next/link";
 
 interface UserNavProps {
   user: UserType;
@@ -56,9 +57,14 @@ export default function UserNav({ user }: UserNavProps) {
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem className="w-full  h-full flex justify-end items-center p-3 ">
-            <span>الملف الشخصي</span>
-            <User className="ml-2 h-4 w-4" />
+          <DropdownMenuItem className="w-full  h-full flex justify-between items-center  ">
+            <Link
+              className="w-full  h-full flex justify-between items-center p-2 "
+              href={"/profile"}
+            >
+              <User className="ml-2 h-4 w-4" />
+              <span>الملف الشخصي</span>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem className="w-full h-full flex justify-end items-center p-3">

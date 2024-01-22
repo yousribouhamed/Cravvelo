@@ -10,6 +10,7 @@ import { Icons } from "../Icons";
 
 const oauthProviders = [
   { name: "Google", strategy: "oauth_google", icon: "google" },
+  { name: "Facebook", strategy: "oauth_facebook", icon: "facebook" },
 ] satisfies {
   name: string;
   icon: keyof typeof Icons;
@@ -41,32 +42,45 @@ export function OAuthSignIn() {
   }
 
   return (
-    <div className=" w-full h-[50px] grid grid-cols-1 gap-2 sm:gap-4">
-      {oauthProviders.map((provider) => {
-        const Icon = Icons[provider.icon];
-
-        return (
-          <Button
-            size="lg"
-            aria-label={`Sign in with ${provider.name}`}
-            key={provider.strategy}
-            variant="secondary"
-            className="w-full bg-background sm:w-auto"
-            onClick={() => void oauthSignIn(provider.strategy)}
-            disabled={isLoading !== null}
-          >
-            {isLoading === provider.strategy ? (
-              <Icons.spinner
-                className="mr-2 h-4 w-4 animate-spin"
-                aria-hidden="true"
-              />
-            ) : (
-              <Icon className="mr-2 h-4 w-4" aria-hidden="true" />
-            )}
-            {provider.name}
-          </Button>
-        );
-      })}
+    <div className=" w-full h-[100px] my-4  flex flex-col gap-y-2">
+      <Button
+        size="lg"
+        aria-label={`Sign in with ${oauthProviders[0].name}`}
+        key={oauthProviders[0].strategy}
+        variant="secondary"
+        className="w-full h-14  bg-white rounded-lg flex items-center justify-between border-input shadow font-bold "
+        onClick={() => void oauthSignIn(oauthProviders[0].strategy)}
+        disabled={isLoading !== null}
+      >
+        تسجيل الدخول من خلال جوجل
+        {isLoading === oauthProviders[0].strategy ? (
+          <Icons.spinner
+            className="mr-2 h-4 w-4 animate-spin"
+            aria-hidden="true"
+          />
+        ) : (
+          <Icons.google className="mr-2 h-4 w-4" aria-hidden="true" />
+        )}
+      </Button>
+      <Button
+        size="lg"
+        aria-label={`Sign in with ${oauthProviders[1].name}`}
+        key={oauthProviders[1].strategy}
+        variant="secondary"
+        className="w-full h-14 bg-[#1877F2] flex items-center justify-between  rounded-lg font-bold text-white "
+        onClick={() => void oauthSignIn(oauthProviders[1].strategy)}
+        disabled={isLoading !== null}
+      >
+        تسجيل الدخول من خلال فايسبوك
+        {isLoading === oauthProviders[1].strategy ? (
+          <Icons.spinner
+            className="mr-4 h-4 w-4 animate-spin"
+            aria-hidden="true"
+          />
+        ) : (
+          <Icons.facebook className="mr-2 h-4 w-4" aria-hidden="true" />
+        )}
+      </Button>
     </div>
   );
 }

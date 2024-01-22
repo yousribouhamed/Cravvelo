@@ -13,7 +13,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaAutosizeProps>(
     return (
       <TextareaAutosize
         className={cn(
-          "flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          "flex h-12 w-full rounded-lg border  border-[#E6E6E6] bg-white px-3 py-2 text-sm   placeholder:text-[#8A8A8A] focus-visible:outline-none   focus:border-[#43766C]   transition-all duration-75  focus:border-2  disabled:cursor-not-allowed disabled:opacity-50",
           className
         )}
         ref={ref}
