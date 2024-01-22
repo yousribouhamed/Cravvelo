@@ -20,7 +20,7 @@ import { cn } from "@ui/lib/utils";
 export type Course = {
   id: string;
   title: string;
-  price: string;
+  price: number;
   studenstNbr: string;
   profit: string;
 };
