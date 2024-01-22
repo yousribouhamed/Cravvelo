@@ -4,13 +4,9 @@ import type { FC } from "react";
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { SignOutButton } from "@clerk/nextjs";
-
-import { cn } from "@ui/lib/utils";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DropdownMenuItem } from "@ui/components/ui/dropdown-menu";
 import { LogOut } from "lucide-react";
-
-interface LogoutButtonAbdullahProps {}
 
 const LogoutButton: FC = ({}) => {
   const router = useRouter();

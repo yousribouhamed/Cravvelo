@@ -72,7 +72,6 @@ function StudentEngagment() {
             </FormLabel>
 
             <div>
-              <h3 className="mb-4 text-lg font-medium">Email Notifications</h3>
               <div className="space-y-4">
                 <FormField
                   control={form.control}
@@ -80,10 +79,7 @@ function StudentEngagment() {
                   render={({ field }) => (
                     <FormItem className="flex flex-row bg-white items-center justify-between rounded-lg border p-3 shadow-sm">
                       <div className="space-y-0.5">
-                        <FormLabel>Marketing emails</FormLabel>
-                        <FormDescription>
-                          Receive emails about new products, features, and more.
-                        </FormDescription>
+                        <FormLabel>تفعيل شهادة على الدورة</FormLabel>
                       </div>
                       <FormControl>
                         <div dir="ltr">
@@ -102,10 +98,7 @@ function StudentEngagment() {
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 bg-white shadow-sm">
                       <div className="space-y-0.5">
-                        <FormLabel>Security emails</FormLabel>
-                        <FormDescription>
-                          Receive emails about your account security.
-                        </FormDescription>
+                        <FormLabel>يجب مشاهدة جميع مواد الدورة</FormLabel>
                       </div>
                       <FormControl>
                         <div dir="ltr">

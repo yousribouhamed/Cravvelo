@@ -67,38 +67,35 @@ export default function UserNav({ user }: UserNavProps) {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="w-full h-full flex justify-end items-center p-3">
-            <span>باقة الأكاديمية</span>
-            <CreditCard className="ml-2 h-4 w-4" />
+          <DropdownMenuItem className="w-full  h-full flex justify-between items-center  ">
+            <Link
+              className="w-full  h-full flex justify-between items-center p-2 "
+              href={"/pricing"}
+            >
+              <CreditCard className="ml-2 h-4 w-4" />
+              <span>باقة الأكاديمية</span>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
 
-          <DropdownMenuItem className="w-full h-full flex justify-end items-center p-3">
-            <span> مركز المساعدة</span>
-            <CreditCard className="ml-2 h-4 w-4" />
+          <DropdownMenuItem className="w-full  h-full flex justify-between items-center  ">
+            <Link
+              className="w-full  h-full flex justify-between items-center p-2 "
+              href={"/profile"}
+            >
+              <CreditCard className="ml-2 h-4 w-4" />
+              <span> مركز المساعدة</span>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="w-full h-full flex justify-end items-center p-3">
-            <span>معاينة الأكاديمية</span>
-            <CreditCard className="ml-2 h-4 w-4" />
-          </DropdownMenuItem>
-
-          <DropdownMenuSeparator />
-
-          <DropdownMenuItem className="w-full h-full flex justify-end items-center p-3">
-            <span> تحديثات المنتج</span>
-            <CreditCard className="ml-2 h-4 w-4" />
-          </DropdownMenuItem>
-
-          <DropdownMenuSeparator />
-          <DropdownMenuItem className="w-full h-full flex justify-end items-center p-3 ">
-            <span>برنامج شركاء مساق</span>
-            <Settings className="ml-2 h-4 w-4" />
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem className="w-full h-full flex justify-end items-center p-3 ">
-            <span>Keyboard shortcuts</span>
-            <Keyboard className="ml-2 h-4 w-4" />
+          <DropdownMenuItem className="w-full  h-full flex justify-between items-center  ">
+            <Link
+              className="w-full  h-full flex justify-between items-center p-2 "
+              href={"/profile"}
+            >
+              <CreditCard className="ml-2 h-4 w-4" />
+              <span>معاينة الأكاديمية</span>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
