@@ -15,6 +15,10 @@ import {
 import { Input } from "@ui/components/ui/input";
 import { Card, CardContent } from "@ui/components/ui/card";
 import * as React from "react";
+import { trpc } from "@/src/app/_trpc/client";
+import { maketoast } from "../../toasts";
+import { usePathname, useRouter } from "next/navigation";
+import { getValueFromUrl } from "@/src/lib/utils";
 
 const addTextSchema = z.object({
   title: z.string().min(2).max(50),
@@ -45,6 +49,10 @@ const selectionButtoms = [
 ];
 
 function PublishCourseForm() {
+  const router = useRouter();
+  const path = usePathname();
+  const courseID = getValueFromUrl(path, 2);
+
   const [selectedItem, setSelectedItem] = React.useState<
     "DRAFT" | "PUBLISED" | "EARLY_ACCESS" | "PRIVATE"
   >("PUBLISED");
@@ -57,8 +65,21 @@ function PublishCourseForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof addTextSchema>) {
-    console.log(values);
+  const mutation = trpc.launchCourse.useMutation({
+    onSuccess: () => {
+      maketoast.success();
+      router.push(`/courses/${courseID}`);
+    },
+    onError: () => {
+      maketoast.error();
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof addTextSchema>) {
+    await mutation.mutateAsync({
+      courseId: courseID,
+      status: selectedItem,
+    });
   }
 
   return (
