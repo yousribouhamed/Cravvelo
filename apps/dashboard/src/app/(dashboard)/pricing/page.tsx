@@ -17,8 +17,8 @@ export default async function Home() {
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start">
         <Header user={user} title="الرئيسية" />
-        <div className="w-full h-[200px] rounded-2xl bg-gradient-to-r from- to-pink-600 flex items-center justify-center">
-          <h2 className="text-xl font-bold text-white text-center mu-4">
+        <div className="w-full h-[200px] mt-10 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-600 flex items-center justify-center">
+          <h2 className="text-4xl font-bold text-white text-center mu-4">
             اختر أفضل خطة لعملك
           </h2>
         </div>

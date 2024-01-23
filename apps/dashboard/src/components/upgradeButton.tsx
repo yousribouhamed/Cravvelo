@@ -149,9 +149,9 @@ const UpgradeButton: FC = ({}) => {
               </div>
               <Button
                 size="lg"
-                className="rounded-full h-16 w-[90%] text-xl font-bold mx-auto"
+                className="rounded-full h-16 w-[90%] text-xl font-bold mx-auto  hover:scale-105 transition-all duration-150"
               >
-                ابدأ تجربتك المجانية الآن
+                احصل عليها الآن{" "}
               </Button>
               <span className="text-start my-6 text-[#43766C] text-xl font-bold ">
                 {item.tagline}
