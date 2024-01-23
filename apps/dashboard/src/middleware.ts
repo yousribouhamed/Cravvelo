@@ -19,9 +19,6 @@ export default authMiddleware({
       .get("host")!
       .replace(".localhost:3001", `${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
 
-    console.log("this is from the middleware");
-    console.log(url);
-    console.log(hostname);
     // special case for Vercel preview deployment URLs
     if (
       hostname.includes("---") &&
