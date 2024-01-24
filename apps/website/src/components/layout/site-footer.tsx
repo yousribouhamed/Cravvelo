@@ -219,12 +219,19 @@ const SiteFooter: FC = ({}) => {
           </div>
 
           {footerItemsLinks.map((item, index) => (
-            <div className="flex flex-col items-start justify-start ">
+            <div
+              key={index + item.title}
+              className="flex flex-col items-start justify-start "
+            >
               <p className="text-gray-500 text-xl">{item.title}</p>
 
               <div className="w-full flex flex-col items-start gap-y-4">
                 {item.children.map((item2, index) => {
-                  return <p className="text-white">{item2}</p>;
+                  return (
+                    <p key={item2 + index} className="text-white">
+                      {item2}
+                    </p>
+                  );
                 })}
               </div>
             </div>
