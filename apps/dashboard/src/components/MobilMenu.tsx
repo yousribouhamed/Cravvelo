@@ -116,7 +116,7 @@ const SideBarMenu: FC = ({}) => {
               )}
               {item.subitems?.length > 0 && (
                 <AccordionContent>
-                  <div className="flex flex-col pr-4 space-y-1">
+                  <div className="flex relative flex-col pr-4 space-y-1">
                     {item.subitems?.map((subItem, index) => (
                       <MobileLink
                         isSelected={path === subItem.slug}
@@ -129,6 +129,7 @@ const SideBarMenu: FC = ({}) => {
                         {subItem.title}
                       </MobileLink>
                     ))}
+                    <div className="absolute top-0 bottom-0 w-0.5 h-full bg-white right-5" />
                   </div>
                 </AccordionContent>
               )}

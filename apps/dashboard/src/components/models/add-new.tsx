@@ -151,7 +151,7 @@ const AddNew: FC = ({}) => {
   return (
     <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
       <DialogTrigger asChild>
-        <Button className="text-[#43766C] text-lg flex justify-between items-center  hover:bg-[#FFB800] hover:text-white rounded-lg h-12 w-full font-bold bg-[#F8FAE5] ">
+        <Button className="text-[#43766C] text-lg flex justify-between items-center group hover:bg-[#FFB800] hover:text-white rounded-lg h-12 w-full font-bold bg-[#F8FAE5] ">
           إضافة جديد
           <svg
             xmlns="http://www.w3.org/2000/svg"
