@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@ui/components/ui/card";
 import AreaChartOverview from "@/src/components/area-chart";
-import RangeDatePicker from "@/src/components/range-date-picker";
+import { DatePickerWithRange } from "@/src/components/range-date-picker";
 import { NotFoundCard } from "@/src/components/not-found-card";
 
 export default async function Home() {
@@ -26,7 +26,7 @@ export default async function Home() {
       <main className="w-full flex flex-col overflow-y-hidden h-fit  justify-start">
         <Header user={user} title="الرئيسية" />
         <div className="w-full h-[100px] flex justify-start items-center ">
-          <RangeDatePicker />
+          <DatePickerWithRange />
         </div>
         <div className="space-y-4 pt-6">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

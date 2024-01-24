@@ -26,9 +26,9 @@ export default function UserNav({ user }: UserNavProps) {
         <div
           className={` ${buttonVariants({
             variant: "ghost",
-          })}  cursor-pointer   flex items-center justify-end gap-x-4 `}
+          })}  cursor-pointer  w-48   flex items-center bg-white rounded-xl border justify-end gap-x-4 `}
         >
-          <Avatar className="w-8 h-8">
+          <Avatar className="w-8 h-8 rounded-xl">
             <AvatarImage src={user?.imageUrl ?? user?.imageUrl} />
             <AvatarFallback>AB</AvatarFallback>
           </Avatar>
@@ -38,7 +38,7 @@ export default function UserNav({ user }: UserNavProps) {
           <ChevronDown className="w-4 h-4 text-black hover:text-accent-foreground " />
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className=" w-56  ">
+      <DropdownMenuContent className=" w-48  ">
         <div className="w-full h-[70px]  flex items-center justify-center px-2">
           <Button size="icon" variant="secondary">
             <Icons.Order className="text-gray-700 w-4 h-4" />

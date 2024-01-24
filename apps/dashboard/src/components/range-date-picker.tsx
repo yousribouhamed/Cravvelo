@@ -1,70 +1,47 @@
 "use client";
 
-import type { FC } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@ui/components/ui/dialog";
-import {
-  addDays,
-  endOfDay,
-  startOfDay,
-  startOfYear,
-  startOfMonth,
-  endOfMonth,
-  endOfYear,
-  addMonths,
-  addYears,
-  startOfWeek,
-  endOfWeek,
-  isSameDay,
-  differenceInCalendarDays,
-} from "date-fns";
-import React, { useState } from "react";
-import { DateRangePicker } from "react-date-range";
-import arLocale from "date-fns/locale/ar-DZ"; // Adjust the locale code based on your needs
-import { DefinedRange } from "react-date-range";
+import * as React from "react";
+import { addDays, format } from "date-fns";
+import { DateRange } from "react-day-picker";
+
+import { cn } from "@ui/lib/utils";
 import { Button } from "@ui/components/ui/button";
+import { Calendar } from "@ui/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@ui/components/ui/popover";
+import { ar } from "date-fns/locale";
 
-const RangeDatePicker: FC = ({}) => {
-  const [state, setState] = useState([
-    {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
-      key: "selection",
-    },
-  ]);
+function formatDayInArabic(day) {
+  const formattedDate = format(day, "dd MMMM yyyy", { locale: ar });
+  return formattedDate;
+}
 
-  // Custom translation function for sidebar labels
-  const translateSidebarLabel = (labelKey: string) => {
-    const translations = {
-      "Start Date": "تاريخ البداية",
-      "End Date": "تاريخ الانتهاء",
-      "Date Range": "نطاق التاريخ",
-      "Last 7 Days": "آخر 7 أيام",
-      "Last 30 Days": "آخر 30 يومًا",
-      "This Month": "هذا الشهر",
-      "Last Month": "الشهر الماضي",
-      "This Year": "هذا العام",
-      "Last Year": "العام الماضي",
-    };
-
-    return translations[labelKey] || labelKey;
-  };
+export function DatePickerWithRange({
+  className,
+}: React.HTMLAttributes<HTMLDivElement>) {
+  const [date, setDate] = React.useState<DateRange | undefined>({
+    from: new Date(2022, 0, 20),
+    to: addDays(new Date(2022, 0, 20), 20),
+  });
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="ghost" size="lg">
-          <span>تاريخ التقرير</span>
-          <div className="w-[200px] h-[40px] rounded-xl border-2 flex items-center justify-start gap-x-4">
+    <div className={cn("grid gap-2", className)}>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            id="date"
+            variant={"secondary"}
+            className={cn(
+              "w-[300px] justify-start text-left gap-x-4 font-normal bg-white rounded-xl border",
+              !date && "text-muted-foreground"
+            )}
+          >
             <svg
-              width="30"
-              height="30"
+              width="20"
+              height="20"
               viewBox="0 0 30 30"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -99,45 +76,33 @@ const RangeDatePicker: FC = ({}) => {
               />
             </svg>
 
-            <span>29 ديسمبر 2023 - 04 يناير 2024</span>
+            {date?.from ? (
+              date.to ? (
+                <>
+                  {formatDayInArabic(date.from)} - {formatDayInArabic(date.to)}
+                </>
+              ) : (
+                formatDayInArabic(date.from)
+              )
+            ) : (
+              <span>تاريخ التقرير</span>
+            )}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0 bg-white shadow-lg" align="start">
+          <div dir="ltr">
+            <Calendar
+              initialFocus
+              mode="range"
+              defaultMonth={date?.from}
+              selected={date}
+              onSelect={setDate}
+              numberOfMonths={2}
+              locale={ar} // Set the Arabic locale for the calendar
+            />
           </div>
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="w-[1000px] h-[500px] p-0 ">
-        <div dir="ltr" className="w-full h-full relative  flex justify-center">
-          <DateRangePicker
-            editableDateInputs={false} // Set this to hide the input dates
-            onChange={(item) => setState([item.selection])}
-            showSelectionPreview={false}
-            moveRangeOnFirstSelection={false}
-            months={2}
-            ranges={state}
-            direction="horizontal"
-            rangeColors={["#43766C"]}
-            showDateDisplay={false}
-            locale={arLocale} // Set the locale to Arabic
-            disabledDates={[]}
-            renderStaticRangeLabel={renderStaticRangeLabel}
-          />
-        </div>
-      </DialogContent>
-    </Dialog>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
-};
-
-export default RangeDatePicker;
-
-const renderStaticRangeLabel = () => (
-  <CustomStaticRangeLabelContent text={"This is a custom label content: "} />
-);
-
-const CustomStaticRangeLabelContent = ({ text }: { text: string }) => {
-  return (
-    <span>
-      <i>{text}</i>
-      <span className={"random-date-string text-xl font-bold"}>
-        <b>{text}</b>
-      </span>
-    </span>
-  );
-};
+}

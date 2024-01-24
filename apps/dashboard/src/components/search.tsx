@@ -55,7 +55,7 @@ export const SearchInput: FC = ({}) => {
     <>
       <Button
         variant="ghost"
-        className="relative hidden h-9 w-9 p-0 xl:h-10 md:justify-start md:px-3 md:py-4 md:w-[641px] border rounded-xl bg-white "
+        className="relative hidden md:flex h-9 w-9 p-0 xl:h-10 md:justify-start md:px-3 md:py-4 md:w-[641px] border rounded-xl bg-white "
         onClick={() => setOpen(true)}
       >
         <MagnifyingGlassIcon className="h-4 w-4 xl:ml-2" aria-hidden="true" />
@@ -73,7 +73,7 @@ export const SearchInput: FC = ({}) => {
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput
-          placeholder="Search products..."
+          placeholder="يبحث..."
           value={query}
           onValueChange={setQuery}
         />

@@ -98,6 +98,9 @@ importers:
       react-date-range:
         specifier: 2.0.0-alpha.4
         version: 2.0.0-alpha.4(date-fns@3.0.6)(react@18.2.0)
+      react-day-picker:
+        specifier: ^8.10.0
+        version: 8.10.0(date-fns@3.0.6)(react@18.2.0)
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
