@@ -10,6 +10,7 @@ export default authMiddleware({
     "/sign-up(.*)",
     "/sso-callback(.*)",
     "/api/uploadthing(.*)",
+    "/editor",
   ],
 
   beforeAuth: (req) => {

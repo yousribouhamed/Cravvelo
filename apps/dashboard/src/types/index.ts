@@ -5,3 +5,9 @@ export type Module = {
   fileUrl: string;
   fileType: string;
 };
+
+export type WebSitePage = {
+  pathname: string;
+  title: string;
+  components: any[];
+};
