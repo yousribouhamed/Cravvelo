@@ -30,14 +30,14 @@ export default function Page() {
       </FadeIn>
       <FadeIn>
         <MaxWidthWrapper className="my-16 ">
-          <div className="w-full min-h-[250px] h-fit  flex flex-col justify-center gap-y-8 pt-8  ">
+          <div className="w-full min-h-[250px] h-fit  flex flex-col justify-center gap-y-8 pt-12  ">
             <h2 className="text-5xl font-bold text-center">
-              قدرات جديدة، بتجربة مذهلة، في مكان
-              <span className="text-[#FFB700] relative inline-block mx-10 ">
-                <div className="absolute -top-20 bottom-0  -right-10 ">
+              قدرات جديدة، بتجربة مذهلة، في
+              <span className="text-[#FFB700] relative inline-block mx-8 ">
+                <div className="absolute -top-20 bottom-0  -right-5 ">
                   <svg
-                    width="200"
-                    height="200"
+                    width="260"
+                    height="220"
                     viewBox="0 0 384 201"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +48,7 @@ export default function Page() {
                     />
                   </svg>
                 </div>
-                واحد
+                مكان واحد
               </span>
             </h2>
             <p className="text-center my-4 text-xl max-w-5xl mt-8 mx-auto">
@@ -117,7 +117,11 @@ export default function Page() {
           </div>
           <div className="w-full h-[250px] grid grid-cols-3 gap-10  ">
             <div className="w-full h-full border border-yellow-500 rounded-xl bg-[#F8FAE5] p-8">
-              <h3 className="text-4xl font-bold  text-start">بيع</h3>
+              <div className="w-full h-[50px] flex items-center justify-start gap-x-4">
+                <div className="w-[50px] h-[50px] bg-green-500" />
+                <h3 className="text-4xl font-bold  text-start">بيع</h3>
+              </div>
+
               <p className="text-xl text-gray-700 mt-4 text-start">
                 {" "}
                 نوفر لك مجموعة من الأدوات تمكنك من النمو وبيع خبراتك بسهولة.
@@ -125,7 +129,11 @@ export default function Page() {
             </div>
 
             <div className="w-full h-full border border-yellow-500 rounded-xl bg-[#F8FAE5] p-8">
-              <h3 className="text-4xl font-bold  text-start">إدارة</h3>
+              <div className="w-full h-[50px] flex items-center justify-start gap-x-4">
+                <div className="w-[50px] h-[50px] bg-green-500" />
+                <h3 className="text-4xl font-bold  text-start">إدارة</h3>
+              </div>
+
               <p className="text-xl text-gray-700 mt-4 text-start">
                 {" "}
                 لوحة تحكم سهلة، بتجربة مذهلة، تتيح إدارة كل دوراتك.
@@ -133,7 +141,11 @@ export default function Page() {
             </div>
 
             <div className="w-full h-full border border-yellow-500 rounded-xl bg-[#F8FAE5] p-8">
-              <h3 className="text-4xl font-bold  text-start">تحليل</h3>
+              <div className="w-full h-[50px] flex items-center justify-start gap-x-4">
+                <div className="w-[50px] h-[50px] bg-green-500" />
+                <h3 className="text-4xl font-bold  text-start">تحليل</h3>
+              </div>
+
               <p className="text-xl text-gray-700 mt-4 text-start">
                 {" "}
                 تقارير وإحصاءات متقدمة تساعدك في الارتقاء بعملك.

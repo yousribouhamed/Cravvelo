@@ -20,11 +20,11 @@ export default function RootLayout({
         <NavBar />
         <div className="  w-full h-fit min-h-full">{children}</div>
       </body>
-      <Script src="//code.tidio.co/f4ntqdkrkcmkov2pbgapiuevig4fhtbq.js" async />
+      {/* <Script src="//code.tidio.co/f4ntqdkrkcmkov2pbgapiuevig4fhtbq.js" async />
       <Script
         src="https://unpkg.com/@material-tailwind/html@latest/scripts/ripple.js"
         async
-      />
+      /> */}
       {/* <Script src="//code.tidio.co/f4ntqdkrkcmkov2pbgapiuevig4fhtbq.js" async /> */}
     </html>
   );
