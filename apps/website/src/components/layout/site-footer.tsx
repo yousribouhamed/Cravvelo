@@ -179,10 +179,10 @@ const SiteFooter: FC = ({}) => {
   return (
     <div
       dir="ltr"
-      className="w-full mt-8  h-[600px] overflow-x-hidden bg-[#43766C] flex flex-col items-center "
+      className="w-full mt-56  h-[600px]  pt-[120px] overflow-hidden bg-[#43766C] flex flex-col items-center "
     >
-      <MaxWidthWrapper>
-        <div className="w-full h-[360px] mt-[80px] bg-transparent  grid grid-cols-6">
+      <MaxWidthWrapper className="overflow-hidden">
+        <div className="w-full h-[360px] bg-transparent overflow-hidden grid grid-cols-6">
           <div className="w-full h-full flex flex-col items-start col-span-2 py-4 gap-y-10">
             <svg
               width="223"
@@ -212,7 +212,7 @@ const SiteFooter: FC = ({}) => {
               />
             </svg>
 
-            <p className="text-white text-start ">
+            <p className="text-[#EAECF0] text-start ">
               Top learning experiences that create more <br /> talent in the
               world.
             </p>
@@ -223,12 +223,12 @@ const SiteFooter: FC = ({}) => {
               key={index + item.title}
               className="flex flex-col items-start justify-start "
             >
-              <p className="text-gray-500 text-xl">{item.title}</p>
+              <p className="text-[#98A2B3] text-lg mb-8">{item.title}</p>
 
               <div className="w-full flex flex-col items-start gap-y-4">
                 {item.children.map((item2, index) => {
                   return (
-                    <p key={item2 + index} className="text-white">
+                    <p key={item2 + index} className="text-[#EAECF0]">
                       {item2}
                     </p>
                   );

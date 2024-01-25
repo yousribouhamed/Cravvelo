@@ -123,7 +123,7 @@ export const NavBar: FC = ({}) => {
             </div>
             <div className="w-[20%] hidden h-full lg:flex items-center justify-end">
               <Link
-                href={"https://jadara-dashboard.vercel.app/sign-in"}
+                href={"https://jadir.vercel.app/sign-in"}
                 className={cn(
                   buttonVariants(),
                   "bg-[#43766C]  text-xl py-4  h-12 rounded-2xl text-white font-bold  hover:bg-[#61AFA0] hover:scale-105 transition-all duration-150 "
