@@ -17,19 +17,19 @@ const LogoutButton: FC = ({}) => {
     return (
       <DropdownMenuItem
         disabled
-        className="w-full h-full flex justify-end items-center p-3 "
+        className="w-full h-full flex justify-between items-center p-3 "
       >
+        <LogOut className=" h-4 w-4 text-red-500" />
         <span className="text-red-500">تسجيل الخروج</span>
-        <LogOut className="ml-2 h-4 w-4 text-red-500" />
       </DropdownMenuItem>
     );
   }
 
   return (
     <SignOutButton signOutCallback={() => router.push(`/sign-in`)}>
-      <DropdownMenuItem className="w-full h-full flex justify-end items-center p-3 ">
+      <DropdownMenuItem className="w-full h-full flex justify-between items-center p-3 ">
+        <LogOut className=" h-4 w-4 text-red-500" />
         <span className="text-red-500">تسجيل الخروج</span>
-        <LogOut className="ml-2 h-4 w-4 text-red-500" />
       </DropdownMenuItem>
     </SignOutButton>
   );

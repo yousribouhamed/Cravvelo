@@ -14,6 +14,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@ui/components/ui/tooltip";
+import Notifications from "./real-time/notifications";
 
 interface Props {
   title: string;
@@ -67,20 +68,7 @@ const Header: FC<Props> = ({ title, user, goBack }) => {
         </div>
 
         <div className="w-[25%]  h-full flex items-center justify-end gap-x-2">
-          <Tooltip delayDuration={0}>
-            <TooltipTrigger asChild>
-              <Button
-                size="icon"
-                variant="secondary"
-                className="bg-white border rounded-xl "
-              >
-                <Icons.bell className="w-4 h-4 text-black " />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p> إشعارات</p>
-            </TooltipContent>
-          </Tooltip>
+          <Notifications />
 
           <Tooltip delayDuration={0}>
             <TooltipTrigger asChild>

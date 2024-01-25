@@ -1,4 +1,12 @@
-import { CreditCard, Keyboard, LogOut, Settings, User } from "lucide-react";
+import {
+  ArrowLeft,
+  CreditCard,
+  Gift,
+  Keyboard,
+  LogOut,
+  Settings,
+  User,
+} from "lucide-react";
 import { ChevronDown } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@ui/components/ui/avatar";
 import type { User as UserType } from "@clerk/nextjs/server";
@@ -14,6 +22,10 @@ import {
 import LogoutButton from "./logout-button";
 import { Icons } from "../Icons";
 import Link from "next/link";
+import { Eye } from "lucide-react";
+import { ArrowUpLeft } from "lucide-react";
+import { Progress } from "@ui/components/ui/progress";
+import Image from "next/image";
 
 interface UserNavProps {
   user: UserType;
@@ -28,7 +40,7 @@ export default function UserNav({ user }: UserNavProps) {
             variant: "ghost",
           })}  cursor-pointer  w-48   flex items-center bg-white rounded-xl border justify-end gap-x-4 `}
         >
-          <Avatar className="w-8 h-8 rounded-xl">
+          <Avatar className="w-8 h-8 rounded-md">
             <AvatarImage src={user?.imageUrl ?? user?.imageUrl} />
             <AvatarFallback>AB</AvatarFallback>
           </Avatar>
@@ -38,21 +50,47 @@ export default function UserNav({ user }: UserNavProps) {
           <ChevronDown className="w-4 h-4 text-black hover:text-accent-foreground " />
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className=" w-48  ">
-        <div className="w-full h-[70px]  flex items-center justify-center px-2">
-          <Button size="icon" variant="secondary">
-            <Icons.Order className="text-gray-700 w-4 h-4" />
+      <DropdownMenuContent align="start" className=" w-56 ">
+        <div
+          dir="ltr"
+          className="w-full h-[70px]  flex items-center justify-between px-2"
+        >
+          <Button size="icon" className="w-6 h-6 p-1" variant="secondary">
+            <Eye className="text-gray-700 w-2 h-2 " />
           </Button>
           <div
-            className={`  cursor-pointer   flex items-center justify-end gap-x-4  w-full `}
+            className={`  cursor-pointer   flex justify-center items-end gap-y-2  w-full h-full flex-col `}
           >
-            <p className="text-md text-black">
-              {user?.firstName ? user?.firstName : "ah"} اكاديمية
-            </p>
-            <Avatar className="w-8 h-8">
+            <Avatar className="w-8 h-8 rounded-md">
               <AvatarImage src={user?.imageUrl} />
               <AvatarFallback>AB</AvatarFallback>
             </Avatar>
+
+            <p className="text-md text-black">
+              {user?.firstName ? user?.firstName : "ah"} اكاديمية
+            </p>
+          </div>
+        </div>
+        <DropdownMenuSeparator />
+        <div className="w-full h-[80px] flex flex-col px-2">
+          <div className="w-full h-[50px] flex items-center justify-between">
+            <ArrowLeft className="w-4 h-4" />
+            <div className="w-[70%] h-full flex items-center justify-end gap-x-2">
+              <p className="text-sm text-black text-start">ابدأ التوثيق الآن</p>
+              <Image
+                alt="verified image"
+                src="/verified.png"
+                width={20}
+                height={20}
+              />
+            </div>
+          </div>
+
+          <div
+            dir="rtl"
+            className="w-full h-[20px] flex justify-center items-center"
+          >
+            <Progress value={25} className="h-1 w-full bg-[#EFEFEF]" />
           </div>
         </div>
         <DropdownMenuSeparator />
@@ -62,38 +100,38 @@ export default function UserNav({ user }: UserNavProps) {
               className="w-full  h-full flex justify-between items-center p-2 "
               href={"/profile"}
             >
-              <User className="ml-2 h-4 w-4" />
+              <User className=" h-4 w-4" />
               <span>الملف الشخصي</span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
+
           <DropdownMenuItem className="w-full  h-full flex justify-between items-center  ">
             <Link
               className="w-full  h-full flex justify-between items-center p-2 "
               href={"/pricing"}
             >
-              <CreditCard className="ml-2 h-4 w-4" />
+              <Gift className=" h-4 w-4" />
               <span>باقة الأكاديمية</span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
+
+          <DropdownMenuItem className="w-fulls  h-full flex justify-between items-center  ">
+            <Link
+              className="w-full  h-full flex justify-between items-center p-2 "
+              href={"/profile"}
+            >
+              <ArrowUpLeft className=" h-4 w-4" />
+              <span> مركز المساعدة</span>
+            </Link>
+          </DropdownMenuItem>
 
           <DropdownMenuItem className="w-full  h-full flex justify-between items-center  ">
             <Link
               className="w-full  h-full flex justify-between items-center p-2 "
               href={"/profile"}
             >
-              <CreditCard className="ml-2 h-4 w-4" />
-              <span> مركز المساعدة</span>
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem className="w-full  h-full flex justify-between items-center  ">
-            <Link
-              className="w-full  h-full flex justify-between items-center p-2 "
-              href={"/profile"}
-            >
-              <CreditCard className="ml-2 h-4 w-4" />
+              <ArrowUpLeft className=" h-4 w-4" />
+
               <span>معاينة الأكاديمية</span>
             </Link>
           </DropdownMenuItem>
