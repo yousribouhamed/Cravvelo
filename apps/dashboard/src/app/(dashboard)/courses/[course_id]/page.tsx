@@ -1,17 +1,30 @@
 import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
 import Header from "@/src/components/Header";
 import { currentUser } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Button } from "@ui/components/ui/button";
+import { prisma } from "database/src";
 
-export default async function Home() {
+interface PageProps {
+  params: { course_id: string };
+}
+
+export default async function Page({ params }: PageProps) {
   const user = await currentUser();
 
   if (!user) {
     redirect("/sign-in");
   }
 
-  console.log(user);
+  const course = await prisma.course.findUnique({
+    where: {
+      id: params.course_id,
+    },
+  });
+
+  if (!course) {
+    notFound();
+  }
 
   return (
     <MaxWidthWrapper>

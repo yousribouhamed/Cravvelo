@@ -3,14 +3,29 @@ import Header from "@/src/components/Header";
 import CourseHeader from "@/src/components/course-header";
 import { User } from "@clerk/nextjs/dist/types/server";
 import { currentUser } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import AddPricingForm from "@/src/components/forms/course-forms/add-pricing-form";
+import { prisma } from "database/src";
 
-export default async function Home() {
+interface PageProps {
+  params: { course_id: string };
+}
+
+export default async function Page({ params }: PageProps) {
   const user = await currentUser();
 
   if (!user) {
     redirect("/sign-in");
+  }
+
+  const course = await prisma.course.findUnique({
+    where: {
+      id: params.course_id,
+    },
+  });
+
+  if (!course) {
+    notFound();
   }
 
   return (

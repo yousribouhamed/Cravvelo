@@ -6,16 +6,8 @@ import * as z from "zod";
 import { Card, CardContent } from "@ui/components/ui/card";
 import { Button } from "@ui/components/ui/button";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@ui/components/ui/select";
-import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -117,7 +109,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                     عنوان الدورة <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="     عنوان الدورة " {...field} />
+                    <Input placeholder=" ادخل عنوان الدورة هنا" {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -134,7 +126,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                     رابط الدورة <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="رابط" {...field} />
+                    <Input placeholder="أدخل رابط الدورة هنا" {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -142,64 +134,6 @@ export function CourseSettingsForm({ course }: ComponentProps) {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="seoTitle"
-              render={({ field }) => (
-                <FormItem className="w-full ">
-                  <FormLabel>
-                    المدرسين <span className="text-red-600 text-xl">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Select>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Theme" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">Light</SelectItem>
-                        <SelectItem value="dark">Dark</SelectItem>
-                        <SelectItem value="system">System</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="seoTitle"
-              render={({ field }) => (
-                <FormItem className="w-full ">
-                  <FormLabel>
-                    الوقت المقدر لاكمال الدورة{" "}
-                    <span className="text-red-600 text-xl">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input placeholder="shadcn" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="seoTitle"
-              render={({ field }) => (
-                <FormItem className="w-full ">
-                  <FormLabel>
-                    تخصيص صفجة هبوط لدورة{" "}
-                    <span className="text-red-600 text-xl">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input placeholder="shadcn" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <div className="w-full h-0.5 bg-gray-500 " />
             <FormLabel className="text-3xl  block font-bold text-black">
               تفاصيل الدورة{" "}
@@ -239,7 +173,10 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input
+                      placeholder="أدخل رابط الفيديو الدعائي هنا"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -259,7 +196,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                       id="description"
                       rows={3}
                       className="min-h-[100px]"
-                      placeholder="short sleeve shirts"
+                      placeholder="أدخل ملخصًا للدورة هنا"
                       value={field.value}
                       onChange={field.onChange}
                     />
@@ -289,40 +226,6 @@ export function CourseSettingsForm({ course }: ComponentProps) {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="seoTitle"
-              render={({ field }) => (
-                <FormItem className="w-full ">
-                  <FormLabel>
-                    ماذا يستفيد الطالب{" "}
-                    <span className="text-red-600 text-xl">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input placeholder="shadcn" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="seoTitle"
-              render={({ field }) => (
-                <FormItem className="w-full ">
-                  <FormLabel>
-                    ماهي متطلباات حضور الدورة{" "}
-                    <span className="text-red-600 text-xl">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input placeholder="shadcn" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <div className="w-full h-0.5 bg-gray-500 " />
             <FormLabel className="text-3xl  block font-bold text-black">
               تهيئة محركات البحث seo{" "}
@@ -338,11 +241,14 @@ export function CourseSettingsForm({ course }: ComponentProps) {
               render={({ field }) => (
                 <FormItem className="w-full ">
                   <FormLabel>
-                    عوان الموقع عند محرك البحث
+                    عنوان الموقع عند محرك البحث
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input
+                      placeholder="       عوان الموقع عند محرك البحث"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -355,7 +261,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
               render={({ field }) => (
                 <FormItem className="w-full ">
                   <FormLabel>
-                    اضف وصفا للموقع
+                    أضف وصفًا للموقع
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
@@ -363,7 +269,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                       id="description"
                       rows={3}
                       className="min-h-[100px]"
-                      placeholder="short sleeve shirts"
+                      placeholder="اضف وصفا للموقع"
                       value={field.value}
                       onChange={field.onChange}
                     />

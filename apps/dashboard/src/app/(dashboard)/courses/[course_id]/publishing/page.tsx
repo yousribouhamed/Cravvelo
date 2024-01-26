@@ -3,30 +3,31 @@ import Header from "@/src/components/Header";
 import CourseHeader from "@/src/components/course-header";
 import { User } from "@clerk/nextjs/dist/types/server";
 import { currentUser } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { prisma } from "database/src";
 import ChaptersBoard from "@/src/components/chapters-board";
 import PublishCourseForm from "@/src/components/forms/course-forms/publish-form";
 
-const getChapters = async () => {
-  try {
-    const chapters = await prisma.chapter.findMany();
+interface PageProps {
+  params: { course_id: string };
+}
 
-    return chapters;
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-};
-
-export default async function Home() {
+export default async function Page({ params }: PageProps) {
   const user = await currentUser();
 
   if (!user) {
     redirect("/sign-in");
   }
 
-  const chapters = await getChapters();
+  const course = await prisma.course.findUnique({
+    where: {
+      id: params.course_id,
+    },
+  });
+
+  if (!course) {
+    notFound();
+  }
 
   return (
     <MaxWidthWrapper>
