@@ -21,7 +21,7 @@ export const ourFileRouter = {
         file,
       };
     }),
-  imageUploader: f({ pdf: { maxFileSize: "1024MB" } })
+  imageUploader: f({ image: { maxFileSize: "1024MB" } })
     // .middleware(async ({ req }) => {
     //   const user = await auth();
     //   if (!user) throw new Error("Unauthorized");

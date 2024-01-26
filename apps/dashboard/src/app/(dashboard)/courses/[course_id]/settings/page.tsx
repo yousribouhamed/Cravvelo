@@ -4,23 +4,34 @@ import CourseHeader from "@/src/components/course-header";
 import { User } from "@clerk/nextjs/dist/types/server";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-import { prisma } from "database/src";
-import ChaptersBoard from "@/src/components/chapters-board";
-import { CourseSettingsForm } from "@/src/components/forms/course-forms/course-settings";
 
-export default async function Home() {
+// import ChaptersBoard from "@/src/components/chapters-board";
+import { CourseSettingsForm } from "@/src/components/forms/course-forms/course-settings";
+import { prisma } from "database/src";
+
+interface PageProps {
+  params: { course_id: string };
+}
+
+export default async function Home({ params }: PageProps) {
   const user = await currentUser();
 
   if (!user) {
     redirect("/sign-in");
   }
 
+  const course = await prisma.course.findUnique({
+    where: {
+      id: params.course_id,
+    },
+  });
+
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col min-h-full  h-fit justify-start">
         <Header user={{ user } as unknown as User} title="ui ux" goBack />
         <CourseHeader />
-        <CourseSettingsForm />
+        <CourseSettingsForm course={course} />
       </main>
     </MaxWidthWrapper>
   );

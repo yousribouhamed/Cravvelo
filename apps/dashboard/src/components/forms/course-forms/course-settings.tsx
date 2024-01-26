@@ -29,6 +29,12 @@ import { Textarea } from "@ui/components/ui/textarea";
 import { trpc } from "@/src/app/_trpc/client";
 import { maketoast } from "../../toasts";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { ImageUploader } from "../../uploaders/ImageUploader";
+import { Course } from "database";
+
+interface ComponentProps {
+  course: Course;
+}
 
 const formSchema = z.object({
   courseResume: z.string(),
@@ -41,7 +47,7 @@ const formSchema = z.object({
   youtubeUrl: z.string(),
 });
 
-export function CourseSettingsForm() {
+export function CourseSettingsForm({ course }: ComponentProps) {
   const router = useRouter();
   const path = usePathname();
   const courseID = getValueFromUrl(path, 2);
@@ -49,6 +55,16 @@ export function CourseSettingsForm() {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      courseDescription: course.courseDescription,
+      courseResume: course.courseResume,
+      courseUrl: course.courseUrl,
+      title: course.title,
+      thumnailUrl: course.thumnailUrl,
+      youtubeUrl: course.youtubeUrl,
+      seoDescription: course.seoDescription,
+      seoTitle: course.seoTitle,
+    },
   });
 
   const mutation = trpc.updateCourseSettings.useMutation({
@@ -61,11 +77,18 @@ export function CourseSettingsForm() {
     },
   });
 
-  // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    mutation.mutate({
+      courseDescription: values.courseDescription,
+      courseId: courseID,
+      courseResume: values.courseResume,
+      courseUrl: values.courseUrl,
+      seoDescription: values.seoDescription,
+      seoTitle: values.seoTitle,
+      thumnailUrl: values.thumnailUrl,
+      title: values.title,
+      youtubeUrl: values.youtubeUrl,
+    });
   }
 
   return (
@@ -196,7 +219,10 @@ export function CourseSettingsForm() {
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <ImageUploader
+                      fileUrl={field.name}
+                      onChnage={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

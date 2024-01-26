@@ -87,12 +87,7 @@ export const ImageUploader = ({
               {!isError && (
                 <>
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <Image
-                      src="/undraw_cloud-upload.svg"
-                      alt="cloud image"
-                      width={200}
-                      height={200}
-                    />
+                    <Cloud className="text-zinc-700 w-8 h-8 mb-12" />
                     <p className="mb-2 text-sm text-zinc-700">
                       <span className="font-semibold">انقر للتحميل</span> أو
                       اسحب وإسقاط
