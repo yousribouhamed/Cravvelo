@@ -21,12 +21,13 @@ import {
   FormMessage,
 } from "@ui/components/ui/form";
 import { Input } from "@ui/components/ui/input";
-import { addCourseSchema } from "@/src/lib/validators/course";
+import { addChapterSchema } from "@/src/lib/validators/course";
 import { trpc } from "@/src/app/_trpc/client";
 import { getCookie, getValueFromUrl } from "@/src/lib/utils";
 import { useRouter, usePathname } from "next/navigation";
 import React from "react";
 import { Icons } from "../Icons";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 interface Props {
   refetch: () => Promise<any>;
@@ -42,22 +43,16 @@ const AddChapter: FC<Props> = ({ refetch, chaptersNumber }) => {
 
   const mutation = trpc.createChapter.useMutation({
     onSuccess: async ({}) => {
-      // router.push(`/courses/${courseId}`);
       await refetch();
     },
     onError: () => {},
   });
 
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof addCourseSchema>>({
-    resolver: zodResolver(addCourseSchema),
-    defaultValues: {
-      title: "",
-    },
+  const form = useForm<z.infer<typeof addChapterSchema>>({
+    resolver: zodResolver(addChapterSchema),
   });
 
-  // 2. Define a submit handler.
-  async function onSubmit(data: z.infer<typeof addCourseSchema>) {
+  async function onSubmit(data: z.infer<typeof addChapterSchema>) {
     setIsLoading(true);
     await mutation
       .mutateAsync({
@@ -74,7 +69,7 @@ const AddChapter: FC<Props> = ({ refetch, chaptersNumber }) => {
   return (
     <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
       <DialogTrigger asChild>
-        <Button size="lg" className="rounded-2xl h-14">
+        <Button className="rounded-xl h-12 hover:scale-105 transition-all duration-150 font-bold flex gap-x-4 items-center">
           <svg
             width="25"
             height="25"
@@ -90,13 +85,13 @@ const AddChapter: FC<Props> = ({ refetch, chaptersNumber }) => {
               fill-rule="evenodd"
               clip-rule="evenodd"
               d="M25.001 16.445C25.9023 16.445 26.6329 17.1757 26.6329 18.077L26.6329 31.9245C26.6329 32.8258 25.9023 33.5564 25.001 33.5564C24.0997 33.5564 23.369 32.8258 23.369 31.9245L23.369 18.077C23.369 17.1757 24.0997 16.445 25.001 16.445Z"
-              fill="#43766C"
+              fill="#FC6B00"
             />
             <path
               fill-rule="evenodd"
               clip-rule="evenodd"
               d="M33.5567 25.0007C33.5567 25.902 32.826 26.6327 31.9247 26.6327H18.0772C17.1759 26.6327 16.4453 25.902 16.4453 25.0007C16.4453 24.0994 17.1759 23.3688 18.0772 23.3688H31.9247C32.826 23.3688 33.5567 24.0994 33.5567 25.0007Z"
-              fill="#43766C"
+              fill="#FC6B00"
             />
           </svg>
           اضافة قسم جديد للدورة
@@ -124,14 +119,15 @@ const AddChapter: FC<Props> = ({ refetch, chaptersNumber }) => {
                 )}
               />
               <DialogFooter className="w-full h-[50px] flex items-center justify-end gap-x-4">
-                <Button variant="ghost">إلغاء</Button>
-                <Button type="submit">
-                  {isLaoding && (
-                    <Icons.spinner
-                      className="ml-2 h-4 w-4 animate-spin"
-                      aria-hidden="true"
-                    />
-                  )}
+                <Button variant="ghost" onClick={() => setIsOpen(false)}>
+                  إلغاء
+                </Button>
+                <Button
+                  className=" flex items-center gap-x-2"
+                  disabled={mutation.isLoading}
+                  type="submit"
+                >
+                  {mutation.isLoading ? <LoadingSpinner /> : null}
                   إضافة جديد
                 </Button>
               </DialogFooter>

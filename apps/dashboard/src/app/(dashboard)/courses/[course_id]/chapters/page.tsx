@@ -9,7 +9,13 @@ import ChaptersBoard from "@/src/components/chapters-board";
 
 const getChapters = async () => {
   try {
-    const chapters = await prisma.chapter.findMany();
+    const chapters = await prisma.chapter.findMany({
+      orderBy: [
+        {
+          orderNumber: "asc",
+        },
+      ],
+    });
 
     return chapters;
   } catch (error) {

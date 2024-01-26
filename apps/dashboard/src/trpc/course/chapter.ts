@@ -2,6 +2,7 @@ import { z } from "zod";
 import { privateProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { Module } from "@/src/types";
+import type { Chapter } from "database";
 
 export const chapter = {
   createChapter: privateProcedure
@@ -40,9 +41,102 @@ export const chapter = {
         where: {
           courseID: input.courseId,
         },
+        orderBy: [
+          {
+            orderNumber: "asc",
+          },
+        ],
       });
 
       return chapters;
+    }),
+  deleteChapter: privateProcedure
+    .input(
+      z.object({
+        chapterId: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const deletedChapter = await ctx.prisma.chapter.delete({
+        where: {
+          id: input.chapterId,
+        },
+      });
+
+      return deletedChapter;
+    }),
+
+  updateChapterTitle: privateProcedure
+    .input(
+      z.object({
+        chapterId: z.string(),
+        title: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const deletedChapter = await ctx.prisma.chapter.update({
+        where: {
+          id: input.chapterId,
+        },
+        data: {
+          title: input.title,
+        },
+      });
+
+      return deletedChapter;
+    }),
+
+  toggleChapterVisibility: privateProcedure
+    .input(
+      z.object({
+        chapterId: z.string(),
+        visibility: z.boolean(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      await ctx.prisma.chapter.update({
+        where: {
+          id: input.chapterId,
+        },
+        data: {
+          isVisible: input.visibility,
+        },
+      });
+    }),
+  updateChapters: privateProcedure
+
+    .input(
+      z.object({
+        courseID: z.string(),
+        bulkUpdateData: z
+          .object({
+            id: z.string(),
+            position: z.number(),
+          })
+          .array(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const bulkUpdateData = input.bulkUpdateData;
+
+      // replace this with promise all later
+      try {
+        bulkUpdateData.map(async (item) => {
+          await ctx.prisma.chapter.update({
+            where: {
+              id: item.id,
+            },
+            data: {
+              orderNumber: item.position,
+            },
+          });
+        });
+      } catch (err) {
+        console.error(
+          "this error is comming from trpc router called update chapters"
+        );
+        console.error(err);
+      }
     }),
 
   createModule: privateProcedure

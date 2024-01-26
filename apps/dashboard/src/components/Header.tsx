@@ -15,6 +15,7 @@ import {
   TooltipTrigger,
 } from "@ui/components/ui/tooltip";
 import Notifications from "./real-time/notifications";
+import { ArrowRight } from "lucide-react";
 
 interface Props {
   title: string;
@@ -32,34 +33,21 @@ const Header: FC<Props> = ({ title, user, goBack }) => {
             <MobildSideBard />
           </div>
           {goBack && (
-            <Button
-              onClick={() => router.back()}
-              variant="secondary"
-              size="icon"
-            >
-              <svg
-                width="17"
-                height="17"
-                viewBox="0 0 22 22"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M10.7305 1.37305L20.8159 11.0001L10.7305 20.6271"
-                  stroke="#43766C"
-                  stroke-width="2.1034"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M20.8162 11L1.18457 11"
-                  stroke="#43766C"
-                  stroke-width="2.1034"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </Button>
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={() => router.back()}
+                  variant="secondary"
+                  size="icon"
+                  className="bg-white rounded-xl border"
+                >
+                  <ArrowRight className="w-4 h-4 text-black" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>عد للصفحة السابقة</p>
+              </TooltipContent>
+            </Tooltip>
           )}
           <h1 className="text-xl font-bold text-start">{title}</h1>
         </div>
