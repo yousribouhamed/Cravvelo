@@ -31,11 +31,11 @@ module.exports = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#FC6B00",
+          foreground: "#FC6B001F",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
+          DEFAULT: "#EFEFEF",
           foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
@@ -60,11 +60,11 @@ module.exports = {
         },
         tremor: {
           brand: {
-            faint: colors.blue[50],
-            muted: colors.blue[200],
-            subtle: colors.blue[400],
-            DEFAULT: colors.blue[500],
-            emphasis: colors.blue[700],
+            faint: colors.orange[50],
+            muted: colors.orange[200],
+            subtle: colors.orange[400],
+            DEFAULT: colors.orange[500],
+            emphasis: colors.orange[700],
             inverted: colors.white,
           },
           background: {

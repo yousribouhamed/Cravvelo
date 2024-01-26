@@ -1,9 +1,17 @@
 import { SignUpForm } from "@/src/components/forms/sign-up-form";
 import type { FC } from "react";
+import { currentUser } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
 interface pageAbdullahProps {}
 
-const page: FC = ({}) => {
+const page = async ({}) => {
+  const user = await currentUser();
+
+  if (user) {
+    redirect("/");
+  }
+
   return (
     <div className="w-full min-h-screen  h-fit grid grid-cols-3  bg-[#FAFAFA] ">
       <div className="bg-white  col-span-1 flex justify-start items-start flex-col gap-y-4 p-6">

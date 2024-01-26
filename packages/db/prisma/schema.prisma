@@ -34,12 +34,12 @@ model Academy {
 
 
 model website {
-    id                     String @default(uuid()) @unique
+    id                     String             @default(uuid()) @unique
     academiaId             String 
-    subdomain              String @unique
+    subdomain              String             @unique
     pages                  Json
-    createdAt              DateTime            @default(now())
-    updatedAt              DateTime            @updatedAt
+    createdAt              DateTime           @default(now())
+    updatedAt              DateTime           @updatedAt
 }
 
 model Course {
@@ -54,6 +54,7 @@ model Course {
   seoTitle               String?
   seoDescription         String?
   price                  Float?
+  compareAtPrice         Float?
   compairAtPrice         Float?
   studenstNbr            String?
   profit                 String?

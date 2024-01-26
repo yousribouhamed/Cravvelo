@@ -43,10 +43,7 @@ function MobileLink({
       href={`${href}`}
       className={cn(
         buttonVariants({ variant: "ghost" }),
-        "w-full flex items-center justify-end text-sm pr-4  hover:!bg-transparent hover:!text-white text-white gap-x-2 hover:bg-none",
-        {
-          "text-[#A9B9B6] ": disabled,
-        }
+        "w-full flex items-center justify-end text-sm pr-4  hover:!bg-transparent  !text-white gap-x-2 hover:bg-none"
       )}
       onClick={() => setIsOpen(false)}
     >
@@ -76,18 +73,14 @@ const SideBarMenu: FC = ({}) => {
                   href={item.slug}
                   className={cn(
                     buttonVariants({ variant: "ghost" }),
-                    "w-full flex items-center justify-end qatar-semibold text-md  gap-x-2 hover:!bg-transparent hover:!text-white text-[#A9B9B6] ",
+                    "w-full flex items-center justify-end qatar-semibold text-md  gap-x-2 hover:!bg-transparent !text-white",
                     {
-                      "text-white bg-[#325951]": path === item.slug,
+                      "text-white bg-white/10": path === item.slug,
                     }
                   )}
                 >
                   {item.title}
-                  <item.icon
-                    className={`w-4 h-4  ${
-                      path === item.slug ? "!text-white" : "!text-[#A9B9B6] "
-                    }`}
-                  />
+                  <item.icon className={`w-4 h-4 `} />
                 </Link>
               )}
 
@@ -100,18 +93,14 @@ const SideBarMenu: FC = ({}) => {
                   }}
                   className={cn(
                     buttonVariants({ variant: "ghost" }),
-                    "w-full flex items-center justify-end qatar-semibold group text-md  gap-x-2 hover:!bg-transparent hover:!text-white text-[#A9B9B6] ",
+                    "w-full flex items-center justify-end qatar-semibold group text-md  gap-x-2 hover:!bg-transparent !text-white ",
                     {
-                      "text-white bg-[#325951]": path === item.slug,
+                      "text-white bg-white/10": path === item.slug,
                     }
                   )}
                 >
                   {item.title}
-                  <item.icon
-                    className={`w-4 h-4 group-hover:text-white  ${
-                      path === item.slug ? "!text-white" : "!text-[#A9B9B6] "
-                    }`}
-                  />
+                  <item.icon className={`w-4 h-4 text-white`} />
                 </AccordionTrigger>
               )}
               {item.subitems?.length > 0 && (

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { privateProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
+import { prisma } from "database/src";
 
 export const course = {
   createCourse: privateProcedure
@@ -25,6 +26,37 @@ export const course = {
         });
 
       return { success: true, courseId: course.id };
+    }),
+  priceCourse: privateProcedure
+    .input(
+      z.object({
+        courseId: z.string(),
+        price: z.number(),
+        compairAtPrice: z.number(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const course = await ctx.prisma.course
+        .update({
+          where: {
+            id: input.courseId,
+          },
+          data: {
+            price: input.price,
+            compairAtPrice: input.compairAtPrice,
+          },
+        })
+        .catch((err) => {
+          console.log(err);
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: err?.message
+              ? err?.message
+              : "the error in on update course settings",
+          });
+        });
+
+      return course;
     }),
   updateCourseSettings: privateProcedure
     .input(

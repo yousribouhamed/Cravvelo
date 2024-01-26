@@ -48,28 +48,28 @@ export function DatePickerWithRange({
             >
               <path
                 d="M1.79785 9.02628C1.79785 7.0303 3.41592 5.41223 5.4119 5.41223H24.3857C26.3817 5.41223 27.9997 7.0303 27.9997 9.02628V24.386C27.9997 26.382 26.3817 28.0001 24.3857 28.0001H5.4119C3.41592 28.0001 1.79785 26.382 1.79785 24.386V9.02628Z"
-                stroke="#43766C"
+                stroke="#FC6B00"
                 stroke-width="2.62925"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               />
               <path
                 d="M7.6709 1.79813V8.12272"
-                stroke="#43766C"
+                stroke="#FC6B00"
                 stroke-width="2.62925"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               />
               <path
                 d="M22.1272 1.79813V8.12272"
-                stroke="#43766C"
+                stroke="#FC6B00"
                 stroke-width="2.62925"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               />
               <path
                 d="M7.21973 12.6403H22.5794"
-                stroke="#43766C"
+                stroke="#FC6B00"
                 stroke-width="2.62925"
                 stroke-linecap="round"
                 stroke-linejoin="round"

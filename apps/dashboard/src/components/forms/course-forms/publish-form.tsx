@@ -19,6 +19,7 @@ import { trpc } from "@/src/app/_trpc/client";
 import { maketoast } from "../../toasts";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 const addTextSchema = z.object({
   title: z.string().min(2).max(50),
@@ -136,12 +137,13 @@ function PublishCourseForm() {
 
             <div className="space-y-4">
               <Button
+                disabled={mutation.isLoading}
                 type="submit"
                 form="add-text"
-                className="w-full"
+                className="w-full flex items-center gap-x-2"
                 size="lg"
               >
-                {" "}
+                {mutation.isLoading ? <LoadingSpinner /> : null}
                 حفظ والمتابعة
               </Button>
               <Button className="w-full" variant="secondary" size="lg">

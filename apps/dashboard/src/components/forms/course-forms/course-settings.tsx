@@ -28,6 +28,8 @@ import { getValueFromUrl } from "@/src/lib/utils";
 import { Textarea } from "@ui/components/ui/textarea";
 import { trpc } from "@/src/app/_trpc/client";
 import { maketoast } from "../../toasts";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
+
 const formSchema = z.object({
   courseResume: z.string(),
   courseDescription: z.any(),
@@ -350,8 +352,14 @@ export function CourseSettingsForm() {
       <div className="col-span-1 w-full h-full ">
         <Card>
           <CardContent className="w-full h-fit flex flex-col p-6  space-y-4">
-            <Button type="submit" form="add-text" className="w-full" size="lg">
-              {" "}
+            <Button
+              disabled={mutation.isLoading}
+              type="submit"
+              form="add-text"
+              className="w-full flex items-center gap-x-2"
+              size="lg"
+            >
+              {mutation.isLoading ? <LoadingSpinner /> : null}
               حفظ والمتابعة
             </Button>
             <Button

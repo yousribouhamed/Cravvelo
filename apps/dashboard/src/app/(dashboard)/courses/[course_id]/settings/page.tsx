@@ -18,7 +18,7 @@ export default async function Home() {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col min-h-full  h-fit justify-start">
-        <Header user={{ user } as unknown as User} title="ui ux" />
+        <Header user={{ user } as unknown as User} title="ui ux" goBack />
         <CourseHeader />
         <CourseSettingsForm />
       </main>

@@ -18,7 +18,7 @@ import { Input } from "@ui/components/ui/input";
 import { Card, CardContent } from "@ui/components/ui/card";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
-
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { JadaraVoiceUpLoader } from "../../upload-voice";
 
 const addPDFSchema = z.object({
@@ -114,10 +114,10 @@ function AddVoiceForm() {
               disabled={mutation.isLoading}
               type="submit"
               form="add-text"
-              className="w-full"
+              className="w-full flex items-center gap-x-2"
               size="lg"
             >
-              {" "}
+              {mutation.isLoading ? <LoadingSpinner /> : null}
               حفظ والمتابعة
             </Button>
             <Button

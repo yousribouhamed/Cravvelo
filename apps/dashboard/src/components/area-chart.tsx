@@ -68,7 +68,7 @@ const AreaChartOverview: FC = ({}) => {
           dir="ltr"
           className="h-[70px]  w-full flex items-center justify-between px-2"
         >
-          <span className="font-bold text-[#43766C] text-sm">
+          <span className="font-bold text-[#FC6B00] text-sm">
             (+5) more{" "}
             <span className="font-thin text-gray-500 text-xs">in 2021</span>
           </span>
@@ -79,7 +79,7 @@ const AreaChartOverview: FC = ({}) => {
             </div>
             <div className="w-[200px] flex items-center gap-x-4 justify-end">
               <span className="text-sm">المنتجات الرقمية</span>
-              <div className="w-[80px] h-1 bg-[#43766C] rounded-full" />
+              <div className="w-[80px] h-1 bg-[#FC6B00] rounded-full" />
             </div>
           </div>
         </div>
@@ -93,8 +93,8 @@ const AreaChartOverview: FC = ({}) => {
             >
               <defs>
                 <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#43766C" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#43766C" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#FC6B00" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#FC6B00" stopOpacity={0} />
                 </linearGradient>
                 <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#FFB800" stopOpacity={0.8} />
@@ -122,7 +122,7 @@ const AreaChartOverview: FC = ({}) => {
               <Area
                 type="monotone"
                 dataKey="المنتجات الرقمية"
-                stroke="#43766C" // Adjusted stroke color for UV
+                stroke="#FC6B00" // Adjusted stroke color for UV
                 strokeWidth={2} // Increased stroke width for UV
                 fillOpacity={1}
                 fill="url(#colorUv)"

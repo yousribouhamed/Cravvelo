@@ -18,6 +18,7 @@ import { Card, CardContent } from "@ui/components/ui/card";
 import Tiptap from "../../tiptap";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 const addTextSchema = z.object({
   title: z.string().min(2).max(50),
@@ -106,10 +107,10 @@ function AddTextForm() {
               disabled={mutation.isLoading}
               type="submit"
               form="add-text"
-              className="w-full"
+              className="w-full flex items-center gap-x-2"
               size="lg"
             >
-              {" "}
+              {mutation.isLoading ? <LoadingSpinner /> : null}
               حفظ والمتابعة
             </Button>
             <Button

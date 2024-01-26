@@ -21,6 +21,7 @@ import { getValueFromUrl } from "@/src/lib/utils";
 
 import { JadaraVoiceUpLoader } from "../../upload-voice";
 import VedioUploader from "../../uploaders/VedioUploader";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import Tiptap from "../../tiptap";
 
 const addVedioSchema = z.object({
@@ -132,10 +133,10 @@ function AddVedioForm() {
               disabled={mutation.isLoading}
               type="submit"
               form="add-text"
-              className="w-full"
+              className="w-full flex items-center gap-x-2"
               size="lg"
             >
-              {" "}
+              {mutation.isLoading ? <LoadingSpinner /> : null}
               حفظ والمتابعة
             </Button>
             <Button

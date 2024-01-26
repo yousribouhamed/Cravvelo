@@ -13,39 +13,51 @@ import {
   FormLabel,
   FormMessage,
 } from "@ui/components/ui/form";
+import { Switch } from "@ui/components/ui/switch";
 import { Input } from "@ui/components/ui/input";
 import { Card, CardContent } from "@ui/components/ui/card";
-import Tiptap from "../../tiptap";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
-import { Label } from "@ui/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@ui/components/ui/radio-group";
+import { useState } from "react";
+import { maketoast } from "../../toasts";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 const PricingFormSchema = z.object({
-  type: z.enum(["all", "mentions"], {
-    required_error: "You need to select a notification type.",
-  }),
+  price: z.number(),
+  compareAtPrice: z.number(),
 });
 
 function AddPricingForm() {
   const router = useRouter();
   const path = usePathname();
-  const chapterID = getValueFromUrl(path, 4);
-
-  const mutation = trpc.createModule.useMutation({
-    onSuccess: () => {},
-    onError: () => {},
+  const courseId = getValueFromUrl(path, 2);
+  const [isFree, setIsFree] = useState(true);
+  const mutation = trpc.priceCourse.useMutation({
+    onSuccess: () => {
+      maketoast.success();
+      router.push(`/courses/${courseId}/publishing`);
+    },
+    onError: () => {
+      maketoast.error();
+    },
   });
 
   const form = useForm<z.infer<typeof PricingFormSchema>>({
     mode: "onChange",
     resolver: zodResolver(PricingFormSchema),
     defaultValues: {
-      type: "all",
+      price: 0,
+      compareAtPrice: 0,
     },
   });
 
-  async function onSubmit(values: z.infer<typeof PricingFormSchema>) {}
+  async function onSubmit(values: z.infer<typeof PricingFormSchema>) {
+    await mutation.mutateAsync({
+      courseId,
+      price: values.price,
+      compairAtPrice: values.compareAtPrice,
+    });
+  }
 
   return (
     <div className="w-full grid grid-cols-3 gap-x-8 ">
@@ -56,43 +68,63 @@ function AddPricingForm() {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-8 w-full "
           >
-            <FormField
-              control={form.control}
-              name="type"
-              render={({ field }) => (
-                <FormItem className="space-y-3 w-full h-fit">
-                  <FormLabel className="text-3xl  block font-bold text-black">
-                    {" "}
-                    اختر أفضل الأسعار التي تناسب الدورة التدريبية الخاصة بك
-                  </FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="flex w-full flex-col space-y-1"
-                    >
-                      <FormItem className="flex items-center justify-start w-full space-x-3 space-y-0">
-                        <FormLabel className="font-normal">
-                          جعل هذه الدورة مجانية
-                        </FormLabel>
-                        <FormControl>
-                          <RadioGroupItem value="all" />
-                        </FormControl>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormLabel className="font-normal">
-                          جعل هذه الدورة مدفوعة الأجر
-                        </FormLabel>
-                        <FormControl>
-                          <RadioGroupItem value="mentions" />
-                        </FormControl>
-                      </FormItem>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <FormLabel className="text-3xl  block font-bold text-black">
+              {" "}
+              اختر أفضل الأسعار التي تناسب الدورة التدريبية الخاصة بك
+            </FormLabel>
+            <div className="flex flex-row bg-white items-center justify-between rounded-lg border p-3 shadow-sm">
+              <div className="space-y-0.5">
+                <FormLabel>جعل هذه الدورة مجانية</FormLabel>
+              </div>
+
+              <div dir="ltr">
+                <Switch
+                  checked={isFree}
+                  onCheckedChange={(val) => setIsFree(val)}
+                />
+              </div>
+            </div>
+            {!isFree ? (
+              <>
+                <FormField
+                  control={form.control}
+                  name="price"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>سعر</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="0 DZD"
+                          disabled={isFree}
+                          {...field}
+                        />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="compareAtPrice"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>مقارنة بالسعر</FormLabel>
+                      <FormControl>
+                        <Input
+                          disabled={isFree}
+                          placeholder="0 DZD"
+                          {...field}
+                        />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
+            ) : null}
           </form>
         </Form>
       </div>
@@ -103,13 +135,14 @@ function AddPricingForm() {
               disabled={mutation.isLoading}
               type="submit"
               form="add-text"
-              className="w-full"
+              className="w-full flex items-center gap-x-2"
               size="lg"
             >
-              {" "}
+              {mutation.isLoading ? <LoadingSpinner /> : null}
               حفظ والمتابعة
             </Button>
             <Button
+              type="button"
               onClick={() => router.back()}
               className="w-full"
               variant="secondary"
