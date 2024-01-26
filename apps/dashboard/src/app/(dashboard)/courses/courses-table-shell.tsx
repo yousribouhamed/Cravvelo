@@ -4,15 +4,25 @@ import { Course } from "database";
 import type { FC } from "react";
 import { trpc } from "../../_trpc/client";
 import { columns } from "@/src/components/data-table/columns/courses";
+import { useMounted } from "@/src/hooks/use-mounted";
+import { DataTableLoading } from "@/src/components/data-table/table-loading";
 
 interface CoursesTableShellProps {
   initialData: Course[];
 }
 
 const CoursesTableShell: FC<CoursesTableShellProps> = ({ initialData }) => {
+  const isMounted = useMounted();
+
   const { data } = trpc.getAllCourses.useQuery(undefined, {
     initialData: initialData,
   });
+
+  if (!isMounted) {
+    return <DataTableLoading columnCount={6} />;
+  }
+
+  console.log(data);
   return (
     <div className="w-full min-h-[300px] h-fit flex flex-col ">
       <DataTable columns={columns} data={data} />

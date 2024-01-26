@@ -9,10 +9,10 @@ const AuthCallBack: FC = ({}) => {
   const router = useRouter();
 
   trpc.authCallback.useQuery(undefined, {
-    onSuccess: ({ success }) => {
+    onSuccess: ({ success, accountId }) => {
       if (success) {
         // // user is synced to db
-        // setCookie("academiaId", academiaId);
+        setCookie("accountId", accountId);
 
         router.push("/");
       }

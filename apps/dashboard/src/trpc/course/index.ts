@@ -1,14 +1,13 @@
 import { z } from "zod";
 import { privateProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
-import { prisma } from "database/src";
 
 export const course = {
   createCourse: privateProcedure
     .input(
       z.object({
         title: z.string(),
-        academiaId: z.string(),
+        accountId: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -17,7 +16,7 @@ export const course = {
           data: {
             status: "DRAFT",
             title: input.title,
-            academiaId: input.academiaId,
+            accountId: input.accountId,
           },
         })
         .catch((err) => {

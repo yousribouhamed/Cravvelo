@@ -44,7 +44,7 @@ model website {
 
 model Course {
   id                     String @default(uuid()) @unique
-  academiaId             String 
+  accountId             String 
   title                  String 
   courseUrl              String?    @db.LongText
   youtubeUrl             String?    @db.LongText

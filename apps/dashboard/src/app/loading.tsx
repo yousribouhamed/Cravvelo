@@ -64,10 +64,8 @@ const loading: FC = ({}) => {
           r="70"
         ></circle>
       </svg>
-      <span className="text-xl font-bold">مرحبًا بعودتك ...</span>
-      <span className="text-sm text-gray-500  ">
-        أول العلم الصمت والثاني حسن الإستماع والثالث حفظه والرابع العمل به
-        والخامس نشره
+      <span className="text-xl font-bold">
+        نحن نقوم بإعداد الأكاديمية الخاصة بك ...
       </span>
     </div>
   );

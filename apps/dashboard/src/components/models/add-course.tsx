@@ -26,10 +26,8 @@ import { addCourseSchema } from "@/src/lib/validators/course";
 import { trpc } from "@/src/app/_trpc/client";
 import { getCookie } from "@/src/lib/utils";
 import { useRouter } from "next/navigation";
-import React from "react";
-import { Icons } from "../Icons";
-
-interface AddCourseAbdullahProps {}
+import type { User } from "@clerk/nextjs/server";
+import * as React from "react";
 
 const AddCourse: FC = ({}) => {
   const router = useRouter();
@@ -52,12 +50,12 @@ const AddCourse: FC = ({}) => {
 
   // 2. Define a submit handler.
   async function onSubmit(data: z.infer<typeof addCourseSchema>) {
-    const cookie = getCookie("academiaId");
+    const cookie = getCookie("accountId");
     setIsLoading(true);
     await mutation
       .mutateAsync({
         title: data.title,
-        academiaId: cookie,
+        accountId: cookie,
       })
       .then(() => {
         setIsLoading(false);
@@ -67,7 +65,7 @@ const AddCourse: FC = ({}) => {
   return (
     <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
       <DialogTrigger asChild>
-        <Button>
+        <Button className=" rounded-xl border flex items-center gap-x-2">
           <svg
             width="18"
             height="18"

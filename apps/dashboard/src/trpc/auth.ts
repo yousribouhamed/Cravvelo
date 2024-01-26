@@ -1,4 +1,4 @@
-import { publicProcedure, router } from "./trpc";
+import { publicProcedure } from "./trpc";
 import { TRPCError } from "@trpc/server";
 import { prisma } from "database/src";
 import { currentUser } from "@clerk/nextjs";
@@ -17,14 +17,15 @@ export const auth = {
     });
 
     if (!account) {
-      await prisma.account.create({
+      const newAccount = await prisma.account.create({
         data: {
           userId: user.id,
           AcademyIds: JSON.stringify([user.id]),
         },
       });
+      return { success: true, accountId: newAccount.id };
     }
 
-    return { success: true };
+    return { success: true, accountId: account.id };
   }),
 };
