@@ -109,8 +109,13 @@ const AddCourse: FC = ({}) => {
               />
               <DialogFooter className="w-full h-[50px] flex items-center justify-end gap-x-4">
                 <Button variant="ghost">إلغاء</Button>
-                <Button disabled={isLaoding} type="submit">
-                  {isLaoding ? <LoadingSpinner /> : "إضافة جديد"}
+                <Button
+                  className=" flex items-center gap-x-2"
+                  disabled={isLaoding}
+                  type="submit"
+                >
+                  {mutation.isLoading ? <LoadingSpinner /> : null}
+                  إضافة جديد
                 </Button>
               </DialogFooter>
             </form>

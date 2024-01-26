@@ -27,6 +27,12 @@ export const course = {
 
       return { success: true, courseId: course.id };
     }),
+
+  getAllCourses: privateProcedure.query(async ({ input, ctx }) => {
+    const courses = await ctx.prisma.course.findMany();
+
+    return courses;
+  }),
   priceCourse: privateProcedure
     .input(
       z.object({
@@ -35,6 +41,7 @@ export const course = {
         compairAtPrice: z.number(),
       })
     )
+
     .mutation(async ({ input, ctx }) => {
       const course = await ctx.prisma.course
         .update({
