@@ -10,7 +10,9 @@ import { XCircle } from "lucide-react";
 import Image from "next/image";
 export const ImageUploader = ({
   onChnage,
+  fileUrl,
 }: {
+  fileUrl: string;
   onChnage: (value: any) => void;
 }) => {
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
@@ -123,7 +125,10 @@ export const ImageUploader = ({
 
                   {uploadProgress === 100 ? (
                     <div className="flex gap-1 items-center justify-center text-sm text-zinc-700 text-center pt-2">
-                      <img className="w-full object-cover m-4 " />
+                      <img
+                        className="w-full object-cover m-4 "
+                        src={fileUrl ? fileUrl : ""}
+                      />
                       <p className="text-xl font-bold text-center ">
                         {" "}
                         تم تحميل الملف
