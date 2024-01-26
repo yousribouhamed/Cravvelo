@@ -136,12 +136,12 @@ const AddNew: FC = ({}) => {
 
   // 2. Define a submit handler.
   async function onSubmit(data: z.infer<typeof addCourseSchema>) {
-    const cookie = getCookie("academiaId");
+    const cookie = getCookie("accountId");
     setIsLoading(true);
     await mutation
       .mutateAsync({
         title: data.title,
-        academiaId: cookie,
+        accountId: cookie,
       })
       .then(() => {
         setIsLoading(false);
