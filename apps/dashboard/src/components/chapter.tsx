@@ -72,7 +72,6 @@ const Chapter: FC<ChapterProps> = ({ chapterID, title, modules }) => {
                   </div>
                 </div>
                 <div className="w-[100px] h-full flex items-center justify-end">
-                  
                   <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200  " />
                 </div>
               </div>
@@ -133,7 +132,7 @@ const Chapter: FC<ChapterProps> = ({ chapterID, title, modules }) => {
 
 export default Chapter;
 
-const AddToChapter = ({
+export const AddToChapter = ({
   path,
   chapterID,
 }: {

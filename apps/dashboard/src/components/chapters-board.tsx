@@ -36,13 +36,15 @@ import { cn } from "@ui/lib/utils";
 import { Grip } from "lucide-react";
 import { maketoast } from "./toasts";
 import { ArrowRight } from "lucide-react";
-import { Button } from "@ui/components/ui/button";
+import { Button, buttonVariants } from "@ui/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 import DeleteChapter from "./models/delete-chapter-model";
 import { useMounted } from "../hooks/use-mounted";
 import UpdateChapterModel from "./models/update-chapter-modle";
 import { Badge } from "@ui/components/ui/badge";
+import Link from "next/link";
+import { AddToChapter } from "./chapter";
 
 interface ChaptersBoardAbdullahProps {
   initialData: ChapterType[];
@@ -280,7 +282,7 @@ const ChaptersBoard: FC<ChaptersBoardAbdullahProps> = ({ initialData }) => {
                             </div>
                           </AccordionTrigger>
                           <AccordionContent className="mt-4">
-                            <div className="w-full h-[100px] rounded-xl bg-white border-dashed"></div>
+                            <AddToChapter path={path} chapterID={chapter.id} />
                           </AccordionContent>
                         </AccordionItem>
                       </Accordion>

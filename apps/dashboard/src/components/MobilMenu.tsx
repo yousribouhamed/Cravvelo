@@ -43,13 +43,15 @@ function MobileLink({
       href={`${href}`}
       className={cn(
         buttonVariants({ variant: "ghost" }),
-        "w-full flex items-center justify-end text-sm pr-4  hover:!bg-transparent  !text-white gap-x-2 hover:bg-none"
+        "w-full flex items-center justify-end text-sm pr-4 relative  hover:!bg-transparent  !text-white gap-x-2 hover:bg-none"
       )}
       onClick={() => setIsOpen(false)}
     >
       {children}
 
-      {isSelected && <div className="w-1.5 h-full bg-yellow-500" />}
+      {isSelected && (
+        <div className="w-[15px] h-[15px] rounded-[50%] z-[20] absolute right-0 ml-1 bg-[#FFB800]" />
+      )}
     </Link>
   );
 }

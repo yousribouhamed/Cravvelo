@@ -25,12 +25,7 @@ export const SIDE_BAR_ITEMS = [
       {
         title: "مكتبة الفيديو",
         icon: Icons.Home,
-        slug: "/courses",
-      },
-      {
-        title: "بنك الأسئلة",
-        icon: Icons.Home,
-        slug: "/products",
+        slug: "/vedios",
       },
     ],
   },
@@ -48,7 +43,7 @@ export const SIDE_BAR_ITEMS = [
       {
         title: "منشئ الموقع",
         icon: Icons.Home,
-        slug: "/courses",
+        slug: "/editor",
       },
       {
         title: "مصمم الشهادة",
