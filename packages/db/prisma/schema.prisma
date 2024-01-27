@@ -55,7 +55,7 @@ model Course {
   seoDescription         String?
   price                  Float?
   compareAtPrice         Float?
-  compairAtPrice         Float?
+
   studenstNbr            String?
   profit                 String?
   trainers               String?
@@ -71,6 +71,26 @@ model Chapter {
   title                  String 
   modules                Json?
   orderNumber            Int
+  isVisible              Boolean             @default(true)
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt 
+}
+
+
+model Product {
+  id                     String              @default(uuid()) @unique
+  title                  String 
+  price                  Float?
+  numberOfDownloads      Int? 
+  subDescription         String?              @db.LongText 
+  SeoTitle               String? 
+  SeoDescription         String?              @db.LongText
+  thumnailUrl            String?             
+  filrUrl                String?
+  description            Json?
+  status                 String? 
+  compareAtPrice         Float?
+  accountId              String
   isVisible              Boolean             @default(true)
   createdAt              DateTime            @default(now())
   updatedAt              DateTime            @updatedAt 

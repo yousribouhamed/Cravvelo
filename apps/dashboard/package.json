@@ -13,6 +13,8 @@
     "start": "dotenv -e ../../.env next start"
   },
   "dependencies": {
+    "@api.video/nodejs-client": "^2.5.5",
+    "@api.video/react-player": "^1.0.4",
     "@api.video/video-uploader": "^1.1.6",
     "@clerk/nextjs": "^4.29.2",
     "@hello-pangea/dnd": "^16.5.0",

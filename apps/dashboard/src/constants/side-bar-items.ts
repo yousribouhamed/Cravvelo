@@ -25,7 +25,7 @@ export const SIDE_BAR_ITEMS = [
       {
         title: "مكتبة الفيديو",
         icon: Icons.Home,
-        slug: "/vedios",
+        slug: "/video-library",
       },
     ],
   },

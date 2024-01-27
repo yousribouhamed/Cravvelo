@@ -1,6 +1,5 @@
 "use client";
 
-import { Chapter } from "@prisma/client";
 import { FC, useEffect, useState } from "react";
 import {
   DragDropContext,
@@ -60,31 +59,29 @@ const ModulesList: FC<ChapterProps> = ({ chapterID, initialModules }) => {
   }
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="modules">
+      <Droppable droppableId={chapterID + "this is an id"}>
         {(provided) => (
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
-            className="mr-4 bg-white h-[200px]"
+            className="mr-12  min-h-[10px] h-fit"
           >
             {modules.map((chapter, index) => (
               <Draggable
-                key={chapter.fileUrl}
-                draggableId={chapter.fileUrl}
+                key={chapter.title + chapterID}
+                draggableId={chapter.title + chapterID}
                 index={index}
               >
                 {(provided) => (
                   <div
                     className={cn(
-                      "flex items-center gap-x-2 bg-transparent    rounded-md mb-4 text-sm"
+                      "flex items-center gap-x-2 bg-transparent  h-[25px] justify-start  rounded-md my-4 text-sm"
                     )}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                   >
                     <div
-                      className={cn(
-                        "px-2 py-3 rounded-l-md transition cursor-grab "
-                      )}
+                      className={cn(" rounded-l-md transition ")}
                       {...provided.dragHandleProps}
                     >
                       <svg
@@ -108,10 +105,7 @@ const ModulesList: FC<ChapterProps> = ({ chapterID, initialModules }) => {
                         />
                       </svg>
                     </div>
-                    <p className="text-black text-lg font-bold">
-                      {" "}
-                      {chapter.title}
-                    </p>
+                    <p className="text-black text-sm "> {chapter.title}</p>
                   </div>
                 )}
               </Draggable>

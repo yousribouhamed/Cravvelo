@@ -49,7 +49,7 @@ export const course = {
           },
           data: {
             price: input.price,
-            compairAtPrice: input.compairAtPrice,
+            compareAtPrice: input.compairAtPrice,
           },
         })
         .catch((err) => {

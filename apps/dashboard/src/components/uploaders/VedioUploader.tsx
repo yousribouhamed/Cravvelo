@@ -32,7 +32,10 @@ const VedioUploader: FC<VedioUploaderProps> = ({ onChange }) => {
           videoUploader.onProgress((e) =>
             setProgress(Math.round((e.uploadedBytes * 100) / e.totalBytes))
           );
-          videoUploader.onPlayable((e) => onChange(e.videoId));
+          videoUploader.onPlayable((e) => {
+            console.log(e);
+            onChange(e.videoId);
+          });
           await videoUploader.upload();
         } catch (error) {
           console.error("Error trying to upload a video:", error);
