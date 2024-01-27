@@ -1,9 +1,6 @@
 import Header from "@/src/components/Header";
 import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
-import { DataTable } from "@/src/components/data-table";
-import { columns } from "@/src/components/data-table/columns/courses";
 import { currentUser } from "@clerk/nextjs";
-import { prisma } from "database/src";
 import { redirect } from "next/navigation";
 
 interface pageAbdullahProps {}
