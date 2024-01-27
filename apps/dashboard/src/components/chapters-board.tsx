@@ -45,6 +45,7 @@ import UpdateChapterModel from "./models/update-chapter-modle";
 import { Badge } from "@ui/components/ui/badge";
 import Link from "next/link";
 import { AddToChapter } from "./chapter";
+import ModulesList from "./modules-list";
 
 interface ChaptersBoardAbdullahProps {
   initialData: ChapterType[];
@@ -281,7 +282,14 @@ const ChaptersBoard: FC<ChaptersBoardAbdullahProps> = ({ initialData }) => {
                               </div>
                             </div>
                           </AccordionTrigger>
-                          <AccordionContent className="mt-4">
+                          <AccordionContent className="mt-4 space-y-4">
+                            {/* @ts-ignore */}
+                            <ModulesList
+                              chapterID={chapter.id}
+                              initialModules={JSON.parse(
+                                chapter.modules as string
+                              )}
+                            />
                             <AddToChapter path={path} chapterID={chapter.id} />
                           </AccordionContent>
                         </AccordionItem>
