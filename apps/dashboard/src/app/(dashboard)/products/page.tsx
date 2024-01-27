@@ -1,32 +1,31 @@
 import Header from "@/src/components/Header";
 import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
-import { DataTable } from "@/src/components/data-table";
-import { ProctsColumns } from "@/src/components/data-table/columns/products";
-import { currentUser } from "@clerk/nextjs";
 import { prisma } from "database/src";
-import { redirect } from "next/navigation";
+import ProductsTableShell from "./products-table-shell";
+import useHaveAccess from "@/src/hooks/use-have-access";
 
 interface pageAbdullahProps {}
 
-const getData = async () => {
-  const products = await prisma.product.findMany();
+const getData = async ({ accountId }: { accountId: string }) => {
+  const products = await prisma.product.findMany({
+    where: {
+      accountId,
+    },
+  });
   return products;
 };
 
 const page = async ({}) => {
-  const user = await currentUser();
+  const { account, user } = await useHaveAccess();
 
-  if (!user) {
-    redirect("/sign-in");
-  }
-
-  const data = await getData();
+  const data = await getData({ accountId: account.id });
 
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
         <Header user={user} title="المنتجات الرقمية" />
-        <DataTable columns={ProctsColumns} data={data} />
+
+        <ProductsTableShell initialData={data} />
       </main>
     </MaxWidthWrapper>
   );

@@ -7,6 +7,7 @@ import { Progress } from "@ui/components/ui/progress";
 import { useState } from "react";
 import { VideoUploader } from "@api.video/video-uploader";
 import { XCircle } from "lucide-react";
+import { trpc } from "@/src/app/_trpc/client";
 
 interface VedioUploaderProps {
   onChange: (onChange: string) => void;
@@ -17,6 +18,17 @@ const VedioUploader: FC<VedioUploaderProps> = ({ onChange }) => {
   const [progress, setProgress] = useState<number>(0);
   // const [videoId, setVideoId] = useState<string | undefined>(undefined);
   const [isError, setIsError] = useState<boolean>(false);
+
+  const mutation = trpc.onVedioUpload.useMutation({
+    onSuccess: ({ success, videoId }) => {
+      if (success) {
+        onChange(videoId);
+      }
+    },
+    onError: () => {
+      setIsError(true);
+    },
+  });
 
   return (
     <Dropzone
@@ -33,8 +45,9 @@ const VedioUploader: FC<VedioUploaderProps> = ({ onChange }) => {
             setProgress(Math.round((e.uploadedBytes * 100) / e.totalBytes))
           );
           videoUploader.onPlayable((e) => {
-            console.log(e);
-            onChange(e.videoId);
+            mutation.mutate({
+              videoId: e.videoId,
+            });
           });
 
           await videoUploader.upload();

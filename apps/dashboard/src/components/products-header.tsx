@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@ui/components/ui/button";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { usePathname } from "next/navigation";
@@ -9,36 +8,29 @@ import { getValueFromUrl } from "../lib/utils";
 const getLinks = ({ id }: { id: string }) => {
   const links = [
     {
-      name: "باني الدورة",
-      href: `/courses/${id}/chapters`,
+      name: "محتوى المنتج",
+      href: `/products/${id}/content`,
     },
     {
       name: "إعدادات الدورة",
-      href: `/courses/${id}/settings`,
-    },
-    {
-      name: "المحتوى التدريجي",
-      href: `/courses/${id}/drip-content`,
-    },
-    {
-      name: "التسعير",
-      href: `/courses/${id}/pricing`,
+      href: `/products/${id}/settings`,
     },
 
     {
-      name: "تفاعل الطلاب",
-      href: `/courses/${id}/students-management`,
+      name: "التسعير",
+      href: `/products/${id}/pricing`,
     },
+
     {
       name: "المعاينة والنشر",
-      href: `/courses/${id}/publishing`,
+      href: `/products/${id}/publishing`,
     },
   ];
 
   return links;
 };
 
-function CourseHeader({ className, ...props }: ExamplesNavProps) {
+function ProductsHeader({ className, ...props }: ExamplesNavProps) {
   const pathname = usePathname();
 
   const courseId = getValueFromUrl(pathname, 2);
@@ -72,6 +64,6 @@ function CourseHeader({ className, ...props }: ExamplesNavProps) {
   );
 }
 
-export default CourseHeader;
-
 interface ExamplesNavProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+export default ProductsHeader;

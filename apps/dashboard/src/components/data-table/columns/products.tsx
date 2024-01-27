@@ -127,7 +127,7 @@ export const ProctsColumns: ColumnDef<Product>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
-              <Link href={`/courses/${row.original.id}/chapters`}>
+              <Link href={`/products/${row.original.id}/content`}>
                 <DropdownMenuItem className="w-full h-full flex justify-between items-center px-2">
                   <svg
                     width="16"

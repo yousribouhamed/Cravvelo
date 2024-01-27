@@ -1,7 +1,7 @@
 import ApiVideoClient from "@api.video/nodejs-client";
-const client = new ApiVideoClient({ apiKey: "YOUR_API_KEY" });
 import { privateProcedure } from "../trpc";
 import { z } from "zod";
+import { prisma } from "database/src";
 
 export const videos = {
   getVediosListing: privateProcedure.query(async () => {
@@ -31,7 +31,19 @@ export const videos = {
         input.videoId,
         videoUpdatePayload
       );
+      const account = await prisma.account.findUnique({
+        where: {
+          userId: ctx.user.id,
+        },
+      });
 
-      // then save the video in the database
+      await prisma.video.create({
+        data: {
+          accountId: account.id,
+          videoId: input.videoId,
+        },
+      });
+
+      return { success: true, videoId: input.videoId };
     }),
 };
