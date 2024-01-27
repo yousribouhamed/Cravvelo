@@ -36,6 +36,7 @@ const VedioUploader: FC<VedioUploaderProps> = ({ onChange }) => {
             console.log(e);
             onChange(e.videoId);
           });
+
           await videoUploader.upload();
         } catch (error) {
           console.error("Error trying to upload a video:", error);
