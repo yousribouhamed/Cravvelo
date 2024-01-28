@@ -1,10 +1,9 @@
 import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
 import Header from "@/src/components/Header";
-import AddTextForm from "@/src/components/forms/course-forms/add-text-form";
 import PathBuilder from "@/src/components/path-builder";
-
 import useHaveAccess from "@/src/hooks/use-have-access";
 import ProductsHeader from "@/src/components/products-header";
+import ProductContentForm from "@/src/components/forms/product-forms/product-content-form";
 
 export default async function Home() {
   const { user } = await useHaveAccess();
@@ -27,7 +26,7 @@ export default async function Home() {
               },
             ]}
           />
-          <h1>here we will make the form of the product</h1>
+          <ProductContentForm />
         </div>
       </main>
     </MaxWidthWrapper>

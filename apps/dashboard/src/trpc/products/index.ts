@@ -48,4 +48,24 @@ export const products = {
         console.error(err);
       }
     }),
+
+  deleteProduct: privateProcedure
+    .input(
+      z.object({
+        productId: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const product = await ctx.prisma.product.delete({
+          where: {
+            id: input.productId,
+          },
+        });
+
+        return product;
+      } catch (err) {
+        console.error(err);
+      }
+    }),
 };

@@ -6,6 +6,7 @@ import { trpc } from "../../_trpc/client";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DataTableLoading } from "@/src/components/data-table/table-loading";
 import { ProctsColumns } from "@/src/components/data-table/columns/products";
+import DeleteProductModel from "@/src/components/models/delete-product-model";
 
 interface ProductsTableShellProps {
   initialData: Product[];
@@ -14,7 +15,7 @@ interface ProductsTableShellProps {
 const ProductsTableShell: FC<ProductsTableShellProps> = ({ initialData }) => {
   const isMounted = useMounted();
 
-  const { data } = trpc.getProducts.useQuery(undefined, {
+  const { data, refetch } = trpc.getProducts.useQuery(undefined, {
     initialData: initialData,
   });
 
@@ -24,6 +25,7 @@ const ProductsTableShell: FC<ProductsTableShellProps> = ({ initialData }) => {
 
   return (
     <div className="w-full min-h-[300px] h-fit flex flex-col ">
+      <DeleteProductModel refetch={refetch} />
       <DataTable columns={ProctsColumns} data={data} />
     </div>
   );

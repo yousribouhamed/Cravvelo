@@ -15,7 +15,7 @@ const getData = async ({ accountId }: { accountId: string }) => {
   return products;
 };
 
-const page = async ({}) => {
+const Page = async ({}) => {
   const { account, user } = await useHaveAccess();
 
   const data = await getData({ accountId: account.id });
@@ -31,4 +31,4 @@ const page = async ({}) => {
   );
 };
 
-export default page;
+export default Page;

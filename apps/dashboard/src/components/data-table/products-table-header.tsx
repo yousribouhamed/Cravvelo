@@ -35,7 +35,7 @@ const ProductsTableHeader: FC<TableHeaderProps> = ({ table }) => {
           تصفية
         </Button>
         <Input
-          placeholder="البحث عن الدورات..."
+          placeholder="البحث عن منتجات..."
           //@ts-ignore
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>

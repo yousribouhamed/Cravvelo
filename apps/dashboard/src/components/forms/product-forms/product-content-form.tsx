@@ -21,6 +21,7 @@ import { getValueFromUrl } from "@/src/lib/utils";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { Textarea } from "@ui/components/ui/textarea";
 import { JadaraUploadDropzone } from "../../upload-dropzone";
+import { ImageUploader } from "../../uploaders/ImageUploader";
 
 const addProductConentNameSchema = z.object({
   name: z.string().min(2).max(50),
@@ -30,7 +31,7 @@ const addProductConentNameSchema = z.object({
   imageUrl: z.string(),
 });
 
-function AddTextForm() {
+function ProductContentForm() {
   const router = useRouter();
   const path = usePathname();
   const chapterID = getValueFromUrl(path, 4);
@@ -84,6 +85,27 @@ function AddTextForm() {
                   </FormLabel>
                   <FormControl>
                     <JadaraUploadDropzone onChnage={field.onChange} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="imageUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    إضافة صورة
+                    <span className="text-red-600 text-xl">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <ImageUploader
+                      fileUrl={field.name}
+                      onChnage={field.onChange}
+                    />
                   </FormControl>
 
                   <FormMessage />
@@ -165,4 +187,4 @@ function AddTextForm() {
   );
 }
 
-export default AddTextForm;
+export default ProductContentForm;

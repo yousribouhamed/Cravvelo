@@ -6,6 +6,7 @@ import { trpc } from "../../_trpc/client";
 import { columns } from "@/src/components/data-table/columns/courses";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DataTableLoading } from "@/src/components/data-table/table-loading";
+import DeleteCourseModel from "@/src/components/models/delete-course-model";
 
 interface CoursesTableShellProps {
   initialData: Course[];
@@ -14,7 +15,7 @@ interface CoursesTableShellProps {
 const CoursesTableShell: FC<CoursesTableShellProps> = ({ initialData }) => {
   const isMounted = useMounted();
 
-  const { data } = trpc.getAllCourses.useQuery(undefined, {
+  const { data, refetch } = trpc.getAllCourses.useQuery(undefined, {
     initialData: initialData,
   });
 
@@ -25,6 +26,7 @@ const CoursesTableShell: FC<CoursesTableShellProps> = ({ initialData }) => {
   console.log(data);
   return (
     <div className="w-full min-h-[300px] h-fit flex flex-col ">
+      <DeleteCourseModel refetch={refetch} />
       <DataTable columns={columns} data={data} />
     </div>
   );

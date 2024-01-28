@@ -4,7 +4,7 @@ import useHaveAccess from "@/src/hooks/use-have-access";
 import ApiVideoClient from "@api.video/nodejs-client";
 import VediosListing from "@/src/components/vedios-lising";
 
-const page = async ({}) => {
+const Page = async ({}) => {
   const { user, account } = await useHaveAccess();
   const videoClient = new ApiVideoClient({ apiKey: process.env.API_VEDIO_KEY });
   const videos = await videoClient.videos.list();
@@ -19,4 +19,4 @@ const page = async ({}) => {
   );
 };
 
-export default page;
+export default Page;

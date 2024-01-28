@@ -137,4 +137,24 @@ export const course = {
 
       return { success: true, courseId: course.id };
     }),
+
+  deleteCourse: privateProcedure
+    .input(
+      z.object({
+        courseId: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const course = await ctx.prisma.course.delete({
+          where: {
+            id: input.courseId,
+          },
+        });
+
+        return course;
+      } catch (err) {
+        console.error(err);
+      }
+    }),
 };
