@@ -8,7 +8,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@ui/components/ui/tooltip";
-
+import { useTheme } from "next-themes";
 import { cn } from "@ui/lib/utils";
 import { Button } from "@ui/components/ui/button";
 import {
@@ -21,6 +21,11 @@ import {
 
 import React from "react";
 import { FilePlus } from "lucide-react";
+import { useEditorScreen } from "@/src/lib/zustand/editor-state";
+import PublishWebsite from "@/src/components/models/editor/publish-website";
+import { useRouter } from "next/navigation";
+import { Sun } from "lucide-react";
+import { Moon } from "lucide-react";
 
 interface EditorHeaderProps {}
 
@@ -50,18 +55,22 @@ const frameworks = [
 const EditorHeader: FC = ({}) => {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
+  const router = useRouter();
+  const { screen, setScreen } = useEditorScreen();
+  const { theme, setTheme } = useTheme();
   return (
     <TooltipProvider>
-      <div className="w-full h-[55px] border-b bg-white flex items-center justify-between px-4">
+      <div className="w-full h-[55px] border-b dark:border-zinc-800 bg-white  dark:bg-black flex items-center justify-between px-4">
         <div className="w-[20%] h-full flex justify-start items-center">
           <Tooltip delayDuration={0}>
             <TooltipTrigger asChild>
               <Button
                 size="icon"
                 variant="secondary"
-                className="bg-white border rounded-xl"
+                className="bg-white dark:bg-zinc-900 border rounded-xl text-black  dark:text-white"
+                onClick={() => router.push("/")}
               >
-                <ArrowRight className="text-black  w-6 h-6 " />
+                <ArrowRight className=" w-6 h-6 " />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -71,37 +80,43 @@ const EditorHeader: FC = ({}) => {
         </div>
         <div className="w-[50%] h-full flex justify-center items-center gap-x-4">
           <Select>
-            <SelectTrigger className="w-[300px] h-10">
+            <SelectTrigger className="w-[300px] h-10 dark:bg-zinc-900">
               <SelectValue placeholder="الصفحة الرئيسية" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="dark:bg-zinc-900">
               <SelectItem value="light">الصفحة الرئيسية</SelectItem>
               <SelectItem value="dark">صفحة عني</SelectItem>
               <SelectItem value="system">صفحة الدورات</SelectItem>
             </SelectContent>
           </Select>
-
-          <Tooltip delayDuration={0}>
-            <TooltipTrigger asChild>
-              <Button
-                variant="secondary"
-                className="w-8 h-8  border bg-white rounded-xl"
-              >
-                <FilePlus />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p> إضافة صفحة جديدة</p>
-            </TooltipContent>
-          </Tooltip>
         </div>
 
         <div className="w-[30%] h-full flex items-center justify-end gap-x-3">
           <Tooltip delayDuration={0}>
             <TooltipTrigger asChild>
               <Button
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                 variant="secondary"
-                className="w-8 h-8 p-2 border bg-white rounded-xl"
+                className={`w-8 h-8 p-2 border bg-white dark:bg-zinc-900 rounded-xl dark:text-white ${
+                  screen === "lg" ? "text-primary dark:text-primary" : ""
+                } `}
+              >
+                {theme === "dark" ? <Sun /> : <Moon />}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p> {theme === "dark" ? "وضع الضوء" : "وضع الظلام"}</p>
+            </TooltipContent>
+          </Tooltip>
+
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <Button
+                variant="secondary"
+                onClick={() => setScreen("xl")}
+                className={`w-8 h-8 p-2 border bg-white dark:bg-zinc-900 rounded-xl dark:text-white ${
+                  screen === "xl" ? "text-primary dark:text-primary" : ""
+                } `}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -129,8 +144,11 @@ const EditorHeader: FC = ({}) => {
           <Tooltip delayDuration={0}>
             <TooltipTrigger asChild>
               <Button
+                onClick={() => setScreen("lg")}
                 variant="secondary"
-                className="w-8 h-8 p-2 border bg-white rounded-xl"
+                className={`w-8 h-8 p-2 border bg-white dark:bg-zinc-900 rounded-xl dark:text-white${
+                  screen === "lg" ? "text-primary dark:text-primary" : ""
+                } `}
               >
                 <MonitorSmartphone />
               </Button>
@@ -144,7 +162,10 @@ const EditorHeader: FC = ({}) => {
             <TooltipTrigger asChild>
               <Button
                 variant="secondary"
-                className="w-8 h-8 p-2 border bg-white rounded-xl"
+                onClick={() => setScreen("sm")}
+                className={`w-8 h-8 p-2 border bg-white dark:bg-zinc-900 rounded-xl dark:text-white ${
+                  screen === "sm" ? "text-primary dark:text-primary" : ""
+                }`}
               >
                 <Monitor />
               </Button>
@@ -154,9 +175,7 @@ const EditorHeader: FC = ({}) => {
             </TooltipContent>
           </Tooltip>
 
-          <Button className=" text-white font-bold rounded-2xl">
-            حفظ ونشر
-          </Button>
+          <PublishWebsite />
         </div>
       </div>
     </TooltipProvider>

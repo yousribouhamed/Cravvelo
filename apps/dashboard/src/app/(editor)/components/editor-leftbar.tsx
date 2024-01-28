@@ -9,6 +9,7 @@ import {
   PopoverTrigger,
 } from "@ui/components/ui/popover";
 import React from "react";
+import { useTheme } from "next-themes";
 
 interface EditorLeftbarAbdullahProps {
   page: WebSitePage;
@@ -18,14 +19,27 @@ const EditorLeftbar: FC<EditorLeftbarAbdullahProps> = ({ page }) => {
   const { currentComponent } = useEditorStore();
   const [bgColor, setBgColor] = React.useState("#000000");
   const [textColor, setTextColor] = React.useState("#000000");
+  const { theme, setTheme } = useTheme();
 
+  const isDarkTheme = theme === "dark";
   return (
     <ScrollArea className="  w-[20%]  max-w-[300px] border-r h-full shadow ">
-      <div dir="rtl" className="w-full h-full white   bg-white px-4 py-8">
+      <div
+        dir="rtl"
+        className={`w-full h-full white    ${
+          theme === "dark" ? "bg-black" : "bg-white"
+        } px-4 py-8`}
+      >
         {currentComponent ? (
           <div className="w-full min-h-[500px] h-fit flex flex-col gap-y-4">
             <div className="w-full h-fit min-h-[50px] my-4 pb-2 ">
-              <p className="text-md text-black">الأنماط</p>
+              <p
+                className={`text-md  ${
+                  isDarkTheme ? "text-white" : "text-black"
+                }`}
+              >
+                الأنماط
+              </p>
               <Popover>
                 <PopoverTrigger asChild>
                   <div className="w-[200px] cursor-pointer hover:bg-gray-50 transition-all duration-150 ease-in-out p-1 rounded-xl h-[40px] flex items-center justify-between gap-x-4 mr-4">
@@ -63,11 +77,23 @@ const EditorLeftbar: FC<EditorLeftbarAbdullahProps> = ({ page }) => {
               </Popover>
             </div>
             <div className="w-full h-fit mt-2 border-t  ">
-              <p className="text-md text-black">التمركز</p>
+              <p
+                className={`text-md  ${
+                  isDarkTheme ? "text-white" : "text-black"
+                }`}
+              >
+                التمركز
+              </p>
               <div className="w-full h-[200px] bg-green-500"></div>
             </div>
             <div className="w-full h-fit my-2 border-t py-2 ">
-              <p className="text-md text-black my-2 ">النص</p>
+              <p
+                className={`text-md  ${
+                  isDarkTheme ? "text-white" : "text-black"
+                }`}
+              >
+                النص
+              </p>
               <div className="w-full h-[200px] bg-emerald-600"></div>
             </div>
           </div>

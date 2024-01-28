@@ -19,7 +19,7 @@ const EditorRightbar: FC<EditorRightbarAbdullahProps> = ({ page }) => {
     <ScrollArea className=" w-[20%] max-w-[300px]  shadow border-l h-full pb-10 ">
       <div
         dir="rtl"
-        className=" h-full w-full white bg-white flex flex-col gap-y-2"
+        className=" h-full w-full white bg-white dark:bg-black flex flex-col gap-y-2"
       >
         <div className="w-full h-[50px] flex items-center justify-start px-2">
           <h1 className="text-xl font-bold text-black">{page.title}</h1>
@@ -37,7 +37,7 @@ const EditorRightbar: FC<EditorRightbarAbdullahProps> = ({ page }) => {
                     variant="ghost"
                     className="w-full  flex justify-start  gap-x-4 h-[40px]"
                   >
-                    <LayoutTemplate className="text-gray-500 w-4 h-4" />
+                    <LayoutTemplate className="text-gray-500 dark:text-gray-50 w-4 h-4" />
                     {item.name}
                   </Button>
                 </AccordionTrigger>
@@ -48,7 +48,7 @@ const EditorRightbar: FC<EditorRightbarAbdullahProps> = ({ page }) => {
                       className="mr-8  w-full flex items-center justify-start gap-x-4"
                       key={item.name + index}
                     >
-                      <Image className="text-gray-500 w-4 h-4" />
+                      <Image className="text-gray-500 dark:text-gray-50 w-4 h-4" />
                       {item.name}
                     </Button>
                   ))}
