@@ -68,7 +68,10 @@ const EditorHeader: FC = ({}) => {
                 size="icon"
                 variant="secondary"
                 className="bg-white dark:bg-zinc-900 border rounded-xl text-black  dark:text-white"
-                onClick={() => router.push("/")}
+                onClick={() => {
+                  setTheme("light");
+                  router.push("/");
+                }}
               >
                 <ArrowRight className=" w-6 h-6 " />
               </Button>

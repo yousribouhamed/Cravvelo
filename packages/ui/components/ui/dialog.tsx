@@ -44,9 +44,11 @@ const DialogContent = React.forwardRef<
       {...props}
     >
       <div className="w-full h-[55px] border-b flex items-center justify-between px-4">
-        <span className="font-bold text-lg text-black">{title}</span>
+        <span className="font-bold text-lg text-black dark:text-white">
+          {title}
+        </span>
         <DialogPrimitive.Close className=" rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-          <X className="h-5 w-5 text-black" />
+          <X className="h-5 w-5 text-black dark:text-white" />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
       </div>

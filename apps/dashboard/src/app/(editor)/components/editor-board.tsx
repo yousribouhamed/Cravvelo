@@ -10,6 +10,9 @@ import EditorHeader from "./editor-header";
 import React from "react";
 import { WebSitePage } from "@/src/types";
 import { useEditorScreen } from "@/src/lib/zustand/editor-state";
+import { pageTemplate } from "@/src/constants/website-template";
+import PagePainter from "./page-painter";
+import AddVisualCompoents from "./add-visual-compoents";
 
 const page = {
   pathname: "/",
@@ -43,14 +46,17 @@ const page = {
 };
 
 const EditorBoard: FC = ({}) => {
-  const [currentpage, setCurrentPage] = React.useState<WebSitePage>(page);
+  const [currentpage, setCurrentPage] =
+    React.useState<WebSitePage>(pageTemplate);
   const { screen, setScreen } = useEditorScreen();
+
   return (
     <>
       <EditorHeader />
+      <AddVisualCompoents page={currentpage} setPages={setCurrentPage} />
       <div className="w-full h-full flex ">
         <EditorRightbar page={currentpage} />
-        <div className="w-[60%] flex-grow h-full flex flex-col items-center bg-gray-50 dark:bg-zinc-900 p-4">
+        <div className="w-[60%] flex-grow min-h-full h-fit flex flex-col items-center bg-gray-50 dark:bg-zinc-900 p-4 ">
           <div
             className={`w-full ${
               screen === "sm"
@@ -58,14 +64,12 @@ const EditorBoard: FC = ({}) => {
                 : screen === "lg"
                 ? "max-w-lg"
                 : "max-w-screen-2xl"
-            } h-full bg-white rounded-md p-1 shadow-2xl transition-all duration-300  `}
+            } h-fit   rounded-md  shadow-2xl transition-all duration-300  `}
           >
-            <AnnouncementBar />
-            <Header />
-            <Hero />
+            <PagePainter page={currentpage} />
           </div>
         </div>
-        <EditorLeftbar page={currentpage} />
+        <EditorLeftbar page={currentpage} setPage={setCurrentPage} />
       </div>
     </>
   );

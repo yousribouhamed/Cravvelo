@@ -24,32 +24,48 @@ import type { FC } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@ui/components/ui/dialog";
 import { Button } from "@ui/components/ui/button";
+import { Textarea } from "@ui/components/ui/textarea";
+import { trpc } from "@/src/app/_trpc/client";
+import { WebSitePage } from "@/src/types";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 const FormSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
+  title: z.string(),
+  description: z.string(),
+  subdomain: z.string(),
 });
 
-interface publishWebsiteAbdullahProps {}
+interface publishWebsiteProps {
+  page: WebSitePage;
+}
 
-const PublishWebsite: FC = ({}) => {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      username: "",
+const PublishWebsite: FC<publishWebsiteProps> = ({ page }) => {
+  const mutation = trpc.createWebSite.useMutation({
+    onSuccess: () => {
+      //TODO : close the model
+      // do something cool
+    },
+    onError: () => {
+      // close the model
+      // display some toast to alert the user that an error accourd
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    //do something in here
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+  });
+
+  function onSubmit(values: z.infer<typeof FormSchema>) {
+    mutation.mutate({
+      description: values.description,
+      name: values.title,
+      subdomain: values.subdomain,
+      pages: [page],
+    });
   }
   return (
     <Dialog>
@@ -60,11 +76,48 @@ const PublishWebsite: FC = ({}) => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="w-2/3 space-y-6 p-4"
+            className=" space-y-6 p-4 w-full"
           >
             <FormField
               control={form.control}
-              name="username"
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel> اسم الأكاديمية</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="dark:bg-black/10"
+                      placeholder="عنوان الموقع"
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>وصف موجز للموقع</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      rows={2}
+                      className="dark:bg-black/10 h-[100px]"
+                      placeholder="وصف موجز للموقع"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="subdomain"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>حدد اسم المجال الخاص بك</FormLabel>
@@ -74,7 +127,7 @@ const PublishWebsite: FC = ({}) => {
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="w-full dark:bg-white/10 min-w-[200px]">
                         <SelectValue placeholder="حدد مجالًا تم التحقق منه لعرضه" />
                       </SelectTrigger>
                     </FormControl>
@@ -99,7 +152,12 @@ const PublishWebsite: FC = ({}) => {
           </form>
         </Form>
         <DialogFooter className="p-4">
-          <Button type="submit" className="rounded-xl font-bold">
+          <Button
+            className=" flex items-center gap-x-2 font-bold rounded-xl"
+            disabled={mutation.isLoading}
+            type="submit"
+          >
+            {mutation.isLoading ? <LoadingSpinner /> : null}
             إطلاق موقع الويب الخاص بي
           </Button>
         </DialogFooter>

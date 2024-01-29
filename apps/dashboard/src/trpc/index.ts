@@ -5,6 +5,7 @@ import { chapter } from "./course/chapter";
 import { payment } from "./payments";
 import { videos } from "./media/vedios";
 import { products } from "./products";
+import { website } from "./website";
 
 export const appRouter = router({
   ...auth,
@@ -13,6 +14,7 @@ export const appRouter = router({
   ...payment,
   ...videos,
   ...products,
+  ...website,
 });
 
 export type AppRouter = typeof appRouter;

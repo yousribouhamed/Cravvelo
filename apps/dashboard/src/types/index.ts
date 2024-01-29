@@ -9,5 +9,22 @@ export type Module = {
 export type WebSitePage = {
   pathname: string;
   title: string;
-  components: any[];
+  components: ComponentBuilder[];
+};
+
+export type ComponentBuilder = {
+  id: string;
+  name: string;
+  type: string;
+  style: {
+    backgroundColor: string;
+    textColor: string;
+    textSize: string;
+    textThoughness: string;
+    innerPosition: string;
+  };
+  content: {
+    text: string;
+    name: string;
+  }[];
 };

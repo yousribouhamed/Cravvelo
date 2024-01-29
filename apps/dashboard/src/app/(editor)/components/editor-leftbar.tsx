@@ -1,8 +1,11 @@
-import { WebSitePage } from "@/src/types";
+import { ComponentBuilder, WebSitePage } from "@/src/types";
 import type { FC } from "react";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
 import { useEditorStore } from "@/src/lib/zustand/editor-state";
 import { SketchPicker } from "react-color";
+import { Input } from "@ui/components/ui/input";
+import { Textarea } from "@ui/components/ui/textarea";
+import { Label } from "@ui/components/ui/label";
 import {
   Popover,
   PopoverContent,
@@ -11,15 +14,51 @@ import {
 import React from "react";
 import { useTheme } from "next-themes";
 
-interface EditorLeftbarAbdullahProps {
+interface EditorLeftbarProps {
+  // component: ComponentBuilder;
   page: WebSitePage;
+  setPage: React.Dispatch<React.SetStateAction<WebSitePage>>;
 }
 
-const EditorLeftbar: FC<EditorLeftbarAbdullahProps> = ({ page }) => {
-  const { currentComponent } = useEditorStore();
+const EditorLeftbar: FC<EditorLeftbarProps> = ({ page, setPage }) => {
+  const { currentComponent, selectComponent } = useEditorStore();
   const [bgColor, setBgColor] = React.useState("#000000");
   const [textColor, setTextColor] = React.useState("#000000");
   const { theme, setTheme } = useTheme();
+
+  const handleChangeColor = (color: string) => {
+    const CurrentPage = page;
+
+    const updatedPage = CurrentPage.components.map((item) => {
+      if (item.id === currentComponent.id) {
+        item.style.backgroundColor = color;
+      }
+
+      return item;
+    });
+
+    setPage({
+      ...page,
+      components: updatedPage,
+    });
+  };
+
+  const handleChangeTextColor = (color: string) => {
+    const CurrentPage = page;
+
+    const updatedPage = CurrentPage.components.map((item) => {
+      if (item.id === currentComponent.id) {
+        item.style.textColor = color;
+      }
+
+      return item;
+    });
+
+    setPage({
+      ...page,
+      components: updatedPage,
+    });
+  };
 
   const isDarkTheme = theme === "dark";
   return (
@@ -33,60 +72,107 @@ const EditorLeftbar: FC<EditorLeftbarAbdullahProps> = ({ page }) => {
         {currentComponent ? (
           <div className="w-full min-h-[500px] h-fit flex flex-col gap-y-4">
             <div className="w-full h-fit min-h-[50px] my-4 pb-2 ">
-              <p
-                className={`text-md  ${
-                  isDarkTheme ? "text-white" : "text-black"
-                }`}
-              >
-                الأنماط
-              </p>
+              <p className={`text-md  text-black dark:text-white`}>الأنماط</p>
               <Popover>
                 <PopoverTrigger asChild>
-                  <div className="w-[200px] cursor-pointer hover:bg-gray-50 transition-all duration-150 ease-in-out p-1 rounded-xl h-[40px] flex items-center justify-between gap-x-4 mr-4">
-                    <p className="text-gray-700 text-xs">لون الخلفية</p>
-                    <div className="flex items-center gap-x-2">
-                      <p className="text-black text-sm block bg-gray-200 p-1 px-2 rounded-2xl ">
+                  <div className="w-[200px] my-2  cursor-pointer  transition-all duration-150 ease-in-out p-1 rounded-xl h-[40px] flex items-center justify-between gap-x-4 mr-4">
+                    <p className="text-black text-xs font-semibold dark:text-white">
+                      لون الخلفية
+                    </p>
+                    <div className="flex items-center gap-x-2 dark:bg-white/10 bg-gray-50 hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl p-1">
+                      <p
+                        dir="ltr"
+                        className="text-black text-sm block  dark:text-white p-1 px-2 rounded-2xl "
+                      >
                         {bgColor}
                       </p>
-                      <div className="bg-emerald-600 w-6 h-6 rounded-lg" />
+                      <div
+                        style={{
+                          backgroundColor: bgColor,
+                        }}
+                        className=" w-6 h-6 rounded-lg"
+                      />
                     </div>
                   </div>
                 </PopoverTrigger>
-                <PopoverContent className=" !bg-white shadow-xl p-0 border-none ">
-                  <SketchPicker color={bgColor} onChangeComplete={setBgColor} />
+                <PopoverContent
+                  align="start"
+                  className=" !bg-white dark:bg-white/10 shadow-xl p-0 border-none "
+                >
+                  <SketchPicker
+                    color={bgColor}
+                    onChangeComplete={(val) => {
+                      setBgColor(val.hex);
+                      handleChangeColor(val.hex);
+                    }}
+                  />
                 </PopoverContent>
               </Popover>
               <Popover>
                 <PopoverTrigger asChild>
-                  <div className="w-[200px] cursor-pointer hover:bg-gray-50 transition-all duration-150 ease-in-out p-1 rounded-xl h-[40px] flex items-center justify-between gap-x-4 mr-4">
-                    <p className="text-gray-700 text-xs"> لون الخط</p>
-                    <div className="flex items-center gap-x-2">
-                      <p className="text-black text-sm block bg-gray-200 p-1 px-2 rounded-2xl ">
-                        {bgColor}
+                  <div className="w-[200px] my-2  cursor-pointer  transition-all duration-150 ease-in-out p-1 rounded-xl h-[40px] flex items-center justify-between gap-x-4 mr-4">
+                    <p className="text-black text-xs font-semibold dark:text-white">
+                      لون الخط
+                    </p>
+                    <div className="flex  items-center gap-x-2 dark:bg-white/10 bg-gray-50 hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl p-1">
+                      <p
+                        dir="ltr"
+                        className="text-black text-sm block  dark:text-white p-1 px-2 rounded-2xl "
+                      >
+                        {textColor}
                       </p>
-                      <div className="bg-green-500 w-6 h-6 rounded-lg" />
+                      <div
+                        style={{
+                          backgroundColor: textColor,
+                        }}
+                        className=" w-6 h-6 rounded-lg"
+                      />
                     </div>
                   </div>
                 </PopoverTrigger>
-                <PopoverContent className=" !bg-white shadow-xl p-0 border-none ">
+                <PopoverContent
+                  align="start"
+                  className=" !bg-white shadow-xl p-0 border-none "
+                >
                   <SketchPicker
                     color={textColor}
-                    onChangeComplete={setTextColor}
+                    onChangeComplete={(val) => {
+                      setTextColor(val.hex);
+                      handleChangeTextColor(val.hex);
+                    }}
                   />
                 </PopoverContent>
               </Popover>
             </div>
-            <div className="w-full h-fit mt-2 border-t  ">
+            <div className="w-full h-fit mt-2 border-t dark:border-zinc-950 ">
+              <p className={`text-md  text-black dark:text-white`}>التمركز</p>
+              <div className="w-full h-[200px] flex justify-center items-center flex-col ">
+                <div className="w-[70px] h-[70px] rounded-xl dark:bg-white/10 relative flex items-center justify-center ">
+                  <div className="w-[30px] h-[30px] rounded-lg dark:bg-white/20 bg-gray-50" />
+
+                  <div className="bg-white/10 w-[70px] h-[30px] absolute -top-12 rounded-xl" />
+                  <div className="bg-white/10 w-[70px] h-[30px] absolute -right-20 rounded-xl" />
+                  <div className="bg-white/10 w-[70px] h-[30px] absolute -left-20 rounded-xl " />
+                  <div className="bg-white/10 w-[70px] h-[30px] absolute -bottom-12 rounded-xl" />
+                </div>
+              </div>
+            </div>
+
+            <div className="w-full h-fit my-2 border-t dark:border-zinc-950 py-2 flex flex-col gap-y-3  ">
               <p
                 className={`text-md  ${
                   isDarkTheme ? "text-white" : "text-black"
                 }`}
               >
-                التمركز
+                العنوان
               </p>
-              <div className="w-full h-[200px] bg-green-500"></div>
-            </div>
-            <div className="w-full h-fit my-2 border-t py-2 ">
+              <div className="w-full min-h-[70px] h-fit p-1 ">
+                <Textarea
+                  rows={2}
+                  className="min-h-[70px] w-full dark:bg-white/10 dark:text-white dark:border-zinc-950 "
+                />
+              </div>
+
               <p
                 className={`text-md  ${
                   isDarkTheme ? "text-white" : "text-black"
@@ -94,7 +180,12 @@ const EditorLeftbar: FC<EditorLeftbarAbdullahProps> = ({ page }) => {
               >
                 النص
               </p>
-              <div className="w-full h-[200px] bg-emerald-600"></div>
+              <div className="w-full min-h-[70px] h-fit p-1 ">
+                <Textarea
+                  rows={2}
+                  className="min-h-[70px] w-full dark:bg-white/10 dark:text-white dark:border-zinc-950 "
+                />
+              </div>
             </div>
           </div>
         ) : (

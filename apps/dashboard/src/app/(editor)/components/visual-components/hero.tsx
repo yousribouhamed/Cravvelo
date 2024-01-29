@@ -8,7 +8,7 @@ const Hero: FC = ({}) => {
   return (
     <div
       onClick={() => selectComponent("HERO")}
-      className="w-full h-[400px] relative hover:border-2 hover:border-green-500  group cursor-pointer"
+      className="w-full h-[400px] relative hover:border-2 hover:border-blue-500  group cursor-pointer"
     >
       <Image
         src="/banner.jpg"
