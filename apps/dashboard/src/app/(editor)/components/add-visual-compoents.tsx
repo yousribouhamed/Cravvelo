@@ -88,9 +88,12 @@ const AddVisualCompoents: FC<Props> = ({ page, setPages }) => {
 
           <div className="col-span-2  h-full w-full  ">
             <ScrollArea className="w-full h-fit flex flex-col items-end  p-4">
-              {VisualComponents[section].map((item) => {
+              {VisualComponents[section].map((item, index) => {
                 return (
-                  <div className="w-[90%] my-4 h-[200px] relative rounded-2xl group bg-white/10">
+                  <div
+                    key={item?.type + index}
+                    className="w-[90%] my-4 h-[200px] relative rounded-2xl group bg-white/10"
+                  >
                     <Button
                       onClick={() => handleSelection({ type: item?.type })}
                       className="absolute inset-0 m-auto w-fit hidden group-hover:flex  rounded-2xl hover:-translate-y-1 duration-150 transition-all"
