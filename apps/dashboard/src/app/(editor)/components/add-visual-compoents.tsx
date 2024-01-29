@@ -5,8 +5,9 @@ import { Sheet, SheetContent } from "@ui/components/ui/sheet";
 
 import { Button } from "@ui/components/ui/button";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
-import { WebSitePage } from "@/src/types";
+import { ComponentBuilder, WebSitePage } from "@/src/types";
 import { openAddVirtualCompoent } from "@/src/lib/zustand/editor-state";
+import { getVirtualComponent } from "@/src/constants/website-template";
 
 interface AddVisualCompoentsAbdullahProps {}
 
@@ -38,9 +39,14 @@ interface Props {
 const AddVisualCompoents: FC<Props> = ({ page, setPages }) => {
   const { isOpen, setIsOpen } = openAddVirtualCompoent();
   const [section, setSection] = useState("typography");
-  const handleSelection = ({}: {}) => {
-    // once the user clikes add we add the component to the tree and
-    // then we close the model
+  const handleSelection = ({ type }: { type: string }) => {
+    setPages({
+      ...page,
+      components: [
+        ...page.components,
+        getVirtualComponent({ type }) as ComponentBuilder,
+      ],
+    });
   };
 
   return (
@@ -85,7 +91,10 @@ const AddVisualCompoents: FC<Props> = ({ page, setPages }) => {
               {VisualComponents[section].map((item) => {
                 return (
                   <div className="w-[90%] my-4 h-[200px] relative rounded-2xl group bg-white/10">
-                    <Button className="absolute inset-0 m-auto w-fit hidden group-hover:flex  rounded-2xl hover:-translate-y-1 duration-150 transition-all">
+                    <Button
+                      onClick={() => handleSelection({ type: item?.type })}
+                      className="absolute inset-0 m-auto w-fit hidden group-hover:flex  rounded-2xl hover:-translate-y-1 duration-150 transition-all"
+                    >
                       أضف هذا العنصر
                     </Button>
                   </div>

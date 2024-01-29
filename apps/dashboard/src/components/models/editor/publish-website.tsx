@@ -75,6 +75,7 @@ const PublishWebsite: FC<publishWebsiteProps> = ({ page }) => {
       <DialogContent className="max-w-lg " title="إنشاء موقع الويب الخاص بك">
         <Form {...form}>
           <form
+            id="createwebsiteform"
             onSubmit={form.handleSubmit(onSubmit)}
             className=" space-y-6 p-4 w-full"
           >
@@ -132,12 +133,14 @@ const PublishWebsite: FC<publishWebsiteProps> = ({ page }) => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="m@example.com">
-                        m@example.com
+                      <SelectItem value="howlongthejournywilltake.vercel.app">
+                        howlongthejournywilltake.vercel.app
                       </SelectItem>
-                      <SelectItem value="m@google.com">m@google.com</SelectItem>
-                      <SelectItem value="m@support.com">
-                        m@support.com
+                      <SelectItem value="uihhtt.vercel.app">
+                        uihhtt.vercel.app
+                      </SelectItem>
+                      <SelectItem value="makethinghappen.vercel.app">
+                        makethinghappen.vercel.app
                       </SelectItem>
                     </SelectContent>
                   </Select>
@@ -153,6 +156,7 @@ const PublishWebsite: FC<publishWebsiteProps> = ({ page }) => {
         </Form>
         <DialogFooter className="p-4">
           <Button
+            form="createwebsiteform"
             className=" flex items-center gap-x-2 font-bold rounded-xl"
             disabled={mutation.isLoading}
             type="submit"

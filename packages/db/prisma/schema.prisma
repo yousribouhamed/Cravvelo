@@ -104,6 +104,10 @@ model Website {
   description   String?  @db.Text
   subdomain     String?  @unique
   pages                  Json
+  assets                Json?
+  favicon                String? 
+  logo          String  @default("https://public.blob.vercel-storage.com/eEZHAoPTOBSYGBE3/JRajRyC-PhBHEinQkupt02jqfKacBVHLWJq7Iy.png") @db.Text
+  font          String   @default("font-cal")
   createdAt              DateTime            @default(now())
   updatedAt              DateTime            @updatedAt
 }

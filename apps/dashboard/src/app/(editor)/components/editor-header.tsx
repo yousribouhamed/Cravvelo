@@ -26,8 +26,13 @@ import PublishWebsite from "@/src/components/models/editor/publish-website";
 import { useRouter } from "next/navigation";
 import { Sun } from "lucide-react";
 import { Moon } from "lucide-react";
+import { WebSitePage } from "@/src/types";
+import { Play } from "lucide-react";
 
-interface EditorHeaderProps {}
+interface EditorHeaderProps {
+  page: WebSitePage;
+  subdomain: string;
+}
 
 const frameworks = [
   {
@@ -52,22 +57,24 @@ const frameworks = [
   },
 ];
 
-const EditorHeader: FC = ({}) => {
+const EditorHeader: FC<EditorHeaderProps> = ({ page, subdomain }) => {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
   const router = useRouter();
   const { screen, setScreen } = useEditorScreen();
   const { theme, setTheme } = useTheme();
+
+  const openNewWindowSite = () => window.open(`https://${subdomain}`);
   return (
     <TooltipProvider>
-      <div className="w-full h-[55px] border-b dark:border-zinc-800 bg-white  dark:bg-black flex items-center justify-between px-4">
+      <div className="w-full h-[55px] border-b dark:border-zinc-900 bg-white  dark:bg-black flex items-center justify-between px-4">
         <div className="w-[20%] h-full flex justify-start items-center">
           <Tooltip delayDuration={0}>
             <TooltipTrigger asChild>
               <Button
                 size="icon"
                 variant="secondary"
-                className="bg-white dark:bg-zinc-900 border rounded-xl text-black  dark:text-white"
+                className="bg-white dark:bg-white/10 border rounded-xl text-black  dark:text-white"
                 onClick={() => {
                   setTheme("light");
                   router.push("/");
@@ -178,7 +185,20 @@ const EditorHeader: FC = ({}) => {
             </TooltipContent>
           </Tooltip>
 
-          <PublishWebsite />
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <Button
+                variant="secondary"
+                onClick={openNewWindowSite}
+                className={`w-8 h-8 p-2 border   rounded-xl text-white bg-green-500`}
+              >
+                <Play />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{subdomain}</TooltipContent>
+          </Tooltip>
+
+          <PublishWebsite page={page} />
         </div>
       </div>
     </TooltipProvider>

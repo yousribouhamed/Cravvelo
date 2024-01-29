@@ -16,16 +16,18 @@ interface EditorRightbarAbdullahProps {
 
 const EditorRightbar: FC<EditorRightbarAbdullahProps> = ({ page }) => {
   return (
-    <ScrollArea className=" w-[20%] max-w-[300px]  shadow border-l h-full pb-10 ">
+    <ScrollArea className=" w-[20%] max-w-[300px]  shadow border-l  dark:border-zinc-900 h-full pb-10 ">
       <div
         dir="rtl"
         className=" h-full w-full white bg-white dark:bg-black flex flex-col gap-y-2"
       >
         <div className="w-full h-[50px] flex items-center justify-start px-2">
-          <h1 className="text-xl font-bold text-black">{page.title}</h1>
+          <h1 className="text-xl font-bold text-black dark:text-white">
+            {page.title}
+          </h1>
         </div>
 
-        <div className="w-full min-h-[400px] h-fit border-t ">
+        <div className="w-full min-h-[400px] h-fit  ">
           <Accordion type="multiple">
             {page.components.map((item, index) => (
               <AccordionItem

@@ -3,18 +3,20 @@ import type { FC } from "react";
 import AddVisualCompoents from "../add-visual-compoents";
 import { ComponentBuilder } from "@/src/types";
 
-interface TextProps {
+interface VirtualComponentProps {
   component: ComponentBuilder;
 }
 
-const Text: FC = ({ component }: TextProps) => {
+// each component needs to recive a stype and a content props
+
+const Text: FC<VirtualComponentProps> = ({ component }) => {
   const { selectComponent } = useEditorStore();
   return (
     <div
       style={{
         background: component.style.backgroundColor,
       }}
-      onClick={() => selectComponent("TEXT")}
+      onClick={() => selectComponent(component)}
     >
       {
         <h1

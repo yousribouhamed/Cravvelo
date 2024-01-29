@@ -1,14 +1,23 @@
 import { useEditorStore } from "@/src/lib/zustand/editor-state";
-
+import { ComponentBuilder } from "@/src/types";
 import type { FC } from "react";
 
-interface HeaderAbdullahProps {}
+interface VirtualComponentProps {
+  component: ComponentBuilder;
+}
 
-const Header: FC = ({}) => {
+// each component needs to recive a stype and a content props
+
+const Header: FC<VirtualComponentProps> = ({ component }) => {
   const { selectComponent } = useEditorStore();
   return (
     <div
-      onClick={() => selectComponent("HEADER")}
+      style={{
+        backgroundColor: component.style.backgroundColor
+          ? component.style.backgroundColor
+          : "#FFF",
+      }}
+      onClick={() => selectComponent(component)}
       className="w-full h-[70px] relative bg-white flex items-center justify-between border-b px-4 hover:border-2 hover:border-blue-500  group cursor-pointer "
     >
       <h2 className="text-lg font-extrabold text-start ">شعارك</h2>

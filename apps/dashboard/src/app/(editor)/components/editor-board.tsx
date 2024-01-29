@@ -13,6 +13,7 @@ import { useEditorScreen } from "@/src/lib/zustand/editor-state";
 import { pageTemplate } from "@/src/constants/website-template";
 import PagePainter from "./page-painter";
 import AddVisualCompoents from "./add-visual-compoents";
+import { trpc } from "../../_trpc/client";
 
 const page = {
   pathname: "/",
@@ -45,18 +46,24 @@ const page = {
   ],
 };
 
-const EditorBoard: FC = ({}) => {
-  const [currentpage, setCurrentPage] =
-    React.useState<WebSitePage>(pageTemplate);
+interface EditorBoardProps {
+  page: WebSitePage;
+  subdomain: string;
+}
+
+const EditorBoard: FC<EditorBoardProps> = ({ page, subdomain }) => {
+  const [currentpage, setCurrentPage] = React.useState<WebSitePage>(
+    page ? page : pageTemplate
+  );
   const { screen, setScreen } = useEditorScreen();
 
   return (
     <>
-      <EditorHeader />
+      <EditorHeader page={currentpage} subdomain={subdomain} />
       <AddVisualCompoents page={currentpage} setPages={setCurrentPage} />
       <div className="w-full h-full flex ">
         <EditorRightbar page={currentpage} />
-        <div className="w-[60%] flex-grow min-h-full h-fit flex flex-col items-center bg-gray-50 dark:bg-zinc-900 p-4 ">
+        <div className="w-[60%] flex-grow min-h-full h-fit flex flex-col items-center bg-gray-50 dark:bg-white/10 p-4 ">
           <div
             className={`w-full ${
               screen === "sm"

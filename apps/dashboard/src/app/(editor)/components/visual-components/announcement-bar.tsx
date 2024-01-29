@@ -6,13 +6,13 @@ import type { FC } from "react";
 import { ComponentBuilder } from "@/src/types";
 import { Button } from "@ui/components/ui/button";
 
-interface AnnouncementBarProps {
+interface VirtualComponentProps {
   component: ComponentBuilder;
 }
 
 // each component needs to recive a stype and a content props
 
-const AnnouncementBar: FC<AnnouncementBarProps> = ({ component }) => {
+const AnnouncementBar: FC<VirtualComponentProps> = ({ component }) => {
   const { selectComponent } = useEditorStore();
   const { isOpen, setIsOpen } = openAddVirtualCompoent();
   return (

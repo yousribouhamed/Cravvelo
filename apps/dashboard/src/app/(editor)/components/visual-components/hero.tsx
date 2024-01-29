@@ -1,13 +1,24 @@
 import Image from "next/image";
 import type { FC } from "react";
 import { useEditorStore } from "@/src/lib/zustand/editor-state";
-interface HeroAbdullahProps {}
+import { ComponentBuilder } from "@/src/types";
 
-const Hero: FC = ({}) => {
+interface VirtualComponentProps {
+  component: ComponentBuilder;
+}
+
+// each component needs to recive a stype and a content props
+
+const Hero: FC<VirtualComponentProps> = ({ component }) => {
   const { selectComponent } = useEditorStore();
   return (
     <div
-      onClick={() => selectComponent("HERO")}
+      style={{
+        backgroundColor: component.style.backgroundColor
+          ? component.style.backgroundColor
+          : "#FFF",
+      }}
+      onClick={() => selectComponent(component)}
       className="w-full h-[400px] relative hover:border-2 hover:border-blue-500  group cursor-pointer"
     >
       <Image

@@ -20,11 +20,12 @@ const Page = async ({}) => {
   const { account } = await useHaveAccess();
 
   const website = await getUserWebsite({ accountId: account.id });
-
-  const pages = proccessWebsiteJsonToObject({ pages: website.pages });
-
+  console.log("here it is the data we get from this account");
+  console.log(website);
+  const pages = proccessWebsiteJsonToObject({ pages: website?.pages });
+  console.log("here are the pages we get from the server");
   console.log(pages);
-  return <EditorBoard />;
+  return <EditorBoard page={pages[0]} subdomain={website.subdomain} />;
 };
 
 export default Page;
