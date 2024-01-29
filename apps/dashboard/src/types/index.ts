@@ -21,10 +21,23 @@ export type ComponentBuilder = {
     textColor: string;
     textSize: string;
     textThoughness: string;
-    innerPosition: string;
+    width: string;
+    height: string;
+    raduis: string;
+    padding: string;
+    alighment: string;
+    direction: string;
+    gap: string;
+    marginTop: string;
+    marginBottom: string;
+    marginLeft: string;
+    margineRight: string;
   };
-  content: {
-    text: string;
-    name: string;
-  }[];
+  content: string;
+  children: ComponentBuilder[];
+};
+
+export type WebsiteAssets = {
+  name: string;
+  fileUrl: string;
 };

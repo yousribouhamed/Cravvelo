@@ -20,10 +20,7 @@ const TitleAndText: FC<VirtualComponentProps> = ({ component }) => {
       }}
       onClick={() => selectComponent(component)}
       className="w-full h-fit min-h-[100px] flex flex-col "
-    >
-      <h2>{component.content[0].text}</h2>
-      <p>{component.content[0].text}</p>
-    </div>
+    ></div>
   );
 };
 

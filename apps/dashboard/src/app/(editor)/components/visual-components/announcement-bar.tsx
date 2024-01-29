@@ -5,6 +5,7 @@ import {
 import type { FC } from "react";
 import { ComponentBuilder } from "@/src/types";
 import { Button } from "@ui/components/ui/button";
+import { processComponent } from "../page-painter";
 
 interface VirtualComponentProps {
   component: ComponentBuilder;
@@ -25,14 +26,7 @@ const AnnouncementBar: FC<VirtualComponentProps> = ({ component }) => {
       }}
       className="h-[40px] relative  w-full  border-b flex items-center justify-center hover:border-2 hover:border-blue-500  group cursor-pointer"
     >
-      <p
-        style={{
-          color: component.style.textColor ? component.style.textColor : "#000",
-        }}
-        className="text-md font-bold  text-center"
-      >
-        {component.content[0].text}
-      </p>
+      {processComponent(component.children[0])}
       <Button
         size="sm"
         className="absolute -bottom-8 right-[40%] hidden group-hover:block  text-white bg-primary rounded-2xl text-sm font-bold "

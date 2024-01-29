@@ -1,5 +1,5 @@
 import { ComponentBuilder, WebSitePage } from "../../../types";
-import Text from "./visual-components/Text";
+import Text from "./visual-components/text";
 import TitleAndText from "./visual-components/TitleAndText";
 import AnnouncementBar from "./visual-components/announcement-bar";
 import Header from "./visual-components/header";
@@ -17,7 +17,7 @@ function PagePainter({ page }: PagePainterProps) {
   );
 }
 
-function processComponent(component: ComponentBuilder) {
+export function processComponent(component: ComponentBuilder) {
   switch (component.type) {
     case "ANNOUNCEMENTBAR":
       return <AnnouncementBar component={component} />;

@@ -99,14 +99,14 @@ model Video {
 
 model Website {
   id                     String              @default(uuid()) @unique 
-  accountId              String
+  accountId              String              @unique
   name          String?
   description   String?  @db.Text
   subdomain     String?  @unique
   pages                  Json
-  assets                Json?
+  assets                 Json?
   favicon                String? 
-  logo          String  @default("https://public.blob.vercel-storage.com/eEZHAoPTOBSYGBE3/JRajRyC-PhBHEinQkupt02jqfKacBVHLWJq7Iy.png") @db.Text
+  logo          String?   @db.LongText
   font          String   @default("font-cal")
   createdAt              DateTime            @default(now())
   updatedAt              DateTime            @updatedAt

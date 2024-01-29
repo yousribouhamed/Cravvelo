@@ -12,23 +12,17 @@ interface VirtualComponentProps {
 const Text: FC<VirtualComponentProps> = ({ component }) => {
   const { selectComponent } = useEditorStore();
   return (
-    <div
+    <p
       style={{
-        background: component.style.backgroundColor,
+        color: component.style.textColor ? component.style.textColor : "",
+        fontSize: component.style.textSize ? component.style.textSize : "",
+        fontWeight: component.style.textThoughness
+          ? component.style.textThoughness
+          : "",
       }}
-      onClick={() => selectComponent(component)}
     >
-      {
-        <h1
-          style={{
-            color: component.style.textColor,
-            fontSizeAdjust: component.style.textSize,
-          }}
-        >
-          {component.content[0].text}
-        </h1>
-      }
-    </div>
+      {component.content}
+    </p>
   );
 };
 
