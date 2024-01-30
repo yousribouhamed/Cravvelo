@@ -1,11 +1,11 @@
 import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
-import Header from "@/src/components/Header";
+import Header from "@/src/components/layout/header";
 import useHaveAccess from "@/src/hooks/use-have-access";
 import ApiVideoClient from "@api.video/nodejs-client";
 import VediosListing from "@/src/components/vedios-lising";
 
 const Page = async ({}) => {
-  const { user, account } = await useHaveAccess();
+  const user = await useHaveAccess();
   const videoClient = new ApiVideoClient({ apiKey: process.env.API_VEDIO_KEY });
   const videos = await videoClient.videos.list();
 

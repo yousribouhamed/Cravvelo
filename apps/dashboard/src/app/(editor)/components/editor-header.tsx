@@ -108,7 +108,7 @@ const EditorHeader: FC<EditorHeaderProps> = ({ page, subdomain }) => {
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                 variant="secondary"
                 className={`w-8 h-8 p-2 border bg-white dark:bg-zinc-900 rounded-xl dark:text-white ${
-                  screen === "lg" ? "text-primary dark:text-primary" : ""
+                  screen === "lg" ? "text-blue-500 dark:text-blue-500" : ""
                 } `}
               >
                 {theme === "dark" ? <Sun /> : <Moon />}
@@ -125,7 +125,7 @@ const EditorHeader: FC<EditorHeaderProps> = ({ page, subdomain }) => {
                 variant="secondary"
                 onClick={() => setScreen("xl")}
                 className={`w-8 h-8 p-2 border bg-white dark:bg-zinc-900 rounded-xl dark:text-white ${
-                  screen === "xl" ? "text-primary dark:text-primary" : ""
+                  screen === "xl" ? "text-blue-500 dark:text-blue-500" : ""
                 } `}
               >
                 <svg
@@ -157,7 +157,7 @@ const EditorHeader: FC<EditorHeaderProps> = ({ page, subdomain }) => {
                 onClick={() => setScreen("lg")}
                 variant="secondary"
                 className={`w-8 h-8 p-2 border bg-white dark:bg-zinc-900 rounded-xl dark:text-white${
-                  screen === "lg" ? "text-primary dark:text-primary" : ""
+                  screen === "lg" ? "text-blue-500 dark:text-blue-500" : ""
                 } `}
               >
                 <MonitorSmartphone />
@@ -174,7 +174,7 @@ const EditorHeader: FC<EditorHeaderProps> = ({ page, subdomain }) => {
                 variant="secondary"
                 onClick={() => setScreen("sm")}
                 className={`w-8 h-8 p-2 border bg-white dark:bg-zinc-900 rounded-xl dark:text-white ${
-                  screen === "sm" ? "text-primary dark:text-primary" : ""
+                  screen === "sm" ? "text-blue-500 dark:text-blue-500" : ""
                 }`}
               >
                 <Monitor />
@@ -190,7 +190,7 @@ const EditorHeader: FC<EditorHeaderProps> = ({ page, subdomain }) => {
               <Button
                 variant="secondary"
                 onClick={openNewWindowSite}
-                className={`w-8 h-8 p-2 border   rounded-xl text-white bg-green-500`}
+                className={`w-8 h-8 p-2 border   rounded-xl text-white bg-blue-500`}
               >
                 <Play />
               </Button>

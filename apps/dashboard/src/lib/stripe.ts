@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { prisma } from "database/src";
-import { PLANS } from "../constants/stripe";
+import { PLANS } from "../constants/plans";
 import { currentUser } from "@clerk/nextjs";
 
 export const stripe = new Stripe(
@@ -49,13 +49,13 @@ export async function getUserSubscriptionPlan() {
     };
   }
 
-  const dbUser = await prisma.account.findFirst({
+  const account = await prisma.account.findFirst({
     where: {
       userId: user.id,
     },
   });
 
-  if (!dbUser) {
+  if (!account) {
     return {
       ...PLANS[0],
       isSubscribed: false,
@@ -65,28 +65,28 @@ export async function getUserSubscriptionPlan() {
   }
 
   const isSubscribed = Boolean(
-    dbUser.stripePriceId &&
-      dbUser.stripeCurrentPeriodEnd && // 86400000 = 1 day
-      dbUser.stripeCurrentPeriodEnd.getTime() + 86_400_000 > Date.now()
+    account.stripePriceId &&
+      account.stripeCurrentPeriodEnd && // 86400000 = 1 day
+      account.stripeCurrentPeriodEnd.getTime() + 86_400_000 > Date.now()
   );
 
   const plan = isSubscribed
-    ? PLANS.find((plan) => plan.price.priceIds.test === dbUser.stripePriceId)
+    ? PLANS.find((plan) => plan.priceIds.test === account.stripePriceId)
     : null;
 
   let isCanceled = false;
-  if (isSubscribed && dbUser.stripeSubscriptionId) {
+  if (isSubscribed && account.stripeSubscriptionId) {
     const stripePlan = await stripe.subscriptions.retrieve(
-      dbUser.stripeSubscriptionId
+      account.stripeSubscriptionId
     );
     isCanceled = stripePlan.cancel_at_period_end;
   }
 
   return {
     ...plan,
-    stripeSubscriptionId: dbUser.stripeSubscriptionId,
-    stripeCurrentPeriodEnd: dbUser.stripeCurrentPeriodEnd,
-    stripeCustomerId: dbUser.stripeCustomerId,
+    stripeSubscriptionId: account.stripeSubscriptionId,
+    stripeCurrentPeriodEnd: account.stripeCurrentPeriodEnd,
+    stripeCustomerId: account.stripeCustomerId,
     isSubscribed,
     isCanceled,
   };

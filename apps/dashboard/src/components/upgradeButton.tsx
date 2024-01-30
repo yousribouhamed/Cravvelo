@@ -45,7 +45,7 @@ const UpgradeButton: FC = ({}) => {
 
   const mutation = trpc.createStripeSession.useMutation({
     onSuccess: ({ url }) => {
-      window.location.href = url ?? "/dashboard/billing";
+      window.location.href = url ?? "/pricing";
     },
     onError: () => {
       maketoast.error();
@@ -70,14 +70,14 @@ const UpgradeButton: FC = ({}) => {
 
       <div className="w-full h-[250px]   flex justify-center items-start pt-8 pl-48 ">
         <div className="w-[200px] h-[50px]   flex items-center justify-start">
-          <span className="text-[#43766C] text-2xl font-bold">وفر 20٪</span>
+          <span className="text-[#FC6B00] text-2xl font-bold">وفر 20٪</span>
         </div>
         <div className="bg-white rounded-full transition-all duration-150 relative shadow-2xl w-[250px] h-[60px] flex items-center gap-x-4 justify-between p-4">
           <button
             onClick={() => setDisplay(DISPLAY_VALUES.yearly)}
             className={`rounded-full h-[48px] w-[125px] font-bold text-lg  ${
               display === DISPLAY_VALUES.yearly
-                ? "bg-[#43766C] text-white "
+                ? "bg-[#FC6B00] text-white "
                 : "bg-white"
             } `}
           >
@@ -88,7 +88,7 @@ const UpgradeButton: FC = ({}) => {
             className={`h-[48px] w-[125px] rounded-full font-bold text-lg 
           ${
             display === DISPLAY_VALUES.monthly
-              ? "bg-[#43766C] text-white "
+              ? "bg-[#FC6B00] text-white "
               : "bg-white"
           }
           `}
@@ -161,13 +161,17 @@ const UpgradeButton: FC = ({}) => {
               </div>
               <Button
                 disabled={mutation.isLoading}
-                onClick={() => mutation.mutate()}
+                onClick={() =>
+                  mutation.mutate({
+                    plan: item.plan_code,
+                  })
+                }
                 size="lg"
                 className="rounded-full h-16 w-[90%] text-xl font-bold mx-auto  hover:scale-105 transition-all duration-150"
               >
                 احصل عليها الآن{" "}
               </Button>
-              <span className="text-start my-6 text-[#43766C] text-xl font-bold ">
+              <span className="text-start my-6 text-[#FC6B00] text-xl font-bold ">
                 {item.tagline}
               </span>
               <div className="w-full h-fit ">
@@ -214,7 +218,7 @@ const UpgradeButton: FC = ({}) => {
                             fill-rule="evenodd"
                             clip-rule="evenodd"
                             d="M8.99881 1.85716C9.66685 1.04111 10.9149 1.0411 11.583 1.85716L12.4111 2.86866L13.634 2.40674C14.6207 2.03408 15.7014 2.65805 15.872 3.69883L16.0835 4.98889L17.3735 5.20033C18.4143 5.37091 19.0383 6.45166 18.6656 7.4383L18.2036 8.66123L19.2152 9.48937C20.0312 10.1575 20.0312 11.4054 19.2152 12.0735L18.2036 12.9017L18.6656 14.1246C19.0383 15.1113 18.4143 16.192 17.3735 16.3626L16.0835 16.574L15.872 17.8641C15.7014 18.9049 14.6207 19.5288 13.634 19.1562L12.4111 18.6943L11.583 19.7058C10.9149 20.5218 9.66685 20.5218 8.99881 19.7058L8.17063 18.6943L6.94769 19.1562C5.96105 19.5288 4.88031 18.9049 4.70973 17.8641L4.49828 16.574L3.20823 16.3626C2.16744 16.192 1.54348 15.1113 1.91614 14.1246L2.37806 12.9017L1.36656 12.0735C0.550505 11.4054 0.550502 10.1575 1.36656 9.48937L2.37806 8.66123L1.91614 7.4383C1.54347 6.45166 2.16745 5.37091 3.20823 5.20033L4.49828 4.98889L4.70973 3.69883C4.88031 2.65805 5.96106 2.03408 6.94769 2.40674L8.17063 2.86866L8.99881 1.85716ZM9.62919 14.2942L15.4739 8.44954L14.2931 7.26874L9.0388 12.523L6.2894 9.77359L5.10859 10.9544L8.4484 14.2942C8.60498 14.4508 8.81737 14.5387 9.0388 14.5387C9.26023 14.5387 9.47264 14.4508 9.62919 14.2942Z"
-                            fill="#43766C"
+                            fill="#FC6B00"
                           />
                         </g>
                         <defs>

@@ -1,10 +1,8 @@
-import Header from "@/src/components/Header";
+import Header from "@/src/components/layout/header";
 import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
 import { prisma } from "database/src";
 import ProductsTableShell from "./products-table-shell";
 import useHaveAccess from "@/src/hooks/use-have-access";
-
-interface pageAbdullahProps {}
 
 const getData = async ({ accountId }: { accountId: string }) => {
   const products = await prisma.product.findMany({
@@ -16,9 +14,9 @@ const getData = async ({ accountId }: { accountId: string }) => {
 };
 
 const Page = async ({}) => {
-  const { account, user } = await useHaveAccess();
+  const user = await useHaveAccess();
 
-  const data = await getData({ accountId: account.id });
+  const data = await getData({ accountId: user.accountId });
 
   return (
     <MaxWidthWrapper>

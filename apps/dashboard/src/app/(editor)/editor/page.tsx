@@ -25,7 +25,11 @@ const Page = async ({}) => {
   const pages = proccessWebsiteJsonToObject({ pages: website?.pages });
   console.log("here are the pages we get from the server");
   console.log(pages);
-  return <EditorBoard page={pages[0]} subdomain={website.subdomain} />;
+  return (
+    <div className="w-full h-screen overflow-hidden">
+      <EditorBoard page={pages[0]} subdomain={website?.subdomain || ""} />
+    </div>
+  );
 };
 
 export default Page;

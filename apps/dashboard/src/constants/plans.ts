@@ -1,10 +1,15 @@
 export const PLANS = [
   {
     plan: "الباقة الآساسية",
+    plan_code: "BASIC",
     price: "10",
     tagline:
       "إنشاء منصتك التعليمية ومنتجاتك الرقمية وبيعها وتسويقها عبر الإنترنت.",
     quota: 10,
+    priceIds: {
+      test: "price_1NvyXVCxv0KQVM5xCieMmhkZ",
+      production: "",
+    },
 
     features: [
       {
@@ -34,6 +39,11 @@ export const PLANS = [
   },
 
   {
+    priceIds: {
+      test: "price_1NvyXVCxv0KQVM5xCieMmhkZ",
+      production: "",
+    },
+    plan_code: "ADVANCED",
     plan: "باقة النمو",
     price: "18",
     tagline:
@@ -68,6 +78,11 @@ export const PLANS = [
   },
 
   {
+    priceIds: {
+      test: "price_1NvyXVCxv0KQVM5xCieMmhkZ",
+      production: "",
+    },
+    plan_code: "PRO",
     plan: "الباقة الاحترافية",
     price: "28",
     tagline: "سعة غير محدودة وأدوات متقدمة تساعدك على التوسّع بعملك ومنتجاتك.",

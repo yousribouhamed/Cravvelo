@@ -1,11 +1,9 @@
-import Header from "@/src/components/Header";
+import Header from "@/src/components/layout/header";
 import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
 import { Course } from "database";
-import { columns } from "@/src/components/data-table/columns/courses";
-import { currentUser } from "@clerk/nextjs";
 import { prisma } from "database/src";
-import { redirect } from "next/navigation";
 import CoursesTableShell from "./courses-table-shell";
+import useHaveAccess from "@/src/hooks/use-have-access";
 
 async function getData(): Promise<Course[]> {
   const data = await prisma.course.findMany();
@@ -13,13 +11,8 @@ async function getData(): Promise<Course[]> {
 }
 
 const page = async ({}) => {
+  const user = await useHaveAccess();
   const data = await getData();
-
-  const user = await currentUser();
-
-  if (!user) {
-    redirect("/sign-in");
-  }
 
   return (
     <MaxWidthWrapper>

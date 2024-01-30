@@ -31,8 +31,6 @@ const AssetsForm: FC = ({}) => {
 
   const { data, refetch } = trpc.getWebsiteAssets.useQuery();
 
-  console.log("here it is the data ");
-  console.log(data);
   return (
     <Card className="w-full min-h-[400px]  h-fit  rounded-2xl col-span-2">
       <CardHeader>
@@ -40,8 +38,11 @@ const AssetsForm: FC = ({}) => {
         <CardContent className="w-full h-fit min-h-[100px] flex flex-wrap gap-4 justify-start">
           {data ? (
             <>
-              {data?.map((item) => (
-                <div className="w-[100px] h-[100px] rounded-2xl flex items-center justify-center relative">
+              {data?.map((item, index) => (
+                <div
+                  key={item.name + index}
+                  className="w-[100px] h-[100px] rounded-2xl flex items-center justify-center relative"
+                >
                   <img
                     src={item.fileUrl}
                     alt={item.name}

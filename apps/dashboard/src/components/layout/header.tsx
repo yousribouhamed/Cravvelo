@@ -1,25 +1,26 @@
 "use client";
 
 import type { FC } from "react";
-import { SearchInput } from "./search";
-import UserNav from "./auth/user-nav";
+import { SearchInput } from "../search";
+import UserNav from "../auth/user-nav";
 import { Button } from "@ui/components/ui/button";
-import { Icons } from "./Icons";
+import { Icons } from "../Icons";
 import type { User } from "@clerk/nextjs/server";
 import { useRouter } from "next/navigation";
-import MobildSideBard from "./MobildSideBard";
+import MobildSideBard from "../MobildSideBard";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@ui/components/ui/tooltip";
-import Notifications from "./real-time/notifications";
+import Notifications from "../real-time/notifications";
 import { ArrowRight } from "lucide-react";
+import { UserData } from "@/src/types";
 
 interface Props {
   title: string;
-  user: User;
+  user: UserData;
   goBack?: boolean;
 }
 

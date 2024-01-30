@@ -1,4 +1,4 @@
-import type { FC } from "react";
+"use server";
 
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
@@ -8,6 +8,8 @@ interface useHaveAccessAbdullahProps {}
 
 // this sunction should run on the server only
 const useHaveAccess = async () => {
+  const currentDate = new Date();
+
   const user = await currentUser();
 
   if (!user) {
@@ -24,9 +26,26 @@ const useHaveAccess = async () => {
     redirect("/auth-callback");
   }
 
+  const trialEndDate = new Date(account.createdAt);
+  trialEndDate.setDate(trialEndDate.getDate() + 14);
+
   // here we check if the user is paid user or not
 
-  return { user, account };
+  const isFreeTrial = currentDate < trialEndDate;
+
+  const isSubscribed =
+    account.stripeCustomerId && account.stripeCurrentPeriodEnd ? true : false;
+
+  return {
+    userId: user.id,
+    accountId: account.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    avatar: user.imageUrl,
+    email: user.primaryEmailAddressId,
+    isFreeTrial,
+    isSubscribed,
+  };
 };
 
 export default useHaveAccess;

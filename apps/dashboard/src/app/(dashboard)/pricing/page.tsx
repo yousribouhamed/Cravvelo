@@ -1,27 +1,15 @@
-import Header from "@/src/components/Header";
+import Header from "@/src/components/layout/header";
 import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
 import UpgradeButton from "@/src/components/upgradeButton";
-import { currentUser } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
+import useHaveAccess from "@/src/hooks/use-have-access";
 
 export default async function Home() {
-  const user = await currentUser();
-
-  if (!user) {
-    redirect("/sign-in");
-  }
-
-  console.log(user);
+  const user = await useHaveAccess();
 
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start">
         <Header user={user} title="الرئيسية" />
-        <div className="w-full h-[200px] mt-10 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-600 flex items-center justify-center">
-          <h2 className="text-4xl font-bold text-white text-center mu-4">
-            اختر أفضل خطة لعملك
-          </h2>
-        </div>
         <UpgradeButton />
       </main>
     </MaxWidthWrapper>

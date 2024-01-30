@@ -12,9 +12,9 @@ export const pageTemplate = {
 
       children: [
         {
-          id: "jsjdbnyetednsmssss",
-          name: "شريط الإعلان",
-          type: "ANNOUNCEMENTBAR",
+          id: "uhyjjjbndbsgwhwh",
+          name: "نص",
+          type: "TEXT",
           style: {
             backgroundColor: "#FFFFFF",
             width: "100%",
@@ -25,16 +25,17 @@ export const pageTemplate = {
             marginBottom: "0",
             margineRight: "0",
             marginLeft: "0",
-            marginTop: 0,
+            marginTop: "0",
             padding: "0",
             raduis: "0",
             textColor: "#000000",
-            textSize: "5px",
+            textSize: "20px",
             textThoughness: "500",
           },
           content: "مرحبا بكم في أكاديميتنا",
         },
       ],
+
       content: "",
       style: {
         backgroundColor: "#FFFFFF",

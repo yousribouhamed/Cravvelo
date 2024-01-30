@@ -1,5 +1,5 @@
 import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
-import Header from "@/src/components/Header";
+import Header from "@/src/components/layout/header";
 import { User } from "@clerk/nextjs/dist/types/server";
 
 import PathBuilder from "@/src/components/path-builder";

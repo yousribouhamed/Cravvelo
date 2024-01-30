@@ -40,13 +40,13 @@ const AddVisualCompoents: FC<Props> = ({ page, setPages }) => {
   const { isOpen, setIsOpen } = openAddVirtualCompoent();
   const [section, setSection] = useState("typography");
   const handleSelection = ({ type }: { type: string }) => {
-    setPages({
-      ...page,
-      components: [
-        ...page.components,
-        getVirtualComponent({ type }) as ComponentBuilder,
-      ],
-    });
+    // setPages({
+    //   ...page,
+    //   components: [
+    //     ...page.components,
+    //     getVirtualComponent({ type }) as ComponentBuilder,
+    //   ],
+    // });
   };
 
   return (

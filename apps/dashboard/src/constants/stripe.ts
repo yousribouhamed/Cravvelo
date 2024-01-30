@@ -6,10 +6,6 @@ export const PLANS = [
     pagesPerPdf: 5,
     price: {
       amount: 0,
-      priceIds: {
-        test: "",
-        production: "",
-      },
     },
   },
   {

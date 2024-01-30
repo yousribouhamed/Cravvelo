@@ -1,11 +1,8 @@
 import MaxWidthWrapper from "../../components/MaxWidthWrapper";
-import Header from "@/src/components/Header";
-import { currentUser } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
+import Header from "@/src/components/layout/header";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -13,13 +10,10 @@ import {
 import AreaChartOverview from "@/src/components/area-chart";
 import { DatePickerWithRange } from "@/src/components/range-date-picker";
 import { NotFoundCard } from "@/src/components/not-found-card";
+import useHaveAccess from "@/src/hooks/use-have-access";
 
-export default async function Home() {
-  const user = await currentUser();
-
-  if (!user) {
-    redirect("/sign-in");
-  }
+async function Page() {
+  const user = await useHaveAccess();
 
   return (
     <MaxWidthWrapper>
@@ -151,3 +145,5 @@ export default async function Home() {
     </MaxWidthWrapper>
   );
 }
+
+export default Page;

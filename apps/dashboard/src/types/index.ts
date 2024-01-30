@@ -41,3 +41,14 @@ export type WebsiteAssets = {
   name: string;
   fileUrl: string;
 };
+
+export type UserData = {
+  userId: string;
+  accountId: string;
+  firstName: string;
+  lastName: string;
+  avatar: string;
+  email: string;
+  isFreeTrial: boolean;
+  isSubscribed: boolean;
+};

@@ -1,5 +1,5 @@
 import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
-import Header from "@/src/components/Header";
+import Header from "@/src/components/layout/header";
 import { currentUser } from "@clerk/nextjs";
 import { notFound, redirect } from "next/navigation";
 import { Button } from "@ui/components/ui/button";
@@ -11,7 +11,7 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps) {
-  const { user, account } = await useHaveAccess();
+  const user = await useHaveAccess();
 
   const course = await prisma.course.findUnique({
     where: {

@@ -14,6 +14,7 @@ datasource db {
 model Account {
   id                     String                         @default(uuid()) @unique
   userId                 String                          @unique
+  avatarUrl              String?         @db.Text
   AcademyIds             Json
   stripeCustomerId       String?             @unique @map(name: "stripe_customer_id")
   stripeSubscriptionId   String?             @unique @map(name: "stripe_subscription_id")
@@ -21,10 +22,15 @@ model Account {
   stripeCurrentPeriodEnd DateTime?           @map(name: "stripe_current_period_end")
   createdAt              DateTime            @default(now())
   updatedAt              DateTime            @updatedAt
+  Course                 Course[]
+  Product                Product[]
+  Video                  Video[]
+  Website                Website[]
+
 }
 
 model Academy {
-  id                     String @default(uuid()) @unique
+  id                     String              @default(uuid()) @unique
   name                   String 
   subdomain              String              @unique
   createdAt              DateTime            @default(now())
@@ -53,9 +59,11 @@ model Course {
   profit                 String?
   trainers               String?
   status                 String
-
+  Account   Account? @relation(fields: [accountId], references: [id])
   createdAt              DateTime            @default(now())
   updatedAt              DateTime            @updatedAt
+  @@index([id])
+  @@index([accountId])
 }
 
 model Chapter {
@@ -87,6 +95,9 @@ model Product {
   isVisible              Boolean             @default(true)
   createdAt              DateTime            @default(now())
   updatedAt              DateTime            @updatedAt 
+  Account   Account? @relation(fields: [accountId], references: [id])
+  @@index([id])
+  @@index([accountId])
 }
 
 model Video {
@@ -95,6 +106,9 @@ model Video {
   videoId                String
   createdAt              DateTime            @default(now())
   updatedAt              DateTime            @updatedAt
+  Account   Account? @relation(fields: [accountId], references: [id])
+  @@index([id])
+  @@index([accountId])
 }
 
 model Website {
@@ -110,4 +124,11 @@ model Website {
   font          String   @default("font-cal")
   createdAt              DateTime            @default(now())
   updatedAt              DateTime            @updatedAt
+  Account   Account? @relation(fields: [accountId], references: [id])
 }
+
+enum Plan {
+  price_1OYxkqFj9oKEERu1NbKUxXxN
+  price_1OYxkqFj9oKEERu1KfJGWxgN
+}
+

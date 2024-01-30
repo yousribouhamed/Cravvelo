@@ -26,7 +26,8 @@ const AnnouncementBar: FC<VirtualComponentProps> = ({ component }) => {
       }}
       className="h-[40px] relative  w-full  border-b flex items-center justify-center hover:border-2 hover:border-blue-500  group cursor-pointer"
     >
-      {processComponent(component.children[0])}
+      {component?.children.map((item) => processComponent(item))}
+
       <Button
         size="sm"
         className="absolute -bottom-8 right-[40%] hidden group-hover:block  text-white bg-primary rounded-2xl text-sm font-bold "

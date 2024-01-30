@@ -15,37 +15,6 @@ import PagePainter from "./page-painter";
 import AddVisualCompoents from "./add-visual-compoents";
 import { trpc } from "../../_trpc/client";
 
-const page = {
-  pathname: "/",
-  title: "الصفحة الرئيسية",
-  components: [
-    {
-      name: "شريط الإعلان",
-      type: "ANNOUNCEMENTBAR",
-      content: [{ text: "مرحبا بكم في أكاديميتنا", name: "كتابة" }],
-      backgroudColor: "",
-      textColor: "",
-      FontSize: "",
-    },
-    {
-      name: "رأس",
-      type: "HEADER",
-      content: [{ text: "شعارك", name: "شعارك" }],
-      backgroudColor: "",
-      textColor: "",
-      FontSize: "",
-    },
-    {
-      name: "قسم البطل",
-      type: "HERO",
-      content: [{ text: "مرحبا بكم في أكاديميتنا" }],
-      backgroudColor: "",
-      textColor: "",
-      FontSize: "",
-    },
-  ],
-};
-
 interface EditorBoardProps {
   page: WebSitePage;
   subdomain: string;
@@ -56,6 +25,9 @@ const EditorBoard: FC<EditorBoardProps> = ({ page, subdomain }) => {
     page ? page : pageTemplate
   );
   const { screen, setScreen } = useEditorScreen();
+
+  console.log("here it is the website");
+  console.log(currentpage);
 
   return (
     <>

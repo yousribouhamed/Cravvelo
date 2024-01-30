@@ -3,39 +3,47 @@ import { TRPCError } from "@trpc/server";
 import { prisma } from "database/src";
 import { currentUser } from "@clerk/nextjs";
 import { getUserSubscriptionPlan, stripe } from "@/src/lib/stripe";
-import { PLANS } from "@/src/constants/stripe";
+import { PLANS } from "@/src/constants/plans";
 import { absoluteUrl } from "@/src/lib/utils";
+import { z } from "zod";
 
-export const createStripeSession = privateProcedure.mutation(
-  async ({ ctx }) => {
+export const createStripeSession = privateProcedure
+  .input(
+    z.object({
+      plan: z.string(),
+    })
+  )
+  .mutation(async ({ ctx, input }) => {
     const user = await currentUser();
 
-    const billingUrl = absoluteUrl("/dashboard/billing");
-
-    console.log("here it is the user");
+    const billingUrl = absoluteUrl("/pricing");
 
     if (!user.id) throw new TRPCError({ code: "UNAUTHORIZED" });
 
-    const dbUser = await prisma.account.findFirst({
+    const account = await prisma.account.findFirst({
       where: {
         userId: user?.id,
       },
     });
-    console.log("here it is the db user");
-    console.log(dbUser);
 
-    if (!dbUser) throw new TRPCError({ code: "UNAUTHORIZED" });
+    if (!account) throw new TRPCError({ code: "UNAUTHORIZED" });
 
     const subscriptionPlan = await getUserSubscriptionPlan();
 
-    if (subscriptionPlan.isSubscribed && dbUser.stripeCustomerId) {
+    if (subscriptionPlan.isSubscribed && account.stripeCustomerId) {
       const stripeSession = await stripe.billingPortal.sessions.create({
-        customer: dbUser.stripeCustomerId,
+        customer: account.stripeCustomerId,
         return_url: billingUrl,
       });
 
       return { url: stripeSession.url };
     }
+
+    // find the plan the user wan't to subscripe to
+
+    const plan = PLANS.filter((item) => item.plan_code === input.plan);
+
+    console.log(plan);
 
     const stripeSession = await stripe.checkout.sessions.create({
       success_url: billingUrl,
@@ -45,24 +53,15 @@ export const createStripeSession = privateProcedure.mutation(
       billing_address_collection: "auto",
       line_items: [
         {
-          price: PLANS.find((plan) => plan.name === "Pro")?.price.priceIds.test,
+          price: plan[0].priceIds.test,
           quantity: 1,
         },
       ],
-      custom_text: {
-        shipping_address: {
-          message:
-            "Please note that we can't guarantee 2-day delivery for PO boxes at this time.",
-        },
-        submit: {
-          message: "We'll email you instructions on how to get started.",
-        },
-      },
+
       metadata: {
         userId: user?.id,
       },
     });
 
     return { url: stripeSession.url };
-  }
-);
+  });

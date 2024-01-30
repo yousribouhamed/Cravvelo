@@ -70,7 +70,12 @@ const PublishWebsite: FC<publishWebsiteProps> = ({ page }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className=" text-white font-bold rounded-2xl">حفظ ونشر</Button>
+        <Button
+          size="sm"
+          className=" text-white font-bold rounded-2xl bg-blue-500"
+        >
+          حفظ ونشر
+        </Button>
       </DialogTrigger>
       <DialogContent className="max-w-lg " title="إنشاء موقع الويب الخاص بك">
         <Form {...form}>

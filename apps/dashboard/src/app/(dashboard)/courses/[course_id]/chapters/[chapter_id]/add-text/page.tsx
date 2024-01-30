@@ -1,17 +1,13 @@
 import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
-import Header from "@/src/components/Header";
-import { User } from "@clerk/nextjs/dist/types/server";
+import Header from "@/src/components/layout/header";
 import AddTextForm from "@/src/components/forms/course-forms/add-text-form";
 import PathBuilder from "@/src/components/path-builder";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
+import useHaveAccess from "@/src/hooks/use-have-access";
 
 export default async function Home() {
-  const user = await currentUser();
-
-  if (!user) {
-    redirect("/sign-in");
-  }
+  const user = await useHaveAccess();
 
   return (
     <MaxWidthWrapper>

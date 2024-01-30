@@ -26,9 +26,10 @@ import { Eye } from "lucide-react";
 import { ArrowUpLeft } from "lucide-react";
 import { Progress } from "@ui/components/ui/progress";
 import Image from "next/image";
+import { UserData } from "@/src/types";
 
 interface UserNavProps {
-  user: UserType;
+  user: UserData;
 }
 
 export default function UserNav({ user }: UserNavProps) {
@@ -41,7 +42,7 @@ export default function UserNav({ user }: UserNavProps) {
           })}  cursor-pointer  w-48   flex items-center bg-white rounded-xl border justify-end gap-x-4 `}
         >
           <Avatar className="w-8 h-8 rounded-md">
-            <AvatarImage src={user?.imageUrl ?? user?.imageUrl} />
+            <AvatarImage src={user?.avatar} />
             <AvatarFallback>AB</AvatarFallback>
           </Avatar>
           <p className="text-md text-black">
@@ -62,7 +63,7 @@ export default function UserNav({ user }: UserNavProps) {
             className={`  cursor-pointer   flex justify-center items-end gap-y-2  w-full h-full flex-col `}
           >
             <Avatar className="w-8 h-8 rounded-md">
-              <AvatarImage src={user?.imageUrl} />
+              <AvatarImage src={user?.avatar} />
               <AvatarFallback>AB</AvatarFallback>
             </Avatar>
 

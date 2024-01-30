@@ -1,5 +1,5 @@
 import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
-import Header from "@/src/components/Header";
+import Header from "@/src/components/layout/header";
 import CourseHeader from "@/src/components/course-header";
 import { User } from "@clerk/nextjs/dist/types/server";
 import { currentUser } from "@clerk/nextjs";
