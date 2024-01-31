@@ -3,12 +3,12 @@
 import type { FC } from "react";
 import EditorRightbar from "./editor-rightbar";
 import EditorHeader from "./editor-header";
-import React from "react";
-import { WebSitePage } from "@/src/types";
+import React, { useState } from "react";
+import { useTheme } from "next-themes";
 import EditorCanvas from "./editor-canvas";
 import EditorLeftSideBar from "./editor-leftsidebar";
 import { Button } from "@ui/components/ui/button";
-import { MousePointer, Sun } from "lucide-react";
+import { Moon, MousePointer, Sun } from "lucide-react";
 import { Hand } from "lucide-react";
 import {
   Select,
@@ -17,8 +17,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ui/components/ui/select";
+import { useWebSiteEditor } from "../editor-state";
+import { cn } from "@ui/lib/utils";
 
 const EditorBoard: FC = () => {
+  const { state, actions } = useWebSiteEditor();
+  const { theme, setTheme } = useTheme();
   return (
     <>
       <EditorHeader />
@@ -33,16 +37,53 @@ const EditorBoard: FC = () => {
           dir="ltr"
           className="w-[330px] h-[60px] p-4 rounded-2xl absolute bottom-20 left-[40%] right-[40%] z-[999] dark:bg-neutral-950 flex items-center justify-center gap-x-4"
         >
-          <Button size="icon" variant="ghost">
-            <MousePointer className="text-gray-50 w-4 h-4" />
+          <Button
+            onClick={() => {
+              if (state.isSelectionMode) return;
+              actions.toggleSelectionMode();
+            }}
+            size="icon"
+            variant="ghost"
+            className={cn(
+              " hover:bg-transparent  hover:text-white text-gray-50",
+              {
+                "text-white bg-white/10": state.isSelectionMode,
+              }
+            )}
+          >
+            <MousePointer className={cn(" w-4 h-4 hover:bg-transparent")} />
           </Button>
 
-          <Button size="icon" variant="ghost">
-            <Hand className="text-gray-50 w-4 h-4" />
+          <Button
+            onClick={() => {
+              if (!state.isSelectionMode) return;
+              actions.toggleSelectionMode();
+            }}
+            size="icon"
+            variant="ghost"
+            className={cn(
+              " hover:bg-transparent hover:text-white  text-gray-50",
+              {
+                "text-white bg-white/10": !state.isSelectionMode,
+              }
+            )}
+          >
+            <Hand className={cn("text-gray-50 w-4 h-4 hover:bg-transparent")} />
           </Button>
 
-          <Button size="icon" variant="ghost">
-            <Sun className="text-gray-50 w-4 h-4" />
+          <Button
+            onClick={() => {
+              setTheme(theme === "dark" ? "light" : "dark");
+            }}
+            size="icon"
+            variant="ghost"
+            className="bg-transparent hover:bg-transparent hover:text-white"
+          >
+            {theme === "dark" ? (
+              <Sun className="dark:text-white text-black w-4 h-4" />
+            ) : (
+              <Moon className="dark:text-white text-black w-4 h-4" />
+            )}
           </Button>
 
           <Select>

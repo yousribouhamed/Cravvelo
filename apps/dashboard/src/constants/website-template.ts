@@ -87,7 +87,7 @@ export const getVirtualComponent = ({ type }: { type: string }) => {
 };
 
 export type EditorBtns =
-  | "text"
+  | "TEXT"
   | "container"
   | "section"
   | "contactForm"
@@ -98,7 +98,8 @@ export type EditorBtns =
   | "__body"
   | "image"
   | null
-  | "3Col";
+  | "3Col"
+  | "ANNOUNCEMENTBAR";
 
 export const defaultStyles: React.CSSProperties = {
   backgroundPosition: "center",

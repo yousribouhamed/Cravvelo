@@ -21,7 +21,7 @@ import {
 
 import React from "react";
 import { FilePlus } from "lucide-react";
-import { useEditorScreen } from "@/src/lib/zustand/editor-state";
+
 import PublishWebsite from "@/src/components/models/editor/publish-website";
 import { useRouter } from "next/navigation";
 import { Sun } from "lucide-react";
@@ -58,7 +58,7 @@ const EditorHeader: FC<EditorHeaderProps> = () => {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
   const router = useRouter();
-  const { screen, setScreen } = useEditorScreen();
+
   const { theme, setTheme } = useTheme();
 
   const openNewWindowSite = () => console.log("hello");
@@ -99,7 +99,7 @@ const EditorHeader: FC<EditorHeaderProps> = () => {
         </div>
 
         <div className="w-[30%] h-full flex items-center justify-end gap-x-3">
-          <Tooltip delayDuration={0}>
+          {/* <Tooltip delayDuration={0}>
             <TooltipTrigger asChild>
               <Button
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
@@ -114,73 +114,7 @@ const EditorHeader: FC<EditorHeaderProps> = () => {
             <TooltipContent>
               <p> {theme === "dark" ? "وضع الضوء" : "وضع الظلام"}</p>
             </TooltipContent>
-          </Tooltip>
-
-          <Tooltip delayDuration={0}>
-            <TooltipTrigger asChild>
-              <Button
-                variant="secondary"
-                onClick={() => setScreen("xl")}
-                className={`w-8 h-8 p-2 border bg-white dark:bg-zinc-900 rounded-xl dark:text-white ${
-                  screen === "xl" ? "text-blue-500 dark:text-blue-500" : ""
-                } `}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  className="lucide lucide-tablet-smartphone"
-                >
-                  <rect width="10" height="14" x="3" y="8" rx="2" />
-                  <path d="M5 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2h-2.4" />
-                  <path d="M8 18h.01" />
-                </svg>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>حجم سطح المكتب</p>
-            </TooltipContent>
-          </Tooltip>
-
-          <Tooltip delayDuration={0}>
-            <TooltipTrigger asChild>
-              <Button
-                onClick={() => setScreen("lg")}
-                variant="secondary"
-                className={`w-8 h-8 p-2 border bg-white dark:bg-zinc-900 rounded-xl dark:text-white${
-                  screen === "lg" ? "text-blue-500 dark:text-blue-500" : ""
-                } `}
-              >
-                <MonitorSmartphone />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>حجم المحرر</p>
-            </TooltipContent>
-          </Tooltip>
-
-          <Tooltip delayDuration={0}>
-            <TooltipTrigger asChild>
-              <Button
-                variant="secondary"
-                onClick={() => setScreen("sm")}
-                className={`w-8 h-8 p-2 border bg-white dark:bg-zinc-900 rounded-xl dark:text-white ${
-                  screen === "sm" ? "text-blue-500 dark:text-blue-500" : ""
-                }`}
-              >
-                <Monitor />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>حجم الهاتف الذكي</p>
-            </TooltipContent>
-          </Tooltip>
+          </Tooltip> */}
 
           <Tooltip delayDuration={0}>
             <TooltipTrigger asChild>

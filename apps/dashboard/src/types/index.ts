@@ -38,6 +38,7 @@ export type HistoryState = {
 export type EditorState = {
   editor: Editor;
   history: HistoryState;
+  isSelectionMode: boolean;
 };
 
 export type WebsiteAssets = {

@@ -1,34 +1,36 @@
-import { ComponentBuilder, WebSitePage } from "../../../types";
-import Text from "./visual-components/text";
-import TitleAndText from "./visual-components/TitleAndText";
-import AnnouncementBar from "./visual-components/announcement-bar";
-import Header from "./visual-components/header";
-import Hero from "./visual-components/hero";
+"use client";
 
-interface PagePainterProps {
-  page: WebSitePage;
-}
+import { useMounted } from "@/src/hooks/use-mounted";
+import { EditorElement, WebSitePage } from "../../../types";
+import { useWebSiteEditor } from "../editor-state";
+import Text from "./elements-placeholder/basic/text";
+import AnnouncementBar from "./elements-placeholder/complex/announcement-bar";
 
-function PagePainter({ page }: PagePainterProps) {
+function PagePainter() {
+  const {
+    actions: { getWebPage },
+  } = useWebSiteEditor();
+
+  const isMounted = useMounted();
+
+  if (!isMounted) {
+    return null;
+  }
+  const pages = getWebPage();
   return (
-    <div className="w-full h-fit min-h-[300px] bg-white max-w-[1500px]">
-      {page.components.map((item, index) => processComponent(item))}
+    <div className="w-[1000px] h-fit min-h-[2000px] bg-white ">
+      {pages?.elements?.map((item, index) => processComponent(item))}
     </div>
   );
 }
 
-export function processComponent(component: ComponentBuilder) {
+export function processComponent(component: EditorElement) {
   switch (component.type) {
     case "ANNOUNCEMENTBAR":
-      return <AnnouncementBar component={component} />;
-    case "TITLEANDTEXT":
-      return <TitleAndText component={component} />;
+      return <AnnouncementBar element={component} />;
     case "TEXT":
-      return <Text component={component} />;
-    case "HEADER":
-      return <Header component={component} />;
-    case "HERO":
-      return <Hero component={component} />;
+      return <Text element={component} />;
+
     default:
       <h1>this is not a valid componet</h1>;
   }
