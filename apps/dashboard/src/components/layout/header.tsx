@@ -4,8 +4,6 @@ import type { FC } from "react";
 import { SearchInput } from "../search";
 import UserNav from "../auth/user-nav";
 import { Button } from "@ui/components/ui/button";
-import { Icons } from "../Icons";
-import type { User } from "@clerk/nextjs/server";
 import { useRouter } from "next/navigation";
 import MobildSideBard from "../MobildSideBard";
 import {
@@ -27,49 +25,58 @@ interface Props {
 const Header: FC<Props> = ({ title, user, goBack }) => {
   const router = useRouter();
   return (
-    <TooltipProvider>
-      <div className="w-full h-[96px] flex justify-between items-center border-b  ">
-        <div className="w-[25%] h-full flex items-center justify-start gap-x-2">
-          <div className="lg:hidden">
-            <MobildSideBard />
+    <>
+      <TooltipProvider>
+        <div className="w-full h-[96px] flex justify-between items-center border-b  ">
+          <div className="w-[25%] h-full flex items-center justify-start gap-x-2">
+            <div className="lg:hidden">
+              <MobildSideBard />
+            </div>
+            {goBack && (
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={() => router.back()}
+                    variant="secondary"
+                    size="icon"
+                    className="bg-white rounded-xl border"
+                  >
+                    <ArrowRight className="w-4 h-4 text-black" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>عد للصفحة السابقة</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
+            <h1 className="text-xl font-bold text-start">{title}</h1>
           </div>
-          {goBack && (
+          <div className="w-[50%] h-[88px] flex items-center justify-center px-4">
+            <SearchInput />
+          </div>
+
+          <div className="w-[25%]  h-full flex items-center justify-end gap-x-2">
+            <Notifications />
+
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
-                <Button
-                  onClick={() => router.back()}
-                  variant="secondary"
-                  size="icon"
-                  className="bg-white rounded-xl border"
-                >
-                  <ArrowRight className="w-4 h-4 text-black" />
-                </Button>
+                <UserNav user={user} />
               </TooltipTrigger>
               <TooltipContent>
-                <p>عد للصفحة السابقة</p>
+                <p> هذه هي قائمة التنقل الخاصة بالمستخدم</p>
               </TooltipContent>
             </Tooltip>
-          )}
-          <h1 className="text-xl font-bold text-start">{title}</h1>
+          </div>
         </div>
-        <div className="w-[50%] h-[88px] flex items-center justify-center px-4">
-          <SearchInput />
+      </TooltipProvider>
+      {user.isFreeTrial && (
+        <div className="w-full h-[70px] flex items-center justify-center bg-gradient-to-r from-primary to-yellow-500">
+          <h1 className="text-white font-bold text-md">
+            أنت الآن في الفترة التجريبية المجانية، يرجى اختيار خطة لتأكيد حسابك
+          </h1>
         </div>
-
-        <div className="w-[25%]  h-full flex items-center justify-end gap-x-2">
-          <Notifications />
-
-          <Tooltip delayDuration={0}>
-            <TooltipTrigger asChild>
-              <UserNav user={user} />
-            </TooltipTrigger>
-            <TooltipContent>
-              <p> هذه هي قائمة التنقل الخاصة بالمستخدم</p>
-            </TooltipContent>
-          </Tooltip>
-        </div>
-      </div>
-    </TooltipProvider>
+      )}
+    </>
   );
 };
 

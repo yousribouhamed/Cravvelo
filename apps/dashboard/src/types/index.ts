@@ -1,3 +1,5 @@
+import { EditorBtns } from "../constants/website-template";
+
 export type Module = {
   title: string;
   content: any;
@@ -9,32 +11,33 @@ export type Module = {
 export type WebSitePage = {
   pathname: string;
   title: string;
-  components: ComponentBuilder[];
+  elements: EditorElement[];
 };
 
-export type ComponentBuilder = {
+export type EditorElement = {
   id: string;
+  styles: React.CSSProperties;
   name: string;
-  type: string;
-  style: {
-    backgroundColor: string;
-    textColor: string;
-    textSize: string;
-    textThoughness: string;
-    width: string;
-    height: string;
-    raduis: string;
-    padding: string;
-    alighment: string;
-    direction: string;
-    gap: string;
-    marginTop: string;
-    marginBottom: string;
-    marginLeft: string;
-    margineRight: string;
-  };
-  content: string;
-  children: ComponentBuilder[];
+  type: EditorBtns;
+  content:
+    | EditorElement[]
+    | { href?: string; innerText?: string; src?: string };
+};
+
+export type Editor = {
+  pages: WebSitePage[];
+  selectedElement: EditorElement;
+  selectedPageIndex: number;
+};
+
+export type HistoryState = {
+  history: Editor[];
+  currentIndex: number;
+};
+
+export type EditorState = {
+  editor: Editor;
+  history: HistoryState;
 };
 
 export type WebsiteAssets = {

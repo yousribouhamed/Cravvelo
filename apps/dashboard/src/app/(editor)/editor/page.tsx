@@ -1,5 +1,3 @@
-import type { FC } from "react";
-import EditorHeader from "../components/editor-header";
 import EditorBoard from "../components/editor-board";
 import { prisma } from "database/src";
 import useHaveAccess from "@/src/hooks/use-have-access";
@@ -9,25 +7,13 @@ interface pageAbdullahProps {}
 
 // i have to get the current website
 
-const getUserWebsite = async ({ accountId }: { accountId: string }) => {
-  const website = await prisma.website.findFirst({ where: { accountId } });
-
-  return website;
-};
-
 //
 const Page = async ({}) => {
-  const { account } = await useHaveAccess();
+  // const user = await useHaveAccess();
 
-  const website = await getUserWebsite({ accountId: account.id });
-  console.log("here it is the data we get from this account");
-  console.log(website);
-  const pages = proccessWebsiteJsonToObject({ pages: website?.pages });
-  console.log("here are the pages we get from the server");
-  console.log(pages);
   return (
     <div className="w-full h-screen overflow-hidden">
-      <EditorBoard page={pages[0]} subdomain={website?.subdomain || ""} />
+      <EditorBoard />
     </div>
   );
 };

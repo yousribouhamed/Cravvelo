@@ -1,54 +1,61 @@
 "use client";
 
 import type { FC } from "react";
-import AnnouncementBar from "./visual-components/announcement-bar";
-import Header from "./visual-components/header";
-import Hero from "./visual-components/hero";
-import EditorLeftbar from "./editor-leftbar";
 import EditorRightbar from "./editor-rightbar";
 import EditorHeader from "./editor-header";
 import React from "react";
 import { WebSitePage } from "@/src/types";
-import { useEditorScreen } from "@/src/lib/zustand/editor-state";
-import { pageTemplate } from "@/src/constants/website-template";
-import PagePainter from "./page-painter";
-import AddVisualCompoents from "./add-visual-compoents";
-import { trpc } from "../../_trpc/client";
+import EditorCanvas from "./editor-canvas";
+import EditorLeftSideBar from "./editor-leftsidebar";
+import { Button } from "@ui/components/ui/button";
+import { MousePointer, Sun } from "lucide-react";
+import { Hand } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@ui/components/ui/select";
 
-interface EditorBoardProps {
-  page: WebSitePage;
-  subdomain: string;
-}
-
-const EditorBoard: FC<EditorBoardProps> = ({ page, subdomain }) => {
-  const [currentpage, setCurrentPage] = React.useState<WebSitePage>(
-    page ? page : pageTemplate
-  );
-  const { screen, setScreen } = useEditorScreen();
-
-  console.log("here it is the website");
-  console.log(currentpage);
-
+const EditorBoard: FC = () => {
   return (
     <>
-      <EditorHeader page={currentpage} subdomain={subdomain} />
-      <AddVisualCompoents page={currentpage} setPages={setCurrentPage} />
-      <div className="w-full h-full flex ">
-        <EditorRightbar page={currentpage} />
-        <div className="w-[60%] flex-grow min-h-full h-fit flex flex-col items-center bg-gray-50 dark:bg-white/10 p-4 ">
-          <div
-            className={`w-full ${
-              screen === "sm"
-                ? "max-w-sm"
-                : screen === "lg"
-                ? "max-w-lg"
-                : "max-w-screen-2xl"
-            } h-fit   rounded-md  shadow-2xl transition-all duration-300  `}
-          >
-            <PagePainter page={currentpage} />
-          </div>
+      <EditorHeader />
+      <div className="w-full h-full flex relative ">
+        <EditorRightbar />
+        <div className="w-[60%] flex-grow min-h-full h-fit bg-gray-50 dark:bg-white/10 flex items-center justify-center">
+          <EditorCanvas />
         </div>
-        <EditorLeftbar page={currentpage} setPage={setCurrentPage} />
+        <EditorLeftSideBar />
+
+        <div
+          dir="ltr"
+          className="w-[330px] h-[60px] p-4 rounded-2xl absolute bottom-20 left-[40%] right-[40%] z-[999] dark:bg-neutral-950 flex items-center justify-center gap-x-4"
+        >
+          <Button size="icon" variant="ghost">
+            <MousePointer className="text-gray-50 w-4 h-4" />
+          </Button>
+
+          <Button size="icon" variant="ghost">
+            <Hand className="text-gray-50 w-4 h-4" />
+          </Button>
+
+          <Button size="icon" variant="ghost">
+            <Sun className="text-gray-50 w-4 h-4" />
+          </Button>
+
+          <Select>
+            <SelectTrigger className="w-[150px] h-10 dark:bg-zinc-900">
+              <SelectValue placeholder="100%" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="light">Light</SelectItem>
+              <SelectItem value="dark">Dark</SelectItem>
+              <SelectItem value="system">System</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
     </>
   );

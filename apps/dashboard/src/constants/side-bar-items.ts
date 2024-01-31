@@ -54,23 +54,77 @@ export const SIDE_BAR_ITEMS = [
   },
 
   {
+    title: "التسويق",
+    slug: "/marketing",
+    icon: Icons.customize,
+    subitems: [
+      {
+        title: "كبونات الخصم",
+        icon: Icons.Home,
+        slug: "/coupons",
+      },
+      {
+        title: "رابط الإحالة",
+        icon: Icons.Home,
+        slug: "/",
+      },
+    ],
+  },
+
+  {
+    title: "تجربة الطلاب",
+    slug: "/marketing",
+    icon: Icons.customize,
+    subitems: [
+      {
+        title: "كبونات الخصم",
+        icon: Icons.Home,
+        slug: "/coupons",
+      },
+      {
+        title: "رابط الإحالة",
+        icon: Icons.Home,
+        slug: "/",
+      },
+    ],
+  },
+
+  {
+    title: "التحليلات",
+    slug: "/marketing",
+    icon: Icons.customize,
+    subitems: [
+      {
+        title: "كبونات الخصم",
+        icon: Icons.Home,
+        slug: "/coupons",
+      },
+      {
+        title: "رابط الإحالة",
+        icon: Icons.Home,
+        slug: "/",
+      },
+    ],
+  },
+
+  {
     title: "الإعدادات",
     icon: Icons.settings,
     subitems: [
       {
         title: "إعدادات الاكاديمية",
         icon: Icons.Home,
-        slug: "/courses",
+        slug: "/settings",
       },
       {
         title: "وسائل الدفع",
         icon: Icons.Home,
-        slug: "/products",
+        slug: "/settings/payments-methods",
       },
       {
         title: "باقة الأكاديمية",
         icon: Icons.Home,
-        slug: "/products",
+        slug: "/pricing",
       },
     ],
     slug: "/settings",

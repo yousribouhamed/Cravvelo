@@ -10,7 +10,7 @@ async function getData(): Promise<Course[]> {
   return data;
 }
 
-const page = async ({}) => {
+const Page = async ({}) => {
   const user = await useHaveAccess();
   const data = await getData();
 
@@ -24,4 +24,4 @@ const page = async ({}) => {
   );
 };
 
-export default page;
+export default Page;

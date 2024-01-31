@@ -30,10 +30,7 @@ export default function RootLayout({
           },
         }}
       />
-      {/* <Script
-          src="//code.tidio.co/f4ntqdkrkcmkov2pbgapiuevig4fhtbq.js"
-          async
-        /> */}
+      {/* <Script src="//code.tidio.co/f4ntqdkrkcmkov2pbgapiuevig4fhtbq.js" async /> */}
       <Script
         src="https://unpkg.com/@material-tailwind/html@latest/scripts/ripple.js"
         async

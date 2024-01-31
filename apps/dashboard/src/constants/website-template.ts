@@ -1,62 +1,5 @@
-import { ComponentBuilder, WebSitePage } from "../types";
+import { WebSitePage } from "../types";
 import { v4 as uuidv4 } from "uuid";
-
-export const pageTemplate = {
-  pathname: "/",
-  title: "الصفحة الرئيسية",
-  components: [
-    {
-      id: "jsjdbnyetednsmssss",
-      name: "شريط الإعلان",
-      type: "ANNOUNCEMENTBAR",
-
-      children: [
-        {
-          id: "uhyjjjbndbsgwhwh",
-          name: "نص",
-          type: "TEXT",
-          style: {
-            backgroundColor: "#FFFFFF",
-            width: "100%",
-            height: "50px",
-            alighment: "CENTER",
-            direction: "CENTER",
-            gap: "0",
-            marginBottom: "0",
-            margineRight: "0",
-            marginLeft: "0",
-            marginTop: "0",
-            padding: "0",
-            raduis: "0",
-            textColor: "#000000",
-            textSize: "20px",
-            textThoughness: "500",
-          },
-          content: "مرحبا بكم في أكاديميتنا",
-        },
-      ],
-
-      content: "",
-      style: {
-        backgroundColor: "#FFFFFF",
-        width: "100%",
-        height: "50px",
-        alighment: "CENTER",
-        direction: "CENTER",
-        gap: "0",
-        marginBottom: "0",
-        margineRight: "0",
-        marginLeft: "0",
-        marginTop: "0",
-        padding: "0",
-        raduis: "0",
-        textColor: "#000000",
-        textSize: "5px",
-        textThoughness: "500",
-      },
-    },
-  ] as ComponentBuilder[],
-} satisfies WebSitePage;
 
 // here we need to create a start with shape
 
@@ -141,4 +84,26 @@ export const getVirtualComponent = ({ type }: { type: string }) => {
     default:
       return {};
   }
+};
+
+export type EditorBtns =
+  | "text"
+  | "container"
+  | "section"
+  | "contactForm"
+  | "paymentForm"
+  | "link"
+  | "2Col"
+  | "video"
+  | "__body"
+  | "image"
+  | null
+  | "3Col";
+
+export const defaultStyles: React.CSSProperties = {
+  backgroundPosition: "center",
+  objectFit: "cover",
+  backgroundRepeat: "no-repeat",
+  textAlign: "left",
+  opacity: "100%",
 };

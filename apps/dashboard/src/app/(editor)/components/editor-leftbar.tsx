@@ -1,4 +1,4 @@
-import { ComponentBuilder, WebSitePage } from "@/src/types";
+import { WebSitePage } from "@/src/types";
 import type { FC } from "react";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
 import { useEditorStore } from "@/src/lib/zustand/editor-state";
@@ -14,56 +14,12 @@ import {
 import React from "react";
 import { useTheme } from "next-themes";
 
-interface EditorLeftbarProps {
-  // component: ComponentBuilder;
-  page: WebSitePage;
-  setPage: React.Dispatch<React.SetStateAction<WebSitePage>>;
-}
+interface EditorLeftbarProps {}
 
-const EditorLeftbar: FC<EditorLeftbarProps> = ({ page, setPage }) => {
-  const { currentComponent, selectComponent } = useEditorStore();
-  const [bgColor, setBgColor] = React.useState("#000000");
-  const [textColor, setTextColor] = React.useState("#000000");
-  const { theme, setTheme } = useTheme();
-
-  const handleChangeColor = (color: string) => {
-    const CurrentPage = page;
-
-    const updatedPage = CurrentPage.components.map((item) => {
-      if (item.id === currentComponent.id) {
-        item.style.backgroundColor = color;
-      }
-
-      return item;
-    });
-
-    setPage({
-      ...page,
-      components: updatedPage,
-    });
-  };
-
-  const handleChangeTextColor = (color: string) => {
-    const CurrentPage = page;
-
-    const updatedPage = CurrentPage.components.map((item) => {
-      if (item.id === currentComponent.id) {
-        item.style.textColor = color;
-      }
-
-      return item;
-    });
-
-    setPage({
-      ...page,
-      components: updatedPage,
-    });
-  };
-
-  const isDarkTheme = theme === "dark";
+const EditorLeftbar: FC<EditorLeftbarProps> = () => {
   return (
     <ScrollArea className="  w-[20%]  max-w-[300px] border-r h-full shadow ">
-      <div
+      {/* <div
         dir="rtl"
         className={`w-full h-full white    ${
           theme === "dark" ? "bg-black" : "bg-white"
@@ -191,7 +147,7 @@ const EditorLeftbar: FC<EditorLeftbarProps> = ({ page, setPage }) => {
         ) : (
           <h1>there is no compoents at all</h1>
         )}
-      </div>
+      </div> */}
     </ScrollArea>
   );
 };

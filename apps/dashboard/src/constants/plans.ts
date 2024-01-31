@@ -7,7 +7,7 @@ export const PLANS = [
       "إنشاء منصتك التعليمية ومنتجاتك الرقمية وبيعها وتسويقها عبر الإنترنت.",
     quota: 10,
     priceIds: {
-      test: "price_1NvyXVCxv0KQVM5xCieMmhkZ",
+      test: "price_1ObeduCxv0KQVM5xHees3z9n",
       production: "",
     },
 
@@ -40,7 +40,7 @@ export const PLANS = [
 
   {
     priceIds: {
-      test: "price_1NvyXVCxv0KQVM5xCieMmhkZ",
+      test: "price_1Obef0Cxv0KQVM5xGGVkqWMS",
       production: "",
     },
     plan_code: "ADVANCED",
@@ -79,7 +79,7 @@ export const PLANS = [
 
   {
     priceIds: {
-      test: "price_1NvyXVCxv0KQVM5xCieMmhkZ",
+      test: "price_1Obeg9Cxv0KQVM5x3qHaFrbs",
       production: "",
     },
     plan_code: "PRO",
