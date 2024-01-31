@@ -2,7 +2,7 @@ import type { FC } from "react";
 
 interface loadingAbdullahProps {}
 
-const loading: FC = ({}) => {
+const Loading: FC = ({}) => {
   return (
     <div
       aria-label="Loading"
@@ -71,4 +71,4 @@ const loading: FC = ({}) => {
   );
 };
 
-export default loading;
+export default Loading;

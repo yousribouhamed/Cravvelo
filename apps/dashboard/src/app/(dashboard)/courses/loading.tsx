@@ -1,15 +1,11 @@
 import Header from "@/src/components/layout/header";
 import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
 import { DataTableLoading } from "@/src/components/data-table/table-loading";
-import { currentUser } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
 
-const loading = async ({}) => {
-  const user = await currentUser();
+import useHaveAccess from "@/src/hooks/use-have-access";
 
-  if (!user) {
-    redirect("/sign-in");
-  }
+const Loading = async ({}) => {
+  const user = await useHaveAccess();
 
   return (
     <MaxWidthWrapper>
@@ -21,4 +17,4 @@ const loading = async ({}) => {
   );
 };
 
-export default loading;
+export default Loading;

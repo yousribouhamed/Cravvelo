@@ -11,6 +11,8 @@ interface EditorGobalState {
     addElement: (element: EditorElement) => void;
     getWebPage: () => WebSitePage;
     toggleSelectionMode: () => void;
+    selectElement: (element: EditorElement) => void;
+    updateElement: (element: EditorElement) => void;
 
     // removeElement: (element: EditorElement) => void;
     // updateElement: (element: EditorElement) => void;
@@ -100,6 +102,57 @@ export const useWebSiteEditor = create<EditorGobalState>()(
               ...get().state,
               isSelectionMode: !get().state.isSelectionMode,
             },
+          }),
+
+        selectElement: (element: EditorElement) =>
+          set({
+            state: {
+              ...get().state,
+              editor: { ...get().state.editor, selectedElement: element },
+            },
+          }),
+        updateElement: (element: EditorElement) =>
+          set({
+            state: (() => {
+              // get the current page
+              const selectedPage = get().state.editor.selectedPageIndex;
+              const currentPage = get().state.editor.pages[selectedPage];
+
+              const newElements = currentPage.elements.map((item) => {
+                if (element.id === item.id) {
+                  return element;
+                }
+
+                return {
+                  ...item,
+                  content:
+                    Array.isArray(item.content) &&
+                    item.content.map((subitem) =>
+                      subitem.id === element.id ? element : subitem
+                    ),
+                };
+              });
+
+              // add the component to the page
+              const newPageUpdated = {
+                ...currentPage,
+                elements: newElements,
+              };
+
+              // update the state
+              // create a copy of the current state
+              const newEditor = {
+                ...get().state.editor,
+                pages: [
+                  ...get().state.editor.pages.slice(0, selectedPage), // copy pages before the selected page
+                  newPageUpdated, // replace the selected page with the updated one
+                  ...get().state.editor.pages.slice(selectedPage + 1), // copy pages after the selected page
+                ],
+              };
+
+              // ste the new state
+              return { ...get().state, editor: newEditor } as EditorState;
+            })(),
           }),
       },
     }),

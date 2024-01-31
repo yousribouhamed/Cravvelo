@@ -6,6 +6,11 @@ import { Input } from "@ui/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@ui/components/ui/toggle-group";
 import { MoveHorizontal, MoveVertical } from "lucide-react";
 import { Slider } from "@ui/components/ui/slider";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@ui/components/ui/popover";
 
 import {
   Select,
@@ -14,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ui/components/ui/select";
+import { useWebSiteEditor } from "../../editor-state";
 
 const EditorLeftSideBar: FC = ({}) => {
   return (
@@ -31,17 +37,43 @@ const EditorLeftSideBar: FC = ({}) => {
 export default EditorLeftSideBar;
 
 const EditeSize = () => {
+  const { actions, state } = useWebSiteEditor();
+
   return (
     <div dir="rtl" className="w-full h-fit flex flex-col px-4">
       <h2 className="text-white font-bold text-md">مقاس</h2>
       <div className="w-full flex items-center justify-between  ">
         <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
           <span className="text-gray-50 text-sm">عرض</span>
-          <Input className="w-[70px] h-10" />
+          <Input
+            className="w-[70px] h-10"
+            value={state.editor.selectedElement.styles.width}
+            onChange={(e) =>
+              actions.updateElement({
+                ...state.editor.selectedElement,
+                styles: {
+                  ...state.editor.selectedElement.styles,
+                  width: e.target.value ?? "",
+                },
+              })
+            }
+          />
         </div>
         <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
           <span className="text-gray-50 text-sm">ارتفاع</span>
-          <Input className="w-[70px] h-10" />
+          <Input
+            className="w-[70px] h-10"
+            value={state.editor.selectedElement.styles.height}
+            onChange={(e) =>
+              actions.updateElement({
+                ...state.editor.selectedElement,
+                styles: {
+                  ...state.editor.selectedElement.styles,
+                  height: e.target.value ?? "",
+                },
+              })
+            }
+          />
         </div>
       </div>
     </div>
