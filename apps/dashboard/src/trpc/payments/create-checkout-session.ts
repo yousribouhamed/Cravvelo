@@ -33,7 +33,7 @@ export const createStripeSession = privateProcedure
     if (subscriptionPlan.isSubscribed && account.stripeCustomerId) {
       const stripeSession = await stripe.billingPortal.sessions.create({
         customer: account.stripeCustomerId,
-        return_url: billingUrl,
+        return_url: "https://jadir.vercel.app",
       });
 
       return { url: stripeSession.url };
@@ -43,11 +43,9 @@ export const createStripeSession = privateProcedure
 
     const plan = PLANS.filter((item) => item.plan_code === input.plan);
 
-    console.log(plan);
-
     const stripeSession = await stripe.checkout.sessions.create({
-      success_url: billingUrl,
-      cancel_url: billingUrl,
+      success_url: "https://jadir.vercel.app/pricing",
+      cancel_url: "https://jadir.vercel.app/pricing",
       payment_method_types: ["card"],
       mode: "subscription",
       billing_address_collection: "auto",
