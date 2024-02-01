@@ -28,6 +28,7 @@ import { Sun } from "lucide-react";
 import { Moon } from "lucide-react";
 import { WebSitePage } from "@/src/types";
 import { Play } from "lucide-react";
+import { Plus } from "lucide-react";
 
 interface EditorHeaderProps {}
 
@@ -96,37 +97,49 @@ const EditorHeader: FC<EditorHeaderProps> = () => {
               <SelectItem value="system">صفحة الدورات</SelectItem>
             </SelectContent>
           </Select>
-        </div>
-
-        <div className="w-[30%] h-full flex items-center justify-end gap-x-3">
-          {/* <Tooltip delayDuration={0}>
-            <TooltipTrigger asChild>
-              <Button
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                variant="secondary"
-                className={`w-8 h-8 p-2 border bg-white dark:bg-zinc-900 rounded-xl dark:text-white ${
-                  screen === "lg" ? "text-blue-500 dark:text-blue-500" : ""
-                } `}
-              >
-                {theme === "dark" ? <Sun /> : <Moon />}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p> {theme === "dark" ? "وضع الضوء" : "وضع الظلام"}</p>
-            </TooltipContent>
-          </Tooltip> */}
 
           <Tooltip delayDuration={0}>
             <TooltipTrigger asChild>
               <Button
                 variant="secondary"
-                onClick={openNewWindowSite}
-                className={`w-8 h-8 p-2 border   rounded-xl text-white bg-blue-500`}
+                className={`w-10 h-10 p-2 border bg-white dark:bg-zinc-900 rounded-xl dark:text-white  `}
               >
-                <Play />
+                <FilePlus className="w-4 h-4 text-white" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent></TooltipContent>
+            <TooltipContent>إضافة صفحة جديدة</TooltipContent>
+          </Tooltip>
+        </div>
+
+        <div className="w-[30%] h-full flex items-center justify-end gap-x-3">
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <Button
+                variant="secondary"
+                className={`w-8 h-8 p-2 border bg-white dark:bg-zinc-900 rounded-xl dark:text-white  `}
+              >
+                <Plus className="w-4 h-4 text-white" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>إضافة عنصر</TooltipContent>
+          </Tooltip>
+
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <button
+                onClick={openNewWindowSite}
+                className="relative inline-flex h-10  overflow-hidden rounded-xl p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
+              >
+                <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
+                <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-xl bg-blue-500 px-3 py-1 text-sm  text-white backdrop-blur-3xl font-bold shadow shadow-blue-500">
+                  نشر موقع الويب
+                </span>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              ادفع موقع الويب الخاص بك بنقرة زر واحدة واحصل على عنوان URL خاص
+              حتى تتمكن من مشاركته مع أصدقائك
+            </TooltipContent>
           </Tooltip>
 
           {/* <PublishWebsite page={{}} /> */}

@@ -9,7 +9,10 @@ interface textProps {
 const Text: FC<textProps> = ({ element }) => {
   const { state, actions } = useWebSiteEditor();
 
-  const handleSelectElement = () => {
+  const handleSelectElement = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.stopPropagation(); // Stop event bubbling
     actions.selectElement(element);
   };
 
@@ -23,7 +26,12 @@ const Text: FC<textProps> = ({ element }) => {
           ? "border-2 border-violet-500"
           : ""
       }`}
-      style={element.styles}
+      style={{
+        ...element.styles,
+
+        height: element.styles.height + "px",
+        width: element.styles.width + "px",
+      }}
     >
       {/* @ts-ignore */}
       {element?.content?.innerText}

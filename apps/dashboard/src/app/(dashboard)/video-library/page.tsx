@@ -13,7 +13,7 @@ const Page = async ({}) => {
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
         <Header user={user} title="مكتبة الفيديو" />
-        <VediosListing videos={videos} />
+        <VediosListing videos={JSON.parse(JSON.stringify(videos))} />
       </main>
     </MaxWidthWrapper>
   );
