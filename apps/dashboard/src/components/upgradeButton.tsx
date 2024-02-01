@@ -48,7 +48,6 @@ const UpgradeButton: FC = ({}) => {
       window.location.href = url ?? "/pricing";
     },
     onError: (err) => {
-      console.error(err);
       maketoast.error();
     },
   });
