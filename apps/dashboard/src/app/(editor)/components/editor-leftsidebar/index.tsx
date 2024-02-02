@@ -50,6 +50,56 @@ const EditeLayout = ({ state }: { state: EditorState }) => {
       <h2 className="text-white font-bold text-md">تَخطِيط</h2>
 
       <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
+        <span className="text-gray-50 text-sm">الاتجاه</span>
+        <ToggleGroup
+          type="single"
+          defaultValue="Horizontal"
+          className="w-[150px] h-10 bg-transparent p-2 rounded-xl"
+        >
+          <ToggleGroupItem
+            onClick={() => {
+              const newElement = {
+                ...state.editor.selectedElement,
+                styles: {
+                  ...state.editor.selectedElement.styles,
+                  display: "flex",
+                  flexDirection: "column",
+                },
+              };
+              //@ts-ignore
+              actions.updateElement(newElement);
+              //@ts-ignore
+              actions.selectElement(newElement);
+            }}
+            className="w-[90px] h-10"
+            value="Vertical"
+          >
+            <span className="font-bold text-white"> عمودي</span>
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            onClick={() => {
+              const newElement = {
+                ...state.editor.selectedElement,
+                styles: {
+                  ...state.editor.selectedElement.styles,
+                  display: "flex",
+                  flexDirection: "row",
+                },
+              };
+              //@ts-ignore
+              actions.updateElement(newElement);
+              //@ts-ignore
+              actions.selectElement(newElement);
+            }}
+            className="w-[90px] h-8 bg-transparent"
+            value="Horizontal"
+          >
+            <span className="font-bold text-white"> افقي</span>
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+
+      <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
         <span className="text-gray-50 text-sm">محاذاة</span>
         <ToggleGroup
           type="single"
@@ -146,7 +196,7 @@ const EditeLayout = ({ state }: { state: EditorState }) => {
                 ...state.editor.selectedElement,
                 styles: {
                   ...state.editor.selectedElement.styles,
-                  margin: e.target.value + "px",
+                  margin: e.target.value,
                 },
               };
               actions.updateElement(newElement);
@@ -168,7 +218,7 @@ const EditeLayout = ({ state }: { state: EditorState }) => {
                 ...state.editor.selectedElement,
                 styles: {
                   ...state.editor.selectedElement.styles,
-                  padding: e.target.value + "px",
+                  padding: e.target.value,
                 },
               };
               actions.updateElement(newElement);
@@ -182,9 +232,6 @@ const EditeLayout = ({ state }: { state: EditorState }) => {
             defaultValue={[33]}
             max={100}
             step={1}
-            onChange={(val) => {
-              console.log(val);
-            }}
           />
         </div>
       </div>
@@ -292,7 +339,7 @@ const EditeStyles = ({ state }: { state: EditorState }) => {
               ...state.editor.selectedElement,
               styles: {
                 ...state.editor.selectedElement.styles,
-                borderRadius: e.target.value + "px",
+                borderRadius: e.target.value,
               },
             };
             actions.updateElement(newElement);
@@ -311,7 +358,7 @@ const EditeStyles = ({ state }: { state: EditorState }) => {
               ...state.editor.selectedElement,
               styles: {
                 ...state.editor.selectedElement.styles,
-                border: e.target.value + "px",
+                border: e.target.value,
               },
             };
             actions.updateElement(newElement);
@@ -340,7 +387,7 @@ const EditeText = ({ state }: { state: EditorState }) => {
               ...state.editor.selectedElement,
               styles: {
                 ...state.editor.selectedElement.styles,
-                fontWeight: e.target.value + "px",
+                fontWeight: e.target.value,
               },
             };
             actions.updateElement(newElement);

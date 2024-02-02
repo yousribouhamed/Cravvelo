@@ -19,7 +19,12 @@ const ELEMENTS: EditorElement[] = [
     name: "حاوية",
     content: [],
     id: "",
-    styles: { ...defaultStyles },
+    styles: {
+      ...defaultStyles,
+      width: "200px",
+      height: "200px",
+      background: "#c3cdc7",
+    },
     type: "container",
   },
   {
@@ -30,7 +35,7 @@ const ELEMENTS: EditorElement[] = [
       ...defaultStyles,
       color: "#fff",
       background: "#000",
-      fontSize: "16px",
+      fontSize: "4px",
     },
     type: "link",
   },
@@ -63,17 +68,13 @@ const AddElementsSheet: FC = ({}) => {
           إضافة abd this is a test to see if it working or notعنصر
         </TooltipContent>
       </Tooltip>
-      <SheetContent className="z-[100] max-w-md dark:bg-zinc-950 p-12 ">
+      <SheetContent className="z-[100] max-w-md dark:bg-zinc-950 p-12 flex flex-col items-center ">
         {ELEMENTS.map((item) => {
           return (
             <div
-              onClick={() => {
-                const newElement = { ...item, id: uuidv4() };
-                actions.addElement(newElement);
-                actions.selectElement(newElement);
-              }}
+              onClick={() => actions.addElement({ ...item, id: uuidv4() })}
               key={item.id}
-              className="bg-primary  m-4 flex items-center justify-center rounded-2xl w-[100px] h-[80px] cursor-pointer hover:bg-orange-700 transition-all duration-300 "
+              className="bg-blue-500  m-4 flex items-center justify-center rounded-2xl w-[100px] h-[80px] cursor-pointer hover:bg-orange-700 transition-all duration-300 "
             >
               <h1 className="text-white font-bold text-sm">{item.name}</h1>
             </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import type { FC } from "react";
-import EditorRightbar from "./editor-rightbar";
+import EditorRightbar from "./editor-rightsidebar/editor-rightbar";
 import EditorHeader from "./editor-header";
 import React, { useState } from "react";
 import { useTheme } from "next-themes";

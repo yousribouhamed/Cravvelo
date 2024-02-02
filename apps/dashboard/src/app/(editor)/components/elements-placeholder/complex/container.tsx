@@ -21,7 +21,7 @@ const Container: FC<AnnouncementBarProps> = ({ element }) => {
     <div
       onClick={handleSelectElement}
       className={cn(
-        ` w-full bg-white  relative p-4 transition-all group ${
+        ` w-full  relative bg-[#baaef6]  transition-all group  ${
           state.isSelectionMode && element.type === "__body"
             ? "hover:border-blue-500 hover:border "
             : ""
@@ -43,7 +43,6 @@ const Container: FC<AnnouncementBarProps> = ({ element }) => {
           "h-fit ": element.type === "container",
           "h-full min-h-[2000px]": element.type === "__body",
           "w-[1200px]": element.type === "__body",
-          "flex flex-col md:!flex-row": element.type === "2Col",
         }
       )}
       style={{

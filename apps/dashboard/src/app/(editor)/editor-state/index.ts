@@ -28,7 +28,12 @@ export const useWebSiteEditor = create<EditorGobalState>()((set, get) => ({
           title: "home",
           elements: [
             {
-              styles: {},
+              styles: {
+                ...defaultStyles,
+                display: "flex",
+                flexDirection: "column",
+                background: "#fff",
+              },
               id: uuidv4(),
               type: "__body",
               content: [],
