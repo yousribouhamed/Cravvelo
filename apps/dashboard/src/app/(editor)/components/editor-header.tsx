@@ -29,6 +29,7 @@ import { Moon } from "lucide-react";
 import { WebSitePage } from "@/src/types";
 import { Play } from "lucide-react";
 import { Plus } from "lucide-react";
+import AddElementsSheet from "./add-visual-compoents";
 
 interface EditorHeaderProps {}
 
@@ -112,17 +113,7 @@ const EditorHeader: FC<EditorHeaderProps> = () => {
         </div>
 
         <div className="w-[30%] h-full flex items-center justify-end gap-x-3">
-          <Tooltip delayDuration={0}>
-            <TooltipTrigger asChild>
-              <Button
-                variant="secondary"
-                className={`w-8 h-8 p-2 border bg-white dark:bg-zinc-900 rounded-xl dark:text-white  `}
-              >
-                <Plus className="w-4 h-4 text-white" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>إضافة عنصر</TooltipContent>
-          </Tooltip>
+          <AddElementsSheet />
 
           <Tooltip delayDuration={0}>
             <TooltipTrigger asChild>
@@ -131,7 +122,7 @@ const EditorHeader: FC<EditorHeaderProps> = () => {
                 className="relative inline-flex h-10  overflow-hidden rounded-xl p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
               >
                 <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
-                <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-xl bg-blue-500 px-3 py-1 text-sm  text-white backdrop-blur-3xl font-bold shadow shadow-blue-500">
+                <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-xl bg-primary px-3 py-1 text-sm  text-white backdrop-blur-3xl font-bold shadow shadow-primary ">
                   نشر موقع الويب
                 </span>
               </button>

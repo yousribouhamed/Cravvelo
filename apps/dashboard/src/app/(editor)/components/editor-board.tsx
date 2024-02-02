@@ -35,7 +35,7 @@ const EditorBoard: FC = () => {
 
         <div
           dir="ltr"
-          className="w-[330px] h-[60px] p-4 rounded-2xl absolute bottom-20 left-[40%] right-[40%] z-[999] dark:bg-neutral-950 flex items-center justify-center gap-x-4"
+          className="w-[330px] h-[60px] p-4 rounded-2xl absolute bottom-20 left-[40%] right-[40%] z-[99] dark:bg-neutral-950 flex items-center justify-center gap-x-4"
         >
           <Button
             onClick={() => {

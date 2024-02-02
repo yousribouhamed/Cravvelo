@@ -24,15 +24,18 @@ import { useWebSiteEditor } from "../../editor-state";
 import { AlignCenter } from "lucide-react";
 import { AlignLeft } from "lucide-react";
 import { AlignRight } from "lucide-react";
+import { EditeSize } from "./edit-size";
+import { EditorState } from "@/src/types";
 
 const EditorLeftSideBar: FC = ({}) => {
+  const { state } = useWebSiteEditor();
   return (
     <ScrollArea className="  w-[300px] border-r h-full  dark:border-r-zinc-900 ">
       <aside className="w-full flex flex-col  h-fit items-center p-4 py-8">
-        <EditeSize />
-        <EditeLayout />
-        <EditeStyles />
-        <EditeText />
+        <EditeSize state={state} />
+        <EditeLayout state={state} />
+        <EditeStyles state={state} />
+        <EditeText state={state} />
       </aside>
     </ScrollArea>
   );
@@ -40,52 +43,8 @@ const EditorLeftSideBar: FC = ({}) => {
 
 export default EditorLeftSideBar;
 
-const EditeSize = () => {
-  const { actions, state } = useWebSiteEditor();
-
-  return (
-    <div dir="rtl" className="w-full h-fit flex flex-col px-4">
-      <h2 className="text-white font-bold text-md">مقاس</h2>
-      <div className="w-full flex items-center justify-between  ">
-        <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
-          <span className="text-gray-50 text-sm">عرض</span>
-          <Input
-            className="w-[70px] h-10"
-            defaultValue={state.editor.selectedElement.styles.width ?? 0}
-            onChange={(e) =>
-              actions.updateElement({
-                ...state.editor.selectedElement,
-                styles: {
-                  ...state.editor.selectedElement.styles,
-                  width: e.target.value ?? "",
-                },
-              })
-            }
-          />
-        </div>
-        <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
-          <span className="text-gray-50 text-sm">ارتفاع</span>
-          <Input
-            className="w-[70px] h-10"
-            defaultValue={state.editor.selectedElement.styles.height ?? 0}
-            onChange={(e) => {
-              actions.updateElement({
-                ...state.editor.selectedElement,
-                styles: {
-                  ...state.editor.selectedElement.styles,
-                  height: e.target.value ?? "",
-                },
-              });
-            }}
-          />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const EditeLayout = () => {
-  const { state, actions } = useWebSiteEditor();
+const EditeLayout = ({ state }: { state: EditorState }) => {
+  const { actions } = useWebSiteEditor();
   return (
     <div dir="rtl" className="w-full h-fit flex flex-col px-4 ">
       <h2 className="text-white font-bold text-md">تَخطِيط</h2>
@@ -97,13 +56,49 @@ const EditeLayout = () => {
           defaultValue="CENTER  "
           className="w-[150px] h-10 rounded-xl"
         >
-          <ToggleGroupItem className=" h-10" value="LEFT">
-            <AlignLeft className="text-white w-4 h-4" />
+          <ToggleGroupItem
+            onClick={() =>
+              actions.updateElement({
+                ...state.editor.selectedElement,
+                styles: {
+                  ...state.editor.selectedElement.styles,
+                  alignItems: "flex-start",
+                },
+              })
+            }
+            className=" h-10"
+            value="LEFT"
+          >
+            <AlignLeft className="text-white w-4 h-4 " />
           </ToggleGroupItem>
-          <ToggleGroupItem className=" h-8" value="CENTER">
+          <ToggleGroupItem
+            onClick={() =>
+              actions.updateElement({
+                ...state.editor.selectedElement,
+                styles: {
+                  ...state.editor.selectedElement.styles,
+                  alignItems: "center",
+                },
+              })
+            }
+            className=" h-8"
+            value="CENTER"
+          >
             <AlignCenter className="text-white w-4 h-4" />
           </ToggleGroupItem>
-          <ToggleGroupItem className=" h-8" value="RIGHT">
+          <ToggleGroupItem
+            onClick={() =>
+              actions.updateElement({
+                ...state.editor.selectedElement,
+                styles: {
+                  ...state.editor.selectedElement.styles,
+                  alignItems: "flex-end",
+                },
+              })
+            }
+            className=" h-8"
+            value="RIGHT"
+          >
             <AlignRight className="text-white w-4 h-4" />
           </ToggleGroupItem>
         </ToggleGroup>
@@ -111,14 +106,25 @@ const EditeLayout = () => {
 
       <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
         <span className="text-gray-50 text-sm">توزيع</span>
-        <Select>
+        <Select
+          onValueChange={(value) => {
+            actions.updateElement({
+              ...state.editor.selectedElement,
+              styles: {
+                ...state.editor.selectedElement.styles,
+                justifyContent: "space-between",
+              },
+            });
+          }}
+        >
           <SelectTrigger className="w-[150px] h-10 dark:bg-zinc-900">
             <SelectValue placeholder="Theme" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="light">Light</SelectItem>
-            <SelectItem value="dark">Dark</SelectItem>
-            <SelectItem value="system">System</SelectItem>
+            <SelectItem value="center">center</SelectItem>
+            <SelectItem value="flex-start">start</SelectItem>
+            <SelectItem value="flex-end">end</SelectItem>
+            <SelectItem value="space-between">space bwtween</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -126,7 +132,19 @@ const EditeLayout = () => {
       <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
         <span className="text-gray-50   text-sm">فجوة</span>
         <div className="w-[150px] h-[50px] my-2 flex items-center justify-end gap-x-2">
-          <Input className="w-[70px] h-10" />
+          <Input
+            onChange={(e) => {
+              actions.updateElement({
+                ...state.editor.selectedElement,
+                styles: {
+                  ...state.editor.selectedElement.styles,
+                  margin: e.target.value + "px",
+                },
+              });
+            }}
+            value={state.editor.selectedElement.styles.margin}
+            className="w-[70px] h-10"
+          />
           <Slider className="w-[70px]" defaultValue={[33]} max={100} step={1} />
         </div>
       </div>
@@ -134,12 +152,27 @@ const EditeLayout = () => {
       <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
         <span className="text-gray-50  text-sm">حشوة</span>
         <div className="w-[150px] h-[50px] my-2 flex items-center justify-end gap-x-2">
-          <Input className="w-[70px] h-10" />
+          <Input
+            onChange={(e) => {
+              actions.updateElement({
+                ...state.editor.selectedElement,
+                styles: {
+                  ...state.editor.selectedElement.styles,
+                  padding: e.target.value + "px",
+                },
+              });
+            }}
+            value={state.editor.selectedElement.styles.padding}
+            className="w-[70px] h-10"
+          />
           <Slider
             className="w-[70px] h-[2px]"
             defaultValue={[33]}
             max={100}
             step={1}
+            onChange={(val) => {
+              console.log(val);
+            }}
           />
         </div>
       </div>
@@ -147,26 +180,12 @@ const EditeLayout = () => {
   );
 };
 
-const EditeStyles = () => {
-  const { state, actions } = useWebSiteEditor();
+const EditeStyles = ({ state }: { state: EditorState }) => {
+  const { actions } = useWebSiteEditor();
 
   return (
     <div dir="rtl" className="w-full h-fit flex flex-col px-4">
       <h2 className="text-white font-bold text-md">الأنماط</h2>
-
-      <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
-        <span className="text-gray-50 text-sm">العتامة</span>
-        <Select>
-          <SelectTrigger className="w-[150px] h-10 dark:bg-zinc-900">
-            <SelectValue placeholder="Theme" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="light">Light</SelectItem>
-            <SelectItem value="dark">Dark</SelectItem>
-            <SelectItem value="system">System</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
 
       <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
         <span className="text-gray-50 text-sm">مرئي</span>
@@ -218,27 +237,24 @@ const EditeStyles = () => {
                 dir="ltr"
                 className="dark:text-white text-black text-sm font-bold"
               >
-                {state.editor.selectedElement.styles.backgroundColor ??
-                  "#FC6B00"}
+                {state.editor.selectedElement.styles.background}
               </span>
               <div
                 className="w-8 h-8 rounded-xl "
                 style={{
-                  backgroundColor:
-                    state.editor.selectedElement.styles.backgroundColor ??
-                    "#FC6B00",
+                  background: state.editor.selectedElement.styles.background,
                 }}
               />
             </div>
           </PopoverTrigger>
           <PopoverContent className="w-fit h-fit dark:!bg-black ">
             <SketchPicker
-              onChangeComplete={(color) => {
+              onChange={(color) => {
                 actions.updateElement({
                   ...state.editor.selectedElement,
                   styles: {
                     ...state.editor.selectedElement.styles,
-                    backgroundColor: color?.hex ?? "",
+                    background: color?.hex ?? "#FFF",
                   },
                 });
               }}
@@ -251,52 +267,43 @@ const EditeStyles = () => {
       <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
         <span className="text-gray-50   text-sm">نصف القطر</span>
 
-        <Input className="w-[150px] h-10" />
+        <Input
+          onChange={(e) => {
+            actions.updateElement({
+              ...state.editor.selectedElement,
+              styles: {
+                ...state.editor.selectedElement.styles,
+                borderRadius: e.target.value + "px",
+              },
+            });
+          }}
+          value={state.editor.selectedElement.styles.borderRadius}
+          className="w-[150px] h-10"
+        />
       </div>
 
       <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
         <span className="text-gray-50  text-sm">حدود</span>
-
-        <Popover>
-          <PopoverTrigger asChild>
-            <div className="w-[150px] h-10  cursor-pointer px-1 rounded-xl dark:bg-white/10 flex items-center justify-end gap-x-2">
-              <span
-                dir="ltr"
-                className="dark:text-white text-black text-sm font-bold"
-              >
-                {state.editor.selectedElement.styles.background ?? "#FC6B00"}
-              </span>
-              <div
-                className="w-8 h-8 rounded-xl "
-                style={{
-                  background:
-                    state.editor.selectedElement.styles.background ?? "#FC6B00",
-                }}
-              />
-            </div>
-          </PopoverTrigger>
-          <PopoverContent className="w-fit h-fit dark:!bg-black ">
-            <SketchPicker
-              onChangeComplete={(color) => {
-                actions.updateElement({
-                  ...state.editor.selectedElement,
-                  styles: {
-                    ...state.editor.selectedElement.styles,
-                    border: "2px" + color?.hex ?? "",
-                  },
-                });
-              }}
-              className="dark:!bg-black dark:!text-white"
-            />
-          </PopoverContent>
-        </Popover>
+        <Input
+          onChange={(e) => {
+            actions.updateElement({
+              ...state.editor.selectedElement,
+              styles: {
+                ...state.editor.selectedElement.styles,
+                border: e.target.value + "px",
+              },
+            });
+          }}
+          value={state.editor.selectedElement.styles.border}
+          className="w-[150px] h-10"
+        />
       </div>
     </div>
   );
 };
 
-const EditeText = () => {
-  const { state, actions } = useWebSiteEditor();
+const EditeText = ({ state }: { state: EditorState }) => {
+  const { actions } = useWebSiteEditor();
   return (
     <div dir="rtl" className="w-full h-fit flex flex-col px-4">
       <h2 className="text-white font-bold text-md">كتابة</h2>
@@ -304,11 +311,23 @@ const EditeText = () => {
       {/* this is section */}
       <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
         <span className="text-gray-50   text-sm">الوزن</span>
-        <Input className="w-[150px] h-10" />
+        <Input
+          onChange={(e) => {
+            actions.updateElement({
+              ...state.editor.selectedElement,
+              styles: {
+                ...state.editor.selectedElement.styles,
+                fontWeight: e.target.value + "px",
+              },
+            });
+          }}
+          value={state.editor.selectedElement.styles.fontWeight}
+          className="w-[150px] h-10"
+        />
       </div>
 
       {/* this is section */}
-      <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
+      {/* <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
         <span className="text-gray-50 text-sm">نوع الخط</span>
         <Select>
           <SelectTrigger className="w-[150px] h-10 dark:bg-zinc-900">
@@ -320,7 +339,7 @@ const EditeText = () => {
             <SelectItem value="system">إزالة التأثير</SelectItem>
           </SelectContent>
         </Select>
-      </div>
+      </div> */}
 
       {/* this is section */}
       <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
@@ -407,7 +426,7 @@ const EditeText = () => {
       </div>
 
       {/* this is section */}
-      <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
+      {/* <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
         <span className="text-gray-50  text-sm">زخرفة</span>
         <Select>
           <SelectTrigger className="w-[150px] h-10 dark:bg-zinc-900">
@@ -419,23 +438,59 @@ const EditeText = () => {
             <SelectItem value="system">System</SelectItem>
           </SelectContent>
         </Select>
-      </div>
+      </div> */}
 
       {/* this is section */}
       <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
         <span className="text-gray-50   text-sm">محاذاة</span>
         <ToggleGroup
           type="single"
-          defaultValue="CENTER  "
+          defaultValue="RIGHT"
           className="w-[150px] h-10 rounded-xl"
         >
-          <ToggleGroupItem className=" h-10" value="LEFT">
-            <AlignLeft className="text-white w-4 h-4" />
+          <ToggleGroupItem
+            onClick={() =>
+              actions.updateElement({
+                ...state.editor.selectedElement,
+                styles: {
+                  ...state.editor.selectedElement.styles,
+                  textAlign: "left",
+                },
+              })
+            }
+            className=" h-10"
+            value="LEFT"
+          >
+            <AlignLeft className="text-white w-4 h-4 text-center" />
           </ToggleGroupItem>
-          <ToggleGroupItem className=" h-8" value="CENTER">
+          <ToggleGroupItem
+            onClick={() =>
+              actions.updateElement({
+                ...state.editor.selectedElement,
+                styles: {
+                  ...state.editor.selectedElement.styles,
+                  textAlign: "center",
+                },
+              })
+            }
+            className=" h-8"
+            value="CENTER"
+          >
             <AlignCenter className="text-white w-4 h-4" />
           </ToggleGroupItem>
-          <ToggleGroupItem className=" h-8" value="RIGHT">
+          <ToggleGroupItem
+            onClick={() =>
+              actions.updateElement({
+                ...state.editor.selectedElement,
+                styles: {
+                  ...state.editor.selectedElement.styles,
+                  textAlign: "right",
+                },
+              })
+            }
+            className=" h-8"
+            value="RIGHT"
+          >
             <AlignRight className="text-white w-4 h-4" />
           </ToggleGroupItem>
         </ToggleGroup>

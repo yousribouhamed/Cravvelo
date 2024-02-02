@@ -30,32 +30,9 @@ export const useWebSiteEditor = create<EditorGobalState>()((set, get) => ({
             {
               styles: {},
               id: uuidv4(),
-              type: "ANNOUNCEMENTBAR",
-              content: [
-                {
-                  type: "TEXT",
-                  content: { innerText: "عندما تغرب الشمس" },
-                  id: uuidv4(),
-                  name: "الكتابة",
-                  styles: { ...defaultStyles },
-                },
-              ],
-              name: "شريط الإعلان",
-            },
-            {
-              styles: {},
-              id: uuidv4(),
-              type: "ANNOUNCEMENTBAR",
-              content: [
-                {
-                  type: "TEXT",
-                  content: { innerText: "تغرب الشمس" },
-                  id: uuidv4(),
-                  name: "الكتابة",
-                  styles: { ...defaultStyles },
-                },
-              ],
-              name: "شريط الإعلان",
+              type: "__body",
+              content: [],
+              name: "جذر",
             },
           ],
         },
@@ -84,10 +61,28 @@ export const useWebSiteEditor = create<EditorGobalState>()((set, get) => ({
           const selectedPage = get().state.editor.selectedPageIndex;
           const currentPage = get().state.editor.pages[selectedPage];
 
+          // const newSlectedElement = {
+          //   ...get().state.editor.selectedElement,
+          //   content: Array.isArray(get().state.editor.selectedElement.content)
+          //     ? //@ts-ignore
+          //       [...get().state?.editor?.selectedElement?.content, element]
+          //     : [element],
+          // };
+
+          // this helper funtion is lt help me do recursion so the new selected element will be added
+          const NEW_ELEMENTS = addNewElementHelper({
+            elements: currentPage.elements,
+            element: get().state.editor.selectedElement,
+            addedElement: element,
+          });
+
+          console.log("here are the new elements after the funtion runs");
+          console.log(NEW_ELEMENTS);
+
           // add the component to the page
           const newPageUpdated = {
             ...currentPage,
-            elements: [...currentPage.elements, element],
+            elements: NEW_ELEMENTS,
           };
 
           // update the state
@@ -117,13 +112,17 @@ export const useWebSiteEditor = create<EditorGobalState>()((set, get) => ({
         },
       }),
 
-    selectElement: (element: EditorElement) =>
+    selectElement: (element: EditorElement) => {
       set({
         state: {
           ...get().state,
           editor: { ...get().state.editor, selectedElement: element },
         },
-      }),
+      });
+
+      console.log(get().state);
+    },
+
     updateElement: (element: EditorElement) =>
       set({
         state: (() => {
@@ -131,24 +130,12 @@ export const useWebSiteEditor = create<EditorGobalState>()((set, get) => ({
           const selectedPage = get().state.editor.selectedPageIndex;
           const currentPage = get().state.editor.pages[selectedPage];
 
-          const newElements = currentPage.elements.map((item) => {
-            if (element.id === item.id) {
-              return element;
-            }
-
-            return {
-              ...item,
-              content:
-                Array.isArray(item.content) &&
-                item.content.map((subitem) =>
-                  subitem.id === element.id ? element : subitem
-                ),
-            };
+          const newElements = updateElement({
+            element,
+            elements: currentPage.elements,
           });
-
-          console.log("here it is the new element ");
-
-          console.log(newElements);
+          // console.log("here it is the new element ");
+          // console.log(newElements);
 
           // add the component to the page
           const newPageUpdated = {
@@ -200,4 +187,60 @@ export const useWebSiteEditor = create<EditorGobalState>()((set, get) => ({
 //     return resultState;
 //   },
 // }
+
 // )
+
+const addNewElementHelper = ({
+  element,
+  elements,
+  addedElement,
+}: {
+  elements: EditorElement[];
+  element: EditorElement; // this is the selected element
+  addedElement: EditorElement; // this is the added element
+}): EditorElement[] => {
+  return elements.map((item) => {
+    if (item.id === element.id && Array.isArray(item.content)) {
+      return {
+        ...item,
+        content: [...item.content, addedElement],
+      };
+    } else if (item.content && Array.isArray(item.content)) {
+      return {
+        ...item,
+        content: addNewElementHelper({
+          element,
+          elements: item.content,
+          addedElement: addedElement,
+        }),
+      };
+    }
+    return item;
+  });
+};
+
+const updateElement = ({
+  element,
+  elements,
+}: {
+  elements: EditorElement[];
+  element: EditorElement; // this is the selected element
+}): EditorElement[] => {
+  return elements.map((item) => {
+    if (item.id === element.id && Array.isArray(item.content)) {
+      return {
+        ...item,
+        styles: element.styles,
+      };
+    } else if (item.content && Array.isArray(item.content)) {
+      return {
+        ...item,
+        content: updateElement({
+          element,
+          elements: item.content,
+        }),
+      };
+    }
+    return item;
+  });
+};

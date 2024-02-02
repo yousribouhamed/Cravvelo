@@ -13,7 +13,7 @@ const LikeFigmaCanva = (props) => {
   return (
     <MapInteraction {...props}>
       {({ translation, scale }) => {
-        // Translate first and then scale. Otherwise, the scale would affect the translation.
+        // todo save this state so later you can stop the  moving mode and keep the same position
         const transform = `translate(${translation.x}px, ${translation.y}px) scale(${scale})`;
         return (
           <div

@@ -1,121 +1,64 @@
-// "use client";
-
-// import { useState, type FC } from "react";
-// import { Sheet, SheetContent } from "@ui/components/ui/sheet";
-
-// import { Button } from "@ui/components/ui/button";
-// import { ScrollArea } from "@ui/components/ui/scroll-area";
-
-// // import { getVirtualComponent } from "@/src/constants/website-template";
-
-// interface AddVisualCompoentsAbdullahProps {}
-
-// const VisualComponents = {
-//   typography: [
-//     {
-//       name: "",
-//       type: "TEXT",
-//       imageUrl: "",
-//     },
-//     {
-//       name: "",
-//       type: "TITLEANDTEXT",
-//       imageUrl: "",
-//     },
-//   ],
-
-//   sections: [],
-//   navigation: [],
-//   media: [],
-//   interactive: [],
-// };
-
-// interface Props {
-//   page: WebSitePage;
-//   setPages: React.Dispatch<React.SetStateAction<WebSitePage>>;
-// }
-
-// const AddVisualCompoents: FC<Props> = ({ page, setPages }) => {
-//   const { isOpen, setIsOpen } = openAddVirtualCompoent();
-//   const [section, setSection] = useState("typography");
-//   const handleSelection = ({ type }: { type: string }) => {
-//     // setPages({
-//     //   ...page,
-//     //   components: [
-//     //     ...page.components,
-//     //     getVirtualComponent({ type }) as ComponentBuilder,
-//     //   ],
-//     // });
-//   };
-
-//   return (
-//     <Sheet open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
-//       <SheetContent className="w-[800px] pt-12" side="right">
-//         <div className="w-full  h-full grid grid-cols-3 gap-6">
-//           <div className="col-span-1   h-full w-full flex flex-col  dark:border-gray-700 items-start gap-y-6 ">
-//             <Button
-//               variant="ghost"
-//               className="h-14 w-full rounded-2xl dark:bg-white/5 flex justify-start gap-x-4 font-semibold text-lg hover:text-white  "
-//             >
-//               الطباعة
-//             </Button>
-//             <Button
-//               variant="ghost"
-//               className="h-14 w-full rounded-2xl dark:bg-white/5 flex justify-start gap-x-4 font-semibold text-lg hover:text-white  "
-//             >
-//               أقسام
-//             </Button>
-//             <Button
-//               variant="ghost"
-//               className="h-14 w-full rounded-2xl dark:bg-white/5 flex justify-start gap-x-4 font-semibold text-lg hover:text-white  "
-//             >
-//               ملاحة
-//             </Button>
-//             <Button
-//               variant="ghost"
-//               className="h-14 w-full  rounded-2xl dark:bg-white/5 flex justify-start gap-x-4 font-semibold text-lg hover:text-white  "
-//             >
-//               الإعلام
-//             </Button>
-//             <Button
-//               variant="ghost"
-//               className="h-14 w-full rounded-2xl dark:bg-white/5 flex justify-start gap-x-4 font-semibold text-lg hover:text-white  "
-//             >
-//               تفاعلية
-//             </Button>
-//           </div>
-
-//           <div className="col-span-2  h-full w-full  ">
-//             <ScrollArea className="w-full h-fit flex flex-col items-end  p-4">
-//               {VisualComponents[section].map((item, index) => {
-//                 return (
-//                   <div
-//                     key={item?.type + index}
-//                     className="w-[90%] my-4 h-[200px] relative rounded-2xl group bg-white/10"
-//                   >
-//                     <Button
-//                       onClick={() => handleSelection({ type: item?.type })}
-//                       className="absolute inset-0 m-auto w-fit hidden group-hover:flex  rounded-2xl hover:-translate-y-1 duration-150 transition-all"
-//                     >
-//                       أضف هذا العنصر
-//                     </Button>
-//                   </div>
-//                 );
-//               })}
-//             </ScrollArea>
-//           </div>
-//         </div>
-//       </SheetContent>
-//     </Sheet>
-//   );
-// };
-
-// export default AddVisualCompoents;
+"use client";
+import { EditorElement } from "@/src/types";
+import { Button } from "@ui/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@ui/components/ui/sheet";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@ui/components/ui/tooltip";
+import { Plus } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
+import { defaultStyles } from "@/src/constants/website-template";
 
 import type { FC } from "react";
+import { useWebSiteEditor } from "../editor-state";
 
-const addVisualCompoents: FC = ({}) => {
-  return <div>add-visual-compoents</div>;
+const ELEMENTS: EditorElement[] = [
+  {
+    name: "حاوية",
+    content: [],
+    id: "",
+    styles: { ...defaultStyles },
+    type: "container",
+  },
+];
+
+const AddElementsSheet: FC = ({}) => {
+  const { actions } = useWebSiteEditor();
+
+  return (
+    <Sheet>
+      <Tooltip delayDuration={0}>
+        <TooltipTrigger asChild>
+          <SheetTrigger asChild>
+            <Button
+              variant="secondary"
+              className={`w-8 h-8 p-2 border bg-white dark:bg-zinc-900 rounded-xl dark:text-white  `}
+            >
+              <Plus className="w-4 h-4 text-white" />
+            </Button>
+          </SheetTrigger>
+        </TooltipTrigger>
+        <TooltipContent>
+          إضافة abd this is a test to see if it working or notعنصر
+        </TooltipContent>
+      </Tooltip>
+      <SheetContent className="z-[100] max-w-xl dark:bg-zinc-950 p-12 ">
+        {ELEMENTS.map((item) => {
+          return (
+            <div
+              onClick={() => actions.addElement({ ...item, id: uuidv4() })}
+              key={item.id}
+              className="bg-primary flex items-center justify-center rounded-2xl w-[200px] h-[120px] cursor-pointer hover:bg-orange-700 transition-all duration-300 "
+            >
+              <h1 className="text-white font-bold text-lg">{item.name}</h1>
+            </div>
+          );
+        })}
+      </SheetContent>
+    </Sheet>
+  );
 };
 
-export default addVisualCompoents;
+export default AddElementsSheet;
