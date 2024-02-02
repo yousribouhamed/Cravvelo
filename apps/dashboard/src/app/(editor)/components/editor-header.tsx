@@ -1,7 +1,7 @@
 "use client";
-import { ArrowRight, Monitor, MonitorSmartphone } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import type { FC } from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+
 import {
   Tooltip,
   TooltipContent,

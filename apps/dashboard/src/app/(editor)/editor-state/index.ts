@@ -131,8 +131,9 @@ export const useWebSiteEditor = create<EditorGobalState>()((set, get) => ({
           const currentPage = get().state.editor.pages[selectedPage];
 
           const newElements = updateElement({
-            element,
+            element: get().state.editor.selectedElement,
             elements: currentPage.elements,
+            newElement: element,
           });
           // console.log("here it is the new element ");
           // console.log(newElements);
@@ -222,15 +223,17 @@ const addNewElementHelper = ({
 const updateElement = ({
   element,
   elements,
+  newElement,
 }: {
   elements: EditorElement[];
   element: EditorElement; // this is the selected element
+  newElement: EditorElement; // this will overwrite the selected element
 }): EditorElement[] => {
   return elements.map((item) => {
     if (item.id === element.id && Array.isArray(item.content)) {
       return {
-        ...item,
-        styles: element.styles,
+        ...newElement,
+        styles: newElement.styles,
       };
     } else if (item.content && Array.isArray(item.content)) {
       return {
@@ -238,6 +241,7 @@ const updateElement = ({
         content: updateElement({
           element,
           elements: item.content,
+          newElement,
         }),
       };
     }
