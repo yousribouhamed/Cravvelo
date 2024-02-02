@@ -13,6 +13,7 @@ const Text: FC<textProps> = ({ element }) => {
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     event.stopPropagation(); // Stop event bubbling
+    event.nativeEvent.stopImmediatePropagation();
     actions.selectElement(element);
   };
 
@@ -20,17 +21,14 @@ const Text: FC<textProps> = ({ element }) => {
     <p
       onClick={handleSelectElement}
       className={`text-xl ${
-        state.isSelectionMode ? "hover:border-blue-500 hover:border-2 " : ""
+        state.isSelectionMode ? "hover:border-blue-500 hover:border-1 " : ""
       } ${
         state.editor.selectedElement.id === element.id && state.isSelectionMode
-          ? "border-2 border-violet-500"
+          ? "border-1 border-blue-500"
           : ""
       }`}
       style={{
         ...element.styles,
-
-        height: element.styles.height + "px",
-        width: element.styles.width + "px",
       }}
     >
       {/* @ts-ignore */}

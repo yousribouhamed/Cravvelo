@@ -76,9 +76,6 @@ export const useWebSiteEditor = create<EditorGobalState>()((set, get) => ({
             addedElement: element,
           });
 
-          console.log("here are the new elements after the funtion runs");
-          console.log(NEW_ELEMENTS);
-
           // add the component to the page
           const newPageUpdated = {
             ...currentPage,
@@ -135,8 +132,6 @@ export const useWebSiteEditor = create<EditorGobalState>()((set, get) => ({
             elements: currentPage.elements,
             newElement: element,
           });
-          // console.log("here it is the new element ");
-          // console.log(newElements);
 
           // add the component to the page
           const newPageUpdated = {
@@ -230,7 +225,7 @@ const updateElement = ({
   newElement: EditorElement; // this will overwrite the selected element
 }): EditorElement[] => {
   return elements.map((item) => {
-    if (item.id === element.id && Array.isArray(item.content)) {
+    if (item.id === element.id) {
       return {
         ...newElement,
         styles: newElement.styles,

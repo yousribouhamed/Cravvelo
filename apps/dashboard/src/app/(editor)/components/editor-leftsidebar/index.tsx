@@ -57,45 +57,51 @@ const EditeLayout = ({ state }: { state: EditorState }) => {
           className="w-[150px] h-10 rounded-xl"
         >
           <ToggleGroupItem
-            onClick={() =>
-              actions.updateElement({
+            onClick={() => {
+              const newElement = {
                 ...state.editor.selectedElement,
                 styles: {
                   ...state.editor.selectedElement.styles,
                   alignItems: "flex-start",
                 },
-              })
-            }
+              };
+              actions.updateElement(newElement);
+              actions.selectElement(newElement);
+            }}
             className=" h-10"
             value="LEFT"
           >
             <AlignLeft className="text-white w-4 h-4 " />
           </ToggleGroupItem>
           <ToggleGroupItem
-            onClick={() =>
-              actions.updateElement({
+            onClick={() => {
+              const newElement = {
                 ...state.editor.selectedElement,
                 styles: {
                   ...state.editor.selectedElement.styles,
                   alignItems: "center",
                 },
-              })
-            }
+              };
+              actions.updateElement(newElement);
+              actions.selectElement(newElement);
+            }}
             className=" h-8"
             value="CENTER"
           >
             <AlignCenter className="text-white w-4 h-4" />
           </ToggleGroupItem>
           <ToggleGroupItem
-            onClick={() =>
-              actions.updateElement({
+            onClick={() => {
+              const newElement = {
                 ...state.editor.selectedElement,
                 styles: {
                   ...state.editor.selectedElement.styles,
                   alignItems: "flex-end",
                 },
-              })
-            }
+              };
+              actions.updateElement(newElement);
+              actions.selectElement(newElement);
+            }}
             className=" h-8"
             value="RIGHT"
           >
@@ -108,13 +114,15 @@ const EditeLayout = ({ state }: { state: EditorState }) => {
         <span className="text-gray-50 text-sm">توزيع</span>
         <Select
           onValueChange={(value) => {
-            actions.updateElement({
+            const newElement = {
               ...state.editor.selectedElement,
               styles: {
                 ...state.editor.selectedElement.styles,
                 justifyContent: "space-between",
               },
-            });
+            };
+            actions.updateElement(newElement);
+            actions.selectElement(newElement);
           }}
         >
           <SelectTrigger className="w-[150px] h-10 dark:bg-zinc-900">
@@ -134,13 +142,15 @@ const EditeLayout = ({ state }: { state: EditorState }) => {
         <div className="w-[150px] h-[50px] my-2 flex items-center justify-end gap-x-2">
           <Input
             onChange={(e) => {
-              actions.updateElement({
+              const newElement = {
                 ...state.editor.selectedElement,
                 styles: {
                   ...state.editor.selectedElement.styles,
                   margin: e.target.value + "px",
                 },
-              });
+              };
+              actions.updateElement(newElement);
+              actions.selectElement(newElement);
             }}
             value={state.editor.selectedElement.styles.margin}
             className="w-[70px] h-10"
@@ -154,13 +164,15 @@ const EditeLayout = ({ state }: { state: EditorState }) => {
         <div className="w-[150px] h-[50px] my-2 flex items-center justify-end gap-x-2">
           <Input
             onChange={(e) => {
-              actions.updateElement({
+              const newElement = {
                 ...state.editor.selectedElement,
                 styles: {
                   ...state.editor.selectedElement.styles,
                   padding: e.target.value + "px",
                 },
-              });
+              };
+              actions.updateElement(newElement);
+              actions.selectElement(newElement);
             }}
             value={state.editor.selectedElement.styles.padding}
             className="w-[70px] h-10"
@@ -196,13 +208,15 @@ const EditeStyles = ({ state }: { state: EditorState }) => {
         >
           <ToggleGroupItem
             onClick={() => {
-              actions.updateElement({
+              const newElement = {
                 ...state.editor.selectedElement,
                 styles: {
                   ...state.editor.selectedElement.styles,
                   display: "none",
                 },
-              });
+              };
+              actions.updateElement(newElement);
+              actions.selectElement(newElement);
             }}
             className="w-[90px] h-10"
             value="Vertical"
@@ -211,13 +225,15 @@ const EditeStyles = ({ state }: { state: EditorState }) => {
           </ToggleGroupItem>
           <ToggleGroupItem
             onClick={() => {
-              actions.updateElement({
+              const newElement = {
                 ...state.editor.selectedElement,
                 styles: {
                   ...state.editor.selectedElement.styles,
                   display: "block",
                 },
-              });
+              };
+              actions.updateElement(newElement);
+              actions.selectElement(newElement);
             }}
             className="w-[90px] h-8 bg-transparent"
             value="Horizontal"
@@ -242,7 +258,8 @@ const EditeStyles = ({ state }: { state: EditorState }) => {
               <div
                 className="w-8 h-8 rounded-xl "
                 style={{
-                  background: state.editor.selectedElement.styles.background,
+                  background:
+                    state.editor.selectedElement.styles.background ?? "#fff",
                 }}
               />
             </div>
@@ -250,13 +267,15 @@ const EditeStyles = ({ state }: { state: EditorState }) => {
           <PopoverContent className="w-fit h-fit dark:!bg-black ">
             <SketchPicker
               onChange={(color) => {
-                actions.updateElement({
+                const newElement = {
                   ...state.editor.selectedElement,
                   styles: {
                     ...state.editor.selectedElement.styles,
                     background: color?.hex ?? "#FFF",
                   },
-                });
+                };
+                actions.updateElement(newElement);
+                actions.selectElement(newElement);
               }}
               className="dark:!bg-black dark:!text-white"
             />
@@ -269,13 +288,15 @@ const EditeStyles = ({ state }: { state: EditorState }) => {
 
         <Input
           onChange={(e) => {
-            actions.updateElement({
+            const newElement = {
               ...state.editor.selectedElement,
               styles: {
                 ...state.editor.selectedElement.styles,
                 borderRadius: e.target.value + "px",
               },
-            });
+            };
+            actions.updateElement(newElement);
+            actions.selectElement(newElement);
           }}
           value={state.editor.selectedElement.styles.borderRadius}
           className="w-[150px] h-10"
@@ -286,13 +307,15 @@ const EditeStyles = ({ state }: { state: EditorState }) => {
         <span className="text-gray-50  text-sm">حدود</span>
         <Input
           onChange={(e) => {
-            actions.updateElement({
+            const newElement = {
               ...state.editor.selectedElement,
               styles: {
                 ...state.editor.selectedElement.styles,
                 border: e.target.value + "px",
               },
-            });
+            };
+            actions.updateElement(newElement);
+            actions.selectElement(newElement);
           }}
           value={state.editor.selectedElement.styles.border}
           className="w-[150px] h-10"
@@ -313,13 +336,15 @@ const EditeText = ({ state }: { state: EditorState }) => {
         <span className="text-gray-50   text-sm">الوزن</span>
         <Input
           onChange={(e) => {
-            actions.updateElement({
+            const newElement = {
               ...state.editor.selectedElement,
               styles: {
                 ...state.editor.selectedElement.styles,
                 fontWeight: e.target.value + "px",
               },
-            });
+            };
+            actions.updateElement(newElement);
+            actions.selectElement(newElement);
           }}
           value={state.editor.selectedElement.styles.fontWeight}
           className="w-[150px] h-10"
@@ -365,13 +390,15 @@ const EditeText = ({ state }: { state: EditorState }) => {
           <PopoverContent className="w-fit h-fit dark:!bg-black ">
             <SketchPicker
               onChangeComplete={(color) => {
-                actions.updateElement({
+                const newElement = {
                   ...state.editor.selectedElement,
                   styles: {
                     ...state.editor.selectedElement.styles,
                     color: color?.hex ?? "",
                   },
-                });
+                };
+                actions.updateElement(newElement);
+                actions.selectElement(newElement);
               }}
               className="dark:!bg-black dark:!text-white"
             />
@@ -384,14 +411,19 @@ const EditeText = ({ state }: { state: EditorState }) => {
         <span className="text-gray-50   text-sm">تحول</span>
         <Select
           onValueChange={(val) => {
-            actions.updateElement({
+            const newElement = {
               ...state.editor.selectedElement,
               styles: {
                 ...state.editor.selectedElement.styles,
                 //@ts-ignore
                 textTransform: val ?? "",
               },
-            });
+            };
+            //@ts-ignore
+            actions.updateElement(newElement);
+
+            //@ts-ignore
+            actions.selectElement(newElement);
           }}
         >
           <SelectTrigger className="w-[150px] h-10 dark:bg-zinc-900">
@@ -417,10 +449,12 @@ const EditeText = ({ state }: { state: EditorState }) => {
           }
           className="w-[150px] h-10"
           onChange={(e) => {
-            actions.updateElement({
+            const newElement = {
               ...state.editor.selectedElement,
               content: { innerText: e.target.value },
-            });
+            };
+            actions.updateElement(newElement);
+            actions.selectElement(newElement);
           }}
         />
       </div>
@@ -449,45 +483,57 @@ const EditeText = ({ state }: { state: EditorState }) => {
           className="w-[150px] h-10 rounded-xl"
         >
           <ToggleGroupItem
-            onClick={() =>
-              actions.updateElement({
+            onClick={() => {
+              const newElement = {
                 ...state.editor.selectedElement,
                 styles: {
                   ...state.editor.selectedElement.styles,
                   textAlign: "left",
                 },
-              })
-            }
+              };
+              //@ts-ignore
+              actions.updateElement(newElement);
+              //@ts-ignore
+              actions.selectElement(newElement);
+            }}
             className=" h-10"
             value="LEFT"
           >
             <AlignLeft className="text-white w-4 h-4 text-center" />
           </ToggleGroupItem>
           <ToggleGroupItem
-            onClick={() =>
-              actions.updateElement({
+            onClick={() => {
+              const newElement = {
                 ...state.editor.selectedElement,
                 styles: {
                   ...state.editor.selectedElement.styles,
                   textAlign: "center",
                 },
-              })
-            }
+              };
+              //@ts-ignore
+              actions.updateElement(newElement);
+              //@ts-ignore
+              actions.selectElement(newElement);
+            }}
             className=" h-8"
             value="CENTER"
           >
             <AlignCenter className="text-white w-4 h-4" />
           </ToggleGroupItem>
           <ToggleGroupItem
-            onClick={() =>
-              actions.updateElement({
+            onClick={() => {
+              const newElement = {
                 ...state.editor.selectedElement,
                 styles: {
                   ...state.editor.selectedElement.styles,
                   textAlign: "right",
                 },
-              })
-            }
+              };
+              //@ts-ignore
+              actions.updateElement(newElement);
+              //@ts-ignore
+              actions.selectElement(newElement);
+            }}
             className=" h-8"
             value="RIGHT"
           >

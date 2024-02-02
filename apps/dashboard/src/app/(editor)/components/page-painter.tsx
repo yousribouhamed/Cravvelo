@@ -6,6 +6,7 @@ import { useWebSiteEditor } from "../editor-state";
 import Text from "./elements-placeholder/basic/text";
 import { useState } from "react";
 import Container from "./elements-placeholder/complex/container";
+import ButtonPlaceHolder from "./elements-placeholder/basic/button";
 function PagePainter() {
   const {
     actions: { getWebPage },
@@ -41,6 +42,8 @@ export function processComponent(element: EditorElement) {
   switch (element.type) {
     case "TEXT":
       return <Text element={element} />;
+    case "link":
+      return <ButtonPlaceHolder element={element} />;
     case "__body":
       return <Container element={element} />;
     case "2Col":

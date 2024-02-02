@@ -24,7 +24,8 @@ export const EditeSize = ({ state }: { state: EditorState }) => {
 
   const hableChangewidth = ({ widthParams }: { widthParams: size }) => {
     setWidth(widthParams);
-    actions.updateElement({
+
+    const newElement = {
       ...state.editor.selectedElement,
       styles: {
         ...state.editor.selectedElement.styles,
@@ -38,12 +39,15 @@ export const EditeSize = ({ state }: { state: EditorState }) => {
             ? "fit-content"
             : widthParams + "px",
       },
-    });
+    };
+    actions.updateElement(newElement);
+    actions.selectElement(newElement);
   };
 
   const hanleChnageHeight = ({ heightParams }: { heightParams: size }) => {
     setHeight(heightParams);
-    actions.updateElement({
+
+    const newElement = {
       ...state.editor.selectedElement,
       styles: {
         ...state.editor.selectedElement.styles,
@@ -56,7 +60,9 @@ export const EditeSize = ({ state }: { state: EditorState }) => {
             ? "fit-content"
             : heightParams + "px",
       },
-    });
+    };
+    actions.updateElement(newElement);
+    actions.selectElement(newElement);
   };
 
   return (
