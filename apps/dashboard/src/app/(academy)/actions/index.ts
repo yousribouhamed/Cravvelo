@@ -9,7 +9,7 @@ export const getPage = async ({
 }: {
   path: string;
   subdomain: string;
-}): Promise<WebSitePage> => {
+}): Promise<WebSitePage | null> => {
   // get all the pages
 
   const website = await prisma.website.findFirst({
@@ -17,6 +17,8 @@ export const getPage = async ({
       subdomain,
     },
   });
+
+  if (!website) return null;
 
   const pages = JSON.parse(website.pages as string) as WebSitePage[];
 

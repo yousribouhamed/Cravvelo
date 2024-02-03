@@ -1,18 +1,19 @@
-import type { FC } from "react";
+import { getPage } from "../actions";
+import { notFound } from "next/navigation";
+import PagePainterProduction from "../_elements/page-painter";
 
-interface pageAbdullahProps {}
+interface pageAbdullahProps {
+  params: { domain: string };
+}
 
-const Page = async ({ params }: { params: { domain: string } }) => {
-  console.log("here it is the domain");
-  console.log(params.domain);
+const Page = async ({ params }: pageAbdullahProps) => {
+  const page = await getPage({ path: "/", subdomain: params?.domain });
 
-  return (
-    <div>
-      <h1 className="text-4xl font-bold my-20">
-        this is your domain name and here you are going to live
-      </h1>
-    </div>
-  );
+  if (!page) {
+    notFound();
+  }
+
+  return <PagePainterProduction page={page} />;
 };
 
 export default Page;
