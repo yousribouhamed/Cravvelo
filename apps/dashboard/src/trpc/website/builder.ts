@@ -23,7 +23,8 @@ export const builder = {
             accountId: account.id,
             name: input.name,
             description: input.description,
-            subdomain: input.subdomain + process.env.NEXT_PUBLIC_ROOT_DOMAIN,
+            subdomain:
+              input.subdomain + "." + process.env.NEXT_PUBLIC_ROOT_DOMAIN,
           },
         });
         return site;
