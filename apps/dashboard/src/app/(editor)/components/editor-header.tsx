@@ -73,7 +73,7 @@ const EditorHeader: FC<EditorHeaderProps> = () => {
               <Button
                 size="icon"
                 variant="secondary"
-                className="bg-white dark:bg-white/10 border rounded-xl text-black  dark:text-white"
+                className="bg-white dark:bg-[#111111] border rounded-xl text-black  dark:text-white"
                 onClick={() => {
                   setTheme("light");
                   router.push("/");
@@ -89,10 +89,10 @@ const EditorHeader: FC<EditorHeaderProps> = () => {
         </div>
         <div className="w-[50%] h-full flex justify-center items-center gap-x-4">
           <Select>
-            <SelectTrigger className="w-[300px] h-10 dark:bg-zinc-900">
+            <SelectTrigger className="w-[300px] h-8 dark:bg-[#252525]">
               <SelectValue placeholder="الصفحة الرئيسية" />
             </SelectTrigger>
-            <SelectContent className="dark:bg-zinc-900">
+            <SelectContent className="dark:bg-[#252525]">
               <SelectItem value="light">الصفحة الرئيسية</SelectItem>
               <SelectItem value="dark">صفحة عني</SelectItem>
               <SelectItem value="system">صفحة الدورات</SelectItem>
@@ -103,7 +103,7 @@ const EditorHeader: FC<EditorHeaderProps> = () => {
             <TooltipTrigger asChild>
               <Button
                 variant="secondary"
-                className={`w-10 h-10 p-2 border bg-white dark:bg-zinc-900 rounded-xl dark:text-white  `}
+                className={`w-8 h-8 p-2 border bg-white dark:bg-[#252525] rounded-xl dark:text-white  `}
               >
                 <FilePlus className="w-4 h-4 text-white" />
               </Button>
@@ -119,7 +119,7 @@ const EditorHeader: FC<EditorHeaderProps> = () => {
             <TooltipTrigger asChild>
               <button
                 onClick={openNewWindowSite}
-                className="relative inline-flex h-10  overflow-hidden rounded-xl p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
+                className="relative inline-flex h-8  overflow-hidden rounded-xl p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
               >
                 <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
                 <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-xl bg-primary px-3 py-1 text-sm  text-white backdrop-blur-3xl font-bold shadow shadow-primary ">

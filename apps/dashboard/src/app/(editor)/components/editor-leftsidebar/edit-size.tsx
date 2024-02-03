@@ -66,14 +66,17 @@ export const EditeSize = ({ state }: { state: EditorState }) => {
   };
 
   return (
-    <div dir="rtl" className="w-full h-fit flex flex-col px-4">
-      <h2 className="text-white font-bold text-md">مقاس</h2>
+    <div
+      dir="rtl"
+      className="w-full h-fit flex flex-col px-4  border-t dark:border-[#252525] "
+    >
+      <h2 className="text-white font-bold text-md my-4">مقاس</h2>
       <div className="w-full flex items-start justify-center  flex-col ">
-        <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
+        <div className="w-full h-[50px] my-1 flex items-center justify-between gap-x-2 ">
           <span className="text-gray-50 text-sm">عرض</span>
           <div className="flex items-center justify-end gap-x-2">
             <Input
-              className="w-[70px] h-10"
+              className="w-[70px] h-8"
               value={width}
               onChange={(e) =>
                 hableChangewidth({ widthParams: Number(e.target.value) })
@@ -84,7 +87,7 @@ export const EditeSize = ({ state }: { state: EditorState }) => {
                 hableChangewidth({ widthParams: value as size });
               }}
             >
-              <SelectTrigger className="w-[70px] h-10 dark:bg-zinc-900">
+              <SelectTrigger className="w-[70px] h-8 dark:bg-zinc-900">
                 <SelectValue placeholder="مقاس" />
               </SelectTrigger>
               <SelectContent>
@@ -95,11 +98,11 @@ export const EditeSize = ({ state }: { state: EditorState }) => {
             </Select>
           </div>
         </div>
-        <div className="w-full h-[50px] my-2 flex items-center justify-between gap-x-2 ">
+        <div className="w-full h-[50px] my-1 flex items-center justify-between gap-x-2 ">
           <span className="text-gray-50 text-sm">ارتفاع</span>
           <div className="flex items-center justify-end gap-x-2">
             <Input
-              className="w-[70px] h-10"
+              className="w-[70px] h-8"
               value={height}
               onChange={(e) =>
                 hanleChnageHeight({ heightParams: Number(e.target.value) })
@@ -111,7 +114,7 @@ export const EditeSize = ({ state }: { state: EditorState }) => {
                 hanleChnageHeight({ heightParams: value as size });
               }}
             >
-              <SelectTrigger className="w-[70px] h-10 dark:bg-zinc-900">
+              <SelectTrigger className="w-[70px] h-8 dark:bg-zinc-900">
                 <SelectValue placeholder="مقاس" />
               </SelectTrigger>
               <SelectContent>

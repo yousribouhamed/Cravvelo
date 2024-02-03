@@ -10,7 +10,7 @@ export default async function AdminLayout({
 }) {
   return (
     <CustomeThemeProvider>
-      <div className="flex w-full h-screen  bg-white  dark:bg-neutral-950 light ">
+      <div className="flex w-full h-screen  bg-white  dark:bg-[#111111] light ">
         {/* <ViewSwitcher /> */}
 
         <main className=" w-full   ">{children}</main>
