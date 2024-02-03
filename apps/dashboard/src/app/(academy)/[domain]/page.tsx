@@ -7,6 +7,9 @@ interface pageAbdullahProps {
 }
 
 const Page = async ({ params }: pageAbdullahProps) => {
+  console.log("this is the domain");
+
+  console.log(params);
   const page = await getPage({ path: "/", subdomain: params?.domain });
 
   if (!page) {

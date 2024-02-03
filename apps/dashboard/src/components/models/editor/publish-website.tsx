@@ -23,7 +23,6 @@ import {
 import { Button } from "@ui/components/ui/button";
 import { Textarea } from "@ui/components/ui/textarea";
 import { trpc } from "@/src/app/_trpc/client";
-import { WebSitePage } from "@/src/types";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { useWebSiteEditor } from "@/src/app/(editor)/editor-state";
 import { maketoast } from "../../toasts";
