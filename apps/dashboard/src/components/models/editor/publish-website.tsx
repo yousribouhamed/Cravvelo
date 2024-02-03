@@ -12,15 +12,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@ui/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@ui/components/ui/select";
 import { Input } from "@ui/components/ui/input";
-import type { FC } from "react";
+import { useState, type FC } from "react";
 import {
   Dialog,
   DialogContent,
@@ -33,6 +26,7 @@ import { trpc } from "@/src/app/_trpc/client";
 import { WebSitePage } from "@/src/types";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { useWebSiteEditor } from "@/src/app/(editor)/editor-state";
+import { maketoast } from "../../toasts";
 
 const FormSchema = z.object({
   title: z.string(),
@@ -40,21 +34,22 @@ const FormSchema = z.object({
   subdomain: z.string(),
 });
 
-interface publishWebsiteProps {}
-
 const PublishWebsite: FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
   const { state } = useWebSiteEditor();
   const mutation = trpc.createWebSite.useMutation({
     onSuccess: (site) => {
-      //TODO : close the model
-      // do something cool
-
       console.log("here it is the site created");
       console.log(site);
+      setIsOpen(false);
     },
-    onError: () => {
-      // close the model
-      // display some toast to alert the user that an error accourd
+    onError: (err) => {
+      console.log(err);
+      setIsOpen(false);
+      maketoast.errorWithTest({
+        text: "لقد فشلنا في إنشاء موقع الويب الخاص بك",
+      });
     },
   });
 
@@ -71,7 +66,7 @@ const PublishWebsite: FC = () => {
     });
   }
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
       <DialogTrigger asChild>
         <Button
           size="sm"
