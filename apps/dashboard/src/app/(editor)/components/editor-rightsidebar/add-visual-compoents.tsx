@@ -12,7 +12,7 @@ import { v4 as uuidv4 } from "uuid";
 import { defaultStyles } from "@/src/constants/website-template";
 
 import type { FC } from "react";
-import { useWebSiteEditor } from "../editor-state";
+import { useWebSiteEditor } from "../../editor-state";
 
 const ELEMENTS: EditorElement[] = [
   {
@@ -58,7 +58,7 @@ const AddElementsSheet: FC = ({}) => {
           <SheetTrigger asChild>
             <Button
               variant="secondary"
-              className={`w-8 h-8 p-2 border bg-white dark:bg-zinc-900 rounded-xl dark:text-white  `}
+              className={`w-8 h-8 p-2 border bg-white dark:bg-[#252525] rounded-xl dark:text-white  `}
             >
               <Plus className="w-4 h-4 text-white" />
             </Button>

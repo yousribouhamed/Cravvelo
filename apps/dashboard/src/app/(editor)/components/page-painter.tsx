@@ -7,6 +7,8 @@ import Text from "./elements-placeholder/basic/text";
 import { useState } from "react";
 import Container from "./elements-placeholder/complex/container";
 import ButtonPlaceHolder from "./elements-placeholder/basic/button";
+import HeaderPlaceholder from "./elements-placeholder/compoent/header-placeholder";
+
 function PagePainter() {
   const {
     actions: { getWebPage },
@@ -32,7 +34,7 @@ function PagePainter() {
   }
   const pages = getWebPage();
   return (
-    <div>
+    <div className="w-fit h-fit">
       {Array.isArray(pages?.elements) && processComponent(pages?.elements[0])}
     </div>
   );
@@ -42,6 +44,8 @@ export function processComponent(element: EditorElement) {
   switch (element.type) {
     case "TEXT":
       return <Text element={element} />;
+    case "BUTTON":
+      return <ButtonPlaceHolder element={element} />;
     case "link":
       return <ButtonPlaceHolder element={element} />;
     case "__body":
@@ -50,7 +54,8 @@ export function processComponent(element: EditorElement) {
       return <Container element={element} />;
     case "container":
       return <Container element={element} />;
-
+    case "header":
+      return <HeaderPlaceholder element={element} />;
     default:
       <h1>this is not a valid componet</h1>;
   }

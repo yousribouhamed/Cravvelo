@@ -2,7 +2,10 @@ import type { FC } from "react";
 
 interface pageAbdullahProps {}
 
-const page: FC = ({}) => {
+const Page = async ({ params }: { params: { domain: string } }) => {
+  console.log("here it is the domain");
+  console.log(params.domain);
+
   return (
     <div>
       <h1 className="text-4xl font-bold my-20">
@@ -12,4 +15,4 @@ const page: FC = ({}) => {
   );
 };
 
-export default page;
+export default Page;

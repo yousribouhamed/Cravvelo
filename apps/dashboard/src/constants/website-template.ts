@@ -88,7 +88,7 @@ export const getVirtualComponent = ({ type }: { type: string }) => {
 
 export type EditorBtns =
   | "TEXT"
-  | "HEADER"
+  | "header"
   | "container"
   | "section"
   | "contactForm"

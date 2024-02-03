@@ -23,11 +23,15 @@ import { cn } from "@ui/lib/utils";
 const EditorBoard: FC = () => {
   const { state, actions } = useWebSiteEditor();
   const { theme, setTheme } = useTheme();
+
+  const [seen, setSeen] = useState<string>("");
+
+  const onDragEnd = () => {};
   return (
     <>
-      <EditorHeader />
+      <EditorHeader setSeen={setSeen} seen={seen} />
       <div className="w-full h-full flex relative ">
-        <EditorRightbar />
+        <EditorRightbar seen={seen} />
         <div className="w-[60%] flex-grow min-h-full h-fit bg-gray-50 dark:bg-[#252525] flex items-center justify-center">
           <EditorCanvas />
         </div>

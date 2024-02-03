@@ -18,11 +18,18 @@ import { useWebSiteEditor } from "../../editor-state";
 import { Component, Type } from "lucide-react";
 import { Puzzle } from "lucide-react";
 import Tree from "./tree";
+import AddElementDragDrop from "./add-element-drag-trop";
 
-interface EditorRightbarAbdullahProps {}
+interface EditorRightbarProps {
+  seen: string;
+}
 
-const EditorRightbar: FC<EditorRightbarAbdullahProps> = ({}) => {
+const EditorRightbar: FC<EditorRightbarProps> = ({ seen }) => {
   const { state } = useWebSiteEditor();
+
+  if (seen === "ADD-COMPONENT") {
+    return <AddElementDragDrop />;
+  }
   return (
     <div className="w-[300px]  shadow border-l  dark:border-zinc-900  h-full pb-10 ">
       <Tabs defaultValue="layouts" className="w-full">

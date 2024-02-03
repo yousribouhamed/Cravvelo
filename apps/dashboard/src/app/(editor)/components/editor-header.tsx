@@ -29,9 +29,12 @@ import { Moon } from "lucide-react";
 import { WebSitePage } from "@/src/types";
 import { Play } from "lucide-react";
 import { Plus } from "lucide-react";
-import AddElementsSheet from "./add-visual-compoents";
+import AddElementsSheet from "./editor-rightsidebar/add-visual-compoents";
 
-interface EditorHeaderProps {}
+interface EditorHeaderProps {
+  setSeen: React.Dispatch<React.SetStateAction<string>>;
+  seen: string;
+}
 
 const frameworks = [
   {
@@ -56,9 +59,17 @@ const frameworks = [
   },
 ];
 
-const EditorHeader: FC<EditorHeaderProps> = () => {
+const EditorHeader: FC<EditorHeaderProps> = ({ seen, setSeen }) => {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
+
+  const toggleSeen = () => {
+    if (seen === "ADD-COMPONENT") {
+      setSeen("");
+    } else {
+      setSeen("ADD-COMPONENT");
+    }
+  };
   const router = useRouter();
 
   const { theme, setTheme } = useTheme();
@@ -67,13 +78,13 @@ const EditorHeader: FC<EditorHeaderProps> = () => {
   return (
     <TooltipProvider>
       <div className="w-full h-[55px] border-b dark:border-zinc-900  flex items-center justify-between px-4">
-        <div className="w-[20%] h-full flex justify-start items-center">
+        <div className="w-[30%] h-full flex justify-start items-center gap-x-4">
           <Tooltip delayDuration={0}>
             <TooltipTrigger asChild>
               <Button
                 size="icon"
                 variant="secondary"
-                className="bg-white dark:bg-[#111111] border rounded-xl text-black  dark:text-white"
+                className="bg-white dark:bg-[#252525] border rounded-xl text-black h-8 w-8 dark:text-white"
                 onClick={() => {
                   setTheme("light");
                   router.push("/");
@@ -84,6 +95,20 @@ const EditorHeader: FC<EditorHeaderProps> = () => {
             </TooltipTrigger>
             <TooltipContent>
               <p>العودة إلى لوحة القيادة</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <Button
+                onClick={toggleSeen}
+                variant="secondary"
+                className={`w-8 h-8 p-2 border bg-white dark:bg-[#252525] rounded-xl dark:text-white  `}
+              >
+                <Plus className="w-4 h-4 text-white" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              إضافة abd this is a test to see if it working or notعنصر
             </TooltipContent>
           </Tooltip>
         </div>
@@ -112,28 +137,8 @@ const EditorHeader: FC<EditorHeaderProps> = () => {
           </Tooltip>
         </div>
 
-        <div className="w-[30%] h-full flex items-center justify-end gap-x-3">
-          <AddElementsSheet />
-
-          <Tooltip delayDuration={0}>
-            <TooltipTrigger asChild>
-              <button
-                onClick={openNewWindowSite}
-                className="relative inline-flex h-8  overflow-hidden rounded-xl p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
-              >
-                <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
-                <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-xl bg-primary px-3 py-1 text-sm  text-white backdrop-blur-3xl font-bold shadow shadow-primary ">
-                  نشر موقع الويب
-                </span>
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              ادفع موقع الويب الخاص بك بنقرة زر واحدة واحصل على عنوان URL خاص
-              حتى تتمكن من مشاركته مع أصدقائك
-            </TooltipContent>
-          </Tooltip>
-
-          {/* <PublishWebsite page={{}} /> */}
+        <div className="w-[20%] h-full flex items-center justify-end gap-x-3">
+          <PublishWebsite />
         </div>
       </div>
     </TooltipProvider>

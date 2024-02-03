@@ -32,6 +32,7 @@ import { Textarea } from "@ui/components/ui/textarea";
 import { trpc } from "@/src/app/_trpc/client";
 import { WebSitePage } from "@/src/types";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { useWebSiteEditor } from "@/src/app/(editor)/editor-state";
 
 const FormSchema = z.object({
   title: z.string(),
@@ -39,11 +40,10 @@ const FormSchema = z.object({
   subdomain: z.string(),
 });
 
-interface publishWebsiteProps {
-  page: WebSitePage;
-}
+interface publishWebsiteProps {}
 
-const PublishWebsite: FC<publishWebsiteProps> = ({ page }) => {
+const PublishWebsite: FC = () => {
+  const { state } = useWebSiteEditor();
   const mutation = trpc.createWebSite.useMutation({
     onSuccess: () => {
       //TODO : close the model
@@ -64,7 +64,7 @@ const PublishWebsite: FC<publishWebsiteProps> = ({ page }) => {
       description: values.description,
       name: values.title,
       subdomain: values.subdomain,
-      pages: [page],
+      pages: state.editor.pages,
     });
   }
   return (
