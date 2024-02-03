@@ -45,9 +45,12 @@ interface publishWebsiteProps {}
 const PublishWebsite: FC = () => {
   const { state } = useWebSiteEditor();
   const mutation = trpc.createWebSite.useMutation({
-    onSuccess: () => {
+    onSuccess: (site) => {
       //TODO : close the model
       // do something cool
+
+      console.log("here it is the site created");
+      console.log(site);
     },
     onError: () => {
       // close the model
@@ -72,7 +75,7 @@ const PublishWebsite: FC = () => {
       <DialogTrigger asChild>
         <Button
           size="sm"
-          className=" text-white font-bold rounded-2xl bg-blue-500"
+          className=" text-white font-bold rounded-2xl bg-primary"
         >
           حفظ ونشر
         </Button>
@@ -92,7 +95,7 @@ const PublishWebsite: FC = () => {
                   <FormLabel> اسم الأكاديمية</FormLabel>
                   <FormControl>
                     <Input
-                      className="dark:bg-black/10"
+                      className="dark:bg-[#252525]"
                       placeholder="عنوان الموقع"
                       {...field}
                     />
@@ -112,7 +115,7 @@ const PublishWebsite: FC = () => {
                   <FormControl>
                     <Textarea
                       rows={2}
-                      className="dark:bg-black/10 h-[100px]"
+                      className="dark:bg-[#252525] h-[100px]"
                       placeholder="وصف موجز للموقع"
                       {...field}
                     />
@@ -127,29 +130,7 @@ const PublishWebsite: FC = () => {
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>حدد اسم المجال الخاص بك</FormLabel>
-
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-full dark:bg-white/10 min-w-[200px]">
-                        <SelectValue placeholder="حدد مجالًا تم التحقق منه لعرضه" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="howlongthejournywilltake.vercel.app">
-                        howlongthejournywilltake.vercel.app
-                      </SelectItem>
-                      <SelectItem value="uihhtt.vercel.app">
-                        uihhtt.vercel.app
-                      </SelectItem>
-                      <SelectItem value="makethinghappen.vercel.app">
-                        makethinghappen.vercel.app
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-
+                  <Input placeholder="  حدد اسم المجال الخاص بك" {...field} />
                   <FormDescription>
                     لا تقلق كثيرًا بشأن ذلك، يمكنك إضافة نطاقك المخصص لاحقًا
                   </FormDescription>
