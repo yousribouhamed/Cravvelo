@@ -12,8 +12,6 @@ export default async function AdminLayout({
 }) {
   return (
     <div className="flex w-full min-h-screen gap-x-2 flex-col ">
-      <AcademyHeader />
-
       <main className=" ">{children}</main>
       {/* <SubscripeButton /> */}
     </div>

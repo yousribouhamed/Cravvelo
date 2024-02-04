@@ -13,6 +13,7 @@ interface EditorGobalState {
     toggleSelectionMode: () => void;
     selectElement: (element: EditorElement) => void;
     updateElement: (element: EditorElement) => void;
+    setPages: (pages: WebSitePage[]) => void;
 
     // removeElement: (element: EditorElement) => void;
     // updateElement: (element: EditorElement) => void;
@@ -59,6 +60,11 @@ export const useWebSiteEditor = create<EditorGobalState>()((set, get) => ({
   },
 
   actions: {
+    setPages: (pages: WebSitePage[]) => {
+      set({
+        state: { ...get().state, editor: { ...get().state.editor, pages } },
+      });
+    },
     addElement: (element: EditorElement) =>
       set({
         state: (() => {

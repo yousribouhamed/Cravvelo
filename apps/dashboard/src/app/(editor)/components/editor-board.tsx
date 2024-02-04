@@ -3,7 +3,7 @@
 import type { FC } from "react";
 import EditorRightbar from "./editor-rightsidebar/editor-rightbar";
 import EditorHeader from "./editor-header";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import EditorCanvas from "./editor-canvas";
 import EditorLeftSideBar from "./editor-leftsidebar";
@@ -19,17 +19,28 @@ import {
 } from "@ui/components/ui/select";
 import { useWebSiteEditor } from "../editor-state";
 import { cn } from "@ui/lib/utils";
+import { WebSitePage } from "@/src/types";
 
-const EditorBoard: FC = () => {
+interface EditorBoardProps {
+  pages: WebSitePage[] | null;
+}
+
+const EditorBoard: FC<EditorBoardProps> = ({ pages }) => {
   const { state, actions } = useWebSiteEditor();
   const { theme, setTheme } = useTheme();
 
   const [seen, setSeen] = useState<string>("");
 
+  useEffect(() => {
+    if (pages !== null) {
+      actions.setPages(pages);
+    }
+  }, [pages]);
+
   const onDragEnd = () => {};
   return (
     <>
-      <EditorHeader setSeen={setSeen} seen={seen} />
+      <EditorHeader pages={pages} setSeen={setSeen} seen={seen} />
       <div className="w-full h-full flex relative ">
         <EditorRightbar seen={seen} />
         <div className="w-[60%] flex-grow min-h-full h-fit bg-gray-50 dark:bg-[#252525] flex items-center justify-center">

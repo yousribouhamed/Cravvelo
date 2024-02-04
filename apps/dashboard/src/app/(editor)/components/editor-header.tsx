@@ -34,6 +34,7 @@ import AddElementsSheet from "./editor-rightsidebar/add-visual-compoents";
 interface EditorHeaderProps {
   setSeen: React.Dispatch<React.SetStateAction<string>>;
   seen: string;
+  pages: WebSitePage[];
 }
 
 const frameworks = [
@@ -59,7 +60,7 @@ const frameworks = [
   },
 ];
 
-const EditorHeader: FC<EditorHeaderProps> = ({ seen, setSeen }) => {
+const EditorHeader: FC<EditorHeaderProps> = ({ seen, setSeen, pages }) => {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
 
@@ -138,7 +139,16 @@ const EditorHeader: FC<EditorHeaderProps> = ({ seen, setSeen }) => {
         </div>
 
         <div className="w-[20%] h-full flex items-center justify-end gap-x-3">
-          <PublishWebsite />
+          {pages ? (
+            <Button
+              size="sm"
+              className=" text-white font-bold rounded-2xl bg-primary"
+            >
+              حفظ التغييرات
+            </Button>
+          ) : (
+            <PublishWebsite />
+          )}
         </div>
       </div>
     </TooltipProvider>
@@ -146,3 +156,9 @@ const EditorHeader: FC<EditorHeaderProps> = ({ seen, setSeen }) => {
 };
 
 export default EditorHeader;
+
+// create update website
+
+// make changes to the website and live with it
+
+// create new page
