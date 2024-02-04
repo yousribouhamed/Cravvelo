@@ -68,7 +68,7 @@ export const EditeSize = ({ state }: { state: EditorState }) => {
   return (
     <div
       dir="rtl"
-      className="w-full h-fit flex flex-col px-4  border-t dark:border-[#252525] "
+      className="w-full h-fit flex flex-col px-4   dark:border-[#252525] "
     >
       <h2 className="text-white font-bold text-md my-4">مقاس</h2>
       <div className="w-full flex items-start justify-center  flex-col ">

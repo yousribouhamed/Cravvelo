@@ -101,6 +101,7 @@ export type EditorBtns =
   | "image"
   | null
   | "3Col"
+  | "PRODUCTS"
   | "ANNOUNCEMENTBAR";
 
 export const defaultStyles: React.CSSProperties = {

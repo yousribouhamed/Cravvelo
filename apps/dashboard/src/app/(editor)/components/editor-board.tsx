@@ -32,9 +32,9 @@ const EditorBoard: FC<EditorBoardProps> = ({ pages }) => {
   const [seen, setSeen] = useState<string>("");
 
   useEffect(() => {
-    if (pages !== null) {
-      actions.setPages(pages);
-    }
+    // if (pages.length > 0) {
+    //   actions.setPages(pages);
+    // }
   }, [pages]);
 
   const onDragEnd = () => {};

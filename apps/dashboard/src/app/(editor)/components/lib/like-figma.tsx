@@ -21,9 +21,8 @@ const LikeFigmaCanva = (props) => {
             onMouseUp={() => setIsDragging(false)}
             onDrag={() => setIsDragging(!state.isSelectionMode)}
             onDragEnd={() => setIsDragging(false)}
+            className="w-full h-full  "
             style={{
-              height: "100%",
-              width: "100%",
               position: "relative", // for absolutely positioned children
               overflow: "hidden",
               touchAction: "none", // Not supported in Safari :(

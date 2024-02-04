@@ -9,64 +9,65 @@ import { v4 as uuidv4 } from "uuid";
 
 interface AddComponentsProps {}
 
-const components: EditorElement[] = [
+export const components: EditorElement[] = [
   {
-    content: [
-      {
-        content: { innerText: "نبذة عني" },
-        id: "nav_bar_btn1",
-        name: "زر التوجيه",
-        styles: {
-          background: "#fff",
-          color: "#000",
-          width: "120px",
-          borderRadius: "17px",
-          height: "40px",
-        },
-        type: "BUTTON",
-      },
-      {
-        content: { innerText: "أعمالي" },
-        id: "nav_bar_btn3",
-        name: "زر التوجيه",
-        styles: {
-          background: "#fff",
-          color: "#000",
-          width: "120px",
-          borderRadius: "17px",
-          height: "40px",
-        },
-        type: "BUTTON",
-      },
-      {
-        content: { innerText: "المدونة" },
-        id: "nav_bar_btn2",
-        name: "زر التوجيه",
-        styles: {
-          background: "#fff",
-          color: "#000",
-          width: "120px",
-          borderRadius: "17px",
-          height: "40px",
-        },
-        type: "BUTTON",
-      },
-      {
-        content: { innerText: " دخول الأكاديمية" },
-        id: "nav_bar_btn5",
-        name: "زر التوجيه",
-        styles: {
-          color: "#fff",
-          width: "120px",
-          borderRadius: "17px",
-          height: "40px",
-          background: "#60a5fa",
-        },
-        type: "BUTTON",
-      },
-    ],
+    image: "/elements-images/header.PNG",
+    content: [],
     id: "",
     name: "شريط التنقل",
+    styles: {
+      display: "flex",
+      justifyContent: "end",
+      gap: "4px",
+      alignItems: "center",
+      paddingLeft: "4px",
+      paddingRight: "4px",
+      borderBottom: "#000 1px",
+      height: "70px",
+      width: "100%",
+    },
+    type: "header",
+  },
+  {
+    image: "/elements-images/courses.PNG",
+    content: [],
+    id: "",
+    name: "الدورات",
+    styles: {},
+    type: "PRODUCTS",
+  },
+  {
+    image: "/elements-images/courses.PNG",
+    content: [],
+    id: "",
+    name: "الدورات",
+    styles: {
+      width: "100%",
+      height: "400px",
+      background: "#fcd34d",
+    },
+    type: "container",
+  },
+  {
+    image: "/elements-images/large-text.PNG",
+    content: { innerText: "اهلا بك في اكادمية يوسري" },
+    id: "",
+    name: "نص كبير",
+    styles: {
+      textAlign: "center",
+      fontSize: "80px",
+      fontWeight: "900",
+      color: "black",
+      marginBottom: "20px",
+      marginTop: "200px",
+    },
+    type: "TEXT",
+  },
+  {
+    image: "/elements-images/footer.PNG",
+    content: [],
+    id: "",
+    name: "ذيل الموقع",
     styles: {
       display: "flex",
       justifyContent: "end",
@@ -87,36 +88,44 @@ const AddElementDragDrop: FC = ({}) => {
   const { actions } = useWebSiteEditor();
   // when the user cloks on the component
 
+  const handleOnDrag = (e: React.DragEvent, element: EditorElement) => {
+    e.dataTransfer.setData("elementType", element.type);
+  };
+
   // we add it
   return (
-    <div className=" min-h-full w-[300px] h-fit flex flex-col py-4">
-      <div className="w-full h-[700px] ">
-        <ScrollArea className=" w-full  h-full p-2 flex flex-col  ">
-          {components.map((item, index) => {
-            return (
-              <div
-                key={item.id}
-                className="w-full h-[150px] relative rounded-2xl bg-white/20 my-4 group"
+    <ScrollArea className=" min-h-full w-[300px] h-full flex flex-col  py-4">
+      <div className="w-full  h-fit p-2 flex flex-col ">
+        {components.map((item, index) => {
+          return (
+            <div
+              draggable
+              onDragStart={(e) => handleOnDrag(e, item)}
+              key={item.id}
+              className="w-full h-[150px] relative rounded-2xl bg-white/20 my-4 group p-4"
+            >
+              <img
+                src={item?.image}
+                className="w-full h-full object-cover rounded-xl "
+              />
+              <Button
+                onClick={() =>
+                  actions.addElement({
+                    ...item,
+                    id: uuidv4(),
+                    //@ts-ignore
+                    content: item.content,
+                  })
+                }
+                className=" absolute inset-0 m-auto rounded-xl bg-primary text-white hidden group-hover:flex  items-center justify-center p-2 w-[150px]  shadow-primary shadow-md"
               >
-                <Button
-                  onClick={() =>
-                    actions.addElement({
-                      ...item,
-                      id: uuidv4(),
-                      //@ts-ignore
-                      content: setIdToTreeOfElement({ elements: item.content }),
-                    })
-                  }
-                  className=" absolute inset-0 m-auto rounded-xl bg-primary text-white hidden group-hover:flex  items-center justify-center p-2 w-[150px]  shadow-primary shadow-xl"
-                >
-                  add item
-                </Button>
-              </div>
-            );
-          })}
-        </ScrollArea>
+                اضافة عنصر
+              </Button>
+            </div>
+          );
+        })}
       </div>
-    </div>
+    </ScrollArea>
   );
 };
 

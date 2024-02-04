@@ -15,6 +15,7 @@ export type WebSitePage = {
 };
 
 export type EditorElement = {
+  image?: string;
   id: string;
   styles: React.CSSProperties;
   name: string;
