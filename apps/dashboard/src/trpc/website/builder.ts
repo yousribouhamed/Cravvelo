@@ -46,4 +46,29 @@ export const builder = {
       console.error(err);
     }
   }),
+
+  saveWebSiteUpdates: privateProcedure
+    .input(
+      z.object({
+        pages: z.any(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const account = await ctx.prisma.account.findFirst({
+          where: { userId: ctx.user.id },
+        });
+        const site = ctx.prisma.website.update({
+          data: {
+            pages: JSON.stringify(input.pages as string),
+          },
+          where: {
+            accountId: account.id,
+          },
+        });
+        return site;
+      } catch (err) {
+        console.error(err);
+      }
+    }),
 };

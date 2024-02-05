@@ -20,6 +20,9 @@ import { ThemePage, useThemeEditorStore } from "../theme-editor-store";
 import { Smartphone } from "lucide-react";
 import { Tv } from "lucide-react";
 import PublishWebsite from "@/src/components/models/editor/publish-website";
+import { trpc } from "../../_trpc/client";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { maketoast } from "@/src/components/toasts";
 
 interface ThemeEditorHeaderProps {
   pages: ThemePage[];
@@ -51,6 +54,16 @@ const ThemeEditorHeader: FC<ThemeEditorHeaderProps> = ({ pages }) => {
     (state) => state.actions.chnageViewMode
   );
   const { state } = useThemeEditorStore();
+
+  const mutation = trpc.saveWebSiteUpdates.useMutation({
+    onSuccess: () => {
+      maketoast.success();
+    },
+    onError: (err) => {
+      maketoast.error();
+      console.error(err);
+    },
+  });
   return (
     <TooltipProvider>
       <div className="w-full h-[70px] border-b fixed top-0 bg-white flex items-center justify-between px-4">
@@ -116,7 +129,14 @@ const ThemeEditorHeader: FC<ThemeEditorHeaderProps> = ({ pages }) => {
             <Button
               size="sm"
               className=" text-white h-10 font-bold rounded-2xl bg-primary"
+              onClick={() =>
+                mutation.mutate({
+                  pages: state.pages,
+                })
+              }
+              disabled={mutation.isLoading}
             >
+              {mutation.isLoading ? <LoadingSpinner /> : null}
               حفظ التغييرات
             </Button>
           ) : (
