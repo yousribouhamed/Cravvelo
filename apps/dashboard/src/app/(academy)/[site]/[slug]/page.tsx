@@ -1,5 +1,7 @@
 import type { FC } from "react";
 
+export const fetchCache = "force-no-store";
+
 interface pageAbdullahProps {}
 
 const page: FC = ({}) => {
