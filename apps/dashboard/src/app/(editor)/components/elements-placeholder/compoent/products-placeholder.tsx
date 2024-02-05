@@ -38,8 +38,11 @@ const ProductsPlaceHolder: FC<elementProps> = ({ element }) => {
     <div
       className={`  w-full h-[300px] flex items-center justify-center gap-x-4 my-16 `}
     >
-      {items.map((item) => (
-        <div className="w-[350px] h-[300px] p-4   flex flex-col shadow-2xl rounded-xl ">
+      {items.map((item, index) => (
+        <div
+          key={item.title + index}
+          className="w-[350px] h-[300px] p-4   flex flex-col shadow-2xl rounded-xl "
+        >
           <img src={item.image} className="w-full h-[200px] object-cover " />
           <div className="w-full h-[50px] flex items-center justify-between my-4">
             <h2 className="text-black font-semibold text-lg text-start ">

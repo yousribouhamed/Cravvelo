@@ -19,7 +19,27 @@ export const EditeText = ({ state }: { state: EditorState }) => {
 
       {/* this is section */}
       <div className="w-full h-[50px] my-1 flex items-center justify-between gap-x-2 ">
-        <span className="text-gray-50   text-xs">الوزن</span>
+        <span className="text-gray-50   text-xs">حجم الخط</span>
+        <Input
+          onChange={(e) => {
+            const newElement = {
+              ...state.editor.selectedElement,
+              styles: {
+                ...state.editor.selectedElement.styles,
+                fontSize: e.target.value,
+              },
+            };
+            actions.updateElement(newElement);
+            actions.selectElement(newElement);
+          }}
+          value={state.editor.selectedElement.styles.fontSize}
+          className="w-[150px] h-8"
+        />
+      </div>
+
+      {/* this is section */}
+      <div className="w-full h-[50px] my-1 flex items-center justify-between gap-x-2 ">
+        <span className="text-gray-50   text-xs">خشونة الخط</span>
         <Input
           onChange={(e) => {
             const newElement = {
@@ -94,12 +114,12 @@ export const EditeText = ({ state }: { state: EditorState }) => {
       </div>
 
       {/* this is section */}
-      <div className="w-full h-[50px] my-1 flex items-center justify-between gap-x-2 ">
+      <div className="w-full h-[50px] my-1 flex items-center justify-between gap-x-2 mb-8 ">
         <span className="text-gray-50   text-xs">محاذاة</span>
         <ToggleGroup
           type="single"
           defaultValue="RIGHT"
-          className="w-[150px] h-8 rounded-xl"
+          className="w-[150px] h-10  rounded-xl "
         >
           <ToggleGroupItem
             onClick={() => {

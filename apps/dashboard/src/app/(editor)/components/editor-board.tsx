@@ -11,6 +11,13 @@ import { Button } from "@ui/components/ui/button";
 import { Moon, MousePointer, Sun } from "lucide-react";
 import { Hand } from "lucide-react";
 import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@ui/components/ui/context-menu";
+
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -39,81 +46,106 @@ const EditorBoard: FC<EditorBoardProps> = ({ pages }) => {
 
   const onDragEnd = () => {};
   return (
-    <>
-      <EditorHeader pages={pages} setSeen={setSeen} seen={seen} />
-      <div className="w-full h-full flex relative ">
-        <EditorRightbar seen={seen} />
-        <div className="w-[60%] flex-grow min-h-full h-fit bg-gray-50 dark:bg-[#252525] flex items-center justify-center">
-          <EditorCanvas />
-        </div>
-        <EditorLeftSideBar />
+    <ContextMenu>
+      <ContextMenuTrigger>
+        <EditorHeader pages={pages} setSeen={setSeen} seen={seen} />
 
-        <div
-          dir="ltr"
-          className="w-[330px] h-[60px] p-4 rounded-2xl absolute bottom-20 left-[40%] right-[40%] z-[99] dark:bg-[#111111] flex items-center justify-center gap-x-4"
+        <div className="w-full h-full flex relative ">
+          <EditorRightbar seen={seen} />
+          <div className="w-[calc(100%-300px)] flex-grow min-h-full h-fit bg-gray-50 dark:bg-[#252525] flex items-center justify-center">
+            <EditorCanvas />
+          </div>
+          {/* <EditorLeftSideBar /> */}
+
+          <div
+            dir="ltr"
+            className="w-[330px] h-[60px] p-4 rounded-2xl absolute bottom-20 left-[40%] right-[40%] z-[99] dark:bg-[#111111] flex items-center justify-center gap-x-4"
+          >
+            <Button
+              onClick={() => {
+                if (state.isSelectionMode) return;
+                actions.toggleSelectionMode();
+              }}
+              size="icon"
+              variant="ghost"
+              className={cn(
+                " hover:bg-transparent  hover:text-white text-gray-50",
+                {
+                  "text-white bg-[#111111]": state.isSelectionMode,
+                }
+              )}
+            >
+              <MousePointer className={cn(" w-4 h-4 hover:bg-transparent")} />
+            </Button>
+
+            <Button
+              onClick={() => {
+                if (!state.isSelectionMode) return;
+                actions.toggleSelectionMode();
+              }}
+              size="icon"
+              variant="ghost"
+              className={cn(
+                " hover:bg-transparent hover:text-white  text-gray-50",
+                {
+                  "text-white bg-[#111111]": !state.isSelectionMode,
+                }
+              )}
+            >
+              <Hand
+                className={cn("text-gray-50 w-4 h-4 hover:bg-transparent")}
+              />
+            </Button>
+
+            <Button
+              onClick={() => {
+                setTheme(theme === "dark" ? "light" : "dark");
+              }}
+              size="icon"
+              variant="ghost"
+              className="bg-transparent hover:bg-transparent hover:text-white"
+            >
+              {theme === "dark" ? (
+                <Sun className="dark:text-white text-black w-4 h-4" />
+              ) : (
+                <Moon className="dark:text-white text-black w-4 h-4" />
+              )}
+            </Button>
+
+            <Select>
+              <SelectTrigger className="w-[150px] h-10 dark:bg-[#252525]">
+                <SelectValue placeholder="100%" />
+              </SelectTrigger>
+              <SelectContent className="dark:bg-[#252525]">
+                <SelectItem value="light">Light</SelectItem>
+                <SelectItem value="dark">Dark</SelectItem>
+                <SelectItem value="system">System</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem
+          disabled={
+            state.editor?.selectedElement?.id === "" ||
+            state.editor?.selectedElement?.type === "__body"
+          }
+          onClick={() => {
+            if (
+              state.editor?.selectedElement?.id === "" ||
+              state.editor?.selectedElement?.type === "__body"
+            )
+              return;
+            actions.deleteElement(state?.editor?.selectedElement);
+          }}
         >
-          <Button
-            onClick={() => {
-              if (state.isSelectionMode) return;
-              actions.toggleSelectionMode();
-            }}
-            size="icon"
-            variant="ghost"
-            className={cn(
-              " hover:bg-transparent  hover:text-white text-gray-50",
-              {
-                "text-white bg-[#111111]": state.isSelectionMode,
-              }
-            )}
-          >
-            <MousePointer className={cn(" w-4 h-4 hover:bg-transparent")} />
-          </Button>
-
-          <Button
-            onClick={() => {
-              if (!state.isSelectionMode) return;
-              actions.toggleSelectionMode();
-            }}
-            size="icon"
-            variant="ghost"
-            className={cn(
-              " hover:bg-transparent hover:text-white  text-gray-50",
-              {
-                "text-white bg-[#111111]": !state.isSelectionMode,
-              }
-            )}
-          >
-            <Hand className={cn("text-gray-50 w-4 h-4 hover:bg-transparent")} />
-          </Button>
-
-          <Button
-            onClick={() => {
-              setTheme(theme === "dark" ? "light" : "dark");
-            }}
-            size="icon"
-            variant="ghost"
-            className="bg-transparent hover:bg-transparent hover:text-white"
-          >
-            {theme === "dark" ? (
-              <Sun className="dark:text-white text-black w-4 h-4" />
-            ) : (
-              <Moon className="dark:text-white text-black w-4 h-4" />
-            )}
-          </Button>
-
-          <Select>
-            <SelectTrigger className="w-[150px] h-10 dark:bg-[#252525]">
-              <SelectValue placeholder="100%" />
-            </SelectTrigger>
-            <SelectContent className="dark:bg-[#252525]">
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-    </>
+          حذف العنصر
+        </ContextMenuItem>
+        <ContextMenuItem>الغاء التحميل</ContextMenuItem>
+        <ContextMenuItem>أعاد عمل شىء</ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
   );
 };
 

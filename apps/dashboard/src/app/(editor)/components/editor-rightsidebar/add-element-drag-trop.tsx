@@ -37,10 +37,11 @@ export const components: EditorElement[] = [
     type: "PRODUCTS",
   },
   {
-    image: "/elements-images/courses.PNG",
+    image:
+      "https://static.vecteezy.com/system/resources/previews/018/907/204/original/cardboard-boxes-side-view-illustration-business-and-cargo-object-icon-concept-delivery-cargo-open-boxes-design-with-shadow-empty-open-and-cardboard-box-icon-design-free-vector.jpg",
     content: [],
     id: "",
-    name: "الدورات",
+    name: "حاوية",
     styles: {
       width: "100%",
       height: "400px",
@@ -80,6 +81,16 @@ export const components: EditorElement[] = [
       width: "100%",
     },
     type: "header",
+  },
+
+  {
+    image:
+      "https://www.google.com/url?sa=i&url=https%3A%2F%2Fsimilarpng.com%2Fclick-button-cursor-clicking-mouse-arrow-or-hand-pointer-over-button-frame-on-transparent-png%2F&psig=AOvVaw3hyB44ykbj4_lBw2zZNHo6&ust=1707167491008000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCJDpmdHMkoQDFQAAAAAdAAAAABAE",
+    content: { innerText: "اظغط علي" },
+    id: "",
+    name: "زر",
+    styles: {},
+    type: "BUTTON",
   },
 ];
 

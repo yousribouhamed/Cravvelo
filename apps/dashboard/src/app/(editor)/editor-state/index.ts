@@ -14,6 +14,7 @@ interface EditorGobalState {
     selectElement: (element: EditorElement) => void;
     updateElement: (element: EditorElement) => void;
     setPages: (pages: WebSitePage[]) => void;
+    deleteElement: (element: EditorElement) => void;
 
     // removeElement: (element: EditorElement) => void;
     // updateElement: (element: EditorElement) => void;
@@ -34,6 +35,9 @@ export const useWebSiteEditor = create<EditorGobalState>()((set, get) => ({
                 display: "flex",
                 flexDirection: "column",
                 background: "#fff",
+                "@media (min-width: 576px)": {
+                  color: "blue",
+                },
               },
               id: uuidv4(),
               type: "__body",
@@ -129,6 +133,39 @@ export const useWebSiteEditor = create<EditorGobalState>()((set, get) => ({
       });
 
       console.log(get().state);
+    },
+
+    deleteElement: (element: EditorElement) => {
+      set({
+        state: (() => {
+          // get the current page
+          const selectedPage = get().state.editor.selectedPageIndex;
+          const currentPage = get().state.editor.pages[selectedPage];
+
+          const newElements = deleteAnElement(currentPage.elements, element);
+
+          // add the component to the page
+          const newPageUpdated = {
+            ...currentPage,
+            elements: newElements,
+          };
+
+          // update the state
+          // create a copy of the current state
+          const newEditor = {
+            ...get().state.editor,
+            pages: [
+              ...get().state.editor.pages.slice(0, selectedPage), // copy pages before the selected page
+              newPageUpdated, // replace the selected page with the updated one
+              ...get().state.editor.pages.slice(selectedPage + 1), // copy pages after the selected page
+            ],
+          };
+
+          // ste the new state
+          return { ...get().state, editor: newEditor } as EditorState;
+        })(),
+      }),
+        console.log(get().state);
     },
 
     updateElement: (element: EditorElement) =>
@@ -252,5 +289,19 @@ const updateElement = ({
       };
     }
     return item;
+  });
+};
+
+const deleteAnElement = (
+  elements: EditorElement[],
+  element: EditorElement
+): EditorElement[] => {
+  return elements.filter((item) => {
+    if (item.id === element.id) {
+      return false;
+    } else if (item.content && Array.isArray(item.content)) {
+      item.content = deleteAnElement(item.content, element);
+    }
+    return true;
   });
 };

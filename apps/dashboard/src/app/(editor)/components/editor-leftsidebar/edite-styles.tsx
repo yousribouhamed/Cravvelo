@@ -21,7 +21,7 @@ export const EditeStyles = ({ state }: { state: EditorState }) => {
         <ToggleGroup
           type="single"
           defaultValue="Horizontal"
-          className="w-[150px] h-8 bg-transparent p-2 rounded-xl"
+          className="w-[150px] h-10 bg-transparent p-2 rounded-xl"
         >
           <ToggleGroupItem
             onClick={() => {

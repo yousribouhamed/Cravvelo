@@ -21,10 +21,10 @@ const Text: FC<textProps> = ({ element }) => {
     <p
       onClick={handleSelectElement}
       className={`text-xl ${
-        state.isSelectionMode ? "hover:border-blue-500 hover:border-1 " : ""
+        state.isSelectionMode ? "hover:border-blue-500 hover:border-2 " : ""
       } ${
         state.editor.selectedElement.id === element.id && state.isSelectionMode
-          ? "border-1 border-blue-500"
+          ? "border-2 border-blue-500"
           : ""
       }`}
       style={{

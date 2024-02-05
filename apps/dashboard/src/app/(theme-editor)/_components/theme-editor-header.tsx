@@ -1,0 +1,124 @@
+"use client";
+
+import type { FC } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@ui/components/ui/tooltip";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@ui/components/ui/select";
+import { Button } from "@ui/components/ui/button";
+import { ArrowRight, MonitorDot } from "lucide-react";
+import { useThemeEditorStore } from "../theme-editor-store";
+import { Smartphone } from "lucide-react";
+import { Tv } from "lucide-react";
+
+interface ThemeEditorHeaderAbdullahProps {}
+
+const viewMods = [
+  {
+    tooltip: "hhhhhh",
+    value: "DESKTOP",
+    icon: <MonitorDot className="w-4 h-4" />,
+  },
+  {
+    tooltip: "hhhhhh",
+    value: "MOBILE",
+    icon: <Smartphone className="w-4 h-4" />,
+  },
+  {
+    tooltip: "hhhhhh",
+    value: "LARGE",
+    icon: <Tv className="w-4 h-4" />,
+  },
+];
+
+const ThemeEditorHeader: FC = ({}) => {
+  const chnageCurrentPage = useThemeEditorStore(
+    (state) => state.actions.chnageCurrentPage
+  );
+  const chnageViewMode = useThemeEditorStore(
+    (state) => state.actions.chnageViewMode
+  );
+  const { state } = useThemeEditorStore();
+  return (
+    <TooltipProvider>
+      <div className="w-full h-[70px] border-b fixed top-0 bg-white flex items-center justify-between px-4">
+        <div className="w-[300px] h-full flex items-center justify-start  ">
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon"
+                variant="secondary"
+                className={"bg-white border rounded-xl text-black h-10 w-10   "}
+              >
+                <ArrowRight className=" w-6 h-6 " />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>العودة إلى لوحة القيادة</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+
+        <div className="w-[300px] h-full  flex items-center justify-center">
+          <Select onValueChange={(val) => chnageCurrentPage(Number(val))}>
+            <SelectTrigger className="w-[300px] h-10 dark:bg-[#252525]">
+              <SelectValue placeholder="الصفحة الرئيسية" />
+            </SelectTrigger>
+            <SelectContent className="dark:bg-[#252525]">
+              {state.pages.map((item, index) => (
+                <SelectItem
+                  key={item.name + index}
+                  value={index.toString()}
+                  className="w-full flex justify-end items-center"
+                >
+                  {item.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="w-[300px] h-full flex items-center justify-end gap-x-4">
+          {viewMods.map((item) => (
+            <Tooltip key={item.value} delayDuration={0}>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={() => chnageViewMode(item.value)}
+                  size="icon"
+                  variant="secondary"
+                  className={`bg-white border rounded-xl  h-10 w-10  ${
+                    state.viewMode === item.value
+                      ? "text-primary"
+                      : "text-zinc-600"
+                  } `}
+                >
+                  {item.icon}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{item.tooltip}</p>
+              </TooltipContent>
+            </Tooltip>
+          ))}
+          <Button
+            size="sm"
+            className=" text-white font-bold rounded-2xl bg-primary"
+          >
+            حفظ التغييرات
+          </Button>
+        </div>
+      </div>
+    </TooltipProvider>
+  );
+};
+
+export default ThemeEditorHeader;
