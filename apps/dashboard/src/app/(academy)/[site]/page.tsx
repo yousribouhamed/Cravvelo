@@ -26,12 +26,13 @@ function insertDotBeforeJadir(inputString: string): string {
 const Page = async ({ params }: pageAbdullahProps) => {
   console.log("this is the domain");
 
-  console.log();
-
   const page = await getPage({
     path: "/",
     subdomain: insertDotBeforeJadir(params?.site),
   });
+
+  console.log("this is the page asked");
+  console.log(page);
 
   if (!page) {
     notFound();

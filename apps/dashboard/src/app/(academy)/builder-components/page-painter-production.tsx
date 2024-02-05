@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import { type FC } from "react";
 import {
   ComponentBuilder,
   ThemePage,
@@ -17,8 +17,8 @@ interface PagePainterProps {
 const PagePainterProduction: FC<PagePainterProps> = ({ page }) => {
   return (
     <div className="w-full h-fit">
-      {Array.isArray(page) &&
-        page.map((item) => (
+      {Array.isArray(page.components) &&
+        page.components.map((item) => (
           <>{renderBuilderComponentProduction({ components: item })}</>
         ))}
     </div>

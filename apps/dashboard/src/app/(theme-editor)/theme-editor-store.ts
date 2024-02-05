@@ -46,12 +46,12 @@ export const useThemeEditorStore = create<ThemeEditorState>()((set, get) => ({
 
       {
         components: [],
-        path: "/",
+        path: "/signin",
         name: "صفحة تسجيل الدخول",
       },
       {
         components: [],
-        path: "/courses",
+        path: "/signup",
         name: "صفحة التسجيل",
       },
     ],
