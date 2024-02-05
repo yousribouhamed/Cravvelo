@@ -1,6 +1,6 @@
 import { getPage } from "../actions";
 import { notFound } from "next/navigation";
-import PagePainterProduction from "../_elements/page-painter";
+import PagePainterProduction from "../builder-components/page-painter-production";
 
 interface pageAbdullahProps {
   params: { site: string };

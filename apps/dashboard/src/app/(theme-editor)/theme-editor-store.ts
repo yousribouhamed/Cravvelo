@@ -26,6 +26,7 @@ interface ThemeEditorState {
     updatePage: (component: ComponentBuilder) => void;
     chnageCurrentPage: (index: number) => void;
     chnageViewMode: (mode: string) => void;
+    setInitialPages: (pages: ThemePage[]) => void;
   };
 }
 
@@ -63,6 +64,8 @@ export const useThemeEditorStore = create<ThemeEditorState>()((set, get) => ({
       set({ state: { ...get().state, currentPageIndex: index } }),
     chnageViewMode: (mode: string) =>
       set({ state: { ...get().state, viewMode: mode } }),
+    setInitialPages: (pages: ThemePage[]) =>
+      set({ state: { ...get().state, pages } }),
     updatePage(component: ComponentBuilder) {
       const oldComponents =
         get().state.pages[get().state.currentPageIndex].components;

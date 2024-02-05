@@ -1,7 +1,7 @@
 "use server";
 
-import { WebSitePage } from "@/src/types";
 import { prisma } from "database/src";
+import { ThemePage } from "../../(theme-editor)/theme-editor-store";
 
 export const getPage = async ({
   path,
@@ -9,7 +9,7 @@ export const getPage = async ({
 }: {
   path: string;
   subdomain: string;
-}): Promise<WebSitePage | null> => {
+}): Promise<ThemePage | null> => {
   // get all the pages
 
   const website = await prisma.website.findFirst({
@@ -20,9 +20,9 @@ export const getPage = async ({
 
   if (!website) return null;
 
-  const pages = JSON.parse(website.pages as string) as WebSitePage[];
+  const pages = JSON.parse(website.pages as string) as ThemePage[];
 
-  const page = pages.find((item) => item.pathname === path);
+  const page = pages.find((item) => item.path === path);
 
   return page;
 };

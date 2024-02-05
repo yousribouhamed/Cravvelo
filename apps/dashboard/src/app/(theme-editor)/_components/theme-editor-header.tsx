@@ -16,11 +16,14 @@ import {
 } from "@ui/components/ui/select";
 import { Button } from "@ui/components/ui/button";
 import { ArrowRight, MonitorDot } from "lucide-react";
-import { useThemeEditorStore } from "../theme-editor-store";
+import { ThemePage, useThemeEditorStore } from "../theme-editor-store";
 import { Smartphone } from "lucide-react";
 import { Tv } from "lucide-react";
+import PublishWebsite from "@/src/components/models/editor/publish-website";
 
-interface ThemeEditorHeaderAbdullahProps {}
+interface ThemeEditorHeaderProps {
+  pages: ThemePage[];
+}
 
 const viewMods = [
   {
@@ -40,7 +43,7 @@ const viewMods = [
   },
 ];
 
-const ThemeEditorHeader: FC = ({}) => {
+const ThemeEditorHeader: FC<ThemeEditorHeaderProps> = ({ pages }) => {
   const chnageCurrentPage = useThemeEditorStore(
     (state) => state.actions.chnageCurrentPage
   );
@@ -109,12 +112,16 @@ const ThemeEditorHeader: FC = ({}) => {
               </TooltipContent>
             </Tooltip>
           ))}
-          <Button
-            size="sm"
-            className=" text-white font-bold rounded-2xl bg-primary"
-          >
-            حفظ التغييرات
-          </Button>
+          {pages ? (
+            <Button
+              size="sm"
+              className=" text-white h-10 font-bold rounded-2xl bg-primary"
+            >
+              حفظ التغييرات
+            </Button>
+          ) : (
+            <PublishWebsite />
+          )}
         </div>
       </div>
     </TooltipProvider>

@@ -24,8 +24,8 @@ import { Button } from "@ui/components/ui/button";
 import { Textarea } from "@ui/components/ui/textarea";
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import { useWebSiteEditor } from "@/src/app/(editor)/editor-state";
 import { maketoast } from "../../toasts";
+import { useThemeEditorStore } from "@/src/app/(theme-editor)/theme-editor-store";
 
 const FormSchema = z.object({
   title: z.string(),
@@ -36,7 +36,7 @@ const FormSchema = z.object({
 const PublishWebsite: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { state } = useWebSiteEditor();
+  const { state } = useThemeEditorStore();
   const mutation = trpc.createWebSite.useMutation({
     onSuccess: (site) => {
       console.log("here it is the site created");
@@ -61,7 +61,7 @@ const PublishWebsite: FC = () => {
       description: values.description,
       name: values.title,
       subdomain: values.subdomain,
-      pages: state.editor.pages,
+      pages: state.pages,
     });
   }
   return (
@@ -108,8 +108,8 @@ const PublishWebsite: FC = () => {
                   <FormLabel>وصف موجز للموقع</FormLabel>
                   <FormControl>
                     <Textarea
-                      rows={2}
-                      className="dark:bg-[#252525] h-[100px]"
+                      rows={3}
+                      className="dark:bg-[#252525] h-[150px]"
                       placeholder="وصف موجز للموقع"
                       {...field}
                     />

@@ -1,4 +1,3 @@
-import { TRPCError } from "@trpc/server";
 import { privateProcedure } from "../trpc";
 import { z } from "zod";
 
