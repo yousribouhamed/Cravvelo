@@ -28,7 +28,7 @@ const ThemeCollectionProduction: FC = ({}) => {
       </div>
 
       <div
-        className={`  w-full min-h-[300px] h-fit flex flex-col md:flex-row items-center justify-center gap-x-4 my-16 `}
+        className={`  w-full min-h-[300px] h-fit flex flex-col md:flex-row items-center justify-center gap-x-4 my-16 hover:translate-y-4 transition-all duration-300 cursor-pointer `}
       >
         {items.map((item, index) => (
           <div

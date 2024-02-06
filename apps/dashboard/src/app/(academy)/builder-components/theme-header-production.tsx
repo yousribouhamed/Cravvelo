@@ -2,11 +2,15 @@ import type { FC } from "react";
 import ShoppingCardProduction from "./theme-actions/shopping-card-production";
 import { Search } from "lucide-react";
 import Link from "next/link";
+import MobilNavgiationProduction from "./theme-actions/mobile-navigation-production";
 
 const ThemeHeaderProduction: FC = ({}) => {
   return (
     <div className="w-full h-[70px] flex items-center justify-between px-4 border-b z-[20] ">
-      <div className="min-w-[200px] w-fit flex items-center justify-start gap-x-4 ">
+      <div className="w-fit h-full flex items-center justify-start md:hidden">
+        <MobilNavgiationProduction />
+      </div>
+      <div className="min-w-[200px] w-fit  items-center justify-start gap-x-4 hidden md:flex ">
         <img
           src="https://png.pngtree.com/png-clipart/20230330/original/pngtree-vector-sword-esports-and-mascot-logo-png-image_9012921.png"
           className="object-cover w-16 h-16"

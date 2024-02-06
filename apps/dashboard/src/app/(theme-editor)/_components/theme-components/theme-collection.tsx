@@ -39,14 +39,14 @@ const ThemeCollection: FC = ({}) => {
         {items.map((item, index) => (
           <div
             key={item.title + index}
-            className="w-[350px] min-h-[300px] h-fit p-4   flex flex-col shadow-2xl rounded-xl "
+            className="w-[350px] min-h-[300px] h-fit p-4   flex flex-col shadow-2xl rounded-xl hover:-translate-y-4 transition-all duration-700 cursor-pointer"
           >
             <img src={item.image} className="w-full h-[200px] object-cover " />
             <div className="w-full h-[50px] flex items-center justify-between my-4">
               <h2 className="text-black font-semibold text-lg text-start ">
                 {item.title}
               </h2>
-              <span className="block  bg-gray-100 w-fit  rounded-full text-black my-auto">
+              <span className="block  bg-gray-100 w-fit px-2 rounded-full text-black my-auto">
                 دورة
               </span>
             </div>

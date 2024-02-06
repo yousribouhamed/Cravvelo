@@ -1,11 +1,15 @@
 import { Search } from "lucide-react";
 import type { FC } from "react";
 import ShoppingCard from "./interactive/shopping-card";
+import MobilNavgiation from "./interactive/mobile-navigation";
 
 const ThemeHeader: FC = ({}) => {
   return (
     <div className="w-full h-[70px] flex items-center justify-between px-4 border-b z-[20] ">
-      <div className="min-w-[200px] w-fit flex items-center justify-start gap-x-4 ">
+      <div className="w-fit h-full flex items-center justify-start md:hidden">
+        <MobilNavgiation />
+      </div>
+      <div className="min-w-[200px] w-fit  items-center justify-start gap-x-4 hidden md:flex">
         <img
           src="https://png.pngtree.com/png-clipart/20230330/original/pngtree-vector-sword-esports-and-mascot-logo-png-image_9012921.png"
           className="object-cover w-16 h-16"

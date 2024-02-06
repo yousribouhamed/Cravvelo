@@ -9,6 +9,7 @@ import ThemeHeadingProduction from "./theme-heading-production";
 import ThemeCollectionProduction from "./theme-collection-production";
 import ThemeSignupProduction from "./theme-signup-production";
 import ThemeSigninProduction from "./theme-signin-production";
+import MaxWidthWrapper from "../_components/max-width-wrapper";
 
 interface PagePainterProps {
   page: ThemePage;
@@ -16,12 +17,14 @@ interface PagePainterProps {
 
 const PagePainterProduction: FC<PagePainterProps> = ({ page }) => {
   return (
-    <div dir="rtl" className="w-full h-fit">
-      {Array.isArray(page.components) &&
-        page.components.map((item) => (
-          <>{renderBuilderComponentProduction({ components: item })}</>
-        ))}
-    </div>
+    <MaxWidthWrapper>
+      <div dir="rtl" className="w-full h-fit">
+        {Array.isArray(page.components) &&
+          page.components.map((item) => (
+            <>{renderBuilderComponentProduction({ components: item })}</>
+          ))}
+      </div>
+    </MaxWidthWrapper>
   );
 };
 
