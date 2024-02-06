@@ -13,8 +13,8 @@ const Page = async ({}) => {
         <Header user={user} title="إعدادات الموقع" />
 
         <div className="w-full h-fit flex flex-col my-8 gap-y-4">
-          <ChangeSubDomainForm />
-          <AddCusotmDomainForm />
+          <ChangeSubDomainForm subdomain={user.subdomain} />
+          <AddCusotmDomainForm customDomain={user.cutomDomain} />
         </div>
       </main>
     </MaxWidthWrapper>

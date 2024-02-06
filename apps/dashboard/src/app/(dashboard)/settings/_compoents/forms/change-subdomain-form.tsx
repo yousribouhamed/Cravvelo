@@ -23,6 +23,7 @@ import {
 } from "@ui/components/ui/form";
 import { Input } from "@ui/components/ui/input";
 import { trpc } from "@/src/app/_trpc/client";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 const formSchema = z.object({
   subdomain: z
@@ -33,22 +34,23 @@ const formSchema = z.object({
     .max(32),
 });
 
-interface ChangeDomainFormProps {}
+interface ChangeDomainFormProps {
+  subdomain: string | null;
+}
 
-const ChangeSubDomainForm: FC = ({}) => {
+const ChangeSubDomainForm: FC<ChangeDomainFormProps> = ({ subdomain }) => {
   const mutation = trpc.chnageSubDmain.useMutation({
     onSuccess: () => {},
     onError: () => {},
   });
 
-  // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      subdomain: "",
+      subdomain: subdomain ? subdomain : "",
     },
   });
-  // 2. Define a submit handler.
+
   async function onSubmit(data: z.infer<typeof formSchema>) {
     await mutation.mutateAsync({
       subdomain: data.subdomain,

@@ -126,10 +126,19 @@ export default function UserNav({ user }: UserNavProps) {
             </Link>
           </DropdownMenuItem>
 
-          <DropdownMenuItem className="w-full  h-full flex justify-between items-center  ">
+          <DropdownMenuItem
+            disabled={!user?.cutomDomain || !user?.cutomDomain}
+            className="w-full  h-full flex justify-between items-center  "
+          >
             <Link
               className="w-full  h-full flex justify-between items-center p-2 "
-              href={user.webSiteUrl}
+              href={
+                user?.cutomDomain
+                  ? user?.cutomDomain
+                  : user?.subdomain
+                  ? user?.cutomDomain
+                  : "#"
+              }
             >
               <ArrowUpLeft className=" h-4 w-4" />
 

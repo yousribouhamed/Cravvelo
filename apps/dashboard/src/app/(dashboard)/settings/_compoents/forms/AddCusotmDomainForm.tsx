@@ -25,24 +25,27 @@ import { Input } from "@ui/components/ui/input";
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
+interface AddCustomDomain {
+  customDomain: string | null;
+}
+
 const formSchema = z.object({
   cutomedomain: z.string(),
 });
 
-const AddCusotmDomainForm: FC = ({}) => {
+const AddCusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
   const mutation = trpc.setCustomDomain.useMutation({
     onSuccess: () => {},
     onError: () => {},
   });
 
-  // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      cutomedomain: "",
+      cutomedomain: customDomain ? customDomain : "",
     },
   });
-  // 2. Define a submit handler.
+
   async function onSubmit(data: z.infer<typeof formSchema>) {
     await mutation.mutateAsync({
       customdomain: data?.cutomedomain,
