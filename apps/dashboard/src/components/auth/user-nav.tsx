@@ -129,7 +129,7 @@ export default function UserNav({ user }: UserNavProps) {
           <DropdownMenuItem className="w-full  h-full flex justify-between items-center  ">
             <Link
               className="w-full  h-full flex justify-between items-center p-2 "
-              href={"/profile"}
+              href={user.webSiteUrl}
             >
               <ArrowUpLeft className=" h-4 w-4" />
 

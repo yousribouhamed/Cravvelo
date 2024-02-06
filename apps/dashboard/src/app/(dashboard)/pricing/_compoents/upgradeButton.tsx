@@ -1,8 +1,9 @@
 "use client";
 
 import type { FC } from "react";
-import { PLANS } from "../constants/plans";
+import { PLANS } from "../../../../constants/plans";
 import { Button } from "@ui/components/ui/button";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Select,
   SelectContent,
@@ -11,9 +12,10 @@ import {
   SelectValue,
 } from "@ui/components/ui/select";
 import * as React from "react";
-import { translateCurrency } from "../lib/utils";
-import { trpc } from "../app/_trpc/client";
-import { maketoast } from "./toasts";
+import { translateCurrency } from "../../../../lib/utils";
+import { trpc } from "../../../_trpc/client";
+import { maketoast } from "../../../../components/toasts";
+import { Tabs } from "./animated-tabs";
 
 interface PricingAbdullahProps {}
 
@@ -72,8 +74,22 @@ const UpgradeButton: FC = ({}) => {
         <div className="w-[200px] h-[50px]   flex items-center justify-start">
           <span className="text-[#FC6B00] text-2xl font-bold">وفر 20٪</span>
         </div>
-        <div className="bg-white rounded-full transition-all duration-150 relative shadow-2xl w-[250px] h-[60px] flex items-center gap-x-4 justify-between p-4">
-          <button
+        <div className="bg-white rounded-full transition-all duration-150 relative shadow-2xl w-fit h-[60px] flex items-center gap-x-4 justify-between p-4">
+          <Tabs
+            activeTabClassName={"bg-[#FC6B00] text-white"}
+            // containerClassName={`w-full h-full`}
+            tabs={[
+              {
+                title: "  شهري",
+                value: DISPLAY_VALUES.monthly,
+              },
+              {
+                title: "سنوي",
+                value: DISPLAY_VALUES.yearly,
+              },
+            ]}
+          />
+          {/* <button
             onClick={() => setDisplay(DISPLAY_VALUES.yearly)}
             className={`rounded-full h-[48px] w-[125px] font-bold text-lg  ${
               display === DISPLAY_VALUES.yearly
@@ -94,7 +110,7 @@ const UpgradeButton: FC = ({}) => {
           `}
           >
             شهري
-          </button>
+          </button> */}
           <div className="absolute right-[-118px] -bottom-5">
             <svg
               width="114"

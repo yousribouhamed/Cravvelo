@@ -56,4 +56,5 @@ export type UserData = {
   email: string;
   isFreeTrial: boolean;
   isSubscribed: boolean;
+  webSiteUrl: string;
 };
