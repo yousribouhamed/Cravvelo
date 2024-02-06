@@ -6,7 +6,7 @@ import MobilNavgiationProduction from "./theme-actions/mobile-navigation-product
 
 const ThemeHeaderProduction: FC = ({}) => {
   return (
-    <div className="w-full h-[70px] flex items-center justify-between px-4 border-b z-[20] ">
+    <div className="w-full h-[70px] flex items-center justify-between px-4 border-b z-[99] fixed top-0 ">
       <div className="w-fit h-full flex items-center justify-start md:hidden">
         <MobilNavgiationProduction />
       </div>

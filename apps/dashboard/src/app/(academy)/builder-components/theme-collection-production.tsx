@@ -28,12 +28,12 @@ const ThemeCollectionProduction: FC = ({}) => {
       </div>
 
       <div
-        className={`  w-full min-h-[300px] h-fit flex flex-col md:flex-row items-center justify-center gap-x-4 my-16 hover:translate-y-4 transition-all duration-300 cursor-pointer `}
+        className={`  w-full min-h-[300px] h-fit flex flex-col md:flex-row items-center justify-center gap-x-4 my-16  `}
       >
         {items.map((item, index) => (
           <div
             key={item.title + index}
-            className="w-[350px] min-h-[300px] h-fit p-4   flex flex-col shadow-2xl rounded-xl "
+            className="w-[350px] min-h-[300px] h-fit p-4   flex flex-col shadow-2xl rounded-xl hover:translate-y-4 transition-all duration-300 cursor-pointerW "
           >
             <img src={item.image} className="w-full h-[200px] object-cover " />
             <div className="w-full h-[50px] flex items-center justify-between my-4">
