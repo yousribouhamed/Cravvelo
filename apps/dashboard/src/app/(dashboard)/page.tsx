@@ -19,10 +19,10 @@ async function Page() {
     <MaxWidthWrapper>
       <main className="w-full flex flex-col overflow-y-hidden h-fit  justify-start">
         <Header user={user} title="الرئيسية" />
-        <div className="w-full h-[100px] flex justify-start items-center ">
+        <div className="w-full h-[30px] flex justify-start items-center mt-10 ">
           <DatePickerWithRange />
         </div>
-        <div className="space-y-4 pt-6">
+        <div className="space-y-4 pt-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card className="flex flex-col justify-between  min-h-[150px]">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

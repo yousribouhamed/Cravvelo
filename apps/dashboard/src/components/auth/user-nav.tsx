@@ -39,9 +39,9 @@ export default function UserNav({ user }: UserNavProps) {
         <div
           className={` ${buttonVariants({
             variant: "ghost",
-          })}  cursor-pointer  w-48   flex items-center bg-white rounded-xl border justify-end gap-x-4 `}
+          })}  cursor-pointer  w-48   flex items-center bg-white rounded-xl border justify-end gap-x-4 p-2 `}
         >
-          <Avatar className="w-8 h-8 rounded-md">
+          <Avatar className="w-8 h-8 rounded-[50%]">
             <AvatarImage src={user?.avatar} />
             <AvatarFallback>AB</AvatarFallback>
           </Avatar>

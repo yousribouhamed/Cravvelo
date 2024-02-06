@@ -20,6 +20,9 @@ const useHaveAccess = async () => {
     where: {
       userId: user.id,
     },
+    include: {
+      Website: true,
+    },
   });
 
   if (!account) {
@@ -45,6 +48,7 @@ const useHaveAccess = async () => {
     email: user.primaryEmailAddressId,
     isFreeTrial,
     isSubscribed,
+    webSiteUrl: account.Website[0].subdomain,
   };
 };
 

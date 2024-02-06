@@ -4,12 +4,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@ui/components/ui/popover";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@ui/components/ui/tooltip";
 import { Button } from "@ui/components/ui/button";
 import { Icons } from "../Icons";
 import Image from "next/image";
@@ -28,8 +22,11 @@ const Notifications: FC = ({}) => {
           <Icons.bell className="w-4 h-4 text-black " />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="p-0">
-        <div className="w-[500px] h-[400px] shadow bg-white p-2">
+      <PopoverContent
+        align="end"
+        className="p-0 border-none ring-none shadow-none"
+      >
+        <div className="w-[500px] h-[400px] shadow bg-white p-2 rounded-xl border">
           <div className="w-full border-b h-[70px] flex items-center justify-start">
             <p className="text-xl font-bold">الإشعارات</p>
           </div>
