@@ -3,37 +3,40 @@ import ShoppingCardProduction from "./theme-actions/shopping-card-production";
 import { Search } from "lucide-react";
 import Link from "next/link";
 import MobilNavgiationProduction from "./theme-actions/mobile-navigation-production";
+import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
 
 const ThemeHeaderProduction: FC = ({}) => {
   return (
-    <div className="w-full h-[70px] flex items-center justify-between px-4 border-b z-[99] fixed top-0 ">
-      <div className="w-fit h-full flex items-center justify-start md:hidden">
-        <MobilNavgiationProduction />
-      </div>
-      <div className="min-w-[200px] w-fit  items-center justify-start gap-x-4 hidden md:flex ">
-        <img
-          src="https://png.pngtree.com/png-clipart/20230330/original/pngtree-vector-sword-esports-and-mascot-logo-png-image_9012921.png"
-          className="object-cover w-16 h-16"
-        />
-        <Link href={"/"} className="text-lg font-semibold">
-          الصفحة الرئيسية
-        </Link>
-        <Link href={"/courses"} className="text-lg font-semibold">
-          الدورات
-        </Link>
-      </div>
-      <div className="flex w-fir min-w-[100px] justify-end items-center">
-        <ShoppingCardProduction />
-        <button className="text-black w-[40px] h-[40px] rounded-xl p-2">
-          <Search className="w-5 h-5 " />
-        </button>
-        <Link
-          href={"/signin"}
-          className="bg-blue-500 text-white w-[140px] h-[40px] rounded-xl p-2"
-        >
-          تسجيل الدخول
-        </Link>
-      </div>
+    <div className="w-full h-[70px]   border-b z-[80] fixed top-0 bg-white shadow-md ">
+      <MaxWidthWrapper className="w-full h-full flex items-center justify-between">
+        <div className="w-fit h-full flex items-center justify-start md:hidden">
+          <MobilNavgiationProduction />
+        </div>
+        <div className="min-w-[200px] w-fit  items-center justify-start gap-x-4 hidden md:flex ">
+          <img
+            src="https://png.pngtree.com/png-clipart/20230330/original/pngtree-vector-sword-esports-and-mascot-logo-png-image_9012921.png"
+            className="object-cover w-16 h-16"
+          />
+          <Link href={"/"} className="text-lg ">
+            الصفحة الرئيسية
+          </Link>
+          <Link href={"/academia-courses"} className="text-lg ">
+            الدورات
+          </Link>
+        </div>
+        <div className="flex w-fir min-w-[100px] justify-end items-center">
+          <ShoppingCardProduction />
+          <button className="text-black w-[40px] h-[40px] rounded-xl p-2">
+            <Search className="w-5 h-5 " />
+          </button>
+          <Link
+            href={"/signin"}
+            className="bg-blue-500 text-white w-[140px] h-[40px] rounded-xl p-2 flex items-center justify-center"
+          >
+            تسجيل الدخول
+          </Link>
+        </div>
+      </MaxWidthWrapper>
     </div>
   );
 };

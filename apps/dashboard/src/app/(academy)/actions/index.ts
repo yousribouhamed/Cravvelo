@@ -18,8 +18,6 @@ export const getPage = async ({
     },
   });
 
-  console.log("this is the website we got");
-
   if (!website) return null;
 
   const pages = JSON.parse(website.pages as string) as ThemePage[];

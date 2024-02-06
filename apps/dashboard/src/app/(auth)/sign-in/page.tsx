@@ -1,7 +1,6 @@
 import { SignInForm } from "@/src/components/forms/sign-in-form";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-import type { FC } from "react";
 
 const page = async ({}) => {
   const user = await currentUser();

@@ -3,24 +3,32 @@
 import { BookMarked, ShoppingCart } from "lucide-react";
 import StarRatings from "react-star-ratings";
 import type { FC } from "react";
+import { useAcademiaStore } from "../global-state/academia-store";
+import { v4 as uuidv4 } from "uuid";
 
 const items = [
   {
     image: "https://img-c.udemycdn.com/course/750x422/1630508_94eb_8.jpg",
     title: "رسم الشخصيات بأسلوب الأنمي والمانغا",
+    price: 99.0,
   },
   {
     image:
       "https://framerusercontent.com/images/OSrhhE7i4s6onZmoAng3StH6geA.jpg",
     title: "  كيفية استخدام Framer في بناء الويب",
+    price: 99.0,
   },
   {
     image: "https://i.ytimg.com/vi/NqzdVN2tyvQ/maxresdefault.jpg",
     title: "redux دورة كاملة",
+    price: 99.0,
   },
 ];
 
 const ThemeCollectionProduction: FC = ({}) => {
+  const addItemToShoppingBag = useAcademiaStore(
+    (state) => state.actions.addItem
+  );
   return (
     <>
       <div className="w-full h-[50px] flex items-center justify-start px-4">
@@ -28,12 +36,12 @@ const ThemeCollectionProduction: FC = ({}) => {
       </div>
 
       <div
-        className={`  w-full min-h-[300px] h-fit flex flex-col md:flex-row items-center justify-center gap-x-4 my-16  `}
+        className={`  w-full min-h-[300px] h-fit flex flex-col md:flex-wrap md:flex-row items-center justify-center gap-x-4 my-16  `}
       >
         {items.map((item, index) => (
           <div
             key={item.title + index}
-            className="w-[350px] min-h-[300px] h-fit p-4   flex flex-col shadow-2xl rounded-xl hover:translate-y-4 transition-all duration-300 cursor-pointerW "
+            className="w-[350px] min-h-[300px] h-fit p-4   flex flex-col shadow-2xl rounded-xl hover:-translate-y-4 transition-all duration-700 cursor-pointer "
           >
             <img src={item.image} className="w-full h-[200px] object-cover " />
             <div className="w-full h-[50px] flex items-center justify-between my-4">
@@ -70,7 +78,17 @@ const ThemeCollectionProduction: FC = ({}) => {
             </div>
 
             <div className="w-full h-[50px] flex items-center justify-center gap-x-4 border-t pt-2">
-              <button className="w-[80%] bg-blue-500 text-white p-2 h-[45px] rounded-xl">
+              <button
+                onClick={() => {
+                  addItemToShoppingBag({
+                    id: uuidv4(),
+                    imageUrl: item.image,
+                    name: item.title,
+                    price: item.price.toString(),
+                  });
+                }}
+                className="w-[80%] bg-blue-500 text-white p-2 h-[45px] rounded-xl"
+              >
                 اشتري الآن
               </button>
 

@@ -11,7 +11,10 @@ interface pageAbdullahProps {
 const Page = async ({ params }: pageAbdullahProps) => {
   const page = await getPage({
     path: "/",
-    subdomain: decodeURIComponent(params?.site),
+    subdomain:
+      process.env.NODE_ENV === "development"
+        ? "chehrichehri.jadir.vercel.app"
+        : decodeURIComponent(params?.site),
   });
 
   if (!page) {

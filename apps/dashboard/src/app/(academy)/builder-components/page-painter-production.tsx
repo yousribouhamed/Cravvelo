@@ -17,14 +17,16 @@ interface PagePainterProps {
 
 const PagePainterProduction: FC<PagePainterProps> = ({ page }) => {
   return (
-    <MaxWidthWrapper>
-      <div dir="rtl" className="w-full h-fit">
+    <div dir="rtl" className="w-full h-fit">
+      <ThemeHeaderProduction />
+      <MaxWidthWrapper>
         {Array.isArray(page.components) &&
-          page.components.map((item) => (
+          page.components.map((item, index) => (
             <>{renderBuilderComponentProduction({ components: item })}</>
           ))}
-      </div>
-    </MaxWidthWrapper>
+      </MaxWidthWrapper>
+      <ThemeFooterProduction />
+    </div>
   );
 };
 
@@ -37,9 +39,9 @@ export const renderBuilderComponentProduction = ({
 }) => {
   switch (components.type) {
     case "header":
-      return <ThemeHeaderProduction />;
+      return null;
     case "footer":
-      return <ThemeFooterProduction />;
+      return null;
     case "collection":
       return <ThemeHeadingProduction />;
     case "heading":

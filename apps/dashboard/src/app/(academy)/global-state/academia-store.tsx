@@ -1,19 +1,32 @@
 import { create } from "zustand";
 
+export type ItemCourse = {
+  id: string;
+  name: string;
+  price: string;
+  imageUrl: string;
+};
+
 interface AcademiaState {
   state: {
-    shoppingBag: [];
+    shoppingBag: ItemCourse[];
   };
   actions: {
-    addItem: () => void;
+    addItem: (item: ItemCourse) => void;
   };
 }
 
-export const useAcademiaStore = create<AcademiaState>()((set) => ({
+export const useAcademiaStore = create<AcademiaState>()((set, get) => ({
   state: {
     shoppingBag: [],
   },
   actions: {
-    addItem: () => {},
+    addItem: (item: ItemCourse) =>
+      set({
+        state: {
+          ...get().state,
+          shoppingBag: [...get().state.shoppingBag, item],
+        },
+      }),
   },
 }));

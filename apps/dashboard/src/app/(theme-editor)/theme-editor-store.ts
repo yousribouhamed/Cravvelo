@@ -40,10 +40,9 @@ export const useThemeEditorStore = create<ThemeEditorState>()((set, get) => ({
       },
       {
         components: [],
-        path: "/courses",
+        path: "/academia-courses",
         name: "صفحة الدورات",
       },
-
       {
         components: [],
         path: "/signin",
@@ -53,6 +52,22 @@ export const useThemeEditorStore = create<ThemeEditorState>()((set, get) => ({
         components: [],
         path: "/signup",
         name: "صفحة التسجيل",
+      },
+      {
+        components: [],
+        path: "/",
+        name: "الصفحة الرئيسية",
+      },
+
+      {
+        components: [],
+        path: "/privacy-policy",
+        name: "سياسة الخصوصية",
+      },
+      {
+        components: [],
+        path: "/terms-of-service",
+        name: "شروط الاستخدام",
       },
     ],
     currentPageIndex: 0,

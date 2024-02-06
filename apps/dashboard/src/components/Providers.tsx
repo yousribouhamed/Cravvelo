@@ -5,7 +5,6 @@ import { absoluteUrl } from "../lib/utils";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import { PropsWithChildren, useState } from "react";
-import { Next13ProgressBar } from "next13-progressbar";
 
 const Providers = ({ children }: PropsWithChildren) => {
   const [queryClient] = useState(() => new QueryClient());
@@ -22,16 +21,7 @@ const Providers = ({ children }: PropsWithChildren) => {
 
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
-        <Next13ProgressBar
-          height="2px"
-          color="#54756c"
-          options={{ showSpinner: false }}
-          showOnShallow
-          startPosition={0.3}
-        />
-        {children}
-      </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </trpc.Provider>
   );
 };

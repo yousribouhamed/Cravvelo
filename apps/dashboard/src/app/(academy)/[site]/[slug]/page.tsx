@@ -9,9 +9,14 @@ interface pageProps {
 }
 
 const Page = async ({ params }: pageProps) => {
+  console.log(decodeURIComponent(params.slug));
+  console.log(decodeURIComponent(params.site));
   const page = await getPage({
-    path: `/${params.slug}`,
-    subdomain: decodeURIComponent(params?.site),
+    path: `/${decodeURIComponent(params.slug)}`,
+    subdomain:
+      process.env.NODE_ENV === "development"
+        ? "chehrichehri.jadir.vercel.app"
+        : decodeURIComponent(params?.site),
   });
 
   if (!page) {
