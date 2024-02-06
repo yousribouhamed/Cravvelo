@@ -16,7 +16,7 @@ interface PagePainterProps {
 
 const PagePainterProduction: FC<PagePainterProps> = ({ page }) => {
   return (
-    <div className="w-full h-fit">
+    <div dir="rtl" className="w-full h-fit">
       {Array.isArray(page.components) &&
         page.components.map((item) => (
           <>{renderBuilderComponentProduction({ components: item })}</>

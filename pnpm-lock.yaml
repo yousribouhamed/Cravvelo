@@ -41,6 +41,9 @@ importers:
       '@clerk/nextjs':
         specifier: ^4.29.2
         version: 4.29.2(next@14.0.3)(react-dom@18.2.0)(react@18.2.0)
+      '@headlessui/react':
+        specifier: ^1.7.18
+        version: 1.7.18(react-dom@18.2.0)(react@18.2.0)
       '@hello-pangea/dnd':
         specifier: ^16.5.0
         version: 16.5.0(@types/react-dom@18.2.3)(@types/react@18.2.5)(react-dom@18.2.0)(react@18.2.0)
@@ -92,6 +95,9 @@ importers:
       database:
         specifier: workspace:*
         version: link:../../packages/db
+      framer-motion:
+        specifier: ^10.18.0
+        version: 10.18.0(react-dom@18.2.0)(react@18.2.0)
       lucide-react:
         specifier: ^0.244.0
         version: 0.244.0(react@18.2.0)
@@ -134,6 +140,9 @@ importers:
       react-map-interaction:
         specifier: ^2.1.0
         version: 2.1.0(prop-types@15.8.1)(react@18.2.0)
+      react-star-ratings:
+        specifier: ^2.3.0
+        version: 2.3.0
       react-zoom-pan-pinch:
         specifier: ^3.3.0
         version: 3.3.0(react-dom@18.2.0)(react@18.2.0)
@@ -6753,6 +6762,14 @@ packages:
       react-transition-group: 2.9.0(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
+  /react-star-ratings@2.3.0:
+    resolution: {integrity: sha512-34Z/oFNDRRn4ZcX7F3t9ccnpo7SQ32gD/vsusQOBc6B6vlqaGR6tke1/Yx3jTDjemKRSmXqhKgpPTR7/JAXq6A==}
+    dependencies:
+      classnames: 2.5.1
+      prop-types: 15.8.1
+      react: 16.14.0
+    dev: false
+
   /react-style-singleton@2.2.1(@types/react@18.2.5)(react@18.2.0):
     resolution: {integrity: sha512-ZWj0fHEMyWkHzKYUr2Bs/4zU6XLmq9HsgBURm7g5pAVfyn49DgUiNgY2d4lXRlYSiCif9YBGpQleewkcqddc7g==}
     engines: {node: '>=10'}
@@ -6820,6 +6837,15 @@ packages:
     dependencies:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /react@16.14.0:
+    resolution: {integrity: sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
+      prop-types: 15.8.1
     dev: false
 
   /react@18.2.0:

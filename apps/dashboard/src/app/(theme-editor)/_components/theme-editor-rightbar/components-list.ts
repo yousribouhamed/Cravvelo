@@ -29,4 +29,9 @@ export const ComponentsList = [
     type: "signinform",
     imageUrl: "",
   },
+  {
+    name: "تواصل معنا",
+    type: "themecontactus",
+    imageUrl: "",
+  },
 ];

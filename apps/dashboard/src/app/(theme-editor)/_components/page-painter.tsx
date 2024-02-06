@@ -11,6 +11,7 @@ import ThemeHeading from "./theme-components/theme-heading";
 import ThemeFooter from "./theme-components/theme-footer";
 import ThemeSignup from "./theme-components/theme-signup";
 import ThemeSignin from "./theme-components/theme-signin";
+import ThemeContactUs from "./theme-components/theme-contactus";
 
 interface PagePainterProps {}
 
@@ -38,8 +39,9 @@ const PagePainter: FC = ({}) => {
   };
 
   return (
-    <ScrollArea className="w-[80%] flex-grow   h-full bg-gray-100 p-4 ">
+    <ScrollArea className="w-[80%] flex-grow relative   h-full bg-gray-100 p-4 ">
       <div
+        dir="rtl"
         onDrop={handleOnDrop}
         onDragOver={handleDragOver}
         className={`${
@@ -48,7 +50,7 @@ const PagePainter: FC = ({}) => {
             : state.viewMode === "MOBILE"
             ? "w-[450px]"
             : "w-full"
-        } min-h-[2000px] bg-white border rounded-xl mx-auto flex flex-col justify-start transition-all duration-500`}
+        } min-h-[2000px] bg-white border rounded-xl mx-auto flex flex-col justify-start transition-all relative duration-500`}
       >
         {Array.isArray(state.pages[state.currentPageIndex].components) &&
           state.pages[state.currentPageIndex].components.map((item) => (
@@ -79,6 +81,8 @@ export const renderBuilderComponent = ({
       return <ThemeSignup />;
     case "signinform":
       return <ThemeSignin />;
+    case "themecontactus":
+      return <ThemeContactUs />;
     default:
       return <h1>this compoent does&apos;t exists</h1>;
   }

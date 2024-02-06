@@ -4,7 +4,7 @@ interface ThemeSignupProps {}
 
 const ThemeSignupProduction: FC = ({}) => {
   return (
-    <div className="w-full min-h-[700px] h-fit flex items-center justify-center">
+    <div className="w-full min-h-[700px] h-fit flex items-center justify-center p-4">
       <div
         dir="rtl"
         className="w-full max-w-lg h-fit min-h-[400px] shadow rounded-lg flex flex-col items-start gap-y-4"
