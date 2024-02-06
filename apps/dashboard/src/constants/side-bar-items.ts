@@ -122,6 +122,11 @@ export const SIDE_BAR_ITEMS = [
         slug: "/settings/payments-methods",
       },
       {
+        title: "إعدادات الموقع",
+        icon: Icons.Home,
+        slug: "/settings/website-settings",
+      },
+      {
         title: "باقة الأكاديمية",
         icon: Icons.Home,
         slug: "/pricing",

@@ -4,131 +4,129 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
-  provider = "mysql"
-  url = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
-
 model Account {
-  id                     String                         @default(uuid()) @unique
-  userId                 String                          @unique
-  avatarUrl              String?         @db.Text
+  id                     String    @unique @default(uuid())
+  userId                 String    @unique
+  avatarUrl              String?   @db.Text
   AcademyIds             Json
-  stripeCustomerId       String?             @unique @map(name: "stripe_customer_id")
-  stripeSubscriptionId   String?             @unique @map(name: "stripe_subscription_id")
-  stripePriceId          String?             @map(name: "stripe_price_id")
-  stripeCurrentPeriodEnd DateTime?           @map(name: "stripe_current_period_end")
-  createdAt              DateTime            @default(now())
-  updatedAt              DateTime            @updatedAt
+  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
+  stripePriceId          String?   @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
   Course                 Course[]
   Product                Product[]
   Video                  Video[]
   Website                Website[]
-
 }
 
 model Academy {
-  id                     String              @default(uuid()) @unique
-  name                   String 
-  subdomain              String              @unique
-  createdAt              DateTime            @default(now())
-  updatedAt              DateTime            @updatedAt
-  userId                 String 
+  id        String   @unique @default(uuid())
+  name      String
+  subdomain String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
 }
 
-
-
-
 model Course {
-  id                     String @default(uuid()) @unique
-  accountId             String 
-  title                  String 
-  courseUrl              String?    @db.LongText
-  youtubeUrl             String?    @db.LongText
-  thumnailUrl            String?    @db.LongText
-  courseResume           String?     @db.LongText
-  courseDescription      Json?
-  seoTitle               String?
-  seoDescription         String?
-  price                  Float?
-  compareAtPrice         Float?
+  id                String  @unique @default(uuid())
+  accountId         String
+  title             String
+  courseUrl         String? @db.LongText
+  youtubeUrl        String? @db.LongText
+  thumnailUrl       String? @db.LongText
+  courseResume      String? @db.LongText
+  courseDescription Json?
+  seoTitle          String?
+  seoDescription    String?
+  price             Float?
+  compareAtPrice    Float?
 
-  studenstNbr            String?
-  profit                 String?
-  trainers               String?
-  status                 String
-  Account   Account? @relation(fields: [accountId], references: [id])
-  createdAt              DateTime            @default(now())
-  updatedAt              DateTime            @updatedAt
+  studenstNbr String?
+  profit      String?
+  trainers    String?
+  status      String
+  Account     Account? @relation(fields: [accountId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
   @@index([id])
   @@index([accountId])
 }
 
 model Chapter {
-  id                     String              @default(uuid()) @unique
-  courseID               String
-  title                  String 
-  modules                Json?
-  orderNumber            Int
-  isVisible              Boolean             @default(true)
-  createdAt              DateTime            @default(now())
-  updatedAt              DateTime            @updatedAt 
+  id          String   @unique @default(uuid())
+  courseID    String
+  title       String
+  modules     Json?
+  orderNumber Int
+  isVisible   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
-
 model Product {
-  id                     String              @default(uuid()) @unique
-  title                  String 
-  price                  Float?
-  numberOfDownloads      Int? 
-  subDescription         String?              @db.LongText 
-  SeoTitle               String? 
-  SeoDescription         String?              @db.LongText
-  thumnailUrl            String?             
-  filrUrl                String?
-  description            Json?
-  status                 String? 
-  compareAtPrice         Float?
-  accountId              String
-  isVisible              Boolean             @default(true)
-  createdAt              DateTime            @default(now())
-  updatedAt              DateTime            @updatedAt 
-  Account   Account? @relation(fields: [accountId], references: [id])
+  id                String   @unique @default(uuid())
+  title             String
+  price             Float?
+  numberOfDownloads Int?
+  subDescription    String?  @db.LongText
+  SeoTitle          String?
+  SeoDescription    String?  @db.LongText
+  thumnailUrl       String?
+  filrUrl           String?
+  description       Json?
+  status            String?
+  compareAtPrice    Float?
+  accountId         String
+  isVisible         Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  Account           Account? @relation(fields: [accountId], references: [id])
+
   @@index([id])
   @@index([accountId])
 }
 
 model Video {
-  id                     String              @default(uuid()) @unique 
-  accountId              String
-  videoId                String
-  createdAt              DateTime            @default(now())
-  updatedAt              DateTime            @updatedAt
+  id        String   @unique @default(uuid())
+  accountId String
+  videoId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   Account   Account? @relation(fields: [accountId], references: [id])
+
   @@index([id])
   @@index([accountId])
 }
 
 model Website {
-  id                     String              @default(uuid()) @unique 
-  accountId              String              @unique
-  name          String?
-  description   String?  @db.Text
-  subdomain     String?  @unique
-  pages                  Json
-  assets                 Json?
-  favicon                String? 
-  logo          String?   @db.LongText
-  font          String   @default("font-cal")
-  createdAt              DateTime            @default(now())
-  updatedAt              DateTime            @updatedAt
-  Account   Account? @relation(fields: [accountId], references: [id])
+  id           String   @unique @default(uuid())
+  accountId    String   @unique
+  name         String?
+  description  String?  @db.Text
+  subdomain    String?  @unique
+  customDomain String?  @unique
+  pages        Json
+  assets       Json?
+  favicon      String?
+  logo         String?  @db.LongText
+  font         String   @default("font-cal")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  Account      Account? @relation(fields: [accountId], references: [id])
 }
 
 enum Plan {
   price_1OYxkqFj9oKEERu1NbKUxXxN
   price_1OYxkqFj9oKEERu1KfJGWxgN
 }
-

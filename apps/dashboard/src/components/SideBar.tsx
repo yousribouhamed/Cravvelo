@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@ui/lib/utils";
-import { useRouter, usePathname } from "next/navigation";
 import SideBarMenu from "./MobilMenu";
 import AddNew from "./models/add-new";
 
