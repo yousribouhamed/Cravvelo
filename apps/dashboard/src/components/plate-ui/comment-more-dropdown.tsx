@@ -9,7 +9,7 @@ import {
   useCommentEditButtonState,
 } from "@udecode/plate-comments";
 
-import { Icons } from "@/src/components/icons";
+import { Icons } from "./text-editor-icons";
 
 import { Button } from "./button";
 import {

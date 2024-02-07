@@ -2,7 +2,7 @@ import { withRef } from "@udecode/cn";
 import { PlateElement, useElement } from "@udecode/plate-common";
 import { useToggleButton, useToggleButtonState } from "@udecode/plate-toggle";
 
-import { Icons } from "@/src/components/icons";
+import { Icons } from "./text-editor-icons";
 import { ChevronDown } from "lucide-react";
 
 export const ToggleElement = withRef<typeof PlateElement>(

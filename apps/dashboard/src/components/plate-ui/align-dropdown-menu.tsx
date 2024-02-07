@@ -7,7 +7,10 @@ import {
   useAlignDropdownMenuState,
 } from "@udecode/plate-alignment";
 
-import { Icons, iconVariants } from "@/src/components/icons";
+import {
+  Icons,
+  iconVariants,
+} from "@/src/components/plate-ui/text-editor-icons";
 
 import {
   DropdownMenu,

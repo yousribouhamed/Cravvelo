@@ -23,7 +23,7 @@ import {
 } from "@udecode/plate-table";
 import { useReadOnly, useSelected } from "slate-react";
 
-import { Icons, iconVariants } from "@/src/components/icons";
+import { Icons, iconVariants } from "./text-editor-icons";
 
 import { Button } from "./button";
 import {
