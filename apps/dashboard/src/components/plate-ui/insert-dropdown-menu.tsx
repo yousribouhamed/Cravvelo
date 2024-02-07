@@ -23,6 +23,8 @@ import {
   useOpenState,
 } from "./dropdown-menu";
 import { ToolbarButton } from "./toolbar";
+import { ELEMENT_TABLE } from "@udecode/plate-table";
+import { ELEMENT_HR } from "@udecode/plate-horizontal-rule";
 
 const items = [
   {
@@ -30,58 +32,34 @@ const items = [
     items: [
       {
         value: ELEMENT_PARAGRAPH,
-        label: "Paragraph",
+        label: "فقرة",
         description: "Paragraph",
         icon: Icons.paragraph,
       },
       {
         value: ELEMENT_H1,
-        label: "Heading 1",
+        label: "عنوان رئيسي",
         description: "Heading 1",
         icon: Icons.h1,
       },
       {
         value: ELEMENT_H2,
-        label: "Heading 2",
+        label: "عنوان صغير",
         description: "Heading 2",
         icon: Icons.h2,
       },
       {
         value: ELEMENT_H3,
-        label: "Heading 3",
+        label: "عنوان اصغر",
         description: "Heading 3",
         icon: Icons.h3,
       },
       {
         value: ELEMENT_BLOCKQUOTE,
-        label: "Quote",
+        label: "اقتباس",
         description: "Quote (⌘+⇧+.)",
         icon: Icons.blockquote,
       },
-      // {
-      //   value: ELEMENT_TABLE,
-      //   label: 'Table',
-      //   description: 'Table',
-      //   icon: Icons.table,
-      // },
-      // {
-      //   value: 'ul',
-      //   label: 'Bulleted list',
-      //   description: 'Bulleted list',
-      //   icon: Icons.ul,
-      // },
-      // {
-      //   value: 'ol',
-      //   label: 'Numbered list',
-      //   description: 'Numbered list',
-      //   icon: Icons.ol,
-      // },
-      // {
-      //   value: ELEMENT_HR,
-      //   label: 'Divider',
-      //   description: 'Divider (---)',
-      //   icon: Icons.hr,
-      // },
     ],
   },
   // {

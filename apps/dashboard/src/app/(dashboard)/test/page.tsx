@@ -5,7 +5,7 @@ interface pageAbdullahProps {}
 
 const page: FC = ({}) => {
   return (
-    <div>
+    <div className="w-full h-screen pt-20">
       <PlateEditor />
     </div>
   );

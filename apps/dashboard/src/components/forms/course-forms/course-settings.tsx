@@ -23,6 +23,7 @@ import { maketoast } from "../../toasts";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { ImageUploader } from "../../uploaders/ImageUploader";
 import { Course } from "database";
+import { PlateEditor } from "../../reich-text-editor/rich-text-editor";
 
 interface ComponentProps {
   course: Course;
@@ -48,7 +49,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      courseDescription: course.courseDescription,
+      courseDescription: [],
       courseResume: course.courseResume,
       courseUrl: course.courseUrl,
       title: course.title,
@@ -75,7 +76,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
       courseId: courseID,
       courseResume: values.courseResume,
       courseUrl: values.courseUrl,
-      seoDescription: values.seoDescription,
+      seoDescription: values?.seoDescription,
       seoTitle: values.seoTitle,
       thumnailUrl: values.thumnailUrl,
       title: values.title,
@@ -216,10 +217,11 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Tiptap
+                    {/* <Tiptap
                       description={field.name}
                       onChnage={field.onChange}
-                    />
+                    /> */}
+                    <PlateEditor onChnage={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

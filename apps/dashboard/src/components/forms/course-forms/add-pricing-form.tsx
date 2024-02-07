@@ -110,7 +110,10 @@ function AddPricingForm() {
                   name="compareAtPrice"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>مقارنة بالسعر</FormLabel>
+                      <FormLabel>
+                        مقارنة بالسعر (هذا السعر سوف يظهم انه مشطب عند عرض
+                        لمنتج)
+                      </FormLabel>
                       <FormControl>
                         <Input
                           disabled={isFree}

@@ -19,6 +19,7 @@ import Tiptap from "../../tiptap";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { PlateEditor } from "../../reich-text-editor/rich-text-editor";
 
 const addTextSchema = z.object({
   title: z.string().min(2).max(50),
@@ -88,10 +89,7 @@ function AddTextForm() {
                     محتوى <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Tiptap
-                      description={field.name}
-                      onChnage={field.onChange}
-                    />
+                    <PlateEditor onChnage={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

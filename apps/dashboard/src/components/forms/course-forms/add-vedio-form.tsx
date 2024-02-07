@@ -23,6 +23,7 @@ import { JadaraVoiceUpLoader } from "../../upload-voice";
 import VedioUploader from "../../uploaders/VedioUploader";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import Tiptap from "../../tiptap";
+import { PlateEditor } from "../../reich-text-editor/rich-text-editor";
 
 const addVedioSchema = z.object({
   title: z.string().min(2).max(50),
@@ -114,10 +115,7 @@ function AddVedioForm() {
                     فيديو الوصف <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Tiptap
-                      description={field.name}
-                      onChnage={field.onChange}
-                    />
+                    <PlateEditor onChnage={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

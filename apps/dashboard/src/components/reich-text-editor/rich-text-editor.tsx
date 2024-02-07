@@ -362,17 +362,25 @@ const initialValue = [
   },
 ];
 
-export function PlateEditor() {
+export function PlateEditor({
+  onChnage,
+}: {
+  onChnage: (richTeact: any) => void;
+}) {
   return (
     <TooltipProvider>
       <DndProvider backend={HTML5Backend}>
         <CommentsProvider users={{}} myUserId="1">
-          <Plate plugins={plugins} initialValue={initialValue}>
+          <Plate
+            plugins={plugins}
+            // initialValue={value}
+            onChange={(val) => onChnage(val)}
+          >
             <FixedToolbar>
               <FixedToolbarButtons />
             </FixedToolbar>
 
-            <Editor />
+            <Editor className="min-h-[150px] h-fit mt-4 w-full " />
 
             <FloatingToolbar>
               <FloatingToolbarButtons />

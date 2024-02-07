@@ -20,20 +20,15 @@ export function FixedToolbarButtons() {
   const readOnly = useEditorReadOnly();
 
   return (
-    <div className="w-full overflow-hidden">
+    <div className="w-[100%]  h-full mx-auto border rounded-xl overflow-hidden shadow bg-white ">
       <div
-        className="flex flex-wrap"
+        className="flex flex-wrap justify-end"
         style={{
           transform: "translateX(calc(-1px))",
         }}
       >
         {!readOnly && (
           <>
-            <ToolbarGroup noSeparator>
-              <InsertDropdownMenu />
-              <TurnIntoDropdownMenu />
-            </ToolbarGroup>
-
             <ToolbarGroup>
               <MarkToolbarButton tooltip="Bold (⌘+B)" nodeType={MARK_BOLD}>
                 <Icons.bold />
@@ -58,14 +53,19 @@ export function FixedToolbarButtons() {
                 <Icons.code />
               </MarkToolbarButton>
             </ToolbarGroup>
+
+            <ToolbarGroup noSeparator>
+              <InsertDropdownMenu />
+              <TurnIntoDropdownMenu />
+            </ToolbarGroup>
           </>
         )}
 
-        <div className="grow" />
+        {/* <div className="grow" />
 
         <ToolbarGroup noSeparator>
           <ModeDropdownMenu />
-        </ToolbarGroup>
+        </ToolbarGroup> */}
       </div>
     </div>
   );

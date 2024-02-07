@@ -113,7 +113,7 @@ export const Draggable = withRef<"div", DraggableProps>(
       >
         <div
           className={cn(
-            "pointer-events-none absolute top-0 flex h-full -translate-x-full cursor-text opacity-0 group-hover:opacity-100",
+            "pointer-events-none absolute top-0 flex h-full translate-x-full cursor-text opacity-0 group-hover:opacity-100",
             classNames.gutterLeft
           )}
           {...gutterLeftProps}
@@ -121,7 +121,7 @@ export const Draggable = withRef<"div", DraggableProps>(
           <div className={cn("flex h-[1.5em]", classNames.blockToolbarWrapper)}>
             <div
               className={cn(
-                "pointer-events-auto mr-1 flex items-center",
+                "pointer-events-auto ml-1 justify-start flex items-center",
                 classNames.blockToolbar
               )}
             >
