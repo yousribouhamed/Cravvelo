@@ -1,4 +1,4 @@
-import { Icons } from "../components/Icons";
+import { Icons } from "../components/my-icons";
 
 export const SIDE_BAR_ITEMS = [
   {

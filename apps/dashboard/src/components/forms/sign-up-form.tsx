@@ -32,7 +32,7 @@ import { PasswordInput } from "../password-input";
 import { authSchema } from "@/src/lib/validators/auth";
 import { useRouter } from "next/navigation";
 
-import { Icons } from "../Icons";
+import { Icons } from "../my-icons";
 import { catchClerkError, catchError } from "@/src/lib/utils";
 
 type Inputs = z.infer<typeof authSchema>;

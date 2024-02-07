@@ -20,7 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
 import LogoutButton from "./logout-button";
-import { Icons } from "../Icons";
+import { Icons } from "../my-icons";
 import Link from "next/link";
 import { Eye } from "lucide-react";
 import { ArrowUpLeft } from "lucide-react";
@@ -39,16 +39,20 @@ export default function UserNav({ user }: UserNavProps) {
         <div
           className={` ${buttonVariants({
             variant: "ghost",
-          })}  cursor-pointer  w-48   flex items-center bg-white rounded-xl border justify-end gap-x-4 p-2 `}
+          })}  cursor-pointer  w-48   flex items-center  rounded-xl border justify-start gap-x-4 bg-white !p-2 `}
         >
-          <Avatar className="w-8 h-8 rounded-[50%]">
-            <AvatarImage src={user?.avatar} />
-            <AvatarFallback>AB</AvatarFallback>
-          </Avatar>
-          <p className="text-md text-black">
-            مرحباً {user?.firstName ? user?.firstName : "ah"}
-          </p>
-          <ChevronDown className="w-4 h-4 text-black hover:text-accent-foreground " />
+          <div className="w-[20%] h-full flex items-center justify-start ">
+            <Avatar className="w-8 h-8  rounded-[50%]">
+              <AvatarImage src={user?.avatar} />
+              <AvatarFallback>AB</AvatarFallback>
+            </Avatar>
+          </div>
+          <div className="w-[80%] h-full flex justify-end items-center gap-x-2">
+            <p className="text-md w-fit  text-black">
+              مرحباً {user?.firstName ? user?.firstName : "ah"}
+            </p>
+            <ChevronDown className="w-4 h-4 text-black hover:text-accent-foreground " />
+          </div>
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className=" w-56 ">
@@ -127,18 +131,12 @@ export default function UserNav({ user }: UserNavProps) {
           </DropdownMenuItem>
 
           <DropdownMenuItem
-            disabled={!user?.cutomDomain || !user?.cutomDomain}
+            disabled={!user?.cutomDomain || !user?.subdomain}
             className="w-full  h-full flex justify-between items-center  "
           >
             <Link
               className="w-full  h-full flex justify-between items-center p-2 "
-              href={
-                user?.cutomDomain
-                  ? user?.cutomDomain
-                  : user?.subdomain
-                  ? user?.cutomDomain
-                  : "#"
-              }
+              href={user?.subdomain}
             >
               <ArrowUpLeft className=" h-4 w-4" />
 

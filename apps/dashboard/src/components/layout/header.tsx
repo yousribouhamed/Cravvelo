@@ -15,6 +15,7 @@ import {
 import Notifications from "../real-time/notifications";
 import { ArrowRight } from "lucide-react";
 import { UserData } from "@/src/types";
+import { daysLeftInTrial } from "@/src/lib/utils";
 
 interface Props {
   title: string;
@@ -72,7 +73,8 @@ const Header: FC<Props> = ({ title, user, goBack }) => {
       {user.isFreeTrial && (
         <div className="w-full h-[70px] flex items-center justify-center bg-gradient-to-r from-primary to-yellow-500">
           <h1 className="text-white font-bold text-md">
-            أنت الآن في الفترة التجريبية المجانية، يرجى اختيار خطة لتأكيد حسابك
+            لديك {daysLeftInTrial(user.createdAt)} يومًا متبقيًا في النسخة
+            التجريبية المجانية
           </h1>
         </div>
       )}

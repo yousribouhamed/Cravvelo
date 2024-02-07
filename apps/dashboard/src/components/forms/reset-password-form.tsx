@@ -29,7 +29,7 @@ import { PasswordInput } from "../password-input";
 import { useSignIn } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { checkEmailSchema, verifyEmailSchema } from "@/src/lib/validators/auth";
-import { Icons } from "../Icons";
+import { Icons } from "../my-icons";
 import { toast } from "@ui/lib/utils";
 import { catchClerkError } from "@/src/lib/utils";
 

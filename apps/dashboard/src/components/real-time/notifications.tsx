@@ -5,7 +5,7 @@ import {
   PopoverTrigger,
 } from "@ui/components/ui/popover";
 import { Button } from "@ui/components/ui/button";
-import { Icons } from "../Icons";
+import { Icons } from "../my-icons";
 import Image from "next/image";
 
 interface notificationsAbdullahProps {}

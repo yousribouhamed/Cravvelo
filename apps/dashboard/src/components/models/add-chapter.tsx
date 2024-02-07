@@ -26,7 +26,7 @@ import { trpc } from "@/src/app/_trpc/client";
 import { getCookie, getValueFromUrl } from "@/src/lib/utils";
 import { useRouter, usePathname } from "next/navigation";
 import React from "react";
-import { Icons } from "../Icons";
+import { Icons } from "../my-icons";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 interface Props {

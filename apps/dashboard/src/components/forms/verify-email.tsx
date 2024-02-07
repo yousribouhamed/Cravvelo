@@ -26,7 +26,7 @@ import { PasswordInput } from "../password-input";
 import { useSignUp } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { verifyEmailSchema } from "@/src/lib/validators/auth";
-import { Icons } from "../Icons";
+import { Icons } from "../my-icons";
 
 export function VerifyEmail() {
   const router = useRouter();

@@ -48,7 +48,7 @@ function MobileLink({
       onClick={() => setIsOpen(false)}
     >
       {isSelected && (
-        <div className="w-[15px] h-[15px] rounded-[50%] z-[20] absolute -right-1  bg-[#FFB800]" />
+        <div className="w-[15px] h-[15px] rounded-[50%] z-[20] absolute -right-1  bg-white" />
       )}
       {children}
     </Link>

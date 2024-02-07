@@ -127,3 +127,21 @@ export function translateCurrency(amount, toCurrency) {
       return amount;
   }
 }
+
+export function daysLeftInTrial(created_at: Date): number {
+  // Calculate the end date of the trial by adding 14 days to the created_at date
+  const trialEndDate = new Date(created_at);
+  trialEndDate.setDate(trialEndDate.getDate() + 14);
+
+  // Get the current date
+  const currentDate = new Date();
+
+  // Calculate the difference in milliseconds between the current date and the trial end date
+  const timeDifference = trialEndDate.getTime() - currentDate.getTime();
+
+  // Convert milliseconds to days
+  const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
+
+  // Return the number of days left in the trial
+  return daysDifference;
+}

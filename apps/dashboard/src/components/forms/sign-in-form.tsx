@@ -27,7 +27,7 @@ import { useRouter } from "next/navigation";
 import { useSignIn } from "@clerk/nextjs";
 import { authSchemaLogin } from "@/src/lib/validators/auth";
 import { catchClerkError } from "@/src/lib/utils";
-import { Icons } from "../Icons";
+import { Icons } from "../my-icons";
 import { toast } from "@ui/lib/utils";
 import { OAuthSignIn } from "../auth/oauth-signin";
 import { maketoast } from "../toasts";

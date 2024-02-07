@@ -26,7 +26,7 @@ import { trpc } from "@/src/app/_trpc/client";
 import { getCookie } from "@/src/lib/utils";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { Icons } from "../Icons";
+import { Icons } from "../my-icons";
 interface AddCourseAbdullahProps {}
 
 const icons = {

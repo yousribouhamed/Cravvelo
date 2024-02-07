@@ -50,6 +50,7 @@ const useHaveAccess = async () => {
     isSubscribed,
     subdomain: account.Website[0].subdomain,
     cutomDomain: account.Website[0].customDomain,
+    createdAt: account.createdAt,
   };
 };
 

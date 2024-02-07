@@ -1,6 +1,6 @@
 "use client";
 
-import { Icons } from "@/src/components/Icons";
+import { Icons } from "@/src/components/my-icons";
 import { Button } from "@ui/components/ui/button";
 import type { FC } from "react";
 import { usePathname, useRouter } from "next/navigation";

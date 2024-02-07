@@ -58,4 +58,5 @@ export type UserData = {
   isSubscribed: boolean;
   subdomain: string;
   cutomDomain: string;
+  createdAt: Date;
 };
