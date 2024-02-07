@@ -26,6 +26,7 @@ model Account {
   Product                Product[]
   Video                  Video[]
   Website                Website[]
+  Coupon                 Coupon[]
 }
 
 model Academy {
@@ -125,6 +126,15 @@ model Website {
   updatedAt    DateTime @updatedAt
   Account      Account? @relation(fields: [accountId], references: [id])
 }
+
+
+ model Coupon {
+     id           String   @unique @default(uuid())
+     accountId    String   @unique
+
+
+     Account      Account? @relation(fields: [accountId], references: [id])
+ }
 
 enum Plan {
   price_1OYxkqFj9oKEERu1NbKUxXxN
