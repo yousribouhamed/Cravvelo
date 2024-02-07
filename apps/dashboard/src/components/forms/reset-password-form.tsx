@@ -105,7 +105,7 @@ export function ResetPasswordForm() {
               data-ripple-light="true"
               type="submit"
               size="lg"
-              className="w-full text-white font-bold bg-[#43766C]"
+              className="w-full text-white font-bold bg-primary"
             >
               إرسال
               {isPending && (

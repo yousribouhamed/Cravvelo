@@ -1,9 +1,6 @@
 import { SignUpForm } from "@/src/components/forms/sign-up-form";
-import type { FC } from "react";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-
-interface pageAbdullahProps {}
 
 const page = async ({}) => {
   const user = await currentUser();

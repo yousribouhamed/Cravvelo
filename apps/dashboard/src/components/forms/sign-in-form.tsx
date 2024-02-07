@@ -138,7 +138,7 @@ export function SignInForm() {
               type="submit"
               size="lg"
               disabled={isLoading}
-              className="w-full text-white font-bold bg-[#43766C]"
+              className="w-full text-white font-bold bg-primary"
             >
               {isLoading && (
                 <Icons.spinner
@@ -154,7 +154,7 @@ export function SignInForm() {
           <span>
             ليس لديك حساب؟{" "}
             <Link href={"/sign-up"}>
-              <span className="text-[#43766C]">أنشئ حساب الآن</span>
+              <span className="text-primary">أنشئ حساب الآن</span>
             </Link>
           </span>
         </div>

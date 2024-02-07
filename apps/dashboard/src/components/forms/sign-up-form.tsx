@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@ui/components/ui/button";
-import { Checkbox } from "@ui/components/ui/checkbox";
 import { toast } from "@ui/lib/utils";
 import {
   Card,
@@ -157,7 +156,7 @@ export function SignUpForm() {
               type="submit"
               disabled={isLoading}
               size="lg"
-              className="w-full text-white font-bold bg-[#43766C]"
+              className="w-full text-white font-bold bg-primary"
             >
               {isLoading && (
                 <Icons.spinner
@@ -173,7 +172,7 @@ export function SignUpForm() {
           <span>
             هل لديك حساب؟{" "}
             <Link href={"/sign-in"}>
-              <span className="text-[#43766C]">سجّل الدخول.</span>
+              <span className="text-primary">سجّل الدخول.</span>
             </Link>
           </span>
         </div>
