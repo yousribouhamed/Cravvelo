@@ -27,7 +27,7 @@ const ThemeEditorBoard: FC<ThemeEditorBoardProps> = ({ pages }) => {
   return (
     <>
       <ThemeEditorHeader pages={pages} />
-      <div className="w-full flex h-full  mt-[70px]">
+      <div className="w-full flex h-full  mt-[60px]">
         <ThemeEditorRightbar />
         <PagePainter />
       </div>

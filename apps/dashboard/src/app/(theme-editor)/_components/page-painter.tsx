@@ -39,7 +39,7 @@ const PagePainter: FC = ({}) => {
   };
 
   return (
-    <ScrollArea className="w-[80%] flex-grow relative   h-full bg-gray-100 p-4 ">
+    <ScrollArea className="w-[75%] flex-grow relative   h-full bg-gray-100 p-4 ">
       <div
         dir="rtl"
         onDrop={handleOnDrop}

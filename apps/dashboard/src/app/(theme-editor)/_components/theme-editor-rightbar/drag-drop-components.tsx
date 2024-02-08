@@ -12,7 +12,7 @@ const DragDropComponents: FC = ({}) => {
 
   return (
     <ScrollArea>
-      <div className="w-full h-fit min-h-[300px] flex flex-col items-center p-4 gap-y-4">
+      <div className="w-[290px] h-fit min-h-[300px] flex flex-col items-center p-4 gap-y-4">
         {ComponentsList.map((item, index) => (
           <Card key={item.type + index} className="w-full">
             <CardContent className="w-full p-0">

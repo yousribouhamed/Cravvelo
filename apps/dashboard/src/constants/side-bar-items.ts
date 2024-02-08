@@ -43,7 +43,7 @@ export const SIDE_BAR_ITEMS = [
       {
         title: "منشئ الموقع",
         icon: Icons.Home,
-        slug: "/editor",
+        slug: "/theme-editor",
       },
       {
         title: "مصمم الشهادة",
