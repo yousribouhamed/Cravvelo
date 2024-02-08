@@ -134,7 +134,7 @@ model Website {
 
 
      Account      Account? @relation(fields: [accountId], references: [id])
- }
+}
 
 enum Plan {
   price_1OYxkqFj9oKEERu1NbKUxXxN

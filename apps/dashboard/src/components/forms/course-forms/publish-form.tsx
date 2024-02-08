@@ -33,7 +33,7 @@ const selectionButtoms = [
     value: "DRAFT",
   },
   {
-    title: "ينشر",
+    title: "متاح للجميع",
     description: "سيكون مرئيًا للجميع",
     value: "PUBLISED",
   },
@@ -98,10 +98,10 @@ function PublishCourseForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    عنوان النص <span className="text-red-600 text-xl">*</span>
+                    عنوان الدورة <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input placeholder="عنوان الدورة" {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -110,6 +110,12 @@ function PublishCourseForm() {
             />
           </form>
         </Form>
+        <div className="w-full my-4 h-fit min-h-[200px] flex flex-col items-start">
+          <p>محتوى الدورة</p>
+          <div className="bg-white w-full h-[500px] flex justify-center items-center rounded-xl border my-4">
+            <h1>in here the content will be added</h1>
+          </div>
+        </div>
       </div>
       <div className="col-span-1 w-full h-full ">
         <Card>
@@ -123,7 +129,7 @@ function PublishCourseForm() {
                 variant="secondary"
                 size="lg"
                 className={`bg-white flex items-start justify-center flex-col gap-x-4 text-lg border text-black h-16 ${
-                  selectedItem === item.value ? "border-[#43766C] border-2" : ""
+                  selectedItem === item.value ? "border-primary border-2" : ""
                 }`}
               >
                 <span className="text-md font-bold text-start">

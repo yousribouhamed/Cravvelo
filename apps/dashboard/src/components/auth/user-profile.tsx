@@ -45,10 +45,6 @@ const formSchema = z.object({
 const UserProfile: FC = ({}) => {
   const { isSignedIn, user, isLoaded } = useUser();
 
-  if (!isLoaded) {
-    return null;
-  }
-
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -66,6 +62,10 @@ const UserProfile: FC = ({}) => {
         lastName: "Doe",
       });
     };
+  }
+
+  if (!isLoaded) {
+    return null;
   }
 
   if (isSignedIn) {

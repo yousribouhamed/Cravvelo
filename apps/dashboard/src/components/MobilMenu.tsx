@@ -76,7 +76,9 @@ const SideBarMenu: FC = ({}) => {
                     buttonVariants({ variant: "ghost" }),
                     "w-full flex items-center justify-end qatar-semibold text-md  gap-x-2 hover:!bg-transparent !text-white",
                     {
-                      "text-white bg-white/10": path === item.slug,
+                      "text-white bg-white/10":
+                        path === "/" ||
+                        (path.includes(item.slug) && item.slug !== "/"),
                     }
                   )}
                 >
@@ -96,7 +98,9 @@ const SideBarMenu: FC = ({}) => {
                     buttonVariants({ variant: "ghost" }),
                     "w-full flex items-center justify-end qatar-semibold group text-md  gap-x-2 hover:!bg-transparent !text-white ",
                     {
-                      "text-white bg-white/10": path === item.slug,
+                      "text-white bg-white/10":
+                        path === "/" ||
+                        (path.includes(item.slug) && item.slug !== "/"),
                     }
                   )}
                 >

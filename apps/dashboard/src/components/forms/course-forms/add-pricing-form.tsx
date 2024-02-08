@@ -23,8 +23,8 @@ import { maketoast } from "../../toasts";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 const PricingFormSchema = z.object({
-  price: z.number(),
-  compareAtPrice: z.number(),
+  price: z.string(),
+  compareAtPrice: z.string(),
 });
 
 function AddPricingForm() {
@@ -45,17 +45,17 @@ function AddPricingForm() {
   const form = useForm<z.infer<typeof PricingFormSchema>>({
     mode: "onChange",
     resolver: zodResolver(PricingFormSchema),
-    defaultValues: {
-      price: 0,
-      compareAtPrice: 0,
-    },
+    // defaultValues: {
+    //   price: 0,
+    //   compareAtPrice: 0,
+    // },
   });
 
   async function onSubmit(values: z.infer<typeof PricingFormSchema>) {
     await mutation.mutateAsync({
       courseId,
-      price: values.price,
-      compairAtPrice: values.compareAtPrice,
+      price: Number(values.price),
+      compairAtPrice: Number(values.compareAtPrice),
     });
   }
 
