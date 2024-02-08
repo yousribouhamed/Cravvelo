@@ -6,6 +6,7 @@ import PagePainter from "./page-painter";
 import ThemeEditorHeader from "./theme-editor-header";
 import { ThemePage, useThemeEditorStore } from "../theme-editor-store";
 import React from "react";
+import { TooltipProvider } from "@ui/components/ui/tooltip";
 
 interface ThemeEditorBoardProps {
   pages: ThemePage[];
@@ -26,11 +27,13 @@ const ThemeEditorBoard: FC<ThemeEditorBoardProps> = ({ pages }) => {
 
   return (
     <>
-      <ThemeEditorHeader pages={pages} />
-      <div className="w-full flex h-full  mt-[60px]">
-        <ThemeEditorRightbar />
-        <PagePainter />
-      </div>
+      <TooltipProvider>
+        <ThemeEditorHeader pages={pages} />
+        <div className="w-full flex h-full  mt-[60px]">
+          <ThemeEditorRightbar />
+          <PagePainter />
+        </div>
+      </TooltipProvider>
     </>
   );
 };

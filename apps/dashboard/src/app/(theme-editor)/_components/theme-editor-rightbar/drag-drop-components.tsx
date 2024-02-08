@@ -14,16 +14,15 @@ const DragDropComponents: FC = ({}) => {
         {ComponentsList.map((item, index) => (
           <Card key={item.type + index} className="w-full">
             <CardContent className="w-full p-0">
-              {/* <img
-              className="w-full h-[200px] object-contain rounded-xl"
-              src={item.imageUrl}
-            /> */}
               <div
                 draggable
                 onDragStart={(e) => handleOnDrag(e, item.type)}
-                className="w-full h-[100px] bg-primary rounded-xl flex items-center justify-center"
+                className="w-full h-[100px] boder border-dashed rounded-xl flex items-center justify-center"
               >
-                <p className="text-white font-bold text-xl">{item.name}</p>
+                <img
+                  className="w-full h-full object-contain rounded-xl"
+                  src={item.imageUrl}
+                />
               </div>
             </CardContent>
           </Card>

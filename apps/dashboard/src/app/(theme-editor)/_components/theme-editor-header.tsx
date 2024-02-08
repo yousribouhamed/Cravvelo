@@ -23,6 +23,7 @@ import PublishWebsite from "@/src/components/models/editor/publish-website";
 import { trpc } from "../../_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
+import { ToggleGroup, ToggleGroupItem } from "@ui/components/ui/toggle-group";
 
 interface ThemeEditorHeaderProps {
   pages: ThemePage[];
@@ -65,86 +66,87 @@ const ThemeEditorHeader: FC<ThemeEditorHeaderProps> = ({ pages }) => {
     },
   });
   return (
-    <TooltipProvider>
-      <div className="w-full h-[60px] border-b fixed top-0 bg-white shadow flex items-center justify-between px-4">
-        <div className="w-[300px] h-full flex items-center justify-start  ">
-          <Tooltip delayDuration={0}>
+    <div className="w-full z-[99] h-[60px] border-b fixed top-0 bg-white shadow flex items-center justify-between px-4 ">
+      <div className="w-[300px] h-full flex items-center justify-start  ">
+        <Tooltip delayDuration={0}>
+          <TooltipTrigger asChild>
+            <Button
+              size="icon"
+              variant="secondary"
+              className={"bg-white border rounded-xl text-black h-10 w-10   "}
+            >
+              <ArrowRight className=" w-6 h-6 " />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>العودة إلى لوحة القيادة</p>
+          </TooltipContent>
+        </Tooltip>
+      </div>
+
+      <div className="w-[150px] h-full  flex items-center justify-center">
+        <Select onValueChange={(val) => chnageCurrentPage(Number(val))}>
+          <SelectTrigger className="w-[150px] border-none  h-10 dark:bg-[#252525]">
+            <SelectValue
+              className="placeholder:text-black "
+              placeholder="الصفحة الرئيسية"
+            />
+          </SelectTrigger>
+          <SelectContent className="dark:bg-[#252525]">
+            {state.pages.map((item, index) => (
+              <SelectItem
+                key={item.name + index}
+                value={index.toString()}
+                className="w-full flex justify-end items-center"
+              >
+                {item.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="w-[300px] h-full flex items-center justify-end gap-x-4">
+        {viewMods.map((item) => (
+          <Tooltip key={item.value} delayDuration={0}>
             <TooltipTrigger asChild>
               <Button
+                onClick={() => chnageViewMode(item.value)}
                 size="icon"
                 variant="secondary"
-                className={"bg-white border rounded-xl text-black h-10 w-10   "}
+                className={`bg-white border rounded-xl  h-8 w-8  ${
+                  state.viewMode === item.value
+                    ? "text-primary"
+                    : "text-zinc-600"
+                } `}
               >
-                <ArrowRight className=" w-6 h-6 " />
+                {item.icon}
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>العودة إلى لوحة القيادة</p>
+              <p>{item.tooltip}</p>
             </TooltipContent>
           </Tooltip>
-        </div>
-
-        <div className="w-[150px] h-full  flex items-center justify-center">
-          <Select onValueChange={(val) => chnageCurrentPage(Number(val))}>
-            <SelectTrigger className="w-[150px] border-none  h-10 dark:bg-[#252525]">
-              <SelectValue placeholder="الصفحة الرئيسية" />
-            </SelectTrigger>
-            <SelectContent className="dark:bg-[#252525]">
-              {state.pages.map((item, index) => (
-                <SelectItem
-                  key={item.name + index}
-                  value={index.toString()}
-                  className="w-full flex justify-end items-center"
-                >
-                  {item.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="w-[300px] h-full flex items-center justify-end gap-x-4">
-          {viewMods.map((item) => (
-            <Tooltip key={item.value} delayDuration={0}>
-              <TooltipTrigger asChild>
-                <Button
-                  onClick={() => chnageViewMode(item.value)}
-                  size="icon"
-                  variant="secondary"
-                  className={`bg-white border rounded-xl  h-10 w-10  ${
-                    state.viewMode === item.value
-                      ? "text-primary"
-                      : "text-zinc-600"
-                  } `}
-                >
-                  {item.icon}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{item.tooltip}</p>
-              </TooltipContent>
-            </Tooltip>
-          ))}
-          {pages ? (
-            <Button
-              size="sm"
-              className=" text-white h-10 font-bold rounded-2xl bg-primary"
-              onClick={() =>
-                mutation.mutate({
-                  pages: state.pages,
-                })
-              }
-              disabled={mutation.isLoading}
-            >
-              {mutation.isLoading ? <LoadingSpinner /> : null}
-              حفظ التغييرات
-            </Button>
-          ) : (
-            <PublishWebsite />
-          )}
-        </div>
+        ))}
+        {pages ? (
+          <Button
+            size="sm"
+            className=" text-white shadow shadow-primary h-8 font-bold rounded-lg text-xs bg-primary"
+            onClick={() =>
+              mutation.mutate({
+                pages: state.pages,
+              })
+            }
+            disabled={mutation.isLoading}
+          >
+            {mutation.isLoading ? <LoadingSpinner /> : null}
+            حفظ التغييرات
+          </Button>
+        ) : (
+          <PublishWebsite />
+        )}
       </div>
-    </TooltipProvider>
+    </div>
   );
 };
 
