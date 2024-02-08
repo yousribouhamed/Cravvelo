@@ -66,7 +66,7 @@ const ThemeEditorHeader: FC<ThemeEditorHeaderProps> = ({ pages }) => {
   });
   return (
     <TooltipProvider>
-      <div className="w-full h-[60px] border-b fixed top-0 bg-white shadow-lg flex items-center justify-between px-4">
+      <div className="w-full h-[60px] border-b fixed top-0 bg-white shadow flex items-center justify-between px-4">
         <div className="w-[300px] h-full flex items-center justify-start  ">
           <Tooltip delayDuration={0}>
             <TooltipTrigger asChild>
