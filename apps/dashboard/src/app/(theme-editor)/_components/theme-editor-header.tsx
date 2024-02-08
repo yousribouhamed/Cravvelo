@@ -84,9 +84,9 @@ const ThemeEditorHeader: FC<ThemeEditorHeaderProps> = ({ pages }) => {
           </Tooltip>
         </div>
 
-        <div className="w-[300px] h-full  flex items-center justify-center">
+        <div className="w-[150px] h-full  flex items-center justify-center">
           <Select onValueChange={(val) => chnageCurrentPage(Number(val))}>
-            <SelectTrigger className="w-[300px] h-10 dark:bg-[#252525]">
+            <SelectTrigger className="w-[150px] border-none  h-10 dark:bg-[#252525]">
               <SelectValue placeholder="الصفحة الرئيسية" />
             </SelectTrigger>
             <SelectContent className="dark:bg-[#252525]">

@@ -8,6 +8,8 @@ import TreeCompoent from "./tree-compoent";
 import { cn } from "@ui/lib/utils";
 import { Component } from "lucide-react";
 import DragDropComponents from "./drag-drop-components";
+import DragDropAssets from "./drag-drop-assets";
+import SystemDesignConfig from "./system-design-config";
 
 interface ThemeEditorRightbarProps {}
 
@@ -21,8 +23,12 @@ const ThemeEditorRightbar: FC = ({}) => {
       <NavigationMenu setState={setView} state={view} />
       {view === "LAYOUTS" ? (
         <TreeCompoent />
-      ) : view === "DESIGN_SYSTEM" ? (
+      ) : view === "BUILDER" ? (
         <DragDropComponents />
+      ) : view === "ASSETS" ? (
+        <DragDropAssets />
+      ) : view === "DESIGN_SYSTEM" ? (
+        <SystemDesignConfig />
       ) : null}
     </div>
   );

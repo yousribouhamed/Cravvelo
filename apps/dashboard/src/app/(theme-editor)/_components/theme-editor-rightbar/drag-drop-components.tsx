@@ -3,8 +3,6 @@ import { ComponentsList } from "./components-list";
 import { Card, CardContent } from "@ui/components/ui/card";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
 
-interface DragDropComponentsProps {}
-
 const DragDropComponents: FC = ({}) => {
   const handleOnDrag = (e: React.DragEvent, type: string) => {
     e.dataTransfer.setData("componetType", type);
