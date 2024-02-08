@@ -1,8 +1,11 @@
 import type { FC } from "react";
+import { useThemeEditorStore } from "../../theme-editor-store";
 
 interface ThemeSignupProps {}
 
 const ThemeContactUs: FC = ({}) => {
+  const { state } = useThemeEditorStore();
+
   return (
     <div className="w-full min-h-[700px] h-fit flex items-center justify-center p-4">
       <div
@@ -20,7 +23,12 @@ const ThemeContactUs: FC = ({}) => {
           <textarea rows={3} className="border p-4 rounded-xl h-[150px]" />
         </div>
 
-        <button className="w-full h-[50px] bg-blue-500 rounded-xl text-white ">
+        <button
+          style={{
+            background: state.color,
+          }}
+          className="w-full h-[50px]rounded-xl text-white "
+        >
           ارسل الرسالة
         </button>
       </div>

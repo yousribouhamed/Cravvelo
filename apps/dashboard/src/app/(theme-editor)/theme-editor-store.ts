@@ -20,6 +20,7 @@ interface ThemeEditorState {
     currentPageIndex: number;
     selectedComponent: ComponentBuilder | null;
     viewMode: string;
+    color: string;
   };
   actions: {
     // getPage: () => ThemePage;
@@ -27,6 +28,7 @@ interface ThemeEditorState {
     chnageCurrentPage: (index: number) => void;
     chnageViewMode: (mode: string) => void;
     setInitialPages: (pages: ThemePage[]) => void;
+    setPrimaryColor: (color: string) => void;
   };
 }
 
@@ -73,8 +75,11 @@ export const useThemeEditorStore = create<ThemeEditorState>()((set, get) => ({
     currentPageIndex: 0,
     selectedComponent: null,
     viewMode: "DESKTOP",
+    color: "#78716c",
   },
   actions: {
+    setPrimaryColor: (color: string) =>
+      set({ state: { ...get().state, color } }),
     chnageCurrentPage: (index: number) =>
       set({ state: { ...get().state, currentPageIndex: index } }),
     chnageViewMode: (mode: string) =>

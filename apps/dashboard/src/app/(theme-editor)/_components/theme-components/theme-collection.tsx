@@ -8,24 +8,23 @@ import StarRatings from "react-star-ratings";
 
 const items = [
   {
-    image: "https://img-c.udemycdn.com/course/750x422/1630508_94eb_8.jpg",
+    image: "https://www.svgrepo.com/show/508699/landscape-placeholder.svg",
     title: "رسم الشخصيات بأسلوب الأنمي والمانغا",
   },
   {
-    image:
-      "https://framerusercontent.com/images/OSrhhE7i4s6onZmoAng3StH6geA.jpg",
+    image: "https://www.svgrepo.com/show/508699/landscape-placeholder.svg",
     title: "  كيفية استخدام Framer في بناء الويب",
   },
   {
-    image: "https://i.ytimg.com/vi/NqzdVN2tyvQ/maxresdefault.jpg",
+    image: "https://www.svgrepo.com/show/508699/landscape-placeholder.svg",
     title: "redux دورة كاملة",
   },
 ];
 
 const ThemeCollection: FC = ({}) => {
-  const view = useThemeEditorStore((state) => state.state.viewMode);
+  const { state } = useThemeEditorStore();
 
-  const isMobil = view === "MOBILE";
+  const isMobil = state.viewMode === "MOBILE";
   return (
     <>
       <div className="w-full h-[50px] flex items-center justify-start px-4">
@@ -76,7 +75,12 @@ const ThemeCollection: FC = ({}) => {
             </div>
 
             <div className="w-full h-[50px] flex items-center justify-center gap-x-4 border-t pt-2">
-              <button className="w-[80%] bg-blue-500 text-white p-2 h-[45px] rounded-xl">
+              <button
+                style={{
+                  background: state.color,
+                }}
+                className="w-[80%]  text-white p-2 h-[45px] rounded-xl"
+              >
                 اشتري الآن
               </button>
 

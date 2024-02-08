@@ -4,7 +4,6 @@ import type { FC } from "react";
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@ui/components/ui/tooltip";
 import {
@@ -23,7 +22,7 @@ import PublishWebsite from "@/src/components/models/editor/publish-website";
 import { trpc } from "../../_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
-import { ToggleGroup, ToggleGroupItem } from "@ui/components/ui/toggle-group";
+import { useRouter } from "next/navigation";
 
 interface ThemeEditorHeaderProps {
   pages: ThemePage[];
@@ -48,6 +47,8 @@ const viewMods = [
 ];
 
 const ThemeEditorHeader: FC<ThemeEditorHeaderProps> = ({ pages }) => {
+  const router = useRouter();
+
   const chnageCurrentPage = useThemeEditorStore(
     (state) => state.actions.chnageCurrentPage
   );
@@ -65,12 +66,14 @@ const ThemeEditorHeader: FC<ThemeEditorHeaderProps> = ({ pages }) => {
       console.error(err);
     },
   });
+
   return (
     <div className="w-full z-[99] h-[60px] border-b fixed top-0 bg-white shadow flex items-center justify-between px-4 ">
       <div className="w-[300px] h-full flex items-center justify-start  ">
         <Tooltip delayDuration={0}>
           <TooltipTrigger asChild>
             <Button
+              onClick={() => router.push("/")}
               size="icon"
               variant="secondary"
               className={"bg-white border rounded-xl text-black h-10 w-10   "}

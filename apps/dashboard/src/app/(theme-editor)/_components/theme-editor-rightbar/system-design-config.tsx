@@ -6,6 +6,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@ui/components/ui/tooltip";
+import { useThemeEditorStore } from "../../theme-editor-store";
+import { cn } from "@ui/lib/utils";
 
 const COLORS_SCHEMA = [
   {
@@ -107,6 +109,8 @@ const SystemDesignConfig: FC = ({}) => {
     e.dataTransfer.setData("componetType", type);
   };
 
+  const { state, actions } = useThemeEditorStore();
+
   return (
     <TooltipProvider>
       <ScrollArea className="w-full h-fit ">
@@ -120,12 +124,18 @@ const SystemDesignConfig: FC = ({}) => {
           {COLORS_SCHEMA.map((item) => (
             <Tooltip key={item.color} delayDuration={0}>
               <TooltipTrigger asChild>
-                <div
+                <button
+                  onClick={() => actions.setPrimaryColor(item.color)}
                   style={{
                     background: item.color,
                   }}
-                  className="w-[30px] h-[30px] rounded-md  hover:scale-105 transition-all duration-300 cursor-pointer hover:shadow "
-                ></div>
+                  className={cn(
+                    "w-[30px] h-[30px] rounded-md  hover:scale-105 transition-all duration-300 cursor-pointer hover:shadow ",
+                    {
+                      "border-black border-4 ": item.color === state.color,
+                    }
+                  )}
+                ></button>
               </TooltipTrigger>
               <TooltipContent className="text-black bg-white shadow">
                 <p>{item.lable}</p>

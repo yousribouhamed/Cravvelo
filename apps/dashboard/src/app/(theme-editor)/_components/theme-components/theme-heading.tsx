@@ -1,6 +1,9 @@
 import type { FC } from "react";
+import { useThemeEditorStore } from "../../theme-editor-store";
 
 const ThemeHeading: FC = ({}) => {
+  const { state } = useThemeEditorStore();
+
   return (
     <div className="relative isolate px-6 pt-4 lg:px-8 mt-[70px]">
       <div
@@ -19,7 +22,13 @@ const ThemeHeading: FC = ({}) => {
         <div className="hidden sm:mb-8 sm:flex sm:justify-center">
           <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
             الإعلان عن الجولة القادمة من التمويل.{" "}
-            <a href="#" className="font-semibold text-blue-500">
+            <a
+              href="#"
+              style={{
+                color: state.color,
+              }}
+              className="font-semibold "
+            >
               <span className="absolute inset-0" aria-hidden="true" />
               تعلم المزيد
             </a>
@@ -42,7 +51,10 @@ const ThemeHeading: FC = ({}) => {
             </a>
             <a
               href="#"
-              className="rounded-xl bg-blue-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+              style={{
+                background: state.color,
+              }}
+              className="rounded-xl  px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
             >
               ابدأ الآن
             </a>

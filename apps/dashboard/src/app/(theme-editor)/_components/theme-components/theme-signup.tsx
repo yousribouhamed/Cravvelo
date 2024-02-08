@@ -1,8 +1,8 @@
 import type { FC } from "react";
-
-interface ThemeSignupProps {}
+import { useThemeEditorStore } from "../../theme-editor-store";
 
 const ThemeSignup: FC = ({}) => {
+  const { state } = useThemeEditorStore();
   return (
     <div className="w-full min-h-[700px] h-fit flex items-center justify-center p-4">
       <div
@@ -30,7 +30,12 @@ const ThemeSignup: FC = ({}) => {
           <input className="border p-4 rounded-xl" />
         </div>
 
-        <button className="w-full h-[50px] bg-blue-500 rounded-xl text-white ">
+        <button
+          style={{
+            background: state.color,
+          }}
+          className="w-full h-[50px]  rounded-xl text-white "
+        >
           أفتح حساب الأن
         </button>
       </div>

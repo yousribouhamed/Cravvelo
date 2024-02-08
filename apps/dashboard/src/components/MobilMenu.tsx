@@ -77,7 +77,7 @@ const SideBarMenu: FC = ({}) => {
                     "w-full flex items-center justify-end qatar-semibold text-md  gap-x-2 hover:!bg-transparent !text-white",
                     {
                       "text-white bg-white/10":
-                        path === "/" ||
+                        path === item.slug ||
                         (path.includes(item.slug) && item.slug !== "/"),
                     }
                   )}
@@ -99,7 +99,7 @@ const SideBarMenu: FC = ({}) => {
                     "w-full flex items-center justify-end qatar-semibold group text-md  gap-x-2 hover:!bg-transparent !text-white ",
                     {
                       "text-white bg-white/10":
-                        path === "/" ||
+                        path === item.slug ||
                         (path.includes(item.slug) && item.slug !== "/"),
                     }
                   )}
@@ -113,7 +113,9 @@ const SideBarMenu: FC = ({}) => {
                   <div className="flex relative flex-col pr-4 space-y-1">
                     {item.subitems?.map((subItem, index) => (
                       <MobileLink
-                        isSelected={path === subItem.slug}
+                        isSelected={
+                          path === subItem.slug || path.includes(subItem.slug)
+                        }
                         key={index}
                         href={subItem.slug}
                         segment={String(segment)}
