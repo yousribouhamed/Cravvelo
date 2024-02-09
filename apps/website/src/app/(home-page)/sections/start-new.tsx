@@ -6,7 +6,7 @@ import type { FC } from "react";
 const StartNew: FC = ({}) => {
   return (
     <MaxWidthWrapper className="my-8 relative  pt-[100px] h-[600px]">
-      <div className="w-full mx-auto h-[500px]  bg-[#43766C] grid grid-cols-2 rounded-3xl">
+      <div className="w-full mx-auto h-[500px]  bg-[#FC6B00] grid grid-cols-2 rounded-3xl">
         <div className="col-span-1 flex flex-col gap-y-12 p-8 justify-center items-center">
           <h3 className="text-white text-6xl font-bold">هل آنت مستعد؟</h3>
           <p className="text-white  text-center text-xl max-w-sm ">
@@ -16,7 +16,7 @@ const StartNew: FC = ({}) => {
           </p>
           <Button
             size="lg"
-            className="w-[300px] h-[60px] bg-[#F8FAE5] rounded-[17px] text-[#43766C] hover:text-white hover:translate-y-[-0.3rem] transition-all duration-150 text-2xl qatar-bold "
+            className="w-[300px] h-[60px] bg-[#F8FAE5] rounded-[17px] text-[#FC6B00] hover:text-white hover:translate-y-[-0.3rem] transition-all duration-150 text-2xl qatar-bold "
           >
             ابدء تجربتك المجانية
           </Button>

@@ -12,8 +12,6 @@ import DragDropAssets from "./drag-drop-assets";
 import SystemDesignConfig from "./system-design-config";
 import { TooltipProvider } from "@ui/components/ui/tooltip";
 
-interface ThemeEditorRightbarProps {}
-
 type Views = "LAYOUTS" | "ASSETS" | "DESIGN_SYSTEM" | "BUILDER";
 
 const ThemeEditorRightbar: FC = ({}) => {
@@ -51,48 +49,48 @@ const NavigationMenu = ({
           className={cn(
             "w-[40px] h-[40px] bg-white rounded-xl flex items-center justify-center text-black",
             {
-              "text-primary bg-secondary ": state === "LAYOUTS",
+              "text-primary bg-zinc-100  ": state === "LAYOUTS",
             }
           )}
           onClick={() => setState("LAYOUTS")}
         >
-          <LayoutPanelTop className="w-4 h-4 " />
+          <LayoutPanelTop className="w-5 h-5 " />
         </button>
 
         <button
           className={cn(
             "w-[40px] h-[40px] bg-white rounded-xl flex items-center justify-center text-black",
             {
-              "text-primary bg-secondary ": state === "DESIGN_SYSTEM",
+              "text-primary bg-zinc-100 ": state === "DESIGN_SYSTEM",
             }
           )}
           onClick={() => setState("DESIGN_SYSTEM")}
         >
-          <Settings className="w-4 h-4 " />
+          <Settings className="w-5 h-5 " />
         </button>
 
         <button
           className={cn(
             "w-[40px] h-[40px] bg-white rounded-xl flex items-center justify-center text-black",
             {
-              "text-primary bg-secondary ": state === "BUILDER",
+              "text-primary bg-zinc-100 ": state === "BUILDER",
             }
           )}
           onClick={() => setState("BUILDER")}
         >
-          <Component className="w-4 h-4 " />
+          <Component className="w-5 h-5 " />
         </button>
 
         <button
           className={cn(
             "w-[40px] h-[40px] bg-white rounded-xl flex items-center justify-center text-black",
             {
-              "text-primary bg-secondary ": state === "ASSETS",
+              "text-primary bg-zinc-100 ": state === "ASSETS",
             }
           )}
           onClick={() => setState("ASSETS")}
         >
-          <FolderCog className="w-4 h-4 " />
+          <FolderCog className="w-5 h-5 " />
         </button>
       </div>
     </TooltipProvider>

@@ -50,7 +50,7 @@ const HeroLights: FC = ({}) => {
               cy="1207.48"
               rx="696.081"
               ry="376.805"
-              fill="#43766C"
+              fill="#FC6B00"
             />
           </g>
           <g opacity="0.3" filter="url(#filter1_f_111_427)">
@@ -59,7 +59,7 @@ const HeroLights: FC = ({}) => {
               cy="744.64"
               rx="501.705"
               ry="271.585"
-              fill="#43766C"
+              fill="#FC6B00"
             />
           </g>
           <g opacity="0.3" filter="url(#filter2_f_111_427)">
@@ -68,7 +68,7 @@ const HeroLights: FC = ({}) => {
               cy="1020.15"
               rx="343.715"
               ry="285.112"
-              fill="#43766C"
+              fill="#FC6B00"
             />
           </g>
           <defs>

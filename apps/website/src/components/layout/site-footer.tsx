@@ -179,7 +179,7 @@ const SiteFooter: FC = ({}) => {
   return (
     <div
       dir="ltr"
-      className="w-full mt-56  h-[600px]  pt-[120px] overflow-hidden bg-[#43766C] flex flex-col items-center "
+      className="w-full mt-56  h-[600px]  pt-[120px] overflow-hidden bg-[#FC6B00] flex flex-col items-center "
     >
       <MaxWidthWrapper className="overflow-hidden">
         <div className="w-full h-[360px] bg-transparent overflow-hidden grid grid-cols-6">

@@ -126,7 +126,7 @@ export const NavBar: FC = ({}) => {
                 href={"https://jadir.vercel.app/sign-in"}
                 className={cn(
                   buttonVariants(),
-                  "bg-[#43766C]  text-xl py-4  h-12 rounded-2xl text-white font-bold  hover:bg-[#61AFA0] hover:scale-105 transition-all duration-150 "
+                  "bg-[#FC6B00]  text-xl py-4  h-12 rounded-2xl text-white font-bold  hover:bg-[#61AFA0] hover:scale-105 transition-all duration-150 "
                 )}
               >
                 تسجيل الدخول
