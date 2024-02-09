@@ -48,8 +48,8 @@ const useHaveAccess = async () => {
     email: user.primaryEmailAddressId,
     isFreeTrial,
     isSubscribed,
-    subdomain: account.Website[0].subdomain,
-    cutomDomain: account.Website[0].customDomain,
+    subdomain: account.Website[0]?.subdomain,
+    cutomDomain: account.Website[0]?.customDomain,
     createdAt: account.createdAt,
   };
 };
