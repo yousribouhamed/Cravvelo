@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@ui/components/ui/avatar";
-import type { User as UserType } from "@clerk/nextjs/server";
 import { Button, buttonVariants } from "@ui/components/ui/button";
 import {
   DropdownMenu,
@@ -122,6 +121,7 @@ export default function UserNav({ user }: UserNavProps) {
 
           <DropdownMenuItem className="w-fulls  h-full flex justify-between items-center  ">
             <Link
+              target="_blank"
               className="w-full  h-full flex justify-between items-center p-2 "
               href={"https://www.instagram.com/mugi.crafts/"}
             >
@@ -131,12 +131,13 @@ export default function UserNav({ user }: UserNavProps) {
           </DropdownMenuItem>
 
           <DropdownMenuItem
-            disabled={user?.subdomain ? true : false}
+            disabled={user?.subdomain ? false : true}
             className="w-full  h-full flex justify-between items-center  "
           >
             <Link
+              target="_blank"
               className="w-full  h-full flex justify-between items-center p-2 "
-              href={user?.subdomain}
+              href={`https://${user?.subdomain}`}
             >
               <ArrowUpLeft className=" h-4 w-4" />
 

@@ -7,7 +7,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
@@ -15,14 +14,12 @@ import { Checkbox } from "@ui/components/ui/checkbox";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { DataTableColumnHeader } from "../data-table-head";
-import { Course } from "database";
+import { Coupon } from "database";
 import { Badge } from "@ui/components/ui/badge";
 import { maketoast } from "../../toasts";
 import { useRouter } from "next/navigation";
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 
-export const columns: ColumnDef<Course>[] = [
+export const CouponColumns: ColumnDef<Coupon>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -49,23 +46,23 @@ export const columns: ColumnDef<Course>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "title",
+    accessorKey: "code",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="عنوان الدورة" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex flex-col gap-y-2 justify-center items-start ">
-          <p className="font-bold ">{row.original.title}</p>
+          <p className="font-bold ">{row.original.code}</p>
           <Badge className="bg-[#F5F5F5] hover:bg-[#F5F5F5] text-black rounded-md">
-            {row.original.status}
+            {row.original.isActive}
           </Badge>
         </div>
       );
     },
   },
   {
-    accessorKey: "price",
+    accessorKey: "description",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="السعر" />
     ),
@@ -74,7 +71,7 @@ export const columns: ColumnDef<Course>[] = [
         <p className="text-gray-500 text-sm">
           {" "}
           <span className="font-bold text-black">
-            {row.original.price === null ? 0 : row.original.price}
+            {row.original.description === null ? "" : row.original.description}
           </span>{" "}
           دج
         </p>
@@ -82,7 +79,7 @@ export const columns: ColumnDef<Course>[] = [
     },
   },
   {
-    accessorKey: "profit",
+    accessorKey: "discountType",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="إجمالي الأرباح" />
     ),
@@ -91,7 +88,7 @@ export const columns: ColumnDef<Course>[] = [
         <p className="text-gray-500 text-sm">
           {" "}
           <span className="font-bold text-black">
-            {row.original.profit === null ? 0 : row.original.profit}
+            {row.original.discountType}
           </span>{" "}
           دج
         </p>
@@ -99,21 +96,44 @@ export const columns: ColumnDef<Course>[] = [
     },
   },
   {
-    accessorKey: "trainers",
+    accessorKey: "discountAmount",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="المدربين" />
     ),
   },
   {
-    accessorKey: "studenstNbr",
+    accessorKey: "expirationDate",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="    عدد الطلاب الملتحقين" />
     ),
     cell: ({ row }) => {
       return (
         <p>
-          {row.original.studenstNbr === null ? 0 : row.original.studenstNbr}
+          {/* todo : add funtion to fransform date to string in arabic */}
+          {/* {row.original.expirationDate} */}
         </p>
+      );
+    },
+  },
+  {
+    accessorKey: "usageLimit",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="    عدد الطلاب الملتحقين" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <p>{row.original.usageLimit === null ? 0 : row.original.usageLimit}</p>
+      );
+    },
+  },
+  {
+    accessorKey: "usageCount",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="    عدد الطلاب الملتحقين" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <p>{row.original.usageCount === null ? 0 : row.original.usageCount}</p>
       );
     },
   },

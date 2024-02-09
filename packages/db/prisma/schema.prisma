@@ -12,21 +12,23 @@ datasource db {
 }
 
 model Account {
-  id                     String    @unique @default(uuid())
-  userId                 String    @unique
-  avatarUrl              String?   @db.Text
+  id                     String         @unique @default(uuid())
+  userId                 String         @unique
+  avatarUrl              String?        @db.Text
   AcademyIds             Json
-  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
-  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
-  stripePriceId          String?   @map(name: "stripe_price_id")
-  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
-  createdAt              DateTime  @default(now())
-  updatedAt              DateTime  @updatedAt
+  stripeCustomerId       String?        @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId   String?        @unique @map(name: "stripe_subscription_id")
+  stripePriceId          String?        @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime?      @map(name: "stripe_current_period_end")
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
   Course                 Course[]
   Product                Product[]
   Video                  Video[]
   Website                Website[]
   Coupon                 Coupon[]
+  Order                  Order[]
+  Notification           Notification[]
 }
 
 model Academy {
@@ -56,9 +58,12 @@ model Course {
   profit      String?
   trainers    String?
   status      String
-  Account     Account? @relation(fields: [accountId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  Account     Account?   @relation(fields: [accountId], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  Comment     Comment[]
+  Homework    Homework[]
+  Exam        Exam[]
 
   @@index([id])
   @@index([accountId])
@@ -127,16 +132,101 @@ model Website {
   Account      Account? @relation(fields: [accountId], references: [id])
 }
 
-
- model Coupon {
-     id           String   @unique @default(uuid())
-     accountId    String   @unique
-
-
-     Account      Account? @relation(fields: [accountId], references: [id])
+enum DiscountType {
+  PERCENTAGE
+  FIXED_AMOUNT
 }
 
-enum Plan {
-  price_1OYxkqFj9oKEERu1NbKUxXxN
-  price_1OYxkqFj9oKEERu1KfJGWxgN
+model Coupon {
+  id             String       @unique @default(uuid())
+  accountId      String       @unique
+  code           String       @unique
+  description    String?
+  discountType   DiscountType
+  discountAmount Float
+  expirationDate DateTime
+  usageLimit     Int?
+  usageCount     Int          @default(0)
+  creationDate   DateTime     @default(now())
+  lastUpdated    DateTime     @updatedAt
+  isActive       Boolean      @default(true)
+
+  Account Account? @relation(fields: [accountId], references: [id])
+
+  @@index([id])
+  @@index([accountId])
+}
+
+enum OrderStatus {
+  CREATED
+  PROCESSING
+  COMPLETED
+  CANCELLED
+}
+
+model Order {
+  id          String      @unique @default(uuid())
+  orderNumber Int         @unique @default(autoincrement())
+  accountId   String      @unique
+  amount      Float
+  status      OrderStatus
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  Account     Account?    @relation(fields: [accountId], references: [id])
+
+  @@index([id])
+  @@index([accountId])
+}
+
+model Homework {
+  id          String   @unique @default(uuid())
+  title       String
+  description String?
+  dueDate     DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  courseId    String
+  Course      Course?  @relation(fields: [courseId], references: [id])
+
+  @@index([id])
+  @@index([courseId])
+}
+
+model Comment {
+  id        String   @unique @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  courseId  String
+  Course    Course?  @relation(fields: [courseId], references: [id])
+
+  @@index([id])
+  @@index([courseId])
+}
+
+model Notification {
+  id        String   @unique @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  accountId String
+  Account   Account  @relation(fields: [accountId], references: [id])
+
+  @@index([id])
+  @@index([accountId])
+}
+
+model Exam {
+  id          String   @unique @default(uuid())
+  title       String
+  description String?
+  date        DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  courseId  String
+  Course    Course?  @relation(fields: [courseId], references: [id])
+
+  @@index([id])
+  @@index([courseId])
 }
