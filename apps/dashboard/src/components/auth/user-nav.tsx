@@ -131,7 +131,7 @@ export default function UserNav({ user }: UserNavProps) {
           </DropdownMenuItem>
 
           <DropdownMenuItem
-            disabled={!user?.cutomDomain || !user?.subdomain}
+            disabled={user?.subdomain ? true : false}
             className="w-full  h-full flex justify-between items-center  "
           >
             <Link

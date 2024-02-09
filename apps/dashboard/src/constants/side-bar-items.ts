@@ -64,7 +64,7 @@ export const SIDE_BAR_ITEMS = [
         slug: "/coupons",
       },
       {
-        title: "رابط الإحالة",
+        title: "التسويق بالعمولة",
         icon: Icons.Home,
         slug: "/",
       },
@@ -77,14 +77,35 @@ export const SIDE_BAR_ITEMS = [
     icon: Icons.customize,
     subitems: [
       {
-        title: "كبونات الخصم",
+        title: "الطلاب",
         icon: Icons.Home,
-        slug: "/coupons",
+        slug: "/students",
       },
       {
-        title: "رابط الإحالة",
+        title: "الشهدات",
         icon: Icons.Home,
-        slug: "/",
+        slug: "/students/certificates",
+      },
+
+      {
+        title: "التعليقات ",
+        icon: Icons.Home,
+        slug: "/students/comments",
+      },
+      {
+        title: "الواجبات",
+        icon: Icons.Home,
+        slug: "/students/homeworks",
+      },
+      {
+        title: "الاختبارات ",
+        icon: Icons.Home,
+        slug: "/students/exams",
+      },
+      {
+        title: "الاشعارات",
+        icon: Icons.Home,
+        slug: "/students/notifications",
       },
     ],
   },
@@ -95,14 +116,19 @@ export const SIDE_BAR_ITEMS = [
     icon: Icons.customize,
     subitems: [
       {
-        title: "كبونات الخصم",
+        title: "المنتجات",
         icon: Icons.Home,
-        slug: "/coupons",
+        slug: "/analytics/products",
       },
       {
-        title: "رابط الإحالة",
+        title: "الارباح",
         icon: Icons.Home,
-        slug: "/",
+        slug: "/analytics/profits",
+      },
+      {
+        title: "العملاء",
+        icon: Icons.Home,
+        slug: "/analytics/customers",
       },
     ],
   },
