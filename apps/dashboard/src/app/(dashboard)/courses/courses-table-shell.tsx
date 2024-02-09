@@ -1,5 +1,5 @@
 "use client";
-import { DataTable } from "@/src/components/data-table";
+import { DataTable } from "@/src/components/data-table/courses-table";
 import { Course } from "database";
 import type { FC } from "react";
 import { trpc } from "../../_trpc/client";

@@ -11,6 +11,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Button } from "@ui/components/ui/button";
+import TableHeader2 from "./table-header";
 import React from "react";
 import {
   Table,
@@ -54,7 +55,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      {/* <TableHeader2 table={table} /> */}
+      <TableHeader2 table={table} />
       <div className="rounded-md border bg-white">
         <Table>
           <TableHeader>
