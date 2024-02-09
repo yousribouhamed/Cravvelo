@@ -25,7 +25,7 @@ export default function RootLayout({
         src="https://unpkg.com/@material-tailwind/html@latest/scripts/ripple.js"
         async
       /> */}
-      {/* <Script src="//code.tidio.co/f4ntqdkrkcmkov2pbgapiuevig4fhtbq.js" async /> */}
+      <Script src="//code.tidio.co/f4ntqdkrkcmkov2pbgapiuevig4fhtbq.js" async />
     </html>
   );
 }
