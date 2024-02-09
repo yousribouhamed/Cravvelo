@@ -32,7 +32,7 @@ export const maketoast = {
           <div className="w-[80%] flex flex-col justify-start items-start p-2">
             <span className="text-xl font-bold text-black ">نجاح</span>
             <span className="text-gray-500 text-xl text-start">
-              كان الإجراء السابق ناجحا
+              هناك خطأ ما
             </span>
           </div>
           <X onClick={() => toast.dismiss(t)} className="cursor-pointer" />
@@ -69,9 +69,9 @@ export const maketoast = {
             <Book className="w-6 h-6 text-white" />
           </div>
           <div className="w-[80%] flex flex-col justify-start items-start p-2">
-            <span className="text-xl font-bold text-black ">نجاح</span>
+            <span className="text-xl font-bold text-black ">معلومات</span>
             <span className="text-gray-500 text-xl text-start">
-              كان الإجراء السابق ناجحا
+              عليك أن تكون على علم بشيء ما
             </span>
           </div>
           <X onClick={() => toast.dismiss(t)} className="cursor-pointer" />
@@ -90,9 +90,9 @@ export const maketoast = {
             <AlertTriangle className="w-6 h-6 text-white" />
           </div>
           <div className="w-[80%] flex flex-col justify-start items-start p-2">
-            <span className="text-xl font-bold text-black ">نجاح</span>
+            <span className="text-xl font-bold text-black ">كن حذرا</span>
             <span className="text-gray-500 text-xl text-start">
-              كان الإجراء السابق ناجحا
+              كن على علم بأن شيئًا ما قد حدث للتو
             </span>
           </div>
           <X onClick={() => toast.dismiss(t)} className="cursor-pointer" />

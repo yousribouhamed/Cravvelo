@@ -15,7 +15,11 @@ const links = [
 ];
 
 const TreeCompoent: FC = ({}) => {
-  const { state } = useThemeEditorStore();
+  const { state, actions } = useThemeEditorStore();
+
+  const deleteElement = useThemeEditorStore(
+    (state) => state.actions.deleteElement
+  );
   return (
     <ScrollArea className="w-full">
       <div dir="rtl" className="w-full min-h-[240px] h-fit flex flex-col ">
@@ -35,7 +39,10 @@ const TreeCompoent: FC = ({}) => {
                   <p className="text-zinc-500 text-sm">{item.name}</p>
                 </div>
 
-                <button className="w-8 h-full flex items-center justify-end  text-white group-hover:text-zinc-500 ">
+                <button
+                  onClick={() => deleteElement(item.id)}
+                  className="w-8 h-full flex items-center justify-end  text-white group-hover:text-zinc-500 "
+                >
                   <Trash2 className="w-4 h-4 hover:text-red-500" />
                 </button>
               </div>
@@ -61,7 +68,10 @@ const TreeCompoent: FC = ({}) => {
                     <p className="text-zinc-500 text-sm">{item.name}</p>
                   </div>
 
-                  <button className="w-8 h-full flex items-center justify-end  text-white group-hover:text-zinc-500 ">
+                  <button
+                    onClick={() => deleteElement(item.id)}
+                    className="w-8 h-full flex items-center justify-end  text-white group-hover:text-zinc-500 "
+                  >
                     <Trash2 className="w-4 h-4 hover:text-red-500" />
                   </button>
                 </div>

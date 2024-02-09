@@ -21,6 +21,10 @@ interface ThemeEditorState {
     selectedComponent: ComponentBuilder | null;
     viewMode: string;
     color: string;
+    logo: {
+      fileUrl: string;
+      width: string;
+    };
   };
   actions: {
     // getPage: () => ThemePage;
@@ -29,6 +33,8 @@ interface ThemeEditorState {
     chnageViewMode: (mode: string) => void;
     setInitialPages: (pages: ThemePage[]) => void;
     setPrimaryColor: (color: string) => void;
+    setWebSiteLogo: (fileUrl: string, width: string) => void;
+    deleteElement: (id: string) => void;
   };
 }
 
@@ -76,16 +82,60 @@ export const useThemeEditorStore = create<ThemeEditorState>()((set, get) => ({
     selectedComponent: null,
     viewMode: "DESKTOP",
     color: "#78716c",
+    logo: {
+      fileUrl:
+        "https://cdn.dribbble.com/userupload/7889037/file/original-c3126d575055e7e9996b8e4643848edf.jpg?resize=400x0",
+      width: "70px",
+    },
   },
   actions: {
     setPrimaryColor: (color: string) =>
       set({ state: { ...get().state, color } }),
+    setWebSiteLogo: (fileUrl: string, width: string) =>
+      set({
+        state: {
+          ...get().state,
+          logo: {
+            fileUrl,
+            width,
+          },
+        },
+      }),
     chnageCurrentPage: (index: number) =>
       set({ state: { ...get().state, currentPageIndex: index } }),
+
     chnageViewMode: (mode: string) =>
       set({ state: { ...get().state, viewMode: mode } }),
     setInitialPages: (pages: ThemePage[]) =>
       set({ state: { ...get().state, pages } }),
+
+    deleteElement: (id: string) => {
+      console.log("function fired");
+      const components =
+        get().state.pages[get().state.currentPageIndex].components;
+      const newComponentsChain = components.filter((item) => item.id !== id);
+
+      // add the component to the page
+      const newPageUpdated = {
+        ...get().state.pages[get().state.currentPageIndex],
+        components: newComponentsChain,
+      };
+
+      // update the state
+      // create a copy of the current state
+      const newState = {
+        ...get().state,
+        pages: [
+          ...get().state.pages.slice(0, get().state.currentPageIndex), // copy pages before the selected page
+          newPageUpdated, // replace the selected page with the updated one
+          ...get().state.pages.slice(get().state.currentPageIndex + 1), // copy pages after the selected page
+        ],
+      };
+      console.log(newState);
+
+      set({ state: newState });
+    },
+
     updatePage(component: ComponentBuilder) {
       const oldComponents =
         get().state.pages[get().state.currentPageIndex].components;

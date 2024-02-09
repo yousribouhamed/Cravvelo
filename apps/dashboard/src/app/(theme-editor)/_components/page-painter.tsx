@@ -13,8 +13,6 @@ import ThemeSignup from "./theme-components/theme-signup";
 import ThemeSignin from "./theme-components/theme-signin";
 import ThemeContactUs from "./theme-components/theme-contactus";
 
-interface PagePainterProps {}
-
 const PagePainter: FC = ({}) => {
   const { state } = useThemeEditorStore();
 
@@ -52,10 +50,14 @@ const PagePainter: FC = ({}) => {
             : "w-full"
         } min-h-[2000px] bg-white border rounded-xl mx-auto flex flex-col justify-start transition-all relative duration-500`}
       >
-        {Array.isArray(state.pages[state.currentPageIndex].components) &&
-          state.pages[state.currentPageIndex].components.map((item) => (
-            <>{renderBuilderComponent({ components: item })}</>
-          ))}
+        <>
+          <ThemeHeader />
+          {Array.isArray(state.pages[state.currentPageIndex].components) &&
+            state.pages[state.currentPageIndex].components.map((item) => (
+              <>{renderBuilderComponent({ components: item })}</>
+            ))}
+          <ThemeFooter />;
+        </>
       </div>
     </ScrollArea>
   );
@@ -70,9 +72,9 @@ export const renderBuilderComponent = ({
 }) => {
   switch (components.type) {
     case "header":
-      return <ThemeHeader />;
+      return null;
     case "footer":
-      return <ThemeFooter />;
+      return null;
     case "collection":
       return <ThemeHeading />;
     case "heading":

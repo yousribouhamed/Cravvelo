@@ -7,6 +7,9 @@ import { Progress } from "@ui/components/ui/progress";
 import { useUploadThing } from "@/src/lib/uploadthing";
 import { toast } from "@ui/lib/utils";
 import { XCircle } from "lucide-react";
+import { trpc } from "@/src/app/_trpc/client";
+import { maketoast } from "@/src/components/toasts";
+import { useThemeEditorStore } from "../../../theme-editor-store";
 export const LogoUploader = ({
   onChnage,
   fileUrl,
@@ -18,7 +21,20 @@ export const LogoUploader = ({
   const [uploadProgress, setUploadProgress] = React.useState<number>(0);
   const [isError, setIsError] = React.useState<boolean>(false);
 
+  const setLogo = useThemeEditorStore((state) => state.actions.setWebSiteLogo);
+  const { state } = useThemeEditorStore();
+
   const { startUpload } = useUploadThing("imageUploader");
+
+  const mutation = trpc?.addWebSiteLogo?.useMutation({
+    onSuccess: ({ logo }) => {
+      maketoast.success();
+      setLogo(logo, state.logo.width);
+    },
+    onError: () => {
+      maketoast.error();
+    },
+  });
 
   const startSimulatedProgress = () => {
     setUploadProgress(0);
@@ -45,13 +61,19 @@ export const LogoUploader = ({
         const progressInterval = startSimulatedProgress();
 
         startUpload(acceptedFile)
-          .then((res) => {
+          .then(async (res) => {
             if (!res) {
               setIsError(true);
               toast("Something went wrong");
               return;
             }
             onChnage(res[0]?.serverData?.file?.url);
+            await mutation.mutateAsync({
+              logo: res[0]?.serverData?.file?.url,
+            });
+
+            console.log("this is the file url ");
+            console.log(res[0]?.serverData?.file?.url);
             clearInterval(progressInterval);
             setUploadProgress(100);
           })

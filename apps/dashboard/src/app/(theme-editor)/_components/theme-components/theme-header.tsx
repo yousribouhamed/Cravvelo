@@ -1,8 +1,9 @@
-import { Search } from "lucide-react";
+import { Search, ShoppingBag } from "lucide-react";
 import type { FC } from "react";
 import ShoppingCard from "./interactive/shopping-card";
-import MobilNavgiation from "./interactive/mobile-navigation";
+
 import { useThemeEditorStore } from "../../theme-editor-store";
+import { AlignJustify } from "lucide-react";
 
 const ThemeHeader: FC = ({}) => {
   const { state } = useThemeEditorStore();
@@ -10,18 +11,21 @@ const ThemeHeader: FC = ({}) => {
   return (
     <div className="w-full h-[70px] flex items-center justify-between px-4 border-b z-[20] ">
       <div className="w-fit h-full flex items-center justify-start md:hidden">
-        <MobilNavgiation />
+        <AlignJustify className="w-6 h-6 " />
       </div>
       <div className="min-w-[200px] w-fit  items-center justify-start gap-x-4 hidden md:flex">
         <img
-          src="https://png.pngtree.com/png-clipart/20230330/original/pngtree-vector-sword-esports-and-mascot-logo-png-image_9012921.png"
-          className="object-cover w-16 h-16"
+          src={state.logo.fileUrl}
+          className={`object-cover  h-16`}
+          style={{
+            width: state.logo.width,
+          }}
         />
         <button className="text-lg font-semibold">الصفحة الرئيسية</button>
         <button className="text-lg font-semibold">الدورات</button>
       </div>
       <div className="flex w-fir min-w-[100px] justify-end items-center">
-        <ShoppingCard />
+        <ShoppingBag className="w-5 h-5 " />
         <button className="text-black w-[40px] h-[40px] rounded-xl p-2">
           <Search className="w-5 h-5 " />
         </button>
