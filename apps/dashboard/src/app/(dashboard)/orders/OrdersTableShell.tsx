@@ -1,21 +1,21 @@
 "use client";
 import { DataTable } from "@/src/components/data-table";
-import { Course } from "database";
+import { Order } from "database";
 import type { FC } from "react";
 import { trpc } from "@/src/app/_trpc/client";
-import { columns } from "@/src/components/data-table/columns/courses";
+import { OrderColumns } from "@/src/components/data-table/columns/orders";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DataTableLoading } from "@/src/components/data-table/table-loading";
 import DeleteCourseModel from "@/src/components/models/delete-course-model";
 
-interface CoursesTableShellProps {
-  initialData: Course[];
+interface OrdersTableShellProps {
+  initialData: Order[];
 }
 
-const CoursesTableShell: FC<CoursesTableShellProps> = ({ initialData }) => {
+const OrdersTableShell: FC<OrdersTableShellProps> = ({ initialData }) => {
   const isMounted = useMounted();
 
-  const { data, refetch } = trpc.getAllCourses.useQuery(undefined, {
+  const { data, refetch } = trpc.getAllOrders.useQuery(undefined, {
     initialData: initialData,
   });
 
@@ -27,9 +27,9 @@ const CoursesTableShell: FC<CoursesTableShellProps> = ({ initialData }) => {
   return (
     <div className="w-full min-h-[300px] h-fit flex flex-col ">
       <DeleteCourseModel refetch={refetch} />
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={OrderColumns} data={data} />
     </div>
   );
 };
 
-export default CoursesTableShell;
+export default OrdersTableShell;

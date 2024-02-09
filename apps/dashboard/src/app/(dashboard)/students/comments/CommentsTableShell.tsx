@@ -1,21 +1,21 @@
 "use client";
 import { DataTable } from "@/src/components/data-table";
-import { Course } from "database";
+import { Comment } from "database";
 import type { FC } from "react";
 import { trpc } from "@/src/app/_trpc/client";
-import { columns } from "@/src/components/data-table/columns/courses";
+import { CommentColumns } from "@/src/components/data-table/columns/comments";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DataTableLoading } from "@/src/components/data-table/table-loading";
 import DeleteCourseModel from "@/src/components/models/delete-course-model";
 
-interface CoursesTableShellProps {
-  initialData: Course[];
+interface TableShellProps {
+  initialData: Comment[];
 }
 
-const CoursesTableShell: FC<CoursesTableShellProps> = ({ initialData }) => {
+const CommentsTableShell: FC<TableShellProps> = ({ initialData }) => {
   const isMounted = useMounted();
 
-  const { data, refetch } = trpc.getAllCourses.useQuery(undefined, {
+  const { data, refetch } = trpc.getAllComments.useQuery(undefined, {
     initialData: initialData,
   });
 
@@ -27,9 +27,9 @@ const CoursesTableShell: FC<CoursesTableShellProps> = ({ initialData }) => {
   return (
     <div className="w-full min-h-[300px] h-fit flex flex-col ">
       <DeleteCourseModel refetch={refetch} />
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={CommentColumns} data={data} />
     </div>
   );
 };
 
-export default CoursesTableShell;
+export default CommentsTableShell;

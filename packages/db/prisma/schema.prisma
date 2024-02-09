@@ -230,3 +230,21 @@ model Exam {
   @@index([id])
   @@index([courseId])
 }
+
+
+model Student {
+  id          String   @unique @default(uuid())
+  firstName String
+  lastName  String
+  email     String   @unique
+  phone     String
+}
+
+model Certificate {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  issuer      String
+  issueDate   DateTime
+  // Add more fields as needed
+}

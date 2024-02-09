@@ -12,11 +12,18 @@ const isAuth = middleware(async (opts) => {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
 
+  const account = await prisma.account.findUnique({
+    where: {
+      userId: user.id,
+    },
+  });
+
   return opts.next({
     ctx: {
       userId: user.id,
       user,
       prisma,
+      account,
     },
   });
 });

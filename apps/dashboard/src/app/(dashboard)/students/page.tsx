@@ -1,12 +1,12 @@
 import Header from "@/src/components/layout/header";
 import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
-import { Course } from "database";
+import { Student } from "database";
 import { prisma } from "database/src";
-import CoursesTableShell from "./StudentsTableShell";
+import StudentsTableShell from "./StudentsTableShell";
 import useHaveAccess from "@/src/hooks/use-have-access";
 
-async function getData(): Promise<Course[]> {
-  const data = await prisma.course.findMany();
+async function getData(): Promise<Student[]> {
+  const data = await prisma.student.findMany();
   return data;
 }
 
@@ -18,7 +18,7 @@ const Page = async ({}) => {
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
         <Header user={user} title="الطلاب" />
-        <CoursesTableShell initialData={data} />
+        <StudentsTableShell initialData={data} />
       </main>
     </MaxWidthWrapper>
   );
