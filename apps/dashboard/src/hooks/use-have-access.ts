@@ -4,8 +4,6 @@ import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { prisma } from "database/src";
 
-interface useHaveAccessAbdullahProps {}
-
 // this sunction should run on the server only
 const useHaveAccess = async () => {
   const currentDate = new Date();
