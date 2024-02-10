@@ -12,6 +12,7 @@ export default authMiddleware({
     "/sign-up(.*)",
     "/signin(.*)",
     "/signup(.*)",
+    "/auth-academy(.*)",
     "/privacy-policy(.*)",
     "/terms-of-service(.*)",
     "/sso-callback(.*)",

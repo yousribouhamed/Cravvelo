@@ -1,5 +1,6 @@
 import { Sidebar } from "@/src/components/SideBar";
 import { ClerkProvider } from "@clerk/nextjs";
+import Script from "next/script";
 
 export default async function AdminLayout({
   children,
@@ -16,6 +17,7 @@ export default async function AdminLayout({
         </main>
         {/* <SubscripeButton /> */}
       </div>
+      <Script src="//code.tidio.co/f4ntqdkrkcmkov2pbgapiuevig4fhtbq.js" async />
     </ClerkProvider>
   );
 }

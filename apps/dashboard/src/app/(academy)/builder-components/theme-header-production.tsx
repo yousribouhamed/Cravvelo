@@ -20,7 +20,7 @@ const ThemeHeaderProduction: FC = ({}) => {
           <Link href={"/"} className="text-lg ">
             الصفحة الرئيسية
           </Link>
-          <Link href={"/academia-courses"} className="text-lg ">
+          <Link href={"/course-academy"} className="text-lg ">
             الدورات
           </Link>
         </div>
@@ -30,7 +30,7 @@ const ThemeHeaderProduction: FC = ({}) => {
             <Search className="w-5 h-5 " />
           </button>
           <Link
-            href={"/signin"}
+            href={"/auth-academy/sign-in"}
             className="bg-blue-500 text-white w-[140px] h-[40px] rounded-xl p-2 flex items-center justify-center"
           >
             تسجيل الدخول
