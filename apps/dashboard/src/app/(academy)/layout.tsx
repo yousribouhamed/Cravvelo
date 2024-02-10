@@ -1,19 +1,30 @@
-import { Sidebar } from "@/src/components/SideBar";
-import { redirect } from "next/navigation";
+import type { Metadata } from "next";
+import "@ui/styles/globals.css";
+import "@ui/font/stylesheet.css";
+import Providers from "@/src/components/Providers";
+import Script from "next/script";
 
-import { Metadata } from "next";
-import SubscripeButton from "@/src/components/subscripe-button";
-import AcademyHeader from "@/src/components/academy-components/academy-header";
+export const metadata: Metadata = {
+  title: "جدير",
+  description: "انت جدير بامتلاك اكادميتي الخاصة",
+};
 
-export default async function AdminLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex w-full min-h-screen gap-x-2 flex-col ">
-      <main className=" ">{children}</main>
-      {/* <SubscripeButton /> */}
-    </div>
+    <html suppressHydrationWarning dir="rtl" lang="ar">
+      <head />
+      <body className={`selection:bg-[#FC6B00] selection:text-white`}>
+        <Providers>{children}</Providers>
+      </body>
+
+      <Script
+        src="https://unpkg.com/@material-tailwind/html@latest/scripts/ripple.js"
+        async
+      />
+    </html>
   );
 }
