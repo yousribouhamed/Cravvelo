@@ -2,6 +2,8 @@ import { Club, Info } from "lucide-react";
 import MaxWidthWrapper from "../../../_components/max-width-wrapper";
 import ThemeFooterProduction from "../../../builder-components/theme-footer-production";
 import ThemeHeaderProduction from "../../../builder-components/theme-header-production";
+import CourseContent from "../../../_components/course-component/course-content";
+import Feedbacks from "../../../_components/course-component/feedbacks";
 
 export const fetchCache = "force-no-store";
 
@@ -90,30 +92,11 @@ const Page = async ({ params }: pageAbdullahProps) => {
                 </div>
                 <h3 className="text-xl font-bold">محتوى الدورة</h3>
               </div>
-              <div className="w-full h-[300px] flex flex-col bg-gray-200 gap-y-4 rounded-xl  p-4">
-                <div className="w-full h-[30px] bg-white flex items-center justify-start rounded-xl p-4 ">
-                  <p className="text-black text-xl text-start ">
-                    ستتعلم شيء على الاقل
-                  </p>
-                </div>
-                <div className="w-full h-[30px] bg-white flex items-center justify-start rounded-xl p-4 ">
-                  <p className="text-black text-xl text-start ">
-                    ستتعلم شيء على الاقل
-                  </p>
-                </div>
+              <div className="w-full min-h-[200px] h-fit flex flex-col bg-gray-200 gap-y-4 rounded-xl  p-8">
+                <CourseContent />
               </div>
             </div>
-            {/* testimonials */}
-            <div className="w-full h-[400px] flex flex-col rounded-xl">
-              <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
-                <div className="w-[45px] h-[45px] rounded-[50%] bg-black flex items-center justify-center">
-                  <Info className="text-white w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold"> التقييمات</h3>
-              </div>
-
-              <div className="w-full h-[300px] flex flex-col bg-gray-200 gap-y-4 rounded-xl  p-4"></div>
-            </div>
+            <Feedbacks />
             {/* comments */}
           </div>
 
