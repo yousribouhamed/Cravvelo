@@ -26,3 +26,28 @@ export const getPage = async ({
 
   return page;
 };
+
+export const getAllCourses = async ({ subdomain }: { subdomain: string }) => {
+  try {
+    const website = await prisma.website.findUnique({
+      where: {
+        subdomain: subdomain,
+      },
+    });
+
+    const account = await prisma.account.findUnique({
+      where: {
+        id: website.id,
+      },
+    });
+
+    const courses = await prisma.course.findMany({
+      where: {
+        accountId: account.id,
+      },
+    });
+    return courses;
+  } catch (err) {
+    console.error(err);
+  }
+};

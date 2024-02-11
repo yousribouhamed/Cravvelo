@@ -9,21 +9,20 @@ interface pageProps {
 }
 
 const Page = async ({ params }: pageProps) => {
-  console.log(decodeURIComponent(params.slug));
-  console.log(decodeURIComponent(params.site));
+  const subdomain_value =
+    process.env.NODE_ENV === "development"
+      ? "best.jadir.vercel.app"
+      : decodeURIComponent(params?.site);
   const page = await getPage({
     path: `/${decodeURIComponent(params.slug)}`,
-    subdomain:
-      process.env.NODE_ENV === "development"
-        ? "chehrichehri.jadir.vercel.app"
-        : decodeURIComponent(params?.site),
+    subdomain: subdomain_value,
   });
 
   if (!page) {
     notFound();
   }
 
-  return <PagePainterProduction page={page} />;
+  return <PagePainterProduction subdomain={subdomain_value} page={page} />;
 };
 
 export default Page;

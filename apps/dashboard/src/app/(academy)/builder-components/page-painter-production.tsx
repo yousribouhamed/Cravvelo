@@ -13,16 +13,22 @@ import MaxWidthWrapper from "../_components/max-width-wrapper";
 
 interface PagePainterProps {
   page: ThemePage;
+  subdomain: string;
 }
 
-const PagePainterProduction: FC<PagePainterProps> = ({ page }) => {
+const PagePainterProduction: FC<PagePainterProps> = ({ page, subdomain }) => {
   return (
     <div dir="rtl" className="w-full h-fit">
       <ThemeHeaderProduction />
       <MaxWidthWrapper>
         {Array.isArray(page.components) &&
           page.components.map((item, index) => (
-            <>{renderBuilderComponentProduction({ components: item })}</>
+            <>
+              {renderBuilderComponentProduction({
+                components: item,
+                subdomain,
+              })}
+            </>
           ))}
       </MaxWidthWrapper>
       <ThemeFooterProduction />
@@ -34,8 +40,10 @@ export default PagePainterProduction;
 
 export const renderBuilderComponentProduction = ({
   components,
+  subdomain,
 }: {
   components: ComponentBuilder;
+  subdomain: string;
 }) => {
   switch (components.type) {
     case "header":
@@ -45,7 +53,7 @@ export const renderBuilderComponentProduction = ({
     case "collection":
       return <ThemeHeadingProduction />;
     case "heading":
-      return <ThemeCollectionProduction />;
+      return <ThemeCollectionProduction subdomain={subdomain} />;
     case "signupform":
       return <ThemeSignupProduction />;
     case "signinform":

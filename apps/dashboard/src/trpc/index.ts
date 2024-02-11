@@ -13,6 +13,7 @@ import { homework } from "./homework";
 import { cetificate } from "./certificate";
 import { exams } from "./exams";
 import { comments } from "./comments";
+import { academia } from "./academia";
 
 export const appRouter = router({
   ...auth,
@@ -29,6 +30,7 @@ export const appRouter = router({
   ...cetificate,
   ...exams,
   ...comments,
+  ...academia,
 });
 
 export type AppRouter = typeof appRouter;
