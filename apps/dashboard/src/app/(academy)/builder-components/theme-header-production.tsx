@@ -3,7 +3,7 @@ import ShoppingCardProduction from "./theme-actions/shopping-card-production";
 import { Search } from "lucide-react";
 import Link from "next/link";
 import MobilNavgiationProduction from "./theme-actions/mobile-navigation-production";
-import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
+import MaxWidthWrapper from "../_components/max-width-wrapper";
 
 const ThemeHeaderProduction: FC = ({}) => {
   return (
