@@ -18,11 +18,8 @@ import { Input } from "@ui/components/ui/input";
 import { Card, CardContent } from "@ui/components/ui/card";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
-
-import { JadaraVoiceUpLoader } from "../../upload-voice";
 import VedioUploader from "../../uploaders/VedioUploader";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import Tiptap from "../../tiptap";
 import { PlateEditor } from "../../reich-text-editor/rich-text-editor";
 
 const addVedioSchema = z.object({
@@ -51,11 +48,9 @@ function AddVedioForm() {
   });
 
   async function onSubmit(values: z.infer<typeof addVedioSchema>) {
-    console.log("here it is file url");
-    console.log(values);
     await mutation.mutateAsync({
       chapterID: chapterID,
-      content: "",
+      content: JSON.stringify(values.content),
       fileType: "VEDIO",
       fileUrl: values.fileUrl,
       title: values.title,

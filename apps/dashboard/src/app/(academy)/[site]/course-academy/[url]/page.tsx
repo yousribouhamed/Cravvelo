@@ -4,19 +4,26 @@ import ThemeFooterProduction from "../../../builder-components/theme-footer-prod
 import ThemeHeaderProduction from "../../../builder-components/theme-header-production";
 import CourseContent from "../../../_components/course-component/course-content";
 import Feedbacks from "../../../_components/course-component/feedbacks";
-import StarRatings from "react-star-ratings";
 import { Hourglass } from "lucide-react";
 import { Zap } from "lucide-react";
 import { ShoppingCart } from "lucide-react";
+import { getCourseByUrlPath } from "../../../actions/course";
+import CourseDescription from "../../../_components/course-component/course-description";
+import { Course } from "database";
+import CourseHeader from "@/src/components/course-header";
+import { get_course_chapters } from "../../../actions/chapter";
 
 export const fetchCache = "force-no-store";
 
 interface pageAbdullahProps {
-  params: { site: string };
+  params: { site: string; url: string };
 }
 
 const Page = async ({ params }: pageAbdullahProps) => {
-  // fetch the data in here then pass it to the children
+  const course = await getCourseByUrlPath({ url: params?.url });
+
+  const chapters = await get_course_chapters({ courseID: course?.id });
+
   return (
     <>
       <ThemeHeaderProduction />
@@ -26,26 +33,11 @@ const Page = async ({ params }: pageAbdullahProps) => {
             {/* video placeholder */}
             <div className="w-full h-[400px] bg-gray-500 rounded-xl"></div>
             {/* description */}
-            <div className="w-full h-[400px] flex flex-col rounded-xl">
-              <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
-                <div className="w-[45px] h-[45px] rounded-[50%] bg-black flex items-center justify-center">
-                  <Info className="text-white w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold">وصف الوردة</h3>
-              </div>
-              <div className="w-full h-[200px] ">
-                <p>
-                  بالتأكيد هناك أيضاً الكثير من المنصات التي لم أذكرها أيضاً
-                  والتي يمكننا التكلم عنها لاحقاً، ولكن الشيء الذي أردت الإشارة
-                  إليه ضمن هذه المقالة، بأن الكثير من المشاريع في الوقت الحالي
-                  يمكنها الاستفادة من هذه الأدوات إما بشكل دائم أو بشكل جزئي.
-                  لذلك إن كنت تخطط لإطلاق مشروع تقني جديد أنصحك بشدة أن تبدأ
-                  بإحدى هذه الأدوات من أجل التأكد من فكرتك في البداية، وذلك من
-                  أجل أن توفر الكثير من المال والجهد والمال الذي سوف تنفقه على
-                  فكرة قد تكون غير ناجحة.
-                </p>
-              </div>
-            </div>
+
+            <CourseDescription
+              // @ts-ignore
+              value={JSON.parse(course.courseDescription as string)}
+            />
             {/* what you are gonna learn */}
             <div className="w-full h-[400px] flex flex-col rounded-xl">
               <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
@@ -80,10 +72,10 @@ const Page = async ({ params }: pageAbdullahProps) => {
                 </div>
               </div>
             </div>
-            <CourseContent />
+            <CourseContent chapters={chapters} />
             <Feedbacks />
           </div>
-          <Product_card />
+          <Product_card course={course} />
         </div>
       </MaxWidthWrapper>
       <ThemeFooterProduction />
@@ -93,19 +85,18 @@ const Page = async ({ params }: pageAbdullahProps) => {
 
 export default Page;
 
-const Product_card = () => {
+const Product_card = ({ course }: { course: Course }) => {
   return (
-    <div className=" w-full lg:w-[350px] h-[500px] rounded-xl border my-8 p-4 flex flex-col gap-y-4 sticky top-0">
-      <h1 className="text-xl font-bold text-start ">
-        الدليل الشامل لاستخدام مواقع الويب
-      </h1>
-      <p className="text-gray-500 text-sm  ">
-        حتى تكون الأمور سهلة قمت بتقسيم الدورات لمسارين منفصلين كل مسار يحتوي
-        على الدورات التي تحتاج الالتحاق بها لتعلم هذا التخصص.
-      </p>
+    <div className=" w-full lg:w-[350px] h-[500px] rounded-xl border my-8 p-4 flex flex-col gap-y-4 lg:sticky lg:top-[100px]">
+      <h1 className="text-xl font-bold text-start ">{course.title}</h1>
+      <p className="text-gray-500 text-sm  ">{course.courseResume}</p>
       <div className="w-full h-[30px] flex items-center justify-start gap-x-4 ">
-        <p className="text-green-500 text-lg font-bold  ">199 دينار جزائري</p>
-        <p className="text-gray-800 line-through text-xs ">300 دينار جزائري</p>
+        <p className="text-green-500 text-lg font-bold  ">
+          {course.price} دينار جزائري
+        </p>
+        <p className="text-gray-800 line-through text-xs ">
+          {course.compareAtPrice} دينار جزائري
+        </p>
       </div>
       <div className="w-full h-[40px] flex items-center justify-between gap-x-4">
         <button className=" w-full  lg:w-[300px] h-[40px]  rounded-xl bg-blue-500 flex items-center justify-center text-white">

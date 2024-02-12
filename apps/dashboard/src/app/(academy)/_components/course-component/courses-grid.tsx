@@ -9,17 +9,20 @@ import { useRouter } from "next/navigation";
 
 const items = [
   {
+    id: "uuuu",
     image: "https://img-c.udemycdn.com/course/750x422/1630508_94eb_8.jpg",
     title: "رسم الشخصيات بأسلوب الأنمي والمانغا",
     price: 99.0,
   },
   {
+    id: "uuuu",
     image:
       "https://framerusercontent.com/images/OSrhhE7i4s6onZmoAng3StH6geA.jpg",
     title: "  كيفية استخدام Framer في بناء الويب",
     price: 99.0,
   },
   {
+    id: "uuuu",
     image: "https://i.ytimg.com/vi/NqzdVN2tyvQ/maxresdefault.jpg",
     title: "redux دورة كاملة",
     price: 99.0,
@@ -27,14 +30,14 @@ const items = [
 ];
 
 const CoursesGrid: FC = ({}) => {
-  const router = useRouter();
-
   const addItemToShoppingBag = useAcademiaStore(
     (state) => state.actions.addItem
   );
 
-  const handleNavigate = () => {
-    router.push("/course-academy/your-course-name");
+  const router = useRouter();
+
+  const handleNavigate = ({ id }: { id: string }) => {
+    router.push(`/course-academy/${id}`);
   };
 
   return (
@@ -42,7 +45,7 @@ const CoursesGrid: FC = ({}) => {
       {items.map((item, index) => (
         <div
           key={item.title + index}
-          onClick={() => handleNavigate()}
+          onClick={() => handleNavigate({ id: item?.id })}
           className="w-[350px] min-h-[300px] h-fit p-4   flex flex-col shadow-2xl rounded-xl hover:-translate-y-4 transition-all duration-700 cursor-pointer "
         >
           <img src={item.image} className="w-full h-[200px] object-cover " />

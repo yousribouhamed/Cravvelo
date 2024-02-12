@@ -17,16 +17,11 @@ export const academia = {
           },
         });
 
-        console.log("this is the website ");
-        console.log(website);
-
         const account = await prisma.account.findUnique({
           where: {
-            id: website.id,
+            id: website.accountId,
           },
         });
-        console.log("this is your account");
-        console.log(account);
 
         const courses = await prisma.course.findMany({
           where: {
@@ -34,8 +29,6 @@ export const academia = {
           },
         });
 
-        console.log("this is your courses");
-        console.log(courses);
         return courses;
       } catch (err) {
         console.error(err);

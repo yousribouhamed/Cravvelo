@@ -135,24 +135,27 @@ import { ParagraphElement } from "@/src/components/plate-ui/paragraph-element";
 import { TableElement } from "@/src/components/plate-ui/table-element";
 import { TableRowElement } from "@/src/components/plate-ui/table-row-element";
 import {
+  focusEditor,
+  useEditorReadOnly,
+  useEditorRef,
+  usePlateStore,
+} from "@udecode/plate-common";
+
+import {
   TableCellElement,
   TableCellHeaderElement,
 } from "@/src/components/plate-ui/table-cell-element";
 import { TodoListElement } from "@/src/components/plate-ui/todo-list-element";
 import { CodeLeaf } from "@/src/components/plate-ui/code-leaf";
 import { CommentLeaf } from "@/src/components/plate-ui/comment-leaf";
-import { CommentsPopover } from "@/src/components/plate-ui/comments-popover";
 import { HighlightLeaf } from "@/src/components/plate-ui/highlight-leaf";
 import { KbdLeaf } from "@/src/components/plate-ui/kbd-leaf";
 import { Editor } from "@/src/components/plate-ui/editor";
-import { FixedToolbar } from "@/src/components/plate-ui/fixed-toolbar";
-import { FixedToolbarButtons } from "@/src/components/plate-ui/fixed-toolbar-buttons";
-import { FloatingToolbar } from "@/src/components/plate-ui/floating-toolbar";
-import { FloatingToolbarButtons } from "@/src/components/plate-ui/floating-toolbar-buttons";
 import { withPlaceholders } from "@/src/components/plate-ui/placeholder";
 import { withDraggables } from "@/src/components/plate-ui/with-draggables";
 import { EmojiCombobox } from "@/src/components/plate-ui/emoji-combobox";
 import { TooltipProvider } from "../plate-ui/tooltip";
+import React from "react";
 
 const plugins = createPlugins(
   [
@@ -354,31 +357,21 @@ const plugins = createPlugins(
   }
 );
 
-export function PlateEditor({
-  onChnage,
-}: {
-  onChnage: (richTeact: any) => void;
-}) {
+const initialValue = [
+  {
+    id: "1",
+    type: "p",
+    children: [{ text: "Hello, World!" }],
+  },
+];
+
+export function PlateEditorReactOnly({ value }: { value: any }) {
   return (
     <TooltipProvider>
       <DndProvider backend={HTML5Backend}>
         <CommentsProvider users={{}} myUserId="1">
-          <Plate
-            plugins={plugins}
-            // initialValue={value}
-            onChange={(val) => onChnage(val)}
-          >
-            <FixedToolbar>
-              <FixedToolbarButtons />
-            </FixedToolbar>
-
+          <Plate readOnly plugins={plugins} initialValue={value}>
             <Editor className="min-h-[150px] h-fit mt-4 w-full " />
-
-            <FloatingToolbar>
-              <FloatingToolbarButtons />
-            </FloatingToolbar>
-            <MentionCombobox items={[]} />
-            <CommentsPopover />
           </Plate>
         </CommentsProvider>
       </DndProvider>

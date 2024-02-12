@@ -1,6 +1,9 @@
-import { getPage } from "../actions";
+import { getAllCourses, getPage } from "../actions";
 import { notFound } from "next/navigation";
-import PagePainterProduction from "../builder-components/page-painter-production";
+import ThemeHeaderProduction from "../builder-components/theme-header-production";
+import ThemeFooterProduction from "../builder-components/theme-footer-production";
+import MaxWidthWrapper from "../_components/max-width-wrapper";
+import ThemeCollectionProduction from "../builder-components/theme-collection-production";
 
 export const fetchCache = "force-no-store";
 
@@ -18,11 +21,21 @@ const Page = async ({ params }: pageAbdullahProps) => {
     subdomain: subdomain_value,
   });
 
+  const courses = await getAllCourses({ subdomain: subdomain_value });
+
   if (!page) {
     notFound();
   }
 
-  return <PagePainterProduction subdomain={subdomain_value} page={page} />;
+  return (
+    <>
+      <ThemeHeaderProduction />
+      <MaxWidthWrapper>
+        <ThemeCollectionProduction courses={courses} />
+      </MaxWidthWrapper>
+      <ThemeFooterProduction />
+    </>
+  );
 };
 
 export default Page;

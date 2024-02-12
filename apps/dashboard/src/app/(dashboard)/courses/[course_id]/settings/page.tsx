@@ -1,11 +1,7 @@
 import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
 import Header from "@/src/components/layout/header";
 import CourseHeader from "@/src/components/course-header";
-import { User } from "@clerk/nextjs/dist/types/server";
-import { currentUser } from "@clerk/nextjs";
 import { notFound, redirect } from "next/navigation";
-
-// import ChaptersBoard from "@/src/components/chapters-board";
 import { CourseSettingsForm } from "@/src/components/forms/course-forms/course-settings";
 import { prisma } from "database/src";
 import useHaveAccess from "@/src/hooks/use-have-access";

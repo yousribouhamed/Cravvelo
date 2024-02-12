@@ -51,9 +51,9 @@ export const renderBuilderComponentProduction = ({
     case "footer":
       return null;
     case "collection":
-      return <ThemeHeadingProduction />;
+      return null;
     case "heading":
-      return <ThemeCollectionProduction subdomain={subdomain} />;
+      return <ThemeHeadingProduction />;
     case "signupform":
       return <ThemeSignupProduction />;
     case "signinform":

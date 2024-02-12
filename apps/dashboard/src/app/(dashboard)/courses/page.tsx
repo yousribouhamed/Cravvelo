@@ -5,14 +5,22 @@ import { prisma } from "database/src";
 import CoursesTableShell from "./courses-table-shell";
 import useHaveAccess from "@/src/hooks/use-have-access";
 
-async function getData(): Promise<Course[]> {
-  const data = await prisma.course.findMany();
+async function getData({
+  accountId,
+}: {
+  accountId: string;
+}): Promise<Course[]> {
+  const data = await prisma.course.findMany({
+    where: {
+      accountId,
+    },
+  });
   return data;
 }
 
 const Page = async ({}) => {
   const user = await useHaveAccess();
-  const data = await getData();
+  const data = await getData({ accountId: user.accountId });
 
   return (
     <MaxWidthWrapper>
