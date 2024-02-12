@@ -234,10 +234,12 @@ model Exam {
 
 model Student {
   id          String   @unique @default(uuid())
-  firstName String
-  lastName  String
-  email     String   @unique
-  phone     String
+  firstName   String?
+  lastName    String?
+  photo_url   String? 
+  email       String   @unique
+  phone       String   @unique
+  password    String 
 }
 
 model Certificate {

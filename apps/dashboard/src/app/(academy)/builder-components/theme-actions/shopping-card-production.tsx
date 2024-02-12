@@ -4,6 +4,7 @@ import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ShoppingBag, X } from "lucide-react";
 import { useAcademiaStore } from "../../global-state/academia-store";
+import Link from "next/link";
 
 export default function ShoppingCardProduction() {
   const [open, setOpen] = useState(false);
@@ -136,12 +137,12 @@ export default function ShoppingCardProduction() {
                               الشحن والضرائب تحسب عند الخروج.
                             </p>
                             <div className="mt-6">
-                              <a
-                                href="#"
+                              <Link
+                                href="/cart"
                                 className="flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                               >
                                 الدفع
-                              </a>
+                              </Link>
                             </div>
                             <div className="mt-6 flex justify-center text-center text-sm  text-gray-500">
                               <p>
