@@ -1,7 +1,8 @@
 import type { FC } from "react";
-import MaxWidthWrapper from "../_components/max-width-wrapper";
+import MaxWidthWrapper from "../max-width-wrapper";
+import Link from "next/link";
 
-const ThemeFooterProduction: FC = ({}) => {
+const AcademiaFooter: FC = ({}) => {
   return (
     <div className="w-full h-[100px]  bg-white  mb-12 px-4 border-t">
       <MaxWidthWrapper className="w-full h-full flex items-center justify-between mx-auto ">
@@ -16,12 +17,16 @@ const ThemeFooterProduction: FC = ({}) => {
           </a>
         </div>
         <div className="w-fit min-w-[100px] flex justify-end items-center gap-x-4">
-          <button>سياسة الخصوصية</button>
-          <button>شروط الاستخدام</button>
+          <Link href="/privacy-policy">
+            <button>سياسة الخصوصية</button>
+          </Link>
+          <Link href="/terms-of-use">
+            <button>شروط الاستخدام</button>
+          </Link>
         </div>
       </MaxWidthWrapper>
     </div>
   );
 };
 
-export default ThemeFooterProduction;
+export default AcademiaFooter;

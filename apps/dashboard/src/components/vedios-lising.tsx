@@ -46,6 +46,9 @@ const VediosListing: FC<VediosType> = ({ videos }) => {
               onClick={() => {
                 setIsOpen(true);
                 setSelectedVideoId(video.videoId);
+
+                console.log("here it is the video id");
+                console.log(video.videoId);
               }}
               key={video.videoId}
             >

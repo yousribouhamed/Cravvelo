@@ -1,19 +1,22 @@
 import type { FC } from "react";
-import ThemeHeaderProduction from "../../builder-components/theme-header-production";
-import ThemeFooterProduction from "../../builder-components/theme-footer-production";
-import MaxWidthWrapper from "../../_components/max-width-wrapper";
 import PaymentForm from "../../_components/forms/payment-form";
+import { ArrowBigRight } from "lucide-react";
+import Link from "next/link";
 
-interface pageAbdullahProps {}
+interface PageProps {}
 
 const Page: FC = ({}) => {
   return (
     <>
-      <ThemeHeaderProduction />
-      <MaxWidthWrapper>
-        <PaymentForm />
-      </MaxWidthWrapper>
-      <ThemeFooterProduction />
+      <div className="w-full h-[30px] flex items-center justify-start gap-x-4 my-6">
+        <Link href="/">
+          <button className="p-4 bg-white rounded-xl  ">
+            <ArrowBigRight className="w-6 h-6" />
+          </button>
+        </Link>
+        <h2 className="text-lg  text-black"> حقيبة التسوق الخاصة بك </h2>
+      </div>
+      <PaymentForm />
     </>
   );
 };

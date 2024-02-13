@@ -1,17 +1,14 @@
+import CoursesReel from "../_components/courses-reel";
 import { getAllCourses, getPage } from "../actions";
 import { notFound } from "next/navigation";
-import ThemeHeaderProduction from "../builder-components/theme-header-production";
-import ThemeFooterProduction from "../builder-components/theme-footer-production";
-import MaxWidthWrapper from "../_components/max-width-wrapper";
-import ThemeCollectionProduction from "../builder-components/theme-collection-production";
 
 export const fetchCache = "force-no-store";
 
-interface pageAbdullahProps {
+interface PageProps {
   params: { site: string };
 }
 
-const Page = async ({ params }: pageAbdullahProps) => {
+const Page = async ({ params }: PageProps) => {
   const subdomain_value =
     process.env.NODE_ENV === "development"
       ? "best.jadir.vercel.app"
@@ -26,16 +23,16 @@ const Page = async ({ params }: pageAbdullahProps) => {
   if (!page) {
     notFound();
   }
-
   return (
-    <>
-      <ThemeHeaderProduction />
-      <MaxWidthWrapper>
-        <ThemeCollectionProduction courses={courses} />
-      </MaxWidthWrapper>
-      <ThemeFooterProduction />
-    </>
+    <main className="w-full h-full flex flex-col items-center justify-center gap-y-8 pt-12">
+      <h1 className="text-4xl font-bold text-center ">
+        مرحبا بكم في اكادمية شهري عبدالله
+      </h1>
+      <CoursesReel courses={courses} />;
+    </main>
   );
+
+  return null;
 };
 
 export default Page;

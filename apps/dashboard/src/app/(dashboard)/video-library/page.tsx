@@ -10,8 +10,6 @@ const Page = async ({}) => {
   // First install the "@api.video/nodejs-client" npm package
   // Documentation: https://github.com/apivideo/api.video-nodejs-client/blob/main/doc/api/PlayerThemesApi.md#create
 
-  const client = new ApiVideoClient({ apiKey: "YOUR_API_KEY" });
-
   const playerThemeCreationPayload = {
     text: "#ffffff", // RGBA color for timer text. Default: rgba(255, 255, 255, 1)
     link: "#ffffff", // RGBA color for all controls. Default: rgba(255, 255, 255, 1)
@@ -30,12 +28,10 @@ const Page = async ({}) => {
   };
 
   const videoClient = new ApiVideoClient({ apiKey: process.env.API_VEDIO_KEY });
+
+  const theme = videoClient.playerThemes?.create(playerThemeCreationPayload);
+
   const videos = await videoClient.videos.list();
-
-  const playerTheme = await videoClient.playerThemes.create(
-    playerThemeCreationPayload
-  );
-
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">

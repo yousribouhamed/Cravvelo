@@ -1,11 +1,13 @@
 import type { FC } from "react";
-import ShoppingCardProduction from "./theme-actions/shopping-card-production";
+import ShoppingCardProduction from "./shopping-bag";
 import { Search } from "lucide-react";
 import Link from "next/link";
-import MobilNavgiationProduction from "./theme-actions/mobile-navigation-production";
-import MaxWidthWrapper from "../_components/max-width-wrapper";
+import MobilNavgiationProduction from "./mobil-navbar";
+import MaxWidthWrapper from "../../max-width-wrapper";
+import LinksNavbar from "./links-navbar";
 
-const ThemeHeaderProduction: FC = ({}) => {
+// الصفحة
+const AcademyHeader: FC = ({}) => {
   return (
     <div className="w-full h-[70px]   border-b z-[80] fixed top-0 bg-white shadow-md ">
       <MaxWidthWrapper className="w-full h-full flex items-center justify-between">
@@ -17,12 +19,8 @@ const ThemeHeaderProduction: FC = ({}) => {
             src="https://png.pngtree.com/png-clipart/20230330/original/pngtree-vector-sword-esports-and-mascot-logo-png-image_9012921.png"
             className="object-cover w-16 h-16"
           />
-          <Link href={"/"} className="text-lg ">
-            الصفحة الرئيسية
-          </Link>
-          <Link href={"/course-academy"} className="text-lg ">
-            الدورات
-          </Link>
+
+          <LinksNavbar />
         </div>
         <div className="flex w-fir min-w-[100px] justify-end items-center">
           <ShoppingCardProduction />
@@ -31,7 +29,7 @@ const ThemeHeaderProduction: FC = ({}) => {
           </button>
           <Link
             href={"/auth-academy/sign-in"}
-            className="bg-blue-500 text-white w-[140px] h-[40px] rounded-xl p-2 flex items-center justify-center"
+            className="bg-blue-500 text-white w-[140px] h-[40px] rounded-xl p-2 flex items-center justify-center hover:bg-blue-700 hover:scale-105 transition-all duration-300"
           >
             تسجيل الدخول
           </Link>
@@ -41,4 +39,4 @@ const ThemeHeaderProduction: FC = ({}) => {
   );
 };
 
-export default ThemeHeaderProduction;
+export default AcademyHeader;

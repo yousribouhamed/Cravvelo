@@ -21,7 +21,9 @@
         "API_VEDIO_KEY",
         "AUTH_BEARER_TOKEN",
         "PROJECT_ID_VERCEL",
-        "TEAM_ID_VERCEL"
+        "TEAM_ID_VERCEL",
+        "CHARGILY_SECRET_KEY",
+        "CHARGILY_PUBLIC_KEY"
       ]
     },
     "lint": {},

@@ -3,7 +3,7 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ShoppingBag, X } from "lucide-react";
-import { useAcademiaStore } from "../../global-state/academia-store";
+import { useAcademiaStore } from "../../../global-state/academia-store";
 import Link from "next/link";
 
 export default function ShoppingCardProduction() {

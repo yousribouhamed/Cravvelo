@@ -1,7 +1,4 @@
 import { Club, Info, Layers } from "lucide-react";
-import MaxWidthWrapper from "../../../_components/max-width-wrapper";
-import ThemeFooterProduction from "../../../builder-components/theme-footer-production";
-import ThemeHeaderProduction from "../../../builder-components/theme-header-production";
 import CourseContent from "../../../_components/course-component/course-content";
 import Feedbacks from "../../../_components/course-component/feedbacks";
 import { Hourglass } from "lucide-react";
@@ -10,60 +7,38 @@ import { ShoppingCart } from "lucide-react";
 import { getCourseByUrlPath } from "../../../actions/course";
 import CourseDescription from "../../../_components/course-component/course-description";
 import { Course } from "database";
-import CourseHeader from "@/src/components/course-header";
 import { get_course_chapters } from "../../../actions/chapter";
 
-export const fetchCache = "force-no-store";
-
-interface pageAbdullahProps {
+interface PageProps {
   params: { site: string; url: string };
 }
 
-const Page = async ({ params }: pageAbdullahProps) => {
+const Page = async ({ params }: PageProps) => {
   const course = await getCourseByUrlPath({ url: params?.url });
 
   const chapters = await get_course_chapters({ courseID: course?.id });
 
   return (
     <>
-      <ThemeHeaderProduction />
-      <MaxWidthWrapper className="mt-[70px] w-full h-fit min-h-screen">
-        <div className="  w-full h-fit min-h-screen flex flex-col lg:flex-row  justify-between gap-x-4 items-start py-4">
-          <div className=" w-full lg:w-[calc(100%-300px)] min-h-[500px] h-fit px-2 py-8 lg:p-8">
-            {/* video placeholder */}
-            <div className="w-full h-[400px] bg-gray-500 rounded-xl"></div>
-            {/* description */}
+      <div className="  w-full h-fit min-h-screen flex flex-col lg:flex-row  justify-between gap-x-4 items-start py-4">
+        <div className=" w-full lg:w-[calc(100%-300px)] min-h-[500px] h-fit px-2 py-8 lg:p-8">
+          {/* video placeholder */}
+          <div className="w-full h-[400px] bg-gray-500 rounded-xl"></div>
+          {/* description */}
 
-            <CourseDescription
-              // @ts-ignore
-              value={JSON.parse(course.courseDescription as string)}
-            />
-            {/* what you are gonna learn */}
-            <div className="w-full h-[400px] flex flex-col rounded-xl">
-              <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
-                <div className="w-[45px] h-[45px] rounded-[50%] bg-black flex items-center justify-center">
-                  <Club className="text-white w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold">ماذا ستتعلم في هذه الدورة</h3>
+          <CourseDescription
+            // @ts-ignore
+            value={JSON.parse(course.courseDescription as string)}
+          />
+          {/* what you are gonna learn */}
+          <div className="w-full h-[400px] flex flex-col rounded-xl">
+            <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
+              <div className="w-[45px] h-[45px] rounded-[50%] bg-black flex items-center justify-center">
+                <Club className="text-white w-6 h-6" />
               </div>
-              <div className="w-full h-[300px] flex flex-col bg-gray-200 gap-y-4 rounded-xl  p-4">
-                <div className="w-full h-[300px] flex flex-col bg-gray-200 gap-y-4 rounded-xl  p-4">
-                  <div className="w-full h-[50px] bg-white flex items-center justify-start rounded-xl p-5 cursor-pointer hover:bg-gray-50 ">
-                    <p className="text-gray-700 text-lg text-start ">
-                      ستتعلم شيء على الاقل
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <h3 className="text-xl font-bold">ماذا ستتعلم في هذه الدورة</h3>
             </div>
-            {/* requirements */}
-            <div className="w-full h-[400px] flex flex-col rounded-xl">
-              <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
-                <div className="w-[45px] h-[45px] rounded-[50%] bg-black flex items-center justify-center">
-                  <Info className="text-white w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold">متطلبات حضور الدورة</h3>
-              </div>
+            <div className="w-full h-[300px] flex flex-col bg-gray-200 gap-y-4 rounded-xl  p-4">
               <div className="w-full h-[300px] flex flex-col bg-gray-200 gap-y-4 rounded-xl  p-4">
                 <div className="w-full h-[50px] bg-white flex items-center justify-start rounded-xl p-5 cursor-pointer hover:bg-gray-50 ">
                   <p className="text-gray-700 text-lg text-start ">
@@ -72,13 +47,28 @@ const Page = async ({ params }: pageAbdullahProps) => {
                 </div>
               </div>
             </div>
-            <CourseContent chapters={chapters} />
-            <Feedbacks />
           </div>
-          <Product_card course={course} />
+          {/* requirements */}
+          <div className="w-full h-[400px] flex flex-col rounded-xl">
+            <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
+              <div className="w-[45px] h-[45px] rounded-[50%] bg-black flex items-center justify-center">
+                <Info className="text-white w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold">متطلبات حضور الدورة</h3>
+            </div>
+            <div className="w-full h-[300px] flex flex-col bg-gray-200 gap-y-4 rounded-xl  p-4">
+              <div className="w-full h-[50px] bg-white flex items-center justify-start rounded-xl p-5 cursor-pointer hover:bg-gray-50 ">
+                <p className="text-gray-700 text-lg text-start ">
+                  ستتعلم شيء على الاقل
+                </p>
+              </div>
+            </div>
+          </div>
+          <CourseContent chapters={chapters} />
+          <Feedbacks />
         </div>
-      </MaxWidthWrapper>
-      <ThemeFooterProduction />
+        <Product_card course={course} />
+      </div>
     </>
   );
 };

@@ -1,6 +1,6 @@
 import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
 import Header from "@/src/components/layout/header";
-import PaymentMethodsConnectors from "@/src/components/payment-methods-connector";
+import PaymentMethodsConnectors from "@/src/components/payments/payment-methods-connector";
 import useHaveAccess from "@/src/hooks/use-have-access";
 
 const Page = async ({}) => {
@@ -10,7 +10,6 @@ const Page = async ({}) => {
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
         <Header user={user} title="بوابات الدفع" />
-
         <PaymentMethodsConnectors />
       </main>
     </MaxWidthWrapper>

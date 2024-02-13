@@ -2,6 +2,7 @@
 
 import { prisma } from "database/src";
 import { ThemePage } from "../../(theme-editor)/theme-editor-store";
+import { Website } from "database";
 
 export const getPage = async ({
   path,
@@ -47,6 +48,24 @@ export const getAllCourses = async ({ subdomain }: { subdomain: string }) => {
       },
     });
     return courses;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const getSiteData = async ({
+  subdomain,
+}: {
+  subdomain: string;
+}): Promise<Website> => {
+  try {
+    const website = await prisma.website.findFirst({
+      where: {
+        subdomain,
+      },
+    });
+
+    return website;
   } catch (err) {
     console.error(err);
   }
