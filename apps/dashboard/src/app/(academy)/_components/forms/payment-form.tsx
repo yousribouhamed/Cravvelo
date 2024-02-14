@@ -41,7 +41,7 @@ const PaymentForm: FC = ({}) => {
   function onSubmit(data: Inputs) {}
 
   return (
-    <div className="w-full min-h-[700px] h-fit grid gird grid-cols-2 mb-[70px] p-8 gap-8">
+    <div className="w-full min-h-[700px] h-fit grid gird grid-cols-1 lg:grid-cols-2 mb-[70px] p-8 gap-8">
       <div className="w-full h-full bg-gray-100 flex flex-col items-end p-8 rounded-xl">
         <div className="w-full min-h-[200px] h-fit  flex flex-col items-start p-2">
           {Array.isArray(bagItems.state.shoppingBag) &&
@@ -100,10 +100,10 @@ const PaymentForm: FC = ({}) => {
           </div>
         </div>
       </div>
-      <div className="w-full h-full p-8 flex flex-col  gap-y-8 ">
-        <Card className="w-[480px] pt-4 min-h-[250px] h-fit ">
+      <div className="w-full h-full lg:p-8 flex flex-col  gap-y-8 ">
+        <Card className=" w-full lg:w-[480px] pt-4 min-h-[250px] h-fit ">
           <CardHeader>
-            <CardTitle> apply coubon code</CardTitle>
+            <CardTitle> حقل خاص بقسائم التخفيض</CardTitle>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -116,10 +116,10 @@ const PaymentForm: FC = ({}) => {
                   name="coubonCode"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel> coubon code</FormLabel>
+                      <FormLabel> قسيمة التخفيض </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="أدخِل عنوان البريد الإلكتروني"
+                          placeholder="الرجاء ادخال رمز صالح الفعالية"
                           {...field}
                         />
                       </FormControl>
@@ -130,17 +130,21 @@ const PaymentForm: FC = ({}) => {
                 />
 
                 <FormDescription>
-                  تأكّد من صحة البريد الإلكتروني، إذ سيتم إرسال رابط استكمال
-                  عملية استعادة كلمة المرور عبره.
+                  سيتم تسليم المنتج في المكتبة بعد اتمام عملية الدفع.
                 </FormDescription>
               </form>
             </Form>
           </CardContent>
         </Card>
-        <div className="w-full h-1 border-b my-4" />
-        <button className="w-full h-[50px]  max-w-[480px] rounded-xl bg-violet-500 border-2 border-black text-white flex items-center justify-center">
-          pay with chargily
-        </button>
+        <div className="w-full h-1 border-b my-4 max-w-[480px] " />
+        <div className="w-full h-[100px] grid lg:grid-cols-1 grid-cols-2 gap-4  max-w-[480px]">
+          <button className="w-full h-[50px]  max-w-[480px] my-4 rounded-xl bg-violet-500 border-2 border-black text-white flex items-center justify-center">
+            pay with chargily
+          </button>
+          <button className="w-full h-[50px]  max-w-[480px] my-4 rounded-xl bg-amber-500 border-2 border-black text-white flex items-center justify-center">
+            pay with coubon
+          </button>
+        </div>
       </div>
     </div>
   );

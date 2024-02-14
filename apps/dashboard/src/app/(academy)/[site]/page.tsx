@@ -31,8 +31,6 @@ const Page = async ({ params }: PageProps) => {
       <CoursesReel courses={courses} />;
     </main>
   );
-
-  return null;
 };
 
 export default Page;

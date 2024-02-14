@@ -66,7 +66,16 @@ export default function RootLayout({
         <body
           className={`selection:bg-blue-500 selection:text-white antialiased`}
         >
-          <AcademyHeader />
+          <AcademyHeader
+            student={{
+              avatar: "/",
+              email: "mahdi.chahri55@gmail.com",
+              firstName: "abdullah",
+              lastName: "chehri",
+              phone_num: "0988777",
+            }}
+            isAuthanticated
+          />
           <MaxWidthWrapper className="mt-[70px] min-h-[calc(100vh-70px)] h-fit">
             {children}
           </MaxWidthWrapper>

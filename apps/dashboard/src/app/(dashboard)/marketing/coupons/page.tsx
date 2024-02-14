@@ -10,7 +10,7 @@ const Page = async ({}) => {
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
         {/* @ts-ignore */}
-        <Header user={{}} title="الاعدادات العامة" />
+        <Header user={{}} title=" صانع الكبونات" />
         <CouponsTableShell initialData={[]} />
       </main>
     </MaxWidthWrapper>
