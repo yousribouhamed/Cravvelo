@@ -1,4 +1,4 @@
-import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
+import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
 import CourseHeader from "@/src/components/course-header";
 import { notFound } from "next/navigation";

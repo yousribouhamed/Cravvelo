@@ -13,6 +13,7 @@ import {
 import { Checkbox } from "@ui/components/ui/checkbox";
 import { Notification } from "database";
 import { maketoast } from "../../toasts";
+import { DataTableColumnHeader } from "../data-table-head";
 
 export const NotificationColumns: ColumnDef<Notification>[] = [
   {
@@ -39,6 +40,35 @@ export const NotificationColumns: ColumnDef<Notification>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
+  },
+
+  {
+    accessorKey: "createdAt",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="وقت الانشاء" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <p>
+          {/* todo : add funtion to fransform date to string in arabic */}
+          {/* {row.original.expirationDate} */}
+        </p>
+      );
+    },
+  },
+  {
+    accessorKey: "content",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="المحتوى" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <p>
+          {/* todo : add funtion to fransform date to string in arabic */}
+          {/* {row.original.expirationDate} */}
+        </p>
+      );
+    },
   },
 
   {

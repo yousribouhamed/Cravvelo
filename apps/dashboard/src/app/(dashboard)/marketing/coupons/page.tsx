@@ -1,14 +1,17 @@
-import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
+import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
 import useHaveAccess from "@/src/hooks/use-have-access";
+import CouponsTableShell from "./CouponsTableShell";
 
 const Page = async ({}) => {
-  const user = await useHaveAccess();
+  // const user = await useHaveAccess();
 
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
-        <Header user={user} title="الاعدادات العامة" />
+        {/* @ts-ignore */}
+        <Header user={{}} title="الاعدادات العامة" />
+        <CouponsTableShell initialData={[]} />
       </main>
     </MaxWidthWrapper>
   );

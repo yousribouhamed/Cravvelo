@@ -20,6 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/components/ui/table";
+import CouponsTableHeader from "./tables-headers/coupons-table-header";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -55,6 +56,7 @@ export function DataTable<TData, TValue>({
   return (
     <>
       {/* <TableHeader2 table={table} /> */}
+      <CouponsTableHeader table={table} />
       <div className="rounded-md border bg-white">
         <Table>
           <TableHeader>

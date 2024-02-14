@@ -1,4 +1,4 @@
-import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
+import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
 import PaymentMethodsConnectors from "@/src/components/payments/payment-methods-connector";
 import useHaveAccess from "@/src/hooks/use-have-access";

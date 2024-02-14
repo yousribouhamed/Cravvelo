@@ -20,6 +20,8 @@ export default authMiddleware({
     "/api/trpc(.*)",
     "/cart(.*)",
     "/editor",
+    "/students(.*)",
+    "/marketing(.*)",
   ],
 
   beforeAuth: (req) => {

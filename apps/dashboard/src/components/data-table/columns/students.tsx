@@ -13,6 +13,7 @@ import {
 import { Checkbox } from "@ui/components/ui/checkbox";
 import { Student } from "database";
 import { maketoast } from "../../toasts";
+import { DataTableColumnHeader } from "../data-table-head";
 
 export const StudentsColumns: ColumnDef<Student>[] = [
   {
@@ -29,6 +30,7 @@ export const StudentsColumns: ColumnDef<Student>[] = [
         className="!mr-4"
       />
     ),
+
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
@@ -39,6 +41,75 @@ export const StudentsColumns: ColumnDef<Student>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
+  },
+  {
+    accessorKey: "firstName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title=" اسم الطالب" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex flex-col gap-y-2 justify-center items-start ">
+          <p className="font-bold ">{row.original?.firstName}</p>
+        </div>
+      );
+    },
+  },
+
+  {
+    accessorKey: "lastName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="اسم العائلة" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex flex-col gap-y-2 justify-center items-start ">
+          <p className="font-bold ">{row.original?.lastName}</p>
+        </div>
+      );
+    },
+  },
+
+  {
+    accessorKey: "lastName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="البريد الالكتروني" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex flex-col gap-y-2 justify-center items-start ">
+          <p className="font-bold ">{row.original?.email}</p>
+        </div>
+      );
+    },
+  },
+
+  {
+    accessorKey: "lastName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="رقم الهاتف" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex flex-col gap-y-2 justify-center items-start ">
+          <p className="font-bold ">{row.original?.phone}</p>
+        </div>
+      );
+    },
+  },
+
+  {
+    accessorKey: "lastName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="تاريخ التسجيل" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex flex-col gap-y-2 justify-center items-start ">
+          <p className="font-bold ">{row.original?.email}</p>
+        </div>
+      );
+    },
   },
 
   {

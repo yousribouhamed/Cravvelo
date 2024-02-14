@@ -1,5 +1,5 @@
 import Header from "@/src/components/layout/header";
-import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
+import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import { Student } from "database";
 import { prisma } from "database/src";
 import StudentsTableShell from "./StudentsTableShell";
@@ -11,14 +11,15 @@ async function getData(): Promise<Student[]> {
 }
 
 const Page = async ({}) => {
-  const user = await useHaveAccess();
-  const data = await getData();
+  // const user = await useHaveAccess();
+  // const data = await getData();
 
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
-        <Header user={user} title="الطلاب" />
-        <StudentsTableShell initialData={data} />
+        {/* @ts-ignore */}
+        <Header user={{}} title="الطلاب" />
+        <StudentsTableShell initialData={[]} />
       </main>
     </MaxWidthWrapper>
   );

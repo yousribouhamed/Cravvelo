@@ -1,5 +1,5 @@
 import ViewSwitcher from "./components/view-switcher";
-import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
+import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import CustomeThemeProvider from "./providers";
 
 //lg:w-[calc(100%-64px)] lg:mr-[64px]

@@ -19,6 +19,7 @@ import { Course } from "database";
 import { Badge } from "@ui/components/ui/badge";
 import { maketoast } from "../../toasts";
 import { useRouter } from "next/navigation";
+
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 

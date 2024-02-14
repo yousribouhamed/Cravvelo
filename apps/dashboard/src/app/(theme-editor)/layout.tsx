@@ -1,4 +1,4 @@
-import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
+import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 
 export default async function EditorLayout({
   children,

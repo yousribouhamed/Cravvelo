@@ -1,5 +1,5 @@
 import Header from "@/src/components/layout/header";
-import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
+import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import UpgradeButton from "@/src/app/(dashboard)/pricing/_compoents/upgradeButton";
 import useHaveAccess from "@/src/hooks/use-have-access";
 

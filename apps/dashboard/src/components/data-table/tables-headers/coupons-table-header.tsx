@@ -1,15 +1,15 @@
 import { Button } from "@ui/components/ui/button";
 import type { FC } from "react";
-import AddCourse from "../models/add-course";
 import { Table } from "@ui/components/ui/table";
 import { Input } from "@ui/components/ui/input";
-import AddProductModel from "../models/add-product";
+import CreateCouponSheet from "../../sheets/create-coupon-sheet";
+import CreateCoupon from "../../models/create-coupon";
 
 interface TableHeaderProps {
   table: any;
 }
 
-const ProductsTableHeader: FC<TableHeaderProps> = ({ table }) => {
+const CouponsTableHeader: FC<TableHeaderProps> = ({ table }) => {
   return (
     <div className="w-full h-[70px] flex items-center justify-between">
       <div className="min-w-[200px] w-fit h-full flex  items-center justify-start gap-x-4">
@@ -35,7 +35,7 @@ const ProductsTableHeader: FC<TableHeaderProps> = ({ table }) => {
           تصفية
         </Button>
         <Input
-          placeholder="البحث عن منتجات..."
+          placeholder="البحث عن الدورات..."
           //@ts-ignore
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
@@ -77,10 +77,10 @@ const ProductsTableHeader: FC<TableHeaderProps> = ({ table }) => {
           </svg>
           تصدير البيانات
         </Button>
-        <AddProductModel />
+        <CreateCoupon />
       </div>
     </div>
   );
 };
 
-export default ProductsTableHeader;
+export default CouponsTableHeader;

@@ -61,19 +61,14 @@ export const SIDE_BAR_ITEMS = [
       {
         title: "كبونات الخصم",
         icon: Icons.Home,
-        slug: "/coupons",
-      },
-      {
-        title: "التسويق بالعمولة",
-        icon: Icons.Home,
-        slug: "/",
+        slug: "/marketing/coupons",
       },
     ],
   },
 
   {
     title: "تجربة الطلاب",
-    slug: "/marketing",
+    slug: "/students",
     icon: Icons.customize,
     subitems: [
       {
@@ -110,28 +105,28 @@ export const SIDE_BAR_ITEMS = [
     ],
   },
 
-  {
-    title: "التحليلات",
-    slug: "/marketing",
-    icon: Icons.customize,
-    subitems: [
-      {
-        title: "المنتجات",
-        icon: Icons.Home,
-        slug: "/analytics/products",
-      },
-      {
-        title: "الارباح",
-        icon: Icons.Home,
-        slug: "/analytics/profits",
-      },
-      {
-        title: "العملاء",
-        icon: Icons.Home,
-        slug: "/analytics/customers",
-      },
-    ],
-  },
+  // {
+  //   title: "التحليلات",
+  //   slug: "/analytics",
+  //   icon: Icons.customize,
+  //   subitems: [
+  //     {
+  //       title: "المنتجات",
+  //       icon: Icons.Home,
+  //       slug: "/analytics/products",
+  //     },
+  //     {
+  //       title: "الارباح",
+  //       icon: Icons.Home,
+  //       slug: "/analytics/profits",
+  //     },
+  //     {
+  //       title: "العملاء",
+  //       icon: Icons.Home,
+  //       slug: "/analytics/customers",
+  //     },
+  //   ],
+  // },
 
   {
     title: "الإعدادات",

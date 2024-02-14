@@ -1,4 +1,4 @@
-import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
+import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
 import PathBuilder from "@/src/components/path-builder";
 import LoadingForm from "@/src/components/forms/form-loading";

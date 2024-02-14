@@ -1,4 +1,4 @@
-import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
+import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
 import AddTextForm from "@/src/components/forms/course-forms/add-text-form";
 import PathBuilder from "@/src/components/path-builder";

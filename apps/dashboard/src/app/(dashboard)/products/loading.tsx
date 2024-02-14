@@ -1,5 +1,5 @@
 import Header from "@/src/components/layout/header";
-import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
+import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import { DataTableLoading } from "@/src/components/data-table/table-loading";
 import useHaveAccess from "@/src/hooks/use-have-access";
 

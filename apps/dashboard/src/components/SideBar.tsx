@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@ui/lib/utils";
-import SideBarMenu from "./MobilMenu";
+import SideBarMenu from "./mobil-menu";
 import AddNew from "./models/add-new";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}

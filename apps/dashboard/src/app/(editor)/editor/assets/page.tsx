@@ -1,4 +1,4 @@
-import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
+import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import type { FC } from "react";
 import AssetsForm from "../../components/forms/assets-form";
 import LogoForm from "../../components/forms/logo-form";

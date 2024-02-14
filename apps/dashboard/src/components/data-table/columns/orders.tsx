@@ -13,6 +13,7 @@ import {
 import { Checkbox } from "@ui/components/ui/checkbox";
 import { Order } from "database";
 import { maketoast } from "../../toasts";
+import { DataTableColumnHeader } from "../data-table-head";
 
 export const OrderColumns: ColumnDef<Order>[] = [
   {
@@ -39,6 +40,66 @@ export const OrderColumns: ColumnDef<Order>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
+  },
+
+  {
+    accessorKey: "createdAt",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="وقت الانشاء" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <p>
+          {/* todo : add funtion to fransform date to string in arabic */}
+          {/* {row.original.expirationDate} */}
+        </p>
+      );
+    },
+  },
+
+  {
+    accessorKey: "orderNumber",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="وقت الانشاء" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <p>
+          {/* todo : add funtion to fransform date to string in arabic */}
+          {/* {row.original.expirationDate} */}
+        </p>
+      );
+    },
+  },
+
+  {
+    accessorKey: "amount",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="الكمية" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <p>
+          {/* todo : add funtion to fransform date to string in arabic */}
+          {/* {row.original.expirationDate} */}
+        </p>
+      );
+    },
+  },
+
+  {
+    accessorKey: "status",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="الحالة" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <p>
+          {/* todo : add funtion to fransform date to string in arabic */}
+          {/* {row.original.expirationDate} */}
+        </p>
+      );
+    },
   },
 
   {

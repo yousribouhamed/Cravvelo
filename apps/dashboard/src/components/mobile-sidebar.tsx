@@ -6,24 +6,25 @@ import { Menu } from "lucide-react";
 import * as React from "react";
 import type { FC } from "react";
 import { cn } from "@ui/lib/utils";
-import { useRouter, usePathname } from "next/navigation";
-import SideBarMenu from "./MobilMenu";
+import SideBarMenu from "./mobil-menu";
 import AddNew from "./models/add-new";
-
-import { Sidebar } from "./SideBar";
 
 const MobildSideBard: FC = ({}) => {
   const [isOpen, setIsOpen] = React.useState(false);
   return (
     <Sheet open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
       <SheetTrigger asChild>
-        <Button variant="secondary" size="icon" className="rounded-2xl">
-          <Menu className="w-4 h-4 text-gray-700" />
+        <Button
+          size="icon"
+          variant="secondary"
+          className="rounded-2xl bg-white border text-black"
+        >
+          <Menu />
         </Button>
       </SheetTrigger>
       <SheetContent
         className={cn(
-          `pb-12  bg-[#43766C] h-full   ${isOpen ? "block" : "hidden"}`
+          `pb-12  bg-primary h-full   ${isOpen ? "block" : "hidden"}`
         )}
       >
         <div className="space-y-4 py-2   ">

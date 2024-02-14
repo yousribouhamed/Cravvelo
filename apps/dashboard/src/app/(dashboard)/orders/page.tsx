@@ -1,5 +1,5 @@
 import Header from "@/src/components/layout/header";
-import MaxWidthWrapper from "@/src/components/MaxWidthWrapper";
+import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import { Order } from "database";
 import { prisma } from "database/src";
 import OrdersTableShell from "./OrdersTableShell";

@@ -13,6 +13,7 @@ import {
 import { Checkbox } from "@ui/components/ui/checkbox";
 import { Comment } from "database";
 import { maketoast } from "../../toasts";
+import { DataTableColumnHeader } from "../data-table-head";
 
 export const CommentColumns: ColumnDef<Comment>[] = [
   {
@@ -39,6 +40,36 @@ export const CommentColumns: ColumnDef<Comment>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
+  },
+
+  {
+    accessorKey: "content",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="محتوى التعليق" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <p>
+          {/* todo : add funtion to fransform date to string in arabic */}
+          {/* {row.original.expirationDate} */}
+        </p>
+      );
+    },
+  },
+
+  {
+    accessorKey: "createdAt",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="وقت الانشاء" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <p>
+          {/* todo : add funtion to fransform date to string in arabic */}
+          {/* {row.original.expirationDate} */}
+        </p>
+      );
+    },
   },
 
   {

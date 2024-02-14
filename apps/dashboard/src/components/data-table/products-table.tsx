@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/components/ui/table";
-import ProductsTableHeader from "./products-table-header";
+import ProductsTableHeader from "./tables-headers/products-table-header";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

@@ -17,7 +17,6 @@ import { DataTableColumnHeader } from "../data-table-head";
 import { Coupon } from "database";
 import { Badge } from "@ui/components/ui/badge";
 import { maketoast } from "../../toasts";
-import { useRouter } from "next/navigation";
 
 export const CouponColumns: ColumnDef<Coupon>[] = [
   {
@@ -48,7 +47,7 @@ export const CouponColumns: ColumnDef<Coupon>[] = [
   {
     accessorKey: "code",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="عنوان الدورة" />
+      <DataTableColumnHeader column={column} title="الرمز" />
     ),
     cell: ({ row }) => {
       return (
@@ -61,27 +60,11 @@ export const CouponColumns: ColumnDef<Coupon>[] = [
       );
     },
   },
-  {
-    accessorKey: "description",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="السعر" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <p className="text-gray-500 text-sm">
-          {" "}
-          <span className="font-bold text-black">
-            {row.original.description === null ? "" : row.original.description}
-          </span>{" "}
-          دج
-        </p>
-      );
-    },
-  },
+
   {
     accessorKey: "discountType",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="إجمالي الأرباح" />
+      <DataTableColumnHeader column={column} title="نمط التخفيض" />
     ),
     cell: ({ row }) => {
       return (
@@ -98,13 +81,13 @@ export const CouponColumns: ColumnDef<Coupon>[] = [
   {
     accessorKey: "discountAmount",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="المدربين" />
+      <DataTableColumnHeader column={column} title="كمية التخفيض" />
     ),
   },
   {
     accessorKey: "expirationDate",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="    عدد الطلاب الملتحقين" />
+      <DataTableColumnHeader column={column} title="تاريخ نهاية الفعالية" />
     ),
     cell: ({ row }) => {
       return (
@@ -118,7 +101,7 @@ export const CouponColumns: ColumnDef<Coupon>[] = [
   {
     accessorKey: "usageLimit",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="    عدد الطلاب الملتحقين" />
+      <DataTableColumnHeader column={column} title="حدود الاستعمال" />
     ),
     cell: ({ row }) => {
       return (
@@ -129,7 +112,7 @@ export const CouponColumns: ColumnDef<Coupon>[] = [
   {
     accessorKey: "usageCount",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="    عدد الطلاب الملتحقين" />
+      <DataTableColumnHeader column={column} title="عدد الاستخدام" />
     ),
     cell: ({ row }) => {
       return (

@@ -13,6 +13,7 @@ import {
 import { Checkbox } from "@ui/components/ui/checkbox";
 import { Homework } from "database";
 import { maketoast } from "../../toasts";
+import { DataTableColumnHeader } from "../data-table-head";
 
 export const HomeworkColumns: ColumnDef<Homework>[] = [
   {
@@ -39,6 +40,50 @@ export const HomeworkColumns: ColumnDef<Homework>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
+  },
+
+  {
+    accessorKey: "description",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="وقت الانشاء" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <p>
+          {/* todo : add funtion to fransform date to string in arabic */}
+          {/* {row.original.expirationDate} */}
+        </p>
+      );
+    },
+  },
+  {
+    accessorKey: "createdAt",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="وقت الانشاء" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <p>
+          {/* todo : add funtion to fransform date to string in arabic */}
+          {/* {row.original.expirationDate} */}
+        </p>
+      );
+    },
+  },
+
+  {
+    accessorKey: "title",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="العنوان" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <p>
+          {/* todo : add funtion to fransform date to string in arabic */}
+          {/* {row.original.expirationDate} */}
+        </p>
+      );
+    },
   },
 
   {
