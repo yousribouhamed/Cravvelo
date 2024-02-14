@@ -82,27 +82,82 @@ const CreateCoupon: FC = ({}) => {
           انشى كوبون
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-lg" title="إضافة دورة جديدة">
-        <div className="w-full px-4 pb-6">
+      <DialogContent className="max-w-2xl " title="إضافة دورة جديدة">
+        <div className="w-full px-4 pb-6 ">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              {/* <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>عنوان الدورة *</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم"
-                        {...field}
-                      />
-                    </FormControl>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel> نمط التخفيض *</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم"
+                          {...field}
+                        />
+                      </FormControl>
 
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel> كمية التخفيض *</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم"
+                          {...field}
+                        />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel> تاريخ نهاية الفعالية *</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم"
+                          {...field}
+                        />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel> حدود الاستعمال *</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم"
+                          {...field}
+                        />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <DialogFooter className="w-full h-[50px] flex items-center justify-end gap-x-4">
                 <Button variant="ghost">إلغاء</Button>
                 <Button
