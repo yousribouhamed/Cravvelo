@@ -1,10 +1,8 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-
 import { Badge } from "@ui/components/ui/badge";
 import { Checkbox } from "@ui/components/ui/checkbox";
-
 import { labels, priorities, statuses } from "@/src/constants/table-static";
 import { Task } from "./schema";
 import { DataTableColumnHeader } from "../table/data-table-column-header";

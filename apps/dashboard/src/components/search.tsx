@@ -62,13 +62,13 @@ export const SearchInput: FC = ({}) => {
         <span className="hidden xl:inline-flex"> بحث...</span>
         <span className="sr-only">Search </span>
         <kbd className="pointer-events-none absolute left-1.5 top-2 hidden h-6 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-xs font-medium opacity-100 xl:flex">
+          K
           <abbr
             title={isMacOs() ? "Command" : "Control"}
             className="no-underline"
           >
             {isMacOs() ? "⌘" : "Ctrl"}
           </abbr>
-          K
         </kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
