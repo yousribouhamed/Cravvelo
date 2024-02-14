@@ -22,6 +22,7 @@ export default authMiddleware({
     "/editor",
     "/students(.*)",
     "/marketing(.*)",
+    "/test",
   ],
 
   beforeAuth: (req) => {

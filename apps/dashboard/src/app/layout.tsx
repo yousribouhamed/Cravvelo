@@ -5,11 +5,9 @@ import type { Metadata } from "next";
 import Providers from "../components/Providers";
 import Script from "next/script";
 import { Toaster } from "@ui/components/ui/sonner";
+import { constructMetadata } from "../lib/utils";
 
-export const metadata: Metadata = {
-  title: "جدير",
-  description: "انت جدير بامتلاك اكادميتي الخاصة",
-};
+export const metadata = constructMetadata();
 
 export default function RootLayout({
   children,

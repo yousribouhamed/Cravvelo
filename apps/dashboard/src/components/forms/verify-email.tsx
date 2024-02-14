@@ -27,6 +27,7 @@ import { useSignUp } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { verifyEmailSchema } from "@/src/lib/validators/auth";
 import { Icons } from "../my-icons";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 export function VerifyEmail() {
   const router = useRouter();
@@ -94,15 +95,10 @@ export function VerifyEmail() {
               data-ripple-light="true"
               type="submit"
               size="lg"
-              className="w-full text-white font-bold bg-primary"
+              className="w-full text-white font-bold bg-primary rounded-xl flex items-center justify-center gap-x-4"
             >
               تسجيل الدخول
-              {isPending && (
-                <Icons.spinner
-                  className="ml-2 h-4 w-4 animate-spin"
-                  aria-hidden="true"
-                />
-              )}
+              {isPending && <LoadingSpinner />}
             </Button>
           </form>
         </Form>

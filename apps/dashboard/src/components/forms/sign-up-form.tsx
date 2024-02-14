@@ -33,6 +33,7 @@ import { useRouter } from "next/navigation";
 
 import { Icons } from "../my-icons";
 import { catchClerkError, catchError } from "@/src/lib/utils";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 type Inputs = z.infer<typeof authSchema>;
 
@@ -156,15 +157,10 @@ export function SignUpForm() {
               type="submit"
               disabled={isLoading}
               size="lg"
-              className="w-full text-white font-bold bg-primary"
+              className="w-full text-white font-bold rounded-xl bg-primary flex items-center justify-center gap-x-4"
             >
-              {isLoading && (
-                <Icons.spinner
-                  className="ml-2 h-4 w-4 animate-spin"
-                  aria-hidden="true"
-                />
-              )}
               أنشئ حسابك مجانًا
+              {isLoading && <LoadingSpinner />}
             </Button>
           </form>
         </Form>

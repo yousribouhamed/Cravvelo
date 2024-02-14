@@ -3,6 +3,7 @@ import type { User } from "@clerk/nextjs/server";
 import { z } from "zod";
 
 import { maketoast } from "../components/toasts";
+import { Metadata } from "next";
 
 export function absoluteUrl(path: string) {
   if (typeof window !== "undefined") return path;
@@ -144,4 +145,48 @@ export function daysLeftInTrial(created_at: Date): number {
 
   // Return the number of days left in the trial
   return daysDifference;
+}
+
+export function constructMetadata({
+  title = "جدير",
+  description = "انت جدير بامتلاك اكادميتي الخاصة",
+  image = "/opengraph-image.png",
+  icons = "/favicon.ico",
+  noIndex = false,
+}: {
+  title?: string;
+  description?: string;
+  image?: string;
+  icons?: string;
+  noIndex?: boolean;
+} = {}): Metadata {
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [
+        {
+          url: image,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+      creator: "@KING_IN_JUNGLE",
+    },
+    icons,
+    metadataBase: new URL("https://quill-blcrm7149-chrhi.vercel.app"),
+    themeColor: "#FFF",
+    ...(noIndex && {
+      robots: {
+        index: false,
+        follow: false,
+      },
+    }),
+  };
 }

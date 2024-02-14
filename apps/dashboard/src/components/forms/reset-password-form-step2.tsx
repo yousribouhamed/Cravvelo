@@ -28,6 +28,7 @@ import { Icons } from "../my-icons";
 import { toast } from "@ui/lib/utils";
 import { catchClerkError } from "@/src/lib/utils";
 import { PasswordInput } from "../password-input";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 type Inputs = z.infer<typeof resetPasswordSchema>;
 
@@ -131,15 +132,10 @@ export function ResetPasswordStep2Form() {
               data-ripple-light="true"
               type="submit"
               size="lg"
-              className="w-full text-white font-bold bg-primary"
+              className="w-full text-white font-bold bg-primary flex items-center justify-center gap-x-4 rounded-xl"
             >
               تغيير كلمة المرور
-              {isPending && (
-                <Icons.spinner
-                  className="ml-2 h-4 w-4 animate-spin"
-                  aria-hidden="true"
-                />
-              )}
+              {isPending && <LoadingSpinner />}
             </Button>
           </form>
         </Form>

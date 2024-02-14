@@ -31,6 +31,7 @@ import { Icons } from "../my-icons";
 import { toast } from "@ui/lib/utils";
 import { OAuthSignIn } from "../auth/oauth-signin";
 import { maketoast } from "../toasts";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 type Inputs = z.infer<typeof authSchemaLogin>;
 export function SignInForm() {
@@ -138,15 +139,10 @@ export function SignInForm() {
               type="submit"
               size="lg"
               disabled={isLoading}
-              className="w-full text-white font-bold bg-primary"
+              className="w-full text-white font-bold bg-primary rounded-xl flex items-center justify-center gap-x-4"
             >
-              {isLoading && (
-                <Icons.spinner
-                  className="ml-2 h-4 w-4 animate-spin"
-                  aria-hidden="true"
-                />
-              )}
               تسجيل الدخول
+              {isLoading && <LoadingSpinner />}
             </Button>
           </form>
         </Form>

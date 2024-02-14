@@ -67,7 +67,7 @@ export function OAuthSignIn() {
         aria-label={`Sign in with ${oauthProviders[1].name}`}
         key={oauthProviders[1].strategy}
         variant="secondary"
-        className="w-full h-14 bg-[#1877F2] flex items-center justify-between  rounded-lg font-bold text-white "
+        className="w-full h-14 bg-[#1877F2] flex items-center justify-center gap-x-4  rounded-lg font-bold text-white "
         onClick={() => void oauthSignIn(oauthProviders[1].strategy)}
         disabled={isLoading !== null}
       >
