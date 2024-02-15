@@ -45,9 +45,9 @@ const VedioUploader: FC<VedioUploaderProps> = ({ onChange }) => {
             setProgress(Math.round((e.uploadedBytes * 100) / e.totalBytes))
           );
           videoUploader.onPlayable(async (e) => {
-            // await mutation.mutateAsync({
-            //   videoId: e.videoId,
-            // });
+            await mutation.mutateAsync({
+              videoId: e.videoId,
+            });
             onChange(e.videoId);
           });
 
