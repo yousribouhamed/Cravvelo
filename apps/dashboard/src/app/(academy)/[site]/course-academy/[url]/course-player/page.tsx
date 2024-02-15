@@ -13,6 +13,9 @@ const Page = async ({ params }: PageProps) => {
 
   const chapters = await get_course_chapters({ courseID: course?.id });
 
+  console.log("here are all the chapters");
+  console.log(chapters);
+
   return (
     <>
       <div className="w-full min-h-[700px] h-fit grid grid-cols-3 gap-x-4 ">
@@ -21,7 +24,7 @@ const Page = async ({ params }: PageProps) => {
           <VideoChain chapters={chapters} />
         </div>
         <div className="w-full h-full col-span-2 py-8">
-          <CourseVideoPlayer videoId="vi2dfLXnw5VSKfPu0VwpzArR" />
+          <CourseVideoPlayer videoId={chapters[0]?.modules[0]?.fileUrl ?? ""} />
           <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
             <button className="w-[100px] h-[40px] rounded-xl bg-blue-500 text-white">
               التعليقات

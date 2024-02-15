@@ -15,6 +15,7 @@ export const useCoursePlayerStore = create<CoursePlayer>()((set, get) => ({
     currentModule: null,
   },
   actions: {
-    setCurrentModule: (item: Module) => {},
+    setCurrentModule: (item: Module) =>
+      set({ state: { ...get().state, currentModule: item } }),
   },
 }));

@@ -37,7 +37,7 @@ const VideoChain: FC<VideoChainProps> = ({ chapters }) => {
                     <AccordionTrigger asChild>
                       <div className="w-full h-[50px]  flex flex-col items-start justify-center  cursor-pointer ">
                         <p className="text-lg font-bold text-black">
-                          {item.title}
+                          {item?.title}
                         </p>
                         <span className="text-sm text-gray-500">
                           {modules?.length} مواد
@@ -51,10 +51,16 @@ const VideoChain: FC<VideoChainProps> = ({ chapters }) => {
                       {Array.isArray(modules) &&
                         modules?.map((subitem) => {
                           return (
-                            <div
-                              key={subitem.title + index}
+                            <button
+                              key={subitem?.title + index}
                               className="w-full h-[70px] flex items-center justify-start gap-x-4 cursor-pointer hover:bg-gray-100 transition-all duration-300 ease-in-out"
-                              onClick={() => setCurrentModule(subitem)}
+                              onClick={() => {
+                                console.log("this is subitem");
+                                console.log(
+                                  "this is the button cliked and it is working as it should"
+                                );
+                                setCurrentModule(subitem);
+                              }}
                             >
                               {/* this is the first container */}
                               <div className="w-[100px] h-full flex items-center justify-start gap-x-4">
@@ -67,13 +73,13 @@ const VideoChain: FC<VideoChainProps> = ({ chapters }) => {
                               {/* this is the second container */}
                               <div className="w-full h-full flex flex-col items-start justify-center ">
                                 <p className="text-sm text-black ">
-                                  {subitem.title}
+                                  {subitem?.title}
                                 </p>
                                 <span className="text-gray-500 text-xs">
                                   3:09
                                 </span>
                               </div>
-                            </div>
+                            </button>
                           );
                         })}
                     </AccordionContent>
