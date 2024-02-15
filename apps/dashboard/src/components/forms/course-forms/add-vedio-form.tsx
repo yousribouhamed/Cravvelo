@@ -21,6 +21,7 @@ import { getValueFromUrl } from "@/src/lib/utils";
 import VedioUploader from "../../uploaders/VedioUploader";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { PlateEditor } from "../../reich-text-editor/rich-text-editor";
+import { maketoast } from "../../toasts";
 
 const addVedioSchema = z.object({
   title: z.string().min(2).max(50),
@@ -34,8 +35,13 @@ function AddVedioForm() {
   const chapterID = getValueFromUrl(path, 4);
 
   const mutation = trpc.createModule.useMutation({
-    onSuccess: () => {},
-    onError: () => {},
+    onSuccess: () => {
+      router.push(`/courses`);
+    },
+    onError: (error) => {
+      maketoast.error();
+      console.error(error);
+    },
   });
 
   const form = useForm<z.infer<typeof addVedioSchema>>({
@@ -48,6 +54,11 @@ function AddVedioForm() {
   });
 
   async function onSubmit(values: z.infer<typeof addVedioSchema>) {
+    if (!values.fileUrl || values.fileUrl === "") {
+      console.log("here it is the values inside the if");
+      console.log(values);
+      return;
+    }
     await mutation.mutateAsync({
       chapterID: chapterID,
       content: JSON.stringify(values.content),
@@ -55,6 +66,9 @@ function AddVedioForm() {
       fileUrl: values.fileUrl,
       title: values.title,
     });
+
+    console.log("here it is the values inside the mutation");
+    console.log(values);
   }
 
   return (

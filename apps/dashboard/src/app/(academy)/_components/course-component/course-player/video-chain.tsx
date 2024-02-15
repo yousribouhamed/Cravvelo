@@ -59,6 +59,7 @@ const VideoChain: FC<VideoChainProps> = ({ chapters }) => {
                                 console.log(
                                   "this is the button cliked and it is working as it should"
                                 );
+                                console.log(subitem);
                                 setCurrentModule(subitem);
                               }}
                             >

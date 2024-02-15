@@ -23,7 +23,11 @@ const CourseVideoPlayer: FC<VideoPlayerProps> = ({ videoId }) => {
       <div className="w-full h-[500px] rounded-xl bg-gray-200">
         <ApiVideoPlayer
           video={{
-            id: state?.currentModule?.fileUrl ?? "vi3zyFVFwXJZFWptq54sINZu",
+            id:
+              state?.currentModule?.fileUrl &&
+              state?.currentModule?.fileUrl !== ""
+                ? state?.currentModule?.fileUrl
+                : "vi3zyFVFwXJZFWptq54sINZu",
           }}
           style={{ width: "100%", height: "100%" }}
           theme={{
