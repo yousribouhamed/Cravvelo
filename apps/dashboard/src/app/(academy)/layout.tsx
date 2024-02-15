@@ -64,7 +64,7 @@ export default function RootLayout({
       <head />
       <Providers>
         <body
-          className={`selection:bg-blue-500 selection:text-white antialiased`}
+          className={`selection:bg-blue-500 selection:text-white antialiased bg-zinc-50`}
         >
           <AcademyHeader
             student={{
@@ -76,7 +76,7 @@ export default function RootLayout({
             }}
             isAuthanticated
           />
-          <MaxWidthWrapper className="mt-[70px] min-h-[calc(100vh-70px)] h-fit">
+          <MaxWidthWrapper className="mt-[70px] min-h-[calc(100vh-70px)] h-fit ">
             {children}
           </MaxWidthWrapper>
           <AcademiaFooter />

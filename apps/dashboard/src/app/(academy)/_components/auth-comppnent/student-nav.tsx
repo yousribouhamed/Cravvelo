@@ -37,7 +37,7 @@ const StudentNav: FC<studentNavProps> = ({ student }) => {
           <DropdownMenuItem className="w-full  h-full flex justify-between items-center  ">
             <Link
               className="w-full  h-full flex justify-between items-center p-2 "
-              href={"/student-profile"}
+              href={"/student-profile/studentId"}
             >
               <User className=" h-4 w-4" />
               <span>الملف الشخصي</span>
@@ -50,7 +50,7 @@ const StudentNav: FC<studentNavProps> = ({ student }) => {
               href={"/student-library"}
             >
               <Gift className=" h-4 w-4" />
-              <span> المكتبة</span>
+              <span>المكتبة الرقمية</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />

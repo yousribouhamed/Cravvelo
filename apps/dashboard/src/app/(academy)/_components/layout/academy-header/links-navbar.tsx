@@ -17,7 +17,7 @@ function LinksNavbar() {
           className={cn(
             " rounded-xl text-md p-2 bg-transparent hover:bg-gray-50  ",
             {
-              "text-zinc-950 font-bold bg-gray-100  hover:bg-gray-100 ":
+              "text-black font-bold bg-gray-100  hover:bg-gray-100 ":
                 isCurrentPath({
                   currentPath: "/",
                 }),
@@ -32,7 +32,7 @@ function LinksNavbar() {
           className={cn(
             " rounded-xl text-md p-2 bg-transparent hover:bg-gray-50  ",
             {
-              "text-zinc-950 font-bold bg-gray-100  hover:bg-gray-100 ":
+              "text-black font-bold bg-gray-100  hover:bg-gray-100 ":
                 isCurrentPath({
                   currentPath: "/course-academy",
                 }),
@@ -47,14 +47,14 @@ function LinksNavbar() {
           className={cn(
             " rounded-xl text-md p-2 bg-transparent hover:bg-gray-50  ",
             {
-              "text-zinc-950 font-bold bg-gray-100  hover:bg-gray-100 ":
+              "text-black font-bold bg-gray-100  hover:bg-gray-100 ":
                 isCurrentPath({
                   currentPath: "/products-academy",
                 }),
             }
           )}
         >
-          الدورات
+          المنتجات
         </button>
       </Link>
     </div>

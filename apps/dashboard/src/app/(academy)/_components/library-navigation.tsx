@@ -36,7 +36,7 @@ function LibraryNavigation({ className, ...props }: ExamplesNavProps) {
       <div
         className={cn(
           "mb-4 w-fit flex items-center ",
-          ` w-full  bg-white max-w-md mx-auto shadow border flex items-center justify-center   rounded-lg  h-full`
+          ` w-full  bg-white max-w-2xl ml-auto shadow border flex items-center justify-start   rounded-lg  h-full`
         )}
       >
         {links.map((item, index) => (
