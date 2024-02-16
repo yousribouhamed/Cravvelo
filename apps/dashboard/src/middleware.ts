@@ -18,6 +18,7 @@ export default authMiddleware({
     "/sso-callback(.*)",
     "/api/uploadthing(.*)",
     "/api/trpc(.*)",
+    "/api(.*)",
     "/cart(.*)",
     "/editor",
     "/students(.*)",
