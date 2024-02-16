@@ -72,10 +72,15 @@ export const create_checkout = async ({
   price_id,
   success_url,
   subdomain,
+  metadata,
 }: {
   price_id: string;
   success_url: string;
   subdomain: string;
+  metadata: {
+    studentId: string;
+    productId: string;
+  };
 }): Promise<Checkout | undefined> => {
   // Function to create a checkout
   // It takes price_id and success_url as input and returns a Promise that resolves to Checkout or undefined
@@ -84,7 +89,7 @@ export const create_checkout = async ({
   const payload = {
     items: [{ price: price_id, quantity: 1 }],
     success_url,
-    metadata: [{ abdullah: "metadatais working" }],
+    metadata: [metadata],
   }; // Constructing the payload for creating a checkout
 
   // Constructing request options

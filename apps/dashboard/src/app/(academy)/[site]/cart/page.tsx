@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import PaymentForm from "../../_components/forms/payment-form";
+import { getStudent } from "../../actions/auth";
 
 export const fetchCache = "force-no-store";
 
@@ -13,9 +14,10 @@ const Page = async ({ params }: PageProps) => {
       ? "abdullah.jadir.vercel.app"
       : decodeURIComponent(params?.site);
 
+  const student = await getStudent();
   return (
     <>
-      <PaymentForm subdomain={subdomain_value} />
+      <PaymentForm studentId={student.id} subdomain={subdomain_value} />
     </>
   );
 };

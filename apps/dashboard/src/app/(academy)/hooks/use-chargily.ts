@@ -12,6 +12,10 @@ interface Product_details {
   product_name: string;
   product_price: number;
   subdomain: string;
+  metadata: {
+    studentId: string;
+    productId: string;
+  };
 }
 export const useChargily = () => {
   // Define a custom hook useChargily that takes product_name and product_price as parameters
@@ -21,6 +25,7 @@ export const useChargily = () => {
     product_name,
     product_price,
     subdomain,
+    metadata,
   }: Product_details) => {
     // Define an asynchronous function pay
     try {
@@ -42,6 +47,7 @@ export const useChargily = () => {
         price_id: price.id,
         success_url: `https://${subdomain}/student-library`,
         subdomain,
+        metadata,
       });
 
       console.log("here it is the content of the checkout");

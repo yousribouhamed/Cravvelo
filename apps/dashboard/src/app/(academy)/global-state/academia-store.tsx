@@ -13,6 +13,7 @@ interface AcademiaState {
   };
   actions: {
     addItem: (item: ItemCourse) => void;
+    removeItem: (id: string) => void;
   };
 }
 
@@ -26,6 +27,13 @@ export const useAcademiaStore = create<AcademiaState>()((set, get) => ({
         state: {
           ...get().state,
           shoppingBag: [...get().state.shoppingBag, item],
+        },
+      }),
+    removeItem: (id: string) =>
+      set({
+        state: {
+          ...get().state,
+          shoppingBag: get().state.shoppingBag.filter((item) => item.id !== id),
         },
       }),
   },

@@ -17,9 +17,10 @@ import React from "react";
 
 interface Props {
   subdomain: string;
+  studentId: string;
 }
 
-const PaymentForm: FC<Props> = ({ subdomain }) => {
+const PaymentForm: FC<Props> = ({ subdomain, studentId }) => {
   const bagItems = useAcademiaStore();
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -28,11 +29,17 @@ const PaymentForm: FC<Props> = ({ subdomain }) => {
 
   const handlePayWithChargily = async () => {
     if (bagItems.state.shoppingBag?.length === 0) return;
+
+    const metadata = {
+      studentId,
+      productId: bagItems.state.shoppingBag[0]?.id,
+    };
     setIsLoading(true);
     await pay({
       product_name: bagItems.state.shoppingBag[0]?.name,
       product_price: Number(bagItems.state.shoppingBag[0]?.price),
       subdomain,
+      metadata,
     });
     setIsLoading(false);
   };

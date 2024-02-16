@@ -2,6 +2,7 @@ import { Filter, Search } from "lucide-react";
 import CoursesGrid from "../../_components/course-component/courses-grid";
 import { Input } from "@ui/components/ui/input";
 import FilterCourses from "../../_components/course-component/filter-courses";
+import { getAllCourses } from "../../actions";
 export const fetchCache = "force-no-store";
 
 interface PageProps {
@@ -9,7 +10,12 @@ interface PageProps {
 }
 
 const Page = async ({ params }: PageProps) => {
-  // fetch the data in here then pass it to the children
+  const subdomain_value =
+    process.env.NODE_ENV === "development"
+      ? "abdullah.jadir.vercel.app"
+      : decodeURIComponent(params?.site);
+
+  const courses = await getAllCourses({ subdomain: subdomain_value });
   return (
     <div className="  w-full h-fit min-h-screen flex flex-col gap-4 items-start py-4">
       {/* <FilterCourses /> */}
@@ -27,7 +33,7 @@ const Page = async ({ params }: PageProps) => {
         </div>
       </div>
 
-      <CoursesGrid />
+      <CoursesGrid courses={courses} />
     </div>
   );
 };
