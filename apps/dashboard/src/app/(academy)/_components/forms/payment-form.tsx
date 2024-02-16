@@ -10,42 +10,39 @@ import {
   CardHeader,
   CardTitle,
 } from "@ui/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@ui/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { PaymentFormSchema } from "../../validations";
-import { z } from "zod";
+
 import { Input } from "@ui/components/ui/input";
+import { useChargily } from "../../hooks/use-chargily";
+import React from "react";
 
-type Inputs = z.infer<typeof PaymentFormSchema>;
+interface Props {
+  subdomain: string;
+}
 
-const PaymentForm: FC = ({}) => {
+const PaymentForm: FC<Props> = ({ subdomain }) => {
   const bagItems = useAcademiaStore();
 
-  // react-hook-form
-  const form = useForm<Inputs>({
-    resolver: zodResolver(PaymentFormSchema),
-    defaultValues: {
-      coubonCode: "",
-    },
-  });
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  function onSubmit(data: Inputs) {}
+  const { pay } = useChargily();
+
+  const handlePayWithChargily = async () => {
+    if (bagItems.state.shoppingBag?.length === 0) return;
+    setIsLoading(true);
+    await pay({
+      product_name: bagItems.state.shoppingBag[0]?.name,
+      product_price: Number(bagItems.state.shoppingBag[0]?.price),
+      subdomain,
+    });
+    setIsLoading(false);
+  };
 
   return (
     <div className="w-full min-h-[700px] h-fit grid gird grid-cols-1 lg:grid-cols-2 mb-[70px] p-8 gap-8">
       <div className="w-full h-full bg-gray-100 flex flex-col items-end p-8 rounded-xl">
         <div className="w-full min-h-[200px] h-fit  flex flex-col items-start p-2">
           {Array.isArray(bagItems.state.shoppingBag) &&
-            bagItems.state.shoppingBag?.length === 0 && (
+            bagItems.state.shoppingBag?.length !== 0 && (
               <div className="w-full h-[400px] flex flex-col items-center justify-center">
                 <h3 className="font-bold text-xl text-black">
                   حقيبة التسوق الخاصة بك فارغة
@@ -105,41 +102,16 @@ const PaymentForm: FC = ({}) => {
           <CardHeader>
             <CardTitle> حقل خاص بقسائم التخفيض</CardTitle>
           </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-8"
-              >
-                <FormField
-                  control={form.control}
-                  name="coubonCode"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel> قسيمة التخفيض </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="الرجاء ادخال رمز صالح الفعالية"
-                          {...field}
-                        />
-                      </FormControl>
-
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormDescription>
-                  سيتم تسليم المنتج في المكتبة بعد اتمام عملية الدفع.
-                </FormDescription>
-              </form>
-            </Form>
-          </CardContent>
+          <CardContent></CardContent>
         </Card>
         <div className="w-full h-1 border-b my-4 max-w-[480px] " />
         <div className="w-full h-[100px] grid lg:grid-cols-1 grid-cols-2 gap-4  max-w-[480px]">
-          <button className="w-full h-[50px]  max-w-[480px] my-4 rounded-xl bg-violet-500 border-2 border-black text-white flex items-center justify-center">
-            pay with chargily
+          <button
+            disabled={isLoading}
+            onClick={handlePayWithChargily}
+            className="w-full h-[50px]  max-w-[480px] my-4 rounded-xl bg-violet-500 border-2 border-black text-white flex items-center justify-center"
+          >
+            {isLoading ? "loading..." : "pay with chargily"}
           </button>
           <button className="w-full h-[50px]  max-w-[480px] my-4 rounded-xl bg-amber-500 border-2 border-black text-white flex items-center justify-center">
             pay with coubon

@@ -70,3 +70,23 @@ export const getSiteData = async ({
     console.error(err);
   }
 };
+
+export const getChargilyKeys = async ({ subdomain }: { subdomain: string }) => {
+  const website = await getSiteData({ subdomain });
+
+  console.log("this is the website");
+  console.log(website);
+  const payments = await prisma.paymentsConnect.findFirst({
+    where: {
+      accountId: website.accountId,
+    },
+  });
+
+  console.log("this is the chargily credentional");
+  console.log(payments);
+
+  return {
+    chargilyPublicKey: payments?.chargilyPublicKey,
+    chargiySecretKey: payments?.chargiySecretKey,
+  };
+};

@@ -136,14 +136,14 @@ export default function ShoppingCardProduction() {
                             <p className="mt-0.5 text-sm text-gray-500">
                               الشحن والضرائب تحسب عند الخروج.
                             </p>
-                            <div className="mt-6">
-                              <Link
-                                href="/cart"
-                                className="flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                              >
-                                الدفع
-                              </Link>
-                            </div>
+
+                            <Link
+                              href="/cart"
+                              className=" mt-6 flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                            >
+                              الدفع
+                            </Link>
+
                             <div className="mt-6 flex justify-center text-center text-sm  text-gray-500">
                               <p>
                                 أو{" "}

@@ -1,22 +1,21 @@
 import type { FC } from "react";
 import PaymentForm from "../../_components/forms/payment-form";
-import { ArrowBigRight } from "lucide-react";
-import Link from "next/link";
 
-interface PageProps {}
+export const fetchCache = "force-no-store";
 
-const Page: FC = ({}) => {
+interface PageProps {
+  params: { site: string };
+}
+
+const Page = async ({ params }: PageProps) => {
+  const subdomain_value =
+    process.env.NODE_ENV === "development"
+      ? "abdullah.jadir.vercel.app"
+      : decodeURIComponent(params?.site);
+
   return (
     <>
-      {/* <div className="w-full h-[30px] flex items-center justify-start gap-x-4 my-6">
-        <Link href="/">
-          <button className="p-4 bg-white rounded-xl  ">
-            <ArrowBigRight className="w-6 h-6" />
-          </button>
-        </Link>
-        <h2 className="text-lg  text-black"> حقيبة التسوق الخاصة بك </h2>
-      </div> */}
-      <PaymentForm />
+      <PaymentForm subdomain={subdomain_value} />
     </>
   );
 };
