@@ -6,11 +6,11 @@ import MobilNavgiationProduction from "./mobil-navbar";
 import MaxWidthWrapper from "../../max-width-wrapper";
 import LinksNavbar from "./links-navbar";
 import StudentNav from "../../auth-comppnent/student-nav";
-import type { Student } from "@/src/types";
+import type { Student } from "database";
 
 interface AcademyHeaderProps {
   isAuthanticated: boolean;
-  student: Student;
+  student: Student | null;
 }
 
 const AcademyHeader: FC<AcademyHeaderProps> = ({
@@ -37,7 +37,7 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
             <Search className="w-5 h-5 " />
           </button>
           {isAuthanticated ? (
-            <StudentNav student={student} />
+            student && <StudentNav student={student} />
           ) : (
             <Link
               href={"/auth-academy/sign-in"}

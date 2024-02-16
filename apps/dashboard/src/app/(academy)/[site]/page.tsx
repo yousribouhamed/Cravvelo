@@ -13,16 +13,9 @@ const Page = async ({ params }: PageProps) => {
     process.env.NODE_ENV === "development"
       ? "best.jadir.vercel.app"
       : decodeURIComponent(params?.site);
-  const page = await getPage({
-    path: "/",
-    subdomain: subdomain_value,
-  });
 
   const courses = await getAllCourses({ subdomain: subdomain_value });
 
-  if (!page) {
-    notFound();
-  }
   return (
     <main className="w-full h-full flex flex-col items-center justify-center gap-y-8 pt-12">
       <h1 className="text-4xl font-bold text-center ">

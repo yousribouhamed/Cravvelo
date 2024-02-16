@@ -25,11 +25,15 @@ import {
 import { Input } from "@ui/components/ui/input";
 import { PasswordInput } from "@/src/components/password-input";
 import Link from "next/link";
+import { create_student } from "../../actions/auth";
+import { useRouter } from "next/navigation";
+import React from "react";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 const formSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
-  phone: z.string(),
+
   email: z.string().email({
     message: "Please enter a valid email address",
   }),
@@ -45,17 +49,39 @@ const formSchema = z.object({
     }),
 });
 
-export function AcademySifnUpForm() {
+interface AcademySifnUpFormProps {
+  accountId: string;
+}
+
+export function AcademySifnUpForm({ accountId }: AcademySifnUpFormProps) {
+  const router = useRouter();
+
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      setIsLoading(true);
+      const user = await create_student({
+        accountId,
+        email: values.email,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        password: values.password,
+      });
+
+      router.push("/auth-academy/sign-in");
+      // TODO :: make a toast telling the student that new account has been created
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -63,8 +89,7 @@ export function AcademySifnUpForm() {
       <CardHeader>
         <CardTitle>إنشاء حساب جديد</CardTitle>
         <CardDescription>
-          إنشاء حساب جديد استمتع بتجربة مجانية لمدة 14 يومًا، بدون بطاقة بنكية
-          أو مصاريف خفية.
+          قم بالتسجيل للطلاب في الأكاديمية لتتمكن من مشاهدة الدورات
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -75,10 +100,29 @@ export function AcademySifnUpForm() {
               name="firstName"
               render={({ field }) => (
                 <FormItem>
+                  <FormLabel>اسم العائلة</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="focus:border-blue-500"
+                      placeholder="الرجاء ادخال اسمك القانوني"
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
                   <FormLabel>الاسم</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="أدخِل عنوان البريد الإلكتروني"
+                      className="focus:border-blue-500"
+                      placeholder="الرجاء ادخال اسمك القانوني"
                       {...field}
                     />
                   </FormControl>
@@ -95,6 +139,7 @@ export function AcademySifnUpForm() {
                   <FormLabel>البريد الإلكتروني</FormLabel>
                   <FormControl>
                     <Input
+                      className="focus:border-blue-500"
                       placeholder="أدخِل عنوان البريد الإلكتروني"
                       {...field}
                     />
@@ -112,7 +157,11 @@ export function AcademySifnUpForm() {
                 <FormItem>
                   <FormLabel>كلمة المرور</FormLabel>
                   <FormControl>
-                    <PasswordInput placeholder="أدخِل كلمة المرور" {...field} />
+                    <PasswordInput
+                      className="focus:border-blue-500"
+                      placeholder="أدخِل كلمة المرور"
+                      {...field}
+                    />
                   </FormControl>
 
                   <FormMessage />
@@ -123,15 +172,18 @@ export function AcademySifnUpForm() {
             <div className="w-full h-[20px] flex justify-between items-center">
               <FormDescription>
                 بالضغط على زر “أنشئ حسابك مجانًا” أنت توافق على الشروط والأحكام
-                في مساق.
+                الاكاديمية
               </FormDescription>
             </div>
+
             <Button
               data-ripple-light="true"
+              disabled={isLoading}
               type="submit"
               size="lg"
-              className="w-full text-white font-bold bg-blue-500"
+              className="w-full text-white font-bold bg-blue-500 hover:bg-blue-600"
             >
+              {isLoading ? <LoadingSpinner /> : null}
               أنشئ حسابك مجانًا
             </Button>
           </form>

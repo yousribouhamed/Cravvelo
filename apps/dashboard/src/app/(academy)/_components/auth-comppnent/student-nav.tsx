@@ -14,7 +14,8 @@ import {
 import Link from "next/link";
 import { Eye } from "lucide-react";
 import { ArrowUpLeft } from "lucide-react";
-import { Student, UserData } from "@/src/types";
+import { UserData } from "@/src/types";
+import type { Student } from "database";
 import { FC } from "react";
 
 interface studentNavProps {
@@ -27,7 +28,7 @@ const StudentNav: FC<studentNavProps> = ({ student }) => {
       <DropdownMenuTrigger asChild>
         <div className="w-10 h-full flex items-center justify-start 6 z-[99] cursor-pointer ">
           <Avatar className="w-10 h-10  rounded-[50%]">
-            <AvatarImage src={student?.avatar} />
+            <AvatarImage src={student?.photo_url} />
             <AvatarFallback>AB</AvatarFallback>
           </Avatar>
         </div>

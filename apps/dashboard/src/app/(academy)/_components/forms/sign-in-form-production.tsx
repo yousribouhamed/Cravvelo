@@ -27,9 +27,16 @@ import { useRouter } from "next/navigation";
 import { useSignIn } from "@clerk/nextjs";
 import { authSchemaLogin } from "@/src/lib/validators/auth";
 import { catchClerkError } from "@/src/lib/utils";
+import { sign_in_as_student } from "../../actions/auth";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 type Inputs = z.infer<typeof authSchemaLogin>;
-export function AcademySignIpForm() {
+
+interface AcademySifnIpFormProps {
+  accountId: string;
+}
+
+export function AcademySignIpForm({ accountId }: AcademySifnIpFormProps) {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -44,7 +51,18 @@ export function AcademySignIpForm() {
 
   // 2. Define a submit handler.
   async function onSubmit(data: z.infer<typeof authSchemaLogin>) {
-    console.log(data);
+    try {
+      setIsLoading(true);
+      await sign_in_as_student({
+        email: data.email,
+        password: data.password,
+      });
+      router.push("/student-library");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -110,6 +128,7 @@ export function AcademySignIpForm() {
               disabled={isLoading}
               className="w-full text-white font-bold bg-blue-500"
             >
+              {isLoading ? <LoadingSpinner /> : null}
               تسجيل الدخول
             </Button>
           </form>

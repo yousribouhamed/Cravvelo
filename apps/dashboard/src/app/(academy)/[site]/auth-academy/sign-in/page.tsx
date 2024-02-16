@@ -1,12 +1,29 @@
-import type { FC } from "react";
 import { AcademySignIpForm } from "../../../_components/forms/sign-in-form-production";
+import { getSiteData } from "../../../actions";
+import { notFound } from "next/navigation";
 
-interface PageProps {}
+export const fetchCache = "force-no-store";
 
-const Page: FC = ({}) => {
+interface PageProps {
+  params: { site: string };
+}
+
+const Page = async ({ params }: PageProps) => {
+  const subdomain_value =
+    process.env.NODE_ENV === "development"
+      ? "best.jadir.vercel.app"
+      : decodeURIComponent(params?.site);
+  const website = await getSiteData({
+    subdomain: subdomain_value,
+  });
+
+  if (!website) {
+    notFound();
+  }
+
   return (
     <div className="w-full min-h-[700px] h-fit flex items-center justify-center mt-[70px]">
-      <AcademySignIpForm />
+      <AcademySignIpForm accountId={website.accountId} />
     </div>
   );
 };

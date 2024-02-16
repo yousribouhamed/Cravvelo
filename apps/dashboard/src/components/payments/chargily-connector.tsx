@@ -1,3 +1,5 @@
+"use client";
+
 import type { FC } from "react";
 import {
   Card,
@@ -23,11 +25,24 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { ChargilyConnectSchema } from "@/src/lib/validators/payments";
 import { Input } from "@ui/components/ui/input";
+import { trpc } from "@/src/app/_trpc/client";
+import React from "react";
+import { maketoast } from "../toasts";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 type Inputs = z.infer<typeof ChargilyConnectSchema>;
 
 const ChargilyConnector: FC = ({}) => {
   const router = useRouter();
+
+  const mutation = trpc.create_user_chargily.useMutation({
+    onSuccess: () => {
+      maketoast.success(), router.back();
+    },
+    onError: () => {
+      maketoast.error();
+    },
+  });
 
   // react-hook-form
   const form = useForm<Inputs>({
@@ -38,10 +53,17 @@ const ChargilyConnector: FC = ({}) => {
     },
   });
 
-  function onSubmit(data: Inputs) {}
+  function onSubmit(data: Inputs) {
+    console.log(data);
+    console.log("here it is the data");
+    mutation.mutate({
+      private_key: data.chargilyPrivateKey,
+      public_key: data.chargilyPublicKey,
+    });
+  }
 
   return (
-    <Card className="w-full h-[300px] rounded-2xl">
+    <Card className="w-full h-full  my-8 rounded-2xl">
       <CardHeader>
         <CardTitle>chargily </CardTitle>
         <CardDescription>
@@ -57,9 +79,9 @@ const ChargilyConnector: FC = ({}) => {
               name="chargilyPublicKey"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>chargily public key</FormLabel>
+                  <FormLabel>المفتاح العام الخاص ب شارجيلي</FormLabel>
                   <FormControl>
-                    <Input placeholder="******" {...field} />
+                    <Input placeholder="ieebr4umff" {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -72,9 +94,9 @@ const ChargilyConnector: FC = ({}) => {
               name="chargilyPrivateKey"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>chargily public key</FormLabel>
+                  <FormLabel>المفتاح الخاص الخاص ب شارجيلي</FormLabel>
                   <FormControl>
-                    <Input placeholder="******" {...field} />
+                    <Input placeholder="kwuyydnnn" {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -83,19 +105,17 @@ const ChargilyConnector: FC = ({}) => {
             />
 
             <Button
-              data-ripple-light="true"
+              disabled={mutation.isLoading}
               type="submit"
+              className=" flex bg-violet-500 hover:bg-violet-600 items-center gap-x-2"
               size="lg"
-              className="w-full text-white font-bold bg-primary"
             >
-              تغيير كلمة المرور
+              {mutation.isLoading ? <LoadingSpinner /> : null}
+              حفظ التغييرات
             </Button>
           </form>
         </Form>
       </CardContent>
-      <CardFooter>
-        <Button>الاتصال ب سترايب</Button>
-      </CardFooter>
     </Card>
   );
 };

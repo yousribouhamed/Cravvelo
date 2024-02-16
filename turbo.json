@@ -23,7 +23,8 @@
         "PROJECT_ID_VERCEL",
         "TEAM_ID_VERCEL",
         "CHARGILY_SECRET_KEY",
-        "CHARGILY_PUBLIC_KEY"
+        "CHARGILY_PUBLIC_KEY",
+        "JWT_SECRET_KEY"
       ]
     },
     "lint": {},

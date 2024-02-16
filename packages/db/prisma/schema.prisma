@@ -29,6 +29,20 @@ model Account {
   Coupon                 Coupon[]
   Order                  Order[]
   Notification           Notification[]
+  Student                Student[]
+  PaymentsConnect        PaymentsConnect[]
+}
+
+model PaymentsConnect {
+  id                String   @unique @default(uuid())
+  accountId         String
+  chargilyPublicKey String 
+  chargiySecretKey  String 
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  Account           Account?   @relation(fields: [accountId], references: [id])
+  @@index([id])
+  @@index([accountId])
 }
 
 model Academy {
@@ -238,8 +252,14 @@ model Student {
   lastName    String?
   photo_url   String? 
   email       String   @unique
-  phone       String   @unique
+  phone       String?   @unique
+  accountId   String 
   password    String 
+  bag         Json
+  Account   Account  @relation(fields: [accountId], references: [id])
+
+  @@index([id])
+  @@index([accountId])
 }
 
 model Certificate {

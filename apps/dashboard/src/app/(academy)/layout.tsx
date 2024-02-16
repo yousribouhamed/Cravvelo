@@ -8,6 +8,7 @@ import { getSiteData } from "./actions";
 import MaxWidthWrapper from "./_components/max-width-wrapper";
 import AcademyHeader from "./_components/layout/academy-header";
 import AcademiaFooter from "./_components/layout/academy-footer";
+import { getStudent } from "./actions/auth";
 
 export const fetchCache = "force-no-store";
 
@@ -54,11 +55,12 @@ export async function generateMetadata({
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const student = await getStudent();
   return (
     <html suppressHydrationWarning dir="rtl" lang="ar">
       <head />
@@ -67,14 +69,8 @@ export default function RootLayout({
           className={`selection:bg-blue-500 selection:text-white antialiased bg-zinc-50`}
         >
           <AcademyHeader
-            student={{
-              avatar: "/",
-              email: "mahdi.chahri55@gmail.com",
-              firstName: "abdullah",
-              lastName: "chehri",
-              phone_num: "0988777",
-            }}
-            isAuthanticated
+            student={student}
+            isAuthanticated={student ? true : false}
           />
           <MaxWidthWrapper className="mt-[70px] min-h-[calc(100vh-70px)] h-fit ">
             {children}
