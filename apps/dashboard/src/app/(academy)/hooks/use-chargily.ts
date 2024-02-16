@@ -40,10 +40,12 @@ export const useChargily = () => {
       const checkout = await create_checkout({
         // Creating a checkout with the created price's id and a success URL
         price_id: price.id,
-        success_url: "https://chargily-template.vercel.app/success",
+        success_url: `https://${subdomain}/student-library`,
         subdomain,
       });
 
+      console.log("here it is the content of the checkout");
+      console.log(checkout);
       if (!checkout?.checkout_url)
         // Throw an error if checkout creation fails or if checkout_url is not available
         throw new Error("failed to create a checkout");

@@ -270,3 +270,9 @@ model Certificate {
   issueDate   DateTime
   // Add more fields as needed
 }
+
+
+model webhooks {
+  id          Int      @id @default(autoincrement())
+  payload     Json
+}

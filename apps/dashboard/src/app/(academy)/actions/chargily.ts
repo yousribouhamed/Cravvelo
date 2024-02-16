@@ -81,7 +81,11 @@ export const create_checkout = async ({
   // It takes price_id and success_url as input and returns a Promise that resolves to Checkout or undefined
   const secret_key = await getChargilyKeys({ subdomain });
   // Constructing payload
-  const payload = { items: [{ price: price_id, quantity: 1 }], success_url }; // Constructing the payload for creating a checkout
+  const payload = {
+    items: [{ price: price_id, quantity: 1 }],
+    success_url,
+    metadata: [{ abdullah: "metadatais working" }],
+  }; // Constructing the payload for creating a checkout
 
   // Constructing request options
   const options = {
