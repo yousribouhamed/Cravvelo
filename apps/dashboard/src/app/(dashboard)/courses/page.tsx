@@ -5,6 +5,8 @@ import { prisma } from "database/src";
 import CoursesTableShell from "./courses-table-shell";
 import useHaveAccess from "@/src/hooks/use-have-access";
 
+export const fetchCache = "force-no-store";
+
 async function getData({
   accountId,
 }: {
@@ -21,6 +23,9 @@ async function getData({
 const Page = async ({}) => {
   const user = await useHaveAccess();
   const data = await getData({ accountId: user.accountId });
+
+  console.log("here are all the courses");
+  console.log(data);
 
   return (
     <MaxWidthWrapper>

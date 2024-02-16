@@ -17,10 +17,9 @@ function LinksNavbar() {
           className={cn(
             " rounded-xl text-md p-2 bg-transparent hover:bg-gray-50  ",
             {
-              "text-black font-bold bg-gray-100  hover:bg-gray-100 ":
-                isCurrentPath({
-                  currentPath: "/",
-                }),
+              "text-black font-bold  ": isCurrentPath({
+                currentPath: "/",
+              }),
             }
           )}
         >
@@ -32,10 +31,9 @@ function LinksNavbar() {
           className={cn(
             " rounded-xl text-md p-2 bg-transparent hover:bg-gray-50  ",
             {
-              "text-black font-bold bg-gray-100  hover:bg-gray-100 ":
-                isCurrentPath({
-                  currentPath: "/course-academy",
-                }),
+              "text-black font-bold ": isCurrentPath({
+                currentPath: "/course-academy",
+              }),
             }
           )}
         >

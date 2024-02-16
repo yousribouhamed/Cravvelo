@@ -23,7 +23,7 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
         <div className="w-fit h-full flex items-center justify-start md:hidden">
           <MobilNavgiationProduction />
         </div>
-        <div className="min-w-[200px] w-fit  items-center justify-start gap-x-4 hidden md:flex ">
+        <div className="min-w-[200px] w-fit  items-center justify-start gap-x-4 hidden md:flex h-full">
           <img
             src="https://png.pngtree.com/png-clipart/20230330/original/pngtree-vector-sword-esports-and-mascot-logo-png-image_9012921.png"
             className="object-cover w-16 h-16"

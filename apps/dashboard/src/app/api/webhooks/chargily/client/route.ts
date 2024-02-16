@@ -1,6 +1,4 @@
 import { NextRequest } from "next/server";
-import crypto from "crypto";
-import useHaveAccess from "@/src/hooks/use-have-access";
 import { prisma } from "database/src";
 import { StudentBag } from "@/src/types";
 

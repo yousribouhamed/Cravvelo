@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import PaymentForm from "../../_components/forms/payment-form";
 import { getStudent } from "../../actions/auth";
 
@@ -17,7 +16,7 @@ const Page = async ({ params }: PageProps) => {
   const student = await getStudent();
   return (
     <>
-      <PaymentForm studentId={student.id} subdomain={subdomain_value} />
+      <PaymentForm studentId={student?.id} subdomain={subdomain_value} />
     </>
   );
 };

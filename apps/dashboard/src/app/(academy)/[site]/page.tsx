@@ -17,11 +17,11 @@ const Page = async ({ params }: PageProps) => {
   const courses = await getAllCourses({ subdomain: subdomain_value });
 
   return (
-    <main className="w-full h-full flex flex-col items-center justify-center gap-y-8 pt-12">
+    <main className="w-full h-full flex flex-col items-center justify-center gap-y-8 pt-20">
       <h1 className="text-4xl font-bold text-center ">
         مرحبا بكم في اكادمية شهري عبدالله
       </h1>
-      <CoursesReel courses={courses} />;
+      {/* <CoursesReel courses={courses} />; */}
     </main>
   );
 };

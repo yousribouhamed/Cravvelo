@@ -11,10 +11,10 @@ const getLinks = () => {
       name: "الدورات",
       href: `/student-library`,
     },
-    {
-      name: "المنتجات الرقمية",
-      href: `/student-library/products`,
-    },
+    // {
+    //   name: "المنتجات الرقمية",
+    //   href: `/student-library/products`,
+    // },
     {
       name: " الشهادات",
       href: `/student-library/certificates`,

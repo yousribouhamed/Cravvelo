@@ -16,7 +16,7 @@ export const course = {
           data: {
             status: "DRAFT",
             title: input.title,
-            accountId: input.accountId,
+            accountId: ctx.account.id,
           },
         })
         .catch((err) => {

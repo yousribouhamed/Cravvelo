@@ -63,7 +63,6 @@ const CoursesGrid: FC<Props> = ({ courses }) => {
         courses.map((item, index) => (
           <div
             key={item.title + index}
-            onClick={() => handleNavigate({ id: item?.id })}
             className="w-[320px] min-h-[300px] h-fit p-0  border  flex flex-col shadow rounded-xl  transition-all duration-700 bg-white cursor-pointer "
           >
             <img
@@ -71,9 +70,11 @@ const CoursesGrid: FC<Props> = ({ courses }) => {
               className="w-full h-[200px] rounded-t-xl object-cover "
             />
             <div className="w-full h-[50px] px-4 flex items-center justify-between my-4">
-              <h2 className="text-black font-semibold text-lg text-start ">
-                {item.title}
-              </h2>
+              <button onClick={() => handleNavigate({ id: item?.id })}>
+                <h2 className="text-black font-semibold text-lg text-start ">
+                  {item.title}
+                </h2>
+              </button>
               <span className="block  bg-gray-100 w-fit  rounded-full text-black my-auto px-2">
                 دورة
               </span>
@@ -109,14 +110,7 @@ const CoursesGrid: FC<Props> = ({ courses }) => {
 
             <div className="w-full h-[70px] px-4 flex items-center justify-center gap-x-4 border-t pt-2">
               <button
-                // @ts-ignore
                 onClick={() => {
-                  const obj = {
-                    id: item.id,
-                    imageUrl: item.thumnailUrl,
-                    name: item.title,
-                    price: item.price.toString(),
-                  };
                   addItemToShoppingBag({
                     id: item.id,
                     imageUrl: item.thumnailUrl,
