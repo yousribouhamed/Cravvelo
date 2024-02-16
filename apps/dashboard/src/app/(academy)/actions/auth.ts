@@ -9,6 +9,7 @@ import { cookies } from "next/headers";
 import { v4 as uuidv4 } from "uuid";
 import { redirect } from "next/navigation";
 import { Student } from "database";
+import { StudentBag } from "@/src/types";
 
 export const create_student = async ({
   email,
@@ -40,9 +41,7 @@ export const create_student = async ({
   // create the student bag
   const bag = {
     courses: [],
-    products: [],
-    cetificates: [],
-  };
+  } as StudentBag;
   // create new student in the database
   const student = await prisma.student.create({
     data: {

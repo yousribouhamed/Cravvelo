@@ -42,7 +42,7 @@ function LinksNavbar() {
           الدورات
         </button>
       </Link>
-      <Link href={"/products-academy"} className="text-lg ">
+      {/* <Link href={"/products-academy"} className="text-lg ">
         <button
           className={cn(
             " rounded-xl text-md p-2 bg-transparent hover:bg-gray-50  ",
@@ -56,7 +56,7 @@ function LinksNavbar() {
         >
           المنتجات
         </button>
-      </Link>
+      </Link> */}
     </div>
   );
 }

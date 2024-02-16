@@ -1,3 +1,4 @@
+import { Course } from "database";
 import { EditorBtns } from "../constants/website-template";
 
 export type Module = {
@@ -113,4 +114,8 @@ export interface Student {
   email: string;
   phone_num: string;
   avatar: string;
+}
+
+export interface StudentBag {
+  courses: Course[];
 }
