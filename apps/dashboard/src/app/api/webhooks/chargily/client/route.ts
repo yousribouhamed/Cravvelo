@@ -17,6 +17,11 @@ const Get_client_api_secret_key = async () => {
 export async function POST(request: NextRequest) {
   const signature = request.nextUrl.searchParams.get("signature");
   const payload = await request.json();
+  await prisma.webhooks.create({
+    data: {
+      payload: JSON.stringify(payload),
+    },
+  });
 
   // If there is no signature, ignore the request
   if (!signature) {
@@ -60,12 +65,6 @@ export async function POST(request: NextRequest) {
       console.log("siyad raho makhalassch");
       break;
   }
-
-  await prisma.webhooks.create({
-    data: {
-      payload: JSON.stringify(payload),
-    },
-  });
 
   return new Response(
     JSON.stringify({
