@@ -51,12 +51,6 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  await prisma.webhooks.create({
-    data: {
-      payload: JSON.stringify(newStudentBag),
-    },
-  });
-
   // get the user id from the meta data
   // update his bag
 }
