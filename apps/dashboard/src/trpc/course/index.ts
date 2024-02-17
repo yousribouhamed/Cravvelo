@@ -157,4 +157,30 @@ export const course = {
         console.error(err);
       }
     }),
+
+  updateCourseStudentEngagment: privateProcedure
+    .input(
+      z.object({
+        courseId: z.string(),
+        allowComment: z.boolean(),
+        certificate: z.boolean(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const course = await ctx.prisma.course.update({
+          where: {
+            id: input.courseId,
+          },
+          data: {
+            allowComment: input.allowComment,
+            certificate: input.certificate,
+          },
+        });
+
+        return course;
+      } catch (err) {
+        console.error(err);
+      }
+    }),
 };

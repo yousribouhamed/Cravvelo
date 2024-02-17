@@ -21,13 +21,18 @@ import { getValueFromUrl } from "@/src/lib/utils";
 import { useState } from "react";
 import { maketoast } from "../../toasts";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { Course } from "database";
 
 const PricingFormSchema = z.object({
   price: z.string(),
   compareAtPrice: z.string(),
 });
 
-function AddPricingForm() {
+interface AddPricingFormProps {
+  course: Course;
+}
+
+function AddPricingForm({ course }: AddPricingFormProps) {
   const router = useRouter();
   const path = usePathname();
   const courseId = getValueFromUrl(path, 2);
@@ -45,10 +50,10 @@ function AddPricingForm() {
   const form = useForm<z.infer<typeof PricingFormSchema>>({
     mode: "onChange",
     resolver: zodResolver(PricingFormSchema),
-    // defaultValues: {
-    //   price: 0,
-    //   compareAtPrice: 0,
-    // },
+    defaultValues: {
+      price: course.price.toString(),
+      compareAtPrice: course.compareAtPrice.toString(),
+    },
   });
 
   async function onSubmit(values: z.infer<typeof PricingFormSchema>) {
@@ -68,7 +73,7 @@ function AddPricingForm() {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-8 w-full "
           >
-            <FormLabel className="text-3xl  block font-bold text-black">
+            <FormLabel className="text-xl  block font-bold text-black">
               {" "}
               اختر أفضل الأسعار التي تناسب الدورة التدريبية الخاصة بك
             </FormLabel>
@@ -112,7 +117,7 @@ function AddPricingForm() {
                     <FormItem>
                       <FormLabel>
                         مقارنة بالسعر (هذا السعر سوف يظهم انه مشطب عند عرض
-                        لمنتج)
+                        المنتج)
                       </FormLabel>
                       <FormControl>
                         <Input

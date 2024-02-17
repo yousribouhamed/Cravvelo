@@ -356,8 +356,10 @@ const plugins = createPlugins(
 
 export function PlateEditor({
   onChnage,
+  value,
 }: {
   onChnage: (richTeact: any) => void;
+  value: any;
 }) {
   return (
     <TooltipProvider>
@@ -365,7 +367,7 @@ export function PlateEditor({
         <CommentsProvider users={{}} myUserId="1">
           <Plate
             plugins={plugins}
-            // initialValue={value}
+            initialValue={value ? value : []}
             onChange={(val) => onChnage(val)}
           >
             <FixedToolbar>

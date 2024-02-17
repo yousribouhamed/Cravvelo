@@ -25,11 +25,13 @@ import CouponsTableHeader from "./tables-headers/coupons-table-header";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  refetch?: () => Promise<any>;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  refetch,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -56,7 +58,7 @@ export function DataTable<TData, TValue>({
   return (
     <>
       {/* <TableHeader2 table={table} /> */}
-      <CouponsTableHeader table={table} />
+      {refetch && <CouponsTableHeader table={table} refetch={refetch} />}
       <div className="rounded-md border bg-white">
         <Table>
           <TableHeader>

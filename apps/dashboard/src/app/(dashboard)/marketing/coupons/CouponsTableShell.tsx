@@ -6,7 +6,6 @@ import { trpc } from "@/src/app/_trpc/client";
 import { CouponColumns } from "@/src/components/data-table/columns/cobons";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DataTableLoading } from "@/src/components/data-table/table-loading";
-import DeleteCourseModel from "@/src/components/models/delete-course-model";
 
 interface CouponTableShellProps {
   initialData: Coupon[];
@@ -23,12 +22,9 @@ const CouponsTableShell: FC<CouponTableShellProps> = ({ initialData }) => {
     return <DataTableLoading columnCount={6} />;
   }
 
-  console.log(data);
   return (
     <div className="w-full min-h-[300px] h-fit flex flex-col ">
-      <DeleteCourseModel refetch={refetch} />
-
-      <DataTable columns={CouponColumns} data={data} />
+      <DataTable columns={CouponColumns} data={data} refetch={refetch} />
     </div>
   );
 };

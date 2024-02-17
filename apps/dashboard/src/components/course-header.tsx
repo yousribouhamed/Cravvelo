@@ -16,10 +16,10 @@ const getLinks = ({ id }: { id: string }) => {
       name: "إعدادات الدورة",
       href: `/courses/${id}/settings`,
     },
-    {
-      name: "المحتوى التدريجي",
-      href: `/courses/${id}/drip-content`,
-    },
+    // {
+    //   name: "المحتوى التدريجي",
+    //   href: `/courses/${id}/drip-content`,
+    // },
     {
       name: "التسعير",
       href: `/courses/${id}/pricing`,

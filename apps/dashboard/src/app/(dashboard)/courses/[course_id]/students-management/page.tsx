@@ -3,16 +3,28 @@ import Header from "@/src/components/layout/header";
 import CourseHeader from "@/src/components/course-header";
 import StudentEngagment from "@/src/components/forms/course-forms/students-engagment";
 import useHaveAccess from "@/src/hooks/use-have-access";
+import { prisma } from "database/src";
 
-export default async function Home() {
-  const user = await useHaveAccess();
+interface PageProps {
+  params: { course_id: string };
+}
+
+export default async function Home({ params }: PageProps) {
+  const [user, course] = await Promise.all([
+    useHaveAccess(),
+    prisma.course.findUnique({
+      where: {
+        id: params.course_id,
+      },
+    }),
+  ]);
 
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
-        <Header user={user} title="ui ux" goBack />
+        <Header user={user} title="تفاعل الطلاب" goBack />
         <CourseHeader />
-        <StudentEngagment />
+        <StudentEngagment course={course} />
       </main>
     </MaxWidthWrapper>
   );

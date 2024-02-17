@@ -1,14 +1,14 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
 import CourseHeader from "@/src/components/course-header";
-import { User } from "@clerk/nextjs/dist/types/server";
-import { currentUser } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
 import { prisma } from "database/src";
 import ChaptersBoard from "@/src/components/chapters-board";
 import useHaveAccess from "@/src/hooks/use-have-access";
 
-const getChapters = async () => {
+interface PageProps {
+  params: { course_id: string };
+}
+const getChapters = async ({ courseId }: { courseId: string }) => {
   try {
     const chapters = await prisma.chapter.findMany({
       orderBy: [
@@ -16,6 +16,9 @@ const getChapters = async () => {
           orderNumber: "asc",
         },
       ],
+      where: {
+        courseID: courseId,
+      },
     });
 
     return chapters;
@@ -25,14 +28,14 @@ const getChapters = async () => {
   }
 };
 
-export default async function Home() {
+export default async function Home({ params }: PageProps) {
   const user = await useHaveAccess();
-  const chapters = await getChapters();
+  const chapters = await getChapters({ courseId: params.course_id });
 
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
-        <Header user={user} title="ui ux" goBack />
+        <Header user={user} title="محتوى الدورة" goBack />
         <CourseHeader />
         <ChaptersBoard initialData={chapters} />
       </main>

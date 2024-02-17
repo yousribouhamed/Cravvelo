@@ -1,6 +1,4 @@
-import CoursesReel from "../_components/courses-reel";
 import { getAllCourses, getPage } from "../actions";
-import { notFound } from "next/navigation";
 
 export const fetchCache = "force-no-store";
 

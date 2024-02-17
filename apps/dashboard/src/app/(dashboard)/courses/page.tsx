@@ -24,9 +24,6 @@ const Page = async ({}) => {
   const user = await useHaveAccess();
   const data = await getData({ accountId: user.accountId });
 
-  console.log("here are all the courses");
-  console.log(data);
-
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">

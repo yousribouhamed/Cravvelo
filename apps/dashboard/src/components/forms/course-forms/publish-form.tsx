@@ -20,6 +20,8 @@ import { maketoast } from "../../toasts";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { Chapter, Course } from "database";
+import CourseContent from "@/src/app/(academy)/_components/course-component/course-content";
 
 const addTextSchema = z.object({
   title: z.string().min(2).max(50),
@@ -49,7 +51,12 @@ const selectionButtoms = [
   },
 ];
 
-function PublishCourseForm() {
+interface PublishCourseFormProps {
+  course: Course;
+  chapters: Chapter[];
+}
+
+function PublishCourseForm({ course, chapters }: PublishCourseFormProps) {
   const router = useRouter();
   const path = usePathname();
   const courseID = getValueFromUrl(path, 2);
@@ -61,15 +68,14 @@ function PublishCourseForm() {
     mode: "onChange",
     resolver: zodResolver(addTextSchema),
     defaultValues: {
-      title: "",
-      content: JSON.stringify(""),
+      title: course.title ?? "",
     },
   });
 
   const mutation = trpc.launchCourse.useMutation({
     onSuccess: () => {
       maketoast.success();
-      router.push(`/courses/${courseID}`);
+      router.push(`/courses`);
     },
     onError: () => {
       maketoast.error();
@@ -111,10 +117,7 @@ function PublishCourseForm() {
           </form>
         </Form>
         <div className="w-full my-4 h-fit min-h-[200px] flex flex-col items-start">
-          <p>محتوى الدورة</p>
-          <div className="bg-white w-full h-[500px] flex justify-center items-center rounded-xl border my-4">
-            <h1>in here the content will be added</h1>
-          </div>
+          <CourseContent chapters={chapters} />
         </div>
       </div>
       <div className="col-span-1 w-full h-full ">

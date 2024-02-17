@@ -1,10 +1,8 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
 import CourseHeader from "@/src/components/course-header";
-import { User } from "@clerk/nextjs/dist/types/server";
 import { notFound } from "next/navigation";
 import { prisma } from "database/src";
-import ChaptersBoard from "@/src/components/chapters-board";
 import PublishCourseForm from "@/src/components/forms/course-forms/publish-form";
 import useHaveAccess from "@/src/hooks/use-have-access";
 
@@ -12,14 +10,36 @@ interface PageProps {
   params: { course_id: string };
 }
 
-export default async function Page({ params }: PageProps) {
-  const user = await useHaveAccess();
+const getChapters = async ({ courseId }: { courseId: string }) => {
+  try {
+    const chapters = await prisma.chapter.findMany({
+      orderBy: [
+        {
+          orderNumber: "asc",
+        },
+      ],
+      where: {
+        courseID: courseId,
+      },
+    });
 
-  const course = await prisma.course.findUnique({
-    where: {
-      id: params.course_id,
-    },
-  });
+    return chapters;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
+export default async function Page({ params }: PageProps) {
+  const [user, course, chapters] = await Promise.all([
+    useHaveAccess(),
+    prisma.course.findUnique({
+      where: {
+        id: params.course_id,
+      },
+    }),
+    getChapters({ courseId: params.course_id }),
+  ]);
 
   if (!course) {
     notFound();
@@ -28,9 +48,9 @@ export default async function Page({ params }: PageProps) {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
-        <Header user={user} title="ui ux" goBack />
+        <Header user={user} title="ناشر الدورة" goBack />
         <CourseHeader />
-        <PublishCourseForm />
+        <PublishCourseForm course={course} chapters={chapters} />
       </main>
     </MaxWidthWrapper>
   );

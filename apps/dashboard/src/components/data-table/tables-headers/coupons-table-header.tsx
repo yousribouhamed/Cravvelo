@@ -7,9 +7,10 @@ import CreateCoupon from "../../models/create-coupon";
 
 interface TableHeaderProps {
   table: any;
+  refetch: () => Promise<any>;
 }
 
-const CouponsTableHeader: FC<TableHeaderProps> = ({ table }) => {
+const CouponsTableHeader: FC<TableHeaderProps> = ({ table, refetch }) => {
   return (
     <div className="w-full h-[70px] flex items-center justify-between">
       <div className="min-w-[200px] w-fit h-full flex  items-center justify-start gap-x-4">
@@ -34,15 +35,6 @@ const CouponsTableHeader: FC<TableHeaderProps> = ({ table }) => {
           </svg>
           تصفية
         </Button>
-        <Input
-          placeholder="البحث عن الدورات..."
-          //@ts-ignore
-          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm rounded-xl border bg-white h-10 "
-        />
       </div>
       <div className="min-w-[200px] w-fit h-full flex items-center justify-end gap-x-4">
         <Button
@@ -77,7 +69,7 @@ const CouponsTableHeader: FC<TableHeaderProps> = ({ table }) => {
           </svg>
           تصدير البيانات
         </Button>
-        <CreateCoupon />
+        <CreateCoupon refetch={refetch} />
       </div>
     </div>
   );

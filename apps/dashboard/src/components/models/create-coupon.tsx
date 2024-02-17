@@ -8,56 +8,30 @@ import {
   DialogTrigger,
 } from "@ui/components/ui/dialog";
 import { Button } from "@ui/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@ui/components/ui/form";
-import { Input } from "@ui/components/ui/input";
-import { addCourseSchema } from "@/src/lib/validators/course";
 import { trpc } from "@/src/app/_trpc/client";
-import { getCookie } from "@/src/lib/utils";
-import { useRouter } from "next/navigation";
 import * as React from "react";
+import { maketoast } from "../toasts";
 
-const CreateCoupon: FC = ({}) => {
-  const router = useRouter();
+interface CreateCouponProps {
+  refetch: () => Promise<any>;
+}
+
+const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const [isLaoding, setIsLoading] = React.useState(false);
-  const mutation = trpc.createCourse.useMutation({
-    onSuccess: ({ courseId }) => {
-      router.push(`/courses/${courseId}`);
-    },
-    onError: () => {},
-  });
 
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof addCourseSchema>>({
-    resolver: zodResolver(addCourseSchema),
-    defaultValues: {
-      title: "",
+  const mutation = trpc.createCoupon.useMutation({
+    onSuccess: async () => {
+      await refetch();
+      maketoast.success();
+    },
+    onError: () => {
+      maketoast.error();
     },
   });
 
-  // 2. Define a submit handler.
-  async function onSubmit(data: z.infer<typeof addCourseSchema>) {
-    const cookie = getCookie("accountId");
-    setIsLoading(true);
-    await mutation
-      .mutateAsync({
-        title: data.title,
-        accountId: cookie,
-      })
-      .then(() => {
-        setIsLoading(false);
-      });
+  async function createCoupon() {
+    await mutation.mutateAsync().then(() => {});
   }
 
   return (
@@ -79,99 +53,32 @@ const CreateCoupon: FC = ({}) => {
               stroke-linejoin="round"
             />
           </svg>
-          انشى كوبون
+          انشاء القسيمة
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl " title="إضافة دورة جديدة">
-        <div className="w-full px-4 pb-6 ">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel> نمط التخفيض *</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم"
-                          {...field}
-                        />
-                      </FormControl>
-
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel> كمية التخفيض *</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم"
-                          {...field}
-                        />
-                      </FormControl>
-
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel> تاريخ نهاية الفعالية *</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم"
-                          {...field}
-                        />
-                      </FormControl>
-
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel> حدود الاستعمال *</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم"
-                          {...field}
-                        />
-                      </FormControl>
-
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <DialogFooter className="w-full h-[50px] flex items-center justify-end gap-x-4">
-                <Button variant="ghost">إلغاء</Button>
-                <Button
-                  className=" flex items-center gap-x-2 "
-                  disabled={isLaoding}
-                  type="submit"
-                >
-                  {mutation.isLoading ? <LoadingSpinner /> : null}
-                  إضافة جديد
-                </Button>
-              </DialogFooter>
-            </form>
-          </Form>
+      <DialogContent className="max-w-2xl " title="انشاء قسيمة جديدة">
+        <div className="w-full px-4 pb-6  ">
+          <p>
+            سيتمكن الطالب من مشاهدة الدورة اذا قام بادخال الرمز الخاص بهذه
+            القسيمة{" "}
+          </p>
+          <p>وستكون في مكتبته الخاصة كانه اشتراها</p>
+          <p>تنبيه يمكن استخدام هذه القسيمة لمرة واحدة فقط</p>
         </div>
+
+        <DialogFooter className="w-full h-[50px] flex items-center justify-end gap-x-4 my-4">
+          <Button onClick={() => setIsOpen(false)} variant="ghost">
+            إلغاء
+          </Button>
+          <Button
+            onClick={createCoupon}
+            className=" flex items-center gap-x-2 "
+            disabled={mutation.isLoading}
+          >
+            {mutation.isLoading ? <LoadingSpinner /> : null}
+            انشاء القسيمة
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

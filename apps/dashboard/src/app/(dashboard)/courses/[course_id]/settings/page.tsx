@@ -11,13 +11,14 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps) {
-  const user = await useHaveAccess();
-
-  const course = await prisma.course.findUnique({
-    where: {
-      id: params.course_id,
-    },
-  });
+  const [user, course] = await Promise.all([
+    useHaveAccess(),
+    prisma.course.findUnique({
+      where: {
+        id: params.course_id,
+      },
+    }),
+  ]);
 
   if (!course) {
     notFound();
@@ -26,7 +27,7 @@ export default async function Page({ params }: PageProps) {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col min-h-full  h-fit justify-start">
-        <Header user={user} title={course.title} goBack />
+        <Header user={user} title={"اعدادات الدورة"} goBack />
         <CourseHeader />
         <CourseSettingsForm course={course} />
       </main>

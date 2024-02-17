@@ -8,51 +8,56 @@ import { Button } from "@ui/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@ui/components/ui/form";
 import { Switch } from "@ui/components/ui/switch";
-import { Input } from "@ui/components/ui/input";
 import { Card, CardContent } from "@ui/components/ui/card";
-import Tiptap from "../../tiptap";
 import { usePathname, useRouter } from "next/navigation";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { getValueFromUrl } from "@/src/lib/utils";
+import { maketoast } from "../../toasts";
+import { Course } from "database";
 
-const addTextSchema = z.object({
-  title: z.string().min(2).max(50),
-  content: z.any(),
+const FormSchema = z.object({
+  allowComments: z.boolean(),
+  cerrificate: z.boolean(),
 });
 
-function StudentEngagment() {
+interface StudentEngagmentProps {
+  course: Course;
+}
+
+function StudentEngagment({ course }: StudentEngagmentProps) {
   const router = useRouter();
   const path = usePathname();
-  const chapterID = getValueFromUrl(path, 4);
 
-  const mutation = trpc.createModule.useMutation({
-    onSuccess: () => {},
-    onError: () => {},
-  });
-
-  const form = useForm<z.infer<typeof addTextSchema>>({
-    mode: "onChange",
-    resolver: zodResolver(addTextSchema),
-    defaultValues: {
-      title: "",
-      content: JSON.stringify(""),
+  const mutation = trpc.updateCourseStudentEngagment.useMutation({
+    onSuccess: () => {
+      maketoast.success();
+      router.push(`/`);
+    },
+    onError: (err) => {
+      maketoast.error();
+      console.error(err);
     },
   });
 
-  async function onSubmit(values: z.infer<typeof addTextSchema>) {
+  const form = useForm<z.infer<typeof FormSchema>>({
+    mode: "onChange",
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      cerrificate: course.certificate,
+      allowComments: course.allowComment,
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof FormSchema>) {
     await mutation.mutateAsync({
-      chapterID: chapterID,
-      content: values.content,
-      fileType: "TEXT",
-      fileUrl: "",
-      title: values.title,
+      allowComment: values.allowComments,
+      certificate: values.cerrificate,
+      courseId: course.id,
     });
   }
 
@@ -65,10 +70,10 @@ function StudentEngagment() {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-8"
           >
-            <FormLabel className="text-3xl  block font-bold text-black">
+            <FormLabel className="text-xl  block font-bold text-black">
               الشهادات
             </FormLabel>
-            <FormLabel className="text-xl block  text-gray-600">
+            <FormLabel className="text-md block  text-gray-600">
               حدد اعدادات الشهادة في دورتك و متى يحق لطالب الحصول عليها
             </FormLabel>
 
@@ -76,7 +81,7 @@ function StudentEngagment() {
               <div className="space-y-4">
                 <FormField
                   control={form.control}
-                  name="content"
+                  name="cerrificate"
                   render={({ field }) => (
                     <FormItem className="flex flex-row bg-white items-center justify-between rounded-lg border p-3 shadow-sm">
                       <div className="space-y-0.5">
@@ -95,7 +100,7 @@ function StudentEngagment() {
                 />
                 <FormField
                   control={form.control}
-                  name="content"
+                  name="cerrificate"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 bg-white shadow-sm">
                       <div className="space-y-0.5">
@@ -108,6 +113,31 @@ function StudentEngagment() {
                             onCheckedChange={field.onChange}
                             disabled
                             aria-readonly
+                          />
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormLabel className="text-xl  block font-bold text-black">
+                  التفاعل مع المحتوى
+                </FormLabel>
+                <FormLabel className="text-md block  text-gray-600">
+                  حدد ما يمكن للطالب القيام به اثناء الدورة
+                </FormLabel>
+                <FormField
+                  control={form.control}
+                  name="allowComments"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row bg-white items-center justify-between rounded-lg border p-3 shadow-sm">
+                      <div className="space-y-0.5">
+                        <FormLabel>السماح بالتعليقات على هذه الدورة</FormLabel>
+                      </div>
+                      <FormControl>
+                        <div dir="ltr">
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
                           />
                         </div>
                       </FormControl>

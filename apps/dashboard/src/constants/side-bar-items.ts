@@ -59,7 +59,7 @@ export const SIDE_BAR_ITEMS = [
     icon: Icons.customize,
     subitems: [
       {
-        title: "كبونات الخصم",
+        title: "صانع القسائم",
         icon: Icons.Home,
         slug: "/marketing/coupons",
       },

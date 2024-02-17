@@ -67,17 +67,18 @@ model Course {
   seoDescription    String?
   price             Float?
   compareAtPrice    Float?
-
-  studenstNbr String?
-  profit      String?
-  trainers    String?
-  status      String
-  Account     Account?   @relation(fields: [accountId], references: [id])
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  Comment     Comment[]
-  Homework    Homework[]
-  Exam        Exam[]
+  studenstNbr       String?
+  profit            String?
+  trainers          String?
+  status            String
+  allowComment      Boolean    @default(true)
+  certificate       Boolean    @default(false)
+  Account           Account?   @relation(fields: [accountId], references: [id])
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  Comment           Comment[]
+  Homework          Homework[]
+  Exam              Exam[]
 
   @@index([id])
   @@index([accountId])
@@ -153,8 +154,8 @@ enum DiscountType {
 
 model Coupon {
   id             String       @unique @default(uuid())
-  accountId      String       @unique
-  code           String       @unique
+  accountId      String    
+  code           String     
   description    String?
   discountType   DiscountType
   discountAmount Float

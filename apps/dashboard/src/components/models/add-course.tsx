@@ -35,7 +35,7 @@ const AddCourse: FC = ({}) => {
   const [isLaoding, setIsLoading] = React.useState(false);
   const mutation = trpc.createCourse.useMutation({
     onSuccess: ({ courseId }) => {
-      router.push(`/courses/${courseId}`);
+      router.push(`/courses/${courseId}/chapters`);
     },
     onError: () => {},
   });

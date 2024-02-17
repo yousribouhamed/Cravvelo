@@ -31,32 +31,32 @@ import { ToolbarButton } from "./toolbar";
 const items = [
   {
     value: ELEMENT_PARAGRAPH,
-    label: "Paragraph",
-    description: "Paragraph",
+    label: "فقرة",
+    description: "فقرة",
     icon: Icons.paragraph,
   },
   {
     value: ELEMENT_H1,
-    label: "Heading 1",
-    description: "Heading 1",
+    label: "عنوان رئيسي",
+    description: "عنوان رئيسي",
     icon: Icons.h1,
   },
   {
     value: ELEMENT_H2,
-    label: "Heading 2",
-    description: "Heading 2",
+    label: "عنوان صغير",
+    description: "عنوان صغير",
     icon: Icons.h2,
   },
   {
     value: ELEMENT_H3,
-    label: "Heading 3",
-    description: "Heading 3",
+    label: "عنوان اصغر",
+    description: "عنوان اصغر",
     icon: Icons.h3,
   },
   {
     value: ELEMENT_BLOCKQUOTE,
-    label: "Quote",
-    description: "Quote (⌘+⇧+.)",
+    label: "اقتباس",
+    description: "اقتباس",
     icon: Icons.blockquote,
   },
   // {
@@ -107,7 +107,7 @@ export function TurnIntoDropdownMenu(props: DropdownMenuProps) {
           pressed={openState.open}
           tooltip="Turn into"
           isDropdown
-          className="lg:min-w-[130px]"
+          className="lg:min-w-[130px] space-x-2"
         >
           <SelectedItemIcon className="h-5 w-5 lg:hidden" />
           <span className="max-lg:hidden">{selectedItemLabel}</span>
@@ -115,24 +115,11 @@ export function TurnIntoDropdownMenu(props: DropdownMenuProps) {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="start" className="min-w-0">
-        <DropdownMenuLabel>Turn into</DropdownMenuLabel>
-
         <DropdownMenuRadioGroup
           className="flex flex-col gap-0.5"
           value={value}
           onValueChange={(type) => {
-            // if (type === 'ul' || type === 'ol') {
-            //   if (settingsStore.get.checkedId(KEY_LIST_STYLE_TYPE)) {
-            //     toggleIndentList(editor, {
-            //       listStyleType: type === 'ul' ? 'disc' : 'decimal',
-            //     });
-            //   } else if (settingsStore.get.checkedId('list')) {
-            //     toggleList(editor, { type });
-            //   }
-            // } else {
-            //   unwrapList(editor);
             toggleNodeType(editor, { activeType: type });
-            // }
 
             collapseSelection(editor);
             focusEditor(editor);
@@ -142,10 +129,10 @@ export function TurnIntoDropdownMenu(props: DropdownMenuProps) {
             <DropdownMenuRadioItem
               key={itemValue}
               value={itemValue}
-              className="min-w-[180px]"
+              className="min-w-[180px] flex items-center justify-end gap-x-2"
             >
-              <Icon className="mr-2 h-5 w-5" />
               {label}
+              <Icon className="mr-2 h-5 w-5" />
             </DropdownMenuRadioItem>
           ))}
         </DropdownMenuRadioGroup>

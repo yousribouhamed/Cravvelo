@@ -7,11 +7,8 @@ import {
   MARK_UNDERLINE,
 } from "@udecode/plate-basic-marks";
 import { useEditorReadOnly } from "@udecode/plate-common";
-
 import { Icons } from "./text-editor-icons";
-
 import { MarkToolbarButton } from "./mark-toolbar-button";
-import { MoreDropdownMenu } from "./more-dropdown-menu";
 import { TurnIntoDropdownMenu } from "./turn-into-dropdown-menu";
 
 export function FloatingToolbarButtons() {
@@ -46,8 +43,6 @@ export function FloatingToolbarButtons() {
           </MarkToolbarButton>
         </>
       )}
-
-      <MoreDropdownMenu />
     </>
   );
 }

@@ -25,8 +25,7 @@ const StudentsTableShell: FC<StudentsTableShellProps> = ({ initialData }) => {
 
   console.log(data);
   return (
-    <div className="w-full min-h-[300px] h-fit flex flex-col ">
-      <DeleteCourseModel refetch={refetch} />
+    <div className="w-full min-h-[300px] h-fit flex flex-col mt-8">
       <DataTable columns={StudentsColumns} data={data} />
     </div>
   );

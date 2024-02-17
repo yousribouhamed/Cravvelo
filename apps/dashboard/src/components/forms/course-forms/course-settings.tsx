@@ -48,7 +48,6 @@ export function CourseSettingsForm({ course }: ComponentProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      courseDescription: [],
       courseResume: course.courseResume,
       courseUrl: course.courseUrl,
       title: course.title,
@@ -92,10 +91,10 @@ export function CourseSettingsForm({ course }: ComponentProps) {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-8"
           >
-            <FormLabel className="text-3xl  block font-bold text-black">
+            <FormLabel className="text-xl  block font-bold text-black">
               اعدادات عامة
             </FormLabel>
-            <FormLabel className="text-xl block  text-gray-600">
+            <FormLabel className="text-md block  text-gray-600">
               ادر اعدادات دورتك التدريبية بما في ذالك عنوانها و رابطها و الخصائص
               و اسماء المدرين و امكانية الوصول اليها و العديد من المميزات الاخرى{" "}
             </FormLabel>
@@ -135,10 +134,10 @@ export function CourseSettingsForm({ course }: ComponentProps) {
             />
 
             <div className="w-full h-0.5 bg-gray-500 " />
-            <FormLabel className="text-3xl  block font-bold text-black">
+            <FormLabel className="text-xl  block font-bold text-black">
               تفاصيل الدورة{" "}
             </FormLabel>
-            <FormLabel className="text-xl block  text-gray-600">
+            <FormLabel className="text-md block  text-gray-600">
               من السهل تخصيص المظهر العام لدورتك عن طريق وضع صورة فريدة لها و
               اظافة وصف تعريفي يجذب الزوار عند زيارة صفحة الهبوط لدورة
             </FormLabel>
@@ -154,7 +153,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                   </FormLabel>
                   <FormControl>
                     <ImageUploader
-                      fileUrl={field.name}
+                      fileUrl={course.thumnailUrl}
                       onChnage={field.onChange}
                     />
                   </FormControl>
@@ -197,7 +196,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                       rows={3}
                       className="min-h-[100px]"
                       placeholder="أدخل ملخصًا للدورة هنا"
-                      value={field.value}
+                      value={field.name}
                       onChange={field.onChange}
                     />
                   </FormControl>
@@ -216,11 +215,14 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    {/* <Tiptap
-                      description={field.name}
+                    <PlateEditor
+                      value={
+                        course.courseDescription
+                          ? JSON.parse(course.courseDescription as string)
+                          : []
+                      }
                       onChnage={field.onChange}
-                    /> */}
-                    <PlateEditor onChnage={field.onChange} />
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -228,10 +230,10 @@ export function CourseSettingsForm({ course }: ComponentProps) {
             />
 
             <div className="w-full h-0.5 bg-gray-500 " />
-            <FormLabel className="text-3xl  block font-bold text-black">
+            <FormLabel className="text-xl  block font-bold text-black">
               تهيئة محركات البحث seo{" "}
             </FormLabel>
-            <FormLabel className="text-xl block  text-gray-600">
+            <FormLabel className="text-md block  text-gray-600">
               من السهل تخصيص المظهر العام لدورتك عن طريق وضع صورة فريدة لها و
               اظافة وصف تعريفي يجذب الزوار عند زيارة صفحة الهبوط لدورة
             </FormLabel>
