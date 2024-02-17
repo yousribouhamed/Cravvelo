@@ -359,7 +359,7 @@ export function PlateEditor({
   value,
 }: {
   onChnage: (richTeact: any) => void;
-  value: any;
+  value?: any;
 }) {
   return (
     <TooltipProvider>

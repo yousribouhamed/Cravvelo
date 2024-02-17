@@ -2,6 +2,7 @@ import ChargilyConnector from "@/src/components/payments/chargily-connector";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
 import useHaveAccess from "@/src/hooks/use-have-access";
+import { prisma } from "database/src";
 
 interface PageProps {}
 
