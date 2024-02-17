@@ -119,10 +119,15 @@ const AddChapter: FC<Props> = ({ refetch, chaptersNumber }) => {
                 )}
               />
               <DialogFooter className="w-full h-[50px] flex items-center justify-end gap-x-4">
-                <Button variant="ghost" onClick={() => setIsOpen(false)}>
+                <Button
+                  data-ripple-light="true"
+                  variant="ghost"
+                  onClick={() => setIsOpen(false)}
+                >
                   إلغاء
                 </Button>
                 <Button
+                  data-ripple-light="true"
                   className=" flex items-center gap-x-2"
                   disabled={mutation.isLoading}
                   type="submit"

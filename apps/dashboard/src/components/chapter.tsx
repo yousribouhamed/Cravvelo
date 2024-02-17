@@ -308,7 +308,7 @@ export const AddToChapter = ({
                   قريبًا
                 </span>
               )}
-              <div className="bg-[#fc690083] w-[30px] h-[30px] rounded-[50%] flex items-center justify-center">
+              <div className="bg-primary opacity-[15.5%] w-[30px] h-[30px] rounded-[50%] flex items-center justify-center">
                 <item.icon />
               </div>
 

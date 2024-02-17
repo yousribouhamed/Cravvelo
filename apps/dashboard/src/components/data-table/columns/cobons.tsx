@@ -150,7 +150,7 @@ export const CouponColumns: ColumnDef<Coupon>[] = [
 
               <DropdownMenuItem
                 onClick={() => {
-                  navigator.clipboard.writeText(payment.id);
+                  navigator.clipboard.writeText(payment.code);
                   maketoast.info();
                 }}
                 className="w-full h-full flex justify-between items-center px-2"

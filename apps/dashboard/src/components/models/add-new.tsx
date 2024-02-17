@@ -151,9 +151,36 @@ const AddNew: FC = ({}) => {
   return (
     <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
       <DialogTrigger asChild>
-        <button className="rounded-xl w-full h-12 px-6 font-qatar  bg-white text-black hover:scale-105 transition-all duration-150 font-bold flex gap-x-4 justify-between items-center">
-          إضافة جديد
-          <PlusCircle className="w-4 h-4 text-black" />
+        <button
+          data-ripple-light="true"
+          className="rounded-xl w-full h-12 px-6   text-primary bg-white  hover:scale-105 transition-all duration-150 font-bold flex gap-x-4 justify-start items-center"
+        >
+          <svg
+            width="30"
+            height="30"
+            viewBox="0 0 49 50"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12.2962 34.9965C6.77536 28.2564 7.76372 18.3169 14.5038 12.7961C21.2439 7.27514 31.1833 8.26356 36.7042 15.0036C42.2251 21.7438 41.2368 31.6831 34.4966 37.204C27.7566 42.7249 17.8171 41.7366 12.2962 34.9965Z"
+              fill="#FC6B00"
+            />
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M24.501 16.4453C25.4023 16.4453 26.1329 17.1759 26.1329 18.0772L26.1329 31.9247C26.1329 32.826 25.4023 33.5567 24.501 33.5567C23.5997 33.5567 22.869 32.826 22.869 31.9247L22.869 18.0772C22.869 17.1759 23.5997 16.4453 24.501 16.4453Z"
+              fill="#F8FAE5"
+            />
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M33.0567 25.001C33.0567 25.9023 32.326 26.6329 31.4247 26.6329H17.5772C16.6759 26.6329 15.9453 25.9023 15.9453 25.001C15.9453 24.0997 16.6759 23.369 17.5772 23.369H31.4247C32.326 23.369 33.0567 24.0997 33.0567 25.001Z"
+              fill="#F8FAE5"
+            />
+          </svg>
+
+          <span className="qatar-bold ">إضافة جديد</span>
         </button>
       </DialogTrigger>
       <DialogContent className="max-w-lg" title="إضافة دورة جديدة">
@@ -179,6 +206,7 @@ const AddNew: FC = ({}) => {
               />
               <div className="w-full h-[70px] flex items-center justify-center gap-x-10">
                 <Button
+                  data-ripple-light="true"
                   type="button"
                   onClick={() => setSelectedItem(0)}
                   variant="secondary"
@@ -193,6 +221,7 @@ const AddNew: FC = ({}) => {
                   دورة تدريبية
                 </Button>
                 <Button
+                  data-ripple-light="true"
                   type="button"
                   onClick={() => setSelectedItem(1)}
                   variant="secondary"
@@ -209,6 +238,7 @@ const AddNew: FC = ({}) => {
               </div>
               <DialogFooter className="w-full h-[50px] flex items-center  justify-center gap-x-4">
                 <Button
+                  data-ripple-light="true"
                   size="lg"
                   type="submit"
                   className="rounded-xl flex items-center justify-center gap-x-2"
