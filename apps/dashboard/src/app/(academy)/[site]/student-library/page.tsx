@@ -16,7 +16,7 @@ async function Page() {
         <h1 className="text-3xl font-bold"> المكتبة الرقمية</h1>
       </div>
       <LibraryNavigation />
-      <div className="w-full h-full">
+      <div className="w-full h-full flex flex-wrap gap-x-4">
         {Array.isArray(bag?.courses) && bag?.courses?.length === 0 && (
           <div className="w-full h-[200px] flex items-center justify-center">
             <p className="text-xl font-bold">انت لم تقم ببناء اي كورس بعد</p>
@@ -44,18 +44,9 @@ async function Page() {
 
               {/* this will hold the price */}
 
-              <div className="w-full h-[10px] px-4 flex items-center justify-start gap-x-4 my-4">
-                <h2 className="text-black font-bold text-sm  text-start ">
-                  DZD {item.price}
-                </h2>
-                <span className="  text-gray-500  text-sm line-through ">
-                  DZD {item.compareAtPrice}
-                </span>
-              </div>
-
               <div className="w-full h-[70px] px-4 flex items-center justify-center gap-x-4 border-t pt-2">
                 <Link
-                  href="/"
+                  href={`/course-academy/${item.id}/course-player`}
                   className="w-[80%] bg-blue-500 hover:bg-blue-600 text-white p-2 h-[45px] rounded-xl"
                 >
                   شاهد الان

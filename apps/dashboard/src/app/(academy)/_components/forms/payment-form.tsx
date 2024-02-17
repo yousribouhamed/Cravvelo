@@ -10,10 +10,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@ui/components/ui/card";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@ui/components/ui/tabs";
 
 import { Input } from "@ui/components/ui/input";
 import { useChargily } from "../../hooks/use-chargily";
 import React from "react";
+import { Label } from "@ui/components/ui/label";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { buyWithCoupon } from "../../actions/coupon";
 
 interface Props {
   subdomain: string;
@@ -25,23 +34,46 @@ const PaymentForm: FC<Props> = ({ subdomain, studentId }) => {
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
+  const [code, setCode] = React.useState<string>("");
+  const [error, setError] = React.useState<boolean>(false);
+
   const { pay } = useChargily();
 
   const handlePayWithChargily = async () => {
-    if (bagItems.state.shoppingBag?.length === 0) return;
+    try {
+      if (bagItems.state.shoppingBag?.length === 0) return;
 
-    const metadata = {
-      studentId,
-      productId: bagItems.state.shoppingBag[0]?.id,
-    };
-    setIsLoading(true);
-    await pay({
-      product_name: bagItems.state.shoppingBag[0]?.name,
-      product_price: Number(bagItems.state.shoppingBag[0]?.price),
-      subdomain,
-      metadata,
-    });
-    setIsLoading(false);
+      const metadata = {
+        studentId,
+        productId: bagItems.state.shoppingBag[0]?.id,
+      };
+      setIsLoading(true);
+      await pay({
+        product_name: bagItems.state.shoppingBag[0]?.name,
+        product_price: Number(bagItems.state.shoppingBag[0]?.price),
+        subdomain,
+        metadata,
+      });
+      setIsLoading(false);
+      bagItems.actions.clear();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handlePayWidthCoupon = async () => {
+    try {
+      setIsLoading(true);
+      await buyWithCoupon({
+        code,
+        courseId: bagItems.state.shoppingBag[0]?.id,
+      });
+      setIsLoading(false);
+      bagItems.actions.clear();
+    } catch (err) {
+      setError(true);
+      console.error(err);
+    }
   };
 
   return (
@@ -49,7 +81,7 @@ const PaymentForm: FC<Props> = ({ subdomain, studentId }) => {
       <div className="w-full h-full bg-gray-100 flex flex-col items-end p-8 rounded-xl">
         <div className="w-full min-h-[200px] h-fit  flex flex-col items-start p-2">
           {Array.isArray(bagItems.state.shoppingBag) &&
-            bagItems.state.shoppingBag?.length !== 0 && (
+            bagItems.state.shoppingBag?.length === 0 && (
               <div className="w-full h-[400px] flex flex-col items-center justify-center">
                 <h3 className="font-bold text-xl text-black">
                   حقيبة التسوق الخاصة بك فارغة
@@ -78,6 +110,7 @@ const PaymentForm: FC<Props> = ({ subdomain, studentId }) => {
                       <p className="ml-4">{product.price} DZD</p>
 
                       <button
+                        onClick={() => bagItems.actions.removeItem(product.id)}
                         type="button"
                         className="font-medium bg-blue-500 px-4 py-2 rounded-xl text-white"
                       >
@@ -92,7 +125,7 @@ const PaymentForm: FC<Props> = ({ subdomain, studentId }) => {
         <div className="w-full h-[100px] flex flex-col items-start justify-center gap-y-4 text-black border-t ">
           <div className="flex w-full h-[20px] justify-between text-base font-medium">
             <p>المجموع الفرعي</p>
-            <p>DZD 262.00</p>
+            <p>DZD {bagItems.state.shoppingBag[0]?.price}</p>
           </div>
           <div className="flex w-full h-[20px] justify-between text-base font-medium">
             <p> الشحن والضرائب .</p>
@@ -100,30 +133,76 @@ const PaymentForm: FC<Props> = ({ subdomain, studentId }) => {
           </div>
           <div className="flex w-full h-[20px] justify-between text-base font-medium border-t">
             <p className="text-lg font-bold ">المجموع</p>
-            <p className="text-lg font-bold ">DZD 0.00</p>
+            <p className="text-lg font-bold ">
+              DZD {bagItems.state.shoppingBag[0]?.price}
+            </p>
           </div>
         </div>
       </div>
       <div className="w-full h-full lg:p-8 flex flex-col  gap-y-8 ">
-        <Card className=" w-full lg:w-[480px] pt-4 min-h-[250px] h-fit ">
-          <CardHeader>
-            <CardTitle> حقل خاص بقسائم التخفيض</CardTitle>
-          </CardHeader>
-          <CardContent></CardContent>
-        </Card>
-        <div className="w-full h-1 border-b my-4 max-w-[480px] " />
-        <div className="w-full h-[100px] grid lg:grid-cols-1 grid-cols-2 gap-4  max-w-[480px]">
-          <button
-            disabled={isLoading}
-            onClick={handlePayWithChargily}
-            className="w-full h-[50px]  max-w-[480px] my-4 rounded-xl bg-violet-500 border-2 border-black text-white flex items-center justify-center"
-          >
-            {isLoading ? "loading..." : "pay with chargily"}
-          </button>
-          <button className="w-full h-[50px]  max-w-[480px] my-4 rounded-xl bg-amber-500 border-2 border-black text-white flex items-center justify-center">
-            pay with coubon
-          </button>
-        </div>
+        <Tabs defaultValue="chargily" className="w-[400px]">
+          <TabsList className=" h-[110px]  w-full flex items-center justify-end gap-x-4">
+            <TabsTrigger value="coupon" asChild>
+              <button className="w-[100px] h-[100px] rounded-xl border text-green-500">
+                قسيمة الخصم
+              </button>
+            </TabsTrigger>
+            <TabsTrigger value="chargily" asChild>
+              <button className="w-[100px] h-[100px] rounded-xl border text-green-500">
+                chargily
+              </button>
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="chargily">
+            <Card>
+              <CardHeader>
+                <CardTitle>الدفع بواسطة منصة chargily</CardTitle>
+                <CardDescription>
+                  سيتم تحويلك الى صفحة شارجيلي لاتمام عملية الدفع بنجاح
+                </CardDescription>
+              </CardHeader>
+
+              <CardFooter>
+                <button
+                  disabled={isLoading}
+                  onClick={handlePayWithChargily}
+                  className="w-full h-[50px]  max-w-[480px] my-4 rounded-xl bg-violet-500 border-2 border-black text-white flex items-center justify-center"
+                >
+                  {isLoading ? <LoadingSpinner /> : null}
+                  pay with chargily
+                </button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+          <TabsContent value="coupon">
+            <Card>
+              <CardHeader>
+                <CardTitle>الدفع بواسطة قسيمة الخصم</CardTitle>
+              </CardHeader>
+
+              <CardContent className="w-full h-[100px] flex flex-col gap-y-2">
+                <Label>الرمز</Label>
+                <Input value={code} onChange={(e) => setCode(e.target.value)} />
+                {error && (
+                  <span className="text-sm text-red-500 my-2">
+                    الرمز الذي ادخلته غير صالح
+                  </span>
+                )}
+              </CardContent>
+
+              <CardFooter>
+                <button
+                  disabled={isLoading}
+                  onClick={handlePayWidthCoupon}
+                  className="w-full h-[50px]  max-w-[480px] my-4 rounded-xl bg-yellow-500 border-2 border-black text-white flex items-center justify-center"
+                >
+                  {isLoading ? <LoadingSpinner /> : null}
+                  استعمال القسيمة
+                </button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

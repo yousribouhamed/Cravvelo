@@ -61,7 +61,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
   const mutation = trpc.updateCourseSettings.useMutation({
     onSuccess: () => {
       maketoast.success();
-      router.push(`/courses/${courseID}/settings`);
+      router.push(`/courses/${courseID}/pricing`);
     },
     onError: () => {
       maketoast.error();

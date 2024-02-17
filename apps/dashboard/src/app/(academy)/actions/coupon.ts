@@ -3,6 +3,7 @@
 import { prisma } from "database/src";
 import { getStudent } from "./auth";
 import { StudentBag } from "@/src/types";
+import { redirect } from "next/navigation";
 
 export const buyWithCoupon = async ({
   code,
@@ -58,6 +59,8 @@ export const buyWithCoupon = async ({
       bag: JSON.stringify(newStudentBag),
     },
   });
+
+  redirect("/student-library");
 
   // update the coupon
 };

@@ -51,8 +51,8 @@ function AddPricingForm({ course }: AddPricingFormProps) {
     mode: "onChange",
     resolver: zodResolver(PricingFormSchema),
     defaultValues: {
-      price: course.price.toString(),
-      compareAtPrice: course.compareAtPrice.toString(),
+      price: course?.price.toString() ?? "0",
+      compareAtPrice: course?.compareAtPrice.toString() ?? "0",
     },
   });
 
