@@ -4,6 +4,7 @@ import { prisma } from "database/src";
 import { getStudent } from "./auth";
 import { StudentBag } from "@/src/types";
 import { redirect } from "next/navigation";
+import { Course } from "database";
 
 export const buyWithCoupon = async ({
   code,
@@ -47,20 +48,43 @@ export const buyWithCoupon = async ({
 
   const studentbag = JSON.parse(student.bag as string) as StudentBag;
 
-  const newStudentBag = {
-    courses: [...studentbag.courses, course],
-  } as StudentBag;
+  // const newStudentBag = {
+  //   courses: [...studentbag.courses, course],
+  // } as StudentBag;
 
   await prisma.student.update({
     where: {
       id: student.id,
     },
     data: {
-      bag: JSON.stringify(newStudentBag),
+      bag: JSON.stringify(
+        addCourseToStudentBag({
+          bag: studentbag,
+          course: course,
+        })
+      ),
     },
   });
 
   redirect("/student-library");
 
   // update the coupon
+};
+
+export const addCourseToStudentBag = ({
+  bag,
+  course,
+}: {
+  course: Course;
+  bag: StudentBag;
+}): StudentBag => {
+  const theCourseExists = bag.courses.find((item) => item.id === course.id);
+  if (theCourseExists) {
+    return bag;
+  }
+  const newStudentBag = {
+    courses: [...bag.courses, course],
+  } as StudentBag;
+
+  return newStudentBag;
 };

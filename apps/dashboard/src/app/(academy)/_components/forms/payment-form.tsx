@@ -166,7 +166,7 @@ const PaymentForm: FC<Props> = ({ subdomain, studentId }) => {
                 <button
                   disabled={isLoading}
                   onClick={handlePayWithChargily}
-                  className="w-full h-[50px]  max-w-[480px] my-4 rounded-xl bg-violet-500 border-2 border-black text-white flex items-center justify-center"
+                  className="w-full h-[50px]  max-w-[480px] my-4 rounded-xl bg-violet-500 border-2 border-black text-white flex items-center justify-center disabled:pointer-events-none disabled:opacity-50"
                 >
                   {isLoading ? <LoadingSpinner /> : null}
                   pay with chargily
@@ -182,7 +182,12 @@ const PaymentForm: FC<Props> = ({ subdomain, studentId }) => {
 
               <CardContent className="w-full h-[100px] flex flex-col gap-y-2">
                 <Label>الرمز</Label>
-                <Input value={code} onChange={(e) => setCode(e.target.value)} />
+                <Input
+                  disabled={isLoading}
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  className="focus:border-blue-500"
+                />
                 {error && (
                   <span className="text-sm text-red-500 my-2">
                     الرمز الذي ادخلته غير صالح
@@ -194,7 +199,7 @@ const PaymentForm: FC<Props> = ({ subdomain, studentId }) => {
                 <button
                   disabled={isLoading}
                   onClick={handlePayWidthCoupon}
-                  className="w-full h-[50px]  max-w-[480px] my-4 rounded-xl bg-yellow-500 border-2 border-black text-white flex items-center justify-center"
+                  className="w-full h-[50px] gap-x-2  max-w-[480px] my-4 rounded-xl bg-yellow-500 border-2 border-black text-white flex items-center justify-center disabled:pointer-events-none disabled:opacity-50"
                 >
                   {isLoading ? <LoadingSpinner /> : null}
                   استعمال القسيمة

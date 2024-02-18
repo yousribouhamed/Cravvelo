@@ -2,12 +2,14 @@ import VideoChain from "@/src/app/(academy)/_components/course-component/course-
 import CourseVideoPlayer from "@/src/app/(academy)/_components/course-component/course-player/video-player";
 import { getCourseByUrlPath } from "@/src/app/(academy)/actions/course";
 import { get_course_chapters } from "@/src/app/(academy)/actions/chapter";
+import { authorization } from "@/src/app/(academy)/actions/auth";
 
 interface PageProps {
   params: { site: string; url: string };
 }
 
 const Page = async ({ params }: PageProps) => {
+  await authorization();
   const course = await getCourseByUrlPath({ url: params?.url });
   const chapters = await get_course_chapters({ courseID: course?.id });
 

@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { prisma } from "database/src";
 import { StudentBag } from "@/src/types";
+import { addCourseToStudentBag } from "@/src/app/(academy)/actions/coupon";
 
 // const Get_client_api_secret_key = async () => {
 //   const user = await useHaveAccess();
@@ -16,43 +17,53 @@ import { StudentBag } from "@/src/types";
 export async function POST(request: NextRequest) {
   const payload = (await request.json()) as Event;
 
-  const studentId = payload.data.metadata[0]?.studentId;
+  // Switch based on the event type
+  switch (payload.type) {
+    case "checkout.paid":
+      const studentId = payload.data.metadata[0]?.studentId;
 
-  const productId = payload.data.metadata[0]?.productId;
+      const productId = payload.data.metadata[0]?.productId;
 
-  // get the student
+      // get the student
 
-  const student = await prisma.student.findFirst({
-    where: {
-      id: studentId,
-    },
-  });
+      const student = await prisma.student.findFirst({
+        where: {
+          id: studentId,
+        },
+      });
 
-  const studentbag = JSON.parse(student.bag as string) as StudentBag;
+      const studentbag = JSON.parse(student.bag as string) as StudentBag;
 
-  const course = await prisma.course.findFirst({
-    where: {
-      id: productId,
-    },
-  });
+      const course = await prisma.course.findFirst({
+        where: {
+          id: productId,
+        },
+      });
 
-  const newStudentBag = {
-    courses: [...studentbag.courses, course],
-  } as StudentBag;
+      // const newStudentBag = {
+      //   courses: [...studentbag.courses, course],
+      // } as StudentBag;
 
-  // update there bag
+      // update there bag
 
-  await prisma.student.update({
-    where: {
-      id: studentId,
-    },
-    data: {
-      bag: JSON.stringify(newStudentBag),
-    },
-  });
+      await prisma.student.update({
+        where: {
+          id: studentId,
+        },
+        data: {
+          bag: JSON.stringify(
+            addCourseToStudentBag({
+              bag: studentbag,
+              course: course,
+            })
+          ),
+        },
+      });
 
-  // get the user id from the meta data
-  // update his bag
+      break;
+    case "checkout.failed":
+      break;
+  }
 }
 
 type Metadata = {

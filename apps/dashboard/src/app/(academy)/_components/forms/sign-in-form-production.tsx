@@ -66,7 +66,7 @@ export function AcademySignIpForm({ accountId }: AcademySifnIpFormProps) {
   }
 
   return (
-    <Card className="w-[480px] pt-4 min-h-[501.39px] h-fit ">
+    <Card className="w-[480px] pt-4 min-h-[401.39px] h-fit ">
       <CardHeader>
         <CardTitle>مرحبًا بعودتك!</CardTitle>
       </CardHeader>
@@ -84,6 +84,7 @@ export function AcademySignIpForm({ accountId }: AcademySifnIpFormProps) {
                   <FormLabel>البريد الإلكتروني</FormLabel>
                   <FormControl>
                     <Input
+                      className="focus:border-blue-500"
                       placeholder="أدخِل عنوان البريد الإلكتروني"
                       {...field}
                     />
@@ -100,33 +101,24 @@ export function AcademySignIpForm({ accountId }: AcademySifnIpFormProps) {
                 <FormItem>
                   <FormLabel>كلمة المرور</FormLabel>
                   <FormControl>
-                    <PasswordInput placeholder="أدخِل كلمة المرور" {...field} />
+                    <PasswordInput
+                      className="focus:border-blue-500"
+                      placeholder="أدخِل كلمة المرور"
+                      {...field}
+                    />
                   </FormControl>
 
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <div className="w-full h-[20px] flex justify-between items-center">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="terms" className="ml-2" />
-                <label
-                  htmlFor="terms"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  تذكَّر بياناتي
-                </label>
-              </div>
-              <Link href={"/sign-in/reset-password"}>
-                <span className="text-[#3B82F6]">هل نسيت كلمة مرورك؟</span>
-              </Link>
-            </div>
+
             <Button
               data-ripple-light="true"
               type="submit"
               size="lg"
               disabled={isLoading}
-              className="w-full text-white font-bold bg-blue-500"
+              className="w-full flex items-center justify-center gap-x-2 text-white font-bold bg-blue-500 hover:bg-blue-600  disabled:pointer-events-none disabled:opacity-50"
             >
               {isLoading ? <LoadingSpinner /> : null}
               تسجيل الدخول

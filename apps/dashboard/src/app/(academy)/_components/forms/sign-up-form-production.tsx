@@ -85,7 +85,7 @@ export function AcademySifnUpForm({ accountId }: AcademySifnUpFormProps) {
   }
 
   return (
-    <Card className="w-[480px] pt-4 min-h-[501.39px] h-fit ">
+    <Card className="w-[480px] pt-4 my-6 min-h-[501.39px] h-fit ">
       <CardHeader>
         <CardTitle>إنشاء حساب جديد</CardTitle>
         <CardDescription>
@@ -181,7 +181,7 @@ export function AcademySifnUpForm({ accountId }: AcademySifnUpFormProps) {
               disabled={isLoading}
               type="submit"
               size="lg"
-              className="w-full text-white font-bold bg-blue-500 hover:bg-blue-600"
+              className="w-full text-white flex items-center justify-center gap-x-2 font-bold bg-blue-500 hover:bg-blue-600  disabled:pointer-events-none disabled:opacity-50"
             >
               {isLoading ? <LoadingSpinner /> : null}
               أنشئ حسابك مجانًا
@@ -191,7 +191,7 @@ export function AcademySifnUpForm({ accountId }: AcademySifnUpFormProps) {
         <div className="w-full my-4 h-[20px] flex justify-center">
           <span>
             هل لديك حساب؟{" "}
-            <Link href={"/auth-academy/sign-ip"}>
+            <Link href={"/auth-academy/sign-in"}>
               <span className="text-blue-500">سجّل الدخول.</span>
             </Link>
           </span>

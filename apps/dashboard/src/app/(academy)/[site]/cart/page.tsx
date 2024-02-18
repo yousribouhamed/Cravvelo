@@ -1,5 +1,5 @@
 import PaymentForm from "../../_components/forms/payment-form";
-import { getStudent } from "../../actions/auth";
+import { authorization, getStudent } from "../../actions/auth";
 
 export const fetchCache = "force-no-store";
 
@@ -12,8 +12,10 @@ const Page = async ({ params }: PageProps) => {
     process.env.NODE_ENV === "development"
       ? "abdullah.jadir.vercel.app"
       : decodeURIComponent(params?.site);
+  await authorization();
 
   const student = await getStudent();
+
   return (
     <>
       <PaymentForm studentId={student?.id} subdomain={subdomain_value} />

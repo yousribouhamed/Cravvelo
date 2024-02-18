@@ -5,7 +5,7 @@ import { StudentBag } from "@/src/types";
 import Link from "next/link";
 
 async function Page() {
-  const response = await authorization();
+  await authorization();
 
   const student = await getStudent();
 
@@ -16,7 +16,7 @@ async function Page() {
         <h1 className="text-3xl font-bold"> المكتبة الرقمية</h1>
       </div>
       <LibraryNavigation />
-      <div className="w-full h-full flex flex-wrap gap-x-4">
+      <div className="w-full h-full flex flex-wrap gap-6 my-8">
         {Array.isArray(bag?.courses) && bag?.courses?.length === 0 && (
           <div className="w-full h-[200px] flex items-center justify-center">
             <p className="text-xl font-bold">انت لم تقم ببناء اي كورس بعد</p>
@@ -36,18 +36,14 @@ async function Page() {
                 <h2 className="text-black font-semibold text-lg text-start ">
                   {item.title}
                 </h2>
-
-                <span className="block  bg-gray-100 w-fit  rounded-full text-black my-auto px-2">
-                  دورة
-                </span>
               </div>
 
               {/* this will hold the price */}
 
-              <div className="w-full h-[70px] px-4 flex items-center justify-center gap-x-4 border-t pt-2">
+              <div className="w-full h-[70px] px-4 flex items-center justify-center gap-x-4  p-2">
                 <Link
                   href={`/course-academy/${item.id}/course-player`}
-                  className="w-[80%] bg-blue-500 hover:bg-blue-600 text-white p-2 h-[45px] rounded-xl"
+                  className="w-[80%] bg-blue-500 hover:bg-blue-600 text-white p-2 h-[45px] flex items-center justify-center rounded-xl"
                 >
                   شاهد الان
                 </Link>

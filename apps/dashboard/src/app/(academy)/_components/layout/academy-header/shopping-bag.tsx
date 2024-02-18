@@ -9,7 +9,7 @@ import Link from "next/link";
 export default function ShoppingCardProduction() {
   const [open, setOpen] = useState(false);
 
-  const { state } = useAcademiaStore();
+  const { state, actions } = useAcademiaStore();
 
   return (
     <>
@@ -112,8 +112,11 @@ export default function ShoppingCardProduction() {
                                           </p>
 
                                           <button
+                                            onClick={() =>
+                                              actions.removeItem(product.id)
+                                            }
                                             type="button"
-                                            className="font-medium bg-blue-500 px-4 py-2 rounded-xl text-white"
+                                            className="font-medium bg-blue-500 hover:bg-blue-600 cursor-pointer px-4 py-2 rounded-xl text-white"
                                           >
                                             إزالة
                                           </button>
@@ -131,7 +134,7 @@ export default function ShoppingCardProduction() {
                           <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                             <div className="flex justify-between text-base font-medium text-gray-900">
                               <p>المجموع الفرعي</p>
-                              <p>DZD 262.00</p>
+                              <p>DZD ${state?.shoppingBag[0]?.price}.00</p>
                             </div>
                             <p className="mt-0.5 text-sm text-gray-500">
                               الشحن والضرائب تحسب عند الخروج.
