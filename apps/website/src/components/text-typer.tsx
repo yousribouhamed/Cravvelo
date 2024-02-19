@@ -6,7 +6,10 @@ interface TextTyperAbdullahProps {}
 
 const TextTyper: FC = ({}) => {
   return (
-    <span className="text-[#FC6B00]  qatar-bold mx-2 border-[#FC6B00] border-2 rounded-full inline-block bg-[#F8FAE5] px-3 py-2.5 ">
+    <span
+      className="text-[#FC6B00]      mx-2 border-[#FC6B00] border-2 rounded-full inline-block bg-[#F8FAE5] px-3 py-2.5 "
+      style={{ fontFamily: "Qatar2022 Arabic bold" }}
+    >
       <Typewriter
         words={["خبراتك التعليمية ", "برامجك التدريبية "]}
         cursor
