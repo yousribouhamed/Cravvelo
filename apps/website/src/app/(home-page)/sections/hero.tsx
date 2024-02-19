@@ -14,7 +14,7 @@ const Hero: FC = ({}) => {
           <div className="lg:col-span-2 z-20 lg:col-start-1 lg:row-start-1 lg:ml-auto lg:grid w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 grid-cols-1">
             <div className="w-full sm:max-w-[34rem] 2xl:max-w-2xl z-20">
               <div className="w-full sm:min-h-[100px] sm:h-fit h-[250px] mt-12 overflow-hidden">
-                <h1 className="text-center sm:text-start qatar-bold font-bold tracking-tight text-black text-3xl 2xl:text-4xl">
+                <h1 className="text-center sm:text-start qatar-bold tracking-tight text-black text-3xl 2xl:text-4xl">
                   إنشاء، بيع، إدارة <TextTyper />
                 </h1>
                 <h1 className="qatar-bold mt-2 text-center sm:text-start font-bold tracking-tight text-black text-3xl 2xl:text-4xl">
@@ -30,7 +30,7 @@ const Hero: FC = ({}) => {
               <div className="w-full my-4 h-[60px] flex flex-col sm:flex-row items-center mt-8 gap-y-6 sm:items-end justify-center sm:justify-start gap-x-8">
                 <Button
                   size="lg"
-                  className="bg-[#FC6B00] text-xl py-6 h-14 rounded-2xl text-white qatar-bold hover:bg-[#61AFA0] hover:scale-105 transition-all duration-150 "
+                  className="bg-[#FC6B00] hover:bg-[#994b13] text-xl py-6 h-14 rounded-2xl text-white qatar-bold  hover:scale-105 transition-all duration-150 "
                 >
                   ابدء تجربتك المجانية
                 </Button>

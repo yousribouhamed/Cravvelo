@@ -1,7 +1,5 @@
 import type { FC } from "react";
 
-interface HowPlatformWorksAbdullahProps {}
-
 const HowPlatformWorks: FC = ({}) => {
   return (
     <div className="w-full my-24 py-8 h-[600px] overflow-x-hidden bg-[#FC6B00] hidden sm:flex flex-col items-center gap-y-6">
