@@ -116,23 +116,6 @@ export function CourseSettingsForm({ course }: ComponentProps) {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="courseUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    رابط الدورة <span className="text-red-600 text-xl">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input placeholder="أدخل رابط الدورة هنا" {...field} />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <div className="w-full h-0.5 bg-gray-500 " />
             <FormLabel className="text-xl  block font-bold text-black">
               تفاصيل الدورة{" "}
@@ -167,10 +150,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
               name="youtubeUrl"
               render={({ field }) => (
                 <FormItem className="w-full ">
-                  <FormLabel>
-                    الفيديو الدعائي (youtube رابط ){" "}
-                    <span className="text-red-600 text-xl">*</span>
-                  </FormLabel>
+                  <FormLabel>الفيديو الدعائي (youtube رابط ) </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="أدخل رابط الفيديو الدعائي هنا"
@@ -229,14 +209,23 @@ export function CourseSettingsForm({ course }: ComponentProps) {
               )}
             />
 
-            <div className="w-full h-0.5 bg-gray-500 " />
-            <FormLabel className="text-xl  block font-bold text-black">
-              تهيئة محركات البحث seo{" "}
-            </FormLabel>
-            <FormLabel className="text-md block  text-gray-600">
-              من السهل تخصيص المظهر العام لدورتك عن طريق وضع صورة فريدة لها و
-              اظافة وصف تعريفي يجذب الزوار عند زيارة صفحة الهبوط لدورة
-            </FormLabel>
+            <Card>
+              <CardContent className="w-full h-fit flex justify-start flex-col items-start p-6 gap-x-4 ">
+                <div className="w-full h-[20px] mb-4 flex items-center justify-between">
+                  <p>قائمة محرك البحث</p>
+                  <Button variant="ghost">تعديل</Button>
+                </div>
+                <h1 className="text-indigo-600 text-xl font-bold text-start">
+                  دورتك الرائعة عند محرك البحث
+                </h1>
+                <p className="text-gray-600 text-md text-start">
+                  كل واحد منا يعيش معتمدًا وملتزمًا بمعرفتنا الفردية ووعينا. كل
+                  هذا هو ما نسميه الواقع. ومع ذلك، فإن المعرفة والوعي كلاهما
+                  ملتبسان. قد تكون حقيقة شخص ما وهمًا لشخص آخر. نحن جميعا نعيش
+                  داخل الأوهام الخاصة بنا
+                </p>
+              </CardContent>
+            </Card>
 
             <FormField
               control={form.control}
@@ -281,6 +270,27 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 </FormItem>
               )}
             />
+            <Card>
+              <CardContent className="w-full h-fit flex justify-end items-center p-6 gap-x-4 ">
+                <Button
+                  onClick={() => router.back()}
+                  className=" rounded-xl"
+                  variant="secondary"
+                >
+                  {" "}
+                  إلغاء والعودة
+                </Button>
+                <Button
+                  disabled={mutation.isLoading}
+                  type="submit"
+                  form="add-text"
+                  className=" flex items-center gap-x-2 rounded-xl"
+                >
+                  {mutation.isLoading ? <LoadingSpinner /> : null}
+                  حفظ والمتابعة
+                </Button>
+              </CardContent>
+            </Card>
           </form>
         </Form>
       </div>

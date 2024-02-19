@@ -1,13 +1,12 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronsUpDown, MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import { Button, buttonVariants } from "@ui/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
@@ -18,7 +17,6 @@ import { DataTableColumnHeader } from "../data-table-head";
 import { Course } from "database";
 import { Badge } from "@ui/components/ui/badge";
 import { maketoast } from "../../toasts";
-import { useRouter } from "next/navigation";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -57,7 +55,12 @@ export const columns: ColumnDef<Course>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex flex-col gap-y-2 justify-center items-start ">
-          <p className="font-bold ">{row.original.title}</p>
+          <Link href={`/courses/${row.original.id}/chapters`}>
+            <p className="font-bold  hover:text-blue-500 cursor-pointer">
+              {row.original.title}
+            </p>
+          </Link>
+
           <Badge className="bg-[#F5F5F5] hover:bg-[#F5F5F5] text-black rounded-md">
             {row.original.status}
           </Badge>
@@ -99,12 +102,7 @@ export const columns: ColumnDef<Course>[] = [
       );
     },
   },
-  {
-    accessorKey: "trainers",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="المدربين" />
-    ),
-  },
+
   {
     accessorKey: "studenstNbr",
     header: ({ column }) => (
@@ -125,7 +123,7 @@ export const columns: ColumnDef<Course>[] = [
 
       return (
         <div className="w-full h-10 flex items-center justify-end gap-x-4">
-          {/* <Link
+          <Link
             href={`/courses/${row.original.id}/chapters`}
             className={cn(
               buttonVariants({ variant: "secondary", size: "sm" }),
@@ -133,7 +131,7 @@ export const columns: ColumnDef<Course>[] = [
             )}
           >
             تعديل
-          </Link> */}
+          </Link>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button

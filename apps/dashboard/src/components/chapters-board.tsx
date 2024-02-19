@@ -176,7 +176,13 @@ const ChaptersBoard: FC<ChaptersBoardAbdullahProps> = ({ initialData }) => {
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                     >
-                      <Accordion type="single" collapsible>
+                      <Accordion
+                        defaultValue={
+                          sections.length - 1 === index ? `item-${index}` : ""
+                        }
+                        type="single"
+                        collapsible
+                      >
                         <AccordionItem
                           value={`item-${index}`}
                           className="w-full min-h-[40px] h-fit p-4 "

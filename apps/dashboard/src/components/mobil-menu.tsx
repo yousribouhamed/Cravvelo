@@ -74,9 +74,9 @@ const SideBarMenu: FC = ({}) => {
                   href={item.slug}
                   className={cn(
                     buttonVariants({ variant: "ghost" }),
-                    "w-full flex items-center justify-end qatar-semibold text-md  gap-x-2 hover:!bg-transparent !text-white",
+                    "w-full flex items-center justify-end qatar-semibold text-md  gap-x-2 hover:bg-primary !text-white",
                     {
-                      "text-white bg-[#A44600]":
+                      "text-white bg-[#A44600] hover:bg-[#A44600]":
                         path === item.slug ||
                         (path.includes(item.slug) && item.slug !== "/"),
                     }
@@ -96,9 +96,9 @@ const SideBarMenu: FC = ({}) => {
                   }}
                   className={cn(
                     buttonVariants({ variant: "ghost" }),
-                    "w-full flex items-center justify-end qatar-semibold group text-md  gap-x-2 hover:!bg-transparent !text-white ",
+                    "w-full flex items-center justify-end qatar-semibold group text-md  gap-x-2 hover:bg-primary !text-white ",
                     {
-                      "text-white bg-[#A44600]":
+                      "text-white bg-[#A44600] hover:bg-[#A44600]":
                         path === item.slug ||
                         (path.includes(item.slug) && item.slug !== "/"),
                     }
@@ -125,7 +125,7 @@ const SideBarMenu: FC = ({}) => {
                         {subItem.title}
                       </MobileLink>
                     ))}
-                    <div className="absolute top-0 bottom-0 w-0.5 h-full bg-white right-5" />
+                    <div className="absolute top-0 bottom-4 w-0.5 h-[80%] bg-white right-5" />
                   </div>
                 </AccordionContent>
               )}

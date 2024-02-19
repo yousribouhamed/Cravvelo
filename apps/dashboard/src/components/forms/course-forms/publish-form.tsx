@@ -153,7 +153,7 @@ function PublishCourseForm({ course, chapters }: PublishCourseFormProps) {
                 size="lg"
               >
                 {mutation.isLoading ? <LoadingSpinner /> : null}
-                حفظ والمتابعة
+                نشر الدورة
               </Button>
               <Button className="w-full" variant="secondary" size="lg">
                 {" "}

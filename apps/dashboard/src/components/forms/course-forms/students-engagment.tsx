@@ -144,6 +144,26 @@ function StudentEngagment({ course }: StudentEngagmentProps) {
                     </FormItem>
                   )}
                 />
+
+                <FormField
+                  control={form.control}
+                  name="allowComments"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row bg-white items-center justify-between rounded-lg border p-3 shadow-sm">
+                      <div className="space-y-0.5">
+                        <FormLabel> السماح بالتقيمات</FormLabel>
+                      </div>
+                      <FormControl>
+                        <div dir="ltr">
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
               </div>
             </div>
           </form>

@@ -19,7 +19,6 @@ export default async function Home() {
                 name: "الرئيسية",
                 url: "/",
               },
-
               {
                 name: "الدورات التدريبية",
                 url: "/courses",
