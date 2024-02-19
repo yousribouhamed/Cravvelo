@@ -165,6 +165,7 @@ model Coupon {
   creationDate   DateTime     @default(now())
   lastUpdated    DateTime     @updatedAt
   isActive       Boolean      @default(true)
+  isArchive      Boolean      @default(false)
 
   Account Account? @relation(fields: [accountId], references: [id])
 

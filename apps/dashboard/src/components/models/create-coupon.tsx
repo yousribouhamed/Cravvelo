@@ -40,14 +40,31 @@ interface CreateCouponProps {
 }
 
 const FormSchema = z.object({
-  type: z.enum(["all", "mentions", "none"], {
-    required_error: "You need to select a notification type.",
+  type: z.enum(["PERCENTAGE", "VALUE"], {
+    required_error: "انت تحتاج الى اختيار نمط تخفيض.",
   }),
-  amount: z.string(),
+  amount: z.string().regex(/^\d+(\.\d{1,2})?$/, {
+    message: "يجب أن يكون سعر صالح",
+  }),
   duration: z.string(),
+  months: z.string().regex(/^\d+(\.\d{1,2})?$/, {
+    message: "يجب أن يكون سعر صالح",
+  }),
+  usage_limits: z.string().regex(/^\d+(\.\d{1,2})?$/, {
+    message: "يجب أن يكون سعر صالح",
+  }),
 });
 
 const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    mode: "onChange",
+    defaultValues: {
+      months: "0",
+      type: "PERCENTAGE",
+    },
+  });
+
   const [isOpen, setIsOpen] = React.useState(false);
 
   const mutation = trpc.createCoupon.useMutation({
@@ -58,17 +75,25 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
     onError: () => {
       maketoast.error();
     },
+    onSettled: () => {
+      setIsOpen(false);
+      form.reset();
+    },
   });
 
-  async function createCoupon() {
-    await mutation.mutateAsync().then(() => {});
+  const reduce_type = form.watch("type");
+
+  const duration = form.watch("duration");
+
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    await mutation.mutateAsync({
+      amount: data.amount,
+      duration: data.duration,
+      months: data.months,
+      type: data.type,
+      usage_limits: data.usage_limits,
+    });
   }
-
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-  });
-
-  function onSubmit(data: z.infer<typeof FormSchema>) {}
 
   return (
     <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
@@ -96,26 +121,19 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
         className="w-[900px] h-[600px]  "
         title="انشاء قسيمة جديدة"
       >
-        <div className="w-ful grid grid-cols-3 h-[430px]">
-          <div className="col-span-1 w-full h-full flex items-center justify-center ">
-            <Image
-              src="/coupon.png"
-              alt="coupon image"
-              width={200}
-              height={300}
-            />
-          </div>
+        <div className="w-full grid grid-cols-3 h-[430px]">
           <div className="col-span-2 w-full h-full flex flex-col ">
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="w-2/3 space-y-6"
+                className="w-full h-fit min-w-full p-4 space-y-2"
+                id="coupon_form"
               >
                 <FormField
                   control={form.control}
                   name="type"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem className="space-y-3 my-2">
                       <FormLabel className="text-xl font-bold">
                         نمط التخفيض
                       </FormLabel>
@@ -130,7 +148,7 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
                               تخفيض بالنسبة
                             </FormLabel>
                             <FormControl>
-                              <RadioGroupItem value="all" />
+                              <RadioGroupItem value="PERCENTAGE" />
                             </FormControl>
                           </FormItem>
 
@@ -139,7 +157,7 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
                               تخفيض بالقيمة
                             </FormLabel>
                             <FormControl>
-                              <RadioGroupItem value="none" />
+                              <RadioGroupItem value="VALUE" />
                             </FormControl>
                           </FormItem>
                         </RadioGroup>
@@ -148,23 +166,57 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
                     </FormItem>
                   )}
                 />
+                <div className="w-full flex items-center gap-x-4">
+                  <FormField
+                    control={form.control}
+                    name="amount"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          {" "}
+                          {reduce_type === "VALUE"
+                            ? "كمية التخفيض"
+                            : "نسبة التخفيض"}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder={`${
+                              reduce_type === "VALUE" ? "0 DZD" : "% 0"
+                            } `}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          سيتم تخفيض هذه القيمة من مبلغ الدورة او المنتج
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                <FormField
-                  control={form.control}
-                  name="amount"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>كمية التخفيض</FormLabel>
-                      <FormControl>
-                        <Input placeholder="shadcn" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        This is your public display name.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                  <FormField
+                    control={form.control}
+                    name="usage_limits"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>حدود الاستعمال</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            value={Number(field.value)}
+                            onChange={(e) => field.onChange(e.target.value)}
+                            placeholder={`0 `}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          سيتم تخفيض هذه القيمة من مبلغ الدورة او المنتج
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
                 <FormField
                   control={form.control}
@@ -178,45 +230,46 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a verified email to display" />
+                            <SelectValue placeholder="مرة واحدة" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="m@example.com">
-                            m@example.com
-                          </SelectItem>
-                          <SelectItem value="m@google.com">
-                            m@google.com
-                          </SelectItem>
-                          <SelectItem value="m@support.com">
-                            m@support.com
-                          </SelectItem>
+                          <SelectItem value="forever">الى الابد</SelectItem>
+                          <SelectItem value="by_month">محدودة</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormDescription>
-                        You can manage email addresses in your{" "}
+                        يرجى اختيار الاعدادات التي تناسب احتياجاتكم
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
-                <FormField
-                  control={form.control}
-                  name="amount"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>عدد الاشهر</FormLabel>
-                      <FormControl>
-                        <Input placeholder="shadcn" {...field} />
-                      </FormControl>
-
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {duration === "by_month" && (
+                  <FormField
+                    control={form.control}
+                    name="months"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>عدد الاشهر</FormLabel>
+                        <FormControl>
+                          <Input placeholder="4 اشهر" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
               </form>
             </Form>
+          </div>
+          <div className="col-span-1 w-full h-full flex items-center justify-center ">
+            <Image
+              src="/coupon.png"
+              alt="coupon image"
+              width={200}
+              height={300}
+            />
           </div>
         </div>
         <DialogFooter className="w-full h-[50px] flex items-center justify-end gap-x-4 px-4 my-4">
@@ -224,7 +277,8 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
             إلغاء
           </Button>
           <Button
-            onClick={createCoupon}
+            form="coupon_form"
+            // onClick={createCoupon}
             className=" flex items-center gap-x-2 "
             disabled={mutation.isLoading}
           >

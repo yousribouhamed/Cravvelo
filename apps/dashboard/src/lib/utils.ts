@@ -1,6 +1,8 @@
 import { isClerkAPIResponseError } from "@clerk/nextjs";
 import type { User } from "@clerk/nextjs/server";
 import { z } from "zod";
+import { format } from "date-fns";
+import { ar } from "date-fns/locale";
 
 import { maketoast } from "../components/toasts";
 import { Metadata } from "next";
@@ -145,6 +147,11 @@ export function daysLeftInTrial(created_at: Date): number {
 
   // Return the number of days left in the trial
   return daysDifference;
+}
+
+// Function to format dates in Arabic
+export function formatDateInArabic(date: Date, formatString: string): string {
+  return format(date, formatString, { locale: ar });
 }
 
 export function constructMetadata({
