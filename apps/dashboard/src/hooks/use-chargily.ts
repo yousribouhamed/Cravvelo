@@ -4,7 +4,7 @@ import {
   create_checkout,
   create_price,
   create_product,
-} from "../_actions/chargily";
+} from "../app/(academy)/_actions/chargily";
 
 import { useRouter } from "next/navigation";
 
@@ -50,8 +50,6 @@ export const useChargily = () => {
         metadata,
       });
 
-      console.log("here it is the content of the checkout");
-      console.log(checkout);
       if (!checkout?.checkout_url)
         // Throw an error if checkout creation fails or if checkout_url is not available
         throw new Error("failed to create a checkout");

@@ -88,3 +88,5 @@ export const addCourseToStudentBag = ({
 
   return newStudentBag;
 };
+
+export const consumeCoupon = () => {};

@@ -1,7 +1,5 @@
 import { jwtVerify, SignJWT } from "jose";
 
-import { uuid as uuidV4 } from "uuid";
-
 interface UserJwtPayload {
   jti: string;
   iat: number;

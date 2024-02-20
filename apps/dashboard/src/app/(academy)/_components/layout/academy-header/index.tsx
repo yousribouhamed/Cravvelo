@@ -5,7 +5,7 @@ import Link from "next/link";
 import MobilNavgiationProduction from "./mobil-navbar";
 import MaxWidthWrapper from "../../max-width-wrapper";
 import LinksNavbar from "./links-navbar";
-import StudentNav from "../../auth-comppnent/student-nav";
+import StudentNav from "../../auth/student-nav";
 import type { Student } from "database";
 
 interface AcademyHeaderProps {
