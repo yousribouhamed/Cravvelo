@@ -6,7 +6,7 @@ import { trpc } from "../../_trpc/client";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DataTableLoading } from "@/src/components/data-table/table-loading";
 import { ProctsColumns } from "@/src/components/data-table/columns/products";
-import DeleteProductModel from "@/src/components/models/delete-product-model";
+import DeleteProductModel from "@/src/components/models/delete-product-modal";
 
 interface ProductsTableShellProps {
   initialData: Product[];

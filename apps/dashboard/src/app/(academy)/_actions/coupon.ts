@@ -6,6 +6,13 @@ import { StudentBag } from "@/src/types";
 import { redirect } from "next/navigation";
 import { Course } from "database";
 
+/**
+ * The function lifts the ban off the user i.e. updates
+ * the status to `ACTIVE`.
+ * @param userId The id of the user.
+ * @returns
+ */
+
 export const buyWithCoupon = async ({
   code,
   courseId,

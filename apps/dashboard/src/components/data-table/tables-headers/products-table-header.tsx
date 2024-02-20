@@ -1,9 +1,9 @@
 import { Button } from "@ui/components/ui/button";
 import type { FC } from "react";
-import AddCourse from "../../models/add-course";
+import AddCourse from "../../models/create-course-modal";
 import { Table } from "@ui/components/ui/table";
 import { Input } from "@ui/components/ui/input";
-import AddProductModel from "../../models/add-product";
+import AddProductModel from "../../models/create-product-modal";
 
 interface TableHeaderProps {
   table: any;

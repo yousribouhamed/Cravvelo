@@ -6,7 +6,7 @@ import { trpc } from "@/src/app/_trpc/client";
 import { StudentsColumns } from "@/src/components/data-table/columns/students";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DataTableLoading } from "@/src/components/data-table/table-loading";
-import DeleteCourseModel from "@/src/components/models/delete-course-model";
+import DeleteCourseModel from "@/src/components/models/delete-course-modal";
 
 interface StudentsTableShellProps {
   initialData: Student[];

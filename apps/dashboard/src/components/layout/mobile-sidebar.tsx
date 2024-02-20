@@ -7,7 +7,7 @@ import * as React from "react";
 import type { FC } from "react";
 import { cn } from "@ui/lib/utils";
 import SideBarMenu from "./mobil-menu";
-import AddNew from "../models/add-new";
+import AddNew from "../models/add-new-modal";
 
 const MobildSideBard: FC = ({}) => {
   const [isOpen, setIsOpen] = React.useState(false);

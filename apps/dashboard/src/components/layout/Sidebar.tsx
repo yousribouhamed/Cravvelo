@@ -2,7 +2,7 @@
 
 import { cn } from "@ui/lib/utils";
 import SideBarMenu from "./mobil-menu";
-import AddNew from "../models/add-new";
+import AddNew from "../models/add-new-modal";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 

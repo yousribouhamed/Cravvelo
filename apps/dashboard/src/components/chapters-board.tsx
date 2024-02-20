@@ -29,7 +29,7 @@ import {
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
-import AddChapter from "./models/add-chapter";
+import AddChapter from "./models/create-chapter-modal";
 import { Module } from "../types";
 import { NotFoundCard } from "./not-found-card";
 import { cn } from "@ui/lib/utils";
@@ -39,9 +39,9 @@ import { ArrowRight } from "lucide-react";
 import { Button, buttonVariants } from "@ui/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { ChevronDown } from "lucide-react";
-import DeleteChapter from "./models/delete-chapter-model";
+import DeleteChapter from "./models/delete-chapter-modal";
 import { useMounted } from "../hooks/use-mounted";
-import UpdateChapterModel from "./models/update-chapter-modle";
+import UpdateChapterModel from "./models/update-chapter-modal";
 import { Badge } from "@ui/components/ui/badge";
 import Link from "next/link";
 import { AddToChapter } from "./chapter";

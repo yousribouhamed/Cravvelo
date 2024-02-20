@@ -6,7 +6,7 @@ import { trpc } from "@/src/app/_trpc/client";
 import { CertificateColumns } from "@/src/components/data-table/columns/certificate";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DataTableLoading } from "@/src/components/data-table/table-loading";
-import DeleteCourseModel from "@/src/components/models/delete-course-model";
+import DeleteCourseModel from "@/src/components/models/delete-course-modal";
 
 interface TableShellProps {
   initialData: Certificate[];

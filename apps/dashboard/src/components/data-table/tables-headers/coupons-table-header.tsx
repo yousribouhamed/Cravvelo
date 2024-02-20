@@ -1,6 +1,6 @@
 import { Button } from "@ui/components/ui/button";
 import type { FC } from "react";
-import CreateCoupon from "../../models/create-coupon";
+import CreateCoupon from "../../models/create-coupon-modal";
 
 interface TableHeaderProps {
   table: any;
