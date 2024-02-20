@@ -19,7 +19,6 @@ import { Card, CardContent } from "@ui/components/ui/card";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import { JadaraVoiceUpLoader } from "../../upload-voice";
 
 const addPDFSchema = z.object({
   title: z.string().min(2).max(50),
@@ -84,23 +83,6 @@ function AddVoiceForm() {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="fileUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    إضافة ملف voice{" "}
-                    <span className="text-red-600 text-xl">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <JadaraVoiceUpLoader onChnage={field.onChange} />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             {/* <div>
            
             </div> */}
