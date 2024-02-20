@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { privateProcedure } from "../trpc";
+import { privateProcedure } from "../../trpc";
 import { TRPCError } from "@trpc/server";
 
 export const course = {

@@ -1,4 +1,4 @@
-import { privateProcedure } from "../trpc";
+import { privateProcedure } from "../../trpc";
 
 export const comments = {
   getAllComments: privateProcedure.query(async ({ ctx, input }) => {

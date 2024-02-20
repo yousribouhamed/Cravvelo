@@ -1,4 +1,4 @@
-import { privateProcedure } from "../trpc";
+import { privateProcedure } from "../../trpc";
 
 export const exams = {
   getAllExams: privateProcedure.query(async ({ ctx }) => {

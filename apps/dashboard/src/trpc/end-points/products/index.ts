@@ -1,4 +1,4 @@
-import { privateProcedure } from "../trpc";
+import { privateProcedure } from "../../trpc";
 import { z } from "zod";
 import { prisma } from "database/src";
 
