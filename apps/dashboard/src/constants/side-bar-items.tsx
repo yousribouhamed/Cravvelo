@@ -35,6 +35,7 @@ export const SIDE_BAR_ITEMS = [
     icon: Icons.money,
     subitems: [],
   },
+
   {
     title: "تخصيص الأكاديمية",
     slug: "/cutomize",
