@@ -1,5 +1,9 @@
 import { Course } from "database";
 import { EditorBtns } from "../constants/website-template";
+import { type FileWithPath } from "react-dropzone";
+import type Stripe from "stripe";
+import { type z } from "zod";
+import type { cartLineItemSchema } from "@/src/lib/validators/cart";
 
 export type Module = {
   title: string;
@@ -119,3 +123,31 @@ export interface Student {
 export interface StudentBag {
   courses: Course[];
 }
+
+export interface StoredFile {
+  id: string;
+  name: string;
+  url: string;
+}
+
+export type StripePaymentStatus = Stripe.PaymentIntent.Status;
+
+export interface SubscriptionPlan {
+  id: "basic" | "standard" | "pro";
+  name: string;
+  description: string;
+  features: string[];
+  stripePriceId: string;
+  price: number;
+}
+
+export interface UserSubscriptionPlan extends SubscriptionPlan {
+  stripeSubscriptionId?: string | null;
+  stripeCurrentPeriodEnd?: string | null;
+  stripeCustomerId?: string | null;
+  isSubscribed: boolean;
+  isCanceled: boolean;
+  isActive: boolean;
+}
+
+export type CartLineItem = z.infer<typeof cartLineItemSchema>;

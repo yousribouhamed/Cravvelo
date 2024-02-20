@@ -22,7 +22,7 @@ import { useChargily } from "../../hooks/use-chargily";
 import React from "react";
 import { Label } from "@ui/components/ui/label";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import { buyWithCoupon } from "../../actions/coupon";
+import { buyWithCoupon } from "../../_actions/coupon";
 
 interface Props {
   subdomain: string;

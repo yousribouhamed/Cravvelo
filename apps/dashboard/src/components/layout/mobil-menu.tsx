@@ -20,7 +20,7 @@ import { buttonVariants } from "@ui/components/ui/button";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
 import { cn } from "@ui/lib/utils";
 import Link from "next/link";
-import { SIDE_BAR_ITEMS } from "../constants/side-bar-items";
+import { SIDE_BAR_ITEMS } from "../../constants/side-bar-items";
 
 interface MobileLinkProps extends React.PropsWithChildren {
   href: string;

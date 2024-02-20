@@ -1,5 +1,5 @@
 import { AcademySignIpForm } from "../../../_components/forms/sign-in-form-production";
-import { getSiteData } from "../../../actions";
+import { getSiteData } from "../../../_actions";
 import { notFound } from "next/navigation";
 
 export const fetchCache = "force-no-store";

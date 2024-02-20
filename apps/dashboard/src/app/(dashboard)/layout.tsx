@@ -1,4 +1,4 @@
-import { Sidebar } from "../../components/Sidebar";
+import { Sidebar } from "../../components/layout/Sidebar";
 import { ClerkProvider } from "@clerk/nextjs";
 import Script from "next/script";
 

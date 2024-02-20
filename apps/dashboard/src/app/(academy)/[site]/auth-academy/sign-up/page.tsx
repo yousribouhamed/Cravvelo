@@ -1,6 +1,6 @@
 import { AcademySifnUpForm } from "../../../_components/forms/sign-up-form-production";
 import { notFound } from "next/navigation";
-import { getSiteData } from "../../../actions";
+import { getSiteData } from "../../../_actions";
 
 export const fetchCache = "force-no-store";
 

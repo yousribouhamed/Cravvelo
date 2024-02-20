@@ -2,7 +2,7 @@ import { Filter, Search } from "lucide-react";
 import CoursesGrid from "../../_components/course-component/courses-grid";
 import { Input } from "@ui/components/ui/input";
 import FilterCourses from "../../_components/course-component/filter-courses";
-import { getAllCourses } from "../../actions";
+import { getAllCourses } from "../../_actions";
 export const fetchCache = "force-no-store";
 
 interface PageProps {

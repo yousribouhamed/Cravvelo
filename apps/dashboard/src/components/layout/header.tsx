@@ -5,7 +5,7 @@ import { SearchInput } from "../search";
 import UserNav from "../auth/user-nav";
 import { Button } from "@ui/components/ui/button";
 import { useRouter } from "next/navigation";
-import MobildSideBard from "../mobile-sidebar";
+import MobildSideBard from "./mobile-sidebar";
 import {
   Tooltip,
   TooltipContent,

@@ -4,10 +4,10 @@ import Feedbacks from "../../../_components/course-component/feedbacks";
 import { Hourglass } from "lucide-react";
 import { Zap } from "lucide-react";
 import { ShoppingCart } from "lucide-react";
-import { getCourseByUrlPath } from "../../../actions/course";
+import { getCourseByUrlPath } from "../../../_actions/course";
 import CourseDescription from "../../../_components/course-component/course-description";
 import { Course } from "database";
-import { get_course_chapters } from "../../../actions/chapter";
+import { get_course_chapters } from "../../../_actions/chapter";
 
 interface PageProps {
   params: { site: string; url: string };

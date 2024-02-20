@@ -1,6 +1,6 @@
 import React from "react";
 import LibraryNavigation from "../../_components/library-navigation";
-import { authorization, getStudent } from "../../actions/auth";
+import { authorization, getStudent } from "../../_actions/auth";
 import { StudentBag } from "@/src/types";
 import Link from "next/link";
 

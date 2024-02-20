@@ -4,7 +4,7 @@ import {
   create_checkout,
   create_price,
   create_product,
-} from "../actions/chargily";
+} from "../_actions/chargily";
 
 import { useRouter } from "next/navigation";
 

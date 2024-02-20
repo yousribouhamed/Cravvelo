@@ -1,8 +1,8 @@
 import VideoChain from "@/src/app/(academy)/_components/course-component/course-player/video-chain";
 import CourseVideoPlayer from "@/src/app/(academy)/_components/course-component/course-player/video-player";
-import { getCourseByUrlPath } from "@/src/app/(academy)/actions/course";
-import { get_course_chapters } from "@/src/app/(academy)/actions/chapter";
-import { authorization } from "@/src/app/(academy)/actions/auth";
+import { getCourseByUrlPath } from "@/src/app/(academy)/_actions/course";
+import { get_course_chapters } from "@/src/app/(academy)/_actions/chapter";
+import { authorization } from "@/src/app/(academy)/_actions/auth";
 
 interface PageProps {
   params: { site: string; url: string };

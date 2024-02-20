@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { prisma } from "database/src";
 import { StudentBag } from "@/src/types";
-import { addCourseToStudentBag } from "@/src/app/(academy)/actions/coupon";
+import { addCourseToStudentBag } from "@/src/app/(academy)/_actions/coupon";
 
 // const Get_client_api_secret_key = async () => {
 //   const user = await useHaveAccess();

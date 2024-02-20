@@ -4,11 +4,11 @@ import "@ui/font/stylesheet.css";
 import type { Metadata } from "next";
 import Providers from "@/src/components/Providers";
 import Script from "next/script";
-import { getSiteData } from "./actions";
+import { getSiteData } from "./_actions";
 import MaxWidthWrapper from "./_components/max-width-wrapper";
 import AcademyHeader from "./_components/layout/academy-header";
 import AcademiaFooter from "./_components/layout/academy-footer";
-import { getStudent } from "./actions/auth";
+import { getStudent } from "./_actions/auth";
 
 export const fetchCache = "force-no-store";
 

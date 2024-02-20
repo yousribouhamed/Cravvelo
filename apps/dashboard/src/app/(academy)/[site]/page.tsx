@@ -1,4 +1,4 @@
-import { getAllCourses, getPage } from "../actions";
+import { getAllCourses, getPage } from "../_actions";
 
 export const fetchCache = "force-no-store";
 

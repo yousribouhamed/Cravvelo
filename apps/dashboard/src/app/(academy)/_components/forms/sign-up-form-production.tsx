@@ -25,7 +25,7 @@ import {
 import { Input } from "@ui/components/ui/input";
 import { PasswordInput } from "@/src/components/password-input";
 import Link from "next/link";
-import { create_student } from "../../actions/auth";
+import { create_student } from "../../_actions/auth";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";

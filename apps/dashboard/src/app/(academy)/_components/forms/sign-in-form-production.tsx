@@ -27,7 +27,7 @@ import { useRouter } from "next/navigation";
 import { useSignIn } from "@clerk/nextjs";
 import { authSchemaLogin } from "@/src/lib/validators/auth";
 import { catchClerkError } from "@/src/lib/utils";
-import { sign_in_as_student } from "../../actions/auth";
+import { sign_in_as_student } from "../../_actions/auth";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 type Inputs = z.infer<typeof authSchemaLogin>;

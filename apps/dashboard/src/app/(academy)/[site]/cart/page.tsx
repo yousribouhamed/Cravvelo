@@ -1,5 +1,5 @@
 import PaymentForm from "../../_components/forms/payment-form";
-import { authorization, getStudent } from "../../actions/auth";
+import { authorization, getStudent } from "../../_actions/auth";
 
 export const fetchCache = "force-no-store";
 
