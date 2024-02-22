@@ -44,5 +44,3 @@ export const generatePdf = async (pdfFileAsString: string) => {
   await browser.close();
   return buffer;
 };
-
-export const genegatePdf = () => {};
