@@ -25,9 +25,9 @@ const CertificateTableShell: FC<TableShellProps> = ({ initialData }) => {
 
   console.log(data);
   return (
-    <div className="w-full min-h-[300px] h-fit flex flex-col ">
+    <div className="w-full min-h-[300px] my-4 h-fit flex flex-col ">
       <DeleteCourseModel refetch={refetch} />
-      <DataTable columns={CertificateColumns} data={data} />
+      <DataTable columns={CertificateColumns} data={data} refetch={refetch} />
     </div>
   );
 };

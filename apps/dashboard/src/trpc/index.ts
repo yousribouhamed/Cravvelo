@@ -15,6 +15,7 @@ import { exams } from "./end-points/exams";
 import { comments } from "./end-points/comments";
 import { academia } from "./end-points/academia";
 import { coubons } from "./end-points/coupons";
+import { generators } from "./generators";
 
 export const appRouter = router({
   ...auth,
@@ -33,6 +34,7 @@ export const appRouter = router({
   ...comments,
   ...academia,
   ...coubons,
+  ...generators,
 });
 
 export type AppRouter = typeof appRouter;

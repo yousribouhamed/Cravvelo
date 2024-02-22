@@ -1,6 +1,7 @@
-import { Button } from "@ui/components/ui/button";
+import { Button, buttonVariants } from "@ui/components/ui/button";
 import type { FC } from "react";
-import CreateCoupon from "../../models/create-coupon-modal";
+import Link from "next/link";
+import { cn } from "@ui/lib/utils";
 
 interface TableHeaderProps {
   table: any;
@@ -34,7 +35,12 @@ const CouponsTableHeader: FC<TableHeaderProps> = ({ table, refetch }) => {
         </Button>
       </div>
       <div className="min-w-[200px] w-fit h-full flex items-center justify-end gap-x-4">
-        <CreateCoupon refetch={refetch} />
+        <Link
+          href={"/students/certificates/create-certificate"}
+          className={cn(buttonVariants(), "rounded-xl")}
+        >
+          تصميم شهادة جديدة
+        </Link>
       </div>
     </div>
   );
