@@ -14,16 +14,16 @@ export const generators = {
     )
     .mutation(async ({ ctx, input }) => {
       const { description, firstName, lastName } = input;
-      const myPdf = await generatePdf(
-        pdfTemplate({ firstName, lastName, description })
-      );
+      // const myPdf = await generatePdf(
+      //   pdfTemplate({ firstName, lastName, description })
+      // );
 
-      // Create a Blob from the ArrayBuffer
-      const blob = new Blob([myPdf], { type: "application/pdf" });
+      // // Create a Blob from the ArrayBuffer
+      // const blob = new Blob([myPdf], { type: "application/pdf" });
 
-      // Create a File from the Blob (you can specify the desired filename here)
-      const file = new File([blob], firstName + "_" + lastName + ".pdf", {
-        type: "application/pdf",
-      });
+      // // Create a File from the Blob (you can specify the desired filename here)
+      // const file = new File([blob], firstName + "_" + lastName + ".pdf", {
+      //   type: "application/pdf",
+      // });
     }),
 };
