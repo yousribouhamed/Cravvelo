@@ -1,31 +1,21 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
-import { Skeleton } from "@ui/components/ui/skeleton";
+import CertificateViewer from "./certificate-viewer";
+import CertificateForm from "./certificate-form";
 
 const page = ({}) => {
   return (
     <MaxWidthWrapper>
-      <main className="w-full flex flex-col overflow-y-hidden h-fit  justify-start">
+      <main className="w-full flex flex-col justify-start ">
         {/* @ts-ignore */}
-        <Header user={{}} title="الرئيسية" />
-        <div className="w-full h-[30px] flex justify-start items-center mt-10 ">
-          <Skeleton className="w-[260px] h-[45px] rounded-xl" />
-        </div>
-        <div className="space-y-4 pt-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <Skeleton className=" min-h-[150px]" />
-            <Skeleton className=" min-h-[150px]" />
-            <Skeleton className=" min-h-[150px]" />
-            <Skeleton className=" min-h-[150px]" />
-          </div>
-          <div className="grid gap-4 md:grid-cols-3  my-8 h-[450px] w-full ">
-            <Skeleton className=" w-full h-full col-span-2" />
-            <Skeleton className=" w-full h-full col-span-1" />
-          </div>
-          <div className="grid gap-4 md:grid-cols-2 my-8 h-[300px] w-full ">
-            <Skeleton className=" w-full h-full" />
+        <Header user={{}} title="الطلاب" />
 
-            <Skeleton className=" w-full h-full" />
+        <div className="w-full min-h-[400px] h-fit grid grid-cols-3 mt-8 py-2   gap-4">
+          <div className="col-span-1 w-full h-full   ">
+            <CertificateForm />
+          </div>
+          <div className="col-span-2 w-full h-full  ">
+            <CertificateViewer />
           </div>
         </div>
       </main>

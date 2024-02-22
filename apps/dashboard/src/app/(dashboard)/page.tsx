@@ -11,6 +11,10 @@ import AreaChartOverview from "@/src/components/area-chart";
 import { DatePickerWithRange } from "@/src/components/range-date-picker";
 import { NotFoundCard } from "@/src/components/not-found-card";
 import useHaveAccess from "@/src/hooks/use-have-access";
+import { Button, buttonVariants } from "@ui/components/ui/button";
+import { cn } from "@ui/lib/utils";
+import { ArrowUpLeft } from "lucide-react";
+import Link from "next/link";
 
 async function Page() {
   const user = await useHaveAccess();
@@ -19,8 +23,18 @@ async function Page() {
     <MaxWidthWrapper>
       <main className="w-full flex flex-col overflow-y-hidden h-fit  justify-start">
         <Header user={user} title="الرئيسية" />
-        <div className="w-full h-[30px] flex justify-start items-center mt-10 ">
+        <div className="w-full h-[30px] flex justify-between items-center mt-10 ">
           <DatePickerWithRange />
+
+          <Link
+            target="_blank"
+            className={cn(buttonVariants())}
+            href={`https://${user?.subdomain}`}
+          >
+            <ArrowUpLeft className=" h-4 w-4" />
+
+            <span>معاينة الأكاديمية</span>
+          </Link>
         </div>
         <div className="space-y-4 pt-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
