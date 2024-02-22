@@ -34,7 +34,6 @@ export const appRouter = router({
   ...comments,
   ...academia,
   ...coubons,
-  ...generators,
 });
 
 export type AppRouter = typeof appRouter;
