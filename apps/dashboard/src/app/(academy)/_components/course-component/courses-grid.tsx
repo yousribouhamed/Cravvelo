@@ -6,32 +6,9 @@ import {
   ItemCourse,
   useAcademiaStore,
 } from "../../global-state/academia-store";
-import { v4 as uuidv4 } from "uuid";
 import type { FC } from "react";
 import { useRouter } from "next/navigation";
 import { Course } from "database";
-
-const items = [
-  {
-    id: "uuuu",
-    image: "https://img-c.udemycdn.com/course/750x422/1630508_94eb_8.jpg",
-    title: "رسم الشخصيات بأسلوب الأنمي والمانغا",
-    price: 99.0,
-  },
-  {
-    id: "uuuu",
-    image:
-      "https://framerusercontent.com/images/OSrhhE7i4s6onZmoAng3StH6geA.jpg",
-    title: "  كيفية استخدام Framer في بناء الويب",
-    price: 99.0,
-  },
-  {
-    id: "uuuu",
-    image: "/opengraph-image.png",
-    title: "redux دورة كاملة",
-    price: 99.0,
-  },
-];
 
 //https://i.ytimg.com/vi/NqzdVN2tyvQ/maxresdefault.jpg
 
@@ -119,12 +96,12 @@ const CoursesGrid: FC<Props> = ({ courses }) => {
                   });
                   router.push(`/cart`);
                 }}
-                className="w-[80%] bg-blue-500 hover:bg-blue-600 text-white p-2 h-[45px] rounded-xl"
+                className="w-[99%] bg-blue-500 hover:bg-blue-600 text-white p-2 h-[45px] rounded-xl"
               >
                 اشتري الآن
               </button>
 
-              <button
+              {/* <button
                 onClick={() => {
                   addItemToShoppingBag({
                     id: item.id,
@@ -136,7 +113,7 @@ const CoursesGrid: FC<Props> = ({ courses }) => {
                 className="w-[20%] h-[45px] flex items-center justify-center bg-secondary rounded-xl"
               >
                 <ShoppingCart className="w-4 h-4" />
-              </button>
+              </button> */}
             </div>
           </div>
         ))}

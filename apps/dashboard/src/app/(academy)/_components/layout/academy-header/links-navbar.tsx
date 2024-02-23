@@ -9,7 +9,7 @@ function LinksNavbar() {
   const path = usePathname();
 
   const isCurrentPath = ({ currentPath }: { currentPath: string }) =>
-    (path.includes(currentPath) && currentPath !== "/") || path === "/";
+    path === currentPath || currentPath === "/";
   return (
     <div className="min-w-[100px] h-full w-fit flex items-center gap-x-6 justify-start px-6">
       <Link href={"/"}>
@@ -37,10 +37,10 @@ function LinksNavbar() {
             }
           )}
         >
-          الدورات
+          الدورات التدريبية
         </button>
       </Link>
-      {/* <Link href={"/products-academy"} className="text-lg ">
+      <Link href={"/products-academy"} className="text-lg ">
         <button
           className={cn(
             " rounded-xl text-md p-2 bg-transparent hover:bg-gray-50  ",
@@ -52,9 +52,9 @@ function LinksNavbar() {
             }
           )}
         >
-          المنتجات
+          المنتجات الرقمية
         </button>
-      </Link> */}
+      </Link>
     </div>
   );
 }

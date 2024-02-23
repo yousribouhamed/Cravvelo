@@ -17,7 +17,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@ui/components/ui/card";
@@ -31,9 +30,7 @@ import React from "react";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 const formSchema = z.object({
-  firstName: z.string(),
-  lastName: z.string(),
-
+  full_name: z.string(),
   email: z.string().email({
     message: "Please enter a valid email address",
   }),
@@ -70,8 +67,7 @@ export function AcademySifnUpForm({ accountId }: AcademySifnUpFormProps) {
       const user = await create_student({
         accountId,
         email: values.email,
-        firstName: values.firstName,
-        lastName: values.lastName,
+        full_name: values.full_name,
         password: values.password,
       });
 
@@ -97,10 +93,10 @@ export function AcademySifnUpForm({ accountId }: AcademySifnUpFormProps) {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
               control={form.control}
-              name="firstName"
+              name="full_name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>اسم العائلة</FormLabel>
+                  <FormLabel>الاسم الكامل</FormLabel>
                   <FormControl>
                     <Input
                       className="focus:border-blue-500"
@@ -113,24 +109,7 @@ export function AcademySifnUpForm({ accountId }: AcademySifnUpFormProps) {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>الاسم</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="focus:border-blue-500"
-                      placeholder="الرجاء ادخال اسمك القانوني"
-                      {...field}
-                    />
-                  </FormControl>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name="email"

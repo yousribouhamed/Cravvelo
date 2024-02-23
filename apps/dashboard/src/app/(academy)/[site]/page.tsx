@@ -1,4 +1,5 @@
 import { getAllCourses, getPage } from "../_actions";
+import CoursesReel from "../_components/courses-reel";
 
 export const fetchCache = "force-no-store";
 
@@ -16,10 +17,10 @@ const Page = async ({ params }: PageProps) => {
 
   return (
     <main className="w-full h-full flex flex-col items-center justify-center gap-y-8 pt-20">
-      <h1 className="text-4xl font-bold text-center ">
+      <h1 className="text-5xl font-bold text-center ">
         مرحبا بكم في اكادمية شهري عبدالله
       </h1>
-      {/* <CoursesReel courses={courses} />; */}
+      <CoursesReel courses={courses} />
     </main>
   );
 };

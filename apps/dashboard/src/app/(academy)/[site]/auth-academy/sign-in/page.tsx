@@ -1,4 +1,4 @@
-import { AcademySignIpForm } from "../../../_components/forms/sign-in-form-production";
+import { AcademySignInForm } from "../../../_components/forms/sign-in-form-production";
 import { getSiteData } from "../../../_actions";
 import { notFound } from "next/navigation";
 
@@ -22,8 +22,8 @@ const Page = async ({ params }: PageProps) => {
   }
 
   return (
-    <div className="w-full min-h-[700px] h-fit flex items-center justify-center mt-[70px]">
-      <AcademySignIpForm accountId={website.accountId} />
+    <div className="w-full min-h-[500px] h-fit flex items-center justify-center mt-[70px]">
+      <AcademySignInForm accountId={website.accountId} />
     </div>
   );
 };

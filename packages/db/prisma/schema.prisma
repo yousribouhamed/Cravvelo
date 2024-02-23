@@ -62,6 +62,8 @@ model Course {
   youtubeUrl        String? @db.LongText
   thumnailUrl       String? @db.LongText
   courseResume      String? @db.LongText
+  courseRequirements String? @db.LongText
+  courseWhatYouWillLearn  String? @db.LongText
   courseDescription Json?
   seoTitle          String?
   seoDescription    String?
@@ -250,8 +252,7 @@ model Exam {
 
 model Student {
   id          String   @unique @default(uuid())
-  firstName   String?
-  lastName    String?
+  full_name   String
   photo_url   String? 
   email       String   @unique
   phone       String?   @unique

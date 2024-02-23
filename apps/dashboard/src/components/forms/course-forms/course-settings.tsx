@@ -37,6 +37,8 @@ const formSchema = z.object({
   thumnailUrl: z.string(),
   title: z.string(),
   youtubeUrl: z.string(),
+  courseRequirements: z.string(),
+  courseWhatYouWillLearn: z.string(),
 });
 
 export function CourseSettingsForm({ course }: ComponentProps) {
@@ -55,6 +57,8 @@ export function CourseSettingsForm({ course }: ComponentProps) {
       youtubeUrl: course.youtubeUrl,
       seoDescription: course.seoDescription,
       seoTitle: course.seoTitle,
+      courseRequirements: course.courseRequirements,
+      courseWhatYouWillLearn: course.courseRequirements,
     },
   });
 
@@ -172,7 +176,49 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                   </FormLabel>
                   <FormControl>
                     <Textarea
-                      id="description"
+                      id="courseResume"
+                      rows={3}
+                      className="min-h-[100px]"
+                      placeholder="أدخل ملخصًا للدورة هنا"
+                      value={field.name}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="courseWhatYouWillLearn"
+              render={({ field }) => (
+                <FormItem className="w-full ">
+                  <FormLabel>ماذا يتعلم الناس في الدورة</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      id="what they will learn"
+                      rows={3}
+                      className="min-h-[100px]"
+                      placeholder="أدخل ملخصًا للدورة هنا"
+                      value={field.name}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="courseRequirements"
+              render={({ field }) => (
+                <FormItem className="w-full ">
+                  <FormLabel>متطلبات حضور الدورة</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      id="course requirements"
                       rows={3}
                       className="min-h-[100px]"
                       placeholder="أدخل ملخصًا للدورة هنا"

@@ -10,17 +10,16 @@ import { v4 as uuidv4 } from "uuid";
 import { redirect } from "next/navigation";
 import { Student } from "database";
 import { StudentBag } from "@/src/types";
+import { getSiteData } from ".";
 
 export const create_student = async ({
   email,
   password,
-  lastName,
-  firstName,
+  full_name,
   accountId,
 }: {
   email: string;
-  firstName: string;
-  lastName: string;
+  full_name: string;
   password: string;
   accountId: string;
 }) => {
@@ -46,8 +45,7 @@ export const create_student = async ({
   const student = await prisma.student.create({
     data: {
       email,
-      firstName,
-      lastName,
+      full_name,
       password: hashedPassword,
       accountId,
       bag: JSON.stringify(bag),
@@ -60,15 +58,18 @@ export const create_student = async ({
 export const sign_in_as_student = async ({
   email,
   password,
+  accountId,
 }: {
   email: string;
   password: string;
+  accountId: string;
 }) => {
   // find the user by the email
 
   const student = await prisma.student.findFirst({
     where: {
       email,
+      accountId,
     },
   });
 

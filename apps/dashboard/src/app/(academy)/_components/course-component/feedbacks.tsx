@@ -4,11 +4,9 @@ import { Star } from "lucide-react";
 import type { FC } from "react";
 import StarRatings from "react-star-ratings";
 
-interface FeedbacksProps {}
-
 const Feedbacks: FC = ({}) => {
   return (
-    <div className="w-full min-h-[400px] h-fit flex flex-col rounded-xl ">
+    <div className="w-full min-h-[200px] h-fit flex flex-col rounded-xl ">
       {/* this is the first title */}
       <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
         <div className="w-[45px] h-[45px] rounded-[50%] bg-black flex items-center justify-center">

@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@ui/components/ui/button";
-import { Checkbox } from "@ui/components/ui/checkbox";
 import {
   Card,
   CardContent,
@@ -24,9 +23,7 @@ import { Input } from "@ui/components/ui/input";
 import Link from "next/link";
 import { PasswordInput } from "@/src/components/password-input";
 import { useRouter } from "next/navigation";
-import { useSignIn } from "@clerk/nextjs";
 import { authSchemaLogin } from "@/src/lib/validators/auth";
-import { catchClerkError } from "@/src/lib/utils";
 import { sign_in_as_student } from "../../_actions/auth";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
@@ -36,7 +33,7 @@ interface AcademySifnIpFormProps {
   accountId: string;
 }
 
-export function AcademySignIpForm({ accountId }: AcademySifnIpFormProps) {
+export function AcademySignInForm({ accountId }: AcademySifnIpFormProps) {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -56,6 +53,7 @@ export function AcademySignIpForm({ accountId }: AcademySifnIpFormProps) {
       await sign_in_as_student({
         email: data.email,
         password: data.password,
+        accountId,
       });
       router.push("/student-library");
     } catch (err) {

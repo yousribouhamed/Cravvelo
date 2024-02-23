@@ -33,28 +33,14 @@ export const StudentsColumns: ColumnDef<Student>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "firstName",
+    accessorKey: "full_name",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="اسم العائلة" />
+      <DataTableColumnHeader column={column} title="الاسم الكامل" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex flex-col gap-y-2 justify-center items-start ">
-          <p className="font-bold text-xs ">{row.original?.firstName}</p>
-        </div>
-      );
-    },
-  },
-
-  {
-    accessorKey: "lastName",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title=" اسم الطالب" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex flex-col gap-y-2 justify-center items-start ">
-          <p className="font-bold text-xs ">{row.original?.lastName}</p>
+          <p className="font-bold text-xs ">{row.original?.full_name}</p>
         </div>
       );
     },
