@@ -85,6 +85,23 @@ const UserProfile: FC = ({}) => {
                     name="username"
                     render={({ field }) => (
                       <FormItem>
+                        <FormLabel>صورتك الشخصية</FormLabel>
+                        <FormControl>
+                          <Input placeholder="shadcn" type="file" {...field} />
+                        </FormControl>
+                        <FormDescription>
+                          This is your public display name.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="username"
+                    render={({ field }) => (
+                      <FormItem>
                         <FormLabel>اسم</FormLabel>
                         <FormControl>
                           <Input placeholder="shadcn" {...field} />

@@ -11,7 +11,7 @@ import AreaChartOverview from "@/src/components/area-chart";
 import { DatePickerWithRange } from "@/src/components/range-date-picker";
 import { NotFoundCard } from "@/src/components/not-found-card";
 import useHaveAccess from "@/src/hooks/use-have-access";
-import { Button, buttonVariants } from "@ui/components/ui/button";
+import { buttonVariants } from "@ui/components/ui/button";
 import { cn } from "@ui/lib/utils";
 import { ArrowUpLeft } from "lucide-react";
 import Link from "next/link";
@@ -28,12 +28,14 @@ async function Page() {
 
           <Link
             target="_blank"
-            className={cn(buttonVariants())}
+            className={cn(
+              buttonVariants(),
+              "font-bold gap-x-4  hover:scale-100 transition-all duration-300"
+            )}
             href={`https://${user?.subdomain}`}
           >
-            <ArrowUpLeft className=" h-4 w-4" />
-
             <span>معاينة الأكاديمية</span>
+            <ArrowUpLeft className=" h-4 w-4" />
           </Link>
         </div>
         <div className="space-y-4 pt-4">
