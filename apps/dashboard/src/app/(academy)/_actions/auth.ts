@@ -1,17 +1,32 @@
 "use server";
 
+/**
+ * Module for managing student-related functionalities such as creation, authentication, profile update,
+ * authorization, and retrieval of student data.
+ * @requires prisma Prisma client for database operations.
+ * @requires bcrypt Library for hashing passwords.
+ * @requires SignJWT Class for generating JWT tokens.
+ */
+
 import { prisma } from "database/src";
 import { getJwtSecritKey, verifyToken } from "../lib";
 import bcrypt from "bcrypt";
 import { jwtVerify, SignJWT } from "jose";
 import { cookies } from "next/headers";
-
 import { v4 as uuidv4 } from "uuid";
 import { redirect } from "next/navigation";
 import { Student } from "database";
 import { StudentBag } from "@/src/types";
 import { getSiteData } from ".";
 
+/**
+ * Function to create a new student.
+ * @param email The email of the student.
+ * @param password The password of the student.
+ * @param full_name The full name of the student.
+ * @param accountId The ID of the account associated with the student.
+ * @returns A Promise that resolves to the created student.
+ */
 export const create_student = async ({
   email,
   password,
@@ -23,7 +38,7 @@ export const create_student = async ({
   password: string;
   accountId: string;
 }) => {
-  // verify if the email exists
+  // Verify if the email exists
   const student_with_same_email = await prisma.student.findFirst({
     where: {
       email,
@@ -31,17 +46,18 @@ export const create_student = async ({
   });
 
   if (student_with_same_email) {
-    throw new Error("student already exists");
+    throw new Error("Student already exists");
   }
 
-  // hash the password
+  // Hash the password
   const hashedPassword: string = await bcrypt?.hash(password, 10);
 
-  // create the student bag
+  // Create the student bag
   const bag = {
     courses: [],
   } as StudentBag;
-  // create new student in the database
+
+  // Create new student in the database
   const student = await prisma.student.create({
     data: {
       email,
@@ -55,6 +71,13 @@ export const create_student = async ({
   return student;
 };
 
+/**
+ * Function to sign in as a student.
+ * @param email The email of the student.
+ * @param password The password of the student.
+ * @param accountId The ID of the account associated with the student.
+ * @returns A Promise that resolves to nothing.
+ */
 export const sign_in_as_student = async ({
   email,
   password,
@@ -64,8 +87,7 @@ export const sign_in_as_student = async ({
   password: string;
   accountId: string;
 }) => {
-  // find the user by the email
-
+  // Find the user by the email
   const student = await prisma.student.findFirst({
     where: {
       email,
@@ -74,18 +96,18 @@ export const sign_in_as_student = async ({
   });
 
   if (!student) {
-    throw new Error("there is no student with such a name");
+    throw new Error("There is no student with such email");
   }
 
-  // comapre the hascode
+  // Compare the hashed password
   const response = await bcrypt
     .compare(password as string, student?.password)
-    .catch((errpr) => {
-      throw new Error(" password is not currect");
+    .catch((error) => {
+      throw new Error("Password is incorrect");
     });
 
   if (response) {
-    // if everything went ok then return something good
+    // Generate and set JWT token in the cookies
     const token = await new SignJWT({})
       .setProtectedHeader({ alg: "HS256" })
       .setJti(uuidv4())
@@ -107,10 +129,18 @@ export const sign_in_as_student = async ({
   }
 };
 
-// mabe a should store the tooken id in the cookie and each time i send i request to the server to see if the user is still authanticated
+/**
+ * Function to update the student's profile.
+ * @returns Nothing.
+ */
+export const update_profile = () => {
+  // Implementation pending
+};
 
-export const update_profile = () => {};
-
+/**
+ * Function to authorize student access.
+ * @returns A Promise that resolves to a boolean indicating if the student is authorized.
+ */
 export const authorization = async (): Promise<boolean> => {
   const token = cookies().get("jwt");
 
@@ -125,11 +155,15 @@ export const authorization = async (): Promise<boolean> => {
     }
 
     return true;
-  } catch (err) {
+  } catch (error) {
     redirect("/auth-academy/sign-in");
   }
 };
 
+/**
+ * Function to retrieve student data.
+ * @returns A Promise that resolves to the retrieved student data or null if not found.
+ */
 export const getStudent = async (): Promise<Student | null> => {
   const studentId = cookies().get("studentId");
 

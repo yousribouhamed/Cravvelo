@@ -1,9 +1,21 @@
-"use server";
+/**
+ * Module for retrieving data related to pages, courses, and website configuration.
+ * Includes functions to fetch specific pages, all courses, site data, and Chargily keys.
+ * @requires prisma Prisma client for database operations.
+ * @requires ThemePage Interface representing a theme page.
+ * @requires Website Interface representing website data.
+ */
 
-import { prisma } from "database/src";
-import { ThemePage } from "../../(theme-editor)/theme-editor-store";
-import { Website } from "database";
+import { prisma } from "database/src"; // Importing Prisma client for database operations
+import { ThemePage } from "../../(theme-editor)/theme-editor-store"; // Importing ThemePage interface for representing a theme page
+import { Website } from "database"; // Importing Website interface representing website data
 
+/**
+ * Function to retrieve a specific page based on its path and subdomain.
+ * @param path The path of the page to be retrieved.
+ * @param subdomain The subdomain associated with the website.
+ * @returns A Promise that resolves to the retrieved page or null if not found.
+ */
 export const getPage = async ({
   path,
   subdomain,
@@ -11,8 +23,6 @@ export const getPage = async ({
   path: string;
   subdomain: string;
 }): Promise<ThemePage | null> => {
-  // get all the pages
-
   const website = await prisma.website.findFirst({
     where: {
       subdomain,
@@ -28,6 +38,11 @@ export const getPage = async ({
   return page;
 };
 
+/**
+ * Function to retrieve all courses associated with a subdomain.
+ * @param subdomain The subdomain associated with the website.
+ * @returns A Promise that resolves to an array of courses.
+ */
 export const getAllCourses = async ({ subdomain }: { subdomain: string }) => {
   try {
     const website = await prisma.website.findUnique({
@@ -53,6 +68,11 @@ export const getAllCourses = async ({ subdomain }: { subdomain: string }) => {
   }
 };
 
+/**
+ * Function to retrieve website data based on a subdomain.
+ * @param subdomain The subdomain associated with the website.
+ * @returns A Promise that resolves to the retrieved website data.
+ */
 export const getSiteData = async ({
   subdomain,
 }: {
@@ -71,6 +91,11 @@ export const getSiteData = async ({
   }
 };
 
+/**
+ * Function to retrieve Chargily keys (public and secret) based on a subdomain.
+ * @param subdomain The subdomain associated with the website.
+ * @returns A Promise that resolves to Chargily keys (public and secret).
+ */
 export const getChargilyKeys = async ({ subdomain }: { subdomain: string }) => {
   const website = await getSiteData({ subdomain });
 
@@ -82,7 +107,7 @@ export const getChargilyKeys = async ({ subdomain }: { subdomain: string }) => {
     },
   });
 
-  console.log("this is the chargily credentional");
+  console.log("this is the Chargily credential");
   console.log(payments);
 
   return {

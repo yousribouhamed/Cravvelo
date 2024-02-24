@@ -1,10 +1,22 @@
 "use server";
 
-import { Checkout, Price, Product } from "@/src/types";
-import { getChargilyKeys } from ".";
+/**
+ * Module for interfacing with the Chargily server to create products, prices, and checkouts.
+ * Contains functions for creating products, prices, and checkouts.
+ * @requires getChargilyKeys Function to obtain Chargily secret keys.
+ */
 
-const CHARGILY_BASE_URL = "https://pay.chargily.net/test/api/v2" as const;
+import { Checkout, Price, Product } from "@/src/types"; // Importing types for products, prices, and checkouts
+import { getChargilyKeys } from "."; // Importing function to obtain Chargily secret keys
 
+const CHARGILY_BASE_URL = "https://pay.chargily.net/test/api/v2" as const; // Base URL for Chargily server API
+
+/**
+ * Function to create a product on the Chargily server.
+ * @param product_name The name of the product to be created.
+ * @param subdomain The subdomain associated with the Chargily account.
+ * @returns A Promise that resolves to the created Product or undefined.
+ */
 export const create_product = async ({
   product_name,
   subdomain,
@@ -12,18 +24,14 @@ export const create_product = async ({
   product_name: string;
   subdomain: string;
 }): Promise<Product | undefined> => {
-  // Function to create a product
-  // It takes product_name as input and returns a Promise that resolves to Product or undefined
-
-  const secret_key = await getChargilyKeys({ subdomain });
-  // Constructing request options
+  const secret_key = await getChargilyKeys({ subdomain }); // Obtaining Chargily secret keys
   const options = {
     method: "POST",
     headers: {
       Authorization: `Bearer ${secret_key.chargiySecretKey}`, // Adding authorization header with secret key
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ name: product_name }), // Constructing the body with product_name
+    body: JSON.stringify({ name: product_name }), // Body containing the product name
   };
 
   try {
@@ -36,6 +44,13 @@ export const create_product = async ({
   }
 };
 
+/**
+ * Function to create a price for a product on the Chargily server.
+ * @param amount The amount of the price to be created.
+ * @param product_id The ID of the product associated with the price.
+ * @param subdomain The subdomain associated with the Chargily account.
+ * @returns A Promise that resolves to the created Price or undefined.
+ */
 export const create_price = async ({
   amount,
   product_id,
@@ -45,17 +60,14 @@ export const create_price = async ({
   product_id: string;
   subdomain: string;
 }): Promise<Price | undefined> => {
-  // Function to create a price
-  // It takes amount and product_id as input and returns a Promise that resolves to Price or undefined
-  const secret_key = await getChargilyKeys({ subdomain });
-  // Constructing request options
+  const secret_key = await getChargilyKeys({ subdomain }); // Obtaining Chargily secret keys
   const options = {
     method: "POST",
     headers: {
       Authorization: `Bearer ${secret_key.chargiySecretKey}`, // Adding authorization header with secret key
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ amount, currency: "dzd", product_id }), // Constructing the body with amount, currency, and product_id
+    body: JSON.stringify({ amount, currency: "dzd", product_id }), // Body containing amount, currency, and product ID
   };
 
   try {
@@ -68,6 +80,14 @@ export const create_price = async ({
   }
 };
 
+/**
+ * Function to create a checkout on the Chargily server.
+ * @param price_id The ID of the price associated with the checkout.
+ * @param success_url The URL to redirect to after successful checkout.
+ * @param subdomain The subdomain associated with the Chargily account.
+ * @param metadata Additional metadata associated with the checkout.
+ * @returns A Promise that resolves to the created Checkout or undefined.
+ */
 export const create_checkout = async ({
   price_id,
   success_url,
@@ -82,24 +102,20 @@ export const create_checkout = async ({
     productId: string;
   };
 }): Promise<Checkout | undefined> => {
-  // Function to create a checkout
-  // It takes price_id and success_url as input and returns a Promise that resolves to Checkout or undefined
-  const secret_key = await getChargilyKeys({ subdomain });
-  // Constructing payload
+  const secret_key = await getChargilyKeys({ subdomain }); // Obtaining Chargily secret keys
   const payload = {
     items: [{ price: price_id, quantity: 1 }],
     success_url,
     metadata: [metadata],
-  }; // Constructing the payload for creating a checkout
+  }; // Payload for creating a checkout
 
-  // Constructing request options
   const options = {
     method: "POST",
     headers: {
       Authorization: `Bearer ${secret_key.chargiySecretKey}`, // Adding authorization header with secret key
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(payload), // Constructing the body with payload
+    body: JSON.stringify(payload), // Body containing the payload
   };
 
   try {

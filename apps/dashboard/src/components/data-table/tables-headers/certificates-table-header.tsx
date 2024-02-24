@@ -36,13 +36,12 @@ const CouponsTableHeader: FC<TableHeaderProps> = ({ table, refetch }) => {
         </Button>
       </div>
       <div className="min-w-[200px] w-fit h-full flex items-center justify-end gap-x-4">
-        {/* <Link
+        <Link
           href={"/students/certificates/create-certificate"}
           className={cn(buttonVariants(), "rounded-xl")}
         >
           تصميم شهادة جديدة
-        </Link> */}
-        <CreateCoupon refetch={refetch} />
+        </Link>
       </div>
     </div>
   );
