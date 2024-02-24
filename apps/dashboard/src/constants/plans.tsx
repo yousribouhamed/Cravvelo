@@ -6,6 +6,17 @@ export const PLANS = [
     tagline:
       "إنشاء منصتك التعليمية ومنتجاتك الرقمية وبيعها وتسويقها عبر الإنترنت.",
     quota: 10,
+    icon: () => (
+      <svg
+        width="49"
+        height="50"
+        viewBox="0 0 49 50"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M0 49.43H49V0.43H0V49.43Z" fill="black" />
+      </svg>
+    ),
     priceIds: {
       test: "price_1ObeduCxv0KQVM5xHees3z9n",
       production: "",
@@ -46,6 +57,17 @@ export const PLANS = [
     plan_code: "ADVANCED",
     plan: "باقة النمو",
     price: "18",
+    icon: () => (
+      <svg
+        width="49"
+        height="50"
+        viewBox="0 0 49 50"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M0 49.43H49V0.43H0V49.43Z" fill="black" />
+      </svg>
+    ),
     tagline:
       "ارتقِ بمستوى عملك من خلال ميزات تساعدك على تحقيق نمو فائق السرعة.",
     quota: 10,
@@ -87,6 +109,17 @@ export const PLANS = [
     price: "28",
     tagline: "سعة غير محدودة وأدوات متقدمة تساعدك على التوسّع بعملك ومنتجاتك.",
     quota: 10,
+    icon: () => (
+      <svg
+        width="49"
+        height="50"
+        viewBox="0 0 49 50"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M0 49.43H49V0.43H0V49.43Z" fill="black" />
+      </svg>
+    ),
 
     features: [
       {

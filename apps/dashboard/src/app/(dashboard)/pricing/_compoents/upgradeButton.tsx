@@ -144,19 +144,13 @@ const UpgradeButton: FC = ({}) => {
               )}
               <div className="w-full h-[100px] flex items-center justify-start gap-x-4 ">
                 <svg
-                  width="63"
-                  height="64"
-                  viewBox="0 0 83 84"
+                  width="49"
+                  height="50"
+                  viewBox="0 0 49 50"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <rect
-                    y="0.413086"
-                    width="82.6753"
-                    height="82.6753"
-                    rx="18.3723"
-                    fill="#ECEBFF"
-                  />
+                  <path d="M0 49.43H49V0.43H0V49.43Z" fill="black" />
                 </svg>
 
                 <h2 className="font-bold text-3xl text-start text-black">

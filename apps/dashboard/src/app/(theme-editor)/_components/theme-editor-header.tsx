@@ -30,17 +30,17 @@ interface ThemeEditorHeaderProps {
 
 const viewMods = [
   {
-    tooltip: "hhhhhh",
+    tooltip: "سطح المكتب",
     value: "DESKTOP",
     icon: <MonitorDot className="w-4 h-4" />,
   },
   {
-    tooltip: "hhhhhh",
+    tooltip: "الهاتف",
     value: "MOBILE",
     icon: <Smartphone className="w-4 h-4" />,
   },
   {
-    tooltip: "hhhhhh",
+    tooltip: "شاشة كاملة",
     value: "LARGE",
     icon: <Tv className="w-4 h-4" />,
   },
@@ -87,7 +87,7 @@ const ThemeEditorHeader: FC<ThemeEditorHeaderProps> = ({ pages }) => {
         </Tooltip>
       </div>
 
-      <div className="w-[150px] h-full  flex items-center justify-center">
+      {/* <div className="w-[150px] h-full  flex items-center justify-center">
         <Select onValueChange={(val) => chnageCurrentPage(Number(val))}>
           <SelectTrigger className="w-[150px] border-none  h-10 dark:bg-[#252525]">
             <SelectValue
@@ -107,7 +107,7 @@ const ThemeEditorHeader: FC<ThemeEditorHeaderProps> = ({ pages }) => {
             ))}
           </SelectContent>
         </Select>
-      </div>
+      </div> */}
 
       <div className="w-[300px] h-full flex items-center justify-end gap-x-4">
         {viewMods.map((item) => (
