@@ -1,6 +1,6 @@
 "use client";
 import { DataTable } from "@/src/components/data-table";
-import { Order } from "database";
+import { Sale } from "database";
 import type { FC } from "react";
 import { trpc } from "@/src/app/_trpc/client";
 import { OrderColumns } from "@/src/components/data-table/columns/orders";
@@ -9,7 +9,7 @@ import { DataTableLoading } from "@/src/components/data-table/table-loading";
 import DeleteCourseModel from "@/src/components/models/delete-course-modal";
 
 interface OrdersTableShellProps {
-  initialData: Order[];
+  initialData: Sale[];
 }
 
 const OrdersTableShell: FC<OrdersTableShellProps> = ({ initialData }) => {

@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { prisma } from "database/src";
 import { StudentBag } from "@/src/types";
 import { addCourseToStudentBag } from "@/src/app/(academy)/_actions/coupon";
+import { create_course_sale } from "@/src/app/(academy)/_actions/sales";
 
 // const Get_client_api_secret_key = async () => {
 //   const user = await useHaveAccess();
@@ -58,6 +59,12 @@ export async function POST(request: NextRequest) {
             })
           ),
         },
+      });
+
+      await create_course_sale({
+        accountId: course.accountId,
+        course,
+        studentId: student.id,
       });
 
       break;

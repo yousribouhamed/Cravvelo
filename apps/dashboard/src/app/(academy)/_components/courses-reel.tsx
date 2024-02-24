@@ -1,7 +1,7 @@
 "use client";
 
 import { Course } from "database";
-import { BookMarked, ShoppingCart } from "lucide-react";
+import { BookMarked } from "lucide-react";
 import StarRatings from "react-star-ratings";
 import type { FC } from "react";
 import { useAcademiaStore } from "../global-state/academia-store";
@@ -19,8 +19,10 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses }) => {
     (state) => state.actions.addItem
   );
 
-  const handleRouting = ({ id }: { id: string }) =>
+  const handleRouting = ({ id }: { id: string }) => {
     router.push(`/course-academy/${id}`);
+  };
+
   return (
     <div className="w-full min-h-[200px] h-fit flex flex-col items-center p-4 gap-y-4">
       <div className="w-full h-[50px] flex items-center justify-between">
@@ -33,6 +35,7 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses }) => {
           courses?.map((item, index) => {
             return (
               <div
+                onClick={() => handleRouting({ id: item.id })}
                 key={item.title + index}
                 className="w-[320px] min-h-[350px] h-fit    flex flex-col border rounded-xl  transition-all shadow  duration-700 cursor-pointer "
               >
@@ -69,14 +72,22 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses }) => {
 
                 {/* this will hold the price */}
 
-                <div className="w-full h-[10px] flex items-center justify-start gap-x-4 my-4 px-4">
-                  <h2 className="text-black font-semibold text-lg text-start ">
-                    DZD 10000
-                  </h2>
-                  <span className="  text-gray-500  line-through ">
-                    DZD 12000
-                  </span>
-                </div>
+                {Number(item.price) === 0 ? (
+                  <div className="w-full h-[10px] flex items-center justify-start gap-x-4 my-4 px-4">
+                    <h2 className="text-blue-500 font-semibold text-lg text-start ">
+                      الدورة مجانية
+                    </h2>
+                  </div>
+                ) : (
+                  <div className="w-full h-[10px] flex items-center justify-start gap-x-4 my-4 px-4">
+                    <h2 className="text-black font-semibold text-lg text-start ">
+                      DZD {item.price}
+                    </h2>
+                    <span className="  text-gray-500  line-through ">
+                      DZD {item.compareAtPrice}
+                    </span>
+                  </div>
+                )}
 
                 <div className="w-full h-[70px] flex items-center justify-center gap-x-4 pt-2 p-4">
                   <button

@@ -11,11 +11,11 @@ import {
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
 import { Checkbox } from "@ui/components/ui/checkbox";
-import { Order } from "database";
+import { Sale } from "database";
 import { maketoast } from "../../toasts";
 import { DataTableColumnHeader } from "../data-table-head";
 
-export const OrderColumns: ColumnDef<Order>[] = [
+export const OrderColumns: ColumnDef<Sale>[] = [
   {
     id: "select",
     header: ({ table }) => (

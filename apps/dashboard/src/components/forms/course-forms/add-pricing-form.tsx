@@ -48,7 +48,7 @@ function AddPricingForm({ course }: AddPricingFormProps) {
   const mutation = trpc.priceCourse.useMutation({
     onSuccess: () => {
       maketoast.success();
-      router.push(`/courses/${courseId}/publishing`);
+      router.push(`/courses/${courseId}/students-management`);
     },
     onError: () => {
       maketoast.error();

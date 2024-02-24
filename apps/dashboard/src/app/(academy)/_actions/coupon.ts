@@ -5,6 +5,7 @@ import { getStudent } from "./auth";
 import { StudentBag } from "@/src/types";
 import { redirect } from "next/navigation";
 import { Course } from "database";
+import { create_course_sale } from "./sales";
 
 /**
  * This function facilitates the process of purchasing a course using a coupon code.
@@ -112,6 +113,11 @@ export const buyWithCoupon = async ({
       });
     }
 
+    await create_course_sale({
+      accountId: coupon.accountId,
+      course,
+      studentId: student.id,
+    });
     // Redirect the user to the student library page after a successful purchase.
     redirect("/student-library");
   } catch (error) {

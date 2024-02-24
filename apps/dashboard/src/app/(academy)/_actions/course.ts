@@ -6,7 +6,7 @@
  * @requires prisma Prisma client for database operations.
  */
 
-import { prisma } from "database/src"; // Importing Prisma client for database operations
+import { prisma } from "database/src";
 
 /**
  * Function to retrieve a course based on its URL path.

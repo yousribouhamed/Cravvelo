@@ -6,10 +6,10 @@
  * @requires getChargilyKeys Function to obtain Chargily secret keys.
  */
 
-import { Checkout, Price, Product } from "@/src/types"; // Importing types for products, prices, and checkouts
-import { getChargilyKeys } from "."; // Importing function to obtain Chargily secret keys
+import { Checkout, Price, Product } from "@/src/types";
+import { getChargilyKeys } from ".";
 
-const CHARGILY_BASE_URL = "https://pay.chargily.net/test/api/v2" as const; // Base URL for Chargily server API
+const CHARGILY_BASE_URL = "https://pay.chargily.net/test/api/v2" as const;
 
 /**
  * Function to create a product on the Chargily server.

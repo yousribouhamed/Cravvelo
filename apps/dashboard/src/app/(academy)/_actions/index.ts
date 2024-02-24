@@ -6,9 +6,9 @@
  * @requires Website Interface representing website data.
  */
 
-import { prisma } from "database/src"; // Importing Prisma client for database operations
-import { ThemePage } from "../../(theme-editor)/theme-editor-store"; // Importing ThemePage interface for representing a theme page
-import { Website } from "database"; // Importing Website interface representing website data
+import { prisma } from "database/src";
+import { ThemePage } from "../../(theme-editor)/theme-editor-store";
+import { Website } from "database";
 
 /**
  * Function to retrieve a specific page based on its path and subdomain.
@@ -62,7 +62,11 @@ export const getAllCourses = async ({ subdomain }: { subdomain: string }) => {
         accountId: account.id,
       },
     });
-    return courses;
+
+    const filteredCourses = courses.filter(
+      (item) => item.status === "PUBLISED"
+    );
+    return filteredCourses;
   } catch (err) {
     console.error(err);
   }

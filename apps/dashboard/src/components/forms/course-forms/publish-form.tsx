@@ -44,11 +44,6 @@ const selectionButtoms = [
     description: "شراء مبكر في الأكاديمية الخاصة بك",
     value: "EARLY_ACCESS",
   },
-  {
-    title: "خاص",
-    description: " إلا من خلال عنوان url",
-    value: "PRIVATE",
-  },
 ];
 
 interface PublishCourseFormProps {

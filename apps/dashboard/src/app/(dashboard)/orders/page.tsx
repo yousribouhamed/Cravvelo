@@ -1,12 +1,12 @@
 import Header from "@/src/components/layout/header";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
-import { Order } from "database";
+import { Sale } from "database";
 import { prisma } from "database/src";
 import OrdersTableShell from "./OrdersTableShell";
 import useHaveAccess from "@/src/hooks/use-have-access";
 
-async function getData(): Promise<Order[]> {
-  const data = await prisma.order.findMany();
+async function getData(): Promise<Sale[]> {
+  const data = await prisma.sale.findMany();
   return data;
 }
 

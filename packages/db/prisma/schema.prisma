@@ -27,7 +27,7 @@ model Account {
   Video                  Video[]
   Website                Website[]
   Coupon                 Coupon[]
-  Order                  Order[]
+  Sale                  Sale[]
   Notification           Notification[]
   Student                Student[]
   PaymentsConnect        PaymentsConnect[]
@@ -175,23 +175,30 @@ model Coupon {
   @@index([accountId])
 }
 
-enum OrderStatus {
+enum SaleStatus {
   CREATED
   PROCESSING
   COMPLETED
   CANCELLED
 }
+enum ItemType {
+  COURSE
+  PRODUCT
+}
 
-model Order {
+model Sale {
   id          String      @unique @default(uuid())
   orderNumber Int         @unique @default(autoincrement())
-  accountId   String      @unique
+  accountId   String     
   amount      Float
-  status      OrderStatus
+  status      SaleStatus
+  itemType    ItemType
+  itemId      String      @db.Text
+  price       Float
+  studentId   String
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   Account     Account?    @relation(fields: [accountId], references: [id])
-
   @@index([id])
   @@index([accountId])
 }
