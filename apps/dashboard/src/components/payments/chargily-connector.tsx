@@ -63,8 +63,8 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
     console.log(data);
     console.log("here it is the data");
     mutation.mutate({
-      private_key: data.chargilyPrivateKey,
-      public_key: data.chargilyPublicKey,
+      private_key: data?.chargilyPrivateKey,
+      public_key: data?.chargilyPublicKey,
     });
   }
 
