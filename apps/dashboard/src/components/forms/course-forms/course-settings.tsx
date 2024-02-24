@@ -23,6 +23,7 @@ import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { ImageUploader } from "../../uploaders/ImageUploader";
 import { Course } from "database";
 import { PlateEditor } from "../../reich-text-editor/rich-text-editor";
+import React from "react";
 
 interface ComponentProps {
   course: Course;
@@ -31,7 +32,6 @@ interface ComponentProps {
 const formSchema = z.object({
   courseResume: z.string(),
   courseDescription: z.any(),
-  courseUrl: z.string(),
   seoDescription: z.string(),
   seoTitle: z.string(),
   thumnailUrl: z.string(),
@@ -50,15 +50,24 @@ export function CourseSettingsForm({ course }: ComponentProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      courseResume: course.courseResume,
-      courseUrl: course.courseUrl,
-      title: course.title,
-      thumnailUrl: course.thumnailUrl,
-      youtubeUrl: course.youtubeUrl,
-      seoDescription: course.seoDescription,
-      seoTitle: course.seoTitle,
-      courseRequirements: course.courseRequirements,
-      courseWhatYouWillLearn: course.courseRequirements,
+      courseResume: course?.courseResume ?? "",
+
+      title: course?.title ?? "",
+      thumnailUrl: course?.thumnailUrl ?? "",
+      youtubeUrl: course?.youtubeUrl ?? "",
+      seoDescription: course?.seoDescription ?? "",
+      seoTitle: course?.seoTitle ?? "",
+      courseRequirements: course.courseRequirements ?? "",
+      courseWhatYouWillLearn: course?.courseRequirements ?? "",
+      courseDescription: course?.courseDescription
+        ? JSON.parse(course?.courseDescription as string)
+        : [
+            {
+              id: "1",
+              type: "p",
+              children: [{ text: "Hello, World!" }],
+            },
+          ],
     },
   });
 
@@ -72,12 +81,24 @@ export function CourseSettingsForm({ course }: ComponentProps) {
     },
   });
 
+  // this will help me debug the issue
+  // React.useEffect(() => {
+  //   if (Object.keys(form.formState.errors).length) {
+  //     for (const [_key, value] of Object.entries(form.formState.errors)) {
+  //       console.log("this is the useEffect form");
+  //       console.log(form.formState);
+  //       console.log(form.formState.errors);
+  //       console.error((value as { message: string }).message);
+  //     }
+  //   }
+  // }, [form.formState.errors]);
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     mutation.mutate({
       courseDescription: values.courseDescription,
       courseId: courseID,
       courseResume: values.courseResume,
-      courseUrl: values.courseUrl,
+      courseUrl: "",
       seoDescription: values?.seoDescription,
       seoTitle: values.seoTitle,
       thumnailUrl: values.thumnailUrl,
@@ -239,17 +260,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                   </FormLabel>
                   <FormControl>
                     <PlateEditor
-                      value={
-                        course.courseDescription
-                          ? JSON.parse(course.courseDescription as string)
-                          : [
-                              {
-                                id: "1",
-                                type: "p",
-                                children: [{ text: "Hello, World!" }],
-                              },
-                            ]
-                      }
+                      value={form.getValues("courseDescription")}
                       onChnage={field.onChange}
                     />
                   </FormControl>
@@ -325,6 +336,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                   onClick={() => router.back()}
                   className=" rounded-xl"
                   variant="secondary"
+                  type="button"
                 >
                   {" "}
                   إلغاء والعودة
@@ -332,7 +344,6 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 <Button
                   disabled={mutation.isLoading}
                   type="submit"
-                  form="add-text"
                   className=" flex items-center gap-x-2 rounded-xl"
                 >
                   {mutation.isLoading ? <LoadingSpinner /> : null}
@@ -360,6 +371,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
               onClick={() => router.back()}
               className="w-full"
               variant="secondary"
+              type="button"
               size="lg"
             >
               {" "}

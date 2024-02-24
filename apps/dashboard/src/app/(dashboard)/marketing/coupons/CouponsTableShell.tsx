@@ -1,6 +1,6 @@
 "use client";
 import { DataTable } from "@/src/components/data-table";
-import { Coupon, Student } from "database";
+import { Coupon } from "database";
 import type { FC } from "react";
 import { trpc } from "@/src/app/_trpc/client";
 import { CouponColumns } from "@/src/components/data-table/columns/cobons";
