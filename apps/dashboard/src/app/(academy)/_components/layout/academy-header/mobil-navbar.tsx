@@ -3,9 +3,16 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { AlignJustify } from "lucide-react";
+import { useMounted } from "@/src/hooks/use-mounted";
 
 export default function MobilNavgiationProduction() {
   const [open, setOpen] = useState(false);
+
+  const isMounted = useMounted();
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <>

@@ -5,11 +5,18 @@ import { Dialog, Transition } from "@headlessui/react";
 import { ShoppingBag, X } from "lucide-react";
 import { useAcademiaStore } from "../../../global-state/academia-store";
 import Link from "next/link";
+import { useMounted } from "@/src/hooks/use-mounted";
 
 export default function ShoppingCardProduction() {
   const [open, setOpen] = useState(false);
 
   const { state, actions } = useAcademiaStore();
+
+  const isMounted = useMounted();
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <>

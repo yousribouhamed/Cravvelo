@@ -15,6 +15,7 @@ import { buttonVariants } from "@ui/components/ui/button";
 import { cn } from "@ui/lib/utils";
 import { ArrowUpLeft } from "lucide-react";
 import Link from "next/link";
+import PublishWebsite from "@/src/components/models/editor/publish-website";
 
 async function Page() {
   const user = await useHaveAccess();
@@ -25,24 +26,27 @@ async function Page() {
         <Header user={user} title="الرئيسية" />
         <div className="w-full h-[30px] flex justify-between items-center mt-10 ">
           <DatePickerWithRange />
-
-          <Link
-            target="_blank"
-            className={cn(
-              buttonVariants(),
-              "font-bold gap-x-4  hover:scale-100 transition-all duration-300"
-            )}
-            href={`https://${user?.subdomain}`}
-          >
-            <span>معاينة الأكاديمية</span>
-            <ArrowUpLeft className=" h-4 w-4" />
-          </Link>
+          {user?.subdomain ? (
+            <Link
+              target="_blank"
+              className={cn(
+                buttonVariants(),
+                "font-bold gap-x-4  hover:scale-100 transition-all duration-300"
+              )}
+              href={`https://${user?.subdomain}`}
+            >
+              <span>معاينة الأكاديمية</span>
+              <ArrowUpLeft className=" h-4 w-4" />
+            </Link>
+          ) : (
+            <PublishWebsite />
+          )}
         </div>
         <div className="space-y-4 pt-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card className="flex flex-col justify-between  min-h-[150px]">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-xl font-bold ">الطلبات </CardTitle>
+                <CardTitle className="text-xl font-bold ">المبيعات </CardTitle>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"

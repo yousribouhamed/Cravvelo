@@ -134,7 +134,10 @@ const ChaptersBoard: FC<ChaptersBoardAbdullahProps> = ({ initialData }) => {
   if (data.length === 0) {
     return (
       <>
-        <NotFoundCard />
+        <NotFoundCard
+          src={"/no-chapters.svg"}
+          text="لم تقم بإضافة أي فصل إلى هذه الدورة"
+        />
         <div className="w-full h-[100px] flex items-center justify-center py-2">
           <AddChapter chaptersNumber={data.length} refetch={refetch} />
         </div>

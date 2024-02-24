@@ -69,9 +69,9 @@ const PublishWebsite: FC = () => {
       <DialogTrigger asChild>
         <Button
           size="sm"
-          className=" text-white font-bold rounded-2xl bg-primary"
+          className=" text-white font-bold rounded-xl bg-primary px-4"
         >
-          حفظ ونشر
+          انشاء الاكاديمية
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-lg " title="إنشاء موقع الويب الخاص بك">

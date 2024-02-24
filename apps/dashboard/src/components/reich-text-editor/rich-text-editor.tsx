@@ -369,12 +369,16 @@ export function PlateEditor({
             plugins={plugins}
             initialValue={value ? value : []}
             onChange={(val) => onChnage(val)}
+            readOnly={false}
           >
             <FixedToolbar>
               <FixedToolbarButtons />
             </FixedToolbar>
 
-            <Editor className="min-h-[150px] h-fit mt-4 w-full " />
+            <Editor
+              readOnly={false}
+              className="min-h-[150px] h-fit mt-4 w-full "
+            />
 
             <FloatingToolbar>
               <FloatingToolbarButtons />

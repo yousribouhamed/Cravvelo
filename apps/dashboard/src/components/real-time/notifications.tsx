@@ -7,10 +7,16 @@ import {
 import { Button } from "@ui/components/ui/button";
 import { Icons } from "../my-icons";
 import Image from "next/image";
+import { useMounted } from "@/src/hooks/use-mounted";
 
 interface notificationsAbdullahProps {}
 
 const Notifications: FC = ({}) => {
+  const isMounted = useMounted();
+
+  if (!isMounted) {
+    return null;
+  }
   return (
     <Popover>
       <PopoverTrigger asChild>

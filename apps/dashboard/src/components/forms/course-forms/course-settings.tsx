@@ -180,8 +180,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                       rows={3}
                       className="min-h-[100px]"
                       placeholder="أدخل ملخصًا للدورة هنا"
-                      value={field.name}
-                      onChange={field.onChange}
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -201,8 +200,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                       rows={3}
                       className="min-h-[100px]"
                       placeholder="أدخل ملخصًا للدورة هنا"
-                      value={field.name}
-                      onChange={field.onChange}
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -222,8 +220,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                       rows={3}
                       className="min-h-[100px]"
                       placeholder="أدخل ملخصًا للدورة هنا"
-                      value={field.name}
-                      onChange={field.onChange}
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -245,7 +242,13 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                       value={
                         course.courseDescription
                           ? JSON.parse(course.courseDescription as string)
-                          : []
+                          : [
+                              {
+                                id: "1",
+                                type: "p",
+                                children: [{ text: "Hello, World!" }],
+                              },
+                            ]
                       }
                       onChnage={field.onChange}
                     />
