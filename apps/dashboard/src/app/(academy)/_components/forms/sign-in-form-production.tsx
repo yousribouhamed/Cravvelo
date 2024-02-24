@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation";
 import { authSchemaLogin } from "@/src/lib/validators/auth";
 import { sign_in_as_student } from "../../_actions/auth";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { maketoast } from "@/src/components/toasts";
 
 type Inputs = z.infer<typeof authSchemaLogin>;
 
@@ -55,9 +56,11 @@ export function AcademySignInForm({ accountId }: AcademySifnIpFormProps) {
         password: data.password,
         accountId,
       });
+      maketoast.successWithText({ text: "تم تسجيل الدخول بنجاح" });
       router.push("/student-library");
     } catch (err) {
       console.error(err);
+      maketoast.error();
     } finally {
       setIsLoading(false);
     }

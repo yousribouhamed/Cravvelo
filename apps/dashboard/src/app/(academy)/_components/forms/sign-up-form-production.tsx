@@ -28,22 +28,19 @@ import { create_student } from "../../_actions/auth";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { maketoast } from "@/src/components/toasts";
 
 const formSchema = z.object({
   full_name: z.string(),
   email: z.string().email({
-    message: "Please enter a valid email address",
+    message: "يرجى إدخال عنوان بريد إلكتروني صالح",
   }),
   password: z
     .string()
-    .min(8, {
-      message: "Password must be at least 8 characters long",
+    .min(7, {
+      message: "يجب أن تتكون كلمة المرور من 7 أحرف على الأقل",
     })
-    .max(100)
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/, {
-      message:
-        "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character",
-    }),
+    .max(100),
 });
 
 interface AcademySifnUpFormProps {
@@ -71,10 +68,13 @@ export function AcademySifnUpForm({ accountId }: AcademySifnUpFormProps) {
         password: values.password,
       });
 
+      maketoast.successWithText({ text: "لقد تم إنشاء حسابك" });
+
       router.push("/auth-academy/sign-in");
       // TODO :: make a toast telling the student that new account has been created
     } catch (err) {
       console.error(err);
+      maketoast.error();
     } finally {
       setIsLoading(false);
     }
