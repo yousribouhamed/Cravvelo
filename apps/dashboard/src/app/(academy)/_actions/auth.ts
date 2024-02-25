@@ -133,8 +133,35 @@ export const sign_in_as_student = async ({
  * Function to update the student's profile.
  * @returns Nothing.
  */
-export const update_profile = () => {
-  // Implementation pending
+export const update_profile = async ({
+  bio,
+  full_name,
+  imageUrl,
+}: {
+  imageUrl: string;
+  full_name: string;
+  bio: string;
+}) => {
+  try {
+    const student = await getStudent();
+
+    if (student) {
+      throw new Error("you are not sign in dammm ");
+    }
+
+    await prisma.student.update({
+      where: {
+        id: student.id,
+      },
+      data: {
+        full_name,
+        photo_url: imageUrl,
+        bio,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 /**

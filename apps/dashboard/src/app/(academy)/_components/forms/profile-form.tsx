@@ -18,19 +18,28 @@ import {
 } from "@ui/components/ui/form";
 import { Input } from "@ui/components/ui/input";
 import { FileWithPreview } from "@/src/types";
-import { OurFileRouter } from "@/src/app/api/uploadthing/core";
 import { FileDialog } from "../uploaders/file-dialog";
 import { LoadingButton } from "@/src/components/loading-button";
+import { isArrayOfFile } from "../../lib";
+import { useUploadThing } from "@/src/lib/uploadthing";
+import { update_profile } from "../../_actions/auth";
 
 const formSchema = z.object({
   full_name: z.string().min(2).max(50),
   bio: z.string(),
-  profile_pic: z.string(),
+  images: z
+    .unknown()
+    .refine((val) => {
+      if (!Array.isArray(val)) return false;
+      if (val.some((file) => !(file instanceof File))) return false;
+      return true;
+    }, "Must be an array of File")
+    .optional()
+    .nullable()
+    .default(null),
 });
 
 interface ProfileFormProps {}
-
-const { useUploadThing } = generateReactHelpers<OurFileRouter>();
 
 const ProfileForm: FC = ({}) => {
   const fileRef = useRef<HTMLInputElement>(null);
@@ -47,14 +56,33 @@ const ProfileForm: FC = ({}) => {
     defaultValues: {
       full_name: "",
       bio: "",
+      images: [],
     },
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      if (isArrayOfFile(values.images)) {
+        console.log("uploading... ");
+        await startUpload(values.images)
+          .then((res) => {
+            const formattedImages = res?.map((image) => ({
+              id: image.key,
+              name: image.key.split("_")[1] ?? image.key,
+              url: image.url,
+            }));
+            return formattedImages ?? null;
+          })
+          .then((images) => {
+            console.log("these are the images ");
+            console.log(images);
+          })
+          .catch((err) => console.error(err));
+      }
+    } catch (err) {
+      console.error(err);
+    }
   }
   return (
     <div className="w-full h-fit min-h-[500px] bg-white shadow border rounded-xl max-w-2xl p-8">
@@ -62,7 +90,7 @@ const ProfileForm: FC = ({}) => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
           <FormField
             control={form.control}
-            name="profile_pic"
+            name="images"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>الاسم الكامل</FormLabel>
@@ -77,7 +105,7 @@ const ProfileForm: FC = ({}) => {
                     <FormControl>
                       <FileDialog
                         setValue={form.setValue}
-                        name="profile_pic"
+                        name="images"
                         maxFiles={1}
                         maxSize={1024 * 1024 * 4}
                         files={files}

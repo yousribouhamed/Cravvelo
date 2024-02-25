@@ -27,3 +27,9 @@ export async function verifyToken({ token }: { token: string }) {
     throw new Error("your token has expired");
   }
 }
+
+export function isArrayOfFile(files: unknown): files is File[] {
+  const isArray = Array.isArray(files);
+  if (!isArray) return false;
+  return files.every((file) => file instanceof File);
+}

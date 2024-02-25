@@ -1,20 +1,20 @@
-// import { currentUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 
 const f = createUploadthing();
 
-// const auth = async () => {
-//   const user = await currentUser();
-//   return user;
-// };
+const auth = async () => {
+  const user = await currentUser();
+  return user;
+};
 
 export const ourFileRouter = {
   pdfUploader: f({ pdf: { maxFileSize: "16MB" } })
-    // .middleware(async ({ req }) => {
-    //   const user = await auth();
-    //   if (!user) throw new Error("Unauthorized");
-    //   return { userId: user.id };
-    // })
+    .middleware(async ({ req }) => {
+      const user = await auth();
+      if (!user) throw new Error("Unauthorized");
+      return { userId: user.id };
+    })
     .onUploadComplete(async ({ file }) => {
       // here i need to save the file to the currect module
       return {
@@ -22,11 +22,11 @@ export const ourFileRouter = {
       };
     }),
   imageUploader: f({ image: { maxFileSize: "1024MB" } })
-    // .middleware(async ({ req }) => {
-    //   const user = await auth();
-    //   if (!user) throw new Error("Unauthorized");
-    //   return { userId: user.id };
-    // })
+    .middleware(async ({ req }) => {
+      const user = await auth();
+      if (!user) throw new Error("Unauthorized");
+      return { userId: user.id };
+    })
     .onUploadComplete(async ({ file }) => {
       // here i need to save the file to the currect module
       return {
@@ -34,11 +34,11 @@ export const ourFileRouter = {
       };
     }),
   voiceUploader: f({ audio: { maxFileSize: "1024GB" } })
-    // .middleware(async ({ req }) => {
-    //   const user = await auth();
-    //   if (!user) throw new Error("Unauthorized");
-    //   return { userId: user.id };
-    // })
+    .middleware(async ({ req }) => {
+      const user = await auth();
+      if (!user) throw new Error("Unauthorized");
+      return { userId: user.id };
+    })
     .onUploadComplete(async ({ file }) => {
       // here i need to save the file to the currect module
       return {
