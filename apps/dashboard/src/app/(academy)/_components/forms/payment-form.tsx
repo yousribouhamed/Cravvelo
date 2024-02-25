@@ -37,6 +37,8 @@ const PaymentForm: FC<Props> = ({ subdomain, studentId }) => {
   const [code, setCode] = React.useState<string>("");
   const [error, setError] = React.useState<boolean>(false);
 
+  const [chargilyCode, setChargilyCode] = React.useState<string>("");
+
   const { pay } = useChargily();
 
   const handlePayWithChargily = async () => {
@@ -161,15 +163,22 @@ const PaymentForm: FC<Props> = ({ subdomain, studentId }) => {
                   سيتم تحويلك الى صفحة شارجيلي لاتمام عملية الدفع بنجاح
                 </CardDescription>
               </CardHeader>
-
+              <CardContent>
+                <Input
+                  disabled={isLoading}
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  className="focus:border-blue-500"
+                />
+              </CardContent>
               <CardFooter>
                 <button
                   disabled={isLoading}
                   onClick={handlePayWithChargily}
-                  className="w-full h-[50px]  max-w-[480px] my-4 rounded-xl bg-violet-500 border-2 border-black text-white flex items-center justify-center disabled:pointer-events-none disabled:opacity-50"
+                  className="w-full h-[50px]  max-w-[480px] my-4 rounded-xl bg-sky-600 text-yellow-400 font-bold text-2xl border-2 border-black  flex items-center justify-center disabled:pointer-events-none disabled:opacity-50"
                 >
                   {isLoading ? <LoadingSpinner /> : null}
-                  pay with chargily
+                  pay with ccp
                 </button>
               </CardFooter>
             </Card>

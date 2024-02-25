@@ -151,3 +151,7 @@ export interface UserSubscriptionPlan extends SubscriptionPlan {
 }
 
 export type CartLineItem = z.infer<typeof cartLineItemSchema>;
+
+export type FileWithPreview = FileWithPath & {
+  preview: string;
+};
