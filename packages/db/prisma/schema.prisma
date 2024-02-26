@@ -141,7 +141,8 @@ model Website {
   customDomain String?  @unique
   pages        Json
   assets       Json?
-  favicon      String?
+  favicon      String?  @default("#22d3ee")
+  color       String? 
   logo         String?  @db.LongText
   font         String   @default("font-cal")
   createdAt    DateTime @default(now())
