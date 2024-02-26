@@ -12,7 +12,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-
 import {
   Form,
   FormControl,
@@ -24,7 +23,6 @@ import {
 import { Input } from "@ui/components/ui/input";
 import { addCourseSchema } from "@/src/lib/validators/course";
 import { trpc } from "@/src/app/_trpc/client";
-import { getCookie } from "@/src/lib/utils";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 
@@ -34,7 +32,7 @@ const AddProductModel: FC = ({}) => {
   const [isLaoding, setIsLoading] = React.useState(false);
   const mutation = trpc.createProduct.useMutation({
     onSuccess: ({ id }) => {
-      router.push(`/products/${id}`);
+      router.push(`/products/${id}/setting`);
     },
     onError: () => {},
   });

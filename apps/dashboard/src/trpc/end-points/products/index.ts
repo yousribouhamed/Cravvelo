@@ -1,6 +1,7 @@
 import { privateProcedure } from "../../trpc";
 import { z } from "zod";
 import { prisma } from "database/src";
+import { TRPCError } from "@trpc/server";
 
 const getAccount = async ({ userId }: { userId: string }) => {
   const data = await prisma.account.findUnique({
@@ -67,5 +68,67 @@ export const products = {
       } catch (err) {
         console.error(err);
       }
+    }),
+
+  priceCourse: privateProcedure
+    .input(
+      z.object({
+        productId: z.string(),
+        price: z.number(),
+        compairAtPrice: z.number(),
+      })
+    )
+
+    .mutation(async ({ input, ctx }) => {
+      const product = await ctx.prisma.product
+        .update({
+          where: {
+            id: input.productId,
+          },
+          data: {
+            price: input.price,
+            compareAtPrice: input.compairAtPrice,
+          },
+        })
+        .catch((err) => {
+          console.log(err);
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: err?.message
+              ? err?.message
+              : "the error in on update course settings",
+          });
+        });
+
+      return product;
+    }),
+  launchCourse: privateProcedure
+    .input(
+      z.object({
+        productId: z.string(),
+        status: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const product = await ctx.prisma.product
+        .update({
+          where: {
+            id: input.productId,
+          },
+          data: {
+            status: input.status,
+          },
+        })
+        .catch((err) => {
+          console.log(err);
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: err?.message
+              ? err?.message
+              : "the error in on update course settings",
+          });
+        });
+
+      return { success: true, courseId: product.id };
     }),
 };

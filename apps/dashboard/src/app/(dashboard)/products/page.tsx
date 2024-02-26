@@ -5,6 +5,9 @@ import ProductsTableShell from "./products-table-shell";
 import useHaveAccess from "@/src/hooks/use-have-access";
 
 const getData = async ({ accountId }: { accountId: string }) => {
+  if (!accountId) {
+    return;
+  }
   const products = await prisma.product.findMany({
     where: {
       accountId,

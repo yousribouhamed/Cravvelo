@@ -17,11 +17,11 @@ export const SIDE_BAR_ITEMS = [
         icon: Icons.Home,
         slug: "/courses",
       },
-      // {
-      //   title: "المنتجات الرقمية",
-      //   icon: Icons.Home,
-      //   slug: "/products",
-      // },
+      {
+        title: "المنتجات الرقمية",
+        icon: Icons.Home,
+        slug: "/products",
+      },
       {
         title: "مكتبة الفيديو",
         icon: Icons.Home,
@@ -30,7 +30,7 @@ export const SIDE_BAR_ITEMS = [
     ],
   },
   {
-    title: "الطلبات",
+    title: "المبيعات",
     slug: "/orders",
     icon: Icons.money,
     subitems: [],

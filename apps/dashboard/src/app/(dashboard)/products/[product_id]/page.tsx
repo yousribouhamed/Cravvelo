@@ -1,25 +1,23 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
-import { currentUser } from "@clerk/nextjs";
 import { notFound, redirect } from "next/navigation";
-import { Button } from "@ui/components/ui/button";
 import { prisma } from "database/src";
 import useHaveAccess from "@/src/hooks/use-have-access";
 
 interface PageProps {
-  params: { course_id: string };
+  params: { product_id: string };
 }
 
 export default async function Page({ params }: PageProps) {
   const user = await useHaveAccess();
 
-  const course = await prisma.course.findUnique({
+  const product = await prisma.product.findUnique({
     where: {
-      id: params.course_id,
+      id: params.product_id,
     },
   });
 
-  if (!course) {
+  if (!product) {
     notFound();
   }
 

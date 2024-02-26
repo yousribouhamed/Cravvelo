@@ -12,15 +12,9 @@ const getLinks = ({ id }: { id: string }) => {
       href: `/products/${id}/content`,
     },
     {
-      name: "إعدادات الدورة",
-      href: `/products/${id}/settings`,
-    },
-
-    {
       name: "التسعير",
       href: `/products/${id}/pricing`,
     },
-
     {
       name: "المعاينة والنشر",
       href: `/products/${id}/publishing`,
