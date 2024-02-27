@@ -62,7 +62,7 @@ export type UserData = {
   isFreeTrial: boolean;
   isSubscribed: boolean;
   subdomain: string;
-  cutomDomain: string;
+  customDomain: string;
   createdAt: Date;
 };
 

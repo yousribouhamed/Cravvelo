@@ -1,12 +1,4 @@
-import {
-  ArrowLeft,
-  CreditCard,
-  Gift,
-  Keyboard,
-  LogOut,
-  Settings,
-  User,
-} from "lucide-react";
+import { ArrowLeft, Gift, User } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@ui/components/ui/avatar";
 import { Button, buttonVariants } from "@ui/components/ui/button";
@@ -22,10 +14,10 @@ import LogoutButton from "./logout-button";
 import { Icons } from "../my-icons";
 import Link from "next/link";
 import { Eye } from "lucide-react";
-import { ArrowUpLeft } from "lucide-react";
 import { Progress } from "@ui/components/ui/progress";
 import Image from "next/image";
 import { UserData } from "@/src/types";
+import { ArrowUpLeft } from "lucide-react";
 
 interface UserNavProps {
   user: UserData;
