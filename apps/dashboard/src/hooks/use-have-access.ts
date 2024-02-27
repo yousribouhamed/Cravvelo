@@ -5,7 +5,7 @@ import { prisma } from "database/src";
 /**
  * A custom hook to check user access and retrieve user information from the server.
  * This function should run on the server only.
- * @returns {Promise<Object>} An object containing user information and access status.
+ * @returns Promise<Object> An object containing user information and access status.
  */
 const useHaveAccess = async () => {
   try {

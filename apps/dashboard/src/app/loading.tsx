@@ -1,7 +1,5 @@
 import type { FC } from "react";
 
-interface loadingAbdullahProps {}
-
 const Loading: FC = ({}) => {
   return (
     <div
