@@ -49,8 +49,9 @@ function ProductPricingForm({ product }: ProductPricingFormProps) {
       maketoast.success();
       router.push(`/products/${product.id}/publishing`);
     },
-    onError: () => {
+    onError: (err) => {
       maketoast.error();
+      console.error(err);
     },
   });
 

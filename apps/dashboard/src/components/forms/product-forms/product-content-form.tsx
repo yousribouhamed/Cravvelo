@@ -15,37 +15,57 @@ import {
 } from "@ui/components/ui/form";
 import { Input } from "@ui/components/ui/input";
 import { Card, CardContent } from "@ui/components/ui/card";
-import Tiptap from "../../tiptap";
 import { usePathname, useRouter } from "next/navigation";
-import { getValueFromUrl } from "@/src/lib/utils";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { Textarea } from "@ui/components/ui/textarea";
-import { JadaraUploadDropzone } from "../../upload-dropzone";
 import { ImageUploader } from "../../uploaders/ImageUploader";
 import { PDFUploader } from "../../uploaders/PDFUploader";
 import { PlateEditor } from "../../reich-text-editor/rich-text-editor";
+import { Product } from "database";
+import { maketoast } from "../../toasts";
 
 const addProductConentNameSchema = z.object({
-  name: z.string().min(2).max(50),
+  name: z.string().min(1).max(50),
   breifDescription: z.any(),
-  description: z.string(),
+  description: z.any(),
   fileUrl: z.string(),
   imageUrl: z.string(),
 });
 
-function ProductContentForm() {
+interface ProductContentFormProps {
+  product: Product;
+}
+
+function ProductContentForm({ product }: ProductContentFormProps) {
   const router = useRouter();
   const path = usePathname();
-  const chapterID = getValueFromUrl(path, 4);
 
   const mutation = trpc.createModule.useMutation({
-    onSuccess: () => {},
-    onError: () => {},
+    onSuccess: () => {
+      maketoast.success();
+      router.push(`/products/${product.id}/pricing`);
+    },
+    onError: (error) => {
+      maketoast.error();
+      console.error(error);
+    },
   });
 
   const form = useForm<z.infer<typeof addProductConentNameSchema>>({
     mode: "onChange",
     resolver: zodResolver(addProductConentNameSchema),
+    defaultValues: {
+      breifDescription: product?.subDescription ?? "",
+      description: product?.description
+        ? JSON.parse(product?.description as string)
+        : [
+            {
+              id: "1",
+              type: "p",
+              children: [{ text: "Hello, World!" }],
+            },
+          ],
+    },
   });
 
   async function onSubmit(values: z.infer<typeof addProductConentNameSchema>) {}
