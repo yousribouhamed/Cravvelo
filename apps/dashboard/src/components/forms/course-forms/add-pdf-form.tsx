@@ -19,7 +19,7 @@ import { Card, CardContent } from "@ui/components/ui/card";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import { JadaraUploadDropzone } from "../../upload-dropzone";
+import { PDFUploader } from "../../uploaders/PDFUploader";
 
 const addPDFSchema = z.object({
   title: z.string().min(2).max(50),
@@ -94,7 +94,10 @@ function AddPdfForm() {
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <JadaraUploadDropzone onChnage={field.onChange} />
+                    <PDFUploader
+                      fileUrl={form.watch("fileUrl")}
+                      onChnage={field.onChange}
+                    />
                   </FormControl>
 
                   <FormMessage />
