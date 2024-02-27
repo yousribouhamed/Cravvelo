@@ -4,7 +4,7 @@ import useHaveAccess from "@/src/hooks/use-have-access";
 import CouponsTableShell from "./CouponsTableShell";
 import { prisma } from "database/src";
 
-const Page = async ({}) => {
+const Page = async () => {
   const user = await useHaveAccess();
 
   const coupons = await prisma.coupon.findMany({
