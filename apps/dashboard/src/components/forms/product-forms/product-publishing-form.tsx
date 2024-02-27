@@ -66,7 +66,7 @@ function ProductPublishingForm({ product }: PublishProductFormProps) {
     },
   });
 
-  const mutation = trpc.launchCourse.useMutation({
+  const mutation = trpc.launchProduct.useMutation({
     onSuccess: () => {
       maketoast.success();
       router.push(`/courses`);

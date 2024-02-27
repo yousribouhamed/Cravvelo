@@ -44,7 +44,7 @@ function ProductPricingForm({ product }: ProductPricingFormProps) {
   const path = usePathname();
   const productId = getValueFromUrl(path, 2);
   const [isFree, setIsFree] = useState(false);
-  const mutation = trpc.priceCourse.useMutation({
+  const mutation = trpc.priceProduct.useMutation({
     onSuccess: () => {
       maketoast.success();
       router.push(`/products/${product.id}/publishing`);
