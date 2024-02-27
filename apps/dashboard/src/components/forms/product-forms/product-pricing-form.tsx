@@ -47,7 +47,7 @@ function ProductPricingForm({ product }: ProductPricingFormProps) {
   const mutation = trpc.priceCourse.useMutation({
     onSuccess: () => {
       maketoast.success();
-      router.push(`/products/${productId}/pubishing`);
+      router.push(`/products/${product.id}/publishing`);
     },
     onError: () => {
       maketoast.error();
@@ -85,7 +85,7 @@ function ProductPricingForm({ product }: ProductPricingFormProps) {
             >
               <FormLabel className="text-xl  block font-bold text-black">
                 {" "}
-                اختر أفضل الأسعار التي تناسب الدورة التدريبية الخاصة بك
+                اختر أفضل الأسعار التي تناسب المنتج الخاصة بك
               </FormLabel>
 
               <div className="grid grid-cols-2 w-full h-fit gap-x-2">

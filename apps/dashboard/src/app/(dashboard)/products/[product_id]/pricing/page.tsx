@@ -2,9 +2,9 @@ import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
 import useHaveAccess from "@/src/hooks/use-have-access";
 import ProductsHeader from "@/src/components/products-header";
-import ProductContentForm from "@/src/components/forms/product-forms/product-content-form";
 import { prisma } from "database/src";
 import { notFound } from "next/navigation";
+import ProductPricingForm from "@/src/components/forms/product-forms/product-pricing-form";
 
 const getData = async ({ id }: { id: string }) => {
   try {
@@ -39,7 +39,7 @@ export default async function Page({ params }: PageProps) {
         <Header goBack user={user} title="تسعير المنتجات" />
         <ProductsHeader />
         <div className="w-full pt-8 min-h-[100px] ">
-          <ProductContentForm />
+          <ProductPricingForm product={product} />
         </div>
       </main>
     </MaxWidthWrapper>

@@ -22,6 +22,8 @@ import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { Textarea } from "@ui/components/ui/textarea";
 import { JadaraUploadDropzone } from "../../upload-dropzone";
 import { ImageUploader } from "../../uploaders/ImageUploader";
+import { PDFUploader } from "../../uploaders/PDFUploader";
+import { PlateEditor } from "../../reich-text-editor/rich-text-editor";
 
 const addProductConentNameSchema = z.object({
   name: z.string().min(2).max(50),
@@ -55,7 +57,7 @@ function ProductContentForm() {
           <form
             id="add-text"
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8"
+            className="space-y-8 mb-8"
           >
             <FormField
               control={form.control}
@@ -68,12 +70,10 @@ function ProductContentForm() {
                   <FormControl>
                     <Input placeholder="اسم المنتج" {...field} />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="fileUrl"
@@ -84,14 +84,15 @@ function ProductContentForm() {
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <JadaraUploadDropzone onChnage={field.onChange} />
+                    <PDFUploader
+                      fileUrl={field.name}
+                      onChnage={field.onChange}
+                    />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="imageUrl"
@@ -107,12 +108,10 @@ function ProductContentForm() {
                       onChnage={field.onChange}
                     />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="breifDescription"
@@ -127,15 +126,13 @@ function ProductContentForm() {
                       rows={3}
                       className="min-h-[100px]"
                       placeholder="أدخل ملخصًا للدورة هنا"
-                      value={field.value}
-                      onChange={field.onChange}
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="description"
@@ -146,8 +143,8 @@ function ProductContentForm() {
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Tiptap
-                      description={field.name}
+                    <PlateEditor
+                      value={form.getValues("description")}
                       onChnage={field.onChange}
                     />
                   </FormControl>
@@ -155,6 +152,27 @@ function ProductContentForm() {
                 </FormItem>
               )}
             />
+            <Card>
+              <CardContent className="w-full h-fit flex justify-end items-center p-6 gap-x-4 ">
+                <Button
+                  onClick={() => router.back()}
+                  className=" rounded-xl"
+                  variant="secondary"
+                  type="button"
+                >
+                  {" "}
+                  إلغاء والعودة
+                </Button>
+                <Button
+                  disabled={mutation.isLoading}
+                  type="submit"
+                  className=" flex items-center gap-x-2 rounded-xl"
+                >
+                  {mutation.isLoading ? <LoadingSpinner /> : null}
+                  حفظ والمتابعة
+                </Button>
+              </CardContent>
+            </Card>
           </form>
         </Form>
       </div>

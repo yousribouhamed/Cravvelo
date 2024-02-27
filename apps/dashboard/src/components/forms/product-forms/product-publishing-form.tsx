@@ -144,7 +144,7 @@ function ProductPublishingForm({ product }: PublishProductFormProps) {
                 size="lg"
               >
                 {mutation.isLoading ? <LoadingSpinner /> : null}
-                نشر الدورة
+                نشر المنتج
               </Button>
               <Button className="w-full" variant="secondary" size="lg">
                 {" "}

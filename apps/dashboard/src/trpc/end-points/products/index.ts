@@ -70,7 +70,7 @@ export const products = {
       }
     }),
 
-  priceCourse: privateProcedure
+  priceProduct: privateProcedure
     .input(
       z.object({
         productId: z.string(),
@@ -102,7 +102,7 @@ export const products = {
 
       return product;
     }),
-  launchCourse: privateProcedure
+  launchProduct: privateProcedure
     .input(
       z.object({
         productId: z.string(),

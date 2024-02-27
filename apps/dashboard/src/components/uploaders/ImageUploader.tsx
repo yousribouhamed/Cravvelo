@@ -40,6 +40,7 @@ export const ImageUploader = ({
   return (
     <Dropzone
       multiple={false}
+      accept={{ "image/*": [".jpeg", ".png"] }}
       onDrop={async (acceptedFile) => {
         setIsUploading(true);
 

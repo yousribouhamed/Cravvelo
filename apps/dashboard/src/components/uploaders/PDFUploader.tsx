@@ -40,6 +40,7 @@ export const PDFUploader = ({
   return (
     <Dropzone
       multiple={false}
+      accept={{ "application/pdf": [".pdf"] }}
       onDrop={async (acceptedFile) => {
         setIsUploading(true);
 
