@@ -90,7 +90,10 @@ function AddVedioForm() {
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input
+                      placeholder="تعلم كل ما يتعلق بتربية الكناري"
+                      {...field}
+                    />
                   </FormControl>
 
                   <FormMessage />
@@ -130,6 +133,27 @@ function AddVedioForm() {
                 </FormItem>
               )}
             />
+            <Card>
+              <CardContent className="w-full h-fit flex justify-end items-center p-6 gap-x-4 ">
+                <Button
+                  onClick={() => router.back()}
+                  className=" rounded-xl"
+                  variant="secondary"
+                  type="button"
+                >
+                  {" "}
+                  إلغاء والعودة
+                </Button>
+                <Button
+                  disabled={mutation.isLoading}
+                  type="submit"
+                  className=" flex items-center gap-x-2 rounded-xl"
+                >
+                  {mutation.isLoading ? <LoadingSpinner /> : null}
+                  حفظ والمتابعة
+                </Button>
+              </CardContent>
+            </Card>
           </form>
         </Form>
       </div>

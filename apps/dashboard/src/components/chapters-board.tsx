@@ -134,10 +134,12 @@ const ChaptersBoard: FC<ChaptersBoardAbdullahProps> = ({ initialData }) => {
   if (data.length === 0) {
     return (
       <>
-        <NotFoundCard
-          src={"/no-chapters.svg"}
-          text="لم تقم بإضافة أي فصل إلى هذه الدورة"
-        />
+        <div className="mt-8">
+          <NotFoundCard
+            src={"/no-chapters.svg"}
+            text="لم تقم بإضافة أي فصل إلى هذه الدورة"
+          />
+        </div>
         <div className="w-full h-[100px] flex items-center justify-center py-2">
           <AddChapter chaptersNumber={data.length} refetch={refetch} />
         </div>
@@ -175,7 +177,7 @@ const ChaptersBoard: FC<ChaptersBoardAbdullahProps> = ({ initialData }) => {
                     return (
                       <div
                         className={cn(
-                          "flex flex-col  justify-start gap-y-2 bg-[#FC6B0033] border-[#FC6B00] cursor-pointer  my-4 rounded-2xl ",
+                          "flex flex-col  justify-start gap-y-2 bg-[#FC6B0033] border-[#FC6B00]   my-4 rounded-2xl ",
                           chapter.isVisible && " text-black"
                         )}
                         ref={provided.innerRef}
@@ -194,7 +196,7 @@ const ChaptersBoard: FC<ChaptersBoardAbdullahProps> = ({ initialData }) => {
                             className="w-full min-h-[40px] h-fit p-4 "
                           >
                             <AccordionTrigger asChild>
-                              <div className="w-full h-[40px]  flex items-center justify-between ">
+                              <div className="w-full h-[40px]  flex items-center cursor-pointer justify-between ">
                                 <div className=" w-fit h-full flex items-center justify-start">
                                   <div
                                     className={cn("px-2 py-3   transition")}

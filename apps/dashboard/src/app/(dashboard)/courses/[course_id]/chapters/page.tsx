@@ -4,6 +4,7 @@ import CourseHeader from "@/src/components/course-header";
 import { prisma } from "database/src";
 import ChaptersBoard from "@/src/components/chapters-board";
 import useHaveAccess from "@/src/hooks/use-have-access";
+import CourseStepper from "@/src/components/course-stepper";
 
 interface PageProps {
   params: { course_id: string };
@@ -29,14 +30,16 @@ const getChapters = async ({ courseId }: { courseId: string }) => {
 };
 
 export default async function Home({ params }: PageProps) {
-  const user = await useHaveAccess();
-  const chapters = await getChapters({ courseId: params.course_id });
-
+  const [user, chapters] = await Promise.all([
+    useHaveAccess(),
+    getChapters({ courseId: params.course_id }),
+  ]);
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
         <Header user={user} title="محتوى الدورة" goBack />
-        <CourseHeader />
+        {/* <CourseHeader /> */}
+        <CourseStepper />
         <ChaptersBoard initialData={chapters} />
       </main>
     </MaxWidthWrapper>

@@ -48,6 +48,7 @@ export const PDFUploader = ({
       onDrop={async (acceptedFile) => {
         if (acceptedFile.length === 0) {
           setStatus("ERROR");
+          return;
         }
         setStatus("LOADING");
 

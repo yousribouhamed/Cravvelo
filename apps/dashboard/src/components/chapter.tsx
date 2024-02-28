@@ -294,9 +294,10 @@ export const AddToChapter = ({
           return (
             <Link
               key={item.name}
+              prefetch={false}
               className={cn(
                 buttonVariants({ variant: "secondary", size: "lg" }),
-                "bg-white border flex justify-center gap-x-2 relative",
+                "bg-white border cursor-pointer flex justify-center gap-x-2 relative",
                 {
                   "cursor-not-allowed bg-gray-50": item.disabled,
                 }

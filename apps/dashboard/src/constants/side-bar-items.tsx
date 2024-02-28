@@ -22,11 +22,11 @@ export const SIDE_BAR_ITEMS = [
         icon: Icons.Home,
         slug: "/products",
       },
-      {
-        title: "مكتبة الفيديو",
-        icon: Icons.Home,
-        slug: "/video-library",
-      },
+      // {
+      //   title: "مكتبة الفيديو",
+      //   icon: Icons.Home,
+      //   slug: "/video-library",
+      // },
     ],
   },
   {
