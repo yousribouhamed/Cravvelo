@@ -62,7 +62,11 @@ export const columns: ColumnDef<Course>[] = [
           </Link>
 
           <Badge className="bg-[#F5F5F5] hover:bg-[#F5F5F5] text-black rounded-md">
-            {row.original.status}
+            {row.original.status === "DRAFT"
+              ? "مسودة"
+              : row.original.status === "PUBLISED"
+              ? "منشور"
+              : "خاص"}
           </Badge>
         </div>
       );

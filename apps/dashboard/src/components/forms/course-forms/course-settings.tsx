@@ -46,6 +46,9 @@ export function CourseSettingsForm({ course }: ComponentProps) {
   const path = usePathname();
   const courseID = getValueFromUrl(path, 2);
 
+  const [isEditingSeoContent, setIsEditingSeoContent] =
+    React.useState<boolean>(false);
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -161,7 +164,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                   </FormLabel>
                   <FormControl>
                     <ImageUploader
-                      fileUrl={course.thumnailUrl}
+                      fileUrl={form.watch("thumnailUrl")}
                       onChnage={field.onChange}
                     />
                   </FormControl>
@@ -271,65 +274,77 @@ export function CourseSettingsForm({ course }: ComponentProps) {
 
             <Card>
               <CardContent className="w-full h-fit flex justify-start flex-col items-start p-6 gap-x-4 ">
-                <div className="w-full h-[20px] mb-4 flex items-center justify-between">
-                  <p>قائمة محرك البحث</p>
-                  <Button variant="ghost">تعديل</Button>
-                </div>
-                <h1 className="text-indigo-600 text-xl font-bold text-start">
-                  دورتك الرائعة عند محرك البحث
-                </h1>
-                <p className="text-gray-600 text-md text-start">
-                  كل واحد منا يعيش معتمدًا وملتزمًا بمعرفتنا الفردية ووعينا. كل
-                  هذا هو ما نسميه الواقع. ومع ذلك، فإن المعرفة والوعي كلاهما
-                  ملتبسان. قد تكون حقيقة شخص ما وهمًا لشخص آخر. نحن جميعا نعيش
-                  داخل الأوهام الخاصة بنا
-                </p>
+                {!isEditingSeoContent && (
+                  <>
+                    <div className="w-full h-[20px] mb-4 flex items-center justify-between">
+                      <p>قائمة محرك البحث</p>
+                      <Button
+                        onClick={() => setIsEditingSeoContent(true)}
+                        variant="ghost"
+                        type="button"
+                      >
+                        تعديل
+                      </Button>
+                    </div>
+                    <h1 className="text-indigo-600 text-xl font-bold text-start">
+                      دورتك الرائعة عند محرك البحث
+                    </h1>
+                    <p className="text-gray-600 text-md text-start">
+                      كل واحد منا يعيش معتمدًا وملتزمًا بمعرفتنا الفردية ووعينا.
+                      كل هذا هو ما نسميه الواقع. ومع ذلك، فإن المعرفة والوعي
+                      كلاهما ملتبسان. قد تكون حقيقة شخص ما وهمًا لشخص آخر. نحن
+                      جميعا نعيش داخل الأوهام الخاصة بنا
+                    </p>
+                  </>
+                )}
+
+                {isEditingSeoContent && (
+                  <div className="space-y-4 w-full h-fit min-h-full">
+                    <FormField
+                      control={form.control}
+                      name="seoTitle"
+                      render={({ field }) => (
+                        <FormItem className="w-full ">
+                          <FormLabel>عنوان الموقع عند محرك البحث</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="   دورتك الرائعة عند محرك البحث"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="seoDescription"
+                      render={({ field }) => (
+                        <FormItem className="w-full ">
+                          <FormLabel>أضف وصفًا للموقع</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              id="description"
+                              rows={3}
+                              className="min-h-[100px]"
+                              placeholder="    كل واحد منا يعيش معتمدًا وملتزمًا بمعرفتنا الفردية ووعينا.
+                              كل هذا هو ما نسميه الواقع. ومع ذلك، فإن المعرفة والوعي
+                              كلاهما ملتبسان. قد تكون حقيقة شخص ما وهمًا لشخص آخر. نحن
+                              جميعا نعيش داخل الأوهام الخاصة بنا"
+                              value={field.value}
+                              onChange={field.onChange}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                )}
               </CardContent>
             </Card>
 
-            <FormField
-              control={form.control}
-              name="seoTitle"
-              render={({ field }) => (
-                <FormItem className="w-full ">
-                  <FormLabel>
-                    عنوان الموقع عند محرك البحث
-                    <span className="text-red-600 text-xl">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="       عوان الموقع عند محرك البحث"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="seoDescription"
-              render={({ field }) => (
-                <FormItem className="w-full ">
-                  <FormLabel>
-                    أضف وصفًا للموقع
-                    <span className="text-red-600 text-xl">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea
-                      id="description"
-                      rows={3}
-                      className="min-h-[100px]"
-                      placeholder="اضف وصفا للموقع"
-                      value={field.value}
-                      onChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <Card>
               <CardContent className="w-full h-fit flex justify-end items-center p-6 gap-x-4 ">
                 <Button

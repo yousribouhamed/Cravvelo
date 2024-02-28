@@ -164,6 +164,8 @@ export const course = {
         courseId: z.string(),
         allowComment: z.boolean(),
         certificate: z.boolean(),
+        forceWatchAllCourse: z.boolean(),
+        allowRating: z.boolean(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -175,6 +177,8 @@ export const course = {
           data: {
             allowComment: input.allowComment,
             certificate: input.certificate,
+            allowRating: input.allowRating,
+            forceWatchAllCourse: input.forceWatchAllCourse,
           },
         });
 

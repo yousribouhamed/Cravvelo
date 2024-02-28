@@ -74,6 +74,8 @@ model Course {
   trainers          String?
   status            String
   allowComment      Boolean    @default(true)
+  allowRating       Boolean    @default(true)
+  forceWatchAllCourse Boolean    @default(true)
   certificate       Boolean    @default(false)
   Account           Account?   @relation(fields: [accountId], references: [id])
   createdAt         DateTime   @default(now())

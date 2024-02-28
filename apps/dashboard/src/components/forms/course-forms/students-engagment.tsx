@@ -16,12 +16,13 @@ import { Switch } from "@ui/components/ui/switch";
 import { Card, CardContent } from "@ui/components/ui/card";
 import { usePathname, useRouter } from "next/navigation";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import { getValueFromUrl } from "@/src/lib/utils";
 import { maketoast } from "../../toasts";
 import { Course } from "database";
 
 const FormSchema = z.object({
   allowComments: z.boolean(),
+  forceWatchAllCourse: z.boolean(),
+  allowRating: z.boolean(),
   cerrificate: z.boolean(),
 });
 
@@ -31,12 +32,11 @@ interface StudentEngagmentProps {
 
 function StudentEngagment({ course }: StudentEngagmentProps) {
   const router = useRouter();
-  const path = usePathname();
 
   const mutation = trpc.updateCourseStudentEngagment.useMutation({
     onSuccess: () => {
       maketoast.success();
-      router.push(`/`);
+      router.push(`/courses/${course.id}/publishing`);
     },
     onError: (err) => {
       maketoast.error();
@@ -50,6 +50,8 @@ function StudentEngagment({ course }: StudentEngagmentProps) {
     defaultValues: {
       cerrificate: course.certificate,
       allowComments: course.allowComment,
+      allowRating: course.allowRating,
+      forceWatchAllCourse: course.forceWatchAllCourse,
     },
   });
 
@@ -58,6 +60,8 @@ function StudentEngagment({ course }: StudentEngagmentProps) {
       allowComment: values.allowComments,
       certificate: values.cerrificate,
       courseId: course.id,
+      allowRating: values.allowRating,
+      forceWatchAllCourse: values.forceWatchAllCourse,
     });
   }
 
@@ -100,7 +104,7 @@ function StudentEngagment({ course }: StudentEngagmentProps) {
                 />
                 <FormField
                   control={form.control}
-                  name="cerrificate"
+                  name="forceWatchAllCourse"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 bg-white shadow-sm">
                       <div className="space-y-0.5">
@@ -111,8 +115,6 @@ function StudentEngagment({ course }: StudentEngagmentProps) {
                           <Switch
                             checked={field.value}
                             onCheckedChange={field.onChange}
-                            disabled
-                            aria-readonly
                           />
                         </div>
                       </FormControl>
@@ -147,7 +149,7 @@ function StudentEngagment({ course }: StudentEngagmentProps) {
 
                 <FormField
                   control={form.control}
-                  name="allowComments"
+                  name="allowRating"
                   render={({ field }) => (
                     <FormItem className="flex flex-row bg-white items-center justify-between rounded-lg border p-3 shadow-sm">
                       <div className="space-y-0.5">

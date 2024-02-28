@@ -3,7 +3,7 @@ module.exports = {
   reactStrictMode: true,
   transpilePackages: ["ui"],
   images: {
-    domains: ["uploadthing.com", "vod.api.video"],
+    domains: ["uploadthing.com", "vod.api.video" , "utfs.io"],
   },
 
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {

@@ -8,6 +8,9 @@ import { useUploadThing } from "@/src/lib/uploadthing";
 import { cn, toast } from "@ui/lib/utils";
 import { XCircle } from "lucide-react";
 import { formatBytes } from "@/src/lib/utils";
+import { Button } from "@ui/components/ui/button";
+import { X } from "lucide-react";
+import Image from "next/image";
 
 export const ImageUploader = ({
   onChnage,
@@ -28,6 +31,13 @@ export const ImageUploader = ({
 
   const { startUpload } = useUploadThing("imageUploader");
 
+  React.useEffect(() => {
+    if (fileUrl) {
+      setStatus("COMPLETE");
+    } else {
+      setStatus("WAITING");
+    }
+  }, [fileUrl]);
   const startSimulatedProgress = () => {
     setProgress(0);
 
@@ -37,6 +47,7 @@ export const ImageUploader = ({
           clearInterval(interval);
           return prevProgress;
         }
+
         return prevProgress + 5;
       });
     }, 500);
@@ -49,6 +60,12 @@ export const ImageUploader = ({
       multiple={false}
       accept={{ "image/*": [".jpeg", ".png"] }}
       onDrop={async (acceptedFile) => {
+        if (acceptedFile.length === 0) {
+          setStatus("ERROR");
+          return;
+        }
+        setStatus("LOADING");
+
         setIsUploading(true);
 
         const progressInterval = startSimulatedProgress();
@@ -57,15 +74,18 @@ export const ImageUploader = ({
           .then((res) => {
             if (!res) {
               setIsError(true);
+              setStatus("ERROR");
               toast("Something went wrong");
               return;
             }
             onChnage(res[0]?.serverData?.file?.url);
             clearInterval(progressInterval);
             setProgress(100);
+            setStatus("COMPLETE");
           })
           .catch((err) => {
             console.error(err);
+            setStatus("ERROR");
             setIsError(true);
           });
       }}
@@ -85,7 +105,7 @@ export const ImageUploader = ({
             "group relative  my-8 grid h-48  w-full cursor-pointer  place-items-center rounded-lg border-2 border-dashed border-muted-foreground/25 px-5 py-2.5 text-center transition bg-white hover:bg-muted/25",
             "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
             isDragActive && "border-muted-foreground/50",
-            isFocused && "border-blue-500",
+            isFocused && "border-primary",
             isDragReject && "border-red-500",
             className
           )}
@@ -133,11 +153,34 @@ export const ImageUploader = ({
                   );
                 case "COMPLETE":
                   return (
-                    <div>
-                      <p>تم تحميل الملف الخاص بك</p>
-                      <span className="text-xl font-bold text-green-500">
-                        {acceptedFiles[0].name}
-                      </span>
+                    <div className="relative w-full h-full flex items-center justify-center gap-x-4 ">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="absolute top-0 right-0 text-black rounded-[50%] hover:bg-black hover:text-white cursor-pointer "
+                        onClick={(e: React.MouseEvent) => {
+                          e.stopPropagation();
+                          setStatus("WAITING");
+                        }}
+                      >
+                        <X className="w-4 h-4 " />
+                      </Button>
+                      <div className="w-[140px] h-[140px] relative">
+                        <Image fill alt="course image" src={fileUrl} />
+                      </div>
+                      <div className="flex flex-col gap-y-4 items-start">
+                        <span className="text-xl font-bold text-black">
+                          {acceptedFiles[0]?.name}
+                        </span>
+
+                        <span className="text-xl font-bold text-black">
+                          {acceptedFiles[0]?.size}
+                        </span>
+
+                        <span className="text-xl font-bold text-black">
+                          {acceptedFiles[0]?.type}
+                        </span>
+                      </div>
                     </div>
                   );
 

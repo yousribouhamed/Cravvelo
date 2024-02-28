@@ -184,6 +184,7 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
                               reduce_type === "VALUE" ? "0 DZD" : "% 0"
                             } `}
                             {...field}
+                            className="  max-w-[100px]"
                           />
                         </FormControl>
                         <FormDescription>
@@ -206,6 +207,7 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
                             value={Number(field.value)}
                             onChange={(e) => field.onChange(e.target.value)}
                             placeholder={`0 `}
+                            className="  max-w-[100px]"
                             {...field}
                           />
                         </FormControl>
