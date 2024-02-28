@@ -80,7 +80,7 @@ function AddPricingForm({ course }: AddPricingFormProps) {
         <div className="col-span-2 w-full h-full">
           <Form {...form}>
             <form
-              id="add-text"
+              id="add-pricing"
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-8 w-full "
             >
@@ -102,9 +102,10 @@ function AddPricingForm({ course }: AddPricingFormProps) {
                       </FormLabel>
                       <FormControl>
                         <Input
+                          type="number"
                           placeholder="0 DZD"
-                          disabled={isFree}
                           {...field}
+                          disabled={isFree}
                         />
                       </FormControl>
 
@@ -133,9 +134,10 @@ function AddPricingForm({ course }: AddPricingFormProps) {
                       </FormLabel>
                       <FormControl>
                         <Input
-                          disabled={isFree}
                           placeholder="0 DZD"
+                          type="number"
                           {...field}
+                          disabled={isFree}
                         />
                       </FormControl>
 
@@ -153,7 +155,13 @@ function AddPricingForm({ course }: AddPricingFormProps) {
                 <div dir="ltr">
                   <Switch
                     checked={isFree}
-                    onCheckedChange={(val) => setIsFree(val)}
+                    onCheckedChange={(val) => {
+                      setIsFree(val);
+                      if (val === true) {
+                        form.setValue("compareAtPrice", "0");
+                        form.setValue("price", "0");
+                      }
+                    }}
                   />
                 </div>
               </div>
@@ -166,7 +174,7 @@ function AddPricingForm({ course }: AddPricingFormProps) {
               <Button
                 disabled={mutation.isLoading}
                 type="submit"
-                form="add-text"
+                form="add-pricing"
                 className="w-full flex items-center gap-x-2"
                 size="lg"
               >

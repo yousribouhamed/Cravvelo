@@ -7,11 +7,8 @@ import {
   MARK_UNDERLINE,
 } from "@udecode/plate-basic-marks";
 import { useEditorReadOnly } from "@udecode/plate-common";
-
 import { Icons } from "./text-editor-icons";
-
 import { MarkToolbarButton } from "./mark-toolbar-button";
-
 import { ToolbarGroup } from "./toolbar";
 import { TurnIntoDropdownMenu } from "./turn-into-dropdown-menu";
 
@@ -19,7 +16,7 @@ export function FixedToolbarButtons() {
   const readOnly = useEditorReadOnly();
 
   return (
-    <div className="w-[100%]  h-full mx-auto border rounded-xl overflow-hidden shadow bg-white ">
+    <div className="w-[100%]  h-12 mx-auto border-b border-l border-r   mb-2  ">
       <div
         className="flex flex-wrap justify-end"
         style={{
@@ -29,31 +26,31 @@ export function FixedToolbarButtons() {
         {!readOnly && (
           <>
             <ToolbarGroup>
-              <MarkToolbarButton tooltip="Bold (⌘+B)" nodeType={MARK_BOLD}>
-                <Icons.bold />
+              <MarkToolbarButton tooltip="غامق (⌘+B)" nodeType={MARK_BOLD}>
+                <Icons.bold className=" w-4 h-4" />
               </MarkToolbarButton>
-              <MarkToolbarButton tooltip="Italic (⌘+I)" nodeType={MARK_ITALIC}>
-                <Icons.italic />
+              <MarkToolbarButton tooltip="مائل (⌘+I)" nodeType={MARK_ITALIC}>
+                <Icons.italic className=" w-4 h-4" />
               </MarkToolbarButton>
               <MarkToolbarButton
-                tooltip="Underline (⌘+U)"
+                tooltip="تسطير (⌘+U)"
                 nodeType={MARK_UNDERLINE}
               >
-                <Icons.underline />
+                <Icons.underline className=" w-4 h-4" />
               </MarkToolbarButton>
 
               <MarkToolbarButton
-                tooltip="Strikethrough (⌘+⇧+M)"
+                tooltip="يتوسطه خط (⌘+⇧+M)"
                 nodeType={MARK_STRIKETHROUGH}
               >
-                <Icons.strikethrough />
+                <Icons.strikethrough className="w-4 h-4" />
               </MarkToolbarButton>
-              <MarkToolbarButton tooltip="Code (⌘+E)" nodeType={MARK_CODE}>
-                <Icons.code />
+              <MarkToolbarButton tooltip="الكود (⌘+E)" nodeType={MARK_CODE}>
+                <Icons.code className="w-4 h-4" />
               </MarkToolbarButton>
             </ToolbarGroup>
 
-            <ToolbarGroup noSeparator>
+            <ToolbarGroup>
               <TurnIntoDropdownMenu />
             </ToolbarGroup>
           </>

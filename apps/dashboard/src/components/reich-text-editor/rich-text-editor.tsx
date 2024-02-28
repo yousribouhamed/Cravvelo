@@ -364,29 +364,37 @@ export function PlateEditor({
   return (
     <TooltipProvider>
       <DndProvider backend={HTML5Backend}>
-        <CommentsProvider users={{}} myUserId="1">
-          <Plate
-            plugins={plugins}
-            initialValue={value ? value : []}
-            onChange={(val) => onChnage(val)}
-            readOnly={false}
-          >
+        <Plate
+          plugins={plugins}
+          initialValue={
+            value
+              ? value
+              : [
+                  {
+                    id: "1",
+                    type: "p",
+                    children: [{ text: "وصف المحتوى" }],
+                  },
+                ]
+          }
+          onChange={(val) => onChnage(val)}
+          readOnly={false}
+        >
+          <div className="bg-white border rounded-xl">
             <FixedToolbar>
               <FixedToolbarButtons />
             </FixedToolbar>
 
             <Editor
               readOnly={false}
-              className="min-h-[150px] h-fit mt-4 w-full "
+              className="min-h-[150px] h-fit  w-full border-none"
             />
 
             <FloatingToolbar>
               <FloatingToolbarButtons />
             </FloatingToolbar>
-            <MentionCombobox items={[]} />
-            <CommentsPopover />
-          </Plate>
-        </CommentsProvider>
+          </div>
+        </Plate>
       </DndProvider>
     </TooltipProvider>
   );

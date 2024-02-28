@@ -76,7 +76,10 @@ function AddPdfForm() {
                     عنوان الملف <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input
+                      placeholder="اين تذهب الشمس عندما يحل الليل"
+                      {...field}
+                    />
                   </FormControl>
 
                   <FormMessage />

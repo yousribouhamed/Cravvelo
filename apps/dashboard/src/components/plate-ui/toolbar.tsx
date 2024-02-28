@@ -39,7 +39,7 @@ const toolbarButtonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-transparent hover:bg-muted hover:text-muted-foreground aria-checked:bg-accent aria-checked:text-accent-foreground",
+          "bg-transparent text-gray-500  hover:text-black  aria-checked:text-black",
         outline:
           "border border-input bg-transparent hover:bg-accent hover:text-accent-foreground",
       },
@@ -86,7 +86,7 @@ const ToolbarButton = withTooltip(
                 variant,
                 size,
               }),
-              isDropdown && "my-1 justify-between pr-1",
+              isDropdown && "my-1 justify-start pr-1",
               className
             )}
             value={pressed ? "single" : ""}
@@ -94,9 +94,12 @@ const ToolbarButton = withTooltip(
           >
             {isDropdown ? (
               <>
-                <div className="flex flex-1">{children}</div>
+                <div className="flex items-center ">{children}</div>
                 <div>
-                  <Icons.arrowDown className="ml-0.5 h-4 w-4" data-icon />
+                  <Icons.arrowDown
+                    className="ml-0.5 text-black h-4 w-4"
+                    data-icon
+                  />
                 </div>
               </>
             ) : (

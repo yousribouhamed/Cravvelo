@@ -1,6 +1,6 @@
 "use client";
 
-import type { FC } from "react";
+import type { Dispatch, FC, SetStateAction } from "react";
 import Dropzone from "react-dropzone";
 import { Progress } from "@ui/components/ui/progress";
 import React, { useState } from "react";
@@ -10,13 +10,22 @@ import { trpc } from "@/src/app/_trpc/client";
 import { cn } from "@ui/lib/utils";
 import Image from "next/image";
 import ApiVideoPlayer from "@api.video/react-player";
+import { Button } from "@ui/components/ui/button";
+import { X } from "lucide-react";
 
 interface VedioUploaderProps {
   onChange: (onChange: string) => void;
   className?: string;
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const VedioUploader: FC<VedioUploaderProps> = ({ onChange, className }) => {
+const VedioUploader: FC<VedioUploaderProps> = ({
+  onChange,
+  className,
+  open,
+  setOpen,
+}) => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
   // const [videoId, setVideoId] = useState<string | undefined>(undefined);
@@ -136,7 +145,7 @@ const VedioUploader: FC<VedioUploaderProps> = ({ onChange, className }) => {
                   );
                 case "LOADING":
                   return (
-                    <div className="w-full mt-4 flex flex-col mx-auto px-4 gap-y-4">
+                    <div className="w-full mt-4 flex flex-col items-center mx-auto px-4 gap-y-4">
                       <Image
                         width={100}
                         height={100}
@@ -152,26 +161,43 @@ const VedioUploader: FC<VedioUploaderProps> = ({ onChange, className }) => {
                   );
                 case "COMPLETE":
                   return (
-                    <div>
-                      {videoId && (
-                        <ApiVideoPlayer
-                          video={{
-                            id: videoId,
-                          }}
-                          style={{ width: "100%", height: "100%" }}
-                          // theme={{
-                          //   text: "#ffffff",
-                          //   link: "#ffffff",
-                          //   linkHover: "#3b82f6",
-                          //   trackPlayed: "#3b82f6",
-                          //   trackUnplayed: "#ffffff",
-                          //   trackBackground: "#3b82f6",
-                          //   backgroundTop: "#3b82f6",
-                          //   backgroundBottom: "#3b82f6",
-                          //   backgroundText: "#ffffff",
-                          // }}
-                        />
-                      )}
+                    <div className="relative w-full h-full flex items-center justify-center flex-col gap-y-1 ">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="absolute top-0 right-0 text-black rounded-[50%] hover:bg-black hover:text-white cursor-pointer "
+                        onClick={(e: React.MouseEvent) => {
+                          e.stopPropagation();
+                          setStatus("WAITING");
+                        }}
+                      >
+                        <X className="w-4 h-4 " />
+                      </Button>
+
+                      <Image
+                        width={100}
+                        height={100}
+                        alt="video uploder"
+                        src={"/video.png"}
+                      />
+                      <p>تم تحميل الفيديو الخاص بك</p>
+                      <span className="text-xl font-bold text-blue-500">
+                        {acceptedFiles[0] && acceptedFiles[0]?.name}
+                      </span>
+                      <div>
+                        <span className="text-lg text-gray-500">
+                          يمكنك معاينة الفيديو من{" "}
+                          <span
+                            onClick={(e: React.MouseEvent) => {
+                              e.stopPropagation();
+                              setOpen(true);
+                            }}
+                            className="text-blue-500 font-bold"
+                          >
+                            هنا
+                          </span>
+                        </span>
+                      </div>
                     </div>
                   );
 

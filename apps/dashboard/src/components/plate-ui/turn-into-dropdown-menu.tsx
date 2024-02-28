@@ -105,16 +105,16 @@ export function TurnIntoDropdownMenu(props: DropdownMenuProps) {
       <DropdownMenuTrigger asChild>
         <ToolbarButton
           pressed={openState.open}
-          tooltip="Turn into"
+          tooltip="قائمة العناصر"
           isDropdown
-          className="lg:min-w-[130px] space-x-2"
+          className="w-[150px] space-x-2 flex items-center justify-end "
         >
-          <SelectedItemIcon className="h-5 w-5 lg:hidden" />
-          <span className="max-lg:hidden">{selectedItemLabel}</span>
+          <span className="max-lg:hidden text-black">{selectedItemLabel}</span>
+          <SelectedItemIcon className="h-4 w-4 text-black " />
         </ToolbarButton>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="start" className="min-w-0">
+      <DropdownMenuContent align="start" className="w-[150px]">
         <DropdownMenuRadioGroup
           className="flex flex-col gap-0.5"
           value={value}
@@ -129,7 +129,8 @@ export function TurnIntoDropdownMenu(props: DropdownMenuProps) {
             <DropdownMenuRadioItem
               key={itemValue}
               value={itemValue}
-              className="min-w-[180px] flex items-center justify-end gap-x-2"
+              hideIcon
+              className="w-[150px] flex items-center justify-end gap-x-2 px-2 "
             >
               {label}
               <Icon className="mr-2 h-5 w-5" />

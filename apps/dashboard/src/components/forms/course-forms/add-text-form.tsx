@@ -73,7 +73,7 @@ function AddTextForm() {
                     عنوان النص <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input placeholder="لماذا لون البحر ازرق" {...field} />
                   </FormControl>
 
                   <FormMessage />

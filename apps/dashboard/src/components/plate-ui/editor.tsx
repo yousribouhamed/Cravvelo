@@ -63,6 +63,7 @@ const Editor = React.forwardRef<HTMLDivElement, EditorProps>(
     return (
       <div ref={ref} className="relative w-full">
         <PlateContent
+          placeholder="اكتب شيئا رائعا"
           className={cn(
             editorVariants({
               disabled,

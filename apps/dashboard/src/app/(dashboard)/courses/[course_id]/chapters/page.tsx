@@ -38,7 +38,6 @@ export default async function Home({ params }: PageProps) {
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
         <Header user={user} title="محتوى الدورة" goBack />
-        {/* <CourseHeader /> */}
         <CourseStepper />
         <ChaptersBoard initialData={chapters} />
       </main>
