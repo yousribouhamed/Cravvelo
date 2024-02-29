@@ -105,7 +105,7 @@ function ProductContentForm({ product }: ProductContentFormProps) {
                   </FormLabel>
                   <FormControl>
                     <PDFUploader
-                      fileUrl={field.name}
+                      fileUrl={form.watch("fileUrl")}
                       onChnage={field.onChange}
                     />
                   </FormControl>
@@ -124,7 +124,7 @@ function ProductContentForm({ product }: ProductContentFormProps) {
                   </FormLabel>
                   <FormControl>
                     <ImageUploader
-                      fileUrl={field.name}
+                      fileUrl={form.watch("imageUrl")}
                       onChnage={field.onChange}
                     />
                   </FormControl>

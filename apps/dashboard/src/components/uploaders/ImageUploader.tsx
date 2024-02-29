@@ -166,7 +166,9 @@ export const ImageUploader = ({
                         <X className="w-4 h-4 " />
                       </Button>
                       <div className="w-[140px] h-[140px] relative">
-                        <Image fill alt="course image" src={fileUrl} />
+                        {fileUrl && (
+                          <Image fill alt="course image" src={fileUrl} />
+                        )}
                       </div>
                       <div className="flex flex-col gap-y-4 items-start">
                         <span className="text-xl font-bold text-black">
