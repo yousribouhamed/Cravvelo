@@ -53,11 +53,13 @@ function CourseStepper({ className, ...props }: ExamplesNavProps) {
           ` w-full  bg-white  border flex items-center justify-center   rounded-lg  h-full p-4 gap-x-4`
         )}
       >
-        {links.map((item) => {
+        {links.map((item, index) => {
           return (
-            <div className="flex flex-col justify-center items-center gap-y-2 w-[100px] ">
+            <div className="flex flex-col justify-center items-center gap-y-2 w-[100px] relative ">
               <div className="bg-primary z-[10] w-[30px] h-[30px] rounded-[50%] flex items-center justify-center">
-                <span className="text-white font-bold text-sm">1</span>
+                <span className="text-white font-bold text-sm">
+                  {index + 1}
+                </span>
               </div>
               <Link
                 href={item.href}
@@ -66,6 +68,9 @@ function CourseStepper({ className, ...props }: ExamplesNavProps) {
               >
                 {item.name}
               </Link>
+              {index !== 0 && (
+                <div className="w-[100px] top-2.5 -right-[4rem] absolute h-2 bg-primary " />
+              )}
             </div>
           );
         })}

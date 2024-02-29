@@ -18,6 +18,7 @@ interface VedioUploaderProps {
   className?: string;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  initialVideoId?: string;
 }
 
 const VedioUploader: FC<VedioUploaderProps> = ({
@@ -25,6 +26,7 @@ const VedioUploader: FC<VedioUploaderProps> = ({
   className,
   open,
   setOpen,
+  initialVideoId,
 }) => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
@@ -37,6 +39,15 @@ const VedioUploader: FC<VedioUploaderProps> = ({
   const [isError, setIsError] = useState<boolean>(false);
 
   const [videoId, setVideoId] = useState<string>("");
+
+  React.useEffect(() => {
+    if (initialVideoId) {
+      setVideoId(initialVideoId);
+      setStatus("COMPLETE");
+    } else {
+      setStatus("WAITING");
+    }
+  }, []);
 
   const mutation = trpc.onVedioUpload.useMutation({
     onSuccess: ({ success, videoId }) => {

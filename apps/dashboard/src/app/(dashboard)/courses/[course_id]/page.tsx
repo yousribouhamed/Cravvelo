@@ -26,13 +26,9 @@ export default async function Page({ params }: PageProps) {
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
         <Header goBack user={user} title="ui ux" />
-        <div className="w-full h-[70px]  flex items-center justify-between">
-          <div>hado les lies </div>
-          <Button>تعديل الدورة</Button>
-        </div>
+        <div className="w-full h-[70px]  flex items-center justify-between"></div>
         <div className="w-full min-h-[500px] grid grid-cols-3">
-          <div className="col-span-2 bg-blue-500"></div>
-          <div className="col-span-1 bg-yellow-500"></div>
+          <p>this page is an error</p>
         </div>
       </main>
     </MaxWidthWrapper>

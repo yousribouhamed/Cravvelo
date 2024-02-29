@@ -30,7 +30,6 @@ import {
   DropResult,
 } from "@hello-pangea/dnd";
 import AddChapter from "./models/create-chapter-modal";
-import { Module } from "../types";
 import { NotFoundCard } from "./not-found-card";
 import { cn } from "@ui/lib/utils";
 import { Grip } from "lucide-react";
@@ -46,6 +45,7 @@ import { Badge } from "@ui/components/ui/badge";
 import Link from "next/link";
 import { AddToChapter } from "./chapter";
 import ModulesList from "./modules-list";
+import { Module } from "../types";
 
 interface ChaptersBoardAbdullahProps {
   initialData: ChapterType[];
@@ -174,6 +174,10 @@ const ChaptersBoard: FC<ChaptersBoardAbdullahProps> = ({ initialData }) => {
                 >
                   {(provided) => {
                     const [open, setOpen] = React.useState<boolean>(false);
+
+                    const materials = JSON.parse(
+                      chapter.modules as string
+                    ) as Module[];
                     return (
                       <div
                         className={cn(
@@ -229,7 +233,7 @@ const ChaptersBoard: FC<ChaptersBoardAbdullahProps> = ({ initialData }) => {
                                       {chapter.title}
                                     </p>
                                     <span className="text-[#A1A1A1] text-xs text-start ">
-                                      {0}
+                                      {materials?.length}
                                       مواد
                                     </span>
                                   </div>
@@ -304,9 +308,7 @@ const ChaptersBoard: FC<ChaptersBoardAbdullahProps> = ({ initialData }) => {
                               {/* @ts-ignore */}
                               <ModulesList
                                 chapterID={chapter.id}
-                                initialModules={JSON.parse(
-                                  chapter.modules as string
-                                )}
+                                initialModules={materials}
                               />
                               <AddToChapter
                                 path={path}

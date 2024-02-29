@@ -19,8 +19,8 @@ import { Card, CardContent } from "@ui/components/ui/card";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import { PDFUploader } from "../../uploaders/PDFUploader";
-import { maketoast } from "../../toasts";
+import { PDFUploader } from "@/src/components/uploaders/PDFUploader";
+import { maketoast } from "@/src/components/toasts";
 
 const addPDFSchema = z.object({
   title: z.string().min(2).max(50),

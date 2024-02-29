@@ -12,21 +12,25 @@ import { Module } from "../types";
 import { cn } from "@ui/lib/utils";
 import { Badge } from "@ui/components/ui/badge";
 import { useMounted } from "../hooks/use-mounted";
+import Link from "next/link";
 
 interface ModulesListProps {}
 
 interface ChapterProps {
   title: string;
   chapterID: string;
+  courseId: string;
   initialModules: Module[];
 }
 
-const ModulesList: FC<ChapterProps> = ({ chapterID, initialModules }) => {
+const ModulesList: FC<ChapterProps> = ({
+  chapterID,
+  courseId,
+  initialModules,
+}) => {
   const [modules, setModules] = useState(initialModules || []);
 
   const isMounted = useMounted();
-  console.log("here are the initial data");
-  console.log(initialModules);
 
   const onDragEnd = (result: DropResult) => {
     if (!result) return;
@@ -105,7 +109,14 @@ const ModulesList: FC<ChapterProps> = ({ chapterID, initialModules }) => {
                         />
                       </svg>
                     </div>
-                    <p className="text-black text-sm "> {chapter.title}</p>
+                    <Link
+                      href={`/courses/${courseId}/chapters/${chapterID}/${chapter.fileUrl}/update-video`}
+                    >
+                      <p className="text-black font-bold text-sm hover:text-primary transition-all duration-300 ">
+                        {" "}
+                        {chapter.title}
+                      </p>
+                    </Link>
                   </div>
                 )}
               </Draggable>

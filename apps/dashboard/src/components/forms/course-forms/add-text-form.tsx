@@ -20,6 +20,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { PlateEditor } from "../../reich-text-editor/rich-text-editor";
+import { maketoast } from "../../toasts";
 
 const addTextSchema = z.object({
   title: z.string().min(2).max(50),
@@ -32,8 +33,14 @@ function AddTextForm() {
   const chapterID = getValueFromUrl(path, 4);
 
   const mutation = trpc.createModule.useMutation({
-    onSuccess: () => {},
-    onError: () => {},
+    onSuccess: () => {
+      maketoast.success();
+      router.back();
+    },
+    onError: (error) => {
+      maketoast.error();
+      console.error(error);
+    },
   });
 
   const form = useForm<z.infer<typeof addTextSchema>>({

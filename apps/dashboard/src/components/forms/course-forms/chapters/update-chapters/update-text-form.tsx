@@ -1,7 +1,6 @@
 "use client";
 
 import * as z from "zod";
-import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { trpc } from "@/src/app/_trpc/client";
@@ -19,16 +18,15 @@ import { Card, CardContent } from "@ui/components/ui/card";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import { PDFUploader } from "../../uploaders/PDFUploader";
-import { maketoast } from "../../toasts";
+import { PlateEditor } from "@/src/components/reich-text-editor/rich-text-editor";
+import { maketoast } from "@/src/components/toasts";
 
-const addPDFSchema = z.object({
+const addTextSchema = z.object({
   title: z.string().min(2).max(50),
-  // content: z.any(),
-  fileUrl: z.string(),
+  content: z.any(),
 });
 
-function AddPdfForm() {
+function AddTextForm() {
   const router = useRouter();
   const path = usePathname();
   const chapterID = getValueFromUrl(path, 4);
@@ -44,23 +42,21 @@ function AddPdfForm() {
     },
   });
 
-  const form = useForm<z.infer<typeof addPDFSchema>>({
+  const form = useForm<z.infer<typeof addTextSchema>>({
     mode: "onChange",
-    resolver: zodResolver(addPDFSchema),
+    resolver: zodResolver(addTextSchema),
     defaultValues: {
       title: "",
-      fileUrl: "",
+      content: JSON.stringify(""),
     },
   });
 
-  async function onSubmit(values: z.infer<typeof addPDFSchema>) {
-    console.log("here it is file url");
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof addTextSchema>) {
     await mutation.mutateAsync({
       chapterID: chapterID,
-      content: "",
-      fileType: "PDF",
-      fileUrl: values.fileUrl,
+      content: values.content,
+      fileType: "TEXT",
+      fileUrl: "",
       title: values.title,
     });
   }
@@ -80,43 +76,31 @@ function AddPdfForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    عنوان الملف <span className="text-red-600 text-xl">*</span>
+                    عنوان النص <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="اين تذهب الشمس عندما يحل الليل"
-                      {...field}
-                    />
+                    <Input placeholder="لماذا لون البحر ازرق" {...field} />
                   </FormControl>
 
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
-              name="fileUrl"
+              name="content"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full ">
                   <FormLabel>
-                    إضافة ملف pdf{" "}
-                    <span className="text-red-600 text-xl">*</span>
+                    محتوى <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <PDFUploader
-                      fileUrl={form.watch("fileUrl")}
-                      onChnage={field.onChange}
-                    />
+                    <PlateEditor onChnage={field.onChange} />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/* <div>
-           
-            </div> */}
           </form>
         </Form>
       </div>
@@ -149,4 +133,4 @@ function AddPdfForm() {
   );
 }
 
-export default AddPdfForm;
+export default AddTextForm;

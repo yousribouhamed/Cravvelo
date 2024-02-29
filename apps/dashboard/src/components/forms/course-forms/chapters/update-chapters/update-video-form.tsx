@@ -18,19 +18,24 @@ import { Input } from "@ui/components/ui/input";
 import { Card, CardContent } from "@ui/components/ui/card";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
-import VedioUploader from "../../uploaders/VedioUploader";
+import VedioUploader from "@/src/components/uploaders/VedioUploader";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import { PlateEditor } from "../../reich-text-editor/rich-text-editor";
-import { maketoast } from "../../toasts";
-import VideoPlayer from "../../models/video-player";
+import { PlateEditor } from "@/src/components/reich-text-editor/rich-text-editor";
+import { maketoast } from "@/src/components/toasts";
+import VideoPlayer from "@/src/components/models/video-player";
+import { Module } from "@/src/types";
 
-const addVedioSchema = z.object({
+const updateVedioSchema = z.object({
   title: z.string().min(2).max(50),
   content: z.any(),
   fileUrl: z.string(),
 });
 
-function AddVedioForm() {
+interface UpdateVedioFormProps {
+  material: Module;
+}
+
+function UpdateVedioForm({ material }: UpdateVedioFormProps) {
   const router = useRouter();
   const path = usePathname();
   const chapterID = getValueFromUrl(path, 4);
@@ -48,23 +53,17 @@ function AddVedioForm() {
     },
   });
 
-  const form = useForm<z.infer<typeof addVedioSchema>>({
+  const form = useForm<z.infer<typeof updateVedioSchema>>({
     mode: "onChange",
-    resolver: zodResolver(addVedioSchema),
+    resolver: zodResolver(updateVedioSchema),
     defaultValues: {
-      title: "",
-      fileUrl: "",
-      content: [
-        {
-          id: "1",
-          type: "p",
-          children: [{ text: "وصف المحتوى" }],
-        },
-      ],
+      title: material.title,
+      fileUrl: material.fileUrl,
+      content: JSON.parse(material?.content),
     },
   });
 
-  async function onSubmit(values: z.infer<typeof addVedioSchema>) {
+  async function onSubmit(values: z.infer<typeof updateVedioSchema>) {
     if (!values.fileUrl || values.fileUrl === "") {
       console.log("here it is the values inside the if");
       console.log(values);
@@ -130,6 +129,7 @@ function AddVedioForm() {
                     </FormLabel>
                     <FormControl>
                       <VedioUploader
+                        initialVideoId={form.watch("fileUrl")}
                         open={open}
                         setOpen={setOpen}
                         onChange={field?.onChange}
@@ -213,4 +213,4 @@ function AddVedioForm() {
   );
 }
 
-export default AddVedioForm;
+export default UpdateVedioForm;

@@ -13,22 +13,6 @@ export default async function Home() {
         <Header goBack user={user} title="اظافة ملف" />
 
         <div className="w-full pt-8 min-h-[100px] ">
-          <PathBuilder
-            links={[
-              {
-                name: "الرئيسية",
-                url: "/",
-              },
-              {
-                name: "الدورات التدريبية",
-                url: "/courses",
-              },
-              {
-                name: "ui ux",
-                url: "/courses/iihh",
-              },
-            ]}
-          />
           <AddPdfForm />
         </div>
       </main>
