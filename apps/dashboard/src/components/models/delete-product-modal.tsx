@@ -10,7 +10,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@ui/components/ui/alert-dialog";
 import type { FC } from "react";
 import * as React from "react";
@@ -32,6 +31,7 @@ const DeleteProductModel: FC<DeleteProductModelProps> = ({ refetch }) => {
     onSuccess: async () => {
       await refetch();
       setIsOpen(false);
+      maketoast.successWithText({ text: "تم حذف منتجك" });
     },
     onError: () => {
       maketoast.error();

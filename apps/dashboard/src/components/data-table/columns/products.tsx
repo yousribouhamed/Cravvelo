@@ -16,6 +16,7 @@ import { DataTableColumnHeader } from "../data-table-head";
 import { Product } from "database";
 import { Badge } from "@ui/components/ui/badge";
 import { maketoast } from "../../toasts";
+import { useOpenProductDeleteAction } from "@/src/lib/zustand/delete-actions";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -101,6 +102,8 @@ export const ProctsColumns: ColumnDef<Product>[] = [
     id: "actions",
     cell: ({ row }) => {
       const payment = row.original;
+
+      const { setId, setIsOpen } = useOpenProductDeleteAction();
 
       return (
         <div className="w-full h-10 flex items-center justify-end gap-x-4">
@@ -266,7 +269,13 @@ export const ProctsColumns: ColumnDef<Product>[] = [
               </DropdownMenuItem>
               <DropdownMenuSeparator />
 
-              <DropdownMenuItem className="w-full h-full flex justify-between items-center px-2 text-[#C23D2F]">
+              <DropdownMenuItem
+                onClick={() => {
+                  setId(row.original.id);
+                  setIsOpen(true);
+                }}
+                className="w-full h-full flex justify-between items-center px-2 text-[#C23D2F]"
+              >
                 <svg
                   width="16"
                   height="17"
@@ -281,7 +290,7 @@ export const ProctsColumns: ColumnDef<Product>[] = [
                     stroke-linejoin="round"
                   />
                 </svg>
-                حذف الدورة
+                حذف المنتج
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

@@ -1,9 +1,11 @@
-import { Button } from "@ui/components/ui/button";
+import { Button, buttonVariants } from "@ui/components/ui/button";
 import type { FC } from "react";
 import AddCourse from "../../models/create-course-modal";
 import { Table } from "@ui/components/ui/table";
 import { Input } from "@ui/components/ui/input";
 import AddProductModel from "../../models/create-product-modal";
+import Link from "next/link";
+import { cn } from "@ui/lib/utils";
 
 interface TableHeaderProps {
   table: any;
@@ -46,6 +48,7 @@ const ProductsTableHeader: FC<TableHeaderProps> = ({ table }) => {
       </div>
       <div className="min-w-[200px] w-fit h-full flex items-center justify-end gap-x-4">
         <Button
+          disabled
           variant="secondary"
           className="bg-white rounded-xl border flex items-center gap-x-2"
         >
@@ -77,7 +80,37 @@ const ProductsTableHeader: FC<TableHeaderProps> = ({ table }) => {
           </svg>
           تصدير البيانات
         </Button>
+
         <AddProductModel />
+        <Link
+          href={`/`}
+          className={cn(
+            buttonVariants({ variant: "ghost" }),
+            "bg-white rounded-xl border flex items-center gap-x-2"
+          )}
+        >
+          معاينة كطالب
+          <svg
+            width="16"
+            height="17"
+            viewBox="0 0 16 17"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M1.35775 8.71467C1.31174 8.57639 1.31174 8.42694 1.35775 8.28867C2.28241 5.50667 4.90708 3.5 8.00041 3.5C11.0924 3.5 13.7157 5.50467 14.6424 8.28533C14.6891 8.42333 14.6891 8.57267 14.6424 8.71133C13.7184 11.4933 11.0937 13.5 8.00041 13.5C4.90841 13.5 2.28441 11.4953 1.35775 8.71467Z"
+              stroke="black"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M10 8.5C10 9.03043 9.78929 9.53914 9.41421 9.91421C9.03914 10.2893 8.53043 10.5 8 10.5C7.46957 10.5 6.96086 10.2893 6.58579 9.91421C6.21071 9.53914 6 9.03043 6 8.5C6 7.96957 6.21071 7.46086 6.58579 7.08579C6.96086 6.71071 7.46957 6.5 8 6.5C8.53043 6.5 9.03914 6.71071 9.41421 7.08579C9.78929 7.46086 10 7.96957 10 8.5Z"
+              stroke="black"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </Link>
       </div>
     </div>
   );
