@@ -194,6 +194,7 @@ export const chapter = {
   updateMaterial: privateProcedure
     .input(
       z.object({
+        oldFileUrl: z.string(),
         chapterID: z.string(),
         title: z.string(),
         content: z.any(),
@@ -214,7 +215,7 @@ export const chapter = {
 
         // find the target
         const targetMaterial = oldMaterials.find(
-          (item) => item.fileUrl === input.fileUrl
+          (item) => item.fileUrl === input.oldFileUrl
         );
 
         // create new material

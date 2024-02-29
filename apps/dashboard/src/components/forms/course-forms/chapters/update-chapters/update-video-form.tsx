@@ -85,6 +85,7 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
     }
     await mutation.mutateAsync({
       chapterID,
+      oldFileUrl: material.fileUrl,
       content: JSON.stringify(values.content),
       fileUrl: values.fileUrl,
       title: values.title,

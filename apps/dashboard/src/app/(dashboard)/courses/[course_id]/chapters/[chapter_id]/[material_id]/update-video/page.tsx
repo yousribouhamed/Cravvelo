@@ -41,9 +41,6 @@ export default async function Page({ params }: PageProps) {
     getMaterial({ chapter_id, fileUrl: material_id }),
   ]);
 
-  console.log("this is the material ");
-  console.log(material);
-
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">

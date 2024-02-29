@@ -79,7 +79,7 @@ const ModulesList: FC<ChapterProps> = ({
                 {(provided) => (
                   <div
                     className={cn(
-                      "flex items-center gap-x-2 bg-transparent  h-[25px] justify-start  rounded-md my-4 text-sm"
+                      "flex items-center gap-x-2 bg-transparent  h-[35px] justify-start  rounded-md my-4 text-sm"
                     )}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
@@ -112,7 +112,7 @@ const ModulesList: FC<ChapterProps> = ({
                     <Link
                       href={`/courses/${courseId}/chapters/${chapterID}/${chapter.fileUrl}/update-video`}
                     >
-                      <p className="text-black font-bold text-sm hover:text-primary transition-all duration-300 ">
+                      <p className="text-black font-bold text-xl hover:text-primary transition-all duration-300 ">
                         {" "}
                         {chapter.title}
                       </p>
