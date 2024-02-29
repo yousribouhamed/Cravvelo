@@ -261,6 +261,9 @@ export const chapter = {
           },
         });
 
+        console.log("this is the target chapter");
+        console.log(targetChapter);
+
         const oldMaterials = JSON.parse(
           targetChapter.modules as string
         ) as Module[];
@@ -268,6 +271,9 @@ export const chapter = {
         const newMaterial = oldMaterials.filter(
           (item) => item.fileUrl === input.fileUrl
         );
+
+        console.log("this is the new material");
+        console.log(newMaterial);
 
         const newChapter = await ctx.prisma.chapter.update({
           where: {
@@ -277,6 +283,8 @@ export const chapter = {
             modules: JSON.stringify(newMaterial),
           },
         });
+
+        console.log(newMaterial);
 
         return newChapter;
       } catch (err) {

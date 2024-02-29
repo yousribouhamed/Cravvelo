@@ -40,6 +40,8 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
   const path = usePathname();
   const chapterID = getValueFromUrl(path, 4);
 
+  // const fileUrl = getValueFromUrl(path, 5);
+
   const [open, setOpen] = React.useState<boolean>(false);
 
   const mutation = trpc.updateMaterial.useMutation({
@@ -81,7 +83,7 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
       return;
     }
     await mutation.mutateAsync({
-      chapterID: chapterID,
+      chapterID,
       content: JSON.stringify(values.content),
       fileUrl: values.fileUrl,
       title: values.title,
@@ -103,7 +105,7 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
         <div className="col-span-2 w-full h-full">
           <Form {...form}>
             <form
-              id="add-video"
+              id="update-video"
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-8"
             >
@@ -208,7 +210,12 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
               </Button>
               <Button
                 disabled={delete_mutation.isLoading}
-                onClick={() => delete_mutation.mutate()}
+                onClick={() =>
+                  delete_mutation.mutate({
+                    chapterID,
+                    fileUrl: form.watch("fileUrl"),
+                  })
+                }
                 type="button"
                 className="w-full flex items-center gap-x-2 bg-red-500"
                 size="lg"
