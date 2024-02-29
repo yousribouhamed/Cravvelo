@@ -63,6 +63,7 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
     onError: (error) => {
       maketoast.error();
       console.error(error);
+      console.log("here is an error");
     },
   });
 
@@ -171,27 +172,6 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
                   </FormItem>
                 )}
               />
-              <Card>
-                <CardContent className="w-full h-fit flex justify-end items-center p-6 gap-x-4 ">
-                  <Button
-                    onClick={() => router.back()}
-                    className=" rounded-xl"
-                    variant="secondary"
-                    type="button"
-                  >
-                    {" "}
-                    إلغاء والعودة
-                  </Button>
-                  <Button
-                    disabled={mutation.isLoading}
-                    type="submit"
-                    className=" flex items-center gap-x-2 rounded-xl"
-                  >
-                    {mutation.isLoading ? <LoadingSpinner /> : null}
-                    حفظ والمتابعة
-                  </Button>
-                </CardContent>
-              </Card>
             </form>
           </Form>
         </div>
@@ -210,12 +190,17 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
               </Button>
               <Button
                 disabled={delete_mutation.isLoading}
-                onClick={() =>
-                  delete_mutation.mutate({
+                onClick={async () => {
+                  console.log("here are the params");
+                  console.log(material.fileUrl, chapterID);
+                  await delete_mutation.mutateAsync({
+                    oldFileUrl: material.fileUrl,
                     chapterID,
                     fileUrl: form.watch("fileUrl"),
-                  })
-                }
+                  });
+
+                  console.log("funtion completed");
+                }}
                 type="button"
                 className="w-full flex items-center gap-x-2 bg-red-500"
                 size="lg"

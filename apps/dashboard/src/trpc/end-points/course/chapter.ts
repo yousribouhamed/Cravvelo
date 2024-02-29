@@ -228,7 +228,7 @@ export const chapter = {
         } as Module;
 
         const newMaterials = oldMaterials.filter(
-          (item) => item.fileUrl === input.fileUrl
+          (item) => item.fileUrl !== input.fileUrl
         );
 
         const newChapter = await ctx.prisma.chapter.update({
@@ -249,11 +249,13 @@ export const chapter = {
   deleteMaterial: privateProcedure
     .input(
       z.object({
+        oldFileUrl: z.string(),
         chapterID: z.string(),
         fileUrl: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {
+      console.log("the funtion started...");
       try {
         const targetChapter = await ctx.prisma.chapter.findFirst({
           where: {
@@ -269,24 +271,28 @@ export const chapter = {
         ) as Module[];
 
         const newMaterial = oldMaterials.filter(
-          (item) => item.fileUrl === input.fileUrl
+          (item) => item.fileUrl !== input.oldFileUrl
         );
 
-        console.log("this is the new material");
+        console.log(
+          "this is the new material where the value should be deleted"
+        );
         console.log(newMaterial);
 
-        const newChapter = await ctx.prisma.chapter.update({
-          where: {
-            id: input.chapterID,
-          },
-          data: {
-            modules: JSON.stringify(newMaterial),
-          },
-        });
+        try {
+          const newChapter = await ctx.prisma.chapter.update({
+            where: {
+              id: input.chapterID,
+            },
+            data: {
+              modules: JSON.stringify(newMaterial),
+            },
+          });
+        } catch (err) {
+          console.error(err);
+        }
 
         console.log(newMaterial);
-
-        return newChapter;
       } catch (err) {
         console.error(err);
       }
