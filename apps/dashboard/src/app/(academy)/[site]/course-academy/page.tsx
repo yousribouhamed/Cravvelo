@@ -26,7 +26,7 @@ const Page = async ({ params }: PageProps) => {
       <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
         <FilterCourses />
         <div className="w-fit h-fit flex items-center justify-start gap-x-2">
-          <button className="bg-blue-500  text-white hover:bg-blue-600 rounded-xl border p-4">
+          <button className="bg-primary  text-white hover:bg-orange-700 rounded-xl border p-4">
             <Search className=" w-4 h-4" />
           </button>
           <Input className="p-4 rounded-xl w-[200px]" />

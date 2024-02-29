@@ -114,7 +114,7 @@ const PaymentForm: FC<Props> = ({ subdomain, studentId }) => {
                       <button
                         onClick={() => bagItems.actions.removeItem(product.id)}
                         type="button"
-                        className="font-medium bg-blue-500 px-4 py-2 rounded-xl text-white"
+                        className="font-medium bg-primary px-4 py-2 rounded-xl text-white"
                       >
                         إزالة
                       </button>

@@ -123,7 +123,7 @@ export default function ShoppingCardProduction() {
                                               actions.removeItem(product.id)
                                             }
                                             type="button"
-                                            className="font-medium bg-blue-500 hover:bg-blue-600 cursor-pointer px-4 py-2 rounded-xl text-white"
+                                            className="font-medium bg-primary hover:bg-blue-600 cursor-pointer px-4 py-2 rounded-xl text-white"
                                           >
                                             إزالة
                                           </button>

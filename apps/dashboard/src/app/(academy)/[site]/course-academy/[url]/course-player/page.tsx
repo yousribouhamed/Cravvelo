@@ -23,7 +23,7 @@ const Page = async ({ params }: PageProps) => {
         <div className="w-full h-full col-span-2 py-8">
           <CourseVideoPlayer videoId={chapters[0]?.modules[0]?.fileUrl ?? ""} />
           <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
-            <button className="w-[100px] h-[40px] rounded-xl bg-blue-500 text-white">
+            <button className="w-[100px] h-[40px] rounded-xl bg-primary text-white">
               التعليقات
             </button>
 

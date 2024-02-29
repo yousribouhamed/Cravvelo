@@ -100,7 +100,7 @@ export default function FilterCourses() {
                         <p>level</p>
                       </div>
                       <div className="w-full h-[300px] flex justify-center items-center  ">
-                        <button className="px-4 py-2 rounded-xl bg-blue-500 text-white">
+                        <button className="px-4 py-2 rounded-xl bg-primary text-white">
                           apply filters
                         </button>
                       </div>

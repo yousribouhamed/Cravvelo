@@ -154,7 +154,7 @@ const ProfileForm: FC = ({}) => {
             )}
           />
           <div className="w-full h-[50px] flex items-center justify-end">
-            <LoadingButton className="bg-blue-500 rounded-xl " type="submit">
+            <LoadingButton className="bg-primary rounded-xl " type="submit">
               Submit
             </LoadingButton>
           </div>

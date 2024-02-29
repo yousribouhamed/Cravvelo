@@ -119,7 +119,7 @@ export function AcademySignInForm({ accountId }: AcademySifnIpFormProps) {
               type="submit"
               size="lg"
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-x-2 text-white font-bold bg-blue-500 hover:bg-blue-600  disabled:pointer-events-none disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-x-2 text-white font-bold bg-primary hover:bg-blue-600  disabled:pointer-events-none disabled:opacity-50"
             >
               {isLoading ? <LoadingSpinner /> : null}
               تسجيل الدخول

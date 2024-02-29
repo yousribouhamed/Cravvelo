@@ -46,7 +46,7 @@ function LibraryNavigation({ className, ...props }: ExamplesNavProps) {
             className={cn(
               "flex h-[60px] items-center justify-center border-b px-4 text-center text-sm transition-colors hover:text-blue-500",
               pathname?.includes(item.href) || (index === 0 && pathname === "/")
-                ? "border-b-2 border-blue-500 text-black font-bold"
+                ? "border-b-2 border-primary text-black font-bold"
                 : ""
             )}
           >

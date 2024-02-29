@@ -74,7 +74,7 @@ const Feedbacks: FC = ({}) => {
         <div className="w-full flex flex-col h-[250px] bg-white rounded-xl ">
           <div className="w-full h-[70px]  flex items-center justify-between p-4">
             <div className="w-[200px] h-full flex  justify-start items-center gap-x-4">
-              <div className="rounded-[50%] w-[40px] h-[40px] bg-blue-500"></div>
+              <div className="rounded-[50%] w-[40px] h-[40px] bg-primary"></div>
               <div className="w-fit min-w-[100px] h-full flex flex-col gap-y-1 justify-center items-start">
                 <p className="text-black text-xl font-bold ">abdullah chehri</p>
                 <span className="text-gray-500 text-sm ">9:99 pm</span>
@@ -101,7 +101,7 @@ const Feedbacks: FC = ({}) => {
         <div className="w-full flex flex-col h-[250px] bg-white rounded-xl ">
           <div className="w-full h-[70px]  flex items-center justify-between p-4">
             <div className="w-[200px] h-full flex  justify-start items-center gap-x-4">
-              <div className="rounded-[50%] w-[40px] h-[40px] bg-blue-500"></div>
+              <div className="rounded-[50%] w-[40px] h-[40px] bg-primary"></div>
               <div className="w-fit min-w-[100px] h-full flex flex-col gap-y-1 justify-center items-start">
                 <p className="text-black text-xl font-bold ">abdullah chehri</p>
                 <span className="text-gray-500 text-sm ">9:99 pm</span>

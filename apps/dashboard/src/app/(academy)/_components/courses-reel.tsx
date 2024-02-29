@@ -99,7 +99,7 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses }) => {
                         price: item.price.toString(),
                       });
                     }}
-                    className="w-[99%] bg-blue-500 text-white p-2 h-[45px] rounded-xl"
+                    className="w-[99%] bg-primary text-white p-2 h-[45px] rounded-xl"
                   >
                     اشتري الآن
                   </button>

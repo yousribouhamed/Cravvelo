@@ -160,7 +160,7 @@ export function AcademySifnUpForm({ accountId }: AcademySifnUpFormProps) {
               disabled={isLoading}
               type="submit"
               size="lg"
-              className="w-full text-white flex items-center justify-center gap-x-2 font-bold bg-blue-500 hover:bg-blue-600  disabled:pointer-events-none disabled:opacity-50"
+              className="w-full text-white flex items-center justify-center gap-x-2 font-bold bg-primary hover:bg-blue-600  disabled:pointer-events-none disabled:opacity-50"
             >
               {isLoading ? <LoadingSpinner /> : null}
               أنشئ حسابك مجانًا

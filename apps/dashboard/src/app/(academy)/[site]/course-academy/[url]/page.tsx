@@ -98,7 +98,7 @@ const Product_card = ({ course }: { course: Course }) => {
           </p>
         </div>
         <div className="w-full h-[40px] flex items-center justify-between gap-x-4">
-          <button className=" w-full  lg:w-[300px] h-[40px]  rounded-xl bg-blue-500 flex items-center justify-center text-white">
+          <button className=" w-full  lg:w-[300px] h-[40px]  rounded-xl bg-primary flex items-center justify-center text-white">
             اشتري الان
           </button>
         </div>
