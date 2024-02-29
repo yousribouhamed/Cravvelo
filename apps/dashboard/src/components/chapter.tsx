@@ -183,7 +183,7 @@ export const AddToChapter = ({
           />
         </svg>
       ),
-      disabled: false,
+      disabled: true,
     },
     {
       name: " صوت",
@@ -261,7 +261,7 @@ export const AddToChapter = ({
           />
         </svg>
       ),
-      disabled: false,
+      disabled: true,
     },
   ];
 

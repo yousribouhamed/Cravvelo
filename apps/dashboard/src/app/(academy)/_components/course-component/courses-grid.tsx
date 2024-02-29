@@ -96,7 +96,7 @@ const CoursesGrid: FC<Props> = ({ courses }) => {
                   });
                   router.push(`/cart`);
                 }}
-                className="w-[99%] bg-primary hover:bg-blue-600 text-white p-2 h-[45px] rounded-xl"
+                className="w-[99%] bg-primary hover:bg-orange-700 text-white p-2 h-[45px] rounded-xl"
               >
                 اشتري الآن
               </button>

@@ -33,9 +33,9 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
         </div>
         <div className="flex w-fir min-w-[100px] justify-end items-center">
           <ShoppingCardProduction />
-          <button className="text-black w-[40px] h-[40px] rounded-xl p-2">
+          {/* <button className="text-black w-[40px] h-[40px] rounded-xl p-2">
             <Search className="w-5 h-5 " />
-          </button>
+          </button> */}
           {isAuthanticated ? (
             student && <StudentNav student={student} />
           ) : (

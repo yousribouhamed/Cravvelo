@@ -27,7 +27,7 @@ const CourseVideoPlayer: FC<VideoPlayerProps> = ({ videoId }) => {
               state?.currentModule?.fileUrl &&
               state?.currentModule?.fileUrl !== ""
                 ? state?.currentModule?.fileUrl
-                : "vi3zyFVFwXJZFWptq54sINZu",
+                : videoId,
           }}
           style={{ width: "100%", height: "100%" }}
           theme={{

@@ -45,7 +45,7 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses }) => {
                 />
                 <div className="w-full h-[50px] flex items-center justify-between my-4 px-4">
                   <Link href={`/course-academy/${item.id}`}>
-                    <h2 className="text-black font-semibold text-lg text-start hover:text-blue-500 hover:underline  cursor-pointer">
+                    <h2 className="text-black font-semibold text-lg text-start hover:text-primary hover:underline  cursor-pointer">
                       {item.title}
                     </h2>
                   </Link>
@@ -64,7 +64,7 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses }) => {
                   </div>
 
                   <StarRatings
-                    rating={2.403}
+                    rating={0}
                     starDimension="20px"
                     starSpacing="1px"
                   />

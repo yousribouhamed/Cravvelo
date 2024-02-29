@@ -232,8 +232,10 @@ const ChaptersBoard: FC<ChaptersBoardAbdullahProps> = ({ initialData }) => {
                                       {" "}
                                       {chapter.title}
                                     </p>
-                                    <span className="text-[#A1A1A1] text-xs text-start ">
-                                      {materials?.length}
+                                    <span className="text-[#A1A1A1] text-xs text-start  space-x-2">
+                                      {materials?.length
+                                        ? materials?.length
+                                        : "0"}
                                       مواد
                                     </span>
                                   </div>
@@ -307,6 +309,7 @@ const ChaptersBoard: FC<ChaptersBoardAbdullahProps> = ({ initialData }) => {
                             <AccordionContent className="mt-4 space-y-4">
                               {/* @ts-ignore */}
                               <ModulesList
+                                courseId={courseID}
                                 chapterID={chapter.id}
                                 initialModules={materials}
                               />
