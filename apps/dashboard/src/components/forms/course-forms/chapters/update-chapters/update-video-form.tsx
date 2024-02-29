@@ -42,7 +42,18 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
 
   const [open, setOpen] = React.useState<boolean>(false);
 
-  const mutation = trpc.createModule.useMutation({
+  const mutation = trpc.updateMaterial.useMutation({
+    onSuccess: () => {
+      maketoast.success();
+      router.back();
+    },
+    onError: (error) => {
+      maketoast.error();
+      console.error(error);
+    },
+  });
+
+  const delete_mutation = trpc.deleteMaterial.useMutation({
     onSuccess: () => {
       maketoast.success();
       router.back();
@@ -72,7 +83,6 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
     await mutation.mutateAsync({
       chapterID: chapterID,
       content: JSON.stringify(values.content),
-      fileType: "VEDIO",
       fileUrl: values.fileUrl,
       title: values.title,
     });
@@ -189,12 +199,22 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
               <Button
                 disabled={mutation.isLoading}
                 type="submit"
-                form="add-video"
+                form="update-video"
                 className="w-full flex items-center gap-x-2"
                 size="lg"
               >
                 {mutation.isLoading ? <LoadingSpinner /> : null}
-                حفظ والمتابعة
+                حفظ التغييرات
+              </Button>
+              <Button
+                disabled={delete_mutation.isLoading}
+                onClick={() => delete_mutation.mutate()}
+                type="button"
+                className="w-full flex items-center gap-x-2 bg-red-500"
+                size="lg"
+              >
+                {delete_mutation.isLoading ? <LoadingSpinner /> : null}
+                حذف هذه المادة
               </Button>
               <Button
                 onClick={() => router.back()}
@@ -203,7 +223,7 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
                 size="lg"
               >
                 {" "}
-                إلغاء والعودة
+                العودة الى باني الدورة
               </Button>
             </CardContent>
           </Card>

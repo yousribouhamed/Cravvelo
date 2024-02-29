@@ -32,11 +32,13 @@ const DeleteCourseModel: FC<DeleteCourseModelProps> = ({ refetch }) => {
   const mutation = trpc.deleteCourse.useMutation({
     onSuccess: async () => {
       await refetch();
+
       setIsOpen(false);
+      maketoast.successWithText({ text: "تم حذف الدورة بنجاح" });
     },
     onError: () => {
       maketoast.error();
-      console.error("something went wrong on the delete chapter model");
+      console.error("حدث خطأ ما في نموذج حذف الفصل");
       setIsOpen(false);
     },
   });

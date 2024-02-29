@@ -26,8 +26,8 @@ import { addCourseSchema } from "@/src/lib/validators/course";
 import { trpc } from "@/src/app/_trpc/client";
 import { getCookie } from "@/src/lib/utils";
 import { useRouter } from "next/navigation";
-import type { User } from "@clerk/nextjs/server";
 import * as React from "react";
+import { maketoast } from "../toasts";
 
 const AddCourse: FC = ({}) => {
   const router = useRouter();
@@ -36,8 +36,12 @@ const AddCourse: FC = ({}) => {
   const mutation = trpc.createCourse.useMutation({
     onSuccess: ({ courseId }) => {
       router.push(`/courses/${courseId}/chapters`);
+      maketoast.successWithText({ text: "تم انشاء الدورة بنجاح" });
     },
-    onError: () => {},
+    onError: () => {
+      maketoast.error();
+      setIsOpen(false);
+    },
   });
 
   // 1. Define your form.

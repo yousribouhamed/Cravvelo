@@ -17,6 +17,7 @@ import { DataTableColumnHeader } from "../data-table-head";
 import { Course } from "database";
 import { Badge } from "@ui/components/ui/badge";
 import { maketoast } from "../../toasts";
+import { useOpenCourseDeleteAction } from "@/src/lib/zustand/delete-actions";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -124,6 +125,8 @@ export const columns: ColumnDef<Course>[] = [
     id: "actions",
     cell: ({ row }) => {
       const payment = row.original;
+
+      const { setId, setIsOpen } = useOpenCourseDeleteAction();
 
       return (
         <div className="w-full h-10 flex items-center justify-end gap-x-4">
@@ -289,7 +292,13 @@ export const columns: ColumnDef<Course>[] = [
               </DropdownMenuItem>
               <DropdownMenuSeparator />
 
-              <DropdownMenuItem className="w-full h-full flex justify-between items-center px-2 text-[#C23D2F]">
+              <DropdownMenuItem
+                onClick={() => {
+                  setId(row.original.id);
+                  setIsOpen(true);
+                }}
+                className="w-full h-full flex justify-between items-center px-2 text-[#C23D2F]"
+              >
                 <svg
                   width="16"
                   height="17"

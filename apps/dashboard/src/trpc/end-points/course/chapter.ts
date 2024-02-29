@@ -190,4 +190,97 @@ export const chapter = {
 
       return { success: true, courseId: course.id };
     }),
+
+  updateMaterial: privateProcedure
+    .input(
+      z.object({
+        chapterID: z.string(),
+        title: z.string(),
+        content: z.any(),
+        fileUrl: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const targetChapter = await ctx.prisma.chapter.findFirst({
+          where: {
+            id: input.chapterID,
+          },
+        });
+
+        const oldMaterials = JSON.parse(
+          targetChapter.modules as string
+        ) as Module[];
+
+        // find the target
+        const targetMaterial = oldMaterials.find(
+          (item) => item.fileUrl === input.fileUrl
+        );
+
+        // create new material
+
+        const newMaterial = {
+          content: input.content,
+          fileUrl: input.fileUrl,
+          orderNumber: targetMaterial.orderNumber,
+          fileType: targetMaterial.fileType,
+          title: input.title,
+        } as Module;
+
+        const newMaterials = oldMaterials.filter(
+          (item) => item.fileUrl === input.fileUrl
+        );
+
+        const newChapter = await ctx.prisma.chapter.update({
+          where: {
+            id: input.chapterID,
+          },
+          data: {
+            modules: JSON.stringify([...newMaterials, newMaterial]),
+          },
+        });
+
+        return newChapter;
+      } catch (err) {
+        console.error(err);
+      }
+    }),
+
+  deleteMaterial: privateProcedure
+    .input(
+      z.object({
+        chapterID: z.string(),
+        fileUrl: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const targetChapter = await ctx.prisma.chapter.findFirst({
+          where: {
+            id: input.chapterID,
+          },
+        });
+
+        const oldMaterials = JSON.parse(
+          targetChapter.modules as string
+        ) as Module[];
+
+        const newMaterial = oldMaterials.filter(
+          (item) => item.fileUrl === input.fileUrl
+        );
+
+        const newChapter = await ctx.prisma.chapter.update({
+          where: {
+            id: input.chapterID,
+          },
+          data: {
+            modules: JSON.stringify(newMaterial),
+          },
+        });
+
+        return newChapter;
+      } catch (err) {
+        console.error(err);
+      }
+    }),
 };

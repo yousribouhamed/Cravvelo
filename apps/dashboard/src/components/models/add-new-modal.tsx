@@ -28,6 +28,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { Icons } from "../my-icons";
 import { PlusCircle } from "lucide-react";
+import { maketoast } from "../toasts";
 
 const icons = {
   icons1: () => (
@@ -121,9 +122,13 @@ const AddNew: FC = ({}) => {
   const [selectedItem, setSelectedItem] = React.useState<0 | 1>(0);
   const mutation = trpc.createCourse.useMutation({
     onSuccess: ({ courseId }) => {
-      router.push(`/courses/${courseId}`);
+      router.push(`/courses/${courseId}/chapters`);
+      maketoast.successWithText({ text: "تم انشاء الدورة بنجاح" });
     },
-    onError: () => {},
+    onError: () => {
+      maketoast.error();
+      setIsOpen(false);
+    },
   });
 
   // 1. Define your form.
