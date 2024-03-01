@@ -50,13 +50,18 @@ const CourseDisplayContent: FC<CourseContentProps> = ({ course, chapters }) => {
             case "informations":
               return (
                 <>
-                  <div className="w-full h-[500px] bg-primary "></div>
+                  <div className="w-full h-[500px]  ">
+                    <ApiVideoPlayer
+                      video={{ id: course?.youtubeUrl }}
+                      style={{ width: "100%", height: 450 }}
+                    />
+                  </div>
                   <CourseDescription
                     // @ts-ignore
                     value={JSON.parse(course?.courseDescription as string)}
                   />
                   {/* what you are gonna learn */}
-                  <div className="w-full min-h-[200px] h-fit flex flex-col rounded-xl">
+                  <div className="w-full my-4 min-h-[200px] h-fit flex flex-col rounded-xl">
                     <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
                       <h3 className="text-xl font-bold">
                         ماذا ستتعلم في هذه الدورة
@@ -64,6 +69,7 @@ const CourseDisplayContent: FC<CourseContentProps> = ({ course, chapters }) => {
                     </div>
                     <div className="w-full h-[300px] flex flex-col bg-white  gap-y-4 rounded-xl  p-4">
                       <p className="text-lg text-black">
+                        uuuuu
                         {course?.courseWhatYouWillLearn}
                       </p>
                     </div>

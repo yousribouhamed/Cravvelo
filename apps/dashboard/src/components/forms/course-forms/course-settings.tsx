@@ -61,6 +61,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
   const [isEditingSeoContent, setIsEditingSeoContent] =
     React.useState<boolean>(false);
 
+  // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -73,8 +74,8 @@ export function CourseSettingsForm({ course }: ComponentProps) {
       seoTitle: course?.seoTitle ?? "",
       courseRequirements: course.courseRequirements ?? "",
       courseWhatYouWillLearn: course?.courseRequirements ?? "",
-      courseDescription: course?.courseDescription,
-      level : course.level , 
+      level: course.level,
+      courseDescription: course?.courseDescription
         ? JSON.parse(course?.courseDescription as string)
         : [
             {
@@ -119,7 +120,6 @@ export function CourseSettingsForm({ course }: ComponentProps) {
       thumnailUrl: values.thumnailUrl,
       title: values.title,
       youtubeUrl: values.youtubeUrl,
-      level: values?.level,
     });
   }
 

@@ -41,7 +41,7 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
           ) : (
             <Link
               href={"/auth-academy/sign-in"}
-              className="bg-primary text-white w-[140px] h-[40px] rounded-xl p-2 flex items-center justify-center hover:bg-blue-700 hover:scale-105 transition-all duration-300"
+              className="bg-primary text-white w-[140px] h-[40px]  p-2 flex items-center justify-center hover:bg-blue-700 hover:scale-105 transition-all duration-300"
             >
               تسجيل الدخول
             </Link>
