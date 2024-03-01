@@ -73,6 +73,7 @@ model Course {
   profit            String?
   trainers          String?
   status            String
+  level             String @default("BEGINNER")
   allowComment      Boolean    @default(true)
   allowRating       Boolean    @default(true)
   forceWatchAllCourse Boolean    @default(true)
