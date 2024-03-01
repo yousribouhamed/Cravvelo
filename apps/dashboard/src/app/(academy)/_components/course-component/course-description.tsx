@@ -1,10 +1,9 @@
 import { PlateEditorReactOnly } from "@/src/components/reich-text-editor/read-only";
-import { Info } from "lucide-react";
 import type { FC } from "react";
 
 const CourseDescription: FC = (props: any) => {
   return (
-    <div className="w-full my-4 min-h-[200px] h-fit flex flex-col rounded-xl">
+    <div className="w-full my-4 min-h-[500px] h-fit flex flex-col rounded-xl">
       <div className="w-full h-[50px] flex items-center justify-start gap-x-4">
         <h3 className="text-xl font-bold">وصف الوردة</h3>
       </div>

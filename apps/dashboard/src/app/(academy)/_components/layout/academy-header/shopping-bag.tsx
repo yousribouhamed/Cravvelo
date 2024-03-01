@@ -115,7 +115,7 @@ export default function ShoppingCardProduction() {
                                       <div className="flex w-full flex-1 items-end justify-between text-sm">
                                         <div className="flex justify-between items-end w-full ">
                                           <p className="ml-4">
-                                            {product.price} DZD
+                                            DZD {product.price}.00
                                           </p>
 
                                           <button
@@ -123,7 +123,7 @@ export default function ShoppingCardProduction() {
                                               actions.removeItem(product.id)
                                             }
                                             type="button"
-                                            className="font-medium bg-primary hover:bg-blue-600 cursor-pointer px-4 py-2 rounded-xl text-white"
+                                            className="font-medium bg-primary hover:bg-orange-700 cursor-pointer px-4 py-2 rounded-xl text-white"
                                           >
                                             إزالة
                                           </button>
@@ -139,17 +139,19 @@ export default function ShoppingCardProduction() {
                       {Array.isArray(state?.shoppingBag) &&
                         state?.shoppingBag?.length > 0 && (
                           <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-                            <div className="flex justify-between text-base font-medium text-gray-900">
+                            <div className="flex justify-between text-base font-medium my-4 text-gray-900">
                               <p>المجموع الفرعي</p>
                               <p>DZD {state?.shoppingBag[0]?.price}.00</p>
                             </div>
-                            <p className="mt-0.5 text-sm text-gray-500">
-                              الشحن والضرائب تحسب عند الخروج.
-                            </p>
+
+                            <div className="flex justify-between my-4 text-base font-medium text-gray-900">
+                              <p> الشحن والضرائب </p>
+                              <p>DZD 0.00</p>
+                            </div>
 
                             <Link
                               href="/cart"
-                              className=" mt-6 flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                              className=" mt-6 flex items-center justify-center rounded-md border border-transparent bg-primary px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-orange-700"
                             >
                               ادفع
                             </Link>
@@ -159,7 +161,7 @@ export default function ShoppingCardProduction() {
                                 أو{" "}
                                 <button
                                   type="button"
-                                  className="font-medium text-blue-600 hover:text-blue-500 mx-2"
+                                  className="font-medium text-primary hover:text-orange-700 mx-2"
                                   onClick={() => setOpen(false)}
                                 >
                                   مواصلة التسوق
