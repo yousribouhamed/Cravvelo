@@ -76,6 +76,7 @@ export const course = {
         thumnailUrl: z.string(),
         title: z.string(),
         youtubeUrl: z.string(),
+        level: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -93,6 +94,7 @@ export const course = {
             thumnailUrl: input.thumnailUrl,
             title: input.title,
             youtubeUrl: input.youtubeUrl,
+            level: input.level,
           },
         })
         .catch((err) => {

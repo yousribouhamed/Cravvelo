@@ -55,13 +55,12 @@ const formSchema = z.object({
 export function CourseSettingsForm({ course }: ComponentProps) {
   const router = useRouter();
   const path = usePathname();
-  const courseID = getValueFromUrl(path, 2);
+
   const [open, setOpen] = React.useState<boolean>(false);
 
   const [isEditingSeoContent, setIsEditingSeoContent] =
     React.useState<boolean>(false);
 
-  // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -74,7 +73,8 @@ export function CourseSettingsForm({ course }: ComponentProps) {
       seoTitle: course?.seoTitle ?? "",
       courseRequirements: course.courseRequirements ?? "",
       courseWhatYouWillLearn: course?.courseRequirements ?? "",
-      courseDescription: course?.courseDescription
+      courseDescription: course?.courseDescription,
+      level : course.level , 
         ? JSON.parse(course?.courseDescription as string)
         : [
             {
@@ -89,7 +89,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
   const mutation = trpc.updateCourseSettings.useMutation({
     onSuccess: () => {
       maketoast.success();
-      router.push(`/courses/${courseID}/pricing`);
+      router.push(`/courses/${course.id}/pricing`);
     },
     onError: () => {
       maketoast.error();
@@ -111,7 +111,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
   function onSubmit(values: z.infer<typeof formSchema>) {
     mutation.mutate({
       courseDescription: values.courseDescription,
-      courseId: courseID,
+      courseId: course.id,
       courseResume: values.courseResume,
       courseUrl: "",
       seoDescription: values?.seoDescription,
@@ -119,6 +119,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
       thumnailUrl: values.thumnailUrl,
       title: values.title,
       youtubeUrl: values.youtubeUrl,
+      level: values?.level,
     });
   }
 
