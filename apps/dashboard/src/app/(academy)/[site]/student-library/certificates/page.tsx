@@ -5,7 +5,7 @@ import { StudentBag } from "@/src/types";
 import Link from "next/link";
 
 async function Page() {
-  await authorization();
+  await authorization({ origin: null });
 
   const student = await getStudent();
 

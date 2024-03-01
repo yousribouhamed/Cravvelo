@@ -12,7 +12,7 @@ const Page = async ({ params }: PageProps) => {
     process.env.NODE_ENV === "development"
       ? "abdullah.jadir.vercel.app"
       : decodeURIComponent(params?.site);
-  await authorization();
+  await authorization({ origin: "cart" });
 
   const student = await getStudent();
 

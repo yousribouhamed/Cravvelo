@@ -168,11 +168,19 @@ export const update_profile = async ({
  * Function to authorize student access.
  * @returns A Promise that resolves to a boolean indicating if the student is authorized.
  */
-export const authorization = async (): Promise<boolean> => {
+export const authorization = async ({
+  origin = null,
+}: {
+  origin?: string | null;
+}): Promise<boolean> => {
   const token = cookies().get("jwt");
 
   if (!token || !token?.value) {
-    redirect("/auth-academy/sign-in");
+    if (origin) {
+      redirect(`/auth-academy/sign-in?origin=${origin}`);
+    } else {
+      redirect("/auth-academy/sign-in");
+    }
   }
 
   try {
@@ -203,6 +211,7 @@ export const getStudent = async (): Promise<Student | null> => {
       id: studentId.value,
     },
   });
+
   if (!student) {
     return null;
   }

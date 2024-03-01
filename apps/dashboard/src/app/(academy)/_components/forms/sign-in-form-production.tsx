@@ -22,7 +22,7 @@ import {
 import { Input } from "@ui/components/ui/input";
 import Link from "next/link";
 import { PasswordInput } from "@/src/components/password-input";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { authSchemaLogin } from "@/src/lib/validators/auth";
 import { sign_in_as_student } from "../../_actions/auth";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
@@ -36,6 +36,9 @@ interface AcademySifnIpFormProps {
 
 export function AcademySignInForm({ accountId }: AcademySifnIpFormProps) {
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const origin = searchParams.get("origin");
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -56,8 +59,13 @@ export function AcademySignInForm({ accountId }: AcademySifnIpFormProps) {
         password: data.password,
         accountId,
       });
+      console.log("this is the value of the origin");
+      console.log(origin);
       maketoast.successWithText({ text: "تم تسجيل الدخول بنجاح" });
-      router.push("/student-library");
+      if (!origin) {
+        router.push("/student-library");
+      }
+      router.push(`/${origin}`);
     } catch (err) {
       console.error(err);
       maketoast.error();
@@ -85,7 +93,7 @@ export function AcademySignInForm({ accountId }: AcademySifnIpFormProps) {
                   <FormLabel>البريد الإلكتروني</FormLabel>
                   <FormControl>
                     <Input
-                      className="focus:border-blue-500"
+                      className="focus:border-orange-500"
                       placeholder="أدخِل عنوان البريد الإلكتروني"
                       {...field}
                     />
@@ -103,7 +111,7 @@ export function AcademySignInForm({ accountId }: AcademySifnIpFormProps) {
                   <FormLabel>كلمة المرور</FormLabel>
                   <FormControl>
                     <PasswordInput
-                      className="focus:border-blue-500"
+                      className="focus:border-orange-500"
                       placeholder="أدخِل كلمة المرور"
                       {...field}
                     />
@@ -119,7 +127,7 @@ export function AcademySignInForm({ accountId }: AcademySifnIpFormProps) {
               type="submit"
               size="lg"
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-x-2 text-white font-bold bg-primary hover:bg-blue-600  disabled:pointer-events-none disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-x-2 text-white font-bold bg-primary hover:bg-orange-600  disabled:pointer-events-none disabled:opacity-50"
             >
               {isLoading ? <LoadingSpinner /> : null}
               تسجيل الدخول
@@ -130,7 +138,7 @@ export function AcademySignInForm({ accountId }: AcademySifnIpFormProps) {
           <span>
             ليس لديك حساب؟{" "}
             <Link href={"/auth-academy/sign-up"}>
-              <span className="text-blue-500">أنشئ حساب الآن</span>
+              <span className="text-orange-500">أنشئ حساب الآن</span>
             </Link>
           </span>
         </div>

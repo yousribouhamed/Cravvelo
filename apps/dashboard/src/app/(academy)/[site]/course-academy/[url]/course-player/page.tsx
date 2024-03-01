@@ -9,7 +9,7 @@ interface PageProps {
 }
 
 const Page = async ({ params }: PageProps) => {
-  await authorization();
+  await authorization({ origin: null });
   const course = await getCourseByUrlPath({ url: params?.url });
   const chapters = await get_course_chapters({ courseID: course?.id });
 
