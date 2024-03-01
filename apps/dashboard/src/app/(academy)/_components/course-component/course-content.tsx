@@ -21,9 +21,6 @@ const CourseContent: FC<CourseContentProps> = ({ chapters }) => {
     <>
       <div className="w-full min-h-[200px] h-fit flex flex-col rounded-xl">
         <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
-          <div className="w-[45px] h-[45px] rounded-[50%] bg-black flex items-center justify-center">
-            <Info className="text-white w-6 h-6" />
-          </div>
           <h3 className="text-xl font-bold">محتوى الدورة</h3>
         </div>
         <div className="w-full min-h-[200px] h-fit flex flex-col bg-gray-200 gap-y-4 rounded-xl  p-8">
