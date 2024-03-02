@@ -3,6 +3,7 @@ export const PLANS = [
     plan: "الباقة الآساسية",
     plan_code: "BASIC",
     price: "10",
+    imageUrl: "/pricing-icons/pro.png",
     tagline:
       "إنشاء منصتك التعليمية ومنتجاتك الرقمية وبيعها وتسويقها عبر الإنترنت.",
     quota: 10,
@@ -54,6 +55,7 @@ export const PLANS = [
       test: "price_1Obef0Cxv0KQVM5xGGVkqWMS",
       production: "",
     },
+    imageUrl: "/pricing-icons/pro.png",
     plan_code: "ADVANCED",
     plan: "باقة النمو",
     price: "18",
@@ -104,6 +106,7 @@ export const PLANS = [
       test: "price_1Obeg9Cxv0KQVM5x3qHaFrbs",
       production: "",
     },
+    imageUrl: "/pricing-icons/pro.png",
     plan_code: "PRO",
     plan: "الباقة الاحترافية",
     price: "28",

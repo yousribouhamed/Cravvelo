@@ -16,6 +16,7 @@ import { translateCurrency } from "../../../../lib/utils";
 import { trpc } from "../../../_trpc/client";
 import { maketoast } from "../../../../components/toasts";
 import { Tabs } from "./animated-tabs";
+import Image from "next/image";
 
 interface PricingAbdullahProps {}
 
@@ -143,15 +144,12 @@ const UpgradeButton: FC = ({}) => {
                 </div>
               )}
               <div className="w-full h-[100px] flex items-center justify-start gap-x-4 ">
-                <svg
-                  width="49"
-                  height="50"
-                  viewBox="0 0 49 50"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M0 49.43H49V0.43H0V49.43Z" fill="black" />
-                </svg>
+                <Image
+                  src={item.imageUrl}
+                  alt="this is the image url"
+                  width={55}
+                  height={55}
+                />
 
                 <h2 className="font-bold text-3xl text-start text-black">
                   {item.plan}
