@@ -169,8 +169,8 @@ export function formatBytes(
 }
 
 export function constructMetadata({
-  title = "جدير",
-  description = "انت جدير بامتلاك اكادميتي الخاصة",
+  title = "Cravvelo",
+  description = "Cravvelo is Cravvelo",
   image = "/opengraph-image.png",
   icons = "/favicon.ico",
   noIndex = false,

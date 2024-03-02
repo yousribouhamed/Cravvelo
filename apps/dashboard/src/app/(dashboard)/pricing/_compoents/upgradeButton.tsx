@@ -3,7 +3,6 @@
 import type { FC } from "react";
 import { PLANS } from "../../../../constants/plans";
 import { Button } from "@ui/components/ui/button";
-import { AnimatePresence, motion } from "framer-motion";
 import {
   Select,
   SelectContent,
