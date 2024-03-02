@@ -7,6 +7,7 @@ import { cn } from "@ui/lib/utils";
 import { MobilNavBar } from "./mobil-nav-bar";
 import { useRouter, usePathname } from "next/navigation";
 import { X } from "lucide-react";
+import Image from "next/image";
 interface HeaderAbdullahProps {}
 
 const links = [
@@ -93,10 +94,13 @@ export const NavBar: FC = ({}) => {
         >
           <div className=" flex items-center mx-auto lg:max-w-screen-2xl 2xl:px-20 px-2.5  justify-between rounded-xl gap-x-2 w-full h-[80px]  ">
             {/* this section is for the logo */}
-            <div className="w-[10%] h-full flex items-center justify-start ">
-              <span className="text-2xl qatar-bold text-black font-bold ">
-                جدارة{" "}
-              </span>
+            <div className="w-[20%] h-full flex items-center justify-start ">
+              <Image
+                src="/Cravvelo_Logo-01.svg"
+                alt="logo"
+                width={160}
+                height={60}
+              />
             </div>
 
             {/* this section is for the nav menu and the action button */}
