@@ -93,7 +93,7 @@ const UserProfileForm: FC = ({}) => {
     }
   }
   return (
-    <div className="w-full h-fit min-h-[500px] bg-white shadow border rounded-xl max-w-2xl p-8">
+    <div className="w-full h-fit min-h-[500px] bg-white shadow border rounded-xl  p-8">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
           <FormField
