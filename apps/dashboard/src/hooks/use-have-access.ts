@@ -39,11 +39,11 @@ const useHaveAccess = async () => {
 
   return {
     userId: user.id,
-    accountId: account.id,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    avatar: user.hasImage ? account.avatarUrl : user.imageUrl,
-    email: user.primaryEmailAddressId,
+    accountId: account?.id,
+    firstName: user?.firstName,
+    lastName: user?.lastName,
+    avatar: account?.avatarUrl ? account?.avatarUrl : user?.imageUrl,
+    email: user?.primaryEmailAddressId,
     isFreeTrial,
     isSubscribed,
     subdomain: account.Website[0]?.subdomain,
