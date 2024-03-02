@@ -16,7 +16,7 @@ const StartNew: FC = ({}) => {
           </p>
           <Button
             size="lg"
-            className="w-[300px] h-[60px] bg-[#F8FAE5] rounded-[17px] text-[#FC6B00] hover:text-white hover:translate-y-[-0.3rem] transition-all duration-150 text-2xl qatar-bold "
+            className="w-[350px] h-[60px] bg-[#F8FAE5] rounded-[17px] text-[#FC6B00] hover:text-white hover:translate-y-[-0.3rem] transition-all duration-150 text-2xl qatar-bold "
           >
             ابدء تجربتك المجانية
           </Button>
