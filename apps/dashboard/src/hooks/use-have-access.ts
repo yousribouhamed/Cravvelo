@@ -42,7 +42,7 @@ const useHaveAccess = async () => {
     accountId: account.id,
     firstName: user.firstName,
     lastName: user.lastName,
-    avatar: user.imageUrl,
+    avatar: user.hasImage ? account.avatarUrl : user.imageUrl,
     email: user.primaryEmailAddressId,
     isFreeTrial,
     isSubscribed,

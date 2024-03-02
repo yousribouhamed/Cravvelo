@@ -23,6 +23,7 @@ import { useUploadThing } from "@/src/lib/uploadthing";
 import { Textarea } from "@ui/components/ui/textarea";
 import { trpc } from "@/src/app/_trpc/client";
 import { maketoast } from "../toasts";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 const formSchema = z.object({
   full_name: z.string().min(2).max(50),
@@ -166,7 +167,9 @@ const UserProfileForm: FC = ({}) => {
               onClick={() => mutation.mutate()}
               className="bg-primary rounded-xl "
               type="submit"
+              disabled={mutation?.isLoading}
             >
+              {mutation.isLoading ? <LoadingSpinner /> : null}
               حفظ التعديلات
             </LoadingButton>
           </div>
