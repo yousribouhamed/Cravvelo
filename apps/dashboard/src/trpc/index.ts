@@ -16,6 +16,7 @@ import { comments } from "./end-points/comments";
 import { academia } from "./end-points/academia";
 import { coubons } from "./end-points/coupons";
 import { generators } from "./generators";
+import { users } from "./end-points/users";
 
 export const appRouter = router({
   ...auth,
@@ -34,6 +35,7 @@ export const appRouter = router({
   ...comments,
   ...academia,
   ...coubons,
+  ...users,
 });
 
 export type AppRouter = typeof appRouter;

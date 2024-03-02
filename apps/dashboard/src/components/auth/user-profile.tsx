@@ -1,29 +1,10 @@
 "use client";
 
-import type { FC } from "react";
-import * as React from "react";
-import { useUser } from "@clerk/nextjs";
-import { Button } from "@ui/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@ui/components/ui/card";
-import { Label } from "@ui/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@ui/components/ui/select";
-import { Textarea } from "@ui/components/ui/textarea";
+import React, { useRef, type FC } from "react";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
+import { Avatar, AvatarFallback, AvatarImage } from "@ui/components/ui/avatar";
 import {
   Form,
   FormControl,
@@ -34,160 +15,165 @@ import {
   FormMessage,
 } from "@ui/components/ui/form";
 import { Input } from "@ui/components/ui/input";
-import { z } from "zod";
+import { FileWithPreview } from "@/src/types";
+import { FileDialog } from "@/src/app/(academy)/_components/uploaders/file-dialog";
+import { LoadingButton } from "@/src/components/loading-button";
+import { isArrayOfFile } from "@/src/app/(academy)/lib";
+import { useUploadThing } from "@/src/lib/uploadthing";
+import { Textarea } from "@ui/components/ui/textarea";
+import { trpc } from "@/src/app/_trpc/client";
+import { maketoast } from "../toasts";
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
+  full_name: z.string().min(2).max(50),
+  bio: z.string(),
+  images: z
+    .unknown()
+    .refine((val) => {
+      if (!Array.isArray(val)) return false;
+      if (val.some((file) => !(file instanceof File))) return false;
+      return true;
+    }, "يجب أن تكون مجموعة من الملفات")
+    .optional()
+    .nullable()
+    .default(null),
 });
 
-const UserProfile: FC = ({}) => {
-  const { isSignedIn, user, isLoaded } = useUser();
+const UserProfileForm: FC = ({}) => {
+  const fileRef = useRef<HTMLInputElement>(null);
 
-  // 1. Define your form.
+  const [files, setFiles] = React.useState<FileWithPreview[] | null>(null);
+
+  const [isPending, startTransition] = React.useTransition();
+
+  const { isUploading, startUpload } = useUploadThing("profileImage");
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      full_name: "",
+      bio: "",
+      images: [],
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!user) return null;
-    const updateUser = async () => {
-      await user.update({
-        firstName: "John",
-        lastName: "Doe",
-      });
-    };
+  const mutation = trpc.update_user_profile.useMutation({
+    onSuccess: () => {
+      maketoast.successWithText({ text: "تم تحديث معلوماتك الشخصية" });
+    },
+    onError: () => {
+      maketoast.error();
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      if (isArrayOfFile(values.images)) {
+        console.log("uploading... ");
+        await startUpload(values.images)
+          .then((res) => {
+            const formattedImages = res?.map((image) => ({
+              id: image.key,
+              name: image.key.split("_")[1] ?? image.key,
+              url: image.url,
+            }));
+            return formattedImages ?? null;
+          })
+          .then((images) => {
+            mutation.mutate({
+              avatarUrl: images[0]?.url,
+              user_bio: values?.bio,
+              user_name: values?.full_name,
+            });
+          })
+          .catch((err) => console.error(err));
+      }
+    } catch (err) {
+      console.error(err);
+    }
   }
+  return (
+    <div className="w-full h-fit min-h-[500px] bg-white shadow border rounded-xl max-w-2xl p-8">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
+          <FormField
+            control={form.control}
+            name="images"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>صورة شخصة</FormLabel>
+                <div className="flex items-center gap-x-4">
+                  <Avatar>
+                    <AvatarImage
+                      src={files && files.length > 0 ? files[0].preview : ""}
+                    />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                  <FormControl>
+                    <FormControl>
+                      <FileDialog
+                        setValue={form.setValue}
+                        name="images"
+                        maxFiles={1}
+                        maxSize={1024 * 1024 * 4}
+                        files={files}
+                        setFiles={setFiles}
+                        isUploading={isUploading}
+                        disabled={isPending}
+                      />
+                    </FormControl>
+                  </FormControl>
+                </div>
+                <FormDescription>
+                  الصورة الشخصية الخاصة بك في الاكادمية
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="full_name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>اسمك الكامل</FormLabel>
+                <FormControl>
+                  <Input placeholder="اسمك الكامل" {...field} />
+                </FormControl>
+                <FormDescription>
+                  هذا هو اسم العرض العام الخاص بك.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="bio"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>السيرة الذاتية</FormLabel>
+                <FormControl>
+                  <Textarea {...field} />
+                </FormControl>
 
-  if (!isLoaded) {
-    return null;
-  }
-
-  if (isSignedIn) {
-    return (
-      <Card className="w-full mx-auto min-h-[700px] h-fit my-6">
-        <CardHeader>
-          <CardTitle>ملفك الشخصي</CardTitle>
-          <CardDescription>تأكد من صحة كافة المعلومات</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <div className="grid w-full items-center gap-4">
-                <div className="flex flex-col space-y-1.5">
-                  <FormField
-                    control={form.control}
-                    name="username"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>صورتك الشخصية</FormLabel>
-                        <FormControl>
-                          <Input placeholder="shadcn" type="file" {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          This is your public display name.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="username"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>اسم</FormLabel>
-                        <FormControl>
-                          <Input placeholder="shadcn" {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          This is your public display name.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                  <FormField
-                    control={form.control}
-                    name="username"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel> اسم العائلة</FormLabel>
-                        <FormControl>
-                          <Input placeholder="shadcn" {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          This is your public display name.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="framework">مستوى التعليم</Label>
-                  <Select>
-                    <SelectTrigger id="framework">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent position="popper">
-                      <SelectItem value="next">Next.js</SelectItem>
-                      <SelectItem value="sveltekit">SvelteKit</SelectItem>
-                      <SelectItem value="astro">Astro</SelectItem>
-                      <SelectItem value="nuxt">Nuxt.js</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name">المزيد عنك</Label>
-                  <Textarea
-                    rows={3}
-                    className="min-h-[100px]"
-                    id="name"
-                    placeholder="Name of your project"
-                  />
-                </div>
-
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name">بريد إلكتروني</Label>
-                  <Input id="name" placeholder="Name of your project" />
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="framework">دولة</Label>
-                  <Select>
-                    <SelectTrigger id="framework">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent position="popper">
-                      <SelectItem value="next">Next.js</SelectItem>
-                      <SelectItem value="sveltekit">SvelteKit</SelectItem>
-                      <SelectItem value="astro">Astro</SelectItem>
-                      <SelectItem value="nuxt">Nuxt.js</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name">رقم التليفون</Label>
-                  <Input id="name" placeholder="Name of your project" />
-                </div>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button>حفظ التغييرات</Button>
-        </CardFooter>
-      </Card>
-    );
-  }
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="w-full h-[50px] flex items-center justify-end">
+            <LoadingButton
+              onClick={() => mutation.mutate()}
+              className="bg-primary rounded-xl "
+              type="submit"
+            >
+              حفظ التعديلات
+            </LoadingButton>
+          </div>
+        </form>
+      </Form>
+    </div>
+  );
 };
 
-export default UserProfile;
+export default UserProfileForm;

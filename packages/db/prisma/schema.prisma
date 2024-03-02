@@ -15,6 +15,8 @@ model Account {
   id                     String         @unique @default(uuid())
   userId                 String         @unique
   avatarUrl              String?        @db.Text
+  user_name              String?        @db.Text
+  user_bio               String?        @db.Text
   AcademyIds             Json
   stripeCustomerId       String?        @unique @map(name: "stripe_customer_id")
   stripeSubscriptionId   String?        @unique @map(name: "stripe_subscription_id")
