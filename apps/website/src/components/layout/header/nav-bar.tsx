@@ -8,32 +8,41 @@ import { MobilNavBar } from "./mobil-nav-bar";
 import { useRouter, usePathname } from "next/navigation";
 import { X } from "lucide-react";
 import Image from "next/image";
+import { motion } from "framer-motion";
+import { useActiveSection } from "@/src/lib/zustand/use-active-section";
+
 interface HeaderAbdullahProps {}
 
 const links = [
   {
     name: "الرئيسية",
-    slug: "/",
+    hash: "#home",
+    code: "home",
   },
   {
     name: "المنتج",
-    slug: "/product",
+    hash: "#features",
+    code: "features",
   },
   {
     name: "المصادر",
-    slug: "/resources",
+    hash: "#how_it_works",
+    code: "how_it_works",
   },
   {
     name: "الخدمات",
-    slug: "/services",
-  },
-  {
-    name: "الاسعار",
-    slug: "/pricing",
+    hash: "#why_us",
+    code: "why_us",
   },
   {
     name: "جدارة +",
-    slug: "/jadara+",
+    hash: "#features2",
+    code: "features2",
+  },
+  {
+    name: "الاسعار",
+    hash: "#pricing",
+    code: "pricing",
   },
 ];
 
@@ -43,6 +52,9 @@ export const NavBar: FC = ({}) => {
   const [hasShadow, setHasShadow] = React.useState(false);
   const [close, setClose] = React.useState(false);
   const path = usePathname();
+
+  const { activeSection, setActiveSection, setTimeOfLastClick } =
+    useActiveSection();
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -86,7 +98,7 @@ export const NavBar: FC = ({}) => {
         <div
           //
           className={cn(
-            "mx-auto w-full    px-2.5 md:px-20 transition-all duration-150 ",
+            "mx-auto w-full    px-2.5 md:px-20 transition-all duration-150 relative -z-[9]",
             {
               "shadow-lg border-b bg-white ": hasShadow,
             }
@@ -105,8 +117,46 @@ export const NavBar: FC = ({}) => {
 
             {/* this section is for the nav menu and the action button */}
 
-            <div className="w-[80%] hidden h-full lg:flex items-center justify-center ">
-              {links.map((item) => {
+            <nav className="w-[80%] hidden h-full lg:flex items-center justify-center ">
+              <ul className="flex w-[22rem] flex-wrap items-center justify-center gap-y-1 text-[0.9rem] font-medium text-gray-500 sm:w-[initial] sm:flex-nowrap sm:gap-5">
+                {links?.map((item) => {
+                  return (
+                    <motion.li
+                      className="h-full   flex items-center justify-center relative"
+                      key={item.hash}
+                    >
+                      <Link
+                        className={cn(
+                          "flex w-full items-center justify-center px-3 py-3 text-black  transition",
+                          {
+                            "font-bold ": activeSection === item.name,
+                          }
+                        )}
+                        href={item.hash}
+                        onClick={() => {
+                          setActiveSection(item.code);
+                          setTimeOfLastClick(Date.now());
+                        }}
+                      >
+                        {item.name}
+
+                        {item.code === activeSection && (
+                          <motion.span
+                            className="border-[#FFB700] border-2  bg-[#FFEEC5] rounded-full absolute inset-0 -z-[9] "
+                            layoutId="activeSection"
+                            transition={{
+                              type: "spring",
+                              stiffness: 380,
+                              damping: 30,
+                            }}
+                          ></motion.span>
+                        )}
+                      </Link>
+                    </motion.li>
+                  );
+                })}
+              </ul>
+              {/* {links.map((item) => {
                 return (
                   <Link
                     href={"/"}
@@ -116,15 +166,15 @@ export const NavBar: FC = ({}) => {
                       "font-bold text-lg leading-[40px] rounded-full transition-all duration-150  ",
                       {
                         "border-[#FFB700] border-2  bg-[#FFEEC5]":
-                          item.slug === path,
+                          item.hash === path,
                       }
                     )}
                   >
                     {item.name}
                   </Link>
                 );
-              })}
-            </div>
+              })} */}
+            </nav>
             <div className="w-[20%] hidden h-full lg:flex items-center justify-end">
               <Link
                 href={"https://jadir.vercel.app/sign-in"}

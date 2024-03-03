@@ -12,6 +12,7 @@ import {
 } from "@ui/components/ui/select";
 import * as React from "react";
 import { translateCurrency } from "@/src/lib/utils";
+import { useSectionInView } from "@/src/hooks/use-section-in-view";
 
 interface PricingAbdullahProps {}
 
@@ -40,8 +41,14 @@ const getMoneyValue = (display: string, value: string) => {
 const Pricing: FC = ({}) => {
   const [display, setDisplay] = React.useState(DISPLAY_VALUES.monthly);
   const [currency, setCurrency] = React.useState(CURRENCY.usd);
+  const { ref } = useSectionInView("pricing", 0.5);
+
   return (
-    <div className="w-full min-h-[1000px] h-fit my-12">
+    <section
+      ref={ref}
+      id="pricing"
+      className="w-full min-h-[1000px] h-fit my-12"
+    >
       <div className="flex w-full h-[80px] items-center justify-start gap-x-4">
         <label className="text-xl font-bold text-black">آختر العملة</label>
         <Select onValueChange={(val) => setCurrency(val)}>
@@ -232,7 +239,7 @@ const Pricing: FC = ({}) => {
           );
         })}
       </div>
-    </div>
+    </section>
   );
 };
 

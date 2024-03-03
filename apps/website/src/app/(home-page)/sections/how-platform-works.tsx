@@ -2,7 +2,10 @@ import type { FC } from "react";
 
 const HowPlatformWorks: FC = ({}) => {
   return (
-    <div className="w-full my-24 py-8 h-[600px] overflow-x-hidden bg-[#FC6B00] hidden sm:flex flex-col items-center gap-y-6">
+    <section
+      id="how_it_works"
+      className="w-full my-24 py-8 h-[600px] overflow-x-hidden bg-[#FC6B00] hidden sm:flex flex-col items-center gap-y-6"
+    >
       <h2 className="text-center font-bold text-white text-5xl">
         كيف تعمل المنصة؟
       </h2>
@@ -65,7 +68,7 @@ const HowPlatformWorks: FC = ({}) => {
           </p>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

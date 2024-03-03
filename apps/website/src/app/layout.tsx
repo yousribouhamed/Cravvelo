@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "@ui/styles/globals.css";
 import "@ui/font/stylesheet.css";
-import { NavBar } from "../components/layout/nav-bar";
+import { NavBar } from "../components/layout/header/nav-bar";
 import Script from "next/script";
 
 export const metadata: Metadata = {
@@ -15,7 +15,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html suppressHydrationWarning dir="rtl" lang="ar">
+    <html
+      suppressHydrationWarning
+      dir="rtl"
+      lang="ar"
+      className="!scroll-smooth"
+    >
       <body className={"min-h-screen h-fit  bg-[#FAFAFA] w-full"}>
         <NavBar />
         <div className="  w-full h-fit min-h-full">{children}</div>

@@ -11,7 +11,7 @@ const WhatYouCanDo: FC = ({}) => {
   const [selected, setSelected] = React.useState<number>(0);
   return (
     <MaxWidthWrapper>
-      <div className="w-full h-fit p-4 lg:p-0 ">
+      <section id="features" className="w-full h-fit p-4 lg:p-0 ">
         <div className="max-w-2xl h-[152px]  my-6 md:mb-6 mb-52 z-20  ">
           <h1 className="text-[49px] qatar-bold text-start font-bold tracking-tight text-black sm:text-4xl">
             ما يمكنك فعله باستخدام جدارة؟
@@ -21,7 +21,7 @@ const WhatYouCanDo: FC = ({}) => {
             استثنائية.
           </p>
         </div>
-      </div>
+      </section>
       <div className="w-full h-fit min-h-[500px]  grid grid-cols-1  xl:grid-cols-3 gap-2">
         <div className=" border border-[#FFB800] bg-[#F8FAE5]  rounded-2xl p-4 xl:col-span-2">
           <div className="w-full h-full min-h-[300px]  rounded-2xl" />

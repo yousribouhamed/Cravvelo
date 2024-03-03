@@ -1,13 +1,22 @@
+"use client";
+
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Reviews from "@/src/components/reviews";
 import TextTyper from "@/src/components/text-typer";
+import { useSectionInView } from "@/src/hooks/use-section-in-view";
 import { Button } from "@ui/components/ui/button";
 import type { FC } from "react";
 
 const Hero: FC = ({}) => {
+  const { ref } = useSectionInView("home", 0.5);
+
   return (
     <MaxWidthWrapper className="mt-32">
-      <div className="isolate w-full h-fit min-h-[700px] pt-4 lg:pt-16 px-4 lg:px-0">
+      <section
+        ref={ref}
+        id="home"
+        className="isolate w-full h-fit min-h-[700px] pt-4 lg:pt-16 px-4 lg:px-0"
+      >
         {/* Hero content grid */}
         <div className="mx-auto w-full min-h-full h-fit sm:place-items-center place-content-start grid grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
           {/* Left column */}
@@ -32,7 +41,7 @@ const Hero: FC = ({}) => {
                   size="lg"
                   className="bg-[#FC6B00] hover:bg-[#994b13] text-xl py-6 h-14 rounded-2xl text-white qatar-bold  hover:scale-105 transition-all duration-150 "
                 >
-                  ابدء تجربتك المجانية
+                  ابدء تجربتك المجانية 👋
                 </Button>
                 <span className="text-xl leading-8 mb-3 block text-black">
                   14 يومًا تجريبيًّا
@@ -52,7 +61,7 @@ const Hero: FC = ({}) => {
             />
           </div>
         </div>
-      </div>
+      </section>
     </MaxWidthWrapper>
   );
 };

@@ -6,7 +6,10 @@ interface EaseSpeedAbdullahProps {}
 const EaseSpeed: FC = ({}) => {
   return (
     <MaxWidthWrapper className="my-6 p-4 lg:p-0">
-      <div className="w-full min-h-[250px] h-fit grid grid-cols-1 lg:grid-cols-3 gap-10  ">
+      <section
+        id="FEATURES2"
+        className="w-full min-h-[250px] h-fit grid grid-cols-1 lg:grid-cols-3 gap-10  "
+      >
         <div className="w-full h-full border border-yellow-500 rounded-xl bg-[#F8FAE5] p-8">
           <div className="w-full h-[50px] flex items-center justify-start gap-x-4">
             <div className="w-[50px] h-[50px] bg-green-500" />
@@ -42,7 +45,7 @@ const EaseSpeed: FC = ({}) => {
             قياس وتقييم طلابك وتتبع أدائهم والتواصل معهم بصورة فعّالة.
           </p>
         </div>
-      </div>
+      </section>
     </MaxWidthWrapper>
   );
 };

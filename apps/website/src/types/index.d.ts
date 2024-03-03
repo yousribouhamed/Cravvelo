@@ -9,3 +9,5 @@ export type UserSubscriptionPlan = SubscriptionPlan &
     stripeCurrentPeriodEnd: number;
     isPro: boolean;
   };
+
+export type SectionName = (typeof links)[number]["name"];
