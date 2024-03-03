@@ -100,15 +100,17 @@ const Pricing: FC = ({}) => {
         </div>
       </div>
 
-      <div className="w-full   max-w-7xl mx-auto h-[800px] grid grid-cols-3 gap-10 ">
+      <div className="w-full   max-w-7xl mx-auto min-h-[800px] h-fit  grid grid-cols-1 lg:grid-cols-3 gap-10 p-4 lg:p-0 ">
         {PLANS.map((item, index) => {
           return (
             <div
               key={item.plan}
-              className="w-full h-full relative bg-white shadow-2xl border rounded-2xl py-2 px-4 flex flex-col "
+              className={`w-full h-full relative bg-white shadow-2xl border rounded-2xl py-2 px-4 flex flex-col ${
+                index === 1 ? "mt-20 mb-4" : index === 2 ? "mt-16" : ""
+              } `}
             >
               {index === 1 && (
-                <div className="bg-[#F0B110] absolute rounded-2xl -top-16 z-[-10] flex items-center justify-center  right-0 left-0  h-20 w-full ">
+                <div className="bg-[#F0B110]   absolute rounded-2xl -top-16 z-[-10] flex items-center justify-center  right-0 left-0  h-20 w-full ">
                   <p className="text-3xl font-bold text-black text-center">
                     لصناع المحتوى
                   </p>

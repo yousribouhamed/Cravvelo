@@ -11,8 +11,8 @@ const WhatYouCanDo: FC = ({}) => {
   const [selected, setSelected] = React.useState<number>(0);
   return (
     <MaxWidthWrapper>
-      <div className="w-full h-fit ">
-        <div className="max-w-2xl h-[152px]  my-6 z-20  ">
+      <div className="w-full h-fit p-4 lg:p-0 ">
+        <div className="max-w-2xl h-[152px]  my-6 md:mb-6 mb-52 z-20  ">
           <h1 className="text-[49px] qatar-bold text-start font-bold tracking-tight text-black sm:text-4xl">
             ما يمكنك فعله باستخدام جدارة؟
           </h1>

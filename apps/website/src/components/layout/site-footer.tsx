@@ -6,8 +6,8 @@ const footerLinks = [
   {
     icons: () => (
       <svg
-        width="33"
-        height="33"
+        width="23"
+        height="23"
         viewBox="0 0 33 33"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -35,8 +35,8 @@ const footerLinks = [
   {
     icons: () => (
       <svg
-        width="33"
-        height="33"
+        width="23"
+        height="23"
         viewBox="0 0 33 33"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -65,8 +65,8 @@ const footerLinks = [
   {
     icons: () => (
       <svg
-        width="33"
-        height="33"
+        width="23"
+        height="23"
         viewBox="0 0 33 33"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -95,8 +95,8 @@ const footerLinks = [
   {
     icons: () => (
       <svg
-        width="33"
-        height="33"
+        width="23"
+        height="23"
         viewBox="0 0 33 33"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -127,8 +127,8 @@ const footerLinks = [
   {
     icons: () => (
       <svg
-        width="33"
-        height="33"
+        width="23"
+        height="23"
         viewBox="0 0 33 33"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -179,10 +179,10 @@ const SiteFooter: FC = ({}) => {
   return (
     <div
       dir="ltr"
-      className="w-full mt-56  h-[600px]  pt-[120px] overflow-hidden bg-[#FC6B00] flex flex-col items-center "
+      className="w-full mt-56  min-h-[600px] h-fit  pt-[120px] overflow-hidden bg-[#FC6B00] flex flex-col items-center "
     >
       <MaxWidthWrapper className="overflow-hidden">
-        <div className="w-full h-[360px] bg-transparent overflow-hidden grid grid-cols-6">
+        <div className="w-full min-h-[360px] h-fit bg-transparent overflow-hidden grid grid-cols-1 gap-10 lg:gap-0 p-4 lg:p-0 lg:grid-cols-6">
           <div className="w-full h-full flex flex-col items-start col-span-2 py-4 gap-y-10">
             <svg
               width="223"
@@ -240,7 +240,7 @@ const SiteFooter: FC = ({}) => {
       </MaxWidthWrapper>
       <div className="w-full  bg-[#F8FAE5] mt-auto h-40">
         <MaxWidthWrapper className=" flex items-center justify-between w-full h-full">
-          <span className="text-lg text-black text-start">
+          <span className=" text-xs lg:text-lg text-black text-start">
             © 2024 Jadara. All rights reserved.
           </span>
           <div className="w-[100px] h-full flex items-center justify-end gap-x-4">

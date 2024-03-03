@@ -3,11 +3,11 @@ import type { FC } from "react";
 
 const CreateLanch: FC = ({}) => {
   return (
-    <MaxWidthWrapper className="my-6">
-      <div className="w-full min-h-[300px] h-fit  grid grid-cols-2 ">
+    <MaxWidthWrapper className="my-6 p-4 lg:p-0">
+      <div className="w-full min-h-[300px] h-fit  grid grid-cols-1 lg:grid-cols-2 ">
         <div className="w-full h-full ">
-          <div className="w-full mt-8 h-[60px] relative flex items-center justify-start">
-            <div className="bg-black w-[60px] h-[60px] rounded-[50%] flex items-center justify-center absolute top-0 z-10 ">
+          <div className="w-full mt-8 h-[60px] relative flex items-center justify-start ">
+            <div className="bg-black w-[60px] h-[60px] rounded-[50%] flex items-center justify-center absolute  top-0 z-10 ">
               <svg
                 width="39"
                 height="39"
@@ -21,10 +21,10 @@ const CreateLanch: FC = ({}) => {
                 />
               </svg>
             </div>
-            <div className="w-[300px] h-[70px]  rounded-2xl  bg-primary flex items-center justify-center absolute  -bottom-8 p-2 rotate-6 right-10">
+            <div className=" w-[250px]  lg:w-[300px] h-[70px]  rounded-2xl  bg-primary flex items-center justify-center absolute  -bottom-8 p-2 rotate-6 right-10">
               <p className="text-3xl font-extrabold text-white">أنشئ، وأطلق</p>
             </div>
-            <div className="w-[300px] h-[70px]  rounded-2xl  bg-[#FFC901] flex items-center justify-center p-2 absolute right-[20rem] top-0 -rotate-12 z-10">
+            <div className=" w-[250px] lg:w-[300px] h-[70px]  rounded-2xl  bg-[#FFC901] flex items-center justify-center p-2 absolute right-[17rem] lg:right-[20rem] top-0 -rotate-12 z-10">
               <p className="text-3xl font-extrabold text-black">
                 {" "}
                 دورتك التدريبية

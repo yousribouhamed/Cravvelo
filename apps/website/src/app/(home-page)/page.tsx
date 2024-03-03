@@ -31,10 +31,10 @@ export default function Page() {
       <FadeIn>
         <MaxWidthWrapper className="my-16 ">
           <div className="w-full min-h-[250px] h-fit  flex flex-col justify-center gap-y-8 pt-12  ">
-            <h2 className="text-5xl font-bold text-center">
+            <h2 className="text-5xl font-bold text-center   leading-10">
               قدرات جديدة، بتجربة مذهلة، في
-              <span className="text-[#FC6B00] relative inline-block mx-8 ">
-                <div className="absolute -top-20 bottom-0  -right-5 ">
+              <span className="text-[#FC6B00] relative block my-12 lg:my-0 lg:inline-block mx-8  ">
+                <div className="absolute -top-20 bottom-0 right-32 lg:-right-5 ">
                   <svg
                     width="260"
                     height="220"
@@ -87,7 +87,7 @@ export default function Page() {
               إنشاء وتسويق وبيع الدورات التدريبية عبر الإنترنت، في مكان واحد.
             </p>
           </div>
-          <div className="w-full h-[250px] grid grid-cols-3 gap-10  ">
+          <div className="w-full min-h-[250px] h-fit grid grid-cols-1 lg:grid-cols-3 gap-10  ">
             <div className="w-full h-full border border-yellow-500 rounded-xl bg-[#F8FAE5] p-8">
               <div className="w-full h-[50px] flex items-center justify-start gap-x-4">
                 <div className="w-[50px] h-[50px] bg-green-500" />

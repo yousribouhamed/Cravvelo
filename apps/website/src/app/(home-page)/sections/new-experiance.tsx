@@ -4,8 +4,8 @@ import type { FC } from "react";
 const NewExperiance: FC = ({}) => {
   return (
     <MaxWidthWrapper>
-      <div className="w-full h-fit ">
-        <div className="w-full h-fit min-h-[500px] grid grid-cols-2 gap-8">
+      <div className="w-full h-fit p-4 lg:p-0 ">
+        <div className="w-full h-fit min-h-[500px] grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className=" border-[#FFB800] border   bg-[#F8FAE5] col-span-1 rounded-lg"></div>
           <div className="max-w-2xl h-full flex flex-col gap-y-4 col-span-1 pt-4 z-20 space-y-6  ">
             <h1 className=" text-5xl mb-8  font-bold text-start  tracking-tight text-black ">
