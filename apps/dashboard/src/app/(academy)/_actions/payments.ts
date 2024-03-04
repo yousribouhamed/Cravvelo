@@ -56,20 +56,21 @@ export const makePayment = async ({
   couponCode: string | null;
   productsId: string[];
   courcesId: string[];
-  subdomain: string;
+  subdomain: string | null;
 }) => {
   try {
     // fetch all the products ,
-    const products = await Promise.all(
-      productsId.map((item) =>
-        prisma.product.findFirst({
-          where: {
-            id: item,
-          },
-        })
-      )
-    );
+    // const products = await Promise.all(
+    //   productsId.map((item) =>
+    //     prisma.product.findFirst({
+    //       where: {
+    //         id: item,
+    //       },
+    //     })
+    //   )
+    // );
     // fetch all the courses
+
     const courses = await Promise.all(
       courcesId.map((item) =>
         prisma.course.findFirst({
@@ -82,14 +83,11 @@ export const makePayment = async ({
 
     // applay the coupon if the code exists
 
-    const total =
-      products
-        .map((item) => Number(item.price))
-        .reduce((current, next) => current + next) +
-      courses
-        .map((item) => Number(item.price))
-        .reduce((current, next) => current + next);
-
+    const total = courses
+      .map((item) => Number(item.price))
+      .reduce((current, next) => current + next);
+    console.log("this is the price");
+    console.log(total);
     if (total === 0) {
       return;
     }

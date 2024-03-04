@@ -103,16 +103,15 @@ export const getSiteData = async ({
 export const getChargilyKeys = async ({ subdomain }: { subdomain: string }) => {
   const website = await getSiteData({ subdomain });
 
-  console.log("this is the website");
-  console.log(website);
   const payments = await prisma.paymentsConnect.findFirst({
     where: {
       accountId: website.accountId,
     },
   });
 
-  console.log("this is the Chargily credential");
-  console.log(payments);
+  if (!payments) {
+    throw new Error("chargily is not connected");
+  }
 
   return {
     chargilyPublicKey: payments?.chargilyPublicKey,
