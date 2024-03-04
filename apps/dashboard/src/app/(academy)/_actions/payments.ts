@@ -4,9 +4,15 @@ import { prisma } from "database/src";
 import { buyWithCoupon } from "./coupon";
 import { payWithChargily } from "./chargily";
 import { getStudent } from "./auth";
-import { redirect } from "next/navigation";
 
-export const applayCoupon = async ({
+/**
+ * Apply a coupon to the price based on its type and amount.
+ * @param couponCode - The code of the coupon to apply.
+ * @param price - The original price before applying the coupon.
+ * @returns The discounted price after applying the coupon.
+ * @throws Error if the coupon is unavailable or invalid.
+ */
+export const applyCoupon = async ({
   couponCode,
   price,
 }: {
@@ -14,29 +20,39 @@ export const applayCoupon = async ({
   price: number;
 }) => {
   try {
+    // Retrieve the coupon from the database
     const coupon = await prisma.coupon.findFirst({
       where: {
         code: couponCode,
       },
     });
 
+    // Check if the coupon is active and not archived
     if (!coupon.isActive || coupon.isArchive) {
-      throw new Error("coupon is unvailable");
+      throw new Error("Coupon is unavailable");
     }
 
+    // Apply different types of discounts based on coupon type
     if (coupon.discountType === "FIXED_AMOUNT") {
       return price - Number(coupon.discountAmount);
     }
     if (coupon.discountType === "PERCENTAGE") {
-      const value = reducePercentage(price, coupon.discountAmount);
-      return value;
+      const discountedPrice = reducePercentage(price, coupon.discountAmount);
+      return discountedPrice;
     }
   } catch (err) {
     console.error(err);
-    throw new Error("coupon is unvailable");
+    throw new Error("Coupon is unavailable");
   }
 };
 
+/**
+ * Reduce a given number by a certain percentage.
+ * @param number - The original number.
+ * @param percentage - The percentage to reduce.
+ * @returns The result after reducing the number by the given percentage.
+ * @throws Error if the percentage is invalid.
+ */
 function reducePercentage(number: number, percentage: number): number {
   if (percentage < 0 || percentage > 100) {
     throw new Error("Percentage must be between 0 and 100");
@@ -47,6 +63,14 @@ function reducePercentage(number: number, percentage: number): number {
   return result;
 }
 
+/**
+ * Make a payment for courses with or without a coupon.
+ * @param couponCode - The coupon code to apply (nullable).
+ * @param productsId - Array of product IDs.
+ * @param courcesId - Array of course IDs.
+ * @param subdomain - The subdomain for the payment process.
+ * @returns The payment URL or redirection URL.
+ */
 export const makePayment = async ({
   couponCode,
   productsId,
@@ -59,36 +83,7 @@ export const makePayment = async ({
   subdomain: string | null;
 }) => {
   try {
-    // fetch all the products ,
-    // const products = await Promise.all(
-    //   productsId.map((item) =>
-    //     prisma.product.findFirst({
-    //       where: {
-    //         id: item,
-    //       },
-    //     })
-    //   )
-    // );
-    // fetch all the courses
-
-    console.log("this is the courses id given by the client");
-    console.log(courcesId);
-
-    const course = await prisma.course.findFirst({
-      where: {
-        id: courcesId[0],
-      },
-    });
-
-    const coursesAll = await prisma.course.findMany();
-
-    console.log("all the courses");
-    console.log(coursesAll);
-
-    console.log("this is the course id");
-
-    console.log(course);
-
+    // Fetch all the courses
     const courses = await Promise.all(
       courcesId.map((item) =>
         prisma.course.findFirst({
@@ -99,35 +94,30 @@ export const makePayment = async ({
       )
     );
 
-    // applay the coupon if the code exists
+    // Retrieve student information
     const student = await getStudent();
 
-    console.log("here are all the courses");
-    console.log(courses);
-
+    // Validate courses and student
     if (!courses || courses?.length === 0) {
-      throw new Error("there is no courses selected");
+      throw new Error("No courses selected");
     }
     if (!student) {
-      throw new Error("there is no student");
+      throw new Error("No student found");
     }
 
+    // Calculate the total price of courses
     const total = courses
       .map((item) => Number(item?.price))
       .reduce((current, next) => current + next);
-    console.log("this is the price");
-    console.log(total);
 
-    if (!total) {
-      throw new Error("the price of courses is NaN");
+    // Check for NaN or zero price
+    if (!total || total === 0) {
+      throw new Error("Invalid total price");
     }
 
-    if (total === 0) {
-      return "/student-library";
-    }
-
+    // Process payment based on coupon presence
     if (!couponCode) {
-      const payment_url = await payWithChargily({
+      const paymentUrl = await payWithChargily({
         amount: total,
         metadata: {
           productId: courses[0].id,
@@ -137,14 +127,11 @@ export const makePayment = async ({
         subdomain,
         success_url: `https://${subdomain}/student-library`,
       });
-
-      console.log("this is from chargily");
-      console.log(payment_url);
-
-      return payment_url;
+      return paymentUrl;
     }
 
-    const newPrice = await applayCoupon({ couponCode, price: total });
+    // Apply coupon and process payment accordingly
+    const newPrice = await applyCoupon({ couponCode, price: total });
 
     if (newPrice === 0) {
       await buyWithCoupon({
@@ -154,7 +141,7 @@ export const makePayment = async ({
       return "/student-library";
     }
 
-    const payment_url = await payWithChargily({
+    const paymentUrl = await payWithChargily({
       amount: newPrice,
       metadata: {
         productId: courses[0]?.id,
@@ -165,12 +152,9 @@ export const makePayment = async ({
       success_url: `https://${subdomain}/student-library`,
     });
 
-    console.log("this is from chargily when the coupon works");
-    console.log(payment_url);
-
-    return payment_url;
+    return paymentUrl;
   } catch (err) {
-    console.error("there is an error while trying to make a payment");
+    console.error("Error occurred while processing payment");
     console.error(err);
   }
 };
