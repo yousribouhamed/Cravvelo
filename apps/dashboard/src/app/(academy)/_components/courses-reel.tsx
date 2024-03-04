@@ -5,7 +5,6 @@ import { BookMarked } from "lucide-react";
 import StarRatings from "react-star-ratings";
 import type { FC } from "react";
 import { useAcademiaStore } from "../global-state/academia-store";
-import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
