@@ -42,6 +42,7 @@ const useGetUser = async () => {
     accountId: account?.id,
     firstName: user?.firstName,
     lastName: user?.lastName,
+    user_name: account.user_name,
     avatar: account?.avatarUrl ? account?.avatarUrl : user?.imageUrl,
     email: user?.primaryEmailAddressId,
     isFreeTrial,
