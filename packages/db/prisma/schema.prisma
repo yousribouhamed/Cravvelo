@@ -8,6 +8,13 @@ datasource db {
   relationMode = "prisma"
 }
 
+enum PLANS {
+  BASIC
+  ADVANCED
+  PRO
+}
+
+
 model Account {
   id                     String         @unique @default(uuid())
   userId                 String         @unique
@@ -15,10 +22,7 @@ model Account {
   user_name              String?        @db.Text
   user_bio               String?        @db.Text
   AcademyIds             Json
-  stripeCustomerId       String?        @unique @map(name: "stripe_customer_id")
-  stripeSubscriptionId   String?        @unique @map(name: "stripe_subscription_id")
-  stripePriceId          String?        @map(name: "stripe_price_id")
-  stripeCurrentPeriodEnd DateTime?      @map(name: "stripe_current_period_end")
+  plan                   PLANS?
   createdAt              DateTime       @default(now())
   updatedAt              DateTime       @updatedAt
   Course                 Course[]
@@ -52,6 +56,8 @@ model Academy {
   updatedAt DateTime @updatedAt
   userId    String
 }
+
+
 
 model Course {
   id                String  @unique @default(uuid())
@@ -184,6 +190,7 @@ enum SaleStatus {
   COMPLETED
   CANCELLED
 }
+
 enum ItemType {
   COURSE
   PRODUCT
@@ -289,5 +296,13 @@ model Certificate {
 
 model webhooks {
   id          Int      @id @default(autoincrement())
+  payload     Json
+}
+
+
+
+model payments {
+  id          Int      @id @default(autoincrement())
+  
   payload     Json
 }

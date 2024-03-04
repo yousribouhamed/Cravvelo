@@ -1,103 +1,77 @@
 import { z } from "zod";
-import { publicProcedure } from "../trpc";
+import { privateProcedure, publicProcedure } from "../trpc";
 import { Checkout, Price, Product } from "@/src/types";
 
-const CHARGILY_BASE_URL = "https://pay.chargily.net/test/api/v2" as const;
+const CHARGILY_BASE_URL = "https://pay.chargily.net/test/api/v2" as const; // Defining the base URL for Chargily API
 
+/**
+ * Chargily service object containing payment-related procedures.
+ */
 export const chargily = {
-  create_product: publicProcedure
-    .input(z.object({ product_name: z.string() }))
-    .mutation(async ({ input }) => {
-      // Function to create a product
-      // It takes product_name as input and returns a Promise that resolves to Product or undefined
-
-      // Constructing request options
-      const options = {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.CHARGILY_SECRET_KEY}`, // Adding authorization header with secret key
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name: input.product_name }), // Constructing the body with product_name
-      };
-
+  /**
+   * Procedure to pay with Chargily.
+   * Validates input and makes requests to Chargily API to process payment.
+   */
+  pay_with_chargily: privateProcedure
+    .input(
+      z.object({
+        product_name: z.string(), // Schema for product name
+        amount: z.number(), // Schema for amount
+        success_url: z.string(), // Schema for success URL
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
       try {
+        // Constructing request options for creating product
+        const options = {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${process.env.CHARGILY_SECRET_KEY}`, // Adding authorization header with secret key
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name: input.product_name }), // Constructing the body with product_name
+        };
         const response = await fetch(`${CHARGILY_BASE_URL}/products`, options); // Sending a POST request to create a product
-        const data = (await response.json()) as Product; // Parsing response JSON into Product type
+        const product = (await response.json()) as Product; // Parsing response JSON into Product type
 
-        return data; // Returning the created product
+        // Constructing request options for creating price
+        const options2 = {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${process.env.CHARGILY_SECRET_KEY}`, // Adding authorization header with secret key
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            amount: input.amount,
+            currency: "dzd",
+            product_id: product.id,
+          }), // Constructing the body with amount, currency, and product_id
+        };
+        const response2 = await fetch(`${CHARGILY_BASE_URL}/prices`, options2); // Sending a POST request to create a price
+        const price = (await response2.json()) as Price; // Parsing response JSON into Price type
+
+        const payload = {
+          items: [{ price: price.id, quantity: 1 }], // Constructing the payload for creating a checkout
+          success_url: input.success_url, // Adding success URL to payload
+        };
+
+        // Constructing request options for creating checkout
+        const options3 = {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${process.env.CHARGILY_SECRET_KEY}`, // Adding authorization header with secret key
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload), // Constructing the body with payload
+        };
+        const response3 = await fetch(
+          `${CHARGILY_BASE_URL}/checkouts`,
+          options3
+        ); // Sending a POST request to create a checkout
+        const data = (await response3.json()) as Checkout; // Parsing response JSON into Checkout type
+        return data; // Returning the checkout data
       } catch (err) {
-        console.error(err); // Logging errors if any occur during the process
-      }
-    }),
-  create_price: publicProcedure
-    .input(
-      z.object({
-        amount: z.number(),
-        product_id: z.string(),
-      })
-    )
-    .mutation(async ({ input }) => {
-      // Function to create a price
-      // It takes amount and product_id as input and returns a Promise that resolves to Price or undefined
-
-      // Constructing request options
-      const options = {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.CHARGILY_SECRET_KEY}`, // Adding authorization header with secret key
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount: input.amount,
-          currency: "dzd",
-          product_id: input.product_id,
-        }), // Constructing the body with amount, currency, and product_id
-      };
-
-      try {
-        const response = await fetch(`${CHARGILY_BASE_URL}/prices`, options); // Sending a POST request to create a price
-        const data = (await response.json()) as Price; // Parsing response JSON into Price type
-
-        return data; // Returning the created price
-      } catch (err) {
-        console.error(err); // Logging errors if any occur during the process
-      }
-    }),
-  create_checkout: publicProcedure
-    .input(
-      z.object({
-        price_id: z.string(),
-        success_url: z.string(),
-      })
-    )
-    .mutation(async ({ input }) => {
-      // Function to create a checkout
-      // It takes price_id and success_url as input and returns a Promise that resolves to Checkout or undefined
-
-      // Constructing payload
-      const payload = {
-        items: [{ price: input.price_id, quantity: 1 }],
-        success_url: input.success_url,
-      }; // Constructing the payload for creating a checkout
-
-      // Constructing request options
-      const options = {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.CHARGILY_SECRET_KEY}`, // Adding authorization header with secret key
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload), // Constructing the body with payload
-      };
-
-      try {
-        const response = await fetch(`${CHARGILY_BASE_URL}/checkouts`, options); // Sending a POST request to create a checkout
-        const data = (await response.json()) as Checkout; // Parsing response JSON into Checkout type
-
-        return data; // Returning the created checkout
-      } catch (err) {
-        console.error(err); // Logging errors if any occur during the process
+        console.error(err); // Handling errors and logging them
       }
     }),
 };

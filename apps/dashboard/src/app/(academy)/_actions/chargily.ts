@@ -8,6 +8,7 @@
 
 import { Checkout, Price, Product } from "@/src/types";
 import { getChargilyKeys } from ".";
+import { redirect } from "next/navigation";
 
 const CHARGILY_BASE_URL = "https://pay.chargily.net/test/api/v2" as const;
 
@@ -125,5 +126,70 @@ export const create_checkout = async ({
     return data; // Returning the created checkout
   } catch (err) {
     console.error(err); // Logging errors if any occur during the process
+  }
+};
+
+export const payWithChargily = async ({
+  amount,
+  metadata,
+  product_name,
+  subdomain,
+  success_url,
+}: {
+  product_name: string;
+  subdomain: string;
+  amount: number;
+  success_url: string;
+
+  metadata: {
+    studentId: string;
+    productId: string;
+  };
+}) => {
+  try {
+    const secret_key = await getChargilyKeys({ subdomain }); // Obtaining Chargily secret keys
+    const options = {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${secret_key.chargiySecretKey}`, // Adding authorization header with secret key
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name: product_name }), // Body containing the product name
+    };
+    const response = await fetch(`${CHARGILY_BASE_URL}/products`, options); // Sending a POST request to create a product
+    const product = (await response.json()) as Product; // Parsing response JSON into Product type
+    const options2 = {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${secret_key.chargiySecretKey}`, // Adding authorization header with secret key
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ amount, currency: "dzd", product_id: product.id }), // Body containing amount, currency, and product ID
+    };
+
+    const response2 = await fetch(`${CHARGILY_BASE_URL}/prices`, options2); // Sending a POST request to create a price
+    const price = (await response2.json()) as Price; // Parsing response JSON into Price type
+
+    const payload = {
+      items: [{ price: price.id, quantity: 1 }],
+      success_url,
+      metadata: [metadata],
+    }; // Payload for creating a checkout
+
+    const options3 = {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${secret_key.chargiySecretKey}`, // Adding authorization header with secret key
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload), // Body containing the payload
+    };
+    const response3 = await fetch(`${CHARGILY_BASE_URL}/checkouts`, options3); // Sending a POST request to create a checkout
+    const checkout = (await response3.json()) as Checkout; // Parsing response JSON into Checkout type
+
+    redirect(checkout.checkout_url);
+  } catch (err) {
+    console.error("there is a problem paying with vhargily");
+    console.error(err);
   }
 };
