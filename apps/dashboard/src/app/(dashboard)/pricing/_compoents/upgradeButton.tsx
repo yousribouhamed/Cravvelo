@@ -14,6 +14,8 @@ import * as React from "react";
 import { translateCurrency } from "../../../../lib/utils";
 import { Tabs } from "./animated-tabs";
 import Image from "next/image";
+import { trpc } from "@/src/app/_trpc/client";
+import { useRouter } from "next/navigation";
 
 interface PricingAbdullahProps {}
 
@@ -22,30 +24,22 @@ const DISPLAY_VALUES = {
   yearly: "YEARLY",
 };
 
-const CURRENCY = {
-  usd: "USD",
-  eur: "EUR",
-  dzd: "DZD",
-};
-
-const getMoneyValue = (display: string, value: string) => {
-  if (display === DISPLAY_VALUES.monthly) {
-    return value;
-  } else {
-    const allAmount = Number(value) * 12;
-
-    const price = allAmount - allAmount * 0.02;
-    return price.toString();
-  }
-};
-
 const UpgradeButton: FC = ({}) => {
-  const [display, setDisplay] = React.useState(DISPLAY_VALUES.monthly);
-  const [currency, setCurrency] = React.useState(CURRENCY.usd);
+  const router = useRouter();
+
+  const mutation = trpc.pay_with_chargily.useMutation({
+    onError: (err) => {
+      console.error("something went wrong upgrading the plan");
+      console.error(err);
+    },
+    onSuccess: ({ checkout_url }) => {
+      router.push(checkout_url);
+    },
+  });
 
   return (
     <div className="w-full min-h-[1000px] h-fit my-12">
-      <div className="flex w-full h-[80px] items-center justify-start gap-x-4">
+      {/* <div className="flex w-full h-[80px] items-center justify-start gap-x-4">
         <label className="text-xl font-bold text-black">آختر العملة</label>
         <Select onValueChange={(val) => setCurrency(val)}>
           <SelectTrigger className="w-[180px]">
@@ -57,9 +51,9 @@ const UpgradeButton: FC = ({}) => {
             <SelectItem value="DZD">DZD</SelectItem>
           </SelectContent>
         </Select>
-      </div>
+      </div> */}
 
-      <div className="w-full h-[250px]   flex justify-center items-start pt-8 pl-48 ">
+      <div className="w-full min-h-[250px] h-fit  flex justify-center items-start pt-8 pl-48 ">
         <div className="w-[200px] h-[50px]   flex items-center justify-start">
           <span className="text-[#FC6B00] text-2xl font-bold">وفر 20٪</span>
         </div>
@@ -132,12 +126,14 @@ const UpgradeButton: FC = ({}) => {
                 </div>
               )}
               <div className="w-full h-[100px] flex items-center justify-start gap-x-4 ">
-                <Image
-                  src={item.imageUrl}
-                  alt="this is the image url"
-                  width={55}
-                  height={55}
-                />
+                <div className="w-[80px] h-[70px] bg-gray-100 rounded-xl flex items-center justify-center">
+                  <Image
+                    src={item.imageUrl}
+                    alt="this is the image url"
+                    width={55}
+                    height={55}
+                  />
+                </div>
 
                 <h2 className="font-bold text-3xl text-start text-black">
                   {item.plan}
@@ -145,23 +141,21 @@ const UpgradeButton: FC = ({}) => {
               </div>
               <div className="w-full h-[100px] flex items-center justify-center">
                 <p className="text-gray-500 text-2xl">
-                  <span className="text-5xl font-bold mx-3 text-black">
-                    {getMoneyValue(
-                      display,
-                      translateCurrency(Number(item.price), currency).toString()
-                    )}{" "}
-                    {currency === "DZD" ? "دج" : currency === "USD" ? "$" : "€"}
+                  <span className="text-4xl font-bold mx-3 text-black">
+                    DZD {item.price}
                   </span>
                   /شهرياً
                 </p>
               </div>
               <Button
-                // disabled={mutation.isLoading}
-                // onClick={() =>
-                //   mutation.mutate({
-                //     plan: item.plan_code,
-                //   })
-                // }
+                disabled={mutation.isLoading}
+                onClick={() =>
+                  mutation.mutate({
+                    amount: Number(item.price),
+                    product_name: item.plan,
+                    success_url: "https://www.cravvelo.com",
+                  })
+                }
                 size="lg"
                 className="rounded-full h-16 w-[90%] text-xl font-bold mx-auto  hover:scale-105 transition-all duration-150"
               >

@@ -2,8 +2,8 @@ export const PLANS = [
   {
     plan: "الباقة الآساسية",
     plan_code: "BASIC",
-    price: "10",
-    imageUrl: "/pricing-icons/pro.png",
+    price: "2000",
+    imageUrl: "/pricing-icons/beginner.png",
     tagline:
       "إنشاء منصتك التعليمية ومنتجاتك الرقمية وبيعها وتسويقها عبر الإنترنت.",
     quota: 10,
@@ -55,10 +55,10 @@ export const PLANS = [
       test: "price_1Obef0Cxv0KQVM5xGGVkqWMS",
       production: "",
     },
-    imageUrl: "/pricing-icons/pro.png",
+    imageUrl: "/pricing-icons/infi.png",
     plan_code: "ADVANCED",
     plan: "باقة النمو",
-    price: "18",
+    price: "3500",
     icon: () => (
       <svg
         width="49"
@@ -109,7 +109,7 @@ export const PLANS = [
     imageUrl: "/pricing-icons/pro.png",
     plan_code: "PRO",
     plan: "الباقة الاحترافية",
-    price: "28",
+    price: "5500",
     tagline: "سعة غير محدودة وأدوات متقدمة تساعدك على التوسّع بعملك ومنتجاتك.",
     quota: 10,
     icon: () => (

@@ -18,6 +18,7 @@ export const chargily = {
         product_name: z.string(), // Schema for product name
         amount: z.number(), // Schema for amount
         success_url: z.string(), // Schema for success URL
+        plan_code: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -53,6 +54,12 @@ export const chargily = {
         const payload = {
           items: [{ price: price.id, quantity: 1 }], // Constructing the payload for creating a checkout
           success_url: input.success_url, // Adding success URL to payload
+          metadata: [
+            {
+              accountId: ctx.account.id,
+              plan: input.plan_code,
+            },
+          ],
         };
 
         // Constructing request options for creating checkout

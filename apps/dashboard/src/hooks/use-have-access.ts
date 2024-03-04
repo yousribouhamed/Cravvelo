@@ -34,7 +34,12 @@ const useHaveAccess = async () => {
 
   const isFreeTrial = currentDate < trialEndDate;
 
-  const isSubscribed = false;
+  const isSubscribed = account.plan ? true : false;
+
+  console.log("this is the free trial ");
+  console.log(isFreeTrial);
+  console.log("and this is the subscription status");
+  console.log(isSubscribed);
 
   return {
     userId: user.id,
