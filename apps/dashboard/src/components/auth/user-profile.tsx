@@ -40,7 +40,13 @@ const formSchema = z.object({
     .default(null),
 });
 
-const UserProfileForm: FC = ({}) => {
+interface Profile {
+  full_name: string;
+  bio: string;
+  image: string;
+}
+
+const UserProfileForm: FC<Profile> = ({ bio, full_name, image }) => {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const [files, setFiles] = React.useState<FileWithPreview[] | null>(null);
@@ -52,9 +58,9 @@ const UserProfileForm: FC = ({}) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      full_name: "",
-      bio: "",
-      images: [],
+      full_name,
+      bio,
+      images: [image],
     },
   });
 
@@ -155,8 +161,9 @@ const UserProfileForm: FC = ({}) => {
               <FormItem>
                 <FormLabel>السيرة الذاتية</FormLabel>
                 <FormControl>
-                  <Textarea {...field} />
+                  <Textarea rows={3} className="min-h-[120px]" {...field} />
                 </FormControl>
+                <FormDescription>صف نفسك في 200 كلمة</FormDescription>
 
                 <FormMessage />
               </FormItem>

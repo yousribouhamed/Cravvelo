@@ -57,6 +57,7 @@ export type UserData = {
   accountId: string;
   firstName: string;
   lastName: string;
+  user_name: string;
   avatar: string;
   email: string;
   isFreeTrial: boolean;

@@ -40,7 +40,11 @@ export default function UserNav({ user }: UserNavProps) {
           </div>
           <div className="w-[80%] h-full flex justify-end items-center gap-x-2">
             <p className="text-md w-fit  text-black">
-              مرحباً {user?.firstName ? user?.firstName : "ah"}
+              {user?.user_name
+                ? user?.user_name
+                : user?.firstName
+                ? user?.firstName
+                : "مرحباً"}
             </p>
             <ChevronDown className="w-4 h-4 text-black hover:text-accent-foreground " />
           </div>

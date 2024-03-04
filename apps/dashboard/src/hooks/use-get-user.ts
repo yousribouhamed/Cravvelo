@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "database/src";
 
 // this sunction should run on the server only
-const useHaveAccess = async () => {
+const useGetUser = async () => {
   const user = await currentUser();
 
   const currentDate = new Date();
@@ -35,20 +35,13 @@ const useHaveAccess = async () => {
 
   const isFreeTrial = currentDate > trialEndDate;
 
-  // const isSubscribed = account.plan ? true : false;
-
-  const isSubscribed = true;
-
-  if (!isFreeTrial && !isSubscribed) {
-    redirect("/pricing");
-  }
+  const isSubscribed = account.plan ? true : false;
 
   return {
     userId: user.id,
     accountId: account?.id,
     firstName: user?.firstName,
     lastName: user?.lastName,
-    user_name: account.user_name,
     avatar: account?.avatarUrl ? account?.avatarUrl : user?.imageUrl,
     email: user?.primaryEmailAddressId,
     isFreeTrial,
@@ -59,4 +52,4 @@ const useHaveAccess = async () => {
   };
 };
 
-export default useHaveAccess;
+export default useGetUser;
