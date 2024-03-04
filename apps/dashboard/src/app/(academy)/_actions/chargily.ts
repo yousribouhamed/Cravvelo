@@ -148,6 +148,7 @@ export const payWithChargily = async ({
 }) => {
   try {
     const secret_key = await getChargilyKeys({ subdomain }); // Obtaining Chargily secret keys
+
     const options = {
       method: "POST",
       headers: {
@@ -162,7 +163,6 @@ export const payWithChargily = async ({
       throw new Error("faild to create a product");
     }
 
-    console.log(product);
     const options2 = {
       method: "POST",
       headers: {

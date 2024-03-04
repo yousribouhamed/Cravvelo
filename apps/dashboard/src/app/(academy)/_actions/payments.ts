@@ -82,6 +82,13 @@ export const makePayment = async ({
     );
 
     // applay the coupon if the code exists
+    const student = await getStudent();
+
+    console.log(student);
+
+    if (!student) {
+      throw new Error("there is no student");
+    }
 
     const total = courses
       .map((item) => Number(item.price))
@@ -93,7 +100,6 @@ export const makePayment = async ({
     }
 
     if (!couponCode) {
-      const student = await getStudent();
       const payment_url = await payWithChargily({
         amount: total,
         metadata: {
@@ -120,7 +126,22 @@ export const makePayment = async ({
       });
       return "/student-library";
     }
-    return "/student-library";
+
+    const payment_url = await payWithChargily({
+      amount: newPrice,
+      metadata: {
+        productId: courses[0]?.id,
+        studentId: student?.id,
+      },
+      product_name: courses[0]?.title,
+      subdomain,
+      success_url: `https://${subdomain}/student-library`,
+    });
+
+    console.log("this is from chargily when the coupon works");
+    console.log(payment_url);
+
+    return payment_url;
   } catch (err) {
     console.error("there is an error while trying to make a payment");
     console.error(err);

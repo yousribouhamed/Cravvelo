@@ -35,8 +35,8 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({ subdomain }) => {
         couponCode,
         price:
           state?.shoppingBag
-            .map((item) => Number(item.price))
-            .reduce((current, next) => current + next) - priceAfterCouponCode,
+            ?.map((item) => Number(item.price))
+            ?.reduce((current, next) => current + next) - priceAfterCouponCode,
       });
 
       setPriceAfterCouponCode(price);
@@ -56,12 +56,20 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({ subdomain }) => {
       setError(false);
       setLoading(true);
 
+      if (!subdomain) {
+        throw new Error("there is no subdmain");
+        console.log(" the subdomain is not here");
+        return;
+      }
+
       const url = await makePayment({
         couponCode,
-        courcesId: state.shoppingBag.map((item) => item.id),
+        courcesId: state.shoppingBag?.map((item) => item.id),
         productsId: [],
         subdomain,
       });
+      console.log("this is the chargily url");
+      console.log(url);
 
       router.push(url);
     } catch (err) {
@@ -120,8 +128,8 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({ subdomain }) => {
         <span>
           DZD{" "}
           {state?.shoppingBag
-            .map((item) => Number(item.price))
-            .reduce((current, next) => current + next)}
+            ?.map((item) => Number(item.price))
+            ?.reduce((current, next) => current + next)}
         </span>
       </div>
       <div className="w-full h-[30px] flex items-center justify-between">
@@ -130,8 +138,8 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({ subdomain }) => {
           -DZD{" "}
           {priceAfterCouponCode
             ? state?.shoppingBag
-                .map((item) => Number(item.price))
-                .reduce((current, next) => current + next) -
+                ?.map((item) => Number(item.price))
+                ?.reduce((current, next) => current + next) -
               priceAfterCouponCode
             : 0}
         </span>
@@ -144,8 +152,8 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({ subdomain }) => {
           {priceAfterCouponCode
             ? priceAfterCouponCode
             : state?.shoppingBag
-                .map((item) => Number(item.price))
-                .reduce((current, next) => current + next)}
+                ?.map((item) => Number(item.price))
+                ?.reduce((current, next) => current + next)}
         </span>
       </div>
       {subdomain ? (
@@ -159,8 +167,8 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({ subdomain }) => {
           {priceAfterCouponCode
             ? priceAfterCouponCode
             : state?.shoppingBag
-                .map((item) => Number(item.price))
-                .reduce((current, next) => current + next)}
+                ?.map((item) => Number(item.price))
+                ?.reduce((current, next) => current + next)}
         </button>
       ) : (
         <button
