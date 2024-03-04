@@ -4,7 +4,7 @@ import { useState, type FC } from "react";
 import { Label } from "@ui/components/ui/label";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { useAcademiaStore } from "../../global-state/academia-store";
-import { applayCoupon, makePayment } from "../../_actions/payments";
+import { applyCoupon, makePayment } from "../../_actions/payments";
 import { useRouter } from "next/navigation";
 
 interface AcademyPymentsProps {
@@ -31,7 +31,7 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({ subdomain }) => {
     try {
       setError(false);
       setLoading(true);
-      const price = await applayCoupon({
+      const price = await applyCoupon({
         couponCode,
         price:
           state?.shoppingBag

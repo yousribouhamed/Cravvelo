@@ -6,9 +6,9 @@ import { prisma } from "database/src";
 
 // this sunction should run on the server only
 const useHaveAccess = async () => {
-  const currentDate = new Date();
-
   const user = await currentUser();
+
+  const currentDate = new Date();
 
   if (!user) {
     redirect("/sign-in");
@@ -27,19 +27,19 @@ const useHaveAccess = async () => {
     redirect("/auth-callback");
   }
 
-  const trialEndDate = new Date(account.createdAt);
-  trialEndDate.setDate(trialEndDate.getDate() + 14);
+  const trialStartDate = account.createdAt;
+  const trialEndDate = new Date(trialStartDate);
+  trialEndDate.setDate(trialEndDate.getDate() + 14); // Adding 14 days to trial start date
 
   // here we check if the user is paid user or not
 
-  const isFreeTrial = currentDate < trialEndDate;
+  const isFreeTrial = currentDate > trialEndDate;
 
   const isSubscribed = account.plan ? true : false;
 
-  console.log("this is the free trial ");
-  console.log(isFreeTrial);
-  console.log("and this is the subscription status");
-  console.log(isSubscribed);
+  if (!isFreeTrial && !isSubscribed) {
+    redirect("/pricing");
+  }
 
   return {
     userId: user.id,
