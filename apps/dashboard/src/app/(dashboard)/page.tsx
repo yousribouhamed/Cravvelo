@@ -16,9 +16,35 @@ import { cn } from "@ui/lib/utils";
 import { ArrowUpLeft } from "lucide-react";
 import Link from "next/link";
 import PublishWebsite from "@/src/components/models/editor/publish-website";
+import { prisma } from "database/src";
+
+const getAllSales = async ({ accountId }: { accountId: string }) => {
+  const sales = await prisma.sale.findMany({
+    where: {
+      accountId,
+    },
+  });
+
+  return sales;
+};
+
+const getAllstudents = async ({ accountId }: { accountId: string }) => {
+  const students = await prisma.student.findMany({
+    where: {
+      accountId,
+    },
+  });
+
+  return students;
+};
 
 async function Page() {
   const user = await useHaveAccess();
+
+  const [sales, studnets] = await Promise.all([
+    getAllSales({ accountId: user.accountId }),
+    getAllstudents({ accountId: user.accountId }),
+  ]);
 
   return (
     <MaxWidthWrapper>
@@ -61,7 +87,7 @@ async function Page() {
                 </svg>
               </CardHeader>
               <CardFooter>
-                <div className="text-2xl font-bold">DZD45,231.89</div>
+                <div className="text-2xl font-bold">{sales.length}</div>
               </CardFooter>
             </Card>
             <Card className="flex flex-col justify-between  min-h-[150px] ">
@@ -83,7 +109,7 @@ async function Page() {
                 </svg>
               </CardHeader>
               <CardFooter>
-                <div className="text-2xl font-bold">+2350</div>
+                <div className="text-2xl font-bold">{studnets?.length}</div>
               </CardFooter>
             </Card>
             <Card className="flex flex-col justify-between  min-h-[150px] ">
@@ -106,7 +132,13 @@ async function Page() {
                 </svg>
               </CardHeader>
               <CardFooter>
-                <div className="text-2xl font-bold">+12,234</div>
+                <div className="text-2xl font-bold">
+                  DZD{" "}
+                  {sales.length > 0 &&
+                    sales
+                      .map((item) => Number(item.price))
+                      .reduce((current, next) => current + next)}
+                </div>
               </CardFooter>
             </Card>
             <Card className="flex flex-col justify-between min-h-[150px]">
@@ -126,12 +158,12 @@ async function Page() {
                 </svg>
               </CardHeader>
               <CardFooter>
-                <div className="text-2xl  font-bold">+573</div>
+                <div className="text-2xl  font-bold">0</div>
               </CardFooter>
             </Card>
           </div>
           <div className="grid gap-4 md:grid-cols-3  my-8 h-[450px] w-full ">
-            <AreaChartOverview />
+            <AreaChartOverview sales={sales} />
             <Card className="col-span-1">
               <CardHeader>
                 <CardTitle>لم نقرر بعد ما سنضعه هنا</CardTitle>
@@ -156,7 +188,18 @@ async function Page() {
                 <CardTitle>الطلبات الجديدة</CardTitle>
               </CardHeader>
               <CardContent className="flex items-center justify-center">
-                <NotFoundCard />
+                {sales.length === 0 ? (
+                  <NotFoundCard />
+                ) : (
+                  <div className="w-full h-full flex flex-col gap-y-2">
+                    {sales.map((item) => (
+                      <div className="w-full flex items-center justify-between px-4 border-b p-4">
+                        <span> DZD {item.price}</span>
+                        <span>عنوان المنتج</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>

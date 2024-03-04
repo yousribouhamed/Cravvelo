@@ -14,6 +14,7 @@ import { Checkbox } from "@ui/components/ui/checkbox";
 import { Sale } from "database";
 import { maketoast } from "../../toasts";
 import { DataTableColumnHeader } from "../data-table-head";
+import { formatDateInArabic } from "@/src/lib/utils";
 
 export const OrderColumns: ColumnDef<Sale>[] = [
   {
@@ -49,9 +50,8 @@ export const OrderColumns: ColumnDef<Sale>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <p>
-          {/* todo : add funtion to fransform date to string in arabic */}
-          {/* {row.original.expirationDate} */}
+        <p className=" text-sm font-bold ">
+          {formatDateInArabic(row.original.createdAt, "dd MMMM yyyy")}
         </p>
       );
     },
@@ -60,43 +60,32 @@ export const OrderColumns: ColumnDef<Sale>[] = [
   {
     accessorKey: "orderNumber",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="وقت الانشاء" />
+      <DataTableColumnHeader column={column} title="رقم متسلسل" />
     ),
     cell: ({ row }) => {
-      return (
-        <p>
-          {/* todo : add funtion to fransform date to string in arabic */}
-          {/* {row.original.expirationDate} */}
-        </p>
-      );
+      return <p className=" text-sm font-bold ">{row.original.orderNumber}</p>;
     },
   },
 
   {
     accessorKey: "amount",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="الكمية" />
+      <DataTableColumnHeader column={column} title="السعر" />
     ),
     cell: ({ row }) => {
-      return (
-        <p>
-          {/* todo : add funtion to fransform date to string in arabic */}
-          {/* {row.original.expirationDate} */}
-        </p>
-      );
+      return <p className=" text-sm font-bold ">DZD ${row.original.price}</p>;
     },
   },
 
   {
-    accessorKey: "status",
+    accessorKey: "itemType",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="الحالة" />
+      <DataTableColumnHeader column={column} title="نوع المنتج" />
     ),
     cell: ({ row }) => {
       return (
-        <p>
-          {/* todo : add funtion to fransform date to string in arabic */}
-          {/* {row.original.expirationDate} */}
+        <p className=" text-sm font-bold ">
+          {row.original.itemType === "COURSE" ? "دورة" : "منتج"}
         </p>
       );
     },

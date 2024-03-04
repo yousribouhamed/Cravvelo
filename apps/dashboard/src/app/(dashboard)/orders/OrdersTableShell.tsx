@@ -26,7 +26,6 @@ const OrdersTableShell: FC<OrdersTableShellProps> = ({ initialData }) => {
   console.log(data);
   return (
     <div className="w-full min-h-[300px] h-fit flex flex-col ">
-      <DeleteCourseModel refetch={refetch} />
       <DataTable columns={OrderColumns} data={data} />
     </div>
   );

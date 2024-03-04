@@ -58,7 +58,7 @@ export function DataTable<TData, TValue>({
   return (
     <>
       {/* <TableHeader2 table={table} /> */}
-      {refetch && <CouponsTableHeader table={table} refetch={refetch} />}
+      <CouponsTableHeader table={table} refetch={refetch} />
       <div className="rounded-md border bg-white">
         <Table>
           <TableHeader>
