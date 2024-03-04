@@ -158,6 +158,11 @@ export const payWithChargily = async ({
     };
     const response = await fetch(`${CHARGILY_BASE_URL}/products`, options); // Sending a POST request to create a product
     const product = (await response.json()) as Product; // Parsing response JSON into Product type
+    if (!product) {
+      throw new Error("faild to create a product");
+    }
+
+    console.log(product);
     const options2 = {
       method: "POST",
       headers: {
@@ -169,6 +174,10 @@ export const payWithChargily = async ({
 
     const response2 = await fetch(`${CHARGILY_BASE_URL}/prices`, options2); // Sending a POST request to create a price
     const price = (await response2.json()) as Price; // Parsing response JSON into Price type
+    if (!price) {
+      throw new Error("faild to create a price");
+    }
+    console.log(price);
 
     const payload = {
       items: [{ price: price.id, quantity: 1 }],
@@ -186,8 +195,11 @@ export const payWithChargily = async ({
     };
     const response3 = await fetch(`${CHARGILY_BASE_URL}/checkouts`, options3); // Sending a POST request to create a checkout
     const checkout = (await response3.json()) as Checkout; // Parsing response JSON into Checkout type
+    if (!checkout) {
+      throw new Error("faild to create a checkout");
+    }
 
-    redirect(checkout.checkout_url);
+    return checkout?.checkout_url;
   } catch (err) {
     console.error("there is a problem paying with vhargily");
     console.error(err);

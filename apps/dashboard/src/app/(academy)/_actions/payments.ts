@@ -89,12 +89,12 @@ export const makePayment = async ({
     console.log("this is the price");
     console.log(total);
     if (total === 0) {
-      return;
+      return "/student-library";
     }
 
     if (!couponCode) {
       const student = await getStudent();
-      await payWithChargily({
+      const payment_url = await payWithChargily({
         amount: total,
         metadata: {
           productId: courses[0].id,
@@ -102,10 +102,13 @@ export const makePayment = async ({
         },
         product_name: courses[0].title,
         subdomain,
-        success_url: "https://jadir.vercel.app",
+        success_url: `https://${subdomain}/student-library`,
       });
 
-      return;
+      console.log("this is from chargily");
+      console.log(payment_url);
+
+      return payment_url;
     }
 
     const newPrice = await applayCoupon({ couponCode, price: total });
@@ -115,8 +118,9 @@ export const makePayment = async ({
         code: couponCode,
         courseId: courses[0].id,
       });
-      redirect("/student-library");
+      return "/student-library";
     }
+    return "/student-library";
   } catch (err) {
     console.error("there is an error while trying to make a payment");
     console.error(err);

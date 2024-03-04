@@ -34,8 +34,7 @@ const useHaveAccess = async () => {
 
   const isFreeTrial = currentDate < trialEndDate;
 
-  const isSubscribed =
-    account.stripeCustomerId && account.stripeCurrentPeriodEnd ? true : false;
+  const isSubscribed = false;
 
   return {
     userId: user.id,

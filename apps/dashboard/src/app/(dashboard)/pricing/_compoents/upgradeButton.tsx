@@ -12,8 +12,6 @@ import {
 } from "@ui/components/ui/select";
 import * as React from "react";
 import { translateCurrency } from "../../../../lib/utils";
-import { trpc } from "../../../_trpc/client";
-import { maketoast } from "../../../../components/toasts";
 import { Tabs } from "./animated-tabs";
 import Image from "next/image";
 
@@ -44,15 +42,6 @@ const getMoneyValue = (display: string, value: string) => {
 const UpgradeButton: FC = ({}) => {
   const [display, setDisplay] = React.useState(DISPLAY_VALUES.monthly);
   const [currency, setCurrency] = React.useState(CURRENCY.usd);
-
-  const mutation = trpc.createStripeSession.useMutation({
-    onSuccess: ({ url }) => {
-      window.location.href = url ?? "/pricing";
-    },
-    onError: (err) => {
-      maketoast.error();
-    },
-  });
 
   return (
     <div className="w-full min-h-[1000px] h-fit my-12">
@@ -167,12 +156,12 @@ const UpgradeButton: FC = ({}) => {
                 </p>
               </div>
               <Button
-                disabled={mutation.isLoading}
-                onClick={() =>
-                  mutation.mutate({
-                    plan: item.plan_code,
-                  })
-                }
+                // disabled={mutation.isLoading}
+                // onClick={() =>
+                //   mutation.mutate({
+                //     plan: item.plan_code,
+                //   })
+                // }
                 size="lg"
                 className="rounded-full h-16 w-[90%] text-xl font-bold mx-auto  hover:scale-105 transition-all duration-150"
               >

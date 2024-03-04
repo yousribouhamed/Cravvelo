@@ -51,16 +51,19 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({ subdomain }) => {
   // proccess the payment
 
   const proccessPayment = async () => {
+    console.log("the funtion is starting");
     try {
       setError(false);
       setLoading(true);
 
-      await makePayment({
+      const url = await makePayment({
         couponCode,
         courcesId: state.shoppingBag.map((item) => item.id),
         productsId: [],
         subdomain,
       });
+
+      router.push(url);
     } catch (err) {
       console.error("an error in the process payment funtion");
       console.error(err);
