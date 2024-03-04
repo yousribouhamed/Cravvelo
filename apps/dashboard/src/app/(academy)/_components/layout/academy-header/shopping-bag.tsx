@@ -10,7 +10,7 @@ import AcademyPyments from "../../forms/academy-pyments";
 export default function ShoppingCardProduction({
   subdomain,
 }: {
-  subdomain: string;
+  subdomain: string | null;
 }) {
   const [open, setOpen] = useState(false);
 

@@ -11,11 +11,13 @@ import type { Student } from "database";
 interface AcademyHeaderProps {
   isAuthanticated: boolean;
   student: Student | null;
+  subdomain: string | null;
 }
 
 const AcademyHeader: FC<AcademyHeaderProps> = ({
   isAuthanticated,
   student,
+  subdomain,
 }) => {
   return (
     <div className="w-full h-[70px]   border-b z-[8] fixed top-0 bg-white shadow ">
@@ -32,7 +34,7 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
           <LinksNavbar />
         </div>
         <div className="flex w-fir min-w-[100px] justify-end items-center">
-          <ShoppingCardProduction />
+          <ShoppingCardProduction subdomain={subdomain} />
           {/* <button className="text-black w-[40px] h-[40px] rounded-xl p-2">
             <Search className="w-5 h-5 " />
           </button> */}

@@ -5,14 +5,16 @@ import { Label } from "@ui/components/ui/label";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { useAcademiaStore } from "../../global-state/academia-store";
 import { applayCoupon, makePayment } from "../../_actions/payments";
+import { useRouter } from "next/navigation";
 
 interface AcademyPymentsProps {
-  subdomain: string;
+  subdomain: string | null;
 }
 
 const AcademyPyments: FC<AcademyPymentsProps> = ({ subdomain }) => {
   const { state, actions } = useAcademiaStore();
 
+  const router = useRouter();
   const [couponCode, setCouponCode] = useState<null | string>(null);
 
   const [priceAfterCouponCode, setPriceAfterCouponCode] = useState<
@@ -143,20 +145,28 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({ subdomain }) => {
                 .reduce((current, next) => current + next)}
         </span>
       </div>
-
-      <button
-        onClick={proccessPayment}
-        disabled={loading}
-        className="mt-8 w-full h-12 bg-primary flex items-center justify-center text-white gap-x-4 disabled:opacity-[50%]"
-      >
-        {loading && <LoadingSpinner />}
-        دفع DZD{" "}
-        {priceAfterCouponCode
-          ? priceAfterCouponCode
-          : state?.shoppingBag
-              .map((item) => Number(item.price))
-              .reduce((current, next) => current + next)}
-      </button>
+      {subdomain ? (
+        <button
+          onClick={proccessPayment}
+          disabled={loading}
+          className="mt-8 w-full h-12 bg-primary flex items-center justify-center text-white gap-x-4 disabled:opacity-[50%]"
+        >
+          {loading && <LoadingSpinner />}
+          دفع DZD{" "}
+          {priceAfterCouponCode
+            ? priceAfterCouponCode
+            : state?.shoppingBag
+                .map((item) => Number(item.price))
+                .reduce((current, next) => current + next)}
+        </button>
+      ) : (
+        <button
+          onClick={() => router.push("/auth-academy/sign-up")}
+          className="mt-8 w-full h-12 bg-primary flex items-center justify-center text-white gap-x-4 disabled:opacity-[50%]"
+        >
+          تسجيل الدخول
+        </button>
+      )}
     </div>
   );
 };

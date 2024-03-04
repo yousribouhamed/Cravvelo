@@ -9,6 +9,7 @@ import MaxWidthWrapper from "./_components/max-width-wrapper";
 import AcademyHeader from "./_components/layout/academy-header";
 import AcademiaFooter from "./_components/layout/academy-footer";
 import { getStudent } from "./_actions/auth";
+import { prisma } from "database/src";
 
 export const fetchCache = "force-no-store";
 
@@ -61,16 +62,23 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const student = await getStudent();
+
+  const website = await prisma.website.findFirst({
+    where: {
+      accountId: student.accountId,
+    },
+  });
   return (
     <html suppressHydrationWarning dir="rtl" lang="ar">
       <head />
       <Providers>
         <body
-          className={`selection:bg-blue-500 selection:text-white antialiased bg-zinc-50`}
+          className={`selection:bg-primary selection:text-white antialiased bg-zinc-50`}
         >
           <AcademyHeader
             student={student}
             isAuthanticated={student ? true : false}
+            subdomain={website?.subdomain ?? null}
           />
           <MaxWidthWrapper className="mt-[70px] min-h-[calc(100vh-70px)] h-fit ">
             {children}
