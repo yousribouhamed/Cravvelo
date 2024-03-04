@@ -93,7 +93,7 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses }) => {
                   <button
                     onClick={() => {
                       addItemToShoppingBag({
-                        id: uuidv4(),
+                        id: item.id,
                         imageUrl: item.thumnailUrl,
                         name: item.title,
                         price: item.price.toString(),

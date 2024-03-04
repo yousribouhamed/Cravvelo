@@ -140,7 +140,6 @@ export const payWithChargily = async ({
   subdomain: string;
   amount: number;
   success_url: string;
-
   metadata: {
     studentId: string;
     productId: string;

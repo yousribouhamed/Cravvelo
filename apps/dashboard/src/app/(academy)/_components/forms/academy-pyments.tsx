@@ -58,8 +58,6 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({ subdomain }) => {
 
       if (!subdomain) {
         throw new Error("there is no subdmain");
-        console.log(" the subdomain is not here");
-        return;
       }
 
       const url = await makePayment({

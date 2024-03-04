@@ -71,6 +71,24 @@ export const makePayment = async ({
     // );
     // fetch all the courses
 
+    console.log("this is the courses id given by the client");
+    console.log(courcesId);
+
+    const course = await prisma.course.findFirst({
+      where: {
+        id: courcesId[0],
+      },
+    });
+
+    const coursesAll = await prisma.course.findMany();
+
+    console.log("all the courses");
+    console.log(coursesAll);
+
+    console.log("this is the course id");
+
+    console.log(course);
+
     const courses = await Promise.all(
       courcesId.map((item) =>
         prisma.course.findFirst({
@@ -84,17 +102,26 @@ export const makePayment = async ({
     // applay the coupon if the code exists
     const student = await getStudent();
 
-    console.log(student);
+    console.log("here are all the courses");
+    console.log(courses);
 
+    if (!courses || courses?.length === 0) {
+      throw new Error("there is no courses selected");
+    }
     if (!student) {
       throw new Error("there is no student");
     }
 
     const total = courses
-      .map((item) => Number(item.price))
+      .map((item) => Number(item?.price))
       .reduce((current, next) => current + next);
     console.log("this is the price");
     console.log(total);
+
+    if (!total) {
+      throw new Error("the price of courses is NaN");
+    }
+
     if (total === 0) {
       return "/student-library";
     }
