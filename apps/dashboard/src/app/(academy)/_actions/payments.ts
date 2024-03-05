@@ -60,6 +60,7 @@ function reducePercentage(number: number, percentage: number): number {
 
   const reductionAmount = (percentage / 100) * number;
   const result = number - reductionAmount;
+
   return result;
 }
 

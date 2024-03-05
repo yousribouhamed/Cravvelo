@@ -146,7 +146,10 @@ export default function ShoppingCardProduction({
                         </div>
                       </div>
                       {state.shoppingBag.length > 0 && (
-                        <AcademyPyments subdomain={subdomain} />
+                        <AcademyPyments
+                          setOpen={setOpen}
+                          subdomain={subdomain}
+                        />
                       )}
                     </div>
                   </Dialog.Panel>

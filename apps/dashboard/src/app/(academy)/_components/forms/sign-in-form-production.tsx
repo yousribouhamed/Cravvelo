@@ -35,11 +35,6 @@ interface AcademySifnIpFormProps {
 }
 
 export function AcademySignInForm({ accountId }: AcademySifnIpFormProps) {
-  const router = useRouter();
-
-  const searchParams = useSearchParams();
-  const origin = searchParams.get("origin");
-
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const form = useForm<Inputs>({
@@ -50,7 +45,6 @@ export function AcademySignInForm({ accountId }: AcademySifnIpFormProps) {
     },
   });
 
-  // 2. Define a submit handler.
   async function onSubmit(data: z.infer<typeof authSchemaLogin>) {
     try {
       setIsLoading(true);
@@ -62,10 +56,7 @@ export function AcademySignInForm({ accountId }: AcademySifnIpFormProps) {
       console.log("this is the value of the origin");
       console.log(origin);
       maketoast.successWithText({ text: "تم تسجيل الدخول بنجاح" });
-      if (!origin) {
-        router.push("/student-library");
-      }
-      router.push(`/${origin}`);
+      window.location.reload();
     } catch (err) {
       console.error(err);
       maketoast.error();

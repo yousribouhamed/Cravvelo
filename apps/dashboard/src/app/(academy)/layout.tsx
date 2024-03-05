@@ -65,7 +65,7 @@ export default async function RootLayout({
 
   const website = await prisma.website.findFirst({
     where: {
-      accountId: student.accountId,
+      accountId: student ? student?.accountId : "",
     },
   });
   return (
@@ -79,7 +79,7 @@ export default async function RootLayout({
             student={student}
             isAuthanticated={student ? true : false}
             subdomain={website?.subdomain ?? null}
-            logo={website.logo}
+            logo={website?.logo ? website?.logo : ""}
           />
           <MaxWidthWrapper className="mt-[70px] min-h-[calc(100vh-70px)] h-fit ">
             {children}

@@ -21,27 +21,43 @@ const CourseVideoPlayer: FC<VideoPlayerProps> = ({ videoId }) => {
         </span>
       </div>
       <div className="w-full h-[500px] rounded-xl bg-gray-200">
-        <ApiVideoPlayer
-          video={{
-            id:
-              state?.currentModule?.fileUrl &&
-              state?.currentModule?.fileUrl !== ""
-                ? state?.currentModule?.fileUrl
-                : videoId,
-          }}
-          style={{ width: "100%", height: "100%" }}
-          theme={{
-            text: "#ffffff",
-            link: "#ffffff",
-            linkHover: "#3b82f6",
-            trackPlayed: "#3b82f6",
-            trackUnplayed: "#ffffff",
-            trackBackground: "#3b82f6",
-            backgroundTop: "#3b82f6",
-            backgroundBottom: "#3b82f6",
-            backgroundText: "#ffffff",
-          }}
-        />
+        {state?.currentModule ? (
+          <ApiVideoPlayer
+            video={{
+              id: state?.currentModule?.fileUrl,
+            }}
+            style={{ width: "100%", height: "100%" }}
+            theme={{
+              text: "#ffffff",
+              link: "#ffffff",
+              linkHover: "#3b82f6",
+              trackPlayed: "#3b82f6",
+              trackUnplayed: "#ffffff",
+              trackBackground: "#3b82f6",
+              backgroundTop: "#3b82f6",
+              backgroundBottom: "#3b82f6",
+              backgroundText: "#ffffff",
+            }}
+          />
+        ) : (
+          <ApiVideoPlayer
+            video={{
+              id: videoId,
+            }}
+            style={{ width: "100%", height: "100%" }}
+            theme={{
+              text: "#ffffff",
+              link: "#ffffff",
+              linkHover: "#3b82f6",
+              trackPlayed: "#3b82f6",
+              trackUnplayed: "#ffffff",
+              trackBackground: "#3b82f6",
+              backgroundTop: "#3b82f6",
+              backgroundBottom: "#3b82f6",
+              backgroundText: "#ffffff",
+            }}
+          />
+        )}
       </div>
     </>
   );

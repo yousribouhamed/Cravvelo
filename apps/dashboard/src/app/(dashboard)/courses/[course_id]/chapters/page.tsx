@@ -4,6 +4,7 @@ import { prisma } from "database/src";
 import ChaptersBoard from "@/src/components/chapters-board";
 import useHaveAccess from "@/src/hooks/use-have-access";
 import CourseStepper from "@/src/components/course-stepper";
+import CourseHeader from "@/src/components/course-header";
 
 interface PageProps {
   params: { course_id: string };
@@ -37,7 +38,8 @@ export default async function Home({ params }: PageProps) {
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
         <Header user={user} title="محتوى الدورة" goBack />
-        <CourseStepper />
+        {/* <CourseStepper /> */}
+        <CourseHeader />
         <ChaptersBoard initialData={chapters} />
       </main>
     </MaxWidthWrapper>

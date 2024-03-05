@@ -3,15 +3,28 @@ import CourseVideoPlayer from "@/src/app/(academy)/_components/course-component/
 import { getCourseByUrlPath } from "@/src/app/(academy)/_actions/course";
 import { get_course_chapters } from "@/src/app/(academy)/_actions/chapter";
 import { authorization } from "@/src/app/(academy)/_actions/auth";
+import { Chapter } from "database";
+import { Module } from "@/src/types";
 
 interface PageProps {
   params: { site: string; url: string };
 }
 
+const getFirstVideo = (chapter: Chapter): string => {
+  const modules = JSON.parse(chapter?.modules as string) as Module[];
+
+  const video = modules[0]?.fileUrl;
+
+  return video;
+};
+
 const Page = async ({ params }: PageProps) => {
   await authorization({ origin: null });
   const course = await getCourseByUrlPath({ url: params?.url });
   const chapters = await get_course_chapters({ courseID: course?.id });
+
+  console.log("this is the video url");
+  console.log(chapters[0]?.modules);
 
   return (
     <>
@@ -21,7 +34,7 @@ const Page = async ({ params }: PageProps) => {
           <VideoChain chapters={chapters} />
         </div>
         <div className="w-full h-full col-span-2 py-8">
-          <CourseVideoPlayer videoId={chapters[0]?.modules[0]?.fileUrl ?? ""} />
+          <CourseVideoPlayer videoId={getFirstVideo(chapters[0])} />
           <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
             <button className="w-[100px] h-[40px] rounded-xl bg-primary text-white">
               التعليقات

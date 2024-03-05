@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FC } from "react";
+import { Dispatch, SetStateAction, useState, type FC } from "react";
 import { Label } from "@ui/components/ui/label";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { useAcademiaStore } from "../../global-state/academia-store";
@@ -9,9 +9,10 @@ import { useRouter } from "next/navigation";
 
 interface AcademyPymentsProps {
   subdomain: string | null;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const AcademyPyments: FC<AcademyPymentsProps> = ({ subdomain }) => {
+const AcademyPyments: FC<AcademyPymentsProps> = ({ subdomain, setOpen }) => {
   const { state, actions } = useAcademiaStore();
 
   const router = useRouter();
@@ -76,6 +77,7 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({ subdomain }) => {
       setError(true);
     } finally {
       setLoading(false);
+      setOpen(false);
     }
   };
 
