@@ -12,12 +12,14 @@ interface AcademyHeaderProps {
   isAuthanticated: boolean;
   student: Student | null;
   subdomain: string | null;
+  logo: string | null;
 }
 
 const AcademyHeader: FC<AcademyHeaderProps> = ({
   isAuthanticated,
   student,
   subdomain,
+  logo,
 }) => {
   return (
     <div className="w-full h-[70px]   border-b z-[8] fixed top-0 bg-white shadow ">
@@ -26,11 +28,7 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
           <MobilNavgiationProduction />
         </div>
         <div className="min-w-[200px] w-fit  items-center justify-start gap-x-4 hidden md:flex h-full">
-          <img
-            src="https://png.pngtree.com/png-clipart/20230330/original/pngtree-vector-sword-esports-and-mascot-logo-png-image_9012921.png"
-            className="object-cover w-16 h-16"
-          />
-
+          {logo && <img src={logo} className="object-cover w-16 h-16" />}
           <LinksNavbar />
         </div>
         <div className="flex w-fir min-w-[100px] justify-end items-center">

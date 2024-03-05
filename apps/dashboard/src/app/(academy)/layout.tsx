@@ -79,6 +79,7 @@ export default async function RootLayout({
             student={student}
             isAuthanticated={student ? true : false}
             subdomain={website?.subdomain ?? null}
+            logo={website.logo}
           />
           <MaxWidthWrapper className="mt-[70px] min-h-[calc(100vh-70px)] h-fit ">
             {children}

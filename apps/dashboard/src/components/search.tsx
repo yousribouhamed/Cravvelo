@@ -21,6 +21,13 @@ import { Button } from "@ui/components/ui/button";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { isMacOs } from "../lib/utils";
 import { cn } from "@ui/lib/utils";
+import { Course, Product } from "database";
+
+interface ProductGroup {
+  pages: { name: string; path: string }[];
+  products: Product[];
+  courses: Course[];
+}
 
 export const SearchInput: FC = ({}) => {
   const router = useRouter();
@@ -28,6 +35,7 @@ export const SearchInput: FC = ({}) => {
   const [query, setQuery] = React.useState("");
   const debouncedQuery = useDebounce(query, 300);
   const [isPending, startTransition] = React.useTransition();
+  const [data, setData] = React.useState<ProductGroup[] | null>(null);
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
