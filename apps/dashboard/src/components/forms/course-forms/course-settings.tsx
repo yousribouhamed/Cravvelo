@@ -34,6 +34,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ui/components/ui/select";
+import { NewVideoUploader } from "../../uploaders/NewVideoUploader";
 
 interface ComponentProps {
   course: Course;
@@ -202,7 +203,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                   <FormItem className="w-full ">
                     <FormLabel>الفيديو الدعائي </FormLabel>
                     <FormControl>
-                      <VedioUploader
+                      <NewVideoUploader
                         open={open}
                         setOpen={setOpen}
                         onChange={field?.onChange}
