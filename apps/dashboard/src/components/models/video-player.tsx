@@ -3,6 +3,7 @@
 import { Dispatch, SetStateAction, type FC } from "react";
 import ApiVideoPlayer from "@api.video/react-player";
 import { Dialog, DialogContent } from "@ui/components/ui/dialog";
+import { EmbeddedVideo } from "../video-player";
 
 interface VideoPlayerProps {
   isOpen: boolean;
@@ -15,10 +16,10 @@ const VideoPlayer: FC<VideoPlayerProps> = ({ isOpen, setIsOpen, videoId }) => {
     <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
       <DialogContent
         title={"مشغل فديوهات"}
-        className="max-w-4xl min-h-[500px] h-fit pb-2  "
+        className="max-w-4xl min-h-[500px] h-fit  !p-0 "
       >
-        <div className="w-full h-full flex items-center justify-between">
-          <ApiVideoPlayer
+        <div className="w-full h-[500px] flex items-center justify-between">
+          {/* <ApiVideoPlayer
             video={{ id: videoId }}
             style={{ width: "100%", height: 450 }}
             // theme={{
@@ -32,7 +33,8 @@ const VideoPlayer: FC<VideoPlayerProps> = ({ isOpen, setIsOpen, videoId }) => {
             //   backgroundBottom: "rgba(255, 255, 255, 1)", // RGBA color: bottom 50% of background. Default: rgba(0, 0, 0, .7)
             //   backgroundText: "rgba(255, 255, 255, 1)", // RGBA color for title text. Default: rgba(255, 255, 255, 1)
             // }}
-          />
+          /> */}
+          <EmbeddedVideo videoId={videoId} />
         </div>
       </DialogContent>
     </Dialog>

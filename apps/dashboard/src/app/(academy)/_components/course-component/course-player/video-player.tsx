@@ -1,5 +1,4 @@
 "use client";
-import ApiVideoPlayer from "@api.video/react-player";
 
 import type { FC } from "react";
 import { useCoursePlayerStore } from "../../../global-state/course-player-store";
@@ -22,41 +21,37 @@ const CourseVideoPlayer: FC<VideoPlayerProps> = ({ videoId }) => {
       </div>
       <div className="w-full h-[500px] rounded-xl bg-gray-200">
         {state?.currentModule ? (
-          <ApiVideoPlayer
-            video={{
-              id: state?.currentModule?.fileUrl,
-            }}
-            style={{ width: "100%", height: "100%" }}
-            theme={{
-              text: "#ffffff",
-              link: "#ffffff",
-              linkHover: "#3b82f6",
-              trackPlayed: "#3b82f6",
-              trackUnplayed: "#ffffff",
-              trackBackground: "#3b82f6",
-              backgroundTop: "#3b82f6",
-              backgroundBottom: "#3b82f6",
-              backgroundText: "#ffffff",
-            }}
-          />
+          <div className="w-full h-[500px]  relative ">
+            <iframe
+              src={`https://iframe.mediadelivery.net/embed/212306/${state?.currentModule?.fileUrl}?autoplay=true`}
+              loading="lazy"
+              style={{
+                border: "none",
+                position: "absolute",
+
+                height: "100%",
+                width: "100%",
+              }}
+              allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+              allowFullScreen={true}
+            ></iframe>
+          </div>
         ) : (
-          <ApiVideoPlayer
-            video={{
-              id: videoId,
-            }}
-            style={{ width: "100%", height: "100%" }}
-            theme={{
-              text: "#ffffff",
-              link: "#ffffff",
-              linkHover: "#3b82f6",
-              trackPlayed: "#3b82f6",
-              trackUnplayed: "#ffffff",
-              trackBackground: "#3b82f6",
-              backgroundTop: "#3b82f6",
-              backgroundBottom: "#3b82f6",
-              backgroundText: "#ffffff",
-            }}
-          />
+          <div className="w-full h-[500px]  relative ">
+            <iframe
+              src={`https://iframe.mediadelivery.net/embed/212306/${videoId}?autoplay=true`}
+              loading="lazy"
+              style={{
+                border: "none",
+                position: "absolute",
+
+                height: "100%",
+                width: "100%",
+              }}
+              allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+              allowFullScreen={true}
+            ></iframe>
+          </div>
         )}
       </div>
     </>

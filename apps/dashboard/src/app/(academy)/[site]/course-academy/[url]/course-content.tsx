@@ -50,11 +50,19 @@ const CourseDisplayContent: FC<CourseContentProps> = ({ course, chapters }) => {
             case "informations":
               return (
                 <>
-                  <div className="w-full h-[500px]  ">
-                    <ApiVideoPlayer
-                      video={{ id: course?.youtubeUrl }}
-                      style={{ width: "100%", height: 450 }}
-                    />
+                  <div className="w-full h-[500px] relative ">
+                    <iframe
+                      src={`https://iframe.mediadelivery.net/embed/212306/${course?.youtubeUrl}?autoplay=true`}
+                      loading="lazy"
+                      style={{
+                        border: "none",
+                        position: "absolute",
+                        height: "100%",
+                        width: "100%",
+                      }}
+                      allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                      allowFullScreen={true}
+                    ></iframe>
                   </div>
                   <CourseDescription
                     // @ts-ignore

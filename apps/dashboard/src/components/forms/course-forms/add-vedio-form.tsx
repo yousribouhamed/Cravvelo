@@ -23,6 +23,7 @@ import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { PlateEditor } from "../../reich-text-editor/rich-text-editor";
 import { maketoast } from "../../toasts";
 import VideoPlayer from "../../models/video-player";
+import { NewVideoUploader } from "../../uploaders/NewVideoUploader";
 
 const addVedioSchema = z.object({
   title: z.string().min(2).max(50),
@@ -128,8 +129,9 @@ function AddVedioForm() {
                       إضافة ملف فيديو{" "}
                       <span className="text-red-600 text-xl">*</span>
                     </FormLabel>
+
                     <FormControl>
-                      <VedioUploader
+                      <NewVideoUploader
                         open={open}
                         setOpen={setOpen}
                         onChange={field?.onChange}
