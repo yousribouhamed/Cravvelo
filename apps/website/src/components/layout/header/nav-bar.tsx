@@ -177,7 +177,7 @@ export const NavBar: FC = ({}) => {
             </nav>
             <div className="w-[20%] hidden h-full lg:flex items-center justify-end">
               <Link
-                href={"https://jadir.vercel.app/sign-in"}
+                href={"https://app.cravvelo.com/sign-in"}
                 className={cn(
                   buttonVariants(),
                   "bg-[#FC6B00]  text-xl py-4  h-12 rounded-2xl text-white font-bold  hover:bg-[#994b13]  hover:scale-105 transition-all duration-150 "
