@@ -469,6 +469,9 @@ importers:
 
   apps/website:
     dependencies:
+      '@hookform/resolvers':
+        specifier: ^3.3.4
+        version: 3.3.4(react-hook-form@7.49.2)
       animejs:
         specifier: ^3.2.2
         version: 3.2.2
@@ -490,6 +493,9 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      react-hook-form:
+        specifier: ^7.49.2
+        version: 7.49.2(react@18.2.0)
       react-intersection-observer:
         specifier: ^9.8.1
         version: 9.8.1(react-dom@18.2.0)(react@18.2.0)
@@ -499,6 +505,9 @@ importers:
       ui:
         specifier: workspace:*
         version: link:../../packages/ui
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
       zustand:
         specifier: ^4.5.0
         version: 4.5.0(@types/react@18.2.5)(immer@10.0.3)(react@18.2.0)
