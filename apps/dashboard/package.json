@@ -90,6 +90,7 @@
     "class-variance-authority": "^0.6.0",
     "cmdk": "^0.2.0",
     "context-menu": "^2.0.0",
+    "crisp-sdk-web": "^1.0.22",
     "database": "workspace:*",
     "framer-motion": "^10.18.0",
     "handlebars": "^4.7.8",
