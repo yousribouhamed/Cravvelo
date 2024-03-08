@@ -1,19 +1,13 @@
-"use client";
-
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Reviews from "@/src/components/reviews";
 import TextTyper from "@/src/components/text-typer";
-import { useSectionInView } from "@/src/hooks/use-section-in-view";
 import { Button } from "@ui/components/ui/button";
 import type { FC } from "react";
 
 const Hero: FC = ({}) => {
-  const { ref } = useSectionInView("home", 0.5);
-
   return (
     <MaxWidthWrapper className="mt-32">
       <section
-        ref={ref}
         id="home"
         className="isolate w-full h-fit min-h-[700px] pt-4 lg:pt-16 px-4 lg:px-0"
       >

@@ -11,38 +11,26 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useActiveSection } from "@/src/lib/zustand/use-active-section";
 
-interface HeaderAbdullahProps {}
-
 const links = [
   {
     name: "الرئيسية",
-    hash: "#home",
-    code: "home",
-  },
-  {
-    name: "المنتج",
-    hash: "#features",
-    code: "features",
-  },
-  {
-    name: "المصادر",
-    hash: "#how_it_works",
-    code: "how_it_works",
-  },
-  {
-    name: "الخدمات",
-    hash: "#why_us",
-    code: "why_us",
-  },
-  {
-    name: "جدارة +",
-    hash: "#features2",
-    code: "features2",
+    href: "/",
   },
   {
     name: "الاسعار",
-    hash: "#pricing",
-    code: "pricing",
+    href: "/pricing",
+  },
+  {
+    name: "الخدمات",
+    href: "/features",
+  },
+  {
+    name: "معلومات عنا",
+    href: "/about-us",
+  },
+  {
+    name: "تواصل معنا",
+    href: "/contact-us",
   },
 ];
 
@@ -72,7 +60,7 @@ export const NavBar: FC = ({}) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []); // The empty dependency array ensures that the effect runs only once, when the component mounts
+  }, []);
 
   return (
     <>
@@ -119,61 +107,25 @@ export const NavBar: FC = ({}) => {
 
             <nav className="w-[80%] hidden h-full lg:flex items-center justify-center ">
               <ul className="flex w-[22rem] flex-wrap items-center justify-center gap-y-1 text-[0.9rem] font-medium text-gray-500 sm:w-[initial] sm:flex-nowrap sm:gap-5">
-                {links?.map((item) => {
+                {links.map((item) => {
                   return (
-                    <motion.li
-                      className="h-full   flex items-center justify-center relative"
-                      key={item.hash}
+                    <Link
+                      href={item.href}
+                      key={item.name}
+                      className={cn(
+                        buttonVariants({ variant: "ghost" }),
+                        "font-semibold text-lg text-black leading-[40px]  rounded-full transition-all duration-150  ",
+                        {
+                          "border-[#FFB700] border-2  font-bold bg-[#FFEEC5]":
+                            item.href === path,
+                        }
+                      )}
                     >
-                      <Link
-                        className={cn(
-                          "flex w-full items-center justify-center px-3 py-3 text-black  transition",
-                          {
-                            "font-bold ": activeSection === item.name,
-                          }
-                        )}
-                        href={item.hash}
-                        onClick={() => {
-                          setActiveSection(item.code);
-                          setTimeOfLastClick(Date.now());
-                        }}
-                      >
-                        {item.name}
-
-                        {item.code === activeSection && (
-                          <motion.span
-                            className="border-[#FFB700] border-2  bg-[#FFEEC5] rounded-full absolute inset-0 -z-[9] "
-                            layoutId="activeSection"
-                            transition={{
-                              type: "spring",
-                              stiffness: 380,
-                              damping: 30,
-                            }}
-                          ></motion.span>
-                        )}
-                      </Link>
-                    </motion.li>
+                      {item.name}
+                    </Link>
                   );
                 })}
               </ul>
-              {/* {links.map((item) => {
-                return (
-                  <Link
-                    href={"/"}
-                    key={item.name}
-                    className={cn(
-                      buttonVariants({ variant: "ghost" }),
-                      "font-bold text-lg leading-[40px] rounded-full transition-all duration-150  ",
-                      {
-                        "border-[#FFB700] border-2  bg-[#FFEEC5]":
-                          item.hash === path,
-                      }
-                    )}
-                  >
-                    {item.name}
-                  </Link>
-                );
-              })} */}
             </nav>
             <div className="w-[20%] hidden h-full lg:flex items-center justify-end">
               <Link

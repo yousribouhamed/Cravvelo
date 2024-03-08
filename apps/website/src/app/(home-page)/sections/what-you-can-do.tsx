@@ -5,7 +5,6 @@ import MaxWidthWrapper from "../../../components/max-width-wrapper";
 import { what_to_do } from "@/src/constants/data";
 import * as React from "react";
 // bg-[#8000FF]
-interface WhatYouCanDoAbdullahProps {}
 
 const WhatYouCanDo: FC = ({}) => {
   const [selected, setSelected] = React.useState<number>(0);
