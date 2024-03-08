@@ -11,11 +11,11 @@ const Page: FC = ({}) => {
           <div className="w-full h-full col-span-1 flex flex-col items-center justify-between pt-[80px] ">
             {/* the first writing */}
             <div className="w-full h-[50px] relative space-x-2 flex items-center justify-center gap-x-4">
-              <div className="bg-[#FFC901] p-4 w-[100px] h-[50px] rounded-xl">
-                <span className="text-black font-bold text-xl">معنا</span>
-              </div>
               <div className="bg-[#FC6B00] p-4  w-[100px] h-[50px] rounded-xl">
                 <span className="text-white font-bold text-xl"> تواصل</span>
+              </div>
+              <div className="bg-[#FFC901] p-4 w-[100px] h-[50px] rounded-xl">
+                <span className="text-black font-bold text-xl">معنا</span>
               </div>
             </div>
             {/* the email support & phone number */}
@@ -23,7 +23,7 @@ const Page: FC = ({}) => {
               <div className="w-[350px] h-[80px] rounded-xl bg-[#E8EEAA] flex items-center justify-end gap-x-4 px-4">
                 <span className="text-lg font-semibold whitespace-nowrap text-black">
                   {" "}
-                  contact@cravvelo.com
+                  support@cravvelo.com
                 </span>
                 <div className="w-[40px] h-[40px] bg-white rounded-xl flex items-center justify-center">
                   <svg
