@@ -1,3 +1,5 @@
+import { Metadata } from "next";
+
 export function translateCurrency(amount, toCurrency) {
   // Exchange rates (as of the last available data, you might want to update them)
   const usdToEurRate = 0.92; // 1 USD = 0.88 EUR
@@ -25,4 +27,45 @@ export function translateCurrency(amount, toCurrency) {
     default:
       return amount;
   }
+}
+
+export function constructMetadata({
+  title = "Cravvelo",
+  description = "قم باستضافة مقاطع الفيديو الخاصة بك، وقم ببيع الدورات التدريبية الخاصة بك عبر الإنترنت واكسب المال أيضًا",
+  noIndex = false,
+}: {
+  title?: string;
+  description?: string;
+  image?: string;
+
+  noIndex?: boolean;
+} = {}): Metadata {
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [
+        {
+          url: "/opengraph-image.png",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/opengraph-image.png"],
+      creator: "@KING_IN_JUNGLE",
+    },
+
+    metadataBase: new URL("https://www.cravvelo.com"),
+    ...(noIndex && {
+      robots: {
+        index: false,
+        follow: false,
+      },
+    }),
+  };
 }
