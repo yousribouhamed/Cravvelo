@@ -1,6 +1,5 @@
 import type { FC } from "react";
 import ShoppingCardProduction from "./shopping-bag";
-import { Search } from "lucide-react";
 import Link from "next/link";
 import MobilNavgiationProduction from "./mobil-navbar";
 import MaxWidthWrapper from "../../max-width-wrapper";
@@ -41,7 +40,7 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
           ) : (
             <Link
               href={"/auth-academy/sign-in"}
-              className="bg-primary text-white w-[140px] h-[40px]  p-2 flex items-center justify-center hover:bg-orange-700 hover:scale-105 transition-all duration-300"
+              className="bg-primary text-white w-[140px] h-[40px] rounded-lg p-2 flex items-center justify-center hover:bg-orange-700 hover:scale-105 transition-all duration-300"
             >
               تسجيل الدخول
             </Link>

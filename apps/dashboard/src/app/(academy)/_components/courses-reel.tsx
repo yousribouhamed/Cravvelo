@@ -7,12 +7,14 @@ import type { FC } from "react";
 import { useAcademiaStore } from "../global-state/academia-store";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 interface CoursesReelProps {
   courses: Course[];
+  blurData: String[];
 }
 
-const CoursesReel: FC<CoursesReelProps> = ({ courses }) => {
+const CoursesReel: FC<CoursesReelProps> = ({ courses, blurData }) => {
   const router = useRouter();
   const addItemToShoppingBag = useAcademiaStore(
     (state) => state.actions.addItem
@@ -23,25 +25,33 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses }) => {
   };
 
   return (
-    <div className="w-full min-h-[200px] h-fit flex flex-col items-center p-4 gap-y-4">
+    <div className="w-full min-h-[400px] h-fit flex flex-col items-center p-4 gap-y-4">
       <div className="w-full h-[50px] flex items-center justify-between">
         <h2 className="text-3xl  font-bold text-zinc-900 text-start">
           الدورات البارزة
         </h2>
       </div>
-      <div className="w-full h-[200px] flex items-start justify-start gap-x-8 flex-wrap">
+      <div className="w-full min-h-[200px] h-fit flex items-start justify-start gap-x-8 flex-wrap">
         {Array.isArray(courses) &&
           courses?.map((item, index) => {
             return (
               <div
                 onClick={() => handleRouting({ id: item.id })}
                 key={item.title + index}
-                className="w-[320px] min-h-[350px] h-fit    flex flex-col border rounded-xl  transition-all shadow  duration-700 cursor-pointer "
+                className="w-[320px] h-[450px]    flex flex-col border rounded-xl  transition-all shadow  duration-700 cursor-pointer "
               >
-                <img
-                  src={item.thumnailUrl}
-                  className="w-full h-[200px] object-cover rounded-t-xl"
-                />
+                <div className="h-[200px] w-full rounded-t-xl relative">
+                  <Image
+                    alt={item.title}
+                    src={item.thumnailUrl}
+                    className="  object-cover rounded-t-xl"
+                    fill
+                    placeholder="blur"
+                    //@ts-ignore
+                    blurDataURL={blurData[index]}
+                  />
+                </div>
+
                 <div className="w-full h-[50px] flex items-center justify-between my-4 px-4">
                   <Link href={`/course-academy/${item.id}`}>
                     <h2 className="text-black font-semibold text-lg text-start hover:text-primary hover:underline  cursor-pointer">
@@ -58,7 +68,7 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses }) => {
                   <div className="w-[50%] h-[20px] flex items-center justify-start gap-x-2">
                     <BookMarked className="w-4 h-4 text-gray-500" />
                     <span className="text-gray-500  text-sm text-start ">
-                      99 مادة
+                      {item.nbrChapters} مادة
                     </span>
                   </div>
 
@@ -73,7 +83,7 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses }) => {
 
                 {Number(item.price) === 0 ? (
                   <div className="w-full h-[10px] flex items-center justify-start gap-x-4 my-4 px-4">
-                    <h2 className="text-blue-500 font-semibold text-lg text-start ">
+                    <h2 className="text-blue-500 font-semibold text-sm text-start ">
                       الدورة مجانية
                     </h2>
                   </div>
@@ -98,7 +108,7 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses }) => {
                         price: item.price.toString(),
                       });
                     }}
-                    className="w-[99%] bg-primary text-white p-2 h-[45px] rounded-xl"
+                    className="w-[99%] bg-primary text-white p-2 h-[45px] rounded-lg"
                   >
                     اشتري الآن
                   </button>

@@ -145,7 +145,7 @@ export const chapter = {
         chapterID: z.string(),
         title: z.string(),
         content: z.any(),
-
+        length: z.number(),
         fileUrl: z.string(),
         fileType: z.string(),
       })
@@ -155,6 +155,7 @@ export const chapter = {
       const chapter = await ctx.prisma.chapter.findFirst({
         where: { id: input.chapterID },
       });
+
       const modules = chapter?.modules
         ? (JSON.parse(chapter?.modules as string) as Module[])
         : ([] as Module[]);
@@ -187,6 +188,20 @@ export const chapter = {
           console.error(err);
           throw new TRPCError({ code: "NOT_FOUND" });
         });
+
+      const courseOldData = await ctx.prisma.course.findFirst({
+        where: chapter.courseID,
+      });
+
+      await ctx.prisma.course.update({
+        where: {
+          id: chapter.courseID,
+        },
+        data: {
+          length: input.length,
+          nbrChapters: 1 + courseOldData.nbrChapters,
+        },
+      });
 
       return { success: true, courseId: course.id };
     }),

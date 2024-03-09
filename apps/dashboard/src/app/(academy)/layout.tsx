@@ -56,34 +56,21 @@ export async function generateMetadata({
   };
 }
 
+//
+
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const student = await getStudent();
-
-  const website = await prisma.website.findFirst({
-    where: {
-      accountId: student ? student?.accountId : "",
-    },
-  });
   return (
     <html suppressHydrationWarning dir="rtl" lang="ar">
       <head />
       <Providers>
         <body
-          className={`selection:bg-primary selection:text-white antialiased bg-zinc-50`}
+          className={`selection:bg-primary selection:text-white antialiased bg-zinc-50 h-fit min-h-screen`}
         >
-          <AcademyHeader
-            student={student}
-            isAuthanticated={student ? true : false}
-            subdomain={website?.subdomain ?? null}
-            logo={website?.logo ? website?.logo : ""}
-          />
-          <MaxWidthWrapper className="mt-[70px] min-h-[calc(100vh-70px)] h-fit ">
-            {children}
-          </MaxWidthWrapper>
+          {children}
           <AcademiaFooter />
         </body>
       </Providers>

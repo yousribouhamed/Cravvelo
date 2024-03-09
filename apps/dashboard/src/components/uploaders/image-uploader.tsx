@@ -38,8 +38,11 @@ export const ImageUploaderS3 = ({
         console.log("there is no selected file");
         setStatus("ERROR");
       }
-      console.log("uploading to s3....");
-      await fetch(success.url, {
+      if (!success || !success?.url) {
+        console.log("there is no selected file");
+        setStatus("ERROR");
+      }
+      await fetch(success?.url, {
         method: "put",
         body: selectedFile,
         headers: {
@@ -158,7 +161,7 @@ export const ImageUploaderS3 = ({
                 case "LOADING":
                   return (
                     <div className="w-full mt-4 flex flex-col mx-auto px-4 gap-y-4">
-                      <p className="text-xl font-bold ">تحميل...</p>
+                      <p className="text-xl font-bold ">جاري رفع الصورة...</p>
                       <Progress
                         value={progress}
                         className="h-1 w-full bg-[#EFEFEF]"

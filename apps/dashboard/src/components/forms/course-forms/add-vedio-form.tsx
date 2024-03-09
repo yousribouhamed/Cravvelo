@@ -37,6 +37,8 @@ function AddVedioForm() {
 
   const [open, setOpen] = React.useState<boolean>(false);
 
+  const [videoSize, setVideoSize] = React.useState<number>(0);
+
   const mutation = trpc.createModule.useMutation({
     onSuccess: () => {
       maketoast.success();
@@ -58,13 +60,15 @@ function AddVedioForm() {
         {
           id: "1",
           type: "p",
-          children: [{ text: "وصف المحتوى" }],
+          children: [{ text: "" }],
         },
       ],
     },
   });
 
   async function onSubmit(values: z.infer<typeof addVedioSchema>) {
+    // video length
+    // colect number of modules
     if (!values.fileUrl || values.fileUrl === "") {
       console.log("here it is the values inside the if");
       console.log(values);
@@ -76,6 +80,7 @@ function AddVedioForm() {
       fileType: "VEDIO",
       fileUrl: values.fileUrl,
       title: values.title,
+      length: videoSize,
     });
 
     console.log("here it is the values inside the mutation");
@@ -134,6 +139,7 @@ function AddVedioForm() {
                         open={open}
                         setOpen={setOpen}
                         onChange={field?.onChange}
+                        setVideoSize={setVideoSize}
                       />
                     </FormControl>
 
@@ -146,10 +152,7 @@ function AddVedioForm() {
                 name="content"
                 render={({ field }) => (
                   <FormItem className="w-full ">
-                    <FormLabel>
-                      وصف الفيديو
-                      <span className="text-red-600 text-xl">*</span>
-                    </FormLabel>
+                    <FormLabel>وصف الفيديو</FormLabel>
                     <FormControl>
                       <PlateEditor
                         value={form.watch("content")}

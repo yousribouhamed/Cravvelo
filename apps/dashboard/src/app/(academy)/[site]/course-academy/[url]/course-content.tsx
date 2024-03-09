@@ -6,6 +6,7 @@ import { Chapter, Course } from "database";
 import CourseDescription from "../../../_components/course-component/course-description";
 import CourseContent from "../../../_components/course-component/course-content";
 import Feedbacks from "../../../_components/course-component/feedbacks";
+import LoadingCard from "../../../_components/loading";
 
 interface CourseContentProps {
   course: Course;
@@ -27,6 +28,7 @@ const CourseDisplayContent: FC<CourseContentProps> = ({ course, chapters }) => {
   const [tab, setTab] = React.useState<{ name: string; value: string }>(
     tabs[0]
   );
+  const [videoLoaded, setVideoLoaded] = React.useState(false);
   return (
     <div className="w-full min-h-[300px] h-fit my-4">
       <div className="w-full h-14 bg-white  flex  items-center justify-start gap-x-4 ">
@@ -50,6 +52,10 @@ const CourseDisplayContent: FC<CourseContentProps> = ({ course, chapters }) => {
               return (
                 <>
                   <div className="w-full h-[500px] relative ">
+                    {!videoLoaded && (
+                      <LoadingCard className="h-[500px] w-full bg-white" />
+                    )}
+
                     <iframe
                       src={`https://iframe.mediadelivery.net/embed/212306/${course?.youtubeUrl}?autoplay=true`}
                       loading="lazy"
@@ -59,6 +65,7 @@ const CourseDisplayContent: FC<CourseContentProps> = ({ course, chapters }) => {
                         height: "100%",
                         width: "100%",
                       }}
+                      onLoad={() => setVideoLoaded(true)} // Set videoLoaded to true when loaded
                       allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
                       allowFullScreen={true}
                     ></iframe>
@@ -68,31 +75,38 @@ const CourseDisplayContent: FC<CourseContentProps> = ({ course, chapters }) => {
                     value={JSON.parse(course?.courseDescription as string)}
                   />
                   {/* what you are gonna learn */}
-                  <div className="w-full my-4 mt-10 min-h-[200px] h-fit flex flex-col rounded-xl">
-                    <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
-                      <h3 className="text-xl font-bold">
-                        ماذا ستتعلم في هذه الدورة
-                      </h3>
+                  {course.courseWhatYouWillLearn && (
+                    <div className="w-full my-4 mt-10 min-h-[200px] h-fit flex flex-col rounded-xl">
+                      <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
+                        <h3 className="text-xl font-bold">
+                          ماذا ستتعلم في هذه الدورة
+                        </h3>
+                      </div>
+                      <div className="w-full h-[300px] flex flex-col bg-white  gap-y-4 rounded-xl  p-4">
+                        <p className="text-lg text-black">
+                          {course?.courseWhatYouWillLearn}
+                        </p>
+                      </div>
                     </div>
-                    <div className="w-full h-[300px] flex flex-col bg-white  gap-y-4 rounded-xl  p-4">
-                      <p className="text-lg text-black">
-                        {course?.courseWhatYouWillLearn}
-                      </p>
-                    </div>
-                  </div>
+                  )}
                   {/* requirements */}
-                  <div className="w-full min-h-[200px] h-fit flex flex-col rounded-xl">
-                    <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
-                      <h3 className="text-xl font-bold">متطلبات حضور الدورة</h3>
-                    </div>
-                    <div className="w-full h-[300px] flex flex-col bg-white gap-y-4 rounded-xl  p-4">
-                      <p className="text-lg text-black">
-                        {course?.courseRequirements}
-                      </p>
-                    </div>
-                  </div>
 
-                  <Feedbacks />
+                  {course.courseRequirements && (
+                    <div className="w-full min-h-[200px] h-fit flex flex-col rounded-xl">
+                      <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
+                        <h3 className="text-xl font-bold">
+                          متطلبات حضور الدورة
+                        </h3>
+                      </div>
+                      <div className="w-full h-[300px] flex flex-col bg-white gap-y-4 rounded-xl  p-4">
+                        <p className="text-lg text-black">
+                          {course?.courseRequirements}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* <Feedbacks /> */}
                 </>
               );
             case "content":

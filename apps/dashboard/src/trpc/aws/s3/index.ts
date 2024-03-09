@@ -6,12 +6,7 @@ import crypto from "crypto";
 import { TRPCError } from "@trpc/server";
 import { s3 } from "@/src/lib/s3";
 
-const allowedFileTypes = [
-  "image/jpeg",
-  "image/png",
-  "video/mp4",
-  "video/quicktime",
-];
+const allowedFileTypes = ["image/jpeg", "image/png"];
 
 const maxFileSize = 1048576 * 10; // 1 MB
 

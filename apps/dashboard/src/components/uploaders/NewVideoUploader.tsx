@@ -19,12 +19,14 @@ export const NewVideoUploader = ({
   className,
   open,
   setOpen,
+  setVideoSize,
 }: {
   onChange: (onChange: string) => void;
   className?: string;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   initialVideoId?: string;
+  setVideoSize?: React.Dispatch<React.SetStateAction<number>>;
 }) => {
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
   const [progress, setProgress] = React.useState<number>(0);
@@ -73,9 +75,9 @@ export const NewVideoUploader = ({
           return prevProgress;
         }
 
-        return prevProgress + 5;
+        return prevProgress + 2;
       });
-    }, 500);
+    }, 1000);
 
     return interval;
   };
@@ -99,10 +101,9 @@ export const NewVideoUploader = ({
           fileReader.onload = async () => {
             const fileBinaryData = fileReader.result as ArrayBuffer;
             setStatus("LOADING");
-            console.log("we reach the funtion");
+
             const videoObjectId = await createVideo({ title: uuidv4() });
-            console.log(videoObjectId);
-            console.log("this is working maybe");
+
             const uploadUrl = `https://video.bunnycdn.com/library/212306/videos/${videoObjectId}`;
             const response = await axios.put(uploadUrl, fileBinaryData, {
               headers: {
@@ -111,11 +112,13 @@ export const NewVideoUploader = ({
               },
             });
 
-            console.log(response);
             clearInterval(progressInterval);
             onChange(videoObjectId);
             setProgress(100);
             setStatus("COMPLETE");
+            if (setVideoSize) {
+              setVideoSize(acceptedFile[0]?.size);
+            }
           };
           fileReader.onerror = () => {
             setStatus("ERROR");
@@ -156,7 +159,7 @@ export const NewVideoUploader = ({
                   هذا الملف غير مقبول
                 </span>
                 <br />
-                الرجاء ادخال ملفات بصيغة pdf
+                الرجاء ادخال ملفات بصيغة الفيديو
               </p>
             </div>
           ) : (
@@ -188,7 +191,7 @@ export const NewVideoUploader = ({
                         alt="video uploder"
                         src={"/video.png"}
                       />
-                      <p className="text-xl font-bold ">تحميل...</p>
+                      <p className="text-xl font-bold ">جاري رفع الفيديو...</p>
                       <Progress
                         value={progress}
                         className="h-1 w-full bg-[#EFEFEF]"

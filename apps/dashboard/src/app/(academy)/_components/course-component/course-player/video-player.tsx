@@ -11,14 +11,14 @@ const CourseVideoPlayer: FC<VideoPlayerProps> = ({ videoId }) => {
   const { state } = useCoursePlayerStore();
   return (
     <>
-      <div className="w-full h-[50px] flex items-start justify-center gap-y-4 my-4 flex-col">
+      {/* <div className="w-full h-[50px] flex items-start justify-center gap-y-4 my-4 flex-col">
         <p className="text-xl font-bold">
           الفصل : {state?.currentModule?.title}
         </p>
         <span className="text-md text-gray-500">
           المادة : {state?.currentModule?.title}
         </span>
-      </div>
+      </div> */}
       <div className="w-full h-[500px] rounded-xl bg-gray-200">
         {state?.currentModule ? (
           <div className="w-full h-[500px]  relative ">

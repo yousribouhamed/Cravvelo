@@ -2,10 +2,9 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 datasource db {
-  provider  = "postgresql"
-  url  	    = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
   // uncomment next line if you use Prisma <5.10
   // directUrl = env("DATABASE_URL_UNPOOLED")
 }
@@ -16,36 +15,36 @@ enum PLANS {
   PRO
 }
 
-
 model Account {
-  id                     String         @unique @default(uuid())
-  userId                 String         @unique
-  avatarUrl              String?        @db.Text
-  user_name              String?        @db.Text
-  user_bio               String?        @db.Text
-  AcademyIds             Json
-  plan                   PLANS?
-  createdAt              DateTime       @default(now())
-  updatedAt              DateTime       @updatedAt
-  Course                 Course[]
-  Product                Product[]
-  Video                  Video[]
-  Website                Website[]
-  Coupon                 Coupon[]
-  Sale                  Sale[]
-  Notification           Notification[]
-  Student                Student[]
-  PaymentsConnect        PaymentsConnect[]
+  id              String            @unique @default(uuid())
+  userId          String            @unique
+  avatarUrl       String?           @db.Text
+  user_name       String?           @db.Text
+  user_bio        String?           @db.Text
+  AcademyIds      Json
+  plan            PLANS?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  Course          Course[]
+  Product         Product[]
+  Video           Video[]
+  Website         Website[]
+  Coupon          Coupon[]
+  Sale            Sale[]
+  Notification    Notification[]
+  Student         Student[]
+  PaymentsConnect PaymentsConnect[]
 }
 
 model PaymentsConnect {
   id                String   @unique @default(uuid())
   accountId         String
-  chargilyPublicKey String 
-  chargiySecretKey  String 
+  chargilyPublicKey String
+  chargiySecretKey  String
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
-  Account           Account?   @relation(fields: [accountId], references: [id])
+  Account           Account? @relation(fields: [accountId], references: [id])
+
   @@index([id])
   @@index([accountId])
 }
@@ -59,38 +58,38 @@ model Academy {
   userId    String
 }
 
-
-
 model Course {
-  id                String  @unique @default(uuid())
-  accountId         String
-  title             String
-  courseUrl         String? 	@db.VarChar(199)
-  youtubeUrl        String? @db.VarChar(199)
-  thumnailUrl       String? @db.VarChar(199)
-  courseResume      String? @db.VarChar(199)
-  courseRequirements String? @db.VarChar(199)
-  courseWhatYouWillLearn  String? @db.VarChar(199)
-  courseDescription Json?
-  seoTitle          String?
-  seoDescription    String?
-  price             Float?
-  compareAtPrice    Float?
-  studenstNbr       String?
-  profit            String?
-  trainers          String?
-  status            String
-  level             String @default("BEGINNER")
-  allowComment      Boolean    @default(true)
-  allowRating       Boolean    @default(true)
-  forceWatchAllCourse Boolean    @default(true)
-  certificate       Boolean    @default(false)
-  Account           Account?   @relation(fields: [accountId], references: [id])
-  createdAt         DateTime   @default(now())
-  updatedAt         DateTime   @updatedAt
-  Comment           Comment[]
-  Homework          Homework[]
-  Exam              Exam[]
+  id                     String     @unique @default(uuid())
+  accountId              String
+  title                  String
+  courseUrl              String?    @db.VarChar(199)
+  youtubeUrl             String?    @db.VarChar(199)
+  thumnailUrl            String?    @db.VarChar(199)
+  courseResume           String?    @db.VarChar(199)
+  courseRequirements     String?    @db.VarChar(199)
+  courseWhatYouWillLearn String?    @db.VarChar(199)
+  courseDescription      Json?
+  seoTitle               String?
+  seoDescription         String?
+  price                  Float?
+  compareAtPrice         Float?
+  studenstNbr            String?
+  profit                 String?
+  length                 Float      @default(0)
+  nbrChapters            Float      @default(0)
+  trainers               String?
+  status                 String
+  level                  String     @default("BEGINNER")
+  allowComment           Boolean    @default(true)
+  allowRating            Boolean    @default(true)
+  forceWatchAllCourse    Boolean    @default(true)
+  certificate            Boolean    @default(false)
+  Account                Account?   @relation(fields: [accountId], references: [id])
+  createdAt              DateTime   @default(now())
+  updatedAt              DateTime   @updatedAt
+  Comment                Comment[]
+  Homework               Homework[]
+  Exam                   Exam[]
 
   @@index([id])
   @@index([accountId])
@@ -152,7 +151,7 @@ model Website {
   pages        Json
   assets       Json?
   favicon      String?  @default("#22d3ee")
-  color       String? 
+  color        String?
   logo         String?  @db.VarChar(199)
   font         String   @default("font-cal")
   createdAt    DateTime @default(now())
@@ -167,8 +166,8 @@ enum DiscountType {
 
 model Coupon {
   id             String       @unique @default(uuid())
-  accountId      String    
-  code           String     
+  accountId      String
+  code           String
   description    String?
   discountType   DiscountType
   discountAmount Float
@@ -199,18 +198,19 @@ enum ItemType {
 }
 
 model Sale {
-  id          String      @unique @default(uuid())
-  orderNumber Int         @unique @default(autoincrement())
-  accountId   String     
+  id          String     @unique @default(uuid())
+  orderNumber Int        @unique @default(autoincrement())
+  accountId   String
   amount      Float
   status      SaleStatus
   itemType    ItemType
-  itemId      String      @db.Text
+  itemId      String     @db.Text
   price       Float
   studentId   String
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  Account     Account?    @relation(fields: [accountId], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  Account     Account?   @relation(fields: [accountId], references: [id])
+
   @@index([id])
   @@index([accountId])
 }
@@ -268,19 +268,18 @@ model Exam {
   @@index([courseId])
 }
 
-
 model Student {
-  id          String   @unique @default(uuid())
-  full_name   String
-  photo_url   String? 
-  bio         String?
-  email       String   @unique
-  phone       String?  @unique
-  accountId   String 
-  password    String 
+  id        String  @unique @default(uuid())
+  full_name String
+  photo_url String?
+  bio       String?
+  email     String  @unique
+  phone     String? @unique
+  accountId String
+  password  String
 
-  bag         Json
-  Account   Account  @relation(fields: [accountId], references: [id])
+  bag     Json
+  Account Account @relation(fields: [accountId], references: [id])
 
   @@index([id])
   @@index([accountId])
@@ -295,16 +294,13 @@ model Certificate {
   // Add more fields as needed
 }
 
-
 model webhooks {
-  id          Int      @id @default(autoincrement())
-  payload     Json
+  id      Int  @id @default(autoincrement())
+  payload Json
 }
 
-
-
 model payments {
-  id          Int      @id @default(autoincrement())
-  
-  payload     Json
+  id Int @id @default(autoincrement())
+
+  payload Json
 }

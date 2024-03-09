@@ -80,7 +80,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
             {
               id: "1",
               type: "p",
-              children: [{ text: "Hello, World!" }],
+              children: [{ text: "" }],
             },
           ],
     },
