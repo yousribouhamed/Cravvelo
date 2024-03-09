@@ -17,13 +17,12 @@ import {
 import { Input } from "@ui/components/ui/input";
 import { Card, CardContent } from "@ui/components/ui/card";
 import { usePathname, useRouter } from "next/navigation";
-import { getValueFromUrl } from "@/src/lib/utils";
-import VedioUploader from "../../uploaders/VedioUploader";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { PlateEditor } from "../../reich-text-editor/rich-text-editor";
 import { maketoast } from "../../toasts";
 import VideoPlayer from "../../models/video-player";
 import { NewVideoUploader } from "../../uploaders/NewVideoUploader";
+import { getValueFromUrl } from "@/src/lib/utils";
 
 const addVedioSchema = z.object({
   title: z.string().min(2).max(50),

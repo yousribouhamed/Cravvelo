@@ -16,10 +16,8 @@ import {
 } from "@ui/components/ui/form";
 import { Input } from "@ui/components/ui/input";
 import { FileWithPreview } from "@/src/types";
-import { FileDialog } from "@/src/app/(academy)/_components/uploaders/file-dialog";
 import { LoadingButton } from "@/src/components/loading-button";
 import { isArrayOfFile } from "@/src/app/(academy)/lib";
-import { useUploadThing } from "@/src/lib/uploadthing";
 import { Textarea } from "@ui/components/ui/textarea";
 import { trpc } from "@/src/app/_trpc/client";
 import { maketoast } from "../toasts";
@@ -53,8 +51,6 @@ const UserProfileForm: FC<Profile> = ({ bio, full_name, image }) => {
 
   const [isPending, startTransition] = React.useTransition();
 
-  const { isUploading, startUpload } = useUploadThing("profileImage");
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -77,23 +73,6 @@ const UserProfileForm: FC<Profile> = ({ bio, full_name, image }) => {
     try {
       if (isArrayOfFile(values.images)) {
         console.log("uploading... ");
-        await startUpload(values.images)
-          .then((res) => {
-            const formattedImages = res?.map((image) => ({
-              id: image.key,
-              name: image.key.split("_")[1] ?? image.key,
-              url: image.url,
-            }));
-            return formattedImages ?? null;
-          })
-          .then((images) => {
-            mutation.mutate({
-              avatarUrl: images[0]?.url,
-              user_bio: values?.bio,
-              user_name: values?.full_name,
-            });
-          })
-          .catch((err) => console.error(err));
       }
     } catch (err) {
       console.error(err);
@@ -117,18 +96,7 @@ const UserProfileForm: FC<Profile> = ({ bio, full_name, image }) => {
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                   <FormControl>
-                    <FormControl>
-                      <FileDialog
-                        setValue={form.setValue}
-                        name="images"
-                        maxFiles={1}
-                        maxSize={1024 * 1024 * 4}
-                        files={files}
-                        setFiles={setFiles}
-                        isUploading={isUploading}
-                        disabled={isPending}
-                      />
-                    </FormControl>
+                    <FormControl></FormControl>
                   </FormControl>
                 </div>
                 <FormDescription>

@@ -2,7 +2,6 @@
 
 import type { FC } from "react";
 import React from "react";
-import ApiVideoPlayer from "@api.video/react-player";
 import { Chapter, Course } from "database";
 import CourseDescription from "../../../_components/course-component/course-description";
 import CourseContent from "../../../_components/course-component/course-content";

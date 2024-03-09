@@ -1,7 +1,6 @@
 import { Course } from "database";
 import { EditorBtns } from "../constants/website-template";
 import { type FileWithPath } from "react-dropzone";
-import type Stripe from "stripe";
 import { type z } from "zod";
 import type { cartLineItemSchema } from "@/src/lib/validators/cart";
 
@@ -130,8 +129,6 @@ export interface StoredFile {
   name: string;
   url: string;
 }
-
-export type StripePaymentStatus = Stripe.PaymentIntent.Status;
 
 export interface SubscriptionPlan {
   id: "basic" | "standard" | "pro";

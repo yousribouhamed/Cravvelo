@@ -13,13 +13,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@ui/components/ui/form";
+import { ImageUploaderS3 } from "../../uploaders/image-uploader";
 import { Input } from "@ui/components/ui/input";
 import { Card, CardContent } from "@ui/components/ui/card";
 import { usePathname, useRouter } from "next/navigation";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { Textarea } from "@ui/components/ui/textarea";
-import { ImageUploader } from "../../uploaders/ImageUploader";
-import { PDFUploader } from "../../uploaders/PDFUploader";
 import { PlateEditor } from "../../reich-text-editor/rich-text-editor";
 import { Product } from "database";
 import { maketoast } from "../../toasts";
@@ -104,10 +103,7 @@ function ProductContentForm({ product }: ProductContentFormProps) {
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <PDFUploader
-                      fileUrl={form.watch("fileUrl")}
-                      onChnage={field.onChange}
-                    />
+                    {/* in here goes the pdf uploader */}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -123,7 +119,7 @@ function ProductContentForm({ product }: ProductContentFormProps) {
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <ImageUploader
+                    <ImageUploaderS3
                       fileUrl={form.watch("imageUrl")}
                       onChnage={field.onChange}
                     />

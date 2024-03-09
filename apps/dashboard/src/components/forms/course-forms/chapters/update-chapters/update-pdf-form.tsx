@@ -19,7 +19,6 @@ import { Card, CardContent } from "@ui/components/ui/card";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import { PDFUploader } from "@/src/components/uploaders/PDFUploader";
 import { maketoast } from "@/src/components/toasts";
 
 const addPDFSchema = z.object({
@@ -103,12 +102,7 @@ function AddPdfForm() {
                     إضافة ملف pdf{" "}
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
-                  <FormControl>
-                    <PDFUploader
-                      fileUrl={form.watch("fileUrl")}
-                      onChnage={field.onChange}
-                    />
-                  </FormControl>
+                  <FormControl></FormControl>
 
                   <FormMessage />
                 </FormItem>

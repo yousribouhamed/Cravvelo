@@ -5,8 +5,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Avatar, AvatarFallback, AvatarImage } from "@ui/components/ui/avatar";
-import { generateReactHelpers } from "@uploadthing/react/hooks";
-import { Button } from "@ui/components/ui/button";
 import {
   Form,
   FormControl,
@@ -18,11 +16,8 @@ import {
 } from "@ui/components/ui/form";
 import { Input } from "@ui/components/ui/input";
 import { FileWithPreview } from "@/src/types";
-import { FileDialog } from "../uploaders/file-dialog";
 import { LoadingButton } from "@/src/components/loading-button";
 import { isArrayOfFile } from "../../lib";
-import { useUploadThing } from "@/src/lib/uploadthing";
-import { update_profile } from "../../_actions/auth";
 
 const formSchema = z.object({
   full_name: z.string().min(2).max(50),
@@ -48,8 +43,6 @@ const ProfileForm: FC = ({}) => {
 
   const [isPending, startTransition] = React.useTransition();
 
-  const { isUploading, startUpload } = useUploadThing("profileImage");
-
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -65,20 +58,6 @@ const ProfileForm: FC = ({}) => {
     try {
       if (isArrayOfFile(values.images)) {
         console.log("uploading... ");
-        await startUpload(values.images)
-          .then((res) => {
-            const formattedImages = res?.map((image) => ({
-              id: image.key,
-              name: image.key.split("_")[1] ?? image.key,
-              url: image.url,
-            }));
-            return formattedImages ?? null;
-          })
-          .then((images) => {
-            console.log("these are the images ");
-            console.log(images);
-          })
-          .catch((err) => console.error(err));
       }
     } catch (err) {
       console.error(err);
@@ -102,18 +81,7 @@ const ProfileForm: FC = ({}) => {
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                   <FormControl>
-                    <FormControl>
-                      <FileDialog
-                        setValue={form.setValue}
-                        name="images"
-                        maxFiles={1}
-                        maxSize={1024 * 1024 * 4}
-                        files={files}
-                        setFiles={setFiles}
-                        isUploading={isUploading}
-                        disabled={isPending}
-                      />
-                    </FormControl>
+                    <FormControl></FormControl>
                   </FormControl>
                 </div>
                 <FormDescription>

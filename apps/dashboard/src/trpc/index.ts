@@ -3,7 +3,6 @@ import { auth } from "./auth";
 import { course } from "./end-points/course";
 import { chapter } from "./end-points/course/chapter";
 import { payment } from "./payments";
-import { videos } from "./media/vedios";
 import { products } from "./end-points/products";
 import { website } from "./website";
 import { orders } from "./end-points/orders";
@@ -24,7 +23,6 @@ export const appRouter = router({
   ...course,
   ...chapter,
   ...payment,
-  ...videos,
   ...products,
   ...website,
   ...orders,

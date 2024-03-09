@@ -18,12 +18,13 @@ import { Input } from "@ui/components/ui/input";
 import { Card, CardContent } from "@ui/components/ui/card";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
-import VedioUploader from "@/src/components/uploaders/VedioUploader";
+
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { PlateEditor } from "@/src/components/reich-text-editor/rich-text-editor";
 import { maketoast } from "@/src/components/toasts";
 import VideoPlayer from "@/src/components/models/video-player";
 import { Module } from "@/src/types";
+import { NewVideoUploader } from "@/src/components/uploaders/NewVideoUploader";
 
 const updateVedioSchema = z.object({
   title: z.string().min(2).max(50),
@@ -142,7 +143,7 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
                       <span className="text-red-600 text-xl">*</span>
                     </FormLabel>
                     <FormControl>
-                      <VedioUploader
+                      <NewVideoUploader
                         initialVideoId={form.watch("fileUrl")}
                         open={open}
                         setOpen={setOpen}

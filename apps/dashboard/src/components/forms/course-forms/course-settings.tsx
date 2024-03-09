@@ -16,16 +16,13 @@ import {
 } from "@ui/components/ui/form";
 import { Input } from "@ui/components/ui/input";
 import { usePathname, useRouter } from "next/navigation";
-import { getValueFromUrl } from "@/src/lib/utils";
 import { Textarea } from "@ui/components/ui/textarea";
 import { trpc } from "@/src/app/_trpc/client";
 import { maketoast } from "../../toasts";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import { ImageUploader } from "../../uploaders/ImageUploader";
 import { Course } from "database";
 import { PlateEditor } from "../../reich-text-editor/rich-text-editor";
 import React from "react";
-import VedioUploader from "../../uploaders/VedioUploader";
 import VideoPlayer from "../../models/video-player";
 import {
   Select,
