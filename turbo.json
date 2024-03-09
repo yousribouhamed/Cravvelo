@@ -26,7 +26,11 @@
         "CHARGILY_PUBLIC_KEY",
         "JWT_SECRET_KEY",
         "NEXT_PUBLIC_BUNNY_API_KEY",
-        "NEXT_PUBLIC_VIDEO_LIBRARY"
+        "NEXT_PUBLIC_VIDEO_LIBRARY",
+        "AWS_BUCKET_NAME",
+        "AWS_BUCKET_REGION",
+        "AWS_ACCESS_KEY",
+        "AWS_SECRET_ACCESS_KEY"
       ]
     },
     "lint": {},

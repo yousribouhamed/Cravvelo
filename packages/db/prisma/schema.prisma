@@ -2,10 +2,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
+
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
+  // uncomment next line if you use Prisma <5.10
+  // directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 enum PLANS {
@@ -63,12 +65,12 @@ model Course {
   id                String  @unique @default(uuid())
   accountId         String
   title             String
-  courseUrl         String? @db.LongText
-  youtubeUrl        String? @db.LongText
-  thumnailUrl       String? @db.LongText
-  courseResume      String? @db.LongText
-  courseRequirements String? @db.LongText
-  courseWhatYouWillLearn  String? @db.LongText
+  courseUrl         String? 	@db.VarChar(199)
+  youtubeUrl        String? @db.VarChar(199)
+  thumnailUrl       String? @db.VarChar(199)
+  courseResume      String? @db.VarChar(199)
+  courseRequirements String? @db.VarChar(199)
+  courseWhatYouWillLearn  String? @db.VarChar(199)
   courseDescription Json?
   seoTitle          String?
   seoDescription    String?
@@ -110,9 +112,9 @@ model Product {
   title             String
   price             Float?
   numberOfDownloads Int?
-  subDescription    String?  @db.LongText
+  subDescription    String?  @db.VarChar(199)
   SeoTitle          String?
-  SeoDescription    String?  @db.LongText
+  SeoDescription    String?  @db.VarChar(199)
   thumnailUrl       String?
   filrUrl           String?
   description       Json?
@@ -151,7 +153,7 @@ model Website {
   assets       Json?
   favicon      String?  @default("#22d3ee")
   color       String? 
-  logo         String?  @db.LongText
+  logo         String?  @db.VarChar(199)
   font         String   @default("font-cal")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt

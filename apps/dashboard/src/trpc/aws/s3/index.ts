@@ -1,17 +1,10 @@
 import { privateProcedure, publicProcedure } from "../../trpc";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { z } from "zod";
 import crypto from "crypto";
 import { TRPCError } from "@trpc/server";
-
-const s3 = new S3Client({
-  region: "eu-west-1",
-  credentials: {
-    accessKeyId: "AKIA6ODU3XOCBKCMI4AV",
-    secretAccessKey: "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",
-  },
-});
+import { s3 } from "@/src/lib/s3";
 
 const allowedFileTypes = [
   "image/jpeg",

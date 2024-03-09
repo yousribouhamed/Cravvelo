@@ -35,6 +35,7 @@ import {
   SelectValue,
 } from "@ui/components/ui/select";
 import { NewVideoUploader } from "../../uploaders/NewVideoUploader";
+import { ImageUploaderS3 } from "../../uploaders/image-uploader";
 
 interface ComponentProps {
   course: Course;
@@ -186,7 +187,11 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                       <span className="text-red-600 text-xl">*</span>
                     </FormLabel>
                     <FormControl>
-                      <ImageUploader
+                      {/* <ImageUploader
+                        fileUrl={form.watch("thumnailUrl")}
+                        onChnage={field.onChange}
+                      /> */}
+                      <ImageUploaderS3
                         fileUrl={form.watch("thumnailUrl")}
                         onChnage={field.onChange}
                       />

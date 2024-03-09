@@ -11,7 +11,7 @@ interface PageProps {
 const Page = async ({ params }: PageProps) => {
   const subdomain_value =
     process.env.NODE_ENV === "development"
-      ? "abdullah.cravvelo-dashboard.vercel.app"
+      ? "abdullah.cravvelo.com"
       : decodeURIComponent(params?.site);
 
   const courses = await getAllCourses({ subdomain: subdomain_value });

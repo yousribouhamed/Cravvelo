@@ -2,17 +2,18 @@
 
 import * as React from "react";
 import Dropzone from "react-dropzone";
-import { Cloud, File, UploadIcon } from "lucide-react";
+import { UploadIcon } from "lucide-react";
 import { Progress } from "@ui/components/ui/progress";
-import { useUploadThing } from "@/src/lib/uploadthing";
 import { cn, toast } from "@ui/lib/utils";
 import { XCircle } from "lucide-react";
 import { formatBytes } from "@/src/lib/utils";
 import { Button } from "@ui/components/ui/button";
 import { X } from "lucide-react";
 import Image from "next/image";
+import { computeSHA256 } from "@/src/lib/utils";
+import { trpc } from "@/src/app/_trpc/client";
 
-export const ImageUploader = ({
+export const ImageUploaderS3 = ({
   onChnage,
   fileUrl,
   className,
@@ -21,15 +22,41 @@ export const ImageUploader = ({
   className?: string;
   onChnage: (value: any) => void;
 }) => {
-  const [isUploading, setIsUploading] = React.useState<boolean>(false);
+  const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+
   const [progress, setProgress] = React.useState<number>(0);
-  const [isError, setIsError] = React.useState<boolean>(false);
 
   const [status, setStatus] = React.useState<
     "WAITING" | "ERROR" | "COMPLETE" | "LOADING"
   >("WAITING");
 
-  const { startUpload } = useUploadThing("imageUploader");
+  const mutation = trpc.getSignedUrl.useMutation({
+    onSuccess: async ({ success }) => {
+      console.log("we have created the sign url ");
+      console.log(success);
+      if (!selectedFile) {
+        console.log("there is no selected file");
+        setStatus("ERROR");
+      }
+      console.log("uploading to s3....");
+      await fetch(success.url, {
+        method: "put",
+        body: selectedFile,
+        headers: {
+          "content-type": selectedFile.type,
+        },
+      });
+      onChnage(success.url.split("?")[0]);
+
+      setProgress(100);
+      setStatus("COMPLETE");
+    },
+    onError: (err) => {
+      console.log("there is an error");
+      console.log(err);
+      setStatus("ERROR");
+    },
+  });
 
   React.useEffect(() => {
     if (fileUrl) {
@@ -48,7 +75,7 @@ export const ImageUploader = ({
           return prevProgress;
         }
 
-        return prevProgress + 5;
+        return prevProgress + 2.5;
       });
     }, 500);
 
@@ -65,11 +92,16 @@ export const ImageUploader = ({
           return;
         }
         setStatus("LOADING");
-
-        setIsUploading(true);
-
+        setSelectedFile(acceptedFile[0]);
         const progressInterval = startSimulatedProgress();
         // here hanle sending the request to s3
+        const checksum = await computeSHA256(acceptedFile[0]);
+        await mutation.mutateAsync({
+          fileSize: acceptedFile[0].size,
+          fileType: acceptedFile[0].type,
+          checksum,
+        });
+        clearInterval(progressInterval);
       }}
     >
       {({
@@ -190,5 +222,3 @@ export const ImageUploader = ({
     </Dropzone>
   );
 };
-
-export default ImageUploader;
