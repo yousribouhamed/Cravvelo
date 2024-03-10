@@ -38,11 +38,11 @@ export const NewVideoUploader = ({
   const createVideo = async ({ title }: { title: string }): Promise<string> => {
     const options = {
       method: "POST",
-      url: "https://video.bunnycdn.com/library/212306/videos",
+      url: `https://video.bunnycdn.com/library/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/videos`,
       headers: {
         accept: "application/json",
         "content-type": "application/*+json",
-        AccessKey: "84a4bc10-43d9-48e1-91b96d5137ee-870e-49b4",
+        AccessKey: process.env["NEXT_PUBLIC_BUNNY_API_KEY"],
       },
       data: '{"title":"inchalah it will work"}',
     };
@@ -104,7 +104,7 @@ export const NewVideoUploader = ({
 
             const videoObjectId = await createVideo({ title: uuidv4() });
 
-            const uploadUrl = `https://video.bunnycdn.com/library/212306/videos/${videoObjectId}`;
+            const uploadUrl = `https://video.bunnycdn.com/library/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/videos/${videoObjectId}`;
             const response = await axios.put(uploadUrl, fileBinaryData, {
               headers: {
                 "Content-Type": "application/octet-stream",
