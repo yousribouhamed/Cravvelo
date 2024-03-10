@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, type FC } from "react";
+import React, { ChangeEvent, useRef, type FC } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -15,49 +15,107 @@ import {
   FormMessage,
 } from "@ui/components/ui/form";
 import { Input } from "@ui/components/ui/input";
-import { FileWithPreview } from "@/src/types";
 import { LoadingButton } from "@/src/components/loading-button";
-import { isArrayOfFile } from "../../lib";
+import { Textarea } from "@ui/components/ui/textarea";
+import { getOurSignedUrl } from "../../_actions/aws/s3";
+import { computeSHA256 } from "@/src/lib/utils";
+import { update_profile } from "../../_actions/auth";
+import { maketoast } from "@/src/components/toasts";
+import { Student } from "database";
 
 const formSchema = z.object({
   full_name: z.string().min(2).max(50),
   bio: z.string(),
-  images: z
-    .unknown()
-    .refine((val) => {
-      if (!Array.isArray(val)) return false;
-      if (val.some((file) => !(file instanceof File))) return false;
-      return true;
-    }, "Must be an array of File")
-    .optional()
-    .nullable()
-    .default(null),
 });
 
-interface ProfileFormProps {}
+interface ProfileFormProps {
+  studnet: Student;
+}
 
-const ProfileForm: FC = ({}) => {
-  const fileRef = useRef<HTMLInputElement>(null);
+const ProfileForm: FC<ProfileFormProps> = ({ studnet }) => {
+  const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
 
-  const [files, setFiles] = React.useState<FileWithPreview[] | null>(null);
+  const [loading, setLoading] = React.useState<boolean>(false);
 
-  const [isPending, startTransition] = React.useTransition();
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      setSelectedFile(file);
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          setPreviewUrl(reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // const [isPending, startTransition] = React.useTransition();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      full_name: "",
-      bio: "",
-      images: [],
+      full_name: studnet.full_name,
+      bio: studnet.bio,
     },
   });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log("here it is the file");
+    console.log(values);
+    console.log(selectedFile);
     try {
-      if (isArrayOfFile(values.images)) {
-        console.log("uploading... ");
+      setLoading(true);
+      if (selectedFile) {
+        // get the checksum
+        const checksum = await computeSHA256(selectedFile);
+        // get the signed url
+        const { success } = await getOurSignedUrl({
+          checksum,
+          fileSize: selectedFile.size,
+          fileType: selectedFile.type,
+        });
+        // upload it to aws
+
+        console.log("this is from aws");
+        console.log(success);
+
+        if (!success || !success?.url) {
+          console.log("there is no selected file");
+          throw new Error("there is no selected file");
+        }
+        await fetch(success?.url, {
+          method: "put",
+          body: selectedFile,
+          headers: {
+            "content-type": selectedFile.type,
+          },
+        });
+
+        // update the data on our app
+
+        await update_profile({
+          bio: values.bio,
+          full_name: values.full_name,
+          imageUrl: success.url.split("?")[0],
+        });
+        setLoading(false);
+        maketoast.successWithText({ text: "تم تحديث ملفك" });
+      } else {
+        // update the data on our app
+
+        await update_profile({
+          bio: values.bio,
+          full_name: values.full_name,
+          imageUrl: "",
+        });
+        setLoading(false);
+        maketoast.successWithText({ text: "تم تحديث ملفك" });
       }
     } catch (err) {
       console.error(err);
@@ -67,30 +125,36 @@ const ProfileForm: FC = ({}) => {
     <div className="w-full h-fit min-h-[500px] bg-white shadow border rounded-xl max-w-2xl p-8">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
-          <FormField
-            control={form.control}
-            name="images"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>الاسم الكامل</FormLabel>
-                <div className="flex items-center gap-x-4">
-                  <Avatar>
-                    <AvatarImage
-                      src={files && files.length > 0 ? files[0].preview : ""}
-                    />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  <FormControl>
-                    <FormControl></FormControl>
-                  </FormControl>
-                </div>
-                <FormDescription>
-                  هذا هو اسم العرض العام الخاص بك.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="w-full  flex flex-col items-start justify-start p-4 gap-x-4">
+            <h2>صورتك الشخصية</h2>
+            <div className="flex items-center gap-x-4 w-[200px] ">
+              <Avatar className="w-12 h-12 ring-primary   rounded-[50%]">
+                <AvatarImage
+                  src={
+                    previewUrl ||
+                    "https://st.depositphotos.com/2218212/2938/i/450/depositphotos_29387653-stock-photo-facebook-profile.jpg"
+                  }
+                />
+                <AvatarFallback>AB</AvatarFallback>
+              </Avatar>
+
+              <div>
+                <label htmlFor="image-upload" className="cursor-pointer">
+                  <div className="border-2 border-gray-300 rounded-md p-2 flex items-center space-x-2">
+                    <span className="text-gray-500">اختر صورة</span>
+                  </div>
+                </label>
+                <input
+                  id="image-upload"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+              </div>
+            </div>
+          </div>
+
           <FormField
             control={form.control}
             name="full_name"
@@ -98,7 +162,7 @@ const ProfileForm: FC = ({}) => {
               <FormItem>
                 <FormLabel>الاسم الكامل</FormLabel>
                 <FormControl>
-                  <Input placeholder="shadcn" {...field} />
+                  <Input placeholder="مثلا : عبدالله" {...field} />
                 </FormControl>
                 <FormDescription>
                   هذا هو اسم العرض العام الخاص بك.
@@ -114,7 +178,11 @@ const ProfileForm: FC = ({}) => {
               <FormItem>
                 <FormLabel>السيرة الذاتية</FormLabel>
                 <FormControl>
-                  <Input placeholder="shadcn" {...field} />
+                  <Textarea
+                    className="min-h-[150px] h-fit"
+                    placeholder="يمكنك كتابة اي شيئ هنا"
+                    {...field}
+                  />
                 </FormControl>
                 <FormDescription>سيتم عرض هذا لمدربك</FormDescription>
                 <FormMessage />
@@ -122,8 +190,8 @@ const ProfileForm: FC = ({}) => {
             )}
           />
           <div className="w-full h-[50px] flex items-center justify-end">
-            <LoadingButton className="bg-primary rounded-xl " type="submit">
-              Submit
+            <LoadingButton className="bg-primary rounded-lg " type="submit">
+              {loading ? "loading" : "  حفظ التعديلات"}
             </LoadingButton>
           </div>
         </form>
