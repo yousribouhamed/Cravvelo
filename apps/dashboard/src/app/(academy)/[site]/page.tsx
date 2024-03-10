@@ -14,8 +14,7 @@ interface PageProps {
 const Page = async ({ params }: PageProps) => {
   const subdomain = getSubDomainValue({ value: params.site });
 
-  const [student, website, courses] = await Promise.all([
-    getStudent(),
+  const [website, courses] = await Promise.all([
     getSiteData({
       subdomain,
     }),
