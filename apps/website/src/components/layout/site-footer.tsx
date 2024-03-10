@@ -241,7 +241,7 @@ const SiteFooter: FC = ({}) => {
       <div className="w-full  bg-[#F8FAE5] mt-auto h-40">
         <MaxWidthWrapper className=" flex items-center justify-between w-full h-full">
           <span className=" text-xs lg:text-lg text-black text-start">
-            © 2024 Jadara. All rights reserved.
+            © 2024 cravvelo. All rights reserved.
           </span>
           <div className="w-[100px] h-full flex items-center justify-end gap-x-4">
             {footerLinks.map((item, index) => (

@@ -1,7 +1,8 @@
 import { AcademySignInForm } from "../../../_components/forms/sign-in-form-production";
-import { getSiteData } from "../../../_actions";
+import { getAllCourses, getSiteData } from "../../../_actions";
 import { notFound, redirect } from "next/navigation";
 import { getStudent } from "../../../_actions/auth";
+import { getSubDomainValue } from "../../../lib";
 
 export const fetchCache = "force-no-store";
 
@@ -10,15 +11,12 @@ interface PageProps {
 }
 
 const Page = async ({ params }: PageProps) => {
-  const subdomain_value =
-    process.env.NODE_ENV === "development"
-      ? "abdullah.cravvelo.com"
-      : decodeURIComponent(params?.site);
+  const subdomain = getSubDomainValue({ value: params.site });
 
   const [student, website] = await Promise.all([
     getStudent(),
     getSiteData({
-      subdomain: subdomain_value,
+      subdomain,
     }),
   ]);
 

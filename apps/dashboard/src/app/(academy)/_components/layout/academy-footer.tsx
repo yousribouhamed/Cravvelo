@@ -23,6 +23,9 @@ const AcademiaFooter: FC = ({}) => {
           <Link href="/terms-of-use">
             <button className="text-sm text-gray-700">شروط الاستخدام</button>
           </Link>
+          <span className="text-sm text-gray-700">
+            جميع الحقوق محفوظة في الأكاديمية © 2024
+          </span>
         </div>
       </MaxWidthWrapper>
     </div>

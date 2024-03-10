@@ -5,6 +5,7 @@ import { getSubDomainValue } from "../lib";
 import AcademyHeader from "../_components/layout/academy-header";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import getBase64 from "@/src/lib/getLocalBase64";
+import { getStudent } from "../_actions/auth";
 
 interface PageProps {
   params: { site: string };
@@ -13,11 +14,13 @@ interface PageProps {
 const Page = async ({ params }: PageProps) => {
   const subdomain = getSubDomainValue({ value: params.site });
 
-  const courses = await getAllCourses({ subdomain });
-
-  const website = await getSiteData({
-    subdomain,
-  });
+  const [student, website, courses] = await Promise.all([
+    getStudent(),
+    getSiteData({
+      subdomain,
+    }),
+    getAllCourses({ subdomain }),
+  ]);
 
   if (!website) {
     notFound();
@@ -30,8 +33,8 @@ const Page = async ({ params }: PageProps) => {
   return (
     <>
       <AcademyHeader
-        student={null}
-        isAuthanticated={false}
+        student={student}
+        isAuthanticated={student ? true : false}
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
       />

@@ -21,7 +21,7 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
   logo,
 }) => {
   return (
-    <div className="w-full h-[70px]   border-b z-[8] fixed top-0 bg-white shadow ">
+    <div className="w-full h-[70px]   border-b z-[8] fixed top-0 bg-white shadow overflow-y-hidden">
       <MaxWidthWrapper className="w-full h-full flex items-center justify-between">
         <div className="w-fit h-full flex items-center justify-start md:hidden">
           <MobilNavgiationProduction />

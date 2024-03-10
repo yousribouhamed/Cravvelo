@@ -7,6 +7,7 @@ import { getSiteData } from "../../../_actions";
 import { notFound } from "next/navigation";
 import AcademyHeader from "../../../_components/layout/academy-header";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
+import { getStudent } from "../../../_actions/auth";
 
 interface PageProps {
   params: { site: string; url: string };
@@ -15,11 +16,13 @@ interface PageProps {
 const Page = async ({ params }: PageProps) => {
   const subdomain = getSubDomainValue({ value: params.site });
 
-  const website = await getSiteData({
-    subdomain,
-  });
-
-  const course = await getCourseByUrlPath({ url: params?.url });
+  const [student, website, course] = await Promise.all([
+    getStudent(),
+    getSiteData({
+      subdomain,
+    }),
+    getCourseByUrlPath({ url: params?.url }),
+  ]);
 
   const chapters = await get_course_chapters({ courseID: course?.id });
 
@@ -30,8 +33,8 @@ const Page = async ({ params }: PageProps) => {
   return (
     <>
       <AcademyHeader
-        student={null}
-        isAuthanticated={false}
+        student={student}
+        isAuthanticated={student ? true : false}
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
       />

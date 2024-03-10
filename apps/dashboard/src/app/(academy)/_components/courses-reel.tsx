@@ -16,9 +16,6 @@ interface CoursesReelProps {
 
 const CoursesReel: FC<CoursesReelProps> = ({ courses, blurData }) => {
   const router = useRouter();
-  const addItemToShoppingBag = useAcademiaStore(
-    (state) => state.actions.addItem
-  );
 
   const handleRouting = ({ id }: { id: string }) => {
     router.push(`/course-academy/${id}`);
@@ -38,7 +35,7 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, blurData }) => {
               <div
                 onClick={() => handleRouting({ id: item.id })}
                 key={item.title + index}
-                className="w-[320px] h-[450px]    flex flex-col border rounded-xl  transition-all shadow  duration-700 cursor-pointer "
+                className="w-[320px] h-[450px] bg-white   flex flex-col border rounded-xl  transition-all shadow  duration-700 cursor-pointer "
               >
                 <div className="h-[200px] w-full rounded-t-xl relative">
                   <Image
@@ -58,10 +55,6 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, blurData }) => {
                       {item.title}
                     </h2>
                   </Link>
-
-                  <span className="block  bg-gray-100 w-fit  rounded-full text-black my-auto">
-                    دورة
-                  </span>
                 </div>
                 {/* this will hold the stars */}
                 <div className="w-full h-[10px] flex items-center justify-between my-4 px-4">
@@ -101,12 +94,7 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, blurData }) => {
                 <div className="w-full h-[70px] flex items-center justify-center gap-x-4 pt-2 p-4">
                   <button
                     onClick={() => {
-                      addItemToShoppingBag({
-                        id: item.id,
-                        imageUrl: item.thumnailUrl,
-                        name: item.title,
-                        price: item.price.toString(),
-                      });
+                      handleRouting({ id: item.id });
                     }}
                     className="w-[99%] bg-primary text-white p-2 h-[45px] rounded-lg"
                   >
