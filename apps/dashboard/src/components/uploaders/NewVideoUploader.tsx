@@ -2,13 +2,11 @@
 
 import * as React from "react";
 import Dropzone from "react-dropzone";
-import { UploadIcon } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import { Progress } from "@ui/components/ui/progress";
 import axios from "axios";
 import { cn } from "@ui/lib/utils";
 import { XCircle } from "lucide-react";
-import { formatBytes } from "@/src/lib/utils";
 import { Button } from "@ui/components/ui/button";
 import { X } from "lucide-react";
 import Image from "next/image";

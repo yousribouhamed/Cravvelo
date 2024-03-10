@@ -38,15 +38,17 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, blurData }) => {
                 className="w-[320px] h-[450px] bg-white   flex flex-col border rounded-xl  transition-all shadow  duration-700 cursor-pointer "
               >
                 <div className="h-[200px] w-full rounded-t-xl relative">
-                  <Image
-                    alt={item.title}
-                    src={item.thumnailUrl}
-                    className="  object-cover rounded-t-xl"
-                    fill
-                    placeholder="blur"
-                    //@ts-ignore
-                    blurDataURL={blurData[index]}
-                  />
+                  {blurData[index] && (
+                    <Image
+                      alt={item.title}
+                      src={item.thumnailUrl}
+                      className="  object-cover rounded-t-xl"
+                      fill
+                      placeholder="blur"
+                      //@ts-ignore
+                      blurDataURL={blurData[index]}
+                    />
+                  )}
                 </div>
 
                 <div className="w-full h-[50px] flex items-center justify-between my-4 px-4">
