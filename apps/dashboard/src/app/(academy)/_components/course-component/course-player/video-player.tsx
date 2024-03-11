@@ -39,7 +39,7 @@ const CourseVideoPlayer: FC<VideoPlayerProps> = ({ videoId }) => {
         ) : (
           <div className="w-full h-[500px]  relative ">
             <iframe
-              src={`https://iframe.mediadelivery.net/embed/212306/${videoId}?autoplay=true`}
+              src={`https://iframe.mediadelivery.net/embed/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/${videoId}?autoplay=true`}
               loading="lazy"
               style={{
                 border: "none",

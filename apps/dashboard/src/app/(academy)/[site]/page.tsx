@@ -4,7 +4,6 @@ import CoursesReel from "../_components/courses-reel";
 import { getSubDomainValue } from "../lib";
 import AcademyHeader from "../_components/layout/academy-header";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
-import getBase64 from "@/src/lib/getLocalBase64";
 
 interface PageProps {
   params: { site: string };
