@@ -16,10 +16,7 @@ const links = [
     name: "الرئيسية",
     href: "/",
   },
-  {
-    name: "الاسعار",
-    href: "/pricing",
-  },
+
   {
     name: "الخدمات",
     href: "/features",
@@ -95,17 +92,19 @@ export const NavBar: FC = ({}) => {
           <div className=" flex items-center mx-auto lg:max-w-screen-2xl 2xl:px-20 px-2.5  justify-between rounded-xl gap-x-2 w-full h-[80px]  ">
             {/* this section is for the logo */}
             <div className="w-[20%] h-full flex items-center justify-start ">
-              <Image
-                src="/Cravvelo_Logo-01.svg"
-                alt="logo"
-                width={160}
-                height={60}
-              />
+              <Link href={"/"}>
+                <Image
+                  src="/Cravvelo_Logo-01.svg"
+                  alt="logo"
+                  width={160}
+                  height={60}
+                />
+              </Link>
             </div>
 
             {/* this section is for the nav menu and the action button */}
 
-            <nav className="w-[80%] hidden h-full lg:flex items-center justify-center ">
+            <nav className="w-[60%] hidden h-full lg:flex items-center justify-center ">
               <ul className="flex w-[22rem] flex-wrap items-center justify-center gap-y-1 text-[0.9rem] font-medium text-gray-500 sm:w-[initial] sm:flex-nowrap sm:gap-5">
                 {links.map((item) => {
                   return (
@@ -127,12 +126,21 @@ export const NavBar: FC = ({}) => {
                 })}
               </ul>
             </nav>
-            <div className="w-[20%] hidden h-full lg:flex items-center justify-end">
+            <div className="w-[40%] hidden h-full lg:flex items-center justify-end gap-x-4">
               <Link
                 href={"https://app.cravvelo.com/sign-in"}
                 className={cn(
                   buttonVariants(),
-                  "bg-[#FC6B00]  text-xl py-4  h-12 rounded-2xl text-white font-bold  hover:bg-[#994b13]  hover:scale-105 transition-all duration-150 "
+                  "bg-primary border border-primary text-white text-xl py-4  h-12 rounded-2xl  font-bold     transition-all duration-150 "
+                )}
+              >
+                تسجيل الدخول
+              </Link>
+              <Link
+                href={"https://app.cravvelo.com/sign-in"}
+                className={cn(
+                  buttonVariants(),
+                  "bg-white border border-primary text-primary text-xl py-4  h-12 rounded-2xl hover:text-white font-bold  hover:bg-[#FC6B00]   transition-all duration-150 "
                 )}
               >
                 تسجيل الدخول

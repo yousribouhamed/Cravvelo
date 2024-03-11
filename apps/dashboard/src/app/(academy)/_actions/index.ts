@@ -53,13 +53,17 @@ export const getAllCourses = async ({ subdomain }: { subdomain: string }) => {
 
     const account = await prisma.account.findUnique({
       where: {
-        id: website.accountId,
+        id: website?.accountId,
       },
     });
 
+    if (!account) {
+      throw new Error("there no account linked to this website");
+    }
+
     const courses = await prisma.course.findMany({
       where: {
-        accountId: account.id,
+        accountId: account?.id,
       },
     });
 

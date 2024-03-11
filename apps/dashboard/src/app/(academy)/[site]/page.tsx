@@ -24,9 +24,9 @@ const Page = async ({ params }: PageProps) => {
     notFound();
   }
 
-  const blurData = await Promise.all(
-    courses.map(async (item) => await getBase64(item?.thumnailUrl))
-  );
+  // const blurData = await Promise.all(
+  //   courses.map(async (item) => await getBase64(item?.thumnailUrl))
+  // );
 
   return (
     <>
@@ -43,7 +43,7 @@ const Page = async ({ params }: PageProps) => {
               مرحبا بكم في اكادمية {website?.name}
             </h1>
           </div>
-          <CoursesReel blurData={blurData} courses={courses} />
+          <CoursesReel courses={courses} />
         </main>
       </MaxWidthWrapper>
     </>
