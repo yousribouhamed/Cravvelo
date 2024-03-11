@@ -5,7 +5,6 @@ import { getSubDomainValue } from "../lib";
 import AcademyHeader from "../_components/layout/academy-header";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import getBase64 from "@/src/lib/getLocalBase64";
-import { getStudent } from "../_actions/auth";
 
 interface PageProps {
   params: { site: string };
@@ -26,14 +25,14 @@ const Page = async ({ params }: PageProps) => {
   }
 
   const blurData = await Promise.all(
-    courses.map(async (item) => await getBase64(item.thumnailUrl))
+    courses.map(async (item) => await getBase64(item?.thumnailUrl))
   );
 
   return (
     <>
       <AcademyHeader
-        student={student}
-        isAuthanticated={student ? true : false}
+        student={null}
+        isAuthanticated={false}
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
       />

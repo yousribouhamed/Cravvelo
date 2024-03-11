@@ -41,4 +41,5 @@ export function getSubDomainValue({ value }: { value: string }) {
       : decodeURIComponent(value);
 
   return subdomain_value;
+  // return "abdullah.cravvelo.com";
 }
