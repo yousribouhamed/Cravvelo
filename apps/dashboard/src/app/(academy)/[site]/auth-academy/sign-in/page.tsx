@@ -30,7 +30,7 @@ const Page = async ({ params }: PageProps) => {
 
   return (
     <div className="w-full min-h-[500px] h-fit flex items-center justify-center mt-[70px]">
-      <AcademySignInForm accountId={website.accountId} />
+      <AcademySignInForm color={website?.color} accountId={website.accountId} />
     </div>
   );
 };

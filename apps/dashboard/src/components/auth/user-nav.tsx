@@ -11,7 +11,6 @@ import {
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
 import LogoutButton from "./logout-button";
-import { Icons } from "../my-icons";
 import Link from "next/link";
 import { Eye } from "lucide-react";
 import { Progress } from "@ui/components/ui/progress";

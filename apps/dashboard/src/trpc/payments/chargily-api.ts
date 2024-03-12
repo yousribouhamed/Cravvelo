@@ -34,6 +34,8 @@ export const chargily = {
         };
         const response = await fetch(`${CHARGILY_BASE_URL}/products`, options); // Sending a POST request to create a product
         const product = (await response.json()) as Product; // Parsing response JSON into Product type
+        console.log("here it is the product");
+        console.log(product);
 
         // Constructing request options for creating price
         const options2 = {
@@ -60,6 +62,7 @@ export const chargily = {
               plan: input.plan_code,
             },
           ],
+          webhook_endpoint: "https://app.cravvelo.com/api/webhooks/chargily",
         };
 
         // Constructing request options for creating checkout

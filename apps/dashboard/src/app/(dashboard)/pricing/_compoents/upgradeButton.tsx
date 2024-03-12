@@ -3,15 +3,7 @@
 import type { FC } from "react";
 import { PLANS } from "../../../../constants/plans";
 import { Button } from "@ui/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@ui/components/ui/select";
 import * as React from "react";
-import { translateCurrency } from "../../../../lib/utils";
 import { Tabs } from "./animated-tabs";
 import Image from "next/image";
 import { trpc } from "@/src/app/_trpc/client";
@@ -39,20 +31,6 @@ const UpgradeButton: FC = ({}) => {
 
   return (
     <div className="w-full min-h-[1000px] h-fit my-12">
-      {/* <div className="flex w-full h-[80px] items-center justify-start gap-x-4">
-        <label className="text-xl font-bold text-black">آختر العملة</label>
-        <Select onValueChange={(val) => setCurrency(val)}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue defaultValue={"USD"} placeholder="USD" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="USD">USD</SelectItem>
-            <SelectItem value="EUR">EUR</SelectItem>
-            <SelectItem value="DZD">DZD</SelectItem>
-          </SelectContent>
-        </Select>
-      </div> */}
-
       <div className="w-full min-h-[250px] h-fit  flex justify-center items-start pt-8 pl-48 ">
         <div className="w-[200px] h-[50px]   flex items-center justify-start">
           <span className="text-[#FC6B00] text-2xl font-bold">وفر 20٪</span>
@@ -63,12 +41,12 @@ const UpgradeButton: FC = ({}) => {
             // containerClassName={`w-full h-full`}
             tabs={[
               {
-                title: "  شهري",
-                value: DISPLAY_VALUES.monthly,
-              },
-              {
                 title: "سنوي",
                 value: DISPLAY_VALUES.yearly,
+              },
+              {
+                title: "  شهري",
+                value: DISPLAY_VALUES.monthly,
               },
             ]}
           />
@@ -149,19 +127,26 @@ const UpgradeButton: FC = ({}) => {
               </div>
               <Button
                 disabled={mutation.isLoading}
-                onClick={() =>
+                onClick={() => {
+                  console.log("here are the data");
+                  console.log({
+                    amount: Number(item.price),
+                    product_name: item.plan,
+                    success_url: "https://app.cravvelo.com",
+                  });
                   mutation.mutate({
                     amount: Number(item.price),
                     product_name: item.plan,
-                    success_url: "https://www.cravvelo.com",
-                  })
-                }
+                    success_url: "https://app.cravvelo.com",
+                    plan_code: item.plan_code,
+                  });
+                }}
                 size="lg"
                 className="rounded-full h-16 w-[90%] text-xl font-bold mx-auto  hover:scale-105 transition-all duration-150"
               >
                 احصل عليها الآن{" "}
               </Button>
-              <span className="text-start my-6 text-[#FC6B00] text-xl font-bold ">
+              <span className="text-start my-6 text-[#FC6B00] text-xl  ">
                 {item.tagline}
               </span>
               <div className="w-full h-fit ">

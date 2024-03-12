@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getAllCourses, getSiteData } from "../../_actions";
+import { getSiteData } from "../../_actions";
 import { getSubDomainValue } from "../../lib";
 import AcademyHeader from "../../_components/layout/academy-header";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";

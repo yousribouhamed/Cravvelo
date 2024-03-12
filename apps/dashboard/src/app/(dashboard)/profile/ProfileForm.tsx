@@ -17,11 +17,11 @@ import {
 import { Input } from "@ui/components/ui/input";
 import { LoadingButton } from "@/src/components/loading-button";
 import { Textarea } from "@ui/components/ui/textarea";
-import { getOurSignedUrl } from "../../_actions/aws/s3";
+import { getOurSignedUrl } from "../../(academy)/_actions/aws/s3";
 import { computeSHA256 } from "@/src/lib/utils";
-import { update_profile } from "../../_actions/auth";
 import { maketoast } from "@/src/components/toasts";
-import { Student } from "database";
+import { Account } from "database";
+import { trpc } from "../../_trpc/client";
 
 const formSchema = z.object({
   full_name: z.string().min(2).max(50),
@@ -29,11 +29,10 @@ const formSchema = z.object({
 });
 
 interface ProfileFormProps {
-  studnet: Student;
-  color: string;
+  account: Account;
 }
 
-const ProfileForm: FC<ProfileFormProps> = ({ studnet, color }) => {
+const UserProfileForm: FC<ProfileFormProps> = ({ account }) => {
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
 
@@ -60,8 +59,17 @@ const ProfileForm: FC<ProfileFormProps> = ({ studnet, color }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      full_name: studnet.full_name,
-      bio: studnet.bio,
+      full_name: account.user_name,
+      bio: account.user_bio,
+    },
+  });
+
+  const mutation = trpc.update_user_profile.useMutation({
+    onSuccess: () => {
+      maketoast.successWithText({ text: "تم تحديث ملفك الشخصي" });
+    },
+    onError: () => {
+      maketoast.error();
     },
   });
 
@@ -102,22 +110,19 @@ const ProfileForm: FC<ProfileFormProps> = ({ studnet, color }) => {
 
         console.log("we are uploding the image url");
 
-        await update_profile({
-          bio: values.bio,
-          full_name: values.full_name,
-          imageUrl: success.url.split("?")[0],
+        await mutation.mutateAsync({
+          avatarUrl: success.url.split("?")[0],
+          user_bio: values.bio,
+          user_name: values.full_name,
         });
         setLoading(false);
-        maketoast.successWithText({ text: "تم تحديث ملفك" });
       } else {
-        // update the data on our app
-        await update_profile({
-          bio: values.bio,
-          full_name: values.full_name,
-          imageUrl: "",
+        await mutation.mutateAsync({
+          avatarUrl: "",
+          user_bio: values.bio,
+          user_name: values.full_name,
         });
         setLoading(false);
-        maketoast.successWithText({ text: "تم تحديث ملفك" });
       }
     } catch (err) {
       console.error(err);
@@ -135,7 +140,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ studnet, color }) => {
                   src={
                     previewUrl
                       ? previewUrl
-                      : studnet.photo_url ??
+                      : account.avatarUrl ??
                         "https://st.depositphotos.com/2218212/2938/i/450/depositphotos_29387653-stock-photo-facebook-profile.jpg"
                   }
                 />
@@ -188,7 +193,8 @@ const ProfileForm: FC<ProfileFormProps> = ({ studnet, color }) => {
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>سيتم عرض هذا لمدربك</FormDescription>
+
+                <FormDescription> قل شيئًا رائعًا </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -196,11 +202,8 @@ const ProfileForm: FC<ProfileFormProps> = ({ studnet, color }) => {
           <div className="w-full h-[50px] flex items-center justify-end">
             <LoadingButton
               pending={loading}
-              className=" rounded-lg "
+              className="bg-primary rounded-lg "
               type="submit"
-              style={{
-                color: color ?? "#FC6B00",
-              }}
             >
               حفظ التعديلات
             </LoadingButton>
@@ -211,4 +214,4 @@ const ProfileForm: FC<ProfileFormProps> = ({ studnet, color }) => {
   );
 };
 
-export default ProfileForm;
+export default UserProfileForm;

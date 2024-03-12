@@ -43,7 +43,7 @@ const Page = async ({ params }: PageProps) => {
           <div className="w-full h-[50px] flex items-center justify-start">
             <h1 className="text-xl font-bold">الملف الشخصي</h1>
           </div>
-          <ProfileForm studnet={student} />
+          <ProfileForm color={website?.color} studnet={student} />
         </div>
       </MaxWidthWrapper>
     </>
