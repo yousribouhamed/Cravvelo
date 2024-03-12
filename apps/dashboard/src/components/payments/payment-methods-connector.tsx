@@ -31,31 +31,6 @@ const PaymentMethodsConnectors: FC<PaymentMethodsConnectorsProps> = ({
         <CardHeader>
           <div className="flex items-center justify-start gap-x-2">
             <Image
-              src="/stripe.png"
-              alt="chargily image"
-              width={50}
-              height={50}
-              className="object-fill rounded-xl"
-            />
-            <CardTitle>stripe </CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <p className="text-xl font-bold text-start ">
-            منصة لمعالجة الدفع تمكن الشركات من قبول المدفوعات عبر الإنترنت
-            وإدارة المعاملات المالية بشكل آمن وفعال.
-          </p>
-        </CardContent>
-        <CardFooter>
-          <Button disabled className=" bg-cyan-500 hover:bg-cyan-600">
-            قريبا
-          </Button>
-        </CardFooter>
-      </Card>
-      <Card className="w-full max-w-sm h-[300px] rounded-2xl">
-        <CardHeader>
-          <div className="flex items-center justify-start gap-x-2">
-            <Image
               src="/chargily.jpg"
               alt="chargily image"
               width={50}

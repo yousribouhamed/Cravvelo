@@ -48,6 +48,7 @@ export const useChargily = () => {
         success_url: `https://${subdomain}/student-library`,
         subdomain,
         metadata,
+        webhook_endpoint: `https://app.cravvelo.com/api/webhooks/chargily/client`,
       });
 
       if (!checkout?.checkout_url)

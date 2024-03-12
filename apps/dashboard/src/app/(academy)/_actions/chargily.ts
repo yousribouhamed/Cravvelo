@@ -94,10 +94,12 @@ export const create_checkout = async ({
   success_url,
   subdomain,
   metadata,
+  webhook_endpoint,
 }: {
   price_id: string;
   success_url: string;
   subdomain: string;
+  webhook_endpoint: string;
   metadata: {
     studentId: string;
     productId: string;
@@ -108,6 +110,7 @@ export const create_checkout = async ({
     items: [{ price: price_id, quantity: 1 }],
     success_url,
     metadata: [metadata],
+    webhook_endpoint,
   }; // Payload for creating a checkout
 
   const options = {

@@ -180,6 +180,40 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account }) => {
               </FormItem>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="full_name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel> رقم التليفون</FormLabel>
+                <FormControl>
+                  <Input placeholder="مثلا : عبدالله" {...field} />
+                </FormControl>
+                <FormDescription>
+                  هذا هو اسم العرض العام الخاص بك.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="full_name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>البريد الإلكتروني الدعم الخاص بك</FormLabel>
+                <FormControl>
+                  <Input placeholder="مثلا : عبدالله" {...field} />
+                </FormControl>
+                <FormDescription>
+                  هذا هو اسم العرض العام الخاص بك.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="bio"

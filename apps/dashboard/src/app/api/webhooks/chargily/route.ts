@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
       const accountId = payload.data.metadata[0]?.accountId;
 
       const plan_code = payload.data.metadata[0]?.plan;
-
+      // update the account status
       await prisma.account.update({
         where: {
           id: accountId,
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      // update the account status
+      //  update the payment in the database
 
       break;
     case "checkout.failed":
