@@ -139,4 +139,104 @@ export const collector = {
         console.error(err);
       }
     }),
+
+  addPolicy: privateProcedure
+    .input(
+      z.object({
+        policy: z.any(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const account = await ctx.prisma.account.findFirst({
+          where: { userId: ctx.user.id },
+        });
+        const site = await ctx.prisma.website.update({
+          where: { accountId: account.id },
+          data: {
+            privacy_policy: JSON.stringify(input.policy),
+          },
+        });
+
+        return site;
+      } catch (err) {
+        console.error(err);
+      }
+    }),
+
+  addContactInformations: privateProcedure
+    .input(
+      z.object({
+        phoneNumber: z.string(),
+        email: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const account = await ctx.prisma.account.findFirst({
+          where: { userId: ctx.user.id },
+        });
+        const site = await ctx.prisma.website.update({
+          where: { accountId: account.id },
+          data: {
+            phoneNumber: input.phoneNumber,
+            supportEmail: input.email,
+          },
+        });
+
+        return site;
+      } catch (err) {
+        console.error(err);
+      }
+    }),
+
+  addFavIcon: privateProcedure
+    .input(
+      z.object({
+        fav_icon_url: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const account = await ctx.prisma.account.findFirst({
+          where: { userId: ctx.user.id },
+        });
+        const site = await ctx.prisma.website.update({
+          where: { accountId: account.id },
+          data: {
+            favicon: input.fav_icon_url,
+          },
+        });
+
+        return site;
+      } catch (err) {
+        console.error(err);
+      }
+    }),
+
+  addWebSiteSeo: privateProcedure
+    .input(
+      z.object({
+        title: z.string(),
+        description: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const account = await ctx.prisma.account.findFirst({
+          where: { userId: ctx.user.id },
+        });
+        const site = await ctx.prisma.website.update({
+          where: { accountId: account.id },
+          data: {
+            name: input.title,
+            description: input.description,
+          },
+        });
+
+        return site;
+      } catch (err) {
+        console.error(err);
+      }
+    }),
 };

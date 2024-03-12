@@ -1,15 +1,10 @@
 import "@ui/styles/globals.css";
 import "@ui/font/stylesheet.css";
-
 import type { Metadata } from "next";
 import Providers from "@/src/components/Providers";
 import Script from "next/script";
 import { getSiteData } from "./_actions";
-import MaxWidthWrapper from "./_components/max-width-wrapper";
-import AcademyHeader from "./_components/layout/academy-header";
 import AcademiaFooter from "./_components/layout/academy-footer";
-import { getStudent } from "./_actions/auth";
-import { prisma } from "database/src";
 
 export const fetchCache = "force-no-store";
 
@@ -23,12 +18,7 @@ export async function generateMetadata({
   if (!data) {
     return null;
   }
-  const {
-    name: title,
-    description,
-
-    logo,
-  } = data;
+  const { name: title, description, favicon, logo } = data;
 
   return {
     title,
@@ -44,7 +34,8 @@ export async function generateMetadata({
       description,
       images: ["/opengraph-image.png"],
     },
-    icons: [logo],
+
+    icons: [favicon ?? "/favicon-placeholder.png"],
     metadataBase: new URL(`https://${domain}`),
     // Optional: Set canonical URL to custom domain if it exists
     ...(params.domain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) &&
@@ -67,9 +58,7 @@ export default async function RootLayout({
     <html suppressHydrationWarning dir="rtl" lang="ar">
       <head />
       <Providers>
-        <body
-          className={`selection:bg-primary selection:text-white antialiased bg-zinc-50 h-fit min-h-screen`}
-        >
+        <body className={` antialiased bg-zinc-50 h-fit min-h-screen`}>
           {children}
           <AcademiaFooter />
         </body>

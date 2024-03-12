@@ -15,45 +15,52 @@ import { Button } from "@ui/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@ui/components/ui/form";
-import { Input } from "@ui/components/ui/input";
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { maketoast } from "@/src/components/toasts";
+import { PlateEditor } from "@/src/components/reich-text-editor/rich-text-editor";
 
 const formSchema = z.object({
-  subdomain: z
-    .string()
-    .min(3, {
-      message: "Username must be at least 2 characters.",
-    })
-    .max(32),
+  policy: z.any(),
 });
 
-interface ChangeDomainFormProps {
-  subdomain: string | null;
+interface AddPrivicyPolicyProps {
+  policy: any;
 }
 
-const AddPrivicyPolicy: FC<ChangeDomainFormProps> = ({ subdomain }) => {
-  const mutation = trpc.chnageSubDmain.useMutation({
-    onSuccess: () => {},
-    onError: () => {},
+const AddPrivicyPolicy: FC<AddPrivicyPolicyProps> = ({ policy }) => {
+  const mutation = trpc.addPolicy.useMutation({
+    onSuccess: () => {
+      maketoast.success();
+    },
+    onError: () => {
+      maketoast.error();
+    },
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      subdomain: subdomain ? subdomain : "",
+      policy: policy
+        ? JSON.parse(policy as string)
+        : [
+            {
+              id: "1",
+              type: "p",
+              children: [{ text: "" }],
+            },
+          ],
     },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     await mutation.mutateAsync({
-      subdomain: data.subdomain,
+      policy: data.policy,
     });
   }
   return (
@@ -61,21 +68,23 @@ const AddPrivicyPolicy: FC<ChangeDomainFormProps> = ({ subdomain }) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card className="border rounded-xl shadow-none">
           <CardHeader>
-            <CardTitle>النطاق الفرعي</CardTitle>
+            <CardTitle>سياسة الأكاديمية</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
               control={form.control}
-              name="subdomain"
+              name="policy"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>النطاق الفرعي لموقعك.</FormLabel>
+                  <FormLabel>
+                    اقرأ هذا القالب وانقر فوق "حفظ" لتنقذ نفسك وعملائك.
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="app.vercel.com" {...field} />
+                    <PlateEditor
+                      value={form.getValues("policy")}
+                      onChnage={field.onChange}
+                    />
                   </FormControl>
-                  <FormDescription>
-                    يرجى استخدام 32 حرفًا كحد أقصى.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

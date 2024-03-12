@@ -148,9 +148,13 @@ model Website {
   description  String?  @db.Text
   subdomain    String?  @unique
   customDomain String?  @unique
-  pages        Json
-  assets       Json?
-  favicon      String?  @default("#22d3ee")
+  pages          Json
+  assets        Json?
+
+  privacy_policy Json?
+  phoneNumber   String?
+  supportEmail  String?
+  favicon      String?  @db.Text @default("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT51NSq8RTDzIs7VaAcWWvKkyiagU5dz6hiAA&usqp=CAU")
   color        String?
   logo         String?  @db.VarChar(199)
   font         String   @default("font-cal")

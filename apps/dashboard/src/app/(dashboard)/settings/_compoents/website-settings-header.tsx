@@ -19,7 +19,7 @@ const getLinks = ({ id }: { id: string }) => {
 
     {
       name: " إعدادات القانوني ",
-      href: `/courses/${id}/students-management`,
+      href: `/settings/website-settings/legal`,
     },
   ];
 

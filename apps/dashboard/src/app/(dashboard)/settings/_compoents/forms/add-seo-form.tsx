@@ -24,36 +24,41 @@ import {
 import { Input } from "@ui/components/ui/input";
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { Textarea } from "@ui/components/ui/textarea";
+import { maketoast } from "@/src/components/toasts";
 
 const formSchema = z.object({
-  subdomain: z
-    .string()
-    .min(3, {
-      message: "Username must be at least 2 characters.",
-    })
-    .max(32),
+  title: z.string(),
+  description: z.string(),
 });
 
-interface ChangeDomainFormProps {
-  subdomain: string | null;
+interface AddSeoFormProps {
+  title: string | null;
+  description: string | null;
 }
 
-const AddSeoForm: FC<ChangeDomainFormProps> = ({ subdomain }) => {
-  const mutation = trpc.chnageSubDmain.useMutation({
-    onSuccess: () => {},
-    onError: () => {},
+const AddSeoForm: FC<AddSeoFormProps> = ({ description, title }) => {
+  const mutation = trpc.addWebSiteSeo.useMutation({
+    onSuccess: () => {
+      maketoast.success();
+    },
+    onError: () => {
+      maketoast.error();
+    },
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      subdomain: subdomain ? subdomain : "",
+      title: title ? title : "",
+      description: description ? description : "",
     },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     await mutation.mutateAsync({
-      subdomain: data.subdomain,
+      title: data.title,
+      description: data.description,
     });
   }
   return (
@@ -61,20 +66,36 @@ const AddSeoForm: FC<ChangeDomainFormProps> = ({ subdomain }) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card className="border rounded-xl shadow-none">
           <CardHeader>
-            <CardTitle>النطاق الفرعي</CardTitle>
+            <CardTitle> عنوان علامة تبويب المتصفح</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
               control={form.control}
-              name="subdomain"
+              name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>النطاق الفرعي لموقعك.</FormLabel>
+                  <FormLabel>سيظهر هذا في محرك البحث.</FormLabel>
                   <FormControl>
-                    <Input placeholder="app.vercel.com" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormDescription>
-                    يرجى استخدام 32 حرفًا كحد أقصى.
+                    استخدم شيئًا سيبحث عنه الناس
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel> هنا حاول أن تصف أكاديميتك .</FormLabel>
+                  <FormControl>
+                    <Textarea {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    استخدم شيئًا سيبحث عنه الناس
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

@@ -21,39 +21,39 @@ import {
   FormLabel,
   FormMessage,
 } from "@ui/components/ui/form";
-import { Input } from "@ui/components/ui/input";
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { maketoast } from "@/src/components/toasts";
+import { ImageUploaderS3 } from "@/src/components/uploaders/image-uploader";
 
 const formSchema = z.object({
-  subdomain: z
-    .string()
-    .min(3, {
-      message: "Username must be at least 2 characters.",
-    })
-    .max(32),
+  logoUrl: z.string(),
 });
 
-interface ChangeDomainFormProps {
-  subdomain: string | null;
+interface AddLogoFormProps {
+  logoUrl: string | null;
 }
 
-const AddLogoForm: FC<ChangeDomainFormProps> = ({ subdomain }) => {
-  const mutation = trpc.chnageSubDmain.useMutation({
-    onSuccess: () => {},
-    onError: () => {},
+const AddLogoForm: FC<AddLogoFormProps> = ({ logoUrl }) => {
+  const mutation = trpc.addWebSiteLogo.useMutation({
+    onSuccess: () => {
+      maketoast.success();
+    },
+    onError: () => {
+      maketoast.error();
+    },
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      subdomain: subdomain ? subdomain : "",
+      logoUrl: logoUrl ? logoUrl : "",
     },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     await mutation.mutateAsync({
-      subdomain: data.subdomain,
+      logo: data.logoUrl,
     });
   }
   return (
@@ -66,15 +66,18 @@ const AddLogoForm: FC<ChangeDomainFormProps> = ({ subdomain }) => {
           <CardContent>
             <FormField
               control={form.control}
-              name="subdomain"
+              name="logoUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>النطاق الفرعي لموقعك.</FormLabel>
+                  <FormLabel>إضافة شعار إلى موقع الويب الخاص بك.</FormLabel>
                   <FormControl>
-                    <Input placeholder="app.vercel.com" {...field} />
+                    <ImageUploaderS3
+                      fileUrl={form.watch("logoUrl")}
+                      onChnage={field.onChange}
+                    />
                   </FormControl>
                   <FormDescription>
-                    يرجى استخدام 32 حرفًا كحد أقصى.
+                    يُسمح فقط باستخدام png وjpg وsvgs
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

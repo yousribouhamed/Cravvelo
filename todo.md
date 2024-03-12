@@ -1,9 +1,9 @@
-# proccess the coupon
+# academia policy
 
-# create a sale each time an evant happend
+# add cotact informations to the academia owner
 
-# display the data in the dashboard
+# fix the chargily connect
 
-# displau the students in the dasboard
+# user profile
 
-# build the search on the academy and in the dashboard
+# update the user thier
