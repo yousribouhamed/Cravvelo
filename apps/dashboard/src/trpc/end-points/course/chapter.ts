@@ -190,7 +190,9 @@ export const chapter = {
         });
 
       const courseOldData = await ctx.prisma.course.findFirst({
-        where: chapter.courseID,
+        where: {
+          id: chapter.courseID,
+        },
       });
 
       await ctx.prisma.course.update({
