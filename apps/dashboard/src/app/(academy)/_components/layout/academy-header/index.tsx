@@ -12,6 +12,7 @@ interface AcademyHeaderProps {
   student: Student | null;
   subdomain: string | null;
   logo: string | null;
+  color: string;
 }
 
 const AcademyHeader: FC<AcademyHeaderProps> = ({
@@ -19,6 +20,7 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
   student,
   subdomain,
   logo,
+  color,
 }) => {
   return (
     <div className="w-full h-[70px]   border-b z-[8] fixed top-0 bg-white shadow overflow-y-hidden">
@@ -31,7 +33,7 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
           <LinksNavbar />
         </div>
         <div className="flex w-fir min-w-[100px] justify-end items-center">
-          <ShoppingCardProduction subdomain={subdomain} />
+          <ShoppingCardProduction color={color} subdomain={subdomain} />
           {/* <button className="text-black w-[40px] h-[40px] rounded-xl p-2">
             <Search className="w-5 h-5 " />
           </button> */}
@@ -40,7 +42,10 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
           ) : (
             <Link
               href={"/auth-academy/sign-in"}
-              className="bg-primary text-white w-[140px] h-[40px] rounded-lg p-2 flex items-center justify-center hover:bg-orange-700 transition-all duration-300"
+              className=" text-white w-[140px] h-[40px] rounded-lg p-2 flex items-center justify-center hover:bg-orange-700 transition-all duration-300"
+              style={{
+                background: color ?? "#FC6B00",
+              }}
             >
               تسجيل الدخول
             </Link>

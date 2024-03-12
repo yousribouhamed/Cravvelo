@@ -145,11 +145,11 @@ export const update_profile = async ({
   try {
     const student = await getStudent();
 
-    if (student) {
+    if (!student) {
       throw new Error("you are not sign in dammm ");
     }
 
-    await prisma.student.update({
+    const updateStudent = await prisma.student.update({
       where: {
         id: student.id,
       },
@@ -159,6 +159,8 @@ export const update_profile = async ({
         bio,
       },
     });
+
+    console.log(updateStudent);
   } catch (err) {
     console.error(err);
   }

@@ -5,7 +5,13 @@ import { useAcademiaStore } from "../../../global-state/academia-store";
 import { ArrowBigUp, Headphones, Clock, User, Star, Globe } from "lucide-react";
 import { Infinity } from "lucide-react";
 
-export const Product_card = ({ course }: { course: Course }) => {
+export const Product_card = ({
+  course,
+  color,
+}: {
+  course: Course;
+  color: string;
+}) => {
   const { actions, state } = useAcademiaStore();
   return (
     <div className=" w-full lg:w-[350px] min-h-[500px] h-fit rounded-xl border p-4 flex flex-col gap-y-4 lg:sticky lg:top-[100px] bg-white">
@@ -29,7 +35,10 @@ export const Product_card = ({ course }: { course: Course }) => {
           });
         }}
         disabled={state.shoppingBag.length > 0}
-        className="w-full h-12 rounded-lg bg-primary hover:bg-orange-700 text-white flex items-center justify-center border-black disabled:cursor-not-allowed disabled:opacity-[50%]"
+        className="w-full h-12 rounded-lg  text-white flex items-center justify-center border-black disabled:cursor-not-allowed disabled:opacity-[50%]"
+        style={{
+          background: color ?? "#FC6B00",
+        }}
       >
         ادفع DZD {course.price}.00
       </button>

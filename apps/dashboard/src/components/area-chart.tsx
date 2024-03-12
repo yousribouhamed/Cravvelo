@@ -74,7 +74,7 @@ const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
     };
   });
   return (
-    <Card className="col-span-2 w-full h-full p-0">
+    <Card className="col-span-3 w-full h-full p-0">
       <CardContent className="p-0  w-full h-full">
         <div
           dir="ltr"

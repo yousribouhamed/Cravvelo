@@ -115,4 +115,28 @@ export const collector = {
       console.error(err);
     }
   }),
+
+  addWebSiteColor: privateProcedure
+    .input(
+      z.object({
+        color: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const account = await ctx.prisma.account.findFirst({
+          where: { userId: ctx.user.id },
+        });
+        const site = await ctx.prisma.website.update({
+          where: { accountId: account.id },
+          data: {
+            color: input.color,
+          },
+        });
+
+        return site;
+      } catch (err) {
+        console.error(err);
+      }
+    }),
 };

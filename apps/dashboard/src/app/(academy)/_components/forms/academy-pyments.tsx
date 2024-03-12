@@ -10,9 +10,14 @@ import { useRouter } from "next/navigation";
 interface AcademyPymentsProps {
   subdomain: string | null;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  color: string;
 }
 
-const AcademyPyments: FC<AcademyPymentsProps> = ({ subdomain, setOpen }) => {
+const AcademyPyments: FC<AcademyPymentsProps> = ({
+  subdomain,
+  setOpen,
+  color,
+}) => {
   const { state, actions } = useAcademiaStore();
 
   const router = useRouter();
@@ -108,7 +113,10 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({ subdomain, setOpen }) => {
           <button
             disabled={loading}
             onClick={applayCouponCode}
-            className="text-primary text-xs font-bold h-full w-[10%] disabled:opacity-[50%] disabled:text-gray-700"
+            className="text-xs font-bold h-full w-[10%] disabled:opacity-[50%] disabled:text-gray-700"
+            style={{
+              color: color ?? "#FC6B00",
+            }}
           >
             Apply
           </button>
@@ -160,7 +168,10 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({ subdomain, setOpen }) => {
         <button
           onClick={proccessPayment}
           disabled={loading}
-          className="mt-8 w-full h-12 bg-primary flex items-center justify-center text-white gap-x-4 disabled:opacity-[50%]"
+          className="mt-8 w-full h-12  flex items-center justify-center text-white gap-x-4 disabled:opacity-[50%]"
+          style={{
+            background: color ?? "#FC6B00",
+          }}
         >
           {loading && <LoadingSpinner />}
           دفع DZD{" "}
@@ -173,7 +184,10 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({ subdomain, setOpen }) => {
       ) : (
         <button
           onClick={() => router.push("/auth-academy/sign-up")}
-          className="mt-8 w-full h-12 bg-primary flex items-center justify-center text-white gap-x-4 disabled:opacity-[50%]"
+          className="mt-8 w-full h-12  flex items-center justify-center text-white gap-x-4 disabled:opacity-[50%]"
+          style={{
+            background: color ?? "#FC6B00",
+          }}
         >
           تسجيل الدخول
         </button>

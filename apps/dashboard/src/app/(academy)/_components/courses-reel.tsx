@@ -11,9 +11,10 @@ import Image from "next/image";
 interface CoursesReelProps {
   courses: Course[];
   // blurData: String[];
+  color: string;
 }
 
-const CoursesReel: FC<CoursesReelProps> = ({ courses }) => {
+const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
   const router = useRouter();
 
   const handleRouting = ({ id }: { id: string }) => {
@@ -27,7 +28,7 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses }) => {
           الدورات البارزة
         </h2>
       </div>
-      <div className="w-full min-h-[200px] h-fit flex items-start justify-start gap-x-8 flex-wrap">
+      <div className="w-full min-h-[200px] h-fit flex items-start justify-start gap-8 flex-wrap">
         {Array.isArray(courses) &&
           courses?.map((item, index) => {
             return (
@@ -92,7 +93,10 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses }) => {
                     onClick={() => {
                       handleRouting({ id: item.id });
                     }}
-                    className="w-[99%] bg-primary text-white p-2 h-[45px] rounded-lg"
+                    className="w-[99%]  text-white p-2 h-[45px] rounded-lg"
+                    style={{
+                      background: color ?? "#FC6B00",
+                    }}
                   >
                     اشتري الآن
                   </button>

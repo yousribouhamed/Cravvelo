@@ -25,25 +25,21 @@ import { Input } from "@ui/components/ui/input";
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
-import { useDomainStatus } from "@/src/hooks/use-domain-status";
-
-interface AddCustomDomain {
-  customDomain: string | null;
-}
 
 const formSchema = z.object({
-  cutomedomain: z.string(),
+  color: z.string(),
 });
 
-const AddCusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
-  const mutation = trpc.setCustomDomain.useMutation({
+interface ChangeDomainFormProps {
+  color: string | null;
+}
+
+const AddColorFrom: FC<ChangeDomainFormProps> = ({ color }) => {
+  const mutation = trpc.addWebSiteColor.useMutation({
     onSuccess: () => {
-      maketoast.successWithText({
-        text: "لقد تم تسجيل النطاق الجديد الخاص بك",
-      });
+      maketoast.success();
     },
-    onError: (err) => {
-      console.error(err);
+    onError: () => {
       maketoast.error();
     },
   });
@@ -51,35 +47,40 @@ const AddCusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      cutomedomain: customDomain ? customDomain : "",
+      color: color ? color : "",
     },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    await mutation.mutateAsync({
-      customdomain: data?.cutomedomain,
+    mutation.mutate({
+      color: data.color,
     });
-
-    // await useDomainStatus({ domain: data.cutomedomain });
   }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card className="border rounded-xl shadow-none">
           <CardHeader>
-            <CardTitle>مجال مخصص</CardTitle>
+            <CardTitle> لون أصلي</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
               control={form.control}
-              name="cutomedomain"
+              name="color"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>النطاق المخصص لموقعك.</FormLabel>
                   <FormControl>
-                    <Input placeholder="yourdomain.com" {...field} />
+                    <Input
+                      type="color"
+                      id="colorPicker"
+                      name="colorPicker"
+                      className="appearance-none w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      {...field}
+                    />
                   </FormControl>
-                  <FormDescription>يرجى إدخال نطاق صالح.</FormDescription>
+                  <FormDescription>
+                    سيظهر هذا اللون في أكاديميتك
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -101,4 +102,4 @@ const AddCusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
   );
 };
 
-export default AddCusotmDomainForm;
+export default AddColorFrom;

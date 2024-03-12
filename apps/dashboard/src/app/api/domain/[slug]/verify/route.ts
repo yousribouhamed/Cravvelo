@@ -10,7 +10,12 @@ export async function GET(
   _req: Request,
   { params }: { params: { slug: string } }
 ) {
-  const domain = decodeURIComponent(params.slug);
+  const domain =
+    process.env.NODE_ENV === "production"
+      ? decodeURIComponent(params.slug)
+      : params.slug;
+
+  console.log(domain);
   let status: DomainVerificationStatusProps = "Valid Configuration";
 
   const [domainJson, configJson] = await Promise.all([

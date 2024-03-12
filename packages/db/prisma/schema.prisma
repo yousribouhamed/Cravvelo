@@ -271,7 +271,7 @@ model Exam {
 model Student {
   id        String  @unique @default(uuid())
   full_name String
-  photo_url String?
+  photo_url String? @db.Text
   bio       String?
   email     String  @unique
   phone     String? @unique

@@ -99,6 +99,8 @@ const ProfileForm: FC<ProfileFormProps> = ({ studnet }) => {
 
         // update the data on our app
 
+        console.log("we are uploding the image url");
+
         await update_profile({
           bio: values.bio,
           full_name: values.full_name,
@@ -108,7 +110,6 @@ const ProfileForm: FC<ProfileFormProps> = ({ studnet }) => {
         maketoast.successWithText({ text: "تم تحديث ملفك" });
       } else {
         // update the data on our app
-
         await update_profile({
           bio: values.bio,
           full_name: values.full_name,
@@ -131,8 +132,10 @@ const ProfileForm: FC<ProfileFormProps> = ({ studnet }) => {
               <Avatar className="w-12 h-12 ring-primary   rounded-[50%]">
                 <AvatarImage
                   src={
-                    previewUrl ||
-                    "https://st.depositphotos.com/2218212/2938/i/450/depositphotos_29387653-stock-photo-facebook-profile.jpg"
+                    previewUrl
+                      ? previewUrl
+                      : studnet.photo_url ??
+                        "https://st.depositphotos.com/2218212/2938/i/450/depositphotos_29387653-stock-photo-facebook-profile.jpg"
                   }
                 />
                 <AvatarFallback>AB</AvatarFallback>

@@ -9,8 +9,10 @@ import AcademyPyments from "../../forms/academy-pyments";
 
 export default function ShoppingCardProduction({
   subdomain,
+  color,
 }: {
   subdomain: string | null;
+  color: string;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -109,7 +111,12 @@ export default function ShoppingCardProduction({
                                       </div>
                                       <div className="flex w-full flex-1 items-end justify-between text-sm">
                                         <div className="flex justify-between items-end w-full ">
-                                          <div className="bg-[#FC6B00] px-4 py-3  rounded-full flex items-center justify-center ">
+                                          <div
+                                            style={{
+                                              background: color ?? "#FC6B00",
+                                            }}
+                                            className=" px-4 py-3  rounded-full flex items-center justify-center "
+                                          >
                                             <p className=" text-white font-bold">
                                               {product.price} DZD
                                             </p>
@@ -149,6 +156,7 @@ export default function ShoppingCardProduction({
                         <AcademyPyments
                           setOpen={setOpen}
                           subdomain={subdomain}
+                          color={color}
                         />
                       )}
                     </div>

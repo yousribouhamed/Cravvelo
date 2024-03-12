@@ -32,6 +32,7 @@ const Page = async ({ params }: PageProps) => {
   return (
     <>
       <AcademyHeader
+        color={website?.color}
         student={student}
         isAuthanticated={student ? true : false}
         subdomain={website?.subdomain ?? null}

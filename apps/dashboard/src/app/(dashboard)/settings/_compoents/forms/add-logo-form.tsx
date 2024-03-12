@@ -24,62 +24,58 @@ import {
 import { Input } from "@ui/components/ui/input";
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import { maketoast } from "@/src/components/toasts";
-import { useDomainStatus } from "@/src/hooks/use-domain-status";
-
-interface AddCustomDomain {
-  customDomain: string | null;
-}
 
 const formSchema = z.object({
-  cutomedomain: z.string(),
+  subdomain: z
+    .string()
+    .min(3, {
+      message: "Username must be at least 2 characters.",
+    })
+    .max(32),
 });
 
-const AddCusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
-  const mutation = trpc.setCustomDomain.useMutation({
-    onSuccess: () => {
-      maketoast.successWithText({
-        text: "لقد تم تسجيل النطاق الجديد الخاص بك",
-      });
-    },
-    onError: (err) => {
-      console.error(err);
-      maketoast.error();
-    },
+interface ChangeDomainFormProps {
+  subdomain: string | null;
+}
+
+const AddLogoForm: FC<ChangeDomainFormProps> = ({ subdomain }) => {
+  const mutation = trpc.chnageSubDmain.useMutation({
+    onSuccess: () => {},
+    onError: () => {},
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      cutomedomain: customDomain ? customDomain : "",
+      subdomain: subdomain ? subdomain : "",
     },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     await mutation.mutateAsync({
-      customdomain: data?.cutomedomain,
+      subdomain: data.subdomain,
     });
-
-    // await useDomainStatus({ domain: data.cutomedomain });
   }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card className="border rounded-xl shadow-none">
           <CardHeader>
-            <CardTitle>مجال مخصص</CardTitle>
+            <CardTitle>النطاق الفرعي</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
               control={form.control}
-              name="cutomedomain"
+              name="subdomain"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>النطاق المخصص لموقعك.</FormLabel>
+                  <FormLabel>النطاق الفرعي لموقعك.</FormLabel>
                   <FormControl>
-                    <Input placeholder="yourdomain.com" {...field} />
+                    <Input placeholder="app.vercel.com" {...field} />
                   </FormControl>
-                  <FormDescription>يرجى إدخال نطاق صالح.</FormDescription>
+                  <FormDescription>
+                    يرجى استخدام 32 حرفًا كحد أقصى.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -101,4 +97,4 @@ const AddCusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
   );
 };
 
-export default AddCusotmDomainForm;
+export default AddLogoForm;

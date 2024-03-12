@@ -4,6 +4,7 @@ import CoursesReel from "../_components/courses-reel";
 import { getSubDomainValue } from "../lib";
 import AcademyHeader from "../_components/layout/academy-header";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
+import { getStudent } from "../_actions/auth";
 
 interface PageProps {
   params: { site: string };
@@ -12,7 +13,8 @@ interface PageProps {
 const Page = async ({ params }: PageProps) => {
   const subdomain = getSubDomainValue({ value: params.site });
 
-  const [website, courses] = await Promise.all([
+  const [student, website, courses] = await Promise.all([
+    getStudent(),
     getSiteData({
       subdomain,
     }),
@@ -23,6 +25,9 @@ const Page = async ({ params }: PageProps) => {
     notFound();
   }
 
+  console.log("this is the student");
+  console.log(student);
+
   // const blurData = await Promise.all(
   //   courses.map(async (item) => await getBase64(item?.thumnailUrl))
   // );
@@ -30,19 +35,25 @@ const Page = async ({ params }: PageProps) => {
   return (
     <>
       <AcademyHeader
-        student={null}
-        isAuthanticated={false}
+        color={website?.color}
+        student={student}
+        isAuthanticated={student ? true : false}
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
       />
       <MaxWidthWrapper className="h-fit mt-[70px] min-h-[calc(100vh-70px)] ">
         <main className="w-full h-fit min-h-full flex flex-col items-center justify-center ">
-          <div className="w-full h-[250px] bg-primary flex items-center justify-center my-10">
+          <div
+            className="w-full h-[250px]  flex items-center justify-center my-10"
+            style={{
+              background: website?.color ?? "#FC6B00",
+            }}
+          >
             <h1 className="text-5xl font-bold text-center text-white ">
               مرحبا بكم في اكادمية {website?.name}
             </h1>
           </div>
-          <CoursesReel courses={courses} />
+          <CoursesReel color={website?.color} courses={courses} />
         </main>
       </MaxWidthWrapper>
     </>

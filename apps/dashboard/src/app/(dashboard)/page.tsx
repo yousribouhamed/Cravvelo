@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@ui/components/ui/card";
+
 import AreaChartOverview from "@/src/components/area-chart";
 import { DatePickerWithRange } from "@/src/components/range-date-picker";
 import { NotFoundCard } from "@/src/components/not-found-card";
@@ -48,7 +49,7 @@ async function Page() {
 
   return (
     <MaxWidthWrapper>
-      <main className="w-full flex flex-col overflow-y-hidden h-fit  justify-start">
+      <main className="w-full flex flex-col overflow-y-hidden h-fit mb-10 justify-start">
         <Header user={user} title="الرئيسية" />
         <div className="w-full h-[30px] flex justify-between items-center mt-10 ">
           <DatePickerWithRange />
@@ -164,16 +165,8 @@ async function Page() {
           </div>
           <div className="grid gap-4 md:grid-cols-3  my-8 h-[450px] w-full ">
             <AreaChartOverview sales={sales} />
-            <Card className="col-span-1">
-              <CardHeader>
-                <CardTitle>لم نقرر بعد ما سنضعه هنا</CardTitle>
-              </CardHeader>
-              <CardContent className="flex items-center justify-center">
-                <NotFoundCard />
-              </CardContent>
-            </Card>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 my-8 h-[300px] w-full ">
+          <div className="grid gap-4 md:grid-cols-2 my-8 h-[300px] w-full mb-10 ">
             <Card className="col-span-1">
               <CardHeader>
                 <CardTitle>الدورات الآكثر مبيعاً</CardTitle>

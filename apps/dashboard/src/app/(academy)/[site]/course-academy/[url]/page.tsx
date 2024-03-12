@@ -33,6 +33,7 @@ const Page = async ({ params }: PageProps) => {
   return (
     <>
       <AcademyHeader
+        color={website?.color}
         student={student}
         isAuthanticated={student ? true : false}
         subdomain={website?.subdomain ?? null}
@@ -55,7 +56,7 @@ const Page = async ({ params }: PageProps) => {
             <CourseDisplayContent course={course} chapters={chapters} />
           </div>
 
-          <Product_card course={course} />
+          <Product_card color={website?.color} course={course} />
         </div>
       </MaxWidthWrapper>
     </>

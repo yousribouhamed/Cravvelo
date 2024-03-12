@@ -49,7 +49,7 @@ export const maketoast = {
             <AlertTriangle className="w-6 h-6 text-white" />
           </div>
           <div className="w-[80%] flex flex-col justify-start items-start p-2">
-            <span className="text-xl font-bold text-black ">نجاح</span>
+            <span className="text-xl font-bold text-black ">خطأ</span>
             <span className="text-gray-500 text-xl text-start">
               هناك خطأ ما
             </span>
