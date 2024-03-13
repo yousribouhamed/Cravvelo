@@ -132,7 +132,6 @@ export default function Page() {
         </MaxWidthWrapper>
       </FadeIn>
       <StartNew />
-
       <SiteFooter />
     </>
   );

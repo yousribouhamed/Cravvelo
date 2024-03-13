@@ -5,10 +5,9 @@ import { Button, buttonVariants } from "@ui/components/button";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { MobilNavBar } from "./mobil-nav-bar";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { useActiveSection } from "@/src/lib/zustand/use-active-section";
 
 const links = [
@@ -38,22 +37,12 @@ export const NavBar: FC = ({}) => {
   const [close, setClose] = React.useState(false);
   const path = usePathname();
 
-  const { activeSection, setActiveSection, setTimeOfLastClick } =
-    useActiveSection();
-
   React.useEffect(() => {
     const handleScroll = () => {
-      // Check if the user has scrolled beyond a certain threshold (e.g., 20 pixels)
       const scrolled = window.scrollY > 64;
-
-      // Update the state based on the scroll position
       setHasShadow(scrolled);
     };
-
-    // Attach the scroll event listener when the component mounts
     window.addEventListener("scroll", handleScroll);
-
-    // Detach the scroll event listener when the component unmounts
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };

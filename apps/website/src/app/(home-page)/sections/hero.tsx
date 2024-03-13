@@ -2,6 +2,7 @@ import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Reviews from "@/src/components/reviews";
 import TextTyper from "@/src/components/text-typer";
 import { Button } from "@ui/components/ui/button";
+import Image from "next/image";
 import type { FC } from "react";
 
 const Hero: FC = ({}) => {
@@ -16,11 +17,11 @@ const Hero: FC = ({}) => {
           {/* Left column */}
           <div className="lg:col-span-2 z-20 lg:col-start-1 lg:row-start-1 lg:ml-auto lg:grid w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 grid-cols-1">
             <div className="w-full sm:max-w-[34rem] 2xl:max-w-2xl z-20">
-              <div className="w-full sm:min-h-[100px] sm:h-fit h-[250px] mt-12 overflow-hidden">
-                <h1 className="text-center sm:text-start qatar-bold tracking-tight text-black text-3xl 2xl:text-4xl">
+              <div className="w-full sm:min-h-[100px] sm:h-fit h-[300px] mt-12 overflow-hidden">
+                <h1 className="text-center h-[70px] flex items-center sm:text-start qatar-bold tracking-tight text-black text-3xl 2xl:text-4xl">
                   إنشاء، بيع، إدارة <TextTyper />
                 </h1>
-                <h1 className="qatar-bold mt-2 text-center sm:text-start font-bold tracking-tight text-black text-3xl 2xl:text-4xl">
+                <h1 className="qatar-bold  text-center sm:text-start font-bold tracking-tight text-black text-3xl 2xl:text-4xl">
                   من مكان واحد، بسهولة كبيرة
                 </h1>
               </div>
@@ -48,11 +49,15 @@ const Hero: FC = ({}) => {
 
           {/* Right column - Image */}
           <div className="xl:ml-20 lg:-ml-10 h-fit sm:-ml-24 z-[10] lg:mt-0 lg:col-start-2 lg:row-span-2 lg:row-start-1">
-            <img
-              className="w-[32rem] max-w-none rounded-xl sm:w-[40rem] xl:w-[57rem] 2xl:w-[60rem]"
-              src="/Snap.png"
-              alt="hero image of the application"
-            />
+            <div className="w-[32rem]  h-[700px] max-w-none rounded-xl sm:w-[40rem] xl:w-[57rem] 2xl:w-[60rem] relative">
+              <Image
+                fill
+                className=" w-full h-full  rounded-xl "
+                src="/Snap.png"
+                alt="hero image of the application"
+                priority
+              />
+            </div>
           </div>
         </div>
       </section>

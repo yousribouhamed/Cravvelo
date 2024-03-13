@@ -1,7 +1,7 @@
 "use client";
 
 import type { FC } from "react";
-import { Cursor, useTypewriter } from "react-simple-typewriter";
+import { useTypewriter } from "react-simple-typewriter";
 
 const TextTyper: FC = ({}) => {
   const [text, count] = useTypewriter({
@@ -11,7 +11,7 @@ const TextTyper: FC = ({}) => {
   });
   return (
     <span
-      className="text-[#FC6B00] qatar-bold    mx-2 border-[#FC6B00] border-2 rounded-full inline-block bg-[#F8FAE5] px-3 py-2.5 "
+      className="text-[#FC6B00] qatar-bold min-w-[10px] h-[60px] w-fit  mx-2 border-[#FC6B00] border-2 rounded-full inline-block bg-[#F8FAE5] px-3 py-2.5 "
       style={{ fontFamily: "Qatar2022 Arabic bold" }}
     >
       {text}

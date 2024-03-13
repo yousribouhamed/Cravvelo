@@ -26,11 +26,11 @@ export default function RootLayout({
         <NavBar />
         <div className="  w-full h-fit min-h-full">{children}</div>
       </body>
-
+      {/* 
       <Script
         src="https://unpkg.com/@material-tailwind/html@latest/scripts/ripple.js"
         async
-      />
+      /> */}
     </html>
   );
 }
