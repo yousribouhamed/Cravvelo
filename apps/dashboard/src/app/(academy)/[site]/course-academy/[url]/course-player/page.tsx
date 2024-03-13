@@ -68,6 +68,14 @@ const Page = async ({ params }: PageProps) => {
             </div>
             <div className="w-full h-full col-span-2 py-8">
               <CourseVideoPlayer videoId={getFirstVideo(chapters[0])} />
+              <div className="w-full h-[70px] flex items-center justify-end">
+                <button className="w-[100px] h-[50px] bg-primary p-2">
+                  mark this video as completed
+                </button>
+                <button className="w-[100px] h-[50px] bg-primary p-2">
+                  add comment
+                </button>
+              </div>
             </div>
           </div>
         </MaxWidthWrapper>

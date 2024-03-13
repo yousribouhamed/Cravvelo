@@ -18,10 +18,10 @@ const AcademiaFooter: FC = ({}) => {
         </div>
         <div className="w-fit min-w-[100px] flex justify-end items-center gap-x-4">
           <Link href="/privacy-policy">
-            <button className="text-sm text-gray-700">سياسة الخصوصية</button>
+            <button className="text-sm text-gray-700"> سياسة الاكاديمية</button>
           </Link>
           <Link href="/terms-of-use">
-            <button className="text-sm text-gray-700">شروط الاستخدام</button>
+            <button className="text-sm text-gray-700">اتصل بنا</button>
           </Link>
           <span className="text-sm text-gray-700">
             جميع الحقوق محفوظة في الأكاديمية © 2024

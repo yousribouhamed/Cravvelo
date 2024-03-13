@@ -8,6 +8,7 @@ import { notFound } from "next/navigation";
 import AcademyHeader from "../../../_components/layout/academy-header";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import { getStudent } from "../../../_actions/auth";
+import Raitings from "../../../_components/raitings";
 
 interface PageProps {
   params: { site: string; url: string };
@@ -54,6 +55,7 @@ const Page = async ({ params }: PageProps) => {
               <span className="text-lg font-bold">الصوت: عربي</span>
             </div>
             <CourseDisplayContent course={course} chapters={chapters} />
+            <Raitings />
           </div>
 
           <Product_card color={website?.color} course={course} />
