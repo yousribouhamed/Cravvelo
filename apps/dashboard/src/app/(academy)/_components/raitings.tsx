@@ -1,7 +1,5 @@
 import type { FC } from "react";
 
-interface RaitingsAbdullahProps {}
-
 const avrage = [5, 4, 3, 2, 1];
 
 const Raitings: FC = ({}) => {

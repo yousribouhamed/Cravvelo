@@ -57,7 +57,6 @@ const Page = async ({ params }: PageProps) => {
             <CourseDisplayContent course={course} chapters={chapters} />
             <Raitings />
           </div>
-
           <Product_card color={website?.color} course={course} />
         </div>
       </MaxWidthWrapper>
