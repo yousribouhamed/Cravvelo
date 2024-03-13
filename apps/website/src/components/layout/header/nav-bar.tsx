@@ -8,7 +8,6 @@ import { MobilNavBar } from "./mobil-nav-bar";
 import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
 import Image from "next/image";
-import { useActiveSection } from "@/src/lib/zustand/use-active-section";
 
 const links = [
   {
@@ -117,13 +116,13 @@ export const NavBar: FC = ({}) => {
             </nav>
             <div className="w-[40%] hidden h-full lg:flex items-center justify-end gap-x-4">
               <Link
-                href={"https://app.cravvelo.com/sign-in"}
+                href={"https://app.cravvelo.com/sign-up"}
                 className={cn(
                   buttonVariants(),
                   "bg-primary border border-primary text-white text-xl py-4  h-12 rounded-2xl  font-bold     transition-all duration-150 "
                 )}
               >
-                تسجيل الدخول
+                انشاء حساب
               </Link>
               <Link
                 href={"https://app.cravvelo.com/sign-in"}
