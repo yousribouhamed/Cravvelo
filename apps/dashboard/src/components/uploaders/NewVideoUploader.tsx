@@ -47,8 +47,6 @@ export const NewVideoUploader = ({
 
     try {
       const response = await axios.request(options);
-      console.log("this is the video data after creation");
-      console.log(response.data?.guid);
       return response.data?.guid;
     } catch (err) {
       console.error(err);

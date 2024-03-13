@@ -23,7 +23,7 @@ const CourseVideoPlayer: FC<VideoPlayerProps> = ({ videoId }) => {
         {state?.currentModule ? (
           <div className="w-full h-[500px]  relative ">
             <iframe
-              src={`https://iframe.mediadelivery.net/embed/212306/${state?.currentModule?.fileUrl}?autoplay=true`}
+              src={`https://iframe.mediadelivery.net/embed/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/${state?.currentModule?.fileUrl}`}
               loading="lazy"
               style={{
                 border: "none",

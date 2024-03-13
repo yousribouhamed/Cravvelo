@@ -57,7 +57,7 @@ const CourseDisplayContent: FC<CourseContentProps> = ({ course, chapters }) => {
                     )}
 
                     <iframe
-                      src={`https://iframe.mediadelivery.net/embed/212306/${course?.youtubeUrl}?autoplay=true`}
+                      src={`https://iframe.mediadelivery.net/embed/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/${course?.youtubeUrl}`}
                       loading="lazy"
                       style={{
                         border: "none",
