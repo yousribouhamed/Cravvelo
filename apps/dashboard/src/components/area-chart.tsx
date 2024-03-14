@@ -15,64 +15,64 @@ import {
 } from "recharts";
 import { formatDateInArabic } from "../lib/utils";
 
-// const data = [
-//   {
-//     name: "Jan",
-//     "الدورات التدريبية": 4000,
-//     "المنتجات الرقمية": 2400,
-//     amt: 2400,
-//   },
-//   {
-//     name: "Feb",
-//     "الدورات التدريبية": 3000,
-//     "المنتجات الرقمية": 1398,
-//     amt: 2210,
-//   },
-//   {
-//     name: "Mar",
-//     "الدورات التدريبية": 2000,
-//     "المنتجات الرقمية": 9800,
-//     amt: 2290,
-//   },
-//   {
-//     name: "Apr",
-//     "الدورات التدريبية": 2780,
-//     "المنتجات الرقمية": 3908,
-//     amt: 2000,
-//   },
-//   {
-//     name: "May",
-//     "الدورات التدريبية": 1890,
-//     "المنتجات الرقمية": 4800,
-//     amt: 2181,
-//   },
-//   {
-//     name: "Jun",
-//     "الدورات التدريبية": 2390,
-//     "المنتجات الرقمية": 3800,
-//     amt: 2500,
-//   },
-//   {
-//     name: "Jul",
-//     "الدورات التدريبية": 3490,
-//     "المنتجات الرقمية": 4300,
-//     amt: 2100,
-//   },
-// ];
+const data = [
+  {
+    name: "Jan",
+    "الدورات التدريبية": 4000,
+    "المنتجات الرقمية": 2400,
+    amt: 2400,
+  },
+  {
+    name: "Feb",
+    "الدورات التدريبية": 3000,
+    "المنتجات الرقمية": 1398,
+    amt: 2210,
+  },
+  {
+    name: "Mar",
+    "الدورات التدريبية": 2000,
+    "المنتجات الرقمية": 9800,
+    amt: 2290,
+  },
+  {
+    name: "Apr",
+    "الدورات التدريبية": 2780,
+    "المنتجات الرقمية": 3908,
+    amt: 2000,
+  },
+  {
+    name: "May",
+    "الدورات التدريبية": 1890,
+    "المنتجات الرقمية": 4800,
+    amt: 2181,
+  },
+  {
+    name: "Jun",
+    "الدورات التدريبية": 2390,
+    "المنتجات الرقمية": 3800,
+    amt: 2500,
+  },
+  {
+    name: "Jul",
+    "الدورات التدريبية": 3490,
+    "المنتجات الرقمية": 4300,
+    amt: 2100,
+  },
+];
 
 interface AreaChartProps {
   sales: Sale[];
 }
 
 const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
-  const data = sales.map((item) => {
-    return {
-      name: formatDateInArabic(item.createdAt, "dd MMMM yyyy"),
-      "الدورات التدريبية": Number(item.price),
-      "المنتجات الرقمية": 0,
-      amt: 0,
-    };
-  });
+  // const data = sales.map((item) => {
+  //   return {
+  //     name: formatDateInArabic(item.createdAt, "dd MMMM yyyy"),
+  //     "الدورات التدريبية": Number(item.price),
+  //     "المنتجات الرقمية": 0,
+  //     amt: 0,
+  //   };
+  // });
   return (
     <Card className="col-span-3 w-full h-full p-0">
       <CardContent className="p-0  w-full h-full">

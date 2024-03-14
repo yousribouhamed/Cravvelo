@@ -5,7 +5,6 @@ import { get_course_chapters } from "@/src/app/(academy)/_actions/chapter";
 import { Chapter } from "database";
 import { Module } from "@/src/types";
 import { notFound } from "next/navigation";
-import MaxWidthWrapper from "@/src/app/(academy)/_components/max-width-wrapper";
 import { buttonVariants } from "@ui/components/ui/button";
 import { LogOut } from "lucide-react";
 import { cn } from "@ui/lib/utils";
@@ -45,8 +44,8 @@ const Page = async ({ params }: PageProps) => {
     <ContextMenuProvider>
       <div className="w-full h-full bg-white flex flex-col">
         <div className="w-[calc(100%-350px)] h-full mr-[350px] flex flex-col ">
-          <div className="w-full  h-[70px]  border-b">
-            <MaxWidthWrapper className="h-full flex items-center justify-between px-0">
+          <div className="w-full  h-[100px]  border-b">
+            <div className="h-full flex items-center justify-between px-4">
               <h1 className={"text-xl font-bold text-black"}>{course.title}</h1>
 
               <a href={"/"}>
@@ -60,23 +59,22 @@ const Page = async ({ params }: PageProps) => {
                   <LogOut className="w-4 h-4 text-black" />
                 </button>
               </a>
-            </MaxWidthWrapper>
+            </div>
           </div>
-          <MaxWidthWrapper className="px-0">
-            <div className="w-full  h-screen grid grid-cols-2 gap-x-4  ">
-              <div className="w-full h-full flex flex-col items-center col-span-2 py-8">
+          <div className="px-0 max-w-[2000px] w-full">
+            <div className="w-full  min-h-screen h-fit flex flex-col items-center gap-x-4 p-4   ">
+              <div className="w-full h-full max-h-[1000px] mx-w-[1400px] flex flex-col items-center  ">
                 <CourseVideoPlayer videoId={getFirstVideo(chapters[0])} />
-                <div className="w-full h-[70px] flex items-center justify-end">
-                  <button className="w-[100px] h-[50px] bg-primary p-2">
-                    mark this video as completed
-                  </button>
-                  <button className="w-[100px] h-[50px] bg-primary p-2">
-                    add comment
-                  </button>
-                </div>
+              </div>
+
+              <div className="w-full h-[100px] my-4 flex items-center justify-between px-4 border rounded-xl">
+                <span className="text-xl font-bold">current module</span>
+                <button className="bg-green-600  rounded-xl text-white py-2 px-4 ">
+                  Complete and continue
+                </button>
               </div>
             </div>
-          </MaxWidthWrapper>
+          </div>
         </div>
         <div className="fixed top-0 bottom-1 right-0 w-[350px] h-full border-l ">
           <StudentProgress />

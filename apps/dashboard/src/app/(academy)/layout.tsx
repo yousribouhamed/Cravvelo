@@ -60,7 +60,7 @@ export default async function RootLayout({
       <Providers>
         <body className={` antialiased bg-zinc-50 h-fit min-h-screen`}>
           {children}
-          <AcademiaFooter />
+          {/* <AcademiaFooter /> */}
         </body>
       </Providers>
 

@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import AddReview from "./add-review";
 
 const avrage = [5, 4, 3, 2, 1];
 
@@ -51,7 +52,7 @@ const Raitings: FC = ({}) => {
       </div>
       <div className="w-full h-2 border-b" />
       <div className="h-[70px] w-full flex justify-between items-center px-4 ">
-        <button className="text-blue-500 text-md ">+ Add Review</button>
+        <AddReview />
         <span className="font-bold text-2xl text-black">All Reviews (1)</span>
       </div>
       <div className="h-[70px] w-full  justify-between items-center ">
