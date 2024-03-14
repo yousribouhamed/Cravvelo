@@ -2,10 +2,10 @@ import { z } from "zod";
 import { privateProcedure } from "../trpc";
 import { Checkout, Price, Product } from "@/src/types";
 
-const CHARGILY_BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? ("https://pay.chargily.net/api/v2" as const)
-    : ("https://pay.chargily.net/test/api/v2" as const); // Defining the base URL for Chargily API
+const CHARGILY_BASE_URL = "https://pay.chargily.net/api/v2";
+// process.env.NODE_ENV === "production"
+//   ? ("https://pay.chargily.net/api/v2" as const)
+//   : ("https://pay.chargily.net/test/api/v2" as const); // Defining the base URL for Chargily API
 
 /**
  * Chargily service object containing payment-related procedures.

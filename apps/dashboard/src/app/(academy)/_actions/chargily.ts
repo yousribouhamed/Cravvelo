@@ -8,12 +8,11 @@
 
 import { Checkout, Price, Product } from "@/src/types";
 import { getChargilyKeys } from ".";
-import { redirect } from "next/navigation";
 
-const CHARGILY_BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? ("https://pay.chargily.net/api/v2" as const)
-    : ("https://pay.chargily.net/test/api/v2" as const); // Defining the base URL for Chargily API
+const CHARGILY_BASE_URL = "https://pay.chargily.net/api/v2";
+// process.env.NODE_ENV === "production"
+//   ? ( as const)
+//   : ("https://pay.chargily.net/test/api/v2" as const); // Defining the base URL for Chargily API
 /**
  * Function to create a product on the Chargily server.
  * @param product_name The name of the product to be created.
