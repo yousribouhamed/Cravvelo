@@ -38,10 +38,7 @@ export const chargily = {
         };
         const response = await fetch(`${CHARGILY_BASE_URL}/products`, options); // Sending a POST request to create a product
         const product = (await response.json()) as Product; // Parsing response JSON into Product type
-        console.log("here it is the product");
-        console.log(product);
-        console.log("and this is the secret key");
-        console.log(process.env.CHARGILY_SECRET_KEY);
+
         // Constructing request options for creating price
         const options2 = {
           method: "POST",
