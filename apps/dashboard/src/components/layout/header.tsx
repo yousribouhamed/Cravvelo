@@ -70,14 +70,21 @@ const Header: FC<Props> = ({ title, user, goBack }) => {
           </div>
         </div>
       </TooltipProvider>
-      {user?.isFreeTrial && !user?.isSubscribed && (
+
+      {user?.isFreeTrial ? (
         <div className="w-full h-[70px] flex items-center justify-center bg-gradient-to-r from-primary to-yellow-500">
           <h1 className="text-white font-bold text-md">
             لديك {daysLeftInTrial(user.createdAt)} يومًا متبقيًا في النسخة
             التجريبية المجانية
           </h1>
         </div>
-      )}
+      ) : !user?.isSubscribed ? (
+        <div className="w-full h-[70px] flex items-center justify-center bg-gradient-to-r from-primary to-yellow-500">
+          <h1 className="text-white font-bold text-md">
+            انتهت الفترة التجريبية، يجب عليك الاشتراك في أحد الباقات
+          </h1>
+        </div>
+      ) : null}
     </>
   );
 };

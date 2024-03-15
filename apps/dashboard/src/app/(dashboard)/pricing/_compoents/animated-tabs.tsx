@@ -16,12 +16,14 @@ export const Tabs = ({
   activeTabClassName,
   tabClassName,
   contentClassName,
+  setPaymentType,
 }: {
   tabs: Tab[];
   containerClassName?: string;
   activeTabClassName?: string;
   tabClassName?: string;
   contentClassName?: string;
+  setPaymentType: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [active, setActive] = useState<Tab>(propTabs[0]);
   const [tabs, setTabs] = useState<Tab[]>(propTabs);
@@ -49,6 +51,11 @@ export const Tabs = ({
             key={tab.title}
             onClick={() => {
               moveSelectedTabToTop(idx);
+              if (idx === 0) {
+                setPaymentType(false);
+              } else {
+                setPaymentType(true);
+              }
             }}
             onMouseEnter={() => setHovering(true)}
             onMouseLeave={() => setHovering(false)}

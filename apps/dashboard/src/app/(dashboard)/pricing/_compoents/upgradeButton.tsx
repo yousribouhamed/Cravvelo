@@ -9,8 +9,6 @@ import Image from "next/image";
 import { trpc } from "@/src/app/_trpc/client";
 import { useRouter } from "next/navigation";
 
-interface PricingAbdullahProps {}
-
 const DISPLAY_VALUES = {
   monthly: "MONTHLY",
   yearly: "YEARLY",
@@ -18,6 +16,9 @@ const DISPLAY_VALUES = {
 
 const UpgradeButton: FC = ({}) => {
   const router = useRouter();
+
+  const [isPaymentByMonth, setIsPaymentByMonth] =
+    React.useState<boolean>(false);
 
   const mutation = trpc.pay_with_chargily.useMutation({
     onError: (err) => {
@@ -30,13 +31,14 @@ const UpgradeButton: FC = ({}) => {
   });
 
   return (
-    <div className="w-full min-h-[1000px] h-fit my-12">
-      <div className="w-full min-h-[250px] h-fit  flex justify-center items-start pt-8 pl-48 ">
+    <div className="w-full min-h-[1000px] h-fit my-4">
+      <div className="w-full min-h-[150px] h-fit  flex justify-center items-start pt-8 pl-48 ">
         <div className="w-[200px] h-[50px]   flex items-center justify-start">
           <span className="text-[#FC6B00] text-2xl font-bold">وفر 20٪</span>
         </div>
         <div className="bg-white rounded-full transition-all duration-150 relative shadow-2xl w-fit h-[60px] flex items-center gap-x-4 justify-between p-4">
           <Tabs
+            setPaymentType={setIsPaymentByMonth}
             activeTabClassName={"bg-[#FC6B00] text-white"}
             // containerClassName={`w-full h-full`}
             tabs={[
@@ -50,28 +52,7 @@ const UpgradeButton: FC = ({}) => {
               },
             ]}
           />
-          {/* <button
-            onClick={() => setDisplay(DISPLAY_VALUES.yearly)}
-            className={`rounded-full h-[48px] w-[125px] font-bold text-lg  ${
-              display === DISPLAY_VALUES.yearly
-                ? "bg-[#FC6B00] text-white "
-                : "bg-white"
-            } `}
-          >
-            سنوي
-          </button>
-          <button
-            onClick={() => setDisplay(DISPLAY_VALUES.monthly)}
-            className={`h-[48px] w-[125px] rounded-full font-bold text-lg 
-          ${
-            display === DISPLAY_VALUES.monthly
-              ? "bg-[#FC6B00] text-white "
-              : "bg-white"
-          }
-          `}
-          >
-            شهري
-          </button> */}
+
           <div className="absolute right-[-118px] -bottom-5">
             <svg
               width="114"
@@ -89,7 +70,7 @@ const UpgradeButton: FC = ({}) => {
         </div>
       </div>
 
-      <div className="w-full   max-w-7xl mx-auto h-[800px] grid grid-cols-3 gap-10 ">
+      <div className="w-full h-fit   max-w-6xl mx-auto min-h-[800px] grid grid-cols-3 gap-10 ">
         {PLANS.map((item, index) => {
           return (
             <div
@@ -113,14 +94,15 @@ const UpgradeButton: FC = ({}) => {
                   />
                 </div>
 
-                <h2 className="font-bold text-3xl text-start text-black">
+                <h2 className="font-bold text-2xl text-start text-black">
                   {item.plan}
                 </h2>
               </div>
               <div className="w-full h-[100px] flex items-center justify-center">
-                <p className="text-gray-500 text-2xl">
+                <p className="text-gray-500 text-xl">
                   <span className="text-4xl font-bold mx-3 text-black">
-                    DZD {item.price}
+                    DZD{" "}
+                    {isPaymentByMonth ? item.price : Number(item.price) - 1000}
                   </span>
                   /شهرياً
                 </p>
@@ -142,9 +124,9 @@ const UpgradeButton: FC = ({}) => {
                   });
                 }}
                 size="lg"
-                className="rounded-full h-16 w-[90%] text-xl font-bold mx-auto  hover:scale-105 transition-all duration-150"
+                className="rounded-full h-14 w-[80%] text-lg font-bold mx-auto  hover:scale-105 transition-all duration-150"
               >
-                احصل عليها الآن{" "}
+                اشترك الان
               </Button>
               <span className="text-start my-6 text-[#FC6B00] text-xl  ">
                 {item.tagline}
@@ -212,7 +194,7 @@ const UpgradeButton: FC = ({}) => {
                     <span
                       className={` ${
                         subitem?.negative ? "text-[#A2A2A2]" : "text-black"
-                      } text-xl font-semibold `}
+                      } text-lg font-semibold `}
                     >
                       {subitem?.text}
                     </span>

@@ -537,14 +537,14 @@ importers:
   packages/db:
     dependencies:
       '@prisma/client':
-        specifier: ^5.7.1
+        specifier: 5.7.1
         version: 5.7.1(prisma@5.7.1)
     devDependencies:
       '@types/node':
         specifier: ^20.10.7
         version: 20.10.7
       prisma:
-        specifier: ^5.7.1
+        specifier: 5.7.1
         version: 5.7.1
 
   packages/eslint-config-custom:

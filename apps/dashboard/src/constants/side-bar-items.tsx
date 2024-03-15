@@ -8,27 +8,18 @@ export const SIDE_BAR_ITEMS = [
     subitems: [],
   },
   {
-    title: "ادارة محتوى",
+    title: "الدورات التدريبية",
     slug: "/courses",
-    icon: Icons.Academy,
-    subitems: [
-      {
-        title: "الدورات التدريبية",
-        icon: Icons.Home,
-        slug: "/courses",
-      },
-      {
-        title: "المنتجات الرقمية",
-        icon: Icons.Home,
-        slug: "/products",
-      },
-      // {
-      //   title: "مكتبة الفيديو",
-      //   icon: Icons.Home,
-      //   slug: "/video-library",
-      // },
-    ],
+    icon: Icons.Home,
+    subitems: [],
   },
+  {
+    title: "المنتجات الرقمية",
+    slug: "/products",
+    icon: Icons.Home,
+    subitems: [],
+  },
+
   {
     title: "المبيعات",
     slug: "/orders",
@@ -36,23 +27,23 @@ export const SIDE_BAR_ITEMS = [
     subitems: [],
   },
 
-  {
-    title: "تخصيص الأكاديمية",
-    slug: "/cutomize",
-    icon: Icons.customize,
-    subitems: [
-      {
-        title: "منشئ الموقع",
-        icon: Icons.Home,
-        slug: "/theme-editor",
-      },
-      {
-        title: "مصمم الشهادة",
-        icon: Icons.Home,
-        slug: "/products",
-      },
-    ],
-  },
+  // {
+  //   title: "تخصيص الأكاديمية",
+  //   slug: "/cutomize",
+  //   icon: Icons.customize,
+  //   subitems: [
+  //     {
+  //       title: "منشئ الموقع",
+  //       icon: Icons.Home,
+  //       slug: "/theme-editor",
+  //     },
+  //     {
+  //       title: "مصمم الشهادة",
+  //       icon: Icons.Home,
+  //       slug: "/products",
+  //     },
+  //   ],
+  // },
 
   {
     title: "التسويق",
@@ -181,7 +172,7 @@ export const SIDE_BAR_ITEMS = [
         slug: "/settings/website-settings",
       },
       {
-        title: "باقة الأكاديمية",
+        title: "باقة المنصة",
         icon: Icons.Home,
         slug: "/pricing",
       },

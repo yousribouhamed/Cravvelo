@@ -34,6 +34,7 @@ model Account {
   Notification    Notification[]
   Student         Student[]
   PaymentsConnect PaymentsConnect[]
+  Payments        Payments[]
 }
 
 model PaymentsConnect {
@@ -298,13 +299,17 @@ model Certificate {
   // Add more fields as needed
 }
 
-model webhooks {
-  id      Int  @id @default(autoincrement())
-  payload Json
-}
 
-model payments {
-  id Int @id @default(autoincrement())
 
-  payload Json
+model Payments {
+  id          Int @id @default(autoincrement())
+  accountId   String
+  Account     Account  @relation(fields: [accountId], references: [id])
+  plan        String 
+  end_of_subscription DateTime 
+  payload     Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  @@index([id])
+  @@index([accountId])
 }

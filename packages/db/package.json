@@ -11,10 +11,10 @@
     "db:studio": "dotenv -e ../../.env prisma studio"
   },
   "dependencies": {
-    "@prisma/client": "^5.7.1"
+    "@prisma/client": "5.7.1"
   },
   "devDependencies": {
     "@types/node": "^20.10.7",
-    "prisma": "^5.7.1"
+    "prisma": "5.7.1"
   }
 }
