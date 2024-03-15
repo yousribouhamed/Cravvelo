@@ -2,7 +2,7 @@ export const PLANS = [
   {
     plan: "الباقة الآساسية",
     plan_code: "BASIC",
-    price: "1999",
+    price: "1990",
     imageUrl: "/pricing-icons/beginner.png",
     tagline:
       "إنشاء منصتك التعليمية ومنتجاتك الرقمية وبيعها وتسويقها عبر الإنترنت.",

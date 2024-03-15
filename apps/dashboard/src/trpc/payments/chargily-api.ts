@@ -2,10 +2,10 @@ import { z } from "zod";
 import { privateProcedure } from "../trpc";
 import { Checkout, Price, Product } from "@/src/types";
 
-const CHARGILY_BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? ("https://pay.chargily.net/api/v2" as const)
-    : ("https://pay.chargily.net/test/api/v2" as const); // Defining the base URL for Chargily API
+const CHARGILY_BASE_URL = "https://pay.chargily.net/api/v2";
+// process.env.NODE_ENV === "production"
+//   ? ("https://pay.chargily.net/api/v2" as const)
+//   : ("https://pay.chargily.net/test/api/v2" as const); // Defining the base URL for Chargily API
 
 /**
  * Chargily service object containing payment-related procedures.
@@ -30,7 +30,8 @@ export const chargily = {
         const options = {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${process.env.CHARGILY_SECRET_KEY}`, // Adding authorization header with secret key
+            // Authorization: `Bearer ${process.env.CHARGILY_SECRET_KEY}`, // Adding authorization header with secret key
+            Authorization: `Bearer live_sk_xrOglvzVrEzabLzJkeptTSMqz0bwc2UFJliJROK2`, // Adding authorization header with secret key
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ name: input.product_name }), // Constructing the body with product_name
@@ -39,11 +40,13 @@ export const chargily = {
         const product = (await response.json()) as Product; // Parsing response JSON into Product type
         console.log("here it is the product");
         console.log(product);
+        console.log("and this is the secret key");
+        console.log(process.env.CHARGILY_SECRET_KEY);
         // Constructing request options for creating price
         const options2 = {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${process.env.CHARGILY_SECRET_KEY}`, // Adding authorization header with secret key
+            Authorization: `Bearer live_sk_xrOglvzVrEzabLzJkeptTSMqz0bwc2UFJliJROK2`, // Adding authorization header with secret key
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -71,7 +74,7 @@ export const chargily = {
         const options3 = {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${process.env.CHARGILY_SECRET_KEY}`, // Adding authorization header with secret key
+            Authorization: `Bearer live_sk_xrOglvzVrEzabLzJkeptTSMqz0bwc2UFJliJROK2`, // Adding authorization header with secret key
             "Content-Type": "application/json",
           },
           body: JSON.stringify(payload), // Constructing the body with payload
@@ -81,6 +84,8 @@ export const chargily = {
           options3
         ); // Sending a POST request to create a checkout
         const data = (await response3.json()) as Checkout; // Parsing response JSON into Checkout type
+        console.log("this is the chekout url");
+        console.log(data);
         return data; // Returning the checkout data
       } catch (err) {
         console.error(err); // Handling errors and logging them
