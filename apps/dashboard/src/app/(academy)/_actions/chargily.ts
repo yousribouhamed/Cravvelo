@@ -27,6 +27,8 @@ export const create_product = async ({
   subdomain: string;
 }): Promise<Product | undefined> => {
   const secret_key = await getChargilyKeys({ subdomain }); // Obtaining Chargily secret keys
+  console.log("this is the secret key");
+  console.log(secret_key);
   const options = {
     method: "POST",
     headers: {

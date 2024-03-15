@@ -30,8 +30,8 @@ export const chargily = {
         const options = {
           method: "POST",
           headers: {
-            // Authorization: `Bearer ${process.env.CHARGILY_SECRET_KEY}`, // Adding authorization header with secret key
-            Authorization: `Bearer live_sk_xrOglvzVrEzabLzJkeptTSMqz0bwc2UFJliJROK2`, // Adding authorization header with secret key
+            Authorization: `Bearer ${process.env.CHARGILY_SECRET_KEY}`, // Adding authorization header with secret key
+            // Authorization: `Bearer live_sk_xrOglvzVrEzabLzJkeptTSMqz0bwc2UFJliJROK2`, // Adding authorization header with secret key
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ name: input.product_name }), // Constructing the body with product_name
@@ -43,7 +43,8 @@ export const chargily = {
         const options2 = {
           method: "POST",
           headers: {
-            Authorization: `Bearer live_sk_xrOglvzVrEzabLzJkeptTSMqz0bwc2UFJliJROK2`, // Adding authorization header with secret key
+            Authorization: `Bearer ${process.env.CHARGILY_SECRET_KEY}`, // Adding authorization header with secret key
+            // Authorization: `Bearer live_sk_xrOglvzVrEzabLzJkeptTSMqz0bwc2UFJliJROK2`, // Adding authorization header with secret key
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -71,7 +72,8 @@ export const chargily = {
         const options3 = {
           method: "POST",
           headers: {
-            Authorization: `Bearer live_sk_xrOglvzVrEzabLzJkeptTSMqz0bwc2UFJliJROK2`, // Adding authorization header with secret key
+            Authorization: `Bearer ${process.env.CHARGILY_SECRET_KEY}`, // Adding authorization header with secret key
+            // Authorization: `Bearer live_sk_xrOglvzVrEzabLzJkeptTSMqz0bwc2UFJliJROK2`, // Adding authorization header with secret key
             "Content-Type": "application/json",
           },
           body: JSON.stringify(payload), // Constructing the body with payload
