@@ -10,6 +10,9 @@ export async function POST(request: NextRequest) {
       const accountId = payload.data.metadata[0]?.accountId;
 
       const plan_code = payload.data.metadata[0]?.plan;
+
+      const currentDate: Date = new Date();
+
       // update the account status
       await prisma.account.update({
         where: {
@@ -22,6 +25,22 @@ export async function POST(request: NextRequest) {
               : plan_code === "PRO"
               ? "PRO"
               : "BASIC",
+        },
+      });
+
+      await prisma.payments.create({
+        data: {
+          end_of_subscription: new Date(
+            currentDate.getTime() + 30 * 24 * 60 * 60 * 1000
+          ),
+          accountId: accountId,
+          plan:
+            plan_code === "ADVANCED"
+              ? "ADVANCED"
+              : plan_code === "PRO"
+              ? "PRO"
+              : "BASIC",
+          payload: JSON.stringify({ something: "true" }),
         },
       });
 
