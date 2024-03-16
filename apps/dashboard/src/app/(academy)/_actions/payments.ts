@@ -4,6 +4,7 @@ import { prisma } from "database/src";
 import { buyWithCoupon } from "./coupon";
 import { payWithChargily } from "./chargily";
 import { getStudent } from "./auth";
+import { create_course_sale } from "./sales";
 
 /**
  * Apply a coupon to the price based on its type and amount.
@@ -138,6 +139,12 @@ export const makePayment = async ({
       await buyWithCoupon({
         code: couponCode,
         courseId: courses[0].id,
+      });
+
+      await create_course_sale({
+        accountId: courses[0].accountId,
+        course: courses[0],
+        studentId: student.id,
       });
       return "/student-library";
     }

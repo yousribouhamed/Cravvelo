@@ -143,7 +143,9 @@ export const addCourseToStudentBag = ({
   course: Course;
 }): StudentBag => {
   // Check if the course already exists in the student's bag.
-  const theCourseExists = bag.courses.find((item) => item.id === course.id);
+  const theCourseExists = bag.courses.find(
+    (item) => item.course.id === course.id
+  );
 
   // If the course already exists, return the current bag without modification.
   if (theCourseExists) {
@@ -152,7 +154,13 @@ export const addCourseToStudentBag = ({
 
   // If the course doesn't exist, create a new student bag with the added course.
   const newStudentBag = {
-    courses: [...bag.courses, course],
+    courses: [
+      ...bag.courses,
+      {
+        course,
+        currentEpisode: 0,
+      },
+    ],
   } as StudentBag;
 
   // Return the updated student bag with the new course added.

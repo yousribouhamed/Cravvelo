@@ -3,6 +3,8 @@ import { getAllCourses, getSiteData } from "../../../_actions";
 import { notFound, redirect } from "next/navigation";
 import { getStudent } from "../../../_actions/auth";
 import { getSubDomainValue } from "../../../lib";
+import AcademiaFooter from "../../../_components/layout/academy-footer";
+import AcademyHeader from "../../../_components/layout/academy-header";
 
 export const fetchCache = "force-no-store";
 
@@ -29,9 +31,22 @@ const Page = async ({ params }: PageProps) => {
   }
 
   return (
-    <div className="w-full min-h-[500px] h-fit flex items-center justify-center mt-[70px]">
-      <AcademySignInForm color={website?.color} accountId={website.accountId} />
-    </div>
+    <>
+      <AcademyHeader
+        color={website?.color}
+        student={student}
+        isAuthanticated={student ? true : false}
+        subdomain={website?.subdomain ?? null}
+        logo={website?.logo}
+      />
+      <div className="w-full min-h-[500px] h-fit flex items-center justify-center mt-[70px]">
+        <AcademySignInForm
+          color={website?.color}
+          accountId={website.accountId}
+        />
+      </div>
+      <AcademiaFooter />
+    </>
   );
 };
 

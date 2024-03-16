@@ -20,6 +20,7 @@ import { Globe } from "lucide-react";
 import { GraduationCap } from "lucide-react";
 import { Infinity } from "lucide-react";
 import { get_course_rating } from "../../../_actions/rating";
+import AcademiaFooter from "../../../_components/layout/academy-footer";
 
 interface PageProps {
   params: { site: string; url: string };
@@ -119,6 +120,7 @@ const Page = async ({ params }: PageProps) => {
           />
         </div>
       </MaxWidthWrapper>
+      <AcademiaFooter />
     </>
   );
 };

@@ -5,6 +5,7 @@ import { getSubDomainValue } from "../lib";
 import AcademyHeader from "../_components/layout/academy-header";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import { getStudent } from "../_actions/auth";
+import AcademiaFooter from "../_components/layout/academy-footer";
 
 interface PageProps {
   params: { site: string };
@@ -49,6 +50,8 @@ const Page = async ({ params }: PageProps) => {
           <CoursesReel color={website?.color} courses={courses} />
         </main>
       </MaxWidthWrapper>
+
+      <AcademiaFooter />
     </>
   );
 };

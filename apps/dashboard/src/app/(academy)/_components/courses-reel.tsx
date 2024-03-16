@@ -21,7 +21,6 @@ import { ShoppingCart } from "lucide-react";
 
 interface CoursesReelProps {
   courses: Course[];
-  // blurData: String[];
   color: string;
 }
 

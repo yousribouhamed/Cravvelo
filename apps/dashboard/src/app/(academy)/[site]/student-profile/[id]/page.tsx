@@ -6,6 +6,7 @@ import { getSiteData } from "../../../_actions";
 import { notFound, redirect } from "next/navigation";
 import MaxWidthWrapper from "../../../_components/max-width-wrapper";
 import AcademyHeader from "../../../_components/layout/academy-header";
+import AcademiaFooter from "../../../_components/layout/academy-footer";
 
 interface PageProps {
   params: { site: string };
@@ -46,6 +47,7 @@ const Page = async ({ params }: PageProps) => {
           <ProfileForm color={website?.color} studnet={student} />
         </div>
       </MaxWidthWrapper>
+      <AcademiaFooter />
     </>
   );
 };
