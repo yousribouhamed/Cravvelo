@@ -27,10 +27,6 @@ const Page = async ({ params }: PageProps) => {
     notFound();
   }
 
-  const blurData = await Promise.all(
-    courses.map(async (item) => await getBase64(item.thumnailUrl))
-  );
-
   return (
     <>
       <AcademyHeader
@@ -45,7 +41,7 @@ const Page = async ({ params }: PageProps) => {
           <div className="w-full h-[100px] flex items-center justify-start">
             <h1 className="text-3xl font-bold">الدورات التدربية</h1>
           </div>
-          <CoursesGrid courses={courses} blurData={blurData} />
+          <CoursesGrid courses={courses} />
         </div>
       </MaxWidthWrapper>
     </>

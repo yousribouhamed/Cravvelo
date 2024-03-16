@@ -2,7 +2,11 @@ import { getCourseByUrlPath } from "../../../_actions/course";
 import { get_course_chapters } from "../../../_actions/chapter";
 import CourseDisplayContent from "./course-content";
 import { Product_card } from "./product-card";
-import { getSubDomainValue } from "../../../lib";
+import {
+  calculatePositiveReviewPercentage,
+  formatVideoDuration,
+  getSubDomainValue,
+} from "../../../lib";
 import { getSiteData } from "../../../_actions";
 import { notFound } from "next/navigation";
 import AcademyHeader from "../../../_components/layout/academy-header";
@@ -58,17 +62,25 @@ const Page = async ({ params }: PageProps) => {
             <div className="w-full h-[150px] bg-gray-100 rounded-xl flex flex-wrap gap-4 my-8 p-4">
               <div className="w-fit flex items-center justify-start gap-x-4">
                 <Star className="w-5 h-5 " />
-                <span>95% تقييمات إيجابية (80)</span>
+                <span>
+                  {calculatePositiveReviewPercentage(
+                    comments.map((item) => item.rating)
+                  )}
+                  % تقييمات إيجابية ({comments.length})
+                </span>
               </div>
 
               <div className="w-fit flex items-center justify-start gap-x-4">
                 <User className="w-5 h-5 " />
-                <span>{course.studenstNbr} طالبا</span>
+                <span>{course.studenstNbr ? course.studenstNbr : 0} طالبا</span>
               </div>
 
               <div className="w-fit flex items-center justify-start gap-x-4">
                 <Clock className="w-5 h-5 " />
-                <span>{course.nbrChapters} درسًا (ساعة و56 دقيقة)</span>
+                <span>
+                  {course.nbrChapters} درسًا (
+                  {formatVideoDuration(course.length)})
+                </span>
               </div>
 
               <div className="w-fit flex items-center justify-start gap-x-4">
@@ -90,10 +102,12 @@ const Page = async ({ params }: PageProps) => {
                 <span>وصول غير محدود إلى الأبد</span>
               </div>
 
-              <div className="w-fit flex items-center justify-start gap-x-4">
-                <GraduationCap className="w-5 h-5 " />
-                <span>ستحصل على شهادة بعد اتمام الدورة</span>
-              </div>
+              {course.certificate && (
+                <div className="w-fit flex items-center justify-start gap-x-4">
+                  <GraduationCap className="w-5 h-5 " />
+                  <span>ستحصل على شهادة بعد اتمام الدورة</span>
+                </div>
+              )}
             </div>
             <CourseDisplayContent course={course} chapters={chapters} />
             <Raitings course={course} comments={comments} />

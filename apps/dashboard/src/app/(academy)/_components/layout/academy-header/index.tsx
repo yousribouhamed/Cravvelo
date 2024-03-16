@@ -29,7 +29,7 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
           <MobilNavgiationProduction />
         </div>
         <div className="min-w-[200px] w-fit  items-center justify-start gap-x-4 hidden md:flex h-full">
-          {logo && <img src={logo} className="object-cover w-16 h-16" />}
+          {logo && <img src={logo} className="object-cover w-12 h-12" />}
           <LinksNavbar />
         </div>
         <div className="flex w-fir min-w-[100px] justify-end items-center">

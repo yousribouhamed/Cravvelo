@@ -9,14 +9,11 @@ import { Switch } from "@ui/components/ui/switch";
 import Image from "next/image";
 import Link from "next/link";
 
-//https://i.ytimg.com/vi/NqzdVN2tyvQ/maxresdefault.jpg
-
 interface Props {
   courses: Course[];
-  blurData: String[];
 }
 
-const CoursesGrid: FC<Props> = ({ courses, blurData }) => {
+const CoursesGrid: FC<Props> = ({ courses }) => {
   const router = useRouter();
 
   const handleNavigate = ({ id }: { id: string }) => {
@@ -80,9 +77,6 @@ const CoursesGrid: FC<Props> = ({ courses, blurData }) => {
                     src={item.thumnailUrl}
                     className="  object-cover rounded-t-xl"
                     fill
-                    placeholder="blur"
-                    //@ts-ignore
-                    blurDataURL={blurData[index]}
                   />
                 </div>
                 <div className="w-full h-[50px] flex items-center justify-between my-4 px-4">
