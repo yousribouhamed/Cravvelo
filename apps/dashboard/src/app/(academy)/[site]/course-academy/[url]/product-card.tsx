@@ -1,15 +1,23 @@
 "use client";
 
-import { Course } from "database";
+import { Course, Comment } from "database";
 import { useAcademiaStore } from "../../../global-state/academia-store";
 import { ArrowBigUp, Headphones, Clock, User, Star, Globe } from "lucide-react";
 import { Infinity } from "lucide-react";
+import { GraduationCap } from "lucide-react";
+import {
+  calculateDiscountPercentage,
+  calculatePositiveReviewPercentage,
+  formatVideoDuration,
+} from "../../../lib";
 
 export const Product_card = ({
   course,
+  comments,
   color,
 }: {
   course: Course;
+  comments: Comment[];
   color: string;
 }) => {
   const { actions, state } = useAcademiaStore();
@@ -22,7 +30,11 @@ export const Product_card = ({
         <span className="line-through text-red-500 text-lg">
           DZD {course.compareAtPrice}.00
         </span>{" "}
-        80% dis
+        {calculateDiscountPercentage(
+          Number(course.price),
+          Number(course.compareAtPrice)
+        )}
+        % dis
       </p>
 
       <button
@@ -40,45 +52,99 @@ export const Product_card = ({
           background: color ?? "#FC6B00",
         }}
       >
-        ادفع DZD {course.price}.00
+        اضف الى السلة
       </button>
 
       <div className="border-b w-full h-1 my-4" />
 
       <div className="flex flex-col gap-y-4">
         <div className="w-full flex items-center justify-start gap-x-4">
-          <Star className="w-5 h-5 " />
-          <span>95% تقييمات إيجابية (80)</span>
+          <Star
+            className="w-5 h-5 "
+            style={{
+              color: color ?? "#FC6B00",
+            }}
+          />
+          <span>
+            {calculatePositiveReviewPercentage(
+              comments.map((item) => item.rating)
+            )}
+            % تقييمات إيجابية ({comments.length})
+          </span>
         </div>
 
         <div className="w-full flex items-center justify-start gap-x-4">
-          <User className="w-5 h-5 " />
-          <span>{course.studenstNbr} طالبا</span>
+          <User
+            className="w-5 h-5 "
+            style={{
+              color: color ?? "#FC6B00",
+            }}
+          />
+          <span>{course.studenstNbr ? course.studenstNbr : 0} طالبا</span>
         </div>
 
         <div className="w-full flex items-center justify-start gap-x-4">
-          <Clock className="w-5 h-5 " />
-          <span>{course.nbrChapters} درسًا (ساعة و56 دقيقة)</span>
+          <Clock
+            className="w-5 h-5 "
+            style={{
+              color: color ?? "#FC6B00",
+            }}
+          />
+          <span>
+            {course.nbrChapters} درسًا ({formatVideoDuration(course.length)})
+          </span>
         </div>
 
         <div className="w-full flex items-center justify-start gap-x-4">
-          <Globe className="w-5 h-5 " />
+          <Globe
+            className="w-5 h-5 "
+            style={{
+              color: color ?? "#FC6B00",
+            }}
+          />
           <span>عبر الإنترنت وبالسرعة التي تناسبك</span>
         </div>
         <div className="w-full flex items-center justify-start gap-x-4">
-          <Headphones className="w-5 h-5 " />
+          <Headphones
+            className="w-5 h-5 "
+            style={{
+              color: color ?? "#FC6B00",
+            }}
+          />
           <span>الصوت: عربي</span>
         </div>
 
         <div className="w-full flex items-center justify-start gap-x-4">
-          <ArrowBigUp className="w-5 h-5 " />
+          <ArrowBigUp
+            className="w-5 h-5 "
+            style={{
+              color: color ?? "#FC6B00",
+            }}
+          />
           <span>المستوى: مبتدئ</span>
         </div>
 
         <div className="w-full flex items-center justify-start gap-x-4">
-          <Infinity className="w-5 h-5 " />
+          <Infinity
+            className="w-5 h-5 "
+            style={{
+              color: color ?? "#FC6B00",
+            }}
+          />
           <span>وصول غير محدود إلى الأبد</span>
         </div>
+
+        {course.certificate && (
+          <div className="w-full flex items-center justify-start gap-x-4">
+            <GraduationCap
+              className="w-5 h-5 "
+              style={{
+                color: color ?? "#FC6B00",
+              }}
+            />
+            <span>ستحصل على شهادة بعد اتمام الدورة</span>
+          </div>
+        )}
       </div>
     </div>
   );

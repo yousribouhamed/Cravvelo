@@ -25,13 +25,6 @@ const Page = async ({ params }: PageProps) => {
     notFound();
   }
 
-  console.log("this is the student");
-  console.log(student);
-
-  // const blurData = await Promise.all(
-  //   courses.map(async (item) => await getBase64(item?.thumnailUrl))
-  // );
-
   return (
     <>
       <AcademyHeader

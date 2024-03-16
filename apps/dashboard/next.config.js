@@ -8,6 +8,7 @@ module.exports = {
       "vod.api.video",
       "utfs.io",
       "cravvel-bucket.s3.eu-west-1.amazonaws.com",
+      "images.unsplash.com",
     ],
   },
 

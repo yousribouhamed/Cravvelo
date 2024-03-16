@@ -1,16 +1,38 @@
+"use client";
+
 import type { FC } from "react";
 import AddReview from "./add-review";
+import { Comment, Course } from "database";
+import StarRatings from "react-star-ratings";
+import { Avatar, AvatarFallback, AvatarImage } from "@ui/components/ui/avatar";
+import {
+  calculateAverageRating,
+  calculateRatingPercentage,
+  formatDateTime,
+} from "../lib";
+import { Progress } from "@ui/components/ui/progress";
+import Image from "next/image";
 
 const avrage = [5, 4, 3, 2, 1];
 
-const Raitings: FC = ({}) => {
+const Raitings: FC<{ course: Course; comments: Comment[] }> = ({
+  course,
+  comments,
+}) => {
   return (
-    <div className="w-full flex flex-col bg-white min-h-[400px] border rounded-xl ">
+    <div className="w-full flex flex-col bg-white min-h-[400px] h-fit border rounded-xl ">
       <div className="w-full h-[250px]  grid grid-cols-2 ">
         <div className="w-full h-full  flex flex-col p-4 ">
           {avrage.map((item) => (
-            <div className="w-full h-[40px] flex justify-start items-center gap-x-4">
-              <div className="w-[300px] h-[9px] rounded-xl bg-primary" />
+            <div className="w-full h-[40px] flex justify-start items-center gap-x-2">
+              {/* <div className=" h-[9px] rounded-xl bg-primary" /> */}
+              <Progress
+                value={calculateRatingPercentage(
+                  comments.map((item) => item.rating),
+                  item
+                )}
+                className="w-[300px] h-2"
+              />
               <svg
                 width="24"
                 height="23"
@@ -19,7 +41,7 @@ const Raitings: FC = ({}) => {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M6.59003 0.646465C6.75842 0.128228 7.49158 0.128229 7.65997 0.646466L8.76676 4.05281C8.84206 4.28458 9.05804 4.44149 9.30173 4.44149H12.8834C13.4283 4.44149 13.6548 5.13877 13.214 5.45906L10.3164 7.5643C10.1192 7.70754 10.0367 7.96143 10.1121 8.1932L11.2188 11.5995C11.3872 12.1178 10.7941 12.5487 10.3532 12.2284L7.45563 10.1232C7.25848 9.97996 6.99152 9.97996 6.79437 10.1232L3.89676 12.2284C3.45592 12.5487 2.86277 12.1178 3.03116 11.5995L4.13795 8.1932C4.21325 7.96143 4.13076 7.70754 3.93361 7.5643L1.036 5.45906C0.595158 5.13877 0.82172 4.44149 1.36663 4.44149H4.94827C5.19196 4.44149 5.40794 4.28458 5.48324 4.05281L6.59003 0.646465Z"
+                  d="M6.59003 0.646465C6.75842 0.110210 7.49158 0.110229 7.65997 0.646466L8.76676 4.05101C8.84206 4.10458 9.05804 4.44149 9.30173 4.44149H12.8834C13.4103 4.44149 13.6510 5.13877 13.214 5.45906L10.3164 7.5643C10.1192 7.70754 10.0367 7.96143 10.1121 8.1932L11.2188 11.5995C11.3872 12.1178 10.7941 12.5107 10.3532 12.2104L7.45563 10.1232C7.25810 9.97996 6.99152 9.97996 6.79437 10.1232L3.89676 12.2104C3.45592 12.5107 2.86277 12.1178 3.03116 11.5995L4.13795 8.1932C4.21325 7.96143 4.13076 7.70754 3.93361 7.5643L1.036 5.45906C0.595158 5.13877 0.82172 4.44149 1.36663 4.44149H4.91027C5.19196 4.44149 5.40794 4.10458 5.10324 4.05101L6.59003 0.646465Z"
                   fill="#FC6B00"
                 />
               </svg>
@@ -42,23 +64,99 @@ const Raitings: FC = ({}) => {
                 fill="#FC6B00"
               />
             </svg>
-            <span className="font-bold text-8xl text-black">4.5 </span>
+
+            <span className="font-bold text-8xl text-black">
+              {" "}
+              {calculateAverageRating(comments.map((item) => item.rating))}{" "}
+            </span>
           </div>
 
-          <div className="w-[300px] h-[50px] bg-black rounded-full flex items-center justify-center">
-            <span className="text-white text-lg">653 reviews</span>
+          <div className="w-[300px] h-[50px] bg-black rounded-full flex items-center justify-center gap-x-2">
+            <span className="text-white text-lg">reviews</span>
+            <span className="text-white text-lg">{comments.length}</span>
+            <div className="flex w-[100px]  justify-end items-center  -space-x-2 ">
+              {comments.length > 3 && (
+                <div className=" h-8 w-8 rounded-full ring-2 flex items-center justify-center bg-white ring-white">
+                  {" "}
+                  <span className="text-black text-xl font-bold">
+                    +{comments.length - 3}
+                  </span>{" "}
+                </div>
+              )}
+              {comments[0] && (
+                <Image
+                  width={10}
+                  height={10}
+                  className="inline-block h-8 w-8 rounded-full ring-2 ring-white"
+                  src={comments[0].studentImage}
+                  alt=""
+                />
+              )}
+
+              {comments[1] && (
+                <Image
+                  width={10}
+                  height={10}
+                  className="inline-block h-8 w-8 rounded-full ring-2 ring-white"
+                  src={comments[1].studentImage}
+                  alt=""
+                />
+              )}
+              {comments[2] && (
+                <Image
+                  width={10}
+                  height={10}
+                  className="inline-block h-8 w-8 rounded-full ring-2 ring-white"
+                  src={comments[2].studentImage}
+                  alt=""
+                />
+              )}
+            </div>{" "}
           </div>
         </div>
       </div>
-      <div className="w-full h-2 border-b" />
-      <div className="h-[70px] w-full flex justify-between items-center px-4 ">
-        <AddReview />
-        <span className="font-bold text-2xl text-black">All Reviews (1)</span>
+
+      <div className=" h-[70px] w-full flex justify-between items-center px-4  ">
+        <AddReview course={course} />
+        <span className="font-bold text-2xl text-black">
+          All Reviews ({comments.length})
+        </span>
       </div>
-      <div className="h-[70px] w-full  justify-between items-center ">
-        <div className="">
-          <span>this is a raiting</span>
-        </div>
+      <div
+        dir="ltr"
+        className={` min-h-[${
+          comments.length * 50
+        }px] h-fit flex flex-col justify-start items-star gap-y-4 w-full `}
+      >
+        {comments.map((item) => {
+          return (
+            <div className="flex items-start h-fit min-h-[50px] justify-start gap-x-2 px-6">
+              <Avatar className="w-10 h-10">
+                <AvatarImage src={item.studentImage} />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <div className="w-full h-[40px] flex flex-col  justify-start items-start p-4">
+                <p className="font-bold text-md">{item.studentName}</p>
+                <div className="w-full h-[20px] flex items-center justify-start gap-x-4">
+                  <StarRatings
+                    starRatedColor="#FFB800"
+                    rating={item.rating}
+                    starDimension="20px"
+                    starSpacing="1px"
+                  />
+                  <span className="text-gray-500 text-sm">
+                    {formatDateTime(item.createdAt)}
+                  </span>
+                </div>
+                <div className="w-full h-fit p-2">
+                  <p className="text-black text-start text-xl">
+                    {item.content}
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

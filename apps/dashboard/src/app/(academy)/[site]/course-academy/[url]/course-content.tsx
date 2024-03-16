@@ -105,8 +105,6 @@ const CourseDisplayContent: FC<CourseContentProps> = ({ course, chapters }) => {
                       </div>
                     </div>
                   )}
-
-                  {/* <Feedbacks /> */}
                 </>
               );
             case "content":
