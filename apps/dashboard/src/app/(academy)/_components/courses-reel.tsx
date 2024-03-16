@@ -7,6 +7,17 @@ import type { FC } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@ui/components/ui/pagination";
+import React from "react";
+import { ShoppingCart } from "lucide-react";
 
 interface CoursesReelProps {
   courses: Course[];
@@ -21,6 +32,22 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
     router.push(`/course-academy/${id}`);
   };
 
+  // State to keep track of current page
+  const [currentPage, setCurrentPage] = React.useState(1);
+  // Number of items per page
+  const itemsPerPage = 3; // Change this to your desired number
+
+  // Calculate index of the first and last item on the current page
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  // Slice the data array to get items for the current page
+  const currentItems = courses.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Function to handle page change
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div className="w-full min-h-[400px] h-fit flex flex-col items-center p-4 gap-y-4">
       <div className="w-full h-[50px] flex items-center justify-between">
@@ -28,14 +55,14 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
           الدورات البارزة
         </h2>
       </div>
-      <div className="w-full min-h-[200px] h-fit flex items-start justify-start gap-8 flex-wrap">
-        {Array.isArray(courses) &&
-          courses?.map((item, index) => {
+      <div className="w-full min-h-[200px] h-fit flex items-start justify-center gap-8 flex-wrap">
+        {Array.isArray(currentItems) &&
+          currentItems?.map((item, index) => {
             return (
               <div
                 onClick={() => handleRouting({ id: item.id })}
                 key={item.title + index}
-                className="w-[320px] h-[450px] bg-white   flex flex-col border rounded-xl  transition-all shadow  duration-700 cursor-pointer "
+                className="w-[320px] h-[450px] bg-white   flex flex-col border rounded-xl  transition-all shadow  duration-700 cursor-pointer hover:-translate-y-2  "
               >
                 <div className="h-[200px] w-full rounded-t-xl relative">
                   <Image
@@ -100,10 +127,46 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
                   >
                     اشتري الآن
                   </button>
+                  <button className="w-[60px]  h-[45px]  rounded-lg bg-secondary flex items-center justify-center cursor-pointer ">
+                    <ShoppingCart className="w-4 h-4 text-black" />
+                  </button>
                 </div>
               </div>
             );
           })}
+      </div>
+      <div
+        dir="ltr"
+        className="w-full h-fit min-h-[100px] flex items-center justify-center "
+      >
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={() => handlePageChange(currentPage - 1)}
+              />
+            </PaginationItem>
+            {courses.map((item, index) => (
+              <PaginationItem>
+                <PaginationLink
+                  key={item.accountId}
+                  onClick={() => handlePageChange(index + 1)}
+                >
+                  {index + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext
+                onClick={() => handlePageChange(currentPage + 1)}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
     </div>
   );

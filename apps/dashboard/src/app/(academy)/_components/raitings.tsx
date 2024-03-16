@@ -130,7 +130,10 @@ const Raitings: FC<{ course: Course; comments: Comment[] }> = ({
       >
         {comments.map((item) => {
           return (
-            <div className="flex items-start h-fit min-h-[50px] justify-start gap-x-2 px-6">
+            <div
+              key={item.id}
+              className="flex items-start h-fit min-h-[50px] justify-start gap-x-2 px-6"
+            >
               <Avatar className="w-10 h-10">
                 <AvatarImage src={item.studentImage} />
                 <AvatarFallback>CN</AvatarFallback>
