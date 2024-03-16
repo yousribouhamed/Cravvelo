@@ -5,14 +5,22 @@ import { prisma } from "database/src";
 import CommentsTableShell from "./CommentsTableShell";
 import useHaveAccess from "@/src/hooks/use-have-access";
 
-async function getData(): Promise<Comment[]> {
-  const data = await prisma.comment.findMany();
+async function getData({
+  accountId,
+}: {
+  accountId: string;
+}): Promise<Comment[]> {
+  const data = await prisma.comment.findMany({
+    where: {
+      accountId,
+    },
+  });
   return data;
 }
 
 const Page = async ({}) => {
   const user = await useHaveAccess();
-  const data = await getData();
+  const data = await getData({ accountId: user.accountId });
 
   return (
     <MaxWidthWrapper>

@@ -247,6 +247,7 @@ model Comment {
   updatedAt     DateTime @updatedAt
   courseId      String 
   accountId     String
+  status        String   @default("verification_pending")
   Course        Course?  @relation(fields: [courseId], references: [id])
   Account       Account  @relation(fields: [accountId], references: [id])
   @@index([id])

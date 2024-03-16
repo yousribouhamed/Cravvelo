@@ -1,4 +1,6 @@
+import { Box } from "lucide-react";
 import { Icons } from "../components/my-icons";
+import { BookMarked } from "lucide-react";
 
 export const SIDE_BAR_ITEMS = [
   {
@@ -10,13 +12,13 @@ export const SIDE_BAR_ITEMS = [
   {
     title: "الدورات التدريبية",
     slug: "/courses",
-    icon: Icons.Home,
+    icon: BookMarked,
     subitems: [],
   },
   {
     title: "المنتجات الرقمية",
     slug: "/products",
-    icon: Icons.Home,
+    icon: Box,
     subitems: [],
   },
 
@@ -106,11 +108,11 @@ export const SIDE_BAR_ITEMS = [
         slug: "/students/certificates",
       },
 
-      // {
-      //   title: "التعليقات ",
-      //   icon: Icons.Home,
-      //   slug: "/students/comments",
-      // },
+      {
+        title: "التعليقات ",
+        icon: Icons.Home,
+        slug: "/students/comments",
+      },
       // {
       //   title: "الواجبات",
       //   icon: Icons.Home,
