@@ -22,3 +22,15 @@ export const getCourseByUrlPath = async ({ url }: { url: string }) => {
 
   return course; // Returning the retrieved course or null if not found
 };
+
+export const completeCourse = async ({
+  courseId,
+  currentEpisode,
+}: {
+  courseId: string;
+  currentEpisode: number;
+}) => {
+  // get the student & old student bug
+  // update the student bug currentEpisode index
+  // save the update to the database
+};

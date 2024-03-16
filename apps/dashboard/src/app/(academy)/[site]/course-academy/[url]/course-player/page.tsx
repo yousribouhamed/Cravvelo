@@ -10,6 +10,7 @@ import { LogOut } from "lucide-react";
 import { cn } from "@ui/lib/utils";
 import { ContextMenuProvider } from "./context-menu";
 import StudentProgress from "./student-progress";
+import MaxWidthWrapper from "@/src/app/(academy)/_components/max-width-wrapper";
 
 interface PageProps {
   params: { site: string; url: string };
@@ -61,9 +62,9 @@ const Page = async ({ params }: PageProps) => {
               </a>
             </div>
           </div>
-          <div className="px-0 max-w-[2000px] w-full">
+          <MaxWidthWrapper className="px-0 w-full">
             <div className="w-full  min-h-screen h-fit flex flex-col items-center gap-x-4 p-4   ">
-              <div className="w-full h-full max-h-[1000px] mx-w-[1400px] flex flex-col items-center  ">
+              <div className="w-full h-full max-h-[800px] mx-w-[1400px] flex flex-col items-center  ">
                 <CourseVideoPlayer videoId={getFirstVideo(chapters[0])} />
               </div>
 
@@ -74,7 +75,7 @@ const Page = async ({ params }: PageProps) => {
                 </button>
               </div>
             </div>
-          </div>
+          </MaxWidthWrapper>
         </div>
         <div className="fixed top-0 bottom-1 right-0 w-[350px] h-full border-l ">
           <StudentProgress />
