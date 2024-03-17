@@ -6,6 +6,17 @@ import {
   removeDomainFromVercelProject,
   validDomainRegex,
 } from "@/src/lib/domains";
+import axios from "axios";
+
+import {
+  DomainResponse,
+  DomainVerificationStatusProps,
+} from "@/src/types/domain-types";
+
+type Response = {
+  status: DomainVerificationStatusProps;
+  domainJson: DomainResponse & { error: { code: string; message: string } };
+};
 
 export const domain = {
   // this if the user wants to chnage it's subdomain
@@ -62,7 +73,7 @@ export const domain = {
         where: { accountId: account.id },
       });
 
-      if (input.customdomain.includes("jadir.vercel.app/")) {
+      if (input.customdomain.includes("jadir.vercel.app")) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Cannot use vercel.pub subdomain as your custom domain",
@@ -83,6 +94,8 @@ export const domain = {
           // Optional: add www subdomain as well and redirect to apex domain
           addDomainToVercel(`www.${input.customdomain}`),
         ]);
+
+        console.log("this is the domains are added to vercel");
 
         // empty value means the user wants to remove the custom domain
       } else if (input.customdomain === "") {
@@ -134,6 +147,24 @@ export const domain = {
         */
 
         return site;
+      }
+    }),
+
+  getDomainStatus: privateProcedure
+    .input(z.object({ domain: z.string() }))
+    .query(async ({ input }) => {
+      try {
+        const data: Response = (await axios.get(
+          `http://localhost:3001/api/domain/${input.domain}/verify`
+        )) as Response;
+
+        console.log(data);
+        return data;
+      } catch (err) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "something went wrong",
+        });
       }
     }),
 };

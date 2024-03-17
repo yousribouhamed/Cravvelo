@@ -26,6 +26,13 @@ import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 import { useDomainStatus } from "@/src/hooks/use-domain-status";
+import {
+  addDomainToVercel,
+  getConfigResponse,
+  getDomainResponse,
+} from "@/src/lib/domains";
+import DomainStatus from "@/src/components/domain-status";
+import DomainConfiguration from "@/src/components/domain-configuration";
 
 interface AddCustomDomain {
   customDomain: string | null;
@@ -59,8 +66,18 @@ const AddCusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
     await mutation.mutateAsync({
       customdomain: data?.cutomedomain,
     });
-
     // await useDomainStatus({ domain: data.cutomedomain });
+    // const response = await getDomainResponse("abdullah.com");
+    // console.log(response);
+    // const response = await getConfigResponse("abdullah.com");
+    // console.log(response);
+    // const response = await fetch(`/api/domain/${data.cutomedomain}/verify`);
+    // const values = await response.json();
+    // console.log(values);
+
+    // const ah = await addDomainToVercel(data.cutomedomain);
+
+    // console.log(ah);
   }
   return (
     <Form {...form}>
@@ -76,14 +93,30 @@ const AddCusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>النطاق المخصص لموقعك.</FormLabel>
-                  <FormControl>
-                    <Input placeholder="yourdomain.com" {...field} />
-                  </FormControl>
-                  <FormDescription>يرجى إدخال نطاق صالح.</FormDescription>
+                  <div className="relative flex w-full ">
+                    <FormControl>
+                      <Input
+                        placeholder="yourdomain.com"
+                        {...field}
+                        className="z-10 flex-1 rounded-md border border-stone-300 text-sm text-stone-900 placeholder-stone-300 focus:border-stone-500 focus:outline-none focus:ring-stone-500 dark:border-stone-600 dark:bg-black dark:text-white dark:placeholder-stone-700"
+                      />
+                    </FormControl>
+                    <div className="absolute left-3 z-10 flex h-full items-center">
+                      {form.watch("cutomedomain") && (
+                        <DomainStatus domain={form.watch("cutomedomain")} />
+                      )}
+                    </div>
+                  </div>
+
                   <FormMessage />
                 </FormItem>
               )}
             />
+            {form.watch("cutomedomain") && (
+              <div dir="ltr" className="w-full  min-h-[300px] h-fit ">
+                <DomainConfiguration domain={form.watch("cutomedomain")} />
+              </div>
+            )}
           </CardContent>
           <CardFooter>
             <Button
