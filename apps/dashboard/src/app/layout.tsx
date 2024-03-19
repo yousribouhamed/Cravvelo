@@ -24,7 +24,7 @@ export default function RootLayout({
         toastOptions={{
           unstyled: true,
           classNames: {
-            toast: "bg-white rounded-2xl",
+            toast: " rounded-2xl",
           },
         }}
       />

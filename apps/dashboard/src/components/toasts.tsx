@@ -44,17 +44,18 @@ export const maketoast = {
   error: () =>
     toast.custom(
       (t) => (
-        <div className="w-[380px] h-[90px] rounded-2xl bg-white  flex items-center px-4 ">
-          <div className="w-10 h-10 rounded-[50%] bg-[#FF616D] flex items-center justify-center ">
-            <AlertTriangle className="w-6 h-6 text-white" />
+        <div className="w-[380px] h-[90px] rounded-2xl bg-red-500 shadow  flex items-center px-4 ">
+          <div className="w-10 h-10 rounded-[50%] bg-white flex items-center justify-center ">
+            <AlertTriangle className="w-6 h-6 text-red-500" />
           </div>
           <div className="w-[80%] flex flex-col justify-start items-start p-2">
-            <span className="text-xl font-bold text-black ">خطأ</span>
-            <span className="text-gray-500 text-xl text-start">
-              هناك خطأ ما
-            </span>
+            <span className="text-xl font-bold text-white ">خطأ</span>
+            <span className="text-white text-xl text-start">هناك خطأ ما</span>
           </div>
-          <X onClick={() => toast.dismiss(t)} className="cursor-pointer" />
+          <X
+            onClick={() => toast.dismiss(t)}
+            className="cursor-pointer text-white"
+          />
         </div>
       ),
       {

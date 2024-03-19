@@ -1,17 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { PropsWithChildren, useEffect } from "react";
+import { maketoast } from "./toasts";
 
-const ConnectionStatusAlert = () => {
-  const [isOnline, setIsOnline] = useState(true);
-
+const ConnectionStatusAlert = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     const handleOnline = () => {
-      setIsOnline(true);
+      maketoast.successWithText({ text: "استعدنا الاتصال بالشبكة" });
     };
 
     const handleOffline = () => {
-      setIsOnline(false);
+      maketoast.errorWithTest({ text: "فقدنا الاتصال بالشبكة" });
     };
 
     window.addEventListener("online", handleOnline);
@@ -23,15 +22,7 @@ const ConnectionStatusAlert = () => {
     };
   }, []);
 
-  return (
-    <div className="w-full h-[100px] bg-pink-200">
-      {isOnline ? (
-        <p>Connected</p>
-      ) : (
-        <p>Lost connection. Please check your internet connection.</p>
-      )}
-    </div>
-  );
+  return <div className="w-full h-full">{children}</div>;
 };
 
 export default ConnectionStatusAlert;
