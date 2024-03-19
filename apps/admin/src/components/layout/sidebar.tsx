@@ -1,36 +1,25 @@
 "use client";
 
-import { sidebar_item } from "@/data";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { cn } from "@ui/lib/utils";
+import SideBarMenu from "./mobile-menu";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function Sidebar({ className }: SidebarProps) {
-  const router = useRouter();
-
-  const path = usePathname();
   return (
     <>
-      <div className={`pb-12  bg-orange-950 h-full    hidden   ${className} `}>
-        <div className="space-y-4 py-4   ">
-          <div className="w-full h-[50px] flex items-center justify-center">
-            <h2 className="text-white font-bold text-3xl ">Cravvelo</h2>
-          </div>
+      <div
+        className={cn(
+          "pb-12  bg-[#FC6B00] h-full rounded-lg  mt-4 hidden   ",
+          className
+        )}
+      >
+        <div className="space-y-4 py-2   ">
           <div className="px-3 pb-2 pt-6">
-            {sidebar_item.map((item) => {
-              return (
-                <Link
-                  className={` w-full h-[50px] flex items-center justify-start gap-x-4 rounded-xl p-4 ${
-                    item.url === path ? " bg-white/10 " : ""
-                  } `}
-                  href={item.url}
-                >
-                  <item.icon />
-                  <span className=" text-white "> {item.name}</span>
-                </Link>
-              );
-            })}
+            <div className="w-full  h-[50px] relative "></div>
+            <div className="space-y-2 mt-5">
+              <SideBarMenu />
+            </div>
           </div>
         </div>
       </div>
