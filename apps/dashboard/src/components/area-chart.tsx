@@ -65,14 +65,32 @@ interface AreaChartProps {
 }
 
 const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
-  // const data = sales.map((item) => {
-  //   return {
-  //     name: formatDateInArabic(item.createdAt, "dd MMMM yyyy"),
-  //     "الدورات التدريبية": Number(item.price),
-  //     "المنتجات الرقمية": 0,
-  //     amt: 0,
-  //   };
-  // });
+  // Aggregate sales data by month
+  const aggregateSalesByMonth = () => {
+    const aggregatedData = {};
+
+    sales.forEach((sale) => {
+      const month = new Date(sale.createdAt).toLocaleString("default", {
+        month: "short",
+      });
+      if (!aggregatedData[month]) {
+        aggregatedData[month] = {
+          name: month,
+          "الدورات التدريبية": 0,
+          "المنتجات الرقمية": 0,
+        };
+      }
+
+      if (sale.itemType === "PRODUCT") {
+        aggregatedData[month]["المنتجات الرقمية"] += sale.price;
+      } else if (sale.itemType === "COURSE") {
+        aggregatedData[month]["الدورات التدريبية"] += sale.price;
+      }
+    });
+
+    return Object.values(aggregatedData);
+  };
+
   return (
     <Card className="col-span-3 w-full h-full p-0">
       <CardContent className="p-0  w-full h-full">
@@ -84,12 +102,12 @@ const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
             (+5) more{" "}
             <span className="font-thin text-gray-500 text-xs">in 2021</span>
           </span>
-          <div className="w-[200px] h-full flex flex-col items-end justify-center gap-y-2">
-            <div className="w-[200px] flex items-center gap-x-4 justify-end">
+          <div className="w-[300px] h-full flex flex-col items-end justify-center gap-y-2">
+            <div className="w-[300px] flex items-center gap-x-4 justify-end">
               <span className="text-sm">الدورات التدريبية</span>
               <div className="w-[80px] h-1 bg-[#FFB800] rounded-full" />
             </div>
-            <div className="w-[200px] flex items-center gap-x-4 justify-end">
+            <div className="w-[300px] flex items-center gap-x-4 justify-end">
               <span className="text-sm">المنتجات الرقمية</span>
               <div className="w-[80px] h-1 bg-[#FC6B00] rounded-full" />
             </div>
@@ -100,7 +118,7 @@ const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
             <AreaChart
               width={730}
               height={250}
-              data={data}
+              data={aggregateSalesByMonth()}
               margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
             >
               <defs>
