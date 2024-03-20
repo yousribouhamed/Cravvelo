@@ -7,12 +7,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@ui/components/accordion";
-import { Video } from "lucide-react";
-import { Globe } from "lucide-react";
 import { Course, Chapter } from "database";
 import { Module } from "@/src/types";
 import { useCoursePlayerStore } from "../../../global-state/course-player-store";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
+
+const formatVideoSize = (sizeInBytes) => {
+  const hours = Math.floor(sizeInBytes / (60 * 60 * 1000));
+  const minutes = Math.floor((sizeInBytes % (60 * 60 * 1000)) / (60 * 1000));
+  return `${hours}:${minutes}`;
+};
 
 interface VideoChainProps {
   chapters: Chapter[];
@@ -90,7 +94,7 @@ const VideoChain: FC<VideoChainProps> = ({ chapters }) => {
                                   </div>
 
                                   <span className="text-black text-sm my-4">
-                                    3:09
+                                    {formatVideoSize(subitem.length)}
                                   </span>
                                 </div>
                               </button>

@@ -11,6 +11,26 @@ import {
   formatVideoDuration,
 } from "../../../lib";
 
+const formatVideoLength = (sizeInBytes) => {
+  const totalSeconds = sizeInBytes / 1000; // Convert bytes to seconds
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = Math.floor(totalSeconds % 60);
+
+  let formattedTime = "";
+  if (hours > 0) {
+    formattedTime += `${hours} ساعة و `;
+  }
+  if (minutes > 0) {
+    formattedTime += `${minutes} دقيقة و `;
+  }
+  formattedTime += `${seconds} ثانية`;
+
+  return formattedTime.trim();
+};
+
+// {formatVideoDuration(course.length)}
+
 export const Product_card = ({
   course,
   comments,
@@ -91,7 +111,7 @@ export const Product_card = ({
             }}
           />
           <span>
-            {course.nbrChapters} درسًا ({formatVideoDuration(course.length)})
+            {course.nbrChapters} درسًا ( {formatVideoLength(course.length)})
           </span>
         </div>
 

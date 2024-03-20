@@ -5,6 +5,7 @@ import { type z } from "zod";
 import type { cartLineItemSchema } from "@/src/lib/validators/cart";
 
 export type Module = {
+  length: number;
   title: string;
   content: any;
   orderNumber: number;

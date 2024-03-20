@@ -22,6 +22,9 @@ import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { isMacOs } from "../lib/utils";
 import { cn } from "@ui/lib/utils";
 import { Course, Product } from "database";
+import { trpc } from "../app/_trpc/client";
+import { maketoast } from "./toasts";
+import { Skeleton } from "@ui/components/ui/skeleton";
 
 interface ProductGroup {
   pages: { name: string; path: string }[];
@@ -35,7 +38,36 @@ export const SearchInput: FC = ({}) => {
   const [query, setQuery] = React.useState("");
   const debouncedQuery = useDebounce(query, 300);
   const [isPending, startTransition] = React.useTransition();
-  const [data, setData] = React.useState<ProductGroup[] | null>(null);
+  const [data, setData] = React.useState<ProductGroup | null>(null);
+
+  const mutation = trpc.getUserQuery.useMutation({
+    onSuccess: (data) => {
+      setData(data);
+
+      console.log("this is the query data");
+      console.log(data);
+    },
+    onError: () => {
+      maketoast.error();
+    },
+  });
+
+  React.useEffect(() => {
+    if (debouncedQuery.length <= 0) {
+      setData(null);
+      return;
+    }
+
+    async function fetchData() {
+      await mutation.mutateAsync({
+        query: debouncedQuery,
+      });
+    }
+
+    startTransition(fetchData);
+
+    return () => setData(null);
+  }, [debouncedQuery]);
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -91,44 +123,51 @@ export const SearchInput: FC = ({}) => {
           >
             No products found.
           </CommandEmpty>
-          {/* {isPending ? (
+          {isPending ? (
             <div className="space-y-1 overflow-hidden px-1 py-2">
               <Skeleton className="h-4 w-10 rounded" />
               <Skeleton className="h-8 rounded-sm" />
               <Skeleton className="h-8 rounded-sm" />
             </div>
           ) : (
-            data?.map((group) => (
-              <CommandGroup
-                key={group.category}
-                className="capitalize"
-                heading={group.category}
-              >
-                {group.products.map((item) => {
-                  const CategoryIcon =
-                    productCategories.find(
-                      (category) => category.title === group.category
-                    )?.icon ?? CircleIcon
+            <>
+              {data && data?.products?.length > 0 && (
+                <CommandGroup className="capitalize" heading={"products"}>
+                  {data?.products.map((item) => {
+                    return (
+                      <CommandItem
+                        key={item.id}
+                        value={item.title}
+                        onSelect={() =>
+                          handleSelect(() => router.push(`/product/${item.id}`))
+                        }
+                      >
+                        <span className="truncate">{item.title}</span>
+                      </CommandItem>
+                    );
+                  })}
+                </CommandGroup>
+              )}
 
-                  return (
-                    <CommandItem
-                      key={item.id}
-                      value={item.name}
-                      onSelect={() =>
-                        handleSelect(() => router.push(`/product/${item.id}`))
-                      }
-                    >
-                      <CategoryIcon
-                        className="mr-2 h-4 w-4 text-muted-foreground"
-                        aria-hidden="true"
-                      />
-                      <span className="truncate">{item.name}</span>
-                    </CommandItem>
-                  )
-                })}
-              </CommandGroup>
-            ))
-          )} */}
+              {data && data?.courses?.length > 0 && (
+                <CommandGroup className="capitalize" heading={"courses"}>
+                  {data.courses.map((item) => {
+                    return (
+                      <CommandItem
+                        key={item.id}
+                        value={item.title}
+                        onSelect={() =>
+                          handleSelect(() => router.push(`/product/${item.id}`))
+                        }
+                      >
+                        <span className="truncate">{item.title}</span>
+                      </CommandItem>
+                    );
+                  })}
+                </CommandGroup>
+              )}
+            </>
+          )}
         </CommandList>
       </CommandDialog>
     </>

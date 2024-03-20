@@ -56,6 +56,7 @@ const Hero: FC = ({}) => {
                 src="/Snap.png"
                 alt="hero image of the application"
                 priority
+                loading="eager"
               />
             </div>
           </div>

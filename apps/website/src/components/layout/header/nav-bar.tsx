@@ -8,6 +8,7 @@ import { MobilNavBar } from "./mobil-nav-bar";
 import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
 import Image from "next/image";
+import DropDownMenu from "../../drop-down-menu";
 
 const links = [
   {
@@ -94,7 +95,10 @@ export const NavBar: FC = ({}) => {
 
             <nav className="w-[60%] hidden h-full lg:flex items-center justify-center ">
               <ul className="flex w-[22rem] flex-wrap items-center justify-center gap-y-1 text-[0.9rem] font-medium text-gray-500 sm:w-[initial] sm:flex-nowrap sm:gap-5">
-                {links.map((item) => {
+                {links.map((item, index) => {
+                  if (index === 1) {
+                    return <DropDownMenu />;
+                  }
                   return (
                     <Link
                       href={item.href}

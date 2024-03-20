@@ -1,6 +1,5 @@
 import type { FC } from "react";
 import { Gradian } from "../icons";
-interface HeroLightsAbdullahProps {}
 
 const HeroLights: FC = ({}) => {
   return (

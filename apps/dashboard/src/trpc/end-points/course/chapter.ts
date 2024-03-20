@@ -166,7 +166,7 @@ export const chapter = {
         ...modules,
         {
           content: input.content,
-
+          length: input.length,
           fileType: input.fileType,
           fileUrl: input.fileUrl,
           orderNumber: modules.length + 1,
@@ -200,7 +200,7 @@ export const chapter = {
           id: chapter.courseID,
         },
         data: {
-          length: input.length,
+          length: input.length + courseOldData.length,
           nbrChapters: 1 + courseOldData.nbrChapters,
         },
       });

@@ -1,12 +1,13 @@
 import "@ui/styles/globals.css";
-import "@ui/font/stylesheet.css";
 import { NavBar } from "../components/layout/header/nav-bar";
-import Script from "next/script";
+
 import { CrispChat } from "../components/crisp-chat";
 import { constructMetadata } from "../lib/utils";
 
 export const metadata = constructMetadata({
   title: "Cravvelo — أنشئ اكاديمية اونلاين وبع دوراتك وأستلم ارباحك",
+  description:
+    "تقدم Cravvelo تطبيقًا متعدد المستأجرين يسمح للمستخدمين بإنشاء منصة خاصة بهم حيث يمكنهم بيع دوراتهم التعليمية ومنتجاتهم الرقمية وإدارة طلابهم تحت علامتهم التجارية الخاصة. يمكنهم فرض رسوم على عملائهم / الطلاب بأسعار أعلى والاحتفاظ بجميع الأرباح لأنفسهم.",
 });
 
 export default function RootLayout({

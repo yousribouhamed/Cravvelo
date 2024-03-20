@@ -11,6 +11,10 @@ import StartNew from "./sections/start-new";
 import SiteFooter from "@/src/components/layout/site-footer";
 import FadeIn from "@/src/components/animations/fade-in";
 
+// diable animations on mobil
+
+// use lazy motion
+
 export default function Page() {
   return (
     <>

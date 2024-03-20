@@ -1,5 +1,5 @@
 import "@ui/styles/globals.css";
-import "@ui/font/stylesheet.css";
+
 import type { Metadata } from "next";
 import Providers from "@/src/components/Providers";
 import Script from "next/script";
