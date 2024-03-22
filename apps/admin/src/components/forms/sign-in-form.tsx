@@ -15,25 +15,33 @@ import { Input } from "ui/components/ui/input";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { trpc } from "@/src/app/_trpc/client";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 const formSchema = z.object({
-  username: z.string().min(2).max(50),
+  email: z.string().email(),
+  password: z.string(),
 });
 
 export function SignInForm() {
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
+  const mutation = trpc.SignInAsAdmin.useMutation({
+    onSuccess: () => {
+      console.log("you are loged in");
+    },
+    onError: () => {
+      console.log("you are loged out");
     },
   });
 
-  // 2. Define a submit handler.
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+  });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    mutation.mutate({
+      email: values.email,
+      password: values.password,
+    });
   }
 
   return (
@@ -45,7 +53,7 @@ export function SignInForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
-            name="username"
+            name="email"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>البريد الالكتروني للمستخدم</FormLabel>
@@ -58,7 +66,7 @@ export function SignInForm() {
           />
           <FormField
             control={form.control}
-            name="username"
+            name="password"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>كلمة السر السرية</FormLabel>
@@ -69,7 +77,13 @@ export function SignInForm() {
               </FormItem>
             )}
           />
-          <Button size="lg" className="w-full " type="submit">
+          <Button
+            type="submit"
+            size="lg"
+            disabled={mutation.isLoading}
+            className="w-full text-white font-bold bg-primary rounded-xl flex items-center justify-center gap-x-4"
+          >
+            {mutation.isLoading && <LoadingSpinner />}
             تسجيل الدخول
           </Button>
         </form>

@@ -14,7 +14,33 @@ import { ArrowUpLeft } from "lucide-react";
 import { prisma } from "database/src";
 import Header from "@/src/components/layout/header";
 
-export default function page() {
+const getStudents = async () => {
+  const students = await prisma.student.findMany();
+  return students;
+};
+
+const getAccounts = async () => {
+  const accounts = await prisma.account.findMany();
+  return accounts;
+};
+
+const getSales = async () => {
+  const sales = await prisma.sale.findMany();
+  return sales;
+};
+
+const getCourses = async () => {
+  const courses = await prisma.course.findMany();
+  return courses;
+};
+
+export default async function page() {
+  const [students, accounts, sales, courses] = await Promise.all([
+    getStudents(),
+    getAccounts(),
+    getSales(),
+    getCourses(),
+  ]);
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col overflow-y-hidden h-fit mb-10 justify-start">
@@ -41,7 +67,7 @@ export default function page() {
                 </svg>
               </CardHeader>
               <CardFooter>
-                <div className="text-2xl font-bold">{0}</div>
+                <div className="text-2xl font-bold">{sales.length}</div>
               </CardFooter>
             </Card>
             <Card className="flex flex-col justify-between  min-h-[150px] ">
@@ -65,7 +91,7 @@ export default function page() {
                 </svg>
               </CardHeader>
               <CardFooter>
-                <div className="text-2xl font-bold">{0}</div>
+                <div className="text-2xl font-bold">{accounts.length}</div>
               </CardFooter>
             </Card>
             <Card className="flex flex-col justify-between  min-h-[150px] ">
@@ -86,7 +112,7 @@ export default function page() {
                 </svg>
               </CardHeader>
               <CardFooter>
-                <div className="text-2xl font-bold">{0}</div>
+                <div className="text-2xl font-bold">{students.length}</div>
               </CardFooter>
             </Card>
             <Card className="flex flex-col justify-between min-h-[150px]">
@@ -108,7 +134,7 @@ export default function page() {
                 </svg>
               </CardHeader>
               <CardFooter>
-                <div className="text-2xl  font-bold">0</div>
+                <div className="text-2xl  font-bold">{courses.length}</div>
               </CardFooter>
             </Card>
           </div>
