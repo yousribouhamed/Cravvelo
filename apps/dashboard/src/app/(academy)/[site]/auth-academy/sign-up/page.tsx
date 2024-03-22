@@ -5,8 +5,6 @@ import { getStudent } from "../../../_actions/auth";
 import AcademiaFooter from "../../../_components/layout/academy-footer";
 import AcademyHeader from "../../../_components/layout/academy-header";
 
-export const fetchCache = "force-no-store";
-
 interface PageProps {
   params: { site: string };
 }
@@ -47,7 +45,7 @@ const Page = async ({ params }: PageProps) => {
           accountId={website.accountId}
         />
       </div>
-      <AcademiaFooter />
+      <AcademiaFooter phone={899} />
     </>
   );
 };

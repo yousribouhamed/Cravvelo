@@ -50,12 +50,18 @@ importers:
       '@trpc/server':
         specifier: ^10.45.0
         version: 10.45.0
+      bcrypt:
+        specifier: ^5.1.1
+        version: 5.1.1
       database:
         specifier: workspace:*
         version: link:../../packages/db
       date-fns:
         specifier: ^3.0.6
         version: 3.0.6
+      jose:
+        specifier: ^5.2.2
+        version: 5.2.2
       lucide-react:
         specifier: ^0.244.0
         version: 0.244.0(react@18.2.0)
@@ -83,6 +89,9 @@ importers:
       ui:
         specifier: workspace:*
         version: link:../../packages/ui
+      uuid:
+        specifier: ^9.0.1
+        version: 9.0.1
       zod:
         specifier: ^3.22.4
         version: 3.22.4
@@ -441,6 +450,9 @@ importers:
       recharts:
         specifier: ^2.10.4
         version: 2.10.4(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
+      resend:
+        specifier: ^3.2.0
+        version: 3.2.0
       sharp:
         specifier: ^0.33.2
         version: 0.33.2
@@ -13051,6 +13063,13 @@ packages:
     resolution: {integrity: sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /resend@3.2.0:
+    resolution: {integrity: sha512-lDHhexiFYPoLXy7zRlJ8D5eKxoXy6Tr9/elN3+Vv7PkUoYuSSD1fpiIfa/JYXEWyiyN2UczkCTLpkT8dDPJ4Pg==}
+    engines: {node: '>=18'}
+    dependencies:
+      '@react-email/render': 0.0.12
+    dev: false
 
   /resolve-from@4.0.0:
     resolution: {integrity: sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==}

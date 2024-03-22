@@ -1,0 +1,53 @@
+import type { NextApiRequest, NextApiResponse } from "next";
+import { CravveloVerifyEmailStudent } from "@/src/emails/student-verify-email";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const { data, error } = await resend.emails.send({
+    from: "Acme <onboarding@resend.dev>",
+    to: ["delivered@resend.dev"],
+    subject: "Hello world",
+    react: CravveloVerifyEmailStudent({ verificationCode: "90000" }),
+  });
+
+  if (error) {
+    return res.status(400).json(error);
+  }
+
+  res.status(200).json(data);
+};
+
+// send email to virify student
+
+export const verifyStudentEmail = async ({ email }: { email: string }) => {
+  const { data, error } = await resend.emails.send({
+    from: "Acme <onboarding@resend.dev>",
+    to: [email],
+    subject: "Hello world",
+    react: CravveloVerifyEmailStudent({ verificationCode: "90000" }),
+  });
+};
+
+// reset password  confirme email
+
+export const resetPasswordEmail = async ({ email }: { email: string }) => {
+  const { data, error } = await resend.emails.send({
+    from: "Acme <onboarding@resend.dev>",
+    to: [email],
+    subject: "Hello world",
+    react: CravveloVerifyEmailStudent({ verificationCode: "90000" }),
+  });
+};
+
+// sen wolcom email to students
+
+export const SendWolcomEmail = async ({ email }: { email: string }) => {
+  const { data, error } = await resend.emails.send({
+    from: "Acme <onboarding@resend.dev>",
+    to: [email],
+    subject: "Hello world",
+    react: CravveloVerifyEmailStudent({ verificationCode: "90000" }),
+  });
+};

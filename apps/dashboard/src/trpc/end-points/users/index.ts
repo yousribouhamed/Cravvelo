@@ -9,6 +9,7 @@ export const users = {
         user_name: z.string(),
         user_bio: z.string(),
         avatarUrl: z.string(),
+        phoneNumber: z.number(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -21,6 +22,7 @@ export const users = {
             avatarUrl: input.avatarUrl,
             user_name: input.user_name,
             user_bio: input.user_bio,
+            phone: input.phoneNumber,
           },
         });
 

@@ -2,6 +2,7 @@
 
 import { cn } from "@ui/lib/utils";
 import SideBarMenu from "./mobile-menu";
+import Logo from "../logo";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -16,7 +17,9 @@ export function Sidebar({ className }: SidebarProps) {
       >
         <div className="space-y-4 py-2   ">
           <div className="px-3 pb-2 pt-6">
-            <div className="w-full  h-[50px] relative "></div>
+            <div className="w-full  h-[50px] relative ">
+              <Logo />
+            </div>
             <div className="space-y-2 mt-5">
               <SideBarMenu />
             </div>

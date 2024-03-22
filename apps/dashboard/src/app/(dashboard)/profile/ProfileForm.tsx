@@ -26,6 +26,8 @@ import { trpc } from "../../_trpc/client";
 const formSchema = z.object({
   full_name: z.string().min(2).max(50),
   bio: z.string(),
+  email: z.string(),
+  phone: z.string(),
 });
 
 interface ProfileFormProps {
@@ -53,14 +55,13 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account }) => {
     }
   };
 
-  // const [isPending, startTransition] = React.useTransition();
-
-  // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       full_name: account.user_name,
       bio: account.user_bio,
+      email: "",
+      phone: account.phone ? account.phone?.toString() : "",
     },
   });
 
@@ -75,9 +76,6 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account }) => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("here it is the file");
-    console.log(values);
-    console.log(selectedFile);
     try {
       setLoading(true);
       if (selectedFile) {
@@ -91,11 +89,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account }) => {
         });
         // upload it to aws
 
-        console.log("this is from aws");
-        console.log(success);
-
         if (!success || !success?.url) {
-          console.log("there is no selected file");
           throw new Error("there is no selected file");
         }
         await fetch(success?.url, {
@@ -106,14 +100,11 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account }) => {
           },
         });
 
-        // update the data on our app
-
-        console.log("we are uploding the image url");
-
         await mutation.mutateAsync({
           avatarUrl: success.url.split("?")[0],
           user_bio: values.bio,
           user_name: values.full_name,
+          phoneNumber: Number(values.phone),
         });
         setLoading(false);
       } else {
@@ -121,6 +112,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account }) => {
           avatarUrl: "",
           user_bio: values.bio,
           user_name: values.full_name,
+          phoneNumber: Number(values.phone),
         });
         setLoading(false);
       }
@@ -183,12 +175,16 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account }) => {
 
           <FormField
             control={form.control}
-            name="full_name"
+            name="phone"
             render={({ field }) => (
               <FormItem>
                 <FormLabel> رقم التليفون</FormLabel>
                 <FormControl>
-                  <Input placeholder="مثلا : عبدالله" {...field} />
+                  <Input
+                    type="number"
+                    placeholder="مثلا : 053874666"
+                    {...field}
+                  />
                 </FormControl>
                 <FormDescription>
                   هذا هو اسم العرض العام الخاص بك.
@@ -200,7 +196,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account }) => {
 
           <FormField
             control={form.control}
-            name="full_name"
+            name="email"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>البريد الإلكتروني الدعم الخاص بك</FormLabel>

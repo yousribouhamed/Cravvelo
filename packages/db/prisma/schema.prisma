@@ -22,6 +22,7 @@ model Account {
   avatarUrl       String?           @db.Text
   user_name       String?           @db.Text
   user_bio        String?           @db.Text
+  phone           Int?           
   AcademyIds      Json
   plan            PLANS?
   createdAt       DateTime          @default(now())
@@ -291,7 +292,7 @@ model Student {
   phone     String? @unique
   accountId String
   password  String
-
+  confirmeEmail DateTime?
   bag     Json
   Account Account @relation(fields: [accountId], references: [id])
 
@@ -300,7 +301,7 @@ model Student {
 }
 
 model Certificate {
-  id          Int      @id @default(autoincrement())
+  id        String  @unique @default(uuid())
   name        String
   description String?
   issuer      String
@@ -311,7 +312,7 @@ model Certificate {
 
 
 model Payments {
-  id          Int @id @default(autoincrement())
+  id        String  @unique @default(uuid())
   accountId   String
   Account     Account  @relation(fields: [accountId], references: [id])
   plan        String 
@@ -321,4 +322,14 @@ model Payments {
   updatedAt   DateTime @updatedAt
   @@index([id])
   @@index([accountId])
+}
+
+
+model Admin {
+  id        String  @unique @default(uuid())
+  name String?
+  email     String? @unique
+  photo_url String?
+  password  String
+  @@index([id])
 }

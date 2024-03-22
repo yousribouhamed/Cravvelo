@@ -1,10 +1,10 @@
-import { AcademySignInForm } from "../../../_components/forms/sign-in-form-production";
-import { getAllCourses, getSiteData } from "../../../_actions";
+import { AcademySignInForm } from "../../../../../_components/forms/sign-in-form-production";
+import { getSiteData } from "../../../../../_actions";
 import { notFound, redirect } from "next/navigation";
-import { getStudent } from "../../../_actions/auth";
-import { getSubDomainValue } from "../../../lib";
-import AcademiaFooter from "../../../_components/layout/academy-footer";
-import AcademyHeader from "../../../_components/layout/academy-header";
+import { getStudent } from "@/src/app/(academy)/_actions/auth";
+import { getSubDomainValue } from "../../../../../lib";
+import AcademiaFooter from "@/src/app/(academy)/_components/layout/academy-footer";
+import AcademyHeader from "@/src/app/(academy)/_components/layout/academy-header";
 
 interface PageProps {
   params: { site: string };

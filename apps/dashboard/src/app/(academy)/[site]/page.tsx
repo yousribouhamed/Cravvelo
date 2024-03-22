@@ -13,7 +13,6 @@ interface PageProps {
 
 const Page = async ({ params }: PageProps) => {
   const subdomain = getSubDomainValue({ value: params.site });
-
   const [student, website, courses] = await Promise.all([
     getStudent(),
     getSiteData({
@@ -50,8 +49,7 @@ const Page = async ({ params }: PageProps) => {
           <CoursesReel color={website?.color} courses={courses} />
         </main>
       </MaxWidthWrapper>
-
-      <AcademiaFooter />
+      <AcademiaFooter phone={8999} />
     </>
   );
 };

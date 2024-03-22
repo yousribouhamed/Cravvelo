@@ -1,5 +1,4 @@
 import "ui/styles/globals.css";
-import "ui/font/stylesheet.css";
 
 import type { Metadata } from "next";
 import Providers from "../components/Provider";

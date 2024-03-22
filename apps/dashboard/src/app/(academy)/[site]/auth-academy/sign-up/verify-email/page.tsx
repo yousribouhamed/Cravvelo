@@ -1,10 +1,9 @@
-import { AcademySignInForm } from "../../../_components/forms/sign-in-form-production";
-import { getAllCourses, getSiteData } from "../../../_actions";
+import { getSiteData } from "../../../../_actions";
 import { notFound, redirect } from "next/navigation";
-import { getStudent } from "../../../_actions/auth";
-import { getSubDomainValue } from "../../../lib";
-import AcademiaFooter from "../../../_components/layout/academy-footer";
-import AcademyHeader from "../../../_components/layout/academy-header";
+import { getStudent } from "@/src/app/(academy)/_actions/auth";
+import { getSubDomainValue } from "../../../../lib";
+import AcademiaFooter from "@/src/app/(academy)/_components/layout/academy-footer";
+import AcademyHeader from "@/src/app/(academy)/_components/layout/academy-header";
 
 interface PageProps {
   params: { site: string };
@@ -37,12 +36,7 @@ const Page = async ({ params }: PageProps) => {
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
       />
-      <div className="w-full min-h-[500px] h-fit flex items-center justify-center mt-[70px]">
-        <AcademySignInForm
-          color={website?.color}
-          accountId={website.accountId}
-        />
-      </div>
+      <div className="w-full min-h-[500px] h-fit flex items-center justify-center mt-[70px]"></div>
       <AcademiaFooter phone={9000} />
     </>
   );

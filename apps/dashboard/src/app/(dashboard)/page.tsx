@@ -38,13 +38,23 @@ const getAllstudents = async ({ accountId }: { accountId: string }) => {
 
   return students;
 };
+const getAllCommets = async ({ accountId }: { accountId: string }) => {
+  const comments = await prisma.comment.findMany({
+    where: {
+      accountId,
+    },
+  });
+
+  return comments;
+};
 
 async function Page() {
   const user = await useHaveAccess();
 
-  const [sales, studnets] = await Promise.all([
+  const [sales, studnets, comments] = await Promise.all([
     getAllSales({ accountId: user.accountId }),
     getAllstudents({ accountId: user.accountId }),
+    getAllCommets({ accountId: user.accountId }),
   ]);
 
   return (
@@ -159,7 +169,7 @@ async function Page() {
                 </svg>
               </CardHeader>
               <CardFooter>
-                <div className="text-2xl  font-bold">0</div>
+                <div className="text-2xl  font-bold">{comments.length}</div>
               </CardFooter>
             </Card>
           </div>
