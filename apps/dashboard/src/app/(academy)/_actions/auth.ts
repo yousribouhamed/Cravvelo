@@ -18,6 +18,8 @@ import { redirect } from "next/navigation";
 import { Student } from "database";
 import { StudentBag } from "@/src/types";
 import { getSiteData } from ".";
+import { verifyStudentEmail } from "@/src/lib/resend";
+import jwt from "jsonwebtoken";
 
 /**
  * Function to create a new student.
@@ -66,6 +68,13 @@ export const create_student = async ({
       accountId,
       bag: JSON.stringify(bag),
     },
+  });
+
+  await verifyStudentEmail({ email });
+
+  cookies().set({
+    name: "studentId",
+    value: student.id,
   });
 
   return student;
@@ -218,5 +227,37 @@ export const getStudent = async (): Promise<Student | null> => {
     return null;
   }
 
+  return student;
+};
+
+export const verifyEmailAction = async ({ jwtToken }: { jwtToken: string }) => {
+  const verifyJwtAndGetNumericToken = (jwtToken) => {
+    try {
+      const secretKey = "abdullahsecretkey";
+      const decoded = jwt.verify(jwtToken, secretKey);
+      return decoded.numericToken; // Extract numeric token from JWT payload
+    } catch (error) {
+      throw new Error("not ");
+    }
+  };
+
+  try {
+    const response = await verifyJwtAndGetNumericToken({ jwtToken });
+
+    console.log(response);
+  } catch (err) {
+    console.error(err);
+    throw new Error("the operation faild");
+  }
+
+  const studentId = cookies().get("studentId")?.value;
+  const student = await prisma.student.update({
+    where: {
+      id: studentId,
+    },
+    data: {
+      confirmeEmail: new Date(),
+    },
+  });
   return student;
 };

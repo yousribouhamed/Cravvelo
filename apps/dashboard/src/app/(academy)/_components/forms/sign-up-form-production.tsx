@@ -74,8 +74,8 @@ export function AcademySifnUpForm({
 
       maketoast.successWithText({ text: "لقد تم إنشاء حسابك" });
 
-      router.push("/auth-academy/sign-in");
-      // TODO :: make a toast telling the student that new account has been created
+      router.push("/auth-academy/sign-up/verify-email");
+      maketoast.info();
     } catch (err) {
       console.error(err);
       maketoast.error();
@@ -166,7 +166,7 @@ export function AcademySifnUpForm({
               size="lg"
               className="w-full text-white flex items-center justify-center gap-x-2 font-bold  disabled:pointer-events-none disabled:opacity-50"
               style={{
-                color: color ?? "#FC6B00",
+                backgroundColor: color ?? "#FC6B00",
               }}
             >
               {isLoading ? <LoadingSpinner /> : null}
@@ -178,7 +178,13 @@ export function AcademySifnUpForm({
           <span>
             هل لديك حساب؟{" "}
             <Link href={"/auth-academy/sign-in"}>
-              <span className="text-blue-500">سجّل الدخول.</span>
+              <span
+                style={{
+                  color: color ?? "#FC6B00",
+                }}
+              >
+                سجّل الدخول.
+              </span>
             </Link>
           </span>
         </div>

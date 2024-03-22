@@ -23,19 +23,19 @@ import { Input } from "@ui/components/ui/input";
 import Link from "next/link";
 import { PasswordInput } from "@/src/components/password-input";
 import { useRouter, useSearchParams } from "next/navigation";
-import { authSchemaLogin } from "@/src/lib/validators/auth";
-import { sign_in_as_student } from "../../_actions/auth";
+import { verifyEmailSchema } from "@/src/lib/validators/auth";
+import { sign_in_as_student, verifyEmailAction } from "../../_actions/auth";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 
-type Inputs = z.infer<typeof authSchemaLogin>;
+type Inputs = z.infer<typeof verifyEmailSchema>;
 
 interface AcademySifnIpFormProps {
   accountId: string;
   color: string;
 }
 
-export function AcademySignInForm({
+export function AcademyVerifyEmailForm({
   accountId,
   color,
 }: AcademySifnIpFormProps) {
@@ -44,25 +44,20 @@ export function AcademySignInForm({
   const router = useRouter();
 
   const form = useForm<Inputs>({
-    resolver: zodResolver(authSchemaLogin),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+    resolver: zodResolver(verifyEmailSchema),
   });
 
-  async function onSubmit(data: z.infer<typeof authSchemaLogin>) {
+  async function onSubmit(data: z.infer<typeof verifyEmailSchema>) {
     try {
       setIsLoading(true);
-      await sign_in_as_student({
-        email: data.email,
-        password: data.password,
-        accountId,
-      });
+
+      const student = await verifyEmailAction({ jwtToken: data.code });
+
+      console.log(student);
 
       maketoast.successWithText({ text: "تم تسجيل الدخول بنجاح" });
       window.location.reload();
-      router.push("/auth-academy/sign-up/verify-email");
+      router.push("/auth-academy/sign-in");
     } catch (err) {
       console.error(err);
       maketoast.error();
@@ -72,7 +67,7 @@ export function AcademySignInForm({
   }
 
   return (
-    <Card className="w-[480px] pt-4 min-h-[401.39px] h-fit ">
+    <Card className="w-[480px] pt-4 min-h-[200px] h-fit ">
       <CardHeader>
         <CardTitle>التحقق من البريد الإلكتروني</CardTitle>
       </CardHeader>
@@ -84,14 +79,14 @@ export function AcademySignInForm({
           >
             <FormField
               control={form.control}
-              name="email"
+              name="code"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>شفرة</FormLabel>
                   <FormControl>
                     <Input
                       className="focus:border-orange-500"
-                      placeholder="أدخِل عنوان البريد الإلكتروني"
+                      placeholder="أدخل الرمز الذي أرسلناه إلى بريدك الإلكتروني"
                       {...field}
                     />
                   </FormControl>
@@ -106,22 +101,14 @@ export function AcademySignInForm({
               disabled={isLoading}
               className="w-full flex items-center justify-center gap-x-2 text-white font-bold   disabled:pointer-events-none disabled:opacity-50"
               style={{
-                color: color ?? "#FC6B00",
+                backgroundColor: color ?? "#FC6B00",
               }}
             >
               {isLoading ? <LoadingSpinner /> : null}
-              تسجيل الدخول
+              التحقق من البريد الإلكتروني
             </Button>
           </form>
         </Form>
-        <div className="w-full my-4 h-[20px] flex justify-center">
-          <span>
-            ليس لديك حساب؟{" "}
-            <Link href={"/auth-academy/sign-up"}>
-              <span className="text-orange-500">أنشئ حساب الآن</span>
-            </Link>
-          </span>
-        </div>
       </CardContent>
     </Card>
   );

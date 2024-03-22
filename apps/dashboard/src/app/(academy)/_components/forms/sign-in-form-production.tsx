@@ -124,7 +124,7 @@ export function AcademySignInForm({
               disabled={isLoading}
               className="w-full flex items-center justify-center gap-x-2 text-white font-bold   disabled:pointer-events-none disabled:opacity-50"
               style={{
-                color: color ?? "#FC6B00",
+                backgroundColor: color ?? "#FC6B00",
               }}
             >
               {isLoading ? <LoadingSpinner /> : null}
@@ -136,7 +136,13 @@ export function AcademySignInForm({
           <span>
             ليس لديك حساب؟{" "}
             <Link href={"/auth-academy/sign-up"}>
-              <span className="text-orange-500">أنشئ حساب الآن</span>
+              <span
+                style={{
+                  color: color ?? "#FC6B00",
+                }}
+              >
+                أنشئ حساب الآن
+              </span>
             </Link>
           </span>
         </div>
