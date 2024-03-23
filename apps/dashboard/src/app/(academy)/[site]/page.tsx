@@ -6,6 +6,7 @@ import AcademyHeader from "../_components/layout/academy-header";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import { getStudent } from "../_actions/auth";
 import AcademiaFooter from "../_components/layout/academy-footer";
+import LiarSales from "../_components/Liar-sales";
 
 interface PageProps {
   params: { site: string };
@@ -34,7 +35,7 @@ const Page = async ({ params }: PageProps) => {
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
       />
-      <MaxWidthWrapper className="h-fit mt-[70px] min-h-[calc(100vh-70px)] ">
+      <MaxWidthWrapper className="h-fit mt-[140px] min-h-[calc(100vh-70px)] ">
         <main className="w-full h-fit min-h-full flex flex-col items-center justify-center ">
           <div
             className="w-full h-[250px]  flex items-center justify-center my-10"
@@ -49,7 +50,7 @@ const Page = async ({ params }: PageProps) => {
           <CoursesReel color={website?.color} courses={courses} />
         </main>
       </MaxWidthWrapper>
-      <AcademiaFooter phone={8999} />
+      <AcademiaFooter />
     </>
   );
 };

@@ -10,21 +10,26 @@ import {
   calculatePositiveReviewPercentage,
   formatVideoDuration,
 } from "../../../lib";
+import { useTimer } from "react-timer-hook";
 
 const formatVideoLength = (sizeInBytes) => {
   const totalSeconds = sizeInBytes / 1000; // Convert bytes to seconds
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = Math.floor(totalSeconds % 60);
+  const OurHours = Math.floor(totalSeconds / 3600);
+  const OurMinutes = Math.floor((totalSeconds % 3600) / 60);
+  const OurSeconds = Math.floor(totalSeconds % 60);
+
+  const expiryTimestamp = new Date();
+
+  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 600 * 12);
 
   let formattedTime = "";
-  if (hours > 0) {
-    formattedTime += `${hours} ساعة و `;
+  if (OurHours > 0) {
+    formattedTime += `${OurHours} ساعة و `;
   }
-  if (minutes > 0) {
-    formattedTime += `${minutes} دقيقة و `;
+  if (OurMinutes > 0) {
+    formattedTime += `${OurMinutes} دقيقة و `;
   }
-  formattedTime += `${seconds} ثانية`;
+  formattedTime += `${OurSeconds} ثانية`;
 
   return formattedTime.trim();
 };
@@ -41,6 +46,15 @@ export const Product_card = ({
   color: string;
 }) => {
   const { actions, state } = useAcademiaStore();
+
+  const expiryTimestamp = new Date();
+
+  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 600 * 6);
+
+  const { seconds, minutes, hours, days } = useTimer({
+    expiryTimestamp,
+    onExpire: () => console.warn("onExpire called"),
+  });
   return (
     <div className=" w-full lg:w-[350px] min-h-[500px] h-fit rounded-xl border p-4 flex flex-col gap-y-4 lg:sticky lg:top-[100px] bg-white">
       <p className="text-2xl font-bold text-start text-black">
@@ -75,7 +89,19 @@ export const Product_card = ({
         اضف الى السلة
       </button>
 
-      <div className="border-b w-full h-1 my-4" />
+      <div
+        dir="ltr"
+        className="w-full h-[20px] flex items-center justify-end  gap-x-4 text-red-500"
+      >
+        <div className="w-[100px] flex items-center justify-start gap-x-2">
+          <span className="text-sm ">{hours}</span>:
+          <span className="text-sm ">{minutes}</span>:
+          <span className="text-sm ">{seconds}</span>
+        </div>
+        <span className=" text-sm">ينتهي هذا العرض عند</span>
+      </div>
+
+      <div className="border-b w-full h-1 my-1" />
 
       <div className="flex flex-col gap-y-4">
         <div className="w-full flex items-center justify-start gap-x-4">

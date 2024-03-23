@@ -45,7 +45,7 @@ const Page = async ({ params }: PageProps) => {
           accountId={website.accountId}
         />
       </div>
-      <AcademiaFooter phone={899} />
+      <AcademiaFooter />
     </>
   );
 };

@@ -6,6 +6,7 @@ import MaxWidthWrapper from "../../max-width-wrapper";
 import LinksNavbar from "./links-navbar";
 import StudentNav from "../../auth/student-nav";
 import type { Student } from "database";
+import LiarSales from "../../Liar-sales";
 
 interface AcademyHeaderProps {
   isAuthanticated: boolean;
@@ -23,8 +24,9 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
   color,
 }) => {
   return (
-    <div className="w-full h-[70px]   border-b z-[8] fixed top-0 bg-white shadow overflow-y-hidden">
-      <MaxWidthWrapper className="w-full h-full flex items-center justify-between">
+    <div className="w-full h-[140px]   border-b z-[8] fixed top-0 bg-white shadow overflow-y-hidden">
+      <LiarSales />
+      <MaxWidthWrapper className="w-full h-[70px] flex items-center justify-between">
         <div className="w-fit h-full flex items-center justify-start md:hidden">
           <MobilNavgiationProduction />
         </div>

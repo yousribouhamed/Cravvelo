@@ -2,7 +2,7 @@ import type { FC } from "react";
 import MaxWidthWrapper from "../max-width-wrapper";
 import Link from "next/link";
 
-const AcademiaFooter: FC<{ phone: number }> = ({ phone }) => {
+const AcademiaFooter: FC = () => {
   return (
     <div className="w-full h-[100px]  bg-white   px-4 border-t">
       <MaxWidthWrapper className="w-full h-full flex items-center justify-between mx-auto ">
@@ -20,9 +20,7 @@ const AcademiaFooter: FC<{ phone: number }> = ({ phone }) => {
           <Link href="/privacy-policy">
             <button className="text-sm text-gray-700"> سياسة الاكاديمية</button>
           </Link>
-          <Link href="/terms-of-use">
-            <button className="text-sm text-gray-700">{phone}</button>
-          </Link>
+
           <span className="text-sm text-gray-700">
             جميع الحقوق محفوظة في الأكاديمية © 2024
           </span>

@@ -73,7 +73,7 @@ export const create_student = async ({
   await verifyStudentEmail({ email });
 
   cookies().set({
-    name: "studentId",
+    name: "studentIdVerifyEmail",
     value: student.id,
   });
 
@@ -230,27 +230,24 @@ export const getStudent = async (): Promise<Student | null> => {
   return student;
 };
 
-export const verifyEmailAction = async ({ jwtToken }: { jwtToken: string }) => {
-  const verifyJwtAndGetNumericToken = (jwtToken) => {
-    try {
-      const secretKey = "abdullahsecretkey";
-      const decoded = jwt.verify(jwtToken, secretKey);
-      return decoded.numericToken; // Extract numeric token from JWT payload
-    } catch (error) {
-      throw new Error("not ");
-    }
-  };
-
+const verifyJwtAndGetNumericToken = (jwtToken) => {
   try {
-    const response = await verifyJwtAndGetNumericToken({ jwtToken });
-
-    console.log(response);
-  } catch (err) {
-    console.error(err);
-    throw new Error("the operation faild");
+    const secretKey = "abdullahsecretkey";
+    const decoded = jwt.verify(jwtToken, secretKey);
+    return decoded.numericToken; // Extract numeric token from JWT payload
+  } catch (error) {
+    throw new Error("not ");
   }
+};
 
-  const studentId = cookies().get("studentId")?.value;
+export const verifyEmailAction = async ({ jwtToken }: { jwtToken: string }) => {
+  console.log("this is the numerique value");
+  console.log(jwtToken);
+  const response = await verifyJwtAndGetNumericToken({ jwtToken });
+
+  console.log(response);
+
+  const studentId = cookies().get("studentIdVerifyEmail")?.value;
   const student = await prisma.student.update({
     where: {
       id: studentId,

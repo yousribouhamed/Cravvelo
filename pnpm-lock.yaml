@@ -441,6 +441,9 @@ importers:
       react-star-ratings:
         specifier: ^2.3.0
         version: 2.3.0
+      react-timer-hook:
+        specifier: ^3.0.7
+        version: 3.0.7(react@18.2.0)
       react-tweet:
         specifier: ^3.2.0
         version: 3.2.0(react-dom@18.2.0)(react@18.2.0)
@@ -12875,6 +12878,14 @@ packages:
       use-latest: 1.2.1(@types/react@18.2.5)(react@18.2.0)
     transitivePeerDependencies:
       - '@types/react'
+
+  /react-timer-hook@3.0.7(react@18.2.0):
+    resolution: {integrity: sha512-ATpNcU+PQRxxfNBPVqce2+REtjGAlwmfoNQfcEBMZFxPj0r3GYdKhyPHdStvqrejejEi0QvqaJZjy2lBlFvAsA==}
+    peerDependencies:
+      react: '>=16.8.0'
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /react-tracked@1.7.11(react-dom@18.2.0)(react@18.2.0)(scheduler@0.23.0):
     resolution: {integrity: sha512-+XXv4dJH7NnLtSD/cPVL9omra4A3KRK91L33owevXZ81r7qF/a9DdCsVZa90jMGht/V1Ym9sasbmidsJykhULQ==}

@@ -20,7 +20,7 @@ interface CravveloVerifyEmailProps {
 const baseUrl = process.env.VERCEL_URL ? process.env.VERCEL_URL : "/static";
 
 export function CravveloVerifyEmailStudent({
-  verificationCode = "596853",
+  verificationCode,
 }: CravveloVerifyEmailProps) {
   return (
     <Html lang="ar">
@@ -62,7 +62,7 @@ export function CravveloVerifyEmailStudent({
                   <Text>أدخل الرمز لتتمكن من إنشاء حساب على جدير:</Text>
                   <Heading className="font-extrabold text-2xl text-black">
                     {" "}
-                    279583
+                    {verificationCode}
                   </Heading>
                   <Text>
                     إذا لم تكن تحاول الدخول إلى أحد منتجات جدير بإستخدام هذا
