@@ -3,6 +3,7 @@ import { privateProcedure } from "../../trpc";
 import { TRPCError } from "@trpc/server";
 import { Module } from "@/src/types";
 import type { Chapter } from "database";
+import axios from "axios";
 
 export const chapter = {
   createChapter: privateProcedure
@@ -151,6 +152,16 @@ export const chapter = {
       })
     )
     .mutation(async ({ input, ctx }) => {
+      const { data } = await axios.get(
+        `https://video.bunnycdn.com/library/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/videos/${input.fileUrl}`,
+        {
+          headers: {
+            "Content-Type": "application/octet-stream",
+            AccessKey: process.env["NEXT_PUBLIC_BUNNY_API_KEY"],
+          },
+        }
+      );
+
       // first we need to get all the modules
       const chapter = await ctx.prisma.chapter.findFirst({
         where: { id: input.chapterID },
@@ -166,7 +177,7 @@ export const chapter = {
         ...modules,
         {
           content: input.content,
-          length: input.length,
+          length: data?.length,
           fileType: input.fileType,
           fileUrl: input.fileUrl,
           orderNumber: modules.length + 1,
@@ -200,7 +211,7 @@ export const chapter = {
           id: chapter.courseID,
         },
         data: {
-          length: input.length + courseOldData.length,
+          length: data?.length + courseOldData.length,
           nbrChapters: 1 + courseOldData.nbrChapters,
         },
       });

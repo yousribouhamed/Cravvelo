@@ -29,6 +29,8 @@ export const NewVideoUploader = ({
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
   const [progress, setProgress] = React.useState<number>(0);
 
+  const [message, setMessage] = React.useState<string>("");
+
   const [status, setStatus] = React.useState<
     "WAITING" | "ERROR" | "COMPLETE" | "LOADING"
   >("WAITING");
@@ -112,9 +114,10 @@ export const NewVideoUploader = ({
             onChange(videoObjectId);
             setProgress(100);
             setStatus("COMPLETE");
-            if (setVideoSize) {
-              setVideoSize(acceptedFile[0]?.size);
-            }
+
+            // if (setVideoSize) {
+            //   setVideoSize(acceptedFile[0]?.size);
+            // }
           };
           fileReader.onerror = () => {
             setStatus("ERROR");
