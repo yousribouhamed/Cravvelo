@@ -114,10 +114,6 @@ export const NewVideoUploader = ({
             onChange(videoObjectId);
             setProgress(100);
             setStatus("COMPLETE");
-
-            // if (setVideoSize) {
-            //   setVideoSize(acceptedFile[0]?.size);
-            // }
           };
           fileReader.onerror = () => {
             setStatus("ERROR");
