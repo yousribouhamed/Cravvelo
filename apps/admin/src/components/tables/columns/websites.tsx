@@ -11,9 +11,14 @@ import {
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
 import { Checkbox } from "@ui/components/ui/checkbox";
-import { Payments } from "database";
+import { Website } from "database";
+import { DataTableColumnHeader } from "../data-table-head";
+import Image from "next/image";
+import Link from "next/link";
+import { trpc } from "@/src/app/_trpc/client";
+import { maketoast } from "../../toasts";
 
-export const BillingColumns: ColumnDef<Payments>[] = [
+export const WebsiteColumns: ColumnDef<Website>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -41,9 +46,110 @@ export const BillingColumns: ColumnDef<Payments>[] = [
   },
 
   {
+    accessorKey: "logo",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="شعار الأكاديمية" />
+    ),
+
+    cell: ({ row }) => (
+      <div className="w-[50px] h-[50px] flex items-center justify-center relative rounded-xl">
+        {row.original.logo ? (
+          <Image
+            src={row.original.logo}
+            alt={`${row.original.name} logo`}
+            fill
+            className="rounded-xl"
+          />
+        ) : (
+          "لا يوجد"
+        )}
+      </div>
+    ),
+  },
+
+  {
+    accessorKey: "name",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="اسم الأكاديمية" />
+    ),
+  },
+
+  {
+    accessorKey: "subdomain",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="المجال الفرعي" />
+    ),
+    cell: ({ row }) => (
+      <div className="w-[70px] h-[70px] flex items-center justify-center relative rounded-xl">
+        <Link
+          href={row.original.subdomain}
+          className="text-blue-500 boder-b cursor-pointer"
+        >
+          {row.original.subdomain}
+        </Link>
+      </div>
+    ),
+  },
+  {
+    accessorKey: "customDomain",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="مجال مخصص" />
+    ),
+    cell: ({ row }) => (
+      <div className="w-[70px] h-[70px] flex items-center justify-center relative rounded-xl">
+        {row.original.customDomain ? (
+          <Link
+            href={row.original.customDomain ?? ""}
+            className="text-blue-500 boder-b cursor-pointer"
+          >
+            {row.original.customDomain}
+          </Link>
+        ) : (
+          "لا يوجد"
+        )}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "suspended",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="مجال مخصص" />
+    ),
+    cell: ({ row }) => (
+      <div
+        className={`w-[100px] h-[30px] flex items-center justify-center  ${
+          row.original.suspended ? "bg-red-500" : "bg-green-500"
+        } rounded-full shadow relative `}
+      >
+        <span className="text-white text-xs">
+          {row.original.suspended ? "إلغاء التنشيط" : "فعال"}
+        </span>
+      </div>
+    ),
+  },
+
+  {
     id: "actions",
     cell: ({ row }) => {
       const payment = row.original;
+
+      const suspendWebsite = trpc.suspendWebSite.useMutation({
+        onSuccess: () => {
+          maketoast.successWithText({ text: "تم تعليق الموقع" });
+        },
+        onError: () => {
+          maketoast.errorWithTest({ text: "حدث خطأ ما أثناء تعليق الموقع" });
+        },
+      });
+
+      const delteWebsite = trpc.deletWebSite.useMutation({
+        onSuccess: () => {
+          maketoast.successWithText({ text: "تم حذف الموقع" });
+        },
+        onError: () => {
+          maketoast.errorWithTest({ text: "حدث خطأ ما أثناء حذف موقع الويب" });
+        },
+      });
 
       return (
         <div className="w-full h-10 flex items-center justify-end gap-x-4">
@@ -61,7 +167,14 @@ export const BillingColumns: ColumnDef<Payments>[] = [
             <DropdownMenuContent align="start">
               <DropdownMenuSeparator />
 
-              <DropdownMenuItem className="w-full h-full flex justify-between items-center px-2">
+              <DropdownMenuItem
+                onClick={() =>
+                  suspendWebsite.mutate({
+                    id: row.original.id,
+                  })
+                }
+                className="w-full h-full flex justify-between items-center px-2"
+              >
                 <svg
                   width="16"
                   height="17"
@@ -76,11 +189,33 @@ export const BillingColumns: ColumnDef<Payments>[] = [
                     stroke-linejoin="round"
                   />
                 </svg>
-                استنساخ
+                تعليق الموقع
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-
-              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() =>
+                  delteWebsite.mutate({
+                    id: row.original.id,
+                  })
+                }
+                className="w-full h-full flex justify-between items-center px-2 text-[#C23D2F]"
+              >
+                <svg
+                  width="16"
+                  height="17"
+                  viewBox="0 0 16 17"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M9.82667 6.5001L9.596 12.5001M6.404 12.5001L6.17333 6.5001M12.8187 4.3601C13.0467 4.39477 13.2733 4.43144 13.5 4.47077M12.8187 4.3601L12.1067 13.6154C12.0776 13.9923 11.9074 14.3442 11.63 14.6009C11.3527 14.8577 10.9886 15.0002 10.6107 15.0001H5.38933C5.0114 15.0002 4.64735 14.8577 4.36999 14.6009C4.09262 14.3442 3.92239 13.9923 3.89333 13.6154L3.18133 4.3601M12.8187 4.3601C12.0492 4.24378 11.2758 4.1555 10.5 4.09544M3.18133 4.3601C2.95333 4.3941 2.72667 4.43077 2.5 4.4701M3.18133 4.3601C3.95076 4.24378 4.72416 4.1555 5.5 4.09544M10.5 4.09544V3.48477C10.5 2.6981 9.89333 2.0421 9.10667 2.01744C8.36908 1.99386 7.63092 1.99386 6.89333 2.01744C6.10667 2.0421 5.5 2.69877 5.5 3.48477V4.09544M10.5 4.09544C8.83581 3.96682 7.16419 3.96682 5.5 4.09544"
+                    stroke="#C23D2F"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                حذف الاكاديمية
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

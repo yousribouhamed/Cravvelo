@@ -154,7 +154,7 @@ model Website {
   customDomain String?  @unique
   pages          Json
   assets        Json?
-
+  suspended     Boolean @default(false)
   privacy_policy Json?
   phoneNumber   String?
   supportEmail  String?

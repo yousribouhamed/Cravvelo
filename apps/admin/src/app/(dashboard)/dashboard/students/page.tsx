@@ -1,9 +1,25 @@
-import type { FC } from "react";
+import Header from "@/src/components/layout/header";
+import MaxWidthWrapper from "@/src/components/max-width-wrapper";
+import { Student } from "database";
+import { prisma } from "database/src";
+import StudentsTableShell from "./students-table-shell";
 
-interface pageProps {}
+async function getData(): Promise<Student[]> {
+  const data = await prisma.student.findMany({});
+  return data;
+}
 
-const page: FC = ({}) => {
-  return <div>page</div>;
+const Page = async ({}) => {
+  const data = await getData();
+
+  return (
+    <MaxWidthWrapper>
+      <main className="w-full flex flex-col justify-start ">
+        <Header title="جميع الطلاب" />
+        <StudentsTableShell initialData={data} />
+      </main>
+    </MaxWidthWrapper>
+  );
 };
 
-export default page;
+export default Page;
