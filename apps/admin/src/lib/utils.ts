@@ -39,3 +39,16 @@ export async function verifyToken({ token }: { token: string }) {
     throw new Error("your token has expired");
   }
 }
+
+export function getValueFromUrl(
+  pathname: string,
+  index: number
+): string | null {
+  const pathSegments = pathname.split("/");
+
+  if (index >= 0 && index < pathSegments.length) {
+    return pathSegments[index];
+  } else {
+    return null;
+  }
+}

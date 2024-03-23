@@ -21,6 +21,7 @@ import { ScrollArea } from "@ui/components/ui/scroll-area";
 import { cn } from "@ui/lib/utils";
 import Link from "next/link";
 import { SIDE_BAR_ITEMS } from "../../constants/side-bar-items";
+import { getValueFromUrl } from "@/src/lib/utils";
 
 interface MobileLinkProps extends React.PropsWithChildren {
   href: string;
@@ -63,6 +64,8 @@ const SideBarMenu: FC = ({}) => {
   const router = useRouter();
   const path = usePathname();
 
+  const secondValue = getValueFromUrl(path, 2);
+
   return (
     <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 ">
       <div className="w-full">
@@ -78,7 +81,9 @@ const SideBarMenu: FC = ({}) => {
                     {
                       "text-white bg-[#A44600] hover:bg-[#A44600]":
                         path === item.slug ||
-                        (path.includes(item.slug) && item.slug !== "/"),
+                        (path.includes(item.slug) &&
+                          secondValue.includes(item.slug) &&
+                          item.slug !== "/dashboard"),
                     }
                   )}
                 >

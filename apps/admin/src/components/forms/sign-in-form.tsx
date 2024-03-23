@@ -17,6 +17,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { useRouter } from "next/navigation";
+import { maketoast } from "../toasts";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -24,12 +26,14 @@ const formSchema = z.object({
 });
 
 export function SignInForm() {
+  const router = useRouter();
   const mutation = trpc.SignInAsAdmin.useMutation({
     onSuccess: () => {
-      console.log("you are loged in");
+      maketoast.success();
+      router.push("/dashboard");
     },
     onError: () => {
-      console.log("you are loged out");
+      maketoast.error();
     },
   });
 
