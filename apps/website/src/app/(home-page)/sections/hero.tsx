@@ -9,7 +9,7 @@ const Hero: FC = ({}) => {
   return (
     <MaxWidthWrapper className="mt-32">
       <section
-        id="home"
+        id="hero"
         className="isolate w-full h-fit min-h-[700px] pt-4 lg:pt-16 px-4 lg:px-0"
       >
         {/* Hero content grid */}
