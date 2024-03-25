@@ -3,7 +3,6 @@
 import { prisma } from "database/src";
 import { getStudent } from "./auth";
 import { StudentBag } from "@/src/types";
-import { redirect } from "next/navigation";
 import { Course } from "database";
 import { create_course_sale } from "./sales";
 
@@ -52,7 +51,7 @@ export const buyWithCoupon = async ({
       if (Number(coupon.discountAmount) < Number(course.price)) {
         throw new Error("Coupon code is not valid.");
       }
-
+      // TODO : CHECK IF THE USEAGE of the coupon has expired ot not
       // Deactivate the coupon after successful use.
       await prisma.coupon.update({
         where: {
@@ -65,18 +64,24 @@ export const buyWithCoupon = async ({
 
       // Update the student's bag with the purchased course.
       const studentbag = JSON.parse(student.bag as string) as StudentBag;
-      await prisma.student.update({
+
+      const newBag = await addCourseToStudentBag({
+        bag: studentbag,
+        course: course,
+      });
+      console.log("the value retued from the funtion");
+      console.log(newBag);
+      const data = await prisma.student.update({
         where: {
           id: student.id,
         },
         data: {
-          bag: JSON.stringify(
-            addCourseToStudentBag({
-              bag: studentbag,
-              course: course,
-            })
-          ),
+          bag: JSON.stringify(newBag),
         },
+      });
+
+      console.log({
+        updatedData: data,
       });
     }
 
@@ -118,8 +123,8 @@ export const buyWithCoupon = async ({
       course,
       studentId: student.id,
     });
-    // Redirect the user to the student library page after a successful purchase.
-    redirect("/student-library");
+    // // Redirect the user to the student library page after a successful purchase.
+    // redirect("/student-library");
   } catch (error) {
     // Handle any errors that occur during the purchase process.
     console.error("Error while processing the purchase:", error);
@@ -143,9 +148,8 @@ export const addCourseToStudentBag = ({
   course: Course;
 }): StudentBag => {
   // Check if the course already exists in the student's bag.
-  const theCourseExists = bag.courses.find(
-    (item) => item.course.id === course.id
-  );
+  const theCourseExists =
+    bag?.courses && bag?.courses?.find((item) => item.course.id === course.id);
 
   // If the course already exists, return the current bag without modification.
   if (theCourseExists) {
@@ -153,9 +157,11 @@ export const addCourseToStudentBag = ({
   }
 
   // If the course doesn't exist, create a new student bag with the added course.
+
+  const oldData = bag.courses && bag.courses.length > 0 ? [...bag.courses] : [];
   const newStudentBag = {
     courses: [
-      ...bag.courses,
+      ...oldData,
       {
         course,
         currentEpisode: 0,
@@ -163,7 +169,8 @@ export const addCourseToStudentBag = ({
     ],
   } as StudentBag;
 
-  // Return the updated student bag with the new course added.
+  console.log("here it is the current student bag");
+  console.log(newStudentBag);
+
   return newStudentBag;
 };
-export const consumeCoupon = () => {};

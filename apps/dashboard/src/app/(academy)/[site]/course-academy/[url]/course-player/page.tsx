@@ -3,7 +3,7 @@ import CourseVideoPlayer from "@/src/app/(academy)/_components/course-component/
 import { getCourseByUrlPath } from "@/src/app/(academy)/_actions/course";
 import { get_course_chapters } from "@/src/app/(academy)/_actions/chapter";
 import { Chapter } from "database";
-import { Module } from "@/src/types";
+import { Module, StudentBag } from "@/src/types";
 import { notFound } from "next/navigation";
 import { buttonVariants } from "@ui/components/ui/button";
 import { LogOut } from "lucide-react";
@@ -11,6 +11,7 @@ import { cn } from "@ui/lib/utils";
 import { ContextMenuProvider } from "./context-menu";
 import StudentProgress from "./student-progress";
 import MaxWidthWrapper from "@/src/app/(academy)/_components/max-width-wrapper";
+import { getStudent } from "@/src/app/(academy)/_actions/auth";
 
 interface PageProps {
   params: { site: string; url: string };
@@ -33,9 +34,21 @@ const Page = async ({ params }: PageProps) => {
   const course = await getCourseByUrlPath({ url: params?.url });
   const chapters = await get_course_chapters({ courseID: course?.id });
 
+  const student = await getStudent();
+
+  const currentBag = (await JSON.parse(student.bag as string)) as StudentBag;
+
+  console.log("here it the course from the student bag");
+
+  console.log({ bag: currentBag?.courses });
+
   if (!course) {
     notFound();
   }
+
+  const curentEpisose = currentBag?.courses?.find(
+    (item) => item?.course.id === course?.id
+  ).currentEpisode;
 
   if (!chapters || chapters?.length === 0) {
     return <h1>this course is empty</h1>;
@@ -78,7 +91,10 @@ const Page = async ({ params }: PageProps) => {
           </div>
         </div>
         <div className="fixed top-0 bottom-1 right-0 w-[350px] h-full border-l ">
-          <StudentProgress />
+          <StudentProgress
+            currentVideo={curentEpisose}
+            totalVideos={course?.nbrChapters}
+          />
           <div className="w-full h-full col-span-1 flex flex-col items-end py-8 border-l ">
             {" "}
             <VideoChain chapters={chapters} />

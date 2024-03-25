@@ -136,6 +136,7 @@ export const makePayment = async ({
     const newPrice = await applyCoupon({ couponCode, price: total });
 
     if (newPrice === 0) {
+      console.log("the price after coupon is equal to 0");
       await buyWithCoupon({
         code: couponCode,
         courseId: courses[0].id,

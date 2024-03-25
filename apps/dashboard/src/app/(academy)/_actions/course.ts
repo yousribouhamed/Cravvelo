@@ -34,3 +34,14 @@ export const completeCourse = async ({
   // update the student bug currentEpisode index
   // save the update to the database
 };
+
+/**
+ * Function to update the progress on the course
+ * @param url The URL path of the course to be retrieved.
+ * @returns A Promise that resolves to the retrieved course or null if not found.
+ */
+export const updateStudentProgress = async ({ url }: { url: string }) => {
+  // get the student
+  // update the current student bag
+  // revalidate the path
+};

@@ -4,10 +4,26 @@ import type { FC } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
-interface StudentProgressProps {}
+interface StudentProgressProps {
+  totalVideos: number;
+  currentVideo: number;
+}
 
-const studentProgress: FC<StudentProgressProps> = ({}) => {
-  const percentage = 66;
+function calculateProgress(episode: number, videos: number): number {
+  if (episode < 0 || videos < 1 || episode > videos) {
+    throw new Error(
+      "Invalid input: Current video or total videos cannot be less than 1, and current video cannot be greater than total videos."
+    );
+  }
+
+  return (episode / videos) * 100;
+}
+
+const studentProgress: FC<StudentProgressProps> = ({
+  currentVideo,
+  totalVideos,
+}) => {
+  const percentage = calculateProgress(currentVideo, totalVideos);
   return (
     <div className="w-full h-[100px] border-b flex items-center justify-center gap-x-4">
       <div className="w-[75px] h-[75px] relative flex items-center justify-center">
@@ -79,7 +95,9 @@ const studentProgress: FC<StudentProgressProps> = ({}) => {
       </div>
       <div className="w-[200px] h-[80px] flex flex-col justify-center gap-y-2">
         <span className="text-xl font-bold text-black">حالة التطوير </span>
-        <span className="text-black text-lg ">13/27 اكتمل</span>
+        <span className="text-black text-lg ">
+          {currentVideo}/{totalVideos} اكتمل
+        </span>
       </div>
     </div>
   );

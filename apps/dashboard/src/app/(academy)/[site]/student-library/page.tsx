@@ -8,6 +8,7 @@ import { getSubDomainValue } from "../../lib";
 import { getSiteData } from "../../_actions";
 import AcademiaFooter from "../../_components/layout/academy-footer";
 import { notFound, redirect } from "next/navigation";
+import Link from "next/link";
 
 interface PageProps {
   params: { site: string };
@@ -33,6 +34,9 @@ const Page = async ({ params }: PageProps) => {
   }
 
   const bag = JSON.parse(student.bag as string) as StudentBag;
+
+  console.log(bag);
+
   return (
     <>
       <AcademyHeader
@@ -42,8 +46,8 @@ const Page = async ({ params }: PageProps) => {
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
       />
-      <MaxWidthWrapper>
-        <div className="w-full h-full flex flex-col items-center">
+      <MaxWidthWrapper className="mt-[140px]">
+        <div className="w-full  flex flex-col items-center h-fit min-h-[calc(100vh-140px)]">
           <div className="w-full h-[100px] flex items-center justify-start">
             <h1 className="text-3xl font-bold"> المكتبة الرقمية</h1>
           </div>
@@ -58,32 +62,31 @@ const Page = async ({ params }: PageProps) => {
             )}
             {bag?.courses?.map((item, index) => {
               return (
-                <div></div>
-                // <div
-                //   key={item.title + index}
-                //   className="w-[320px] min-h-[300px] h-fit p-0  border  flex flex-col shadow rounded-xl  transition-all duration-700 bg-white cursor-pointer "
-                // >
-                //   <img
-                //     src={item.thumnailUrl}
-                //     className="w-full h-[200px] rounded-t-xl object-cover "
-                //   />
-                //   <div className="w-full h-[50px] px-4 flex items-center justify-between my-4">
-                //     <h2 className="text-black font-semibold text-lg text-start ">
-                //       {item.title}
-                //     </h2>
-                //   </div>
+                <div
+                  key={item.course.title + index}
+                  className="w-[320px] min-h-[300px] h-fit p-0  border  flex flex-col shadow rounded-xl  transition-all duration-700 bg-white cursor-pointer "
+                >
+                  <img
+                    src={item.course.thumnailUrl}
+                    className="w-full h-[200px] rounded-t-xl object-cover "
+                  />
+                  <div className="w-full h-[50px] px-4 flex items-center justify-between my-4">
+                    <h2 className="text-black font-semibold text-lg text-start ">
+                      {item.course.title}
+                    </h2>
+                  </div>
 
-                //   {/* this will hold the price */}
+                  {/* this will hold the price */}
 
-                //   <div className="w-full h-[70px] px-4 flex items-center justify-center gap-x-4  p-2">
-                //     <Link
-                //       href={`/course-academy/${item.id}/course-player`}
-                //       className="w-[80%] bg-blue-500 hover:bg-blue-600 text-white p-2 h-[45px] flex items-center justify-center rounded-xl"
-                //     >
-                //       شاهد الان
-                //     </Link>
-                //   </div>
-                // </div>
+                  <div className="w-full h-[70px] px-4 flex items-center justify-center gap-x-4  p-2">
+                    <Link
+                      href={`/course-academy/${item.course.id}/course-player`}
+                      className="w-[80%] bg-blue-500 hover:bg-blue-600 text-white p-2 h-[45px] flex items-center justify-center rounded-xl"
+                    >
+                      شاهد الان
+                    </Link>
+                  </div>
+                </div>
               );
             })}
           </div>

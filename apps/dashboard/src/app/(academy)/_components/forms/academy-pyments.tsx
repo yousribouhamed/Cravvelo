@@ -144,7 +144,7 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({
         <span className="text-[#677489] font-semibold text-md">قيمة الخصم</span>
         <span>
           -DZD{" "}
-          {priceAfterCouponCode
+          {priceAfterCouponCode || priceAfterCouponCode === 0
             ? state?.shoppingBag
                 ?.map((item) => Number(item.price))
                 ?.reduce((current, next) => current + next) -
@@ -157,7 +157,7 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({
         <span className="text-black font-semibold text-md">المجموع</span>
         <span>
           DZD{" "}
-          {priceAfterCouponCode
+          {priceAfterCouponCode || priceAfterCouponCode === 0
             ? priceAfterCouponCode
             : state?.shoppingBag
                 ?.map((item) => Number(item.price))
@@ -176,7 +176,7 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({
           {loading && <LoadingSpinner />}
           دفع DZD{" "}
           {priceAfterCouponCode
-            ? priceAfterCouponCode
+            ? priceAfterCouponCode || priceAfterCouponCode === 0
             : state?.shoppingBag
                 ?.map((item) => Number(item.price))
                 ?.reduce((current, next) => current + next)}
