@@ -62,9 +62,9 @@ const Page = async ({ params }: PageProps) => {
               </a>
             </div>
           </div>
-          <MaxWidthWrapper className="px-0 w-full">
+          <div className="px-0 w-full">
             <div className="w-full  min-h-screen h-fit flex flex-col items-center gap-x-4 p-4   ">
-              <div className="w-full h-full max-h-[800px] mx-w-[1400px] flex flex-col items-center  ">
+              <div className="w-full h-fit max-h-[1500px] bg-black flex flex-col items-center  ">
                 <CourseVideoPlayer videoId={getFirstVideo(chapters[0])} />
               </div>
 
@@ -75,7 +75,7 @@ const Page = async ({ params }: PageProps) => {
                 </button>
               </div>
             </div>
-          </MaxWidthWrapper>
+          </div>
         </div>
         <div className="fixed top-0 bottom-1 right-0 w-[350px] h-full border-l ">
           <StudentProgress />

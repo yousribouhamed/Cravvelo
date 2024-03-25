@@ -19,9 +19,9 @@ const CourseVideoPlayer: FC<VideoPlayerProps> = ({ videoId }) => {
           المادة : {state?.currentModule?.title}
         </span>
       </div> */}
-      <div className="w-full h-full min-h-[500px] rounded-xl bg-gray-200">
+      <div className="w-full h-fit rounded-xl ">
         {state?.currentModule ? (
-          <div className="w-full h-full min-h-[500px]  relative ">
+          <div className="w-full h-[600px] 2xl:h-[800px]  relative ">
             <iframe
               src={`https://iframe.mediadelivery.net/embed/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/${state?.currentModule?.fileUrl}`}
               loading="lazy"
@@ -37,7 +37,7 @@ const CourseVideoPlayer: FC<VideoPlayerProps> = ({ videoId }) => {
             ></iframe>
           </div>
         ) : (
-          <div className="w-full h-full min-h-[500px]  relative ">
+          <div className="w-full h-[600px] 2xl:h-[800px] relative ">
             <iframe
               src={`https://iframe.mediadelivery.net/embed/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/${videoId}?autoplay=true`}
               loading="lazy"

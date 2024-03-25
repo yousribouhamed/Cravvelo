@@ -12,11 +12,13 @@ import { Module } from "@/src/types";
 import { useCoursePlayerStore } from "../../../global-state/course-player-store";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
 
-const formatVideoSize = (sizeInBytes) => {
-  const hours = Math.floor(sizeInBytes / (60 * 60 * 1000));
-  const minutes = Math.floor((sizeInBytes % (60 * 60 * 1000)) / (60 * 1000));
-  return `${hours}:${minutes}`;
-};
+function formatDuration(durationSeconds: number): string {
+  const minutes: number = Math.floor(durationSeconds / 60);
+  const seconds: number = durationSeconds % 60;
+  return `${minutes.toString().padStart(2, "0")}:${seconds
+    .toString()
+    .padStart(2, "0")}`;
+}
 
 interface VideoChainProps {
   chapters: Chapter[];
@@ -59,7 +61,7 @@ const VideoChain: FC<VideoChainProps> = ({ chapters }) => {
                             return (
                               <button
                                 key={subitem?.title + index}
-                                className="w-full h-[70px] flex items-center justify-start gap-x-4 cursor-pointer hover:bg-gray-100 transition-all duration-300 ease-in-out "
+                                className="w-full h-[70px] flex items-center justify-start gap-x-4 cursor-pointer  hover:bg-gray-100  transition-all duration-300 ease-in-out "
                                 onClick={() => {
                                   console.log("this is subitem");
                                   console.log(
@@ -69,9 +71,12 @@ const VideoChain: FC<VideoChainProps> = ({ chapters }) => {
                                   setCurrentModule(subitem);
                                 }}
                               >
+                                <div className="w-[60px] h-full  flex items-center justify-center">
+                                  <div className="w-[30px] h-[30px] rounded-[50%]  bg-white border-4 border-[#007AFF]"></div>
+                                </div>
                                 {/* this is the second container */}
-                                <div className="w-full  h-full flex flex-col items-start justify-center gap-y-1 p-4 ">
-                                  <div className="flex items-center justify-start gap-x-2 mt-2">
+                                <div className="w-full  h-full flex flex-col items-start justify-center gap-y-2 py-4 ">
+                                  <div className="flex items-center justify-start gap-x-2 mt-4">
                                     <svg
                                       width="23"
                                       height="20"
@@ -89,12 +94,12 @@ const VideoChain: FC<VideoChainProps> = ({ chapters }) => {
                                       />
                                     </svg>
                                     <p className="text-sm text-black ">
-                                      {index}-{subitem?.title}
+                                      {index + " "}-{subitem?.title}
                                     </p>
                                   </div>
 
-                                  <span className="text-black text-sm my-4">
-                                    {formatVideoSize(subitem.length)}
+                                  <span className="text-black text-sm">
+                                    ({formatDuration(subitem.length)})
                                   </span>
                                 </div>
                               </button>
