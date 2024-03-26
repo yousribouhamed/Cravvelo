@@ -8,8 +8,6 @@ import { getSubDomainValue } from "../../lib";
 import { getSiteData } from "../../_actions";
 import AcademiaFooter from "../../_components/layout/academy-footer";
 import { notFound, redirect } from "next/navigation";
-import Link from "next/link";
-
 import { Progress } from "@ui/components/ui/progress";
 
 import { BookMarked } from "lucide-react";
