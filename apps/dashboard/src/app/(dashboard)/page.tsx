@@ -14,7 +14,7 @@ import { NotFoundCard } from "@/src/components/not-found-card";
 import useHaveAccess from "@/src/hooks/use-have-access";
 import { buttonVariants } from "@ui/components/ui/button";
 import { cn } from "@ui/lib/utils";
-import { ArrowUpLeft } from "lucide-react";
+import { ArrowUpLeft, Eye } from "lucide-react";
 import Link from "next/link";
 import PublishWebsite from "@/src/components/models/editor/publish-website";
 import { prisma } from "database/src";
@@ -73,7 +73,8 @@ async function Page() {
               href={`https://${user?.subdomain}`}
             >
               <span>معاينة الأكاديمية</span>
-              <ArrowUpLeft className=" h-4 w-4" />
+
+              <Eye className=" h-4 w-4" />
             </Link>
           ) : (
             <PublishWebsite />

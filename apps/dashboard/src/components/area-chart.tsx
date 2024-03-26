@@ -105,7 +105,7 @@ const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
           <div className="w-[300px] h-full flex flex-col items-end justify-center gap-y-2">
             <div className="w-[300px] flex items-center gap-x-4 justify-end">
               <span className="text-sm">الدورات التدريبية</span>
-              <div className="w-[80px] h-1 bg-[#FFB800] rounded-full" />
+              <div className="w-[80px] h-1 bg-[#000000] rounded-full" />
             </div>
             <div className="w-[300px] flex items-center gap-x-4 justify-end">
               <span className="text-sm">المنتجات الرقمية</span>
@@ -127,9 +127,9 @@ const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
                   <stop offset="95%" stopColor="#FC6B00" stopOpacity={0} />
                 </linearGradient>
                 <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#FFB800" stopOpacity={0.8} />
+                  <stop offset="5%" stopColor="#000000" stopOpacity={0.8} />
                   {/* <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} /> */}
-                  <stop offset="95%" stopColor="#FFB800" stopOpacity={0} />
+                  <stop offset="95%" stopColor="#000000" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <XAxis
@@ -160,7 +160,7 @@ const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
               <Area
                 type="monotone"
                 dataKey="الدورات التدريبية"
-                stroke="#FFB800" // Adjusted stroke color for PV
+                stroke="#000000" // Adjusted stroke color for PV
                 strokeWidth={2} // Increased stroke width for PV
                 fillOpacity={1}
                 fill="url(#colorPv)"
