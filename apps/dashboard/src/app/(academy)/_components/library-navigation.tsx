@@ -15,10 +15,10 @@ const getLinks = () => {
     //   name: "المنتجات الرقمية",
     //   href: `/student-library/products`,
     // },
-    {
-      name: " الشهادات",
-      href: `/student-library/certificates`,
-    },
+    // {
+    //   name: " الشهادات",
+    //   href: `/student-library/certificates`,
+    // },
   ];
 
   return links;

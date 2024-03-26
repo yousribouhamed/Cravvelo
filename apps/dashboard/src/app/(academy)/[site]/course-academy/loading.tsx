@@ -1,11 +1,26 @@
+import type { FC } from "react";
 import LoadingCard from "../../_components/loading";
+import AcademyHeader from "../../_components/layout/academy-header";
+import MaxWidthWrapper from "../../_components/max-width-wrapper";
+import AcademiaFooter from "../../_components/layout/academy-footer";
 
-const Loading = async () => {
+const Page: FC = ({}) => {
   return (
-    <div className="  w-full h-fit min-h-screen flex flex-col gap-4 items-start py-4">
-      <LoadingCard />
-    </div>
+    <>
+      <AcademyHeader
+        color={"#FC6B00"}
+        student={null}
+        isAuthanticated={true}
+        subdomain={null}
+        logo={null}
+      />
+
+      <MaxWidthWrapper className="h-fit mt-[140px] min-h-[calc(100vh-70px)] overflow-hidden ">
+        <LoadingCard />
+      </MaxWidthWrapper>
+      <AcademiaFooter />
+    </>
   );
 };
 
-export default Loading;
+export default Page;

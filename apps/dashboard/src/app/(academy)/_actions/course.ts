@@ -7,6 +7,8 @@
  */
 
 import { prisma } from "database/src";
+import { getStudent } from "./auth";
+import { StudentBag } from "@/src/types";
 
 /**
  * Function to retrieve a course based on its URL path.
@@ -40,8 +42,45 @@ export const completeCourse = async ({
  * @param url The URL path of the course to be retrieved.
  * @returns A Promise that resolves to the retrieved course or null if not found.
  */
-export const updateStudentProgress = async ({ url }: { url: string }) => {
+export const updateStudentProgress = async ({
+  courseId,
+  newEpisond,
+}: {
+  newEpisond: string;
+  courseId: string;
+}) => {
   // get the student
-  // update the current student bag
-  // revalidate the path
+  const student = await getStudent();
+
+  // const course = await prisma.course.findFirst({
+  //   where: {
+  //     id: courseId,
+  //   },
+  // });
+
+  const oldBag = JSON.parse(student.bag as string) as StudentBag;
+
+  const target = oldBag.courses.find((item) => item.course.id === courseId);
+
+  const newCourses = oldBag.courses.filter(
+    (item) => item.course.id !== courseId
+  );
+
+  const updatedItem = {
+    ...target,
+    currentEpisode: target.currentEpisode + 1,
+  };
+
+  const newBag = { ...oldBag, courses: [...newCourses, updatedItem] };
+
+  // add the updated item
+
+  await prisma.student.update({
+    where: {
+      id: student.id,
+    },
+    data: {
+      bag: JSON.stringify(newBag),
+    },
+  });
 };

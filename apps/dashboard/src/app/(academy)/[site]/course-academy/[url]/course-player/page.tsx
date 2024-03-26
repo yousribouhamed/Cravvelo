@@ -83,7 +83,7 @@ const Page = async ({ params }: PageProps) => {
 
               <div className="w-full h-[100px] my-4 flex items-center justify-between px-4 border rounded-xl">
                 <span className="text-xl font-bold">current module</span>
-                <button className="bg-green-600  rounded-xl text-white py-2 px-4 ">
+                <button className="bg-blue-600  rounded-xl text-white py-2 px-4 ">
                   Complete and continue
                 </button>
               </div>

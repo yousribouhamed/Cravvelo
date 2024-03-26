@@ -37,7 +37,7 @@ const Page = async ({ params }: PageProps) => {
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
       />
-      <div className="w-full min-h-[500px] h-fit flex items-center justify-center mt-[70px]">
+      <div className="w-full min-h-[500px] h-fit flex items-center justify-center mt-[140px]">
         <AcademyVerifyEmailForm
           color={website?.color}
           accountId={website.accountId}
