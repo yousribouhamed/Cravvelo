@@ -62,7 +62,7 @@ async function Page() {
     <MaxWidthWrapper>
       <main className="w-full flex flex-col overflow-y-hidden h-fit mb-10 justify-start">
         <Header user={user} title="الرئيسية" />
-        <ConfirmeAccount />
+        {/* <ConfirmeAccount /> */}
         <div className="w-full h-[30px] flex justify-between items-center mt-10 ">
           <DatePickerWithRange />
           {user?.subdomain ? (

@@ -118,7 +118,8 @@ const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
             <AreaChart
               width={730}
               height={250}
-              data={aggregateSalesByMonth()}
+              // aggregateSalesByMonth()
+              data={data}
               margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
             >
               <defs>
