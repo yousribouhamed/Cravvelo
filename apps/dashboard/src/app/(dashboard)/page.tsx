@@ -18,6 +18,7 @@ import { ArrowUpLeft, Eye } from "lucide-react";
 import Link from "next/link";
 import PublishWebsite from "@/src/components/models/editor/publish-website";
 import { prisma } from "database/src";
+import ConfirmeAccount from "@/src/components/confirme-account";
 
 const getAllSales = async ({ accountId }: { accountId: string }) => {
   const sales = await prisma.sale.findMany({
@@ -61,6 +62,7 @@ async function Page() {
     <MaxWidthWrapper>
       <main className="w-full flex flex-col overflow-y-hidden h-fit mb-10 justify-start">
         <Header user={user} title="الرئيسية" />
+        <ConfirmeAccount />
         <div className="w-full h-[30px] flex justify-between items-center mt-10 ">
           <DatePickerWithRange />
           {user?.subdomain ? (

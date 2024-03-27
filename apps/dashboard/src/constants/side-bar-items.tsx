@@ -102,11 +102,11 @@ export const SIDE_BAR_ITEMS = [
         icon: Icons.Home,
         slug: "/students",
       },
-      {
-        title: "الشهدات",
-        icon: Icons.Home,
-        slug: "/students/certificates",
-      },
+      // {
+      //   title: "الشهدات",
+      //   icon: Icons.Home,
+      //   slug: "/students/certificates",
+      // },
 
       {
         title: "التعليقات ",
