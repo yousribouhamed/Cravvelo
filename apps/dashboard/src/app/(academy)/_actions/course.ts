@@ -21,7 +21,7 @@ export const getCourseByUrlPath = async ({ url }: { url: string }) => {
       id: url, // Querying the course by its URL path (assuming 'id' represents the URL path)
     },
   });
-
+  console.log(course);
   return course; // Returning the retrieved course or null if not found
 };
 
