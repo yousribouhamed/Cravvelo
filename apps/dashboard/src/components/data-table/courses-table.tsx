@@ -9,6 +9,7 @@ import {
   ColumnFiltersState,
   getFilteredRowModel,
   useReactTable,
+  getPaginationRowModel,
 } from "@tanstack/react-table";
 import { Button } from "@ui/components/ui/button";
 import TableHeader2 from "./table-header";
@@ -21,6 +22,8 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/components/ui/table";
+import { DoubleArrowLeftIcon } from "@radix-ui/react-icons";
+import { ChevronRightIcon } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -46,6 +49,7 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     state: {
       sorting,
       rowSelection,
@@ -110,6 +114,28 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
+
+        <div className="w-full h-[60px] border-t flex items-center justify-start gap-x-6 p-2">
+          <Button
+            disabled={!table.getCanPreviousPage()}
+            aria-label="Go to previous page"
+            onClick={() => table.previousPage()}
+            variant="ghost"
+          >
+            <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+            سابق
+          </Button>
+
+          <Button
+            aria-label="Go to next page"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+            variant="ghost"
+          >
+            التالي
+            <DoubleArrowLeftIcon className="h-4 w-4" aria-hidden="true" />
+          </Button>
+        </div>
       </div>
     </>
   );

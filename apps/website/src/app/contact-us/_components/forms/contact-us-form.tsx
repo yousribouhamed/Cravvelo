@@ -18,6 +18,8 @@ import { Input } from "@ui/components/ui/input";
 
 const formSchema = z.object({
   username: z.string().min(2).max(50),
+  email: z.string().min(2).max(50),
+  message: z.string().min(2).max(50),
 });
 
 import type { FC } from "react";
@@ -55,7 +57,7 @@ const ContactUsForm: FC = ({}) => {
                 الاسم الكامل <span className="text-red-500 text-xl ">*</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="عبدالله " {...field} />
               </FormControl>
 
               <FormMessage />
@@ -64,7 +66,7 @@ const ContactUsForm: FC = ({}) => {
         />
         <FormField
           control={form.control}
-          name="username"
+          name="email"
           render={({ field }) => (
             <FormItem>
               <FormLabel>
@@ -72,7 +74,7 @@ const ContactUsForm: FC = ({}) => {
                 <span className="text-red-500 text-xl ">*</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="example@gmail.com" {...field} />
               </FormControl>
 
               <FormMessage />
@@ -82,7 +84,7 @@ const ContactUsForm: FC = ({}) => {
 
         <FormField
           control={form.control}
-          name="username"
+          name="message"
           render={({ field }) => (
             <FormItem>
               <FormLabel>

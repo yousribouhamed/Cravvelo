@@ -18,7 +18,6 @@ import { ArrowUpLeft, Eye } from "lucide-react";
 import Link from "next/link";
 import PublishWebsite from "@/src/components/models/editor/publish-website";
 import { prisma } from "database/src";
-import ConfirmeAccount from "@/src/components/confirme-account";
 
 const getAllSales = async ({ accountId }: { accountId: string }) => {
   const sales = await prisma.sale.findMany({

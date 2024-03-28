@@ -2,19 +2,20 @@ import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import HeroLights from "@/src/components/svgs/hero-lights";
 import type { FC } from "react";
 import ContactUsForm from "./_components/forms/contact-us-form";
+import SiteFooter from "@/src/components/layout/site-footer";
 
 const Page: FC = ({}) => {
   return (
     <>
       <MaxWidthWrapper>
-        <div className="w-full h-fit min-h-[400px] mt-[140px] grid grid-cols-2 ">
-          <div className="w-full h-full col-span-1 flex flex-col items-center justify-between pt-[80px] ">
+        <div className="w-full h-fit min-h-[300px] mt-[140px] grid grid-cols-2 ">
+          <div className="w-full h-full col-span-1 flex flex-col items-center justify-center gap-y-32 pt-[80px] ">
             {/* the first writing */}
-            <div className="w-full h-[50px] relative space-x-2 flex items-center justify-center gap-x-4">
-              <div className="bg-[#FC6B00] p-4  w-[100px] h-[50px] rounded-xl">
+            <div className="w-full h-[50px] mr-[200px] xl:mr-[350px] relative space-x-2 flex items-center justify-start gap-x-4">
+              <div className="bg-[#FC6B00] rotate-6 p-4  flex items-center justify-center w-[100px] h-[50px] rounded-xl">
                 <span className="text-white font-bold text-xl"> تواصل</span>
               </div>
-              <div className="bg-[#FFC901] p-4 w-[100px] h-[50px] rounded-xl">
+              <div className="bg-[#FFC901] p-4 -rotate-12   flex items-center justify-center  absolute right-[5.5rem] -top-5  w-[100px] h-[50px] rounded-xl">
                 <span className="text-black font-bold text-xl">معنا</span>
               </div>
             </div>
@@ -71,6 +72,7 @@ const Page: FC = ({}) => {
         </div>
       </MaxWidthWrapper>
       <HeroLights />
+      <SiteFooter />
     </>
   );
 };
