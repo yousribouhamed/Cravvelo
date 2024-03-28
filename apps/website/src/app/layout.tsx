@@ -22,9 +22,9 @@ export default function RootLayout({
       lang="ar"
       className="!scroll-smooth"
     >
-      <CrispChat />
+      {/* <CrispChat /> */}
       <body className={"min-h-screen h-fit  bg-[#FAFAFA] w-full"}>
-        <NavBar />
+        {/* <NavBar /> */}
         <div className="  w-full h-fit min-h-full">{children}</div>
       </body>
       {/* 
