@@ -39,7 +39,7 @@ const Page = async ({ params }: PageProps) => {
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
       />
-      <MaxWidthWrapper className="h-fit mt-[70px] min-h-[calc(100vh-70px)] ">
+      <MaxWidthWrapper className="h-fit mt-[110px] min-h-[calc(100vh-110px)] ">
         <div className="w-full h-full flex flex-col items-center py-4">
           <div className="w-full h-[50px] flex items-center justify-start">
             <h1 className="text-xl font-bold">الملف الشخصي</h1>

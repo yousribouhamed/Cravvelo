@@ -37,7 +37,7 @@ const Page = async ({ params }: PageProps) => {
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
       />
-      <div className="w-full min-h-[500px] mt-[140px] h-fit flex items-center justify-center ">
+      <div className="w-full min-h-[500px] mt-[110px] h-fit flex items-center justify-center ">
         <AcademySignInForm
           color={website?.color}
           accountId={website.accountId}

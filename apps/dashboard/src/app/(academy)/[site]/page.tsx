@@ -35,7 +35,7 @@ const Page = async ({ params }: PageProps) => {
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
       />
-      <MaxWidthWrapper className="h-fit mt-[140px] min-h-[calc(100vh-70px)] ">
+      <MaxWidthWrapper className="h-fit mt-[110px] min-h-[calc(100vh-70px)] ">
         <main className="w-full h-fit min-h-full flex flex-col items-center justify-center ">
           <div
             className="w-full h-[250px]  flex items-center justify-center my-10"

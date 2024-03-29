@@ -14,9 +14,9 @@ const LiarSales: FC = ({}) => {
   });
 
   return (
-    <div className="w-full bg-red-600 h-[70px] flex items-center justify-between px-8">
+    <div className="w-full bg-[#f02d00] h-[40px] flex items-center justify-between px-8">
       <div className="w-fit h-full flex items-center justify-start">
-        <span className="font-extrabold text-white text-xl">
+        <span className="font-bold text-white text-sm">
           تخفيضات على جميع الدورات في الأكاديمية
         </span>
       </div>
@@ -24,10 +24,10 @@ const LiarSales: FC = ({}) => {
         dir="ltr"
         className="w-[100px] flex items-center justify-start text-white gap-x-2"
       >
-        <span className="text-xl font-bold">{days}</span>:
-        <span className="text-xl font-bold">{hours}</span>:
-        <span className="text-xl font-bold">{minutes}</span>:
-        <span className="text-xl font-bold">{seconds}</span>
+        <span className="text-sm font-bold">{days}</span>:
+        <span className="text-sm font-bold">{hours}</span>:
+        <span className="text-sm font-bold">{minutes}</span>:
+        <span className="text-sm font-bold">{seconds}</span>
       </div>
     </div>
   );

@@ -44,8 +44,8 @@ const Page = async ({ params }: PageProps) => {
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
       />
-      <MaxWidthWrapper className="mt-[140px]">
-        <div className="w-full  flex flex-col items-center h-fit min-h-[calc(100vh-140px)]">
+      <MaxWidthWrapper className="mt-[110px]">
+        <div className="w-full  flex flex-col items-center h-fit min-h-[calc(100vh-110px)]">
           <div className="w-full h-[100px] flex items-center justify-start">
             <h1 className="text-3xl font-bold"> المكتبة الرقمية</h1>
           </div>
