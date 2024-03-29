@@ -64,6 +64,7 @@ model Academy {
 
 model Course {
   id                     String     @unique @default(uuid())
+  rating                 Float      @default(0)
   accountId              String
   title                  String
   courseUrl              String?    @db.VarChar(199)

@@ -89,7 +89,7 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
                   </div>
 
                   <StarRatings
-                    rating={0}
+                    rating={item.rating}
                     starDimension="20px"
                     starSpacing="1px"
                   />
@@ -139,7 +139,7 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
         className="w-full h-fit min-h-[100px] flex items-center justify-center "
       >
         <Pagination>
-          <PaginationContent>
+          <PaginationContent dir="rtl">
             <PaginationItem>
               <PaginationPrevious
                 onClick={() => handlePageChange(currentPage - 1)}

@@ -7,6 +7,7 @@ import StarRatings from "react-star-ratings";
 import { Course } from "database";
 import { create_rating } from "../_actions/rating";
 import { maketoast } from "@/src/components/toasts";
+import { revalidatePath } from "next/cache";
 
 export default function AddReview({ course }: { course: Course }) {
   const [open, setOpen] = useState<boolean>(false);
@@ -24,6 +25,7 @@ export default function AddReview({ course }: { course: Course }) {
         rating,
         course,
       });
+
       maketoast.successWithText({
         text: "لقد تم إرسال تعليقك للمراجعة، عند الموافقة عليه سيتم عرضه",
       });
@@ -31,6 +33,7 @@ export default function AddReview({ course }: { course: Course }) {
       maketoast.error();
       console.error(err);
     } finally {
+      revalidatePath(`/course-academy/${course.id}`);
       setLoading(false);
       setOpen(false);
     }

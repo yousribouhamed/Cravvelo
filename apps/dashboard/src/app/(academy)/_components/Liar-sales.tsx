@@ -14,7 +14,7 @@ const LiarSales: FC = ({}) => {
   });
 
   return (
-    <div className="w-full bg-[#f02d00] h-[40px] flex items-center justify-between px-8">
+    <div className="w-full bg-[#f02d00] h-[40px] flex items-center justify-center gap-x-8 px-8">
       <div className="w-fit h-full flex items-center justify-start">
         <span className="font-bold text-white text-sm">
           تخفيضات على جميع الدورات في الأكاديمية

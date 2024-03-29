@@ -15,12 +15,12 @@ export const SIDE_BAR_ITEMS = [
     icon: BookMarked,
     subitems: [],
   },
-  {
-    title: "المنتجات الرقمية",
-    slug: "/products",
-    icon: Box,
-    subitems: [],
-  },
+  // {
+  //   title: "المنتجات الرقمية",
+  //   slug: "/products",
+  //   icon: Box,
+  //   subitems: [],
+  // },
 
   {
     title: "المبيعات",

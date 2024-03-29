@@ -124,15 +124,13 @@ const Raitings: FC<{ course: Course; comments: Comment[] }> = ({
       </div>
       <div
         dir="ltr"
-        className={` min-h-[${
-          comments.length * 50
-        }px] h-fit flex flex-col justify-start items-star gap-y-4 w-full `}
+        className={` min-h-[200px] h-fit flex flex-col justify-start items-star gap-y-4 w-full `}
       >
         {comments.map((item) => {
           return (
             <div
               key={item.id}
-              className="flex items-start h-fit min-h-[50px] justify-start gap-x-2 px-6"
+              className="flex items-start h-fit min-h-[100px] justify-start gap-x-2 px-6"
             >
               <Avatar className="w-10 h-10">
                 <AvatarImage src={item.studentImage} />

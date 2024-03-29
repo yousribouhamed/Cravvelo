@@ -29,9 +29,9 @@ const StartNew: FC = ({}) => {
             height={850}
           />
         </div>
-        <div className="col-span-1 absolute ml-0 mt-1 left-28 bottom-5   ">
+        {/* <div className="col-span-1 absolute ml-0 mt-1 left-28 bottom-5   ">
           {trustpilotSvg()}
-        </div>
+        </div> */}
       </div>
     </MaxWidthWrapper>
   );

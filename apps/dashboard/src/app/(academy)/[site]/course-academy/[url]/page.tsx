@@ -53,9 +53,9 @@ const Page = async ({ params }: PageProps) => {
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
       />
-      <MaxWidthWrapper className="h-fit mt-[110px] min-h-[calc(100vh-70px)] overflow-hidden ">
+      <MaxWidthWrapper className="h-fit mt-[110px] min-h-[calc(100vh-70px)]  ">
         <div className="  w-full h-fit min-h-screen flex flex-col lg:flex-row  justify-between gap-x-4 items-start py-4">
-          <div className=" w-full lg:w-[calc(100%-300px)] min-h-[500px] h-fit px-2 py-8 lg:p-8">
+          <div className=" w-full lg:w-[calc(100%-300px)] min-h-[500px] h-fit px-2 py-8 lg:p-8 pb-4">
             <h1 className="text-3xl font-bold text-black text-start">
               {course.title}
             </h1>

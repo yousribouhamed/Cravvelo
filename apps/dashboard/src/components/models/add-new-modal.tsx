@@ -216,7 +216,7 @@ const AddNew: FC = ({}) => {
                   onClick={() => setSelectedItem(0)}
                   variant="secondary"
                   size="lg"
-                  className={`bg-white flex items-center gap-x-4 text-xl border text-black h-16 ${
+                  className={`bg-white flex items-center gap-x-4 text-lg font-bold border text-black h-16 ${
                     selectedItem === 0 ? "border-[#FC6B00] border-2" : ""
                   }`}
                 >
@@ -226,12 +226,13 @@ const AddNew: FC = ({}) => {
                   دورة تدريبية
                 </Button>
                 <Button
+                  disabled
                   data-ripple-light="true"
                   type="button"
                   onClick={() => setSelectedItem(1)}
                   variant="secondary"
                   size="lg"
-                  className={`bg-white text-xl border flex items-center gap-x-4 text-black h-16 ${
+                  className={`bg-white text-lg font-bold border flex items-center gap-x-4 text-black h-16 ${
                     selectedItem === 1 ? "border-[#FC6B00] border-2" : ""
                   }`}
                 >

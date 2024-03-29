@@ -20,7 +20,7 @@ export const create_rating = async ({
       throw new Error("there is no student");
     }
 
-    const sale = await prisma.comment.create({
+    const comment = await prisma.comment.create({
       data: {
         rating,
         content,
@@ -33,9 +33,24 @@ export const create_rating = async ({
       },
     });
 
-    return sale;
+    const comments = await prisma.comment.findMany({
+      where: {
+        courseId: course.id,
+      },
+    });
+
+    const newCourseRating = (course.rating ?? 0 + rating) / comments.length;
+
+    await prisma.course.update({
+      where: { id: course.id },
+      data: {
+        rating: newCourseRating,
+      },
+    });
+
+    return comment;
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 

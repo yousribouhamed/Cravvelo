@@ -9,9 +9,7 @@ export const prisma =
   new PrismaClient({
     log:
       //@ts-ignore
-      process?.env?.NODE_ENV === "development"
-        ? ["query", "error", "warn"]
-        : ["error"],
+      process?.env?.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
   });
 //@ts-ignore
 if (process?.env?.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
