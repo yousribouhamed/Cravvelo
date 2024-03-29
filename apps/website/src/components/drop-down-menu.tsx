@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { Popover, Transition } from "@headlessui/react";
 
 import { ChevronDownIcon } from "lucide-react";
@@ -130,15 +130,22 @@ const solutions = [
 ];
 
 export default function DropDownMenu() {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
   return (
     <Popover className="relative">
       {({ open, close }) => (
         <>
           <Popover.Button
+            ref={buttonRef}
+            onMouseEnter={() => buttonRef?.current?.click()}
             className={cn(
               buttonVariants({ variant: "ghost" }),
-              "font-semibold text-lg text-black leading-[40px]  rounded-full transition-all duration-150  "
+              "font-semibold text-lg text-black leading-[40px]   rounded-full transition-all duration-150  "
             )}
+            style={{
+              cursor: "pointer",
+            }}
           >
             الخدمات
             <ChevronDownIcon
@@ -148,7 +155,10 @@ export default function DropDownMenu() {
             />
           </Popover.Button>
 
-          <Popover.Overlay onClick={close} className="fixed inset-0 " />
+          <Popover.Overlay
+            onClick={close}
+            className="fixed inset-0  cursor-pointer"
+          />
 
           <Transition
             as={Fragment}
@@ -159,7 +169,10 @@ export default function DropDownMenu() {
             leaveFrom="opacity-100 translate-y-0"
             leaveTo="opacity-0 translate-y-1"
           >
-            <Popover.Panel className="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4">
+            <Popover.Panel
+              onMouseLeave={() => buttonRef?.current?.click()}
+              className="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4"
+            >
               <div className="w-screen max-w-[600px]  overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5 grid grid-cols-2 grid-rows-3 p-4">
                 {solutions.map((item) => (
                   <div
