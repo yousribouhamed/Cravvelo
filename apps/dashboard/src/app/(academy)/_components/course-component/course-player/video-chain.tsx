@@ -1,6 +1,6 @@
 "use client";
 
-import type { FC } from "react";
+import { useState, type FC } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -11,6 +11,7 @@ import { Course, Chapter } from "database";
 import { Module } from "@/src/types";
 import { useCoursePlayerStore } from "../../../global-state/course-player-store";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
+import { Check } from "lucide-react";
 
 function formatDuration(durationSeconds: number): string {
   const minutes: number = Math.floor(durationSeconds / 60);
@@ -22,9 +23,12 @@ function formatDuration(durationSeconds: number): string {
 
 interface VideoChainProps {
   chapters: Chapter[];
+  currentEpisode: number;
 }
 
-const VideoChain: FC<VideoChainProps> = ({ chapters }) => {
+const VideoChain: FC<VideoChainProps> = ({ chapters, currentEpisode }) => {
+  // the current episode of the current course
+
   const setCurrentModule = useCoursePlayerStore(
     (state) => state.actions.setCurrentModule
   );
@@ -72,7 +76,22 @@ const VideoChain: FC<VideoChainProps> = ({ chapters }) => {
                                 }}
                               >
                                 <div className="w-[60px] h-full  flex items-center justify-center">
-                                  <div className="w-[30px] h-[30px] rounded-[50%]  bg-white border-4 border-[#007AFF]"></div>
+                                  <div
+                                    className={`w-[30px] h-[30px] rounded-[50%]  bg-white border-4 border-[#007AFF] flex items-center justify-center ${
+                                      index < currentEpisode
+                                        ? "bg-[#007AFF]"
+                                        : index === currentEpisode
+                                        ? "bg-green-500"
+                                        : ""
+                                    }`}
+                                  >
+                                    {index < currentEpisode && (
+                                      <Check
+                                        strokeWidth={3}
+                                        className="w-5 h-5 text-white"
+                                      />
+                                    )}
+                                  </div>
                                 </div>
                                 {/* this is the second container */}
                                 <div className="w-full  h-full flex flex-col items-start justify-center gap-y-2 py-4 ">

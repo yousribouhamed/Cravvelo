@@ -32,7 +32,7 @@ const CourseVideoPlayer: FC<VideoPlayerProps> = ({ videoId }) => {
                 height: "100%",
                 width: "100%",
               }}
-              allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+              allow="accelerometer; gyroscope;  encrypted-media; picture-in-picture;"
               allowFullScreen={true}
             ></iframe>
           </div>
@@ -48,7 +48,7 @@ const CourseVideoPlayer: FC<VideoPlayerProps> = ({ videoId }) => {
                 height: "100%",
                 width: "100%",
               }}
-              allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+              allow="accelerometer; gyroscope;  encrypted-media; picture-in-picture;"
               allowFullScreen={true}
             ></iframe>
           </div>

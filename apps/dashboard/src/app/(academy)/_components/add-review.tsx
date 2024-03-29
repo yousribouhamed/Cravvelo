@@ -33,7 +33,8 @@ export default function AddReview({ course }: { course: Course }) {
       maketoast.error();
       console.error(err);
     } finally {
-      revalidatePath(`/course-academy/${course.id}`);
+      // revalidatePath(`/course-academy/${course.id}`);
+      window?.location?.reload();
       setLoading(false);
       setOpen(false);
     }

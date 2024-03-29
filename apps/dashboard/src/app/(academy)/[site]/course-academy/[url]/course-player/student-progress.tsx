@@ -16,7 +16,8 @@ function calculateProgress(episode: number, videos: number): number {
     );
   }
 
-  return (episode / videos) * 100;
+  const progressPercentage = (episode / videos) * 100;
+  return parseFloat(progressPercentage.toFixed(0));
 }
 
 const studentProgress: FC<StudentProgressProps> = ({

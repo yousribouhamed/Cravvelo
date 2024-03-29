@@ -12,6 +12,7 @@ import { ContextMenuProvider } from "./context-menu";
 import StudentProgress from "./student-progress";
 import MaxWidthWrapper from "@/src/app/(academy)/_components/max-width-wrapper";
 import { getStudent } from "@/src/app/(academy)/_actions/auth";
+import CompleteCourse from "./complete-course";
 
 interface PageProps {
   params: { site: string; url: string };
@@ -46,7 +47,7 @@ const Page = async ({ params }: PageProps) => {
     notFound();
   }
 
-  const curentEpisose = currentBag?.courses?.find(
+  const currentEpisod = currentBag?.courses?.find(
     (item) => item?.course.id === course?.id
   ).currentEpisode;
 
@@ -81,23 +82,18 @@ const Page = async ({ params }: PageProps) => {
                 <CourseVideoPlayer videoId={getFirstVideo(chapters[0])} />
               </div>
 
-              <div className="w-full h-[100px] my-4 flex items-center justify-between px-4 border rounded-xl">
-                <span className="text-xl font-bold">current module</span>
-                <button className="bg-blue-600  rounded-xl text-white py-2 px-4 ">
-                  Complete and continue
-                </button>
-              </div>
+              <CompleteCourse courseId={course.id} />
             </div>
           </div>
         </div>
         <div className="fixed top-0 bottom-1 right-0 w-[350px] h-full border-l ">
           <StudentProgress
-            currentVideo={curentEpisose}
+            currentVideo={currentEpisod}
             totalVideos={course?.nbrChapters}
           />
           <div className="w-full h-full col-span-1 flex flex-col items-end py-8 border-l ">
             {" "}
-            <VideoChain chapters={chapters} />
+            <VideoChain currentEpisode={currentEpisod} chapters={chapters} />
           </div>
         </div>
       </div>

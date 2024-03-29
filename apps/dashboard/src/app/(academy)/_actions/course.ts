@@ -44,9 +44,7 @@ export const completeCourse = async ({
  */
 export const updateStudentProgress = async ({
   courseId,
-  newEpisond,
 }: {
-  newEpisond: string;
   courseId: string;
 }) => {
   // get the student

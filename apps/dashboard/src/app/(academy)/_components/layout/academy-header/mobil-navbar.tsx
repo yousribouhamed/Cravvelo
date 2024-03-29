@@ -4,6 +4,8 @@ import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { AlignJustify } from "lucide-react";
 import { useMounted } from "@/src/hooks/use-mounted";
+import { Home } from "lucide-react";
+import { School } from "lucide-react";
 
 export default function MobilNavgiationProduction() {
   const [open, setOpen] = useState(false);
@@ -50,8 +52,15 @@ export default function MobilNavgiationProduction() {
                   leaveTo="translate-x-full"
                 >
                   <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
-                    <div className="flex h-full flex-col overflow-y-auto bg-white shadow-xl">
-                      <h1>the content in here will be added soon</h1>
+                    <div className="flex h-full flex-col overflow-y-auto gap-y-4 p-4 bg-white shadow-xl">
+                      <button className=" w-full h-[45px] flex items-center justify-start gap-x-4">
+                        <Home strokeWidth={3} className=" w-6 h-6 " />
+                        الصفحة الرئيسية
+                      </button>
+                      <button className=" w-full h-[45px] flex items-center justify-start gap-x-4">
+                        <School strokeWidth={3} className=" w-6 h-6 " />
+                        الدورات التدريبية
+                      </button>
                     </div>
                   </Dialog.Panel>
                 </Transition.Child>
