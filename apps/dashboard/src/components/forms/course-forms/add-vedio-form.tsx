@@ -115,7 +115,7 @@ function AddVedioForm() {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="تعلم كل ما يتعلق بتربية الكناري"
+                        placeholder="مثال : دورة في التصميم الجرافيكي للمبتدئين"
                         {...field}
                       />
                     </FormControl>

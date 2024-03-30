@@ -60,7 +60,7 @@ const Page = async ({ params }: PageProps) => {
               {course.title}
             </h1>
 
-            <div className="w-full h-[150px] bg-gray-100 rounded-xl flex flex-wrap gap-4 my-8 p-4">
+            {/* <div className="w-full h-[150px] bg-gray-100 rounded-xl flex flex-wrap gap-4 my-8 p-4">
               <div className="w-fit flex items-center justify-start gap-x-4">
                 <Star className="w-5 h-5 " />
                 <span>
@@ -109,7 +109,7 @@ const Page = async ({ params }: PageProps) => {
                   <span>ستحصل على شهادة بعد اتمام الدورة</span>
                 </div>
               )}
-            </div>
+            </div> */}
             <CourseDisplayContent course={course} chapters={chapters} />
             <Raitings course={course} comments={comments} />
           </div>
