@@ -57,7 +57,7 @@ const Page = async ({ params }: PageProps) => {
 
   return (
     <ContextMenuProvider>
-      <div className="w-full h-full bg-white flex flex-col">
+      <div className="w-full h-full bg-white flex flex-col ">
         <div className="w-[calc(100%-350px)] h-full mr-[350px] flex flex-col ">
           <div className="w-full  h-[100px]  border-b">
             <div className="h-full flex items-center justify-between px-4">

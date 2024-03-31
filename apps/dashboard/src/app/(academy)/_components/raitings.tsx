@@ -132,7 +132,7 @@ const Raitings: FC<{ course: Course; comments: Comment[] }> = ({
               key={item.id}
               className="flex items-start h-fit min-h-[100px] justify-start gap-x-2 px-6"
             >
-              <Avatar className="w-10 h-10">
+              <Avatar className="w-10 h-10 mt-4">
                 <AvatarImage src={item.studentImage} />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
