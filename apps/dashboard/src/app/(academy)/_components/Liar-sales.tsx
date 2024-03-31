@@ -16,18 +16,18 @@ const LiarSales: FC = ({}) => {
   return (
     <div className="w-full bg-[#f02d00] h-[40px] flex items-center justify-center gap-x-8 px-8">
       <div className="w-fit h-full flex items-center justify-start">
-        <span className="font-bold text-white text-sm">
+        <span className="font-bold text-white text-md">
           تخفيضات على جميع الدورات في الأكاديمية
         </span>
       </div>
       <div
         dir="ltr"
-        className="w-[100px] flex items-center justify-start text-white gap-x-2"
+        className="w-[100px] flex items-center justify-start text-white gap-x-[2px]"
       >
-        <span className="text-sm font-bold">{days}</span>:
-        <span className="text-sm font-bold">{hours}</span>:
-        <span className="text-sm font-bold">{minutes}</span>:
-        <span className="text-sm font-bold">{seconds}</span>
+        <span className="text-md font-bold">{days}</span>:
+        <span className="text-md font-bold">{hours}</span>:
+        <span className="text-md font-bold">{minutes}</span>:
+        <span className="text-md font-bold">{seconds}</span>
       </div>
     </div>
   );
