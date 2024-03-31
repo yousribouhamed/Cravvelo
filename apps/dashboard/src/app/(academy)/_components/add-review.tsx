@@ -2,12 +2,11 @@
 
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { X } from "lucide-react";
+import { Loader, X } from "lucide-react";
 import StarRatings from "react-star-ratings";
 import { Course } from "database";
 import { create_rating } from "../_actions/rating";
 import { maketoast } from "@/src/components/toasts";
-import { revalidatePath } from "next/cache";
 
 export default function AddReview({ course }: { course: Course }) {
   const [open, setOpen] = useState<boolean>(false);
@@ -94,15 +93,18 @@ export default function AddReview({ course }: { course: Course }) {
                     <div className="w-full h-[300px] flex flex-col items-end py-4 gap-y-4">
                       <div className="flex flex-col w-full h-[50px] items-start gap-y-2 ">
                         <label>تقييمك</label>
-                        <StarRatings
-                          rating={rating}
-                          starRatedColor="#FC6B00"
-                          starHoverColor="#FC6B00"
-                          changeRating={(number) => setRating(number)}
-                          numberOfStars={5}
-                          starDimension="25px"
-                          name="rating"
-                        />
+                        <div className="w-full h-[45px] flex items-center justify-start">
+                          <StarRatings
+                            rating={rating}
+                            starRatedColor="#FC6B00"
+                            starHoverColor="#FC6B00"
+                            changeRating={(number) => setRating(number)}
+                            numberOfStars={5}
+                            starDimension="25px"
+                            starSpacing="1px"
+                            name="rating"
+                          />
+                        </div>
                       </div>
                       <div className="flex flex-col w-full items-start h-fit min-h-[50px]  gap-y-2">
                         <label>تعليقك</label>
@@ -117,10 +119,13 @@ export default function AddReview({ course }: { course: Course }) {
                   <div className="bg-gray-50  py-3 sm:flex sm:flex-row-reverse  gap-x-4">
                     <button
                       type="button"
-                      className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto"
+                      className="inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-700 sm:ml-3 sm:w-auto"
                       onClick={() => submiteReview()}
                     >
-                      {loading ? "loading.." : "اضافة التعليق"}
+                      {loading && (
+                        <Loader className="w-4 h-4 ml-2 animate-spin" />
+                      )}
+                      اضافة التعليق
                     </button>
                     <button
                       type="button"
