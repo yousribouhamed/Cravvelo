@@ -6,6 +6,7 @@ import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { useAcademiaStore } from "../../global-state/academia-store";
 import { applyCoupon, makePayment } from "../../_actions/payments";
 import { useRouter } from "next/navigation";
+import { Input } from "@ui/components/ui/input";
 
 interface AcademyPymentsProps {
   subdomain: string | null;
@@ -90,7 +91,7 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({
     <div className="w-full min-h-[300px] h-fit  flex flex-col p-4 ">
       <div className="w-full h-[70px] flex flex-col gap-y-4">
         <Label>كوبون الخصم</Label>
-        <div className="flex items-center justify-between border-2 rounded-xl bg-white h-[40px] border-primary px-2">
+        <div className="flex items-center justify-between border-2 rounded-xl bg-white h-[50px] border-primary px-2">
           <div className="w-[90%] h-full rounded-xl flex items-center justify-start gap-x-2">
             <svg
               width="20"
@@ -104,9 +105,10 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({
                 fill="#FC6B00"
               />
             </svg>
-            <input
+            <Input
               onChange={(e) => setCouponCode(e.target.value)}
-              className="h-full w-[80%] rounded-xl border-none focus:border-none "
+              className="h-full w-[80%] rounded-xl border-none focus:!border-none focus:!ring-0 "
+              placeholder="ادخل الرمز"
             />
           </div>
 
