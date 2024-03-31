@@ -37,7 +37,7 @@ const Page = async ({ params }: PageProps) => {
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
       />
-      <MaxWidthWrapper className="h-fit mt-[70px] min-h-[calc(100vh-70px)] ">
+      <MaxWidthWrapper className="h-fit mt-[70px] min-h-[calc(100vh-110px)] ">
         <main className="w-full h-fit min-h-full flex flex-col items-center justify-center ">
           <DisplayPolicy // @ts-ignore
             value={JSON.parse(website?.privacy_policy as string)}

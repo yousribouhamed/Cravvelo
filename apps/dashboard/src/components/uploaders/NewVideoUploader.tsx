@@ -226,7 +226,7 @@ export const NewVideoUploader = ({
                               e.stopPropagation();
                               setOpen(true);
                             }}
-                            className="text-blue-500 font-bold"
+                            className="text-primary font-bold"
                           >
                             هنا
                           </span>

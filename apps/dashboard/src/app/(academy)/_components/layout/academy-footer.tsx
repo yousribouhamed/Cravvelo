@@ -25,6 +25,9 @@ const AcademiaFooter: FC = () => {
           <Link href="/privacy-policy">
             <button className="text-sm text-gray-700"> سياسة الاكاديمية</button>
           </Link>
+          <Link href="/privacy-policy/contact-us">
+            <button className="text-sm text-gray-700">تواصل معنا</button>
+          </Link>
 
           <span className="text-sm text-gray-700">
             جميع الحقوق محفوظة في الأكاديمية © 2024
