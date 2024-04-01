@@ -7,6 +7,7 @@ import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import { getStudent } from "../_actions/auth";
 import AcademiaFooter from "../_components/layout/academy-footer";
 import LiarSales from "../_components/Liar-sales";
+import Banner from "../_components/banner";
 
 interface PageProps {
   params: { site: string };
@@ -37,16 +38,7 @@ const Page = async ({ params }: PageProps) => {
       />
       <MaxWidthWrapper className="h-fit mt-[110px] min-h-[calc(100vh-70px)] ">
         <main className="w-full h-fit min-h-full flex flex-col items-center justify-center ">
-          <div
-            className="w-full h-[250px]  flex items-center justify-center my-10"
-            style={{
-              background: website?.color ?? "#FC6B00",
-            }}
-          >
-            <h1 className="text-5xl font-bold text-center text-white ">
-              مرحبا بكم في اكادمية {website?.name}
-            </h1>
-          </div>
+          <Banner />
           <CoursesReel color={website?.color} courses={courses} />
         </main>
       </MaxWidthWrapper>
