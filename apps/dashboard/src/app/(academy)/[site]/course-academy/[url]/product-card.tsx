@@ -11,6 +11,7 @@ import {
   formatVideoDuration,
 } from "../../../lib";
 import { useTimer } from "react-timer-hook";
+import React from "react";
 
 const formatVideoLength = (sizeInBytes) => {
   const totalSeconds = sizeInBytes / 1000; // Convert bytes to seconds
@@ -49,14 +50,32 @@ export const Product_card = ({
 
   const expiryTimestamp = new Date();
 
+  const [isFixed, setIsFixed] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      const scrolled = window.scrollY > 64;
+      setIsFixed(scrolled);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 600 * 6);
 
   const { seconds, minutes, hours, days } = useTimer({
     expiryTimestamp,
     onExpire: () => console.warn("onExpire called"),
   });
+
   return (
-    <div className=" w-full lg:w-[350px] min-h-[500px] h-fit rounded-xl border p-4 flex flex-col gap-y-4 lg:sticky lg:top-[100px] bg-white">
+    <div
+      className={` ${
+        isFixed ? "md:fixed md:top-40 md:left-[5%]  " : ""
+      } w-full lg:w-[350px] min-h-[500px] h-fit rounded-xl border p-4 flex flex-col gap-y-4 2xl:sticky 2xl:top-[120px] bg-white `}
+    >
       <p className="text-2xl font-bold text-start text-black">
         DZD {course.price}.00
       </p>
