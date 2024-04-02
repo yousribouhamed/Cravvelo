@@ -32,8 +32,8 @@ import { Course } from "database";
 import { HelpCircle } from "lucide-react";
 
 const PricingFormSchema = z.object({
-  price: z.string(),
-  compareAtPrice: z.string(),
+  price: z.string({ required_error: "يرجى ملئ الحقل" }),
+  compareAtPrice: z.string({ required_error: "يرجى ملئ الحقل" }),
 });
 
 interface AddPricingFormProps {

@@ -24,7 +24,7 @@ import { Chapter, Course } from "database";
 import CourseContent from "@/src/app/(academy)/_components/course-component/course-content";
 
 const addTextSchema = z.object({
-  title: z.string().min(2).max(50),
+  title: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
   content: z.any(),
 });
 

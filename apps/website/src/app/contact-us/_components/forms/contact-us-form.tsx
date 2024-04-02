@@ -17,9 +17,9 @@ import { Textarea } from "@ui/components/ui/textarea";
 import { Input } from "@ui/components/ui/input";
 
 const formSchema = z.object({
-  username: z.string().min(2).max(50),
-  email: z.string().min(2).max(50),
-  message: z.string().min(2).max(50),
+  username: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
+  email: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
+  message: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
 });
 
 import type { FC } from "react";

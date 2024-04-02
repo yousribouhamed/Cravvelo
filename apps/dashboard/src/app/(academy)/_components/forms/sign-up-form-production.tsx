@@ -31,8 +31,8 @@ import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 
 const formSchema = z.object({
-  full_name: z.string(),
-  email: z.string().email({
+  full_name: z.string({ required_error: "يرجى ملئ الحقل" }),
+  email: z.string({ required_error: "يرجى ملئ الحقل" }).email({
     message: "يرجى إدخال عنوان بريد إلكتروني صالح",
   }),
   password: z

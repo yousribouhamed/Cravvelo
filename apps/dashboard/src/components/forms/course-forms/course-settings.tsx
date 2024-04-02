@@ -39,16 +39,16 @@ interface ComponentProps {
 }
 
 const formSchema = z.object({
-  courseResume: z.string(),
+  courseResume: z.string({ required_error: "يرجى ملئ الحقل" }),
   courseDescription: z.any(),
-  seoDescription: z.string(),
-  seoTitle: z.string(),
-  thumnailUrl: z.string(),
-  title: z.string(),
-  youtubeUrl: z.string(),
-  courseRequirements: z.string(),
-  courseWhatYouWillLearn: z.string(),
-  level: z.string(),
+  seoDescription: z.string({ required_error: "يرجى ملئ الحقل" }),
+  seoTitle: z.string({ required_error: "يرجى ملئ الحقل" }),
+  thumnailUrl: z.string({ required_error: "يرجى ملئ الحقل" }),
+  title: z.string({ required_error: "يرجى ملئ الحقل" }),
+  youtubeUrl: z.string({ required_error: "يرجى ملئ الحقل" }),
+  courseRequirements: z.string({ required_error: "يرجى ملئ الحقل" }),
+  courseWhatYouWillLearn: z.string({ required_error: "يرجى ملئ الحقل" }),
+  level: z.string({ required_error: "يرجى ملئ الحقل" }),
 });
 
 export function CourseSettingsForm({ course }: ComponentProps) {

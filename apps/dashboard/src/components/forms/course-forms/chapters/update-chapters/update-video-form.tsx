@@ -27,9 +27,9 @@ import { Module } from "@/src/types";
 import { NewVideoUploader } from "@/src/components/uploaders/NewVideoUploader";
 
 const updateVedioSchema = z.object({
-  title: z.string().min(2).max(50),
+  title: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
   content: z.any(),
-  fileUrl: z.string(),
+  fileUrl: z.string({ required_error: "يرجى ملئ الحقل" }),
 });
 
 interface UpdateVedioFormProps {

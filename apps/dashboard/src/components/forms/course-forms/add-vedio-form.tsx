@@ -25,9 +25,9 @@ import { NewVideoUploader } from "../../uploaders/NewVideoUploader";
 import { getValueFromUrl } from "@/src/lib/utils";
 
 const addVedioSchema = z.object({
-  title: z.string().min(2).max(50),
+  title: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
   content: z.any(),
-  fileUrl: z.string(),
+  fileUrl: z.string({ required_error: "يرجى ملئ الحقل" }),
 });
 
 function AddVedioForm() {

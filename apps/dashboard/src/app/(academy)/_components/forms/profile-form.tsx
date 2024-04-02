@@ -24,8 +24,8 @@ import { maketoast } from "@/src/components/toasts";
 import { Student } from "database";
 
 const formSchema = z.object({
-  full_name: z.string().min(2).max(50),
-  bio: z.string(),
+  full_name: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
+  bio: z.string({ required_error: "يرجى ملئ الحقل" }),
 });
 
 interface ProfileFormProps {

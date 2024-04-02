@@ -23,7 +23,7 @@ import { PlateEditor } from "../../reich-text-editor/rich-text-editor";
 import { maketoast } from "../../toasts";
 
 const addTextSchema = z.object({
-  title: z.string().min(2).max(50),
+  title: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
   content: z.any(),
 });
 

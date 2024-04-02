@@ -2,12 +2,12 @@ import * as z from "zod";
 
 export const authSchema = z.object({
   email: z.string().email({
-    message: "Please enter a valid email address",
+    message: "يرجى إدخال عنوان بريد إلكتروني صالح",
   }),
   password: z
-    .string()
+    .string({ required_error: "يرجى ملئ الحقل" })
     .min(7, {
-      message: "Password must be at least 8 characters long",
+      message: "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
     })
     .max(100),
   firstName: z.string(),
@@ -15,12 +15,12 @@ export const authSchema = z.object({
 
 export const authSchemaLogin = z.object({
   email: z.string().email({
-    message: "Please enter a valid email address",
+    message: "يرجى إدخال عنوان بريد إلكتروني صالح",
   }),
   password: z
     .string()
     .min(8, {
-      message: "Password must be at least 8 characters long",
+      message: "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
     })
     .max(100),
 });
@@ -29,7 +29,7 @@ export const verifyEmailSchema = z.object({
   code: z
     .string()
     .min(6, {
-      message: "Verification code must be 6 characters long",
+      message: "يجب أن يتكون رمز التحقق من 6 أحرف",
     })
     .max(6),
 });
@@ -45,6 +45,6 @@ export const resetPasswordSchema = z
     code: verifyEmailSchema.shape.code,
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
+    message: "كلمة المرور غير مطابقة",
     path: ["confirmPassword"],
   });
