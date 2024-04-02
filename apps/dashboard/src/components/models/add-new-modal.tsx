@@ -124,6 +124,7 @@ const AddNew: FC = ({}) => {
     onSuccess: ({ courseId }) => {
       router.push(`/courses/${courseId}/chapters`);
       maketoast.successWithText({ text: "تم انشاء الدورة بنجاح" });
+      setIsOpen(false);
     },
     onError: () => {
       maketoast.error();
