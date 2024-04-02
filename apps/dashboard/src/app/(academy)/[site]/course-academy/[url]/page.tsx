@@ -12,6 +12,7 @@ import Raitings from "../../../_components/raitings";
 
 import { get_course_rating } from "../../../_actions/rating";
 import AcademiaFooter from "../../../_components/layout/academy-footer";
+import Suspanded from "../../../_components/suspanded";
 
 interface PageProps {
   params: { site: string; url: string };
@@ -33,6 +34,10 @@ const Page = async ({ params }: PageProps) => {
 
   if (!website) {
     notFound();
+  }
+
+  if (website.suspended) {
+    return <Suspanded />;
   }
 
   return (

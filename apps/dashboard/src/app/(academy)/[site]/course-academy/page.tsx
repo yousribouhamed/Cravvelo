@@ -7,6 +7,7 @@ import AcademyHeader from "../../_components/layout/academy-header";
 import MaxWidthWrapper from "../../_components/max-width-wrapper";
 import { getStudent } from "../../_actions/auth";
 import AcademiaFooter from "../../_components/layout/academy-footer";
+import Suspanded from "../../_components/suspanded";
 export const fetchCache = "force-no-store";
 
 interface PageProps {
@@ -26,6 +27,9 @@ const Page = async ({ params }: PageProps) => {
 
   if (!website) {
     notFound();
+  }
+  if (website.suspended) {
+    return <Suspanded />;
   }
 
   return (

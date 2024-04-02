@@ -8,6 +8,7 @@ import { getStudent } from "../_actions/auth";
 import AcademiaFooter from "../_components/layout/academy-footer";
 import LiarSales from "../_components/Liar-sales";
 import Banner from "../_components/banner";
+import Suspanded from "../_components/suspanded";
 
 interface PageProps {
   params: { site: string };
@@ -25,6 +26,9 @@ const Page = async ({ params }: PageProps) => {
 
   if (!website) {
     notFound();
+  }
+  if (website.suspended) {
+    return <Suspanded />;
   }
 
   return (
