@@ -8,7 +8,7 @@ const EaseSpeed: FC = ({}) => {
     <MaxWidthWrapper className="my-6 p-4 lg:p-0">
       <section
         id="FEATURES2"
-        className="w-full min-h-[250px] h-fit grid grid-cols-1 lg:grid-cols-3 gap-10  "
+        className="w-full min-h-[250px] h-fit grid grid-cols-1 lg:grid-cols-3 gap-10 px-8 2xl:px-0  "
       >
         <div className="w-full h-full border border-yellow-500 rounded-xl bg-[#F8FAE5] p-8">
           <div className="w-full h-[50px] flex items-center justify-start gap-x-4">

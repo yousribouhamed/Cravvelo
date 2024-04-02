@@ -19,7 +19,7 @@ const Banner: FC = ({}) => {
             className="font-semibold text-primary"
           >
             <Image
-              src="/cravvelo-logo.svg"
+              src="/logo-white.png"
               alt="cravvelo logo"
               width={60}
               height={12}

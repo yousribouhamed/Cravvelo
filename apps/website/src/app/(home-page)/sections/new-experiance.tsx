@@ -11,7 +11,7 @@ const NewExperiance: FC = ({}) => {
             <h1 className=" text-5xl mb-8  font-bold text-start  tracking-tight text-black ">
               وفّر{" "}
               <span className="text-[#FC6B00] relative inline-block ">
-                <div className="absolute  -bottom-11  right-0 left-0  ">
+                <div className="absolute  -bottom-14  right-0 left-0  ">
                   <svg
                     width="117"
                     height="45"

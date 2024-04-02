@@ -66,11 +66,17 @@ export default function ShoppingCardProduction({
                 >
                   <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
                     <div className="flex h-full flex-col overflow-y-auto bg-[#E3E8EF] shadow-xl">
-                      <div className="flex-1 overflow-y-auto my-4 px-4 py-6 sm:px-6">
-                        <div className="flex items-start justify-center">
+                      <div className="flex-1 overflow-y-auto my-4 px-4 py-3 sm:px-6">
+                        <div className="flex items-start justify-between">
                           <Dialog.Title className="text-2xl font-bold text-[#677489]">
                             سلة التسوق
                           </Dialog.Title>
+                          <button
+                            onClick={() => setOpen(false)}
+                            className="text-gray-500 hover:text-black cursor-pointer flex items-center justify-center p-4"
+                          >
+                            <X className="w-4 h-4 " />
+                          </button>
                         </div>
 
                         <div className="mt-8">
