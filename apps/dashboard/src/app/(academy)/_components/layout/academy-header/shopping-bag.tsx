@@ -98,9 +98,9 @@ export default function ShoppingCardProduction({
                                 state?.shoppingBag?.map((product) => (
                                   <li
                                     key={product.id}
-                                    className="flex py-4 gap-x-4 border bg-white border-[#C4B8B8] rounded-xl"
+                                    className="flex p-4 gap-x-4 border bg-white border-[#C4B8B8] rounded-xl"
                                   >
-                                    <div className="h-32 w-32 flex-shrink-0 overflow-hidden  rounded-xl  ">
+                                    <div className="h-32 w-32 flex-shrink-0 overflow-hidden  rounded-xl   ">
                                       <img
                                         src={product.imageUrl}
                                         className="h-full w-full object-cover object-center"
