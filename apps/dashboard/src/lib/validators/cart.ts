@@ -15,3 +15,8 @@ export const cartLineItemSchema = z.object({
     .nullable(),
   price: z.string().regex(/^\d+(\.\d{1,2})?$/),
 });
+
+export const dashboardProductsSearchParamsSchema = z.object({
+  from: z.string().optional(),
+  to: z.string().optional(),
+});

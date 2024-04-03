@@ -296,7 +296,8 @@ model Student {
   confirmeEmail DateTime?
   bag     Json
   Account Account @relation(fields: [accountId], references: [id])
-
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   @@index([id])
   @@index([accountId])
 }
@@ -307,6 +308,8 @@ model Certificate {
   description String?
   issuer      String
   issueDate   DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   // Add more fields as needed
 }
 
@@ -332,5 +335,7 @@ model Admin {
   email     String? @unique
   photo_url String?
   password  String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   @@index([id])
 }

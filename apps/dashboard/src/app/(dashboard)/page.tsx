@@ -18,43 +18,107 @@ import { ArrowUpLeft, Eye } from "lucide-react";
 import Link from "next/link";
 import PublishWebsite from "@/src/components/models/editor/publish-website";
 import { prisma } from "database/src";
+import { dashboardProductsSearchParamsSchema } from "@/src/lib/validators/cart";
 
-const getAllSales = async ({ accountId }: { accountId: string }) => {
+const getAllSales = async ({
+  accountId,
+  end_date,
+  start_date,
+}: {
+  accountId: string;
+  start_date: Date | undefined;
+  end_date: Date | undefined;
+}) => {
   const sales = await prisma.sale.findMany({
     where: {
       accountId,
+      createdAt:
+        start_date && end_date
+          ? {
+              gte: start_date, // Start of date range
+              lte: end_date, // End of date range
+            }
+          : {},
     },
   });
 
   return sales;
 };
 
-const getAllstudents = async ({ accountId }: { accountId: string }) => {
+const getAllstudents = async ({
+  accountId,
+  end_date,
+  start_date,
+}: {
+  accountId: string;
+  start_date: Date | undefined;
+  end_date: Date | undefined;
+}) => {
   const students = await prisma.student.findMany({
     where: {
       accountId,
+      createdAt:
+        start_date && end_date
+          ? {
+              gte: start_date, // Start of date range
+              lte: end_date, // End of date range
+            }
+          : {},
     },
   });
 
   return students;
 };
-const getAllCommets = async ({ accountId }: { accountId: string }) => {
+const getAllCommets = async ({
+  accountId,
+  end_date,
+  start_date,
+}: {
+  accountId: string;
+  start_date: Date | undefined;
+  end_date: Date | undefined;
+}) => {
   const comments = await prisma.comment.findMany({
     where: {
       accountId,
+      createdAt:
+        start_date && end_date
+          ? {
+              gte: start_date, // Start of date range
+              lte: end_date, // End of date range
+            }
+          : {},
     },
   });
 
   return comments;
 };
 
-async function Page() {
+async function Page({ searchParams }) {
+  // Parse search params using zod schema
+  const { from, to } = dashboardProductsSearchParamsSchema.parse(searchParams);
+
+  const fromDay = from ? new Date(from) : undefined;
+  const toDay = to ? new Date(to) : undefined;
+
   const user = await useHaveAccess();
 
   const [sales, studnets, comments] = await Promise.all([
-    getAllSales({ accountId: user.accountId }),
-    getAllstudents({ accountId: user.accountId }),
-    getAllCommets({ accountId: user.accountId }),
+    getAllSales({
+      accountId: user.accountId,
+      start_date: fromDay,
+      end_date: toDay,
+    }),
+    getAllstudents({
+      accountId: user.accountId,
+      start_date: fromDay,
+      end_date: toDay,
+    }),
+    getAllCommets({
+      accountId: user.accountId,
+      start_date: fromDay,
+      end_date: toDay,
+    }),
   ]);
 
   return (

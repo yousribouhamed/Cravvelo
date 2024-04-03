@@ -6,6 +6,7 @@ import { DateRange } from "react-day-picker";
 import { cn } from "@ui/lib/utils";
 import { Button } from "@ui/components/ui/button";
 import { Calendar } from "@ui/components/ui/calendar";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   Popover,
   PopoverContent,
@@ -18,13 +19,72 @@ function formatDayInArabic(day) {
   return formattedDate;
 }
 
+interface DateRangePickerProps extends React.HTMLAttributes<HTMLDivElement> {
+  dateRange?: DateRange;
+  dayCount?: number;
+  align?: "center" | "start" | "end";
+}
+
 export function DatePickerWithRange({
   className,
-}: React.HTMLAttributes<HTMLDivElement>) {
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(2022, 0, 20),
-    to: addDays(new Date(2022, 0, 20), 20),
-  });
+  dateRange,
+  dayCount,
+  align = "start",
+
+  ...props
+}: DateRangePickerProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const [from, to] = React.useMemo(() => {
+    let fromDay: Date | undefined;
+    let toDay: Date | undefined;
+
+    if (dateRange) {
+      fromDay = dateRange.from;
+      toDay = dateRange.to;
+    } else if (dayCount) {
+      toDay = new Date();
+      fromDay = addDays(toDay, -dayCount);
+    }
+
+    return [fromDay, toDay];
+  }, [dateRange, dayCount]);
+
+  const [date, setDate] = React.useState<DateRange | undefined>({ from, to });
+
+  // Create query string
+  const createQueryString = React.useCallback(
+    (params: Record<string, string | number | null>) => {
+      const newSearchParams = new URLSearchParams(searchParams?.toString());
+
+      for (const [key, value] of Object.entries(params)) {
+        if (value === null) {
+          newSearchParams.delete(key);
+        } else {
+          newSearchParams.set(key, String(value));
+        }
+      }
+
+      return newSearchParams.toString();
+    },
+    [searchParams]
+  );
+
+  // Update query string
+  React.useEffect(() => {
+    router.push(
+      `${pathname}?${createQueryString({
+        from: date?.from ? format(date.from, "yyyy-MM-dd") : null,
+        to: date?.to ? format(date.to, "yyyy-MM-dd") : null,
+      })}`,
+      {
+        scroll: false,
+      }
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [date?.from, date?.to]);
 
   return (
     <div className={cn("grid gap-2", className)}>

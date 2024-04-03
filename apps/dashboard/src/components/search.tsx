@@ -14,7 +14,6 @@ import {
   CommandShortcut,
 } from "@ui/components/ui/command";
 
-import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useDebounce } from "../hooks/use-debounce";
 import { Button } from "@ui/components/ui/button";
@@ -68,6 +67,10 @@ export const SearchInput: FC = ({}) => {
 
     return () => setData(null);
   }, [debouncedQuery]);
+
+  // courses
+  // digital products
+  // pages
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -149,6 +152,8 @@ export const SearchInput: FC = ({}) => {
                 </CommandGroup>
               )}
 
+              <CommandSeparator />
+
               {data && data?.courses?.length > 0 && (
                 <CommandGroup className="capitalize" heading={"courses"}>
                   {data.courses.map((item) => {
@@ -157,7 +162,7 @@ export const SearchInput: FC = ({}) => {
                         key={item.id}
                         value={item.title}
                         onSelect={() =>
-                          handleSelect(() => router.push(`/product/${item.id}`))
+                          handleSelect(() => router.push(`/courses/${item.id}`))
                         }
                       >
                         <span className="truncate">{item.title}</span>

@@ -1,10 +1,27 @@
 export const PLANS = [
   {
     plan: "الباقة الآساسية",
-    price: "10",
+    plan_code: "BASIC",
+    price: "20",
+    imageUrl: "/pricing-icons/beginner.png",
     tagline:
       "إنشاء منصتك التعليمية ومنتجاتك الرقمية وبيعها وتسويقها عبر الإنترنت.",
     quota: 10,
+    icon: () => (
+      <svg
+        width="49"
+        height="50"
+        viewBox="0 0 49 50"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M0 49.43H49V0.43H0V49.43Z" fill="black" />
+      </svg>
+    ),
+    priceIds: {
+      test: "price_1ObeduCxv0KQVM5xHees3z9n",
+      production: "",
+    },
 
     features: [
       {
@@ -27,6 +44,15 @@ export const PLANS = [
         text: "بوابات دفع الكتروني",
       },
       {
+        text: "التصميم الجميل لاكاديميتك",
+      },
+      {
+        text: "مجال مخصص",
+      },
+      {
+        text: "تحسينات تحسين محركات البحث",
+      },
+      {
         text: "إزالة هوية جدارة",
         negative: true,
       },
@@ -34,8 +60,25 @@ export const PLANS = [
   },
 
   {
+    priceIds: {
+      test: "price_1Obef0Cxv0KQVM5xGGVkqWMS",
+      production: "",
+    },
+    imageUrl: "/pricing-icons/infi.png",
+    plan_code: "ADVANCED",
     plan: "باقة النمو",
-    price: "18",
+    price: "4999",
+    icon: () => (
+      <svg
+        width="49"
+        height="50"
+        viewBox="0 0 49 50"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M0 49.43H49V0.43H0V49.43Z" fill="black" />
+      </svg>
+    ),
     tagline:
       "ارتقِ بمستوى عملك من خلال ميزات تساعدك على تحقيق نمو فائق السرعة.",
     quota: 10,
@@ -61,6 +104,15 @@ export const PLANS = [
         text: "بوابات دفع الكتروني",
       },
       {
+        text: "التصميم الجميل لاكاديميتك",
+      },
+      {
+        text: "مجال مخصص",
+      },
+      {
+        text: "تحسينات تحسين محركات البحث",
+      },
+      {
         text: "إزالة هوية جدارة",
         negative: true,
       },
@@ -68,10 +120,27 @@ export const PLANS = [
   },
 
   {
+    priceIds: {
+      test: "price_1Obeg9Cxv0KQVM5x3qHaFrbs",
+      production: "",
+    },
+    imageUrl: "/pricing-icons/pro.png",
+    plan_code: "PRO",
     plan: "الباقة الاحترافية",
-    price: "28",
+    price: "19999",
     tagline: "سعة غير محدودة وأدوات متقدمة تساعدك على التوسّع بعملك ومنتجاتك.",
     quota: 10,
+    icon: () => (
+      <svg
+        width="49"
+        height="50"
+        viewBox="0 0 49 50"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M0 49.43H49V0.43H0V49.43Z" fill="black" />
+      </svg>
+    ),
 
     features: [
       {
@@ -92,6 +161,15 @@ export const PLANS = [
 
       {
         text: "بوابات دفع الكتروني",
+      },
+      {
+        text: "التصميم الجميل لاكاديميتك",
+      },
+      {
+        text: "مجال مخصص",
+      },
+      {
+        text: "تحسينات تحسين محركات البحث",
       },
       {
         text: "إزالة هوية جدارة",

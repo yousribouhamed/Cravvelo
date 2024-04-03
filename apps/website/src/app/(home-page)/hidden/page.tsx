@@ -11,6 +11,7 @@ import StartNew from "../sections/start-new";
 import SiteFooter from "@/src/components/layout/site-footer";
 import FadeIn from "@/src/components/animations/fade-in";
 import { NavBar } from "@/src/components/layout/header/nav-bar";
+import NewPricing from "../sections/new-pricing";
 
 // diable animations on mobil
 
@@ -75,8 +76,30 @@ export default function Page() {
           <MaxWidthWrapper className="my-8">
             <div className="w-full min-h-[250px] h-fit  flex flex-col justify-center  gap-y-8  pt-20 ">
               <div className="w-full h-[100px] relative flex flex-col justify-center items-center">
-                <div className="bg-primary rounded-2xl w-[300px] h-[70px] -rotate-12"></div>
-                <div className="bg-[#F4EDE5]  border-[5px] border-black rounded-2xl w-[300px] h-[70px] absolute -rotate-12 right-[25%] -bottom-2"></div>
+                <div className="bg-primary rounded-2xl w-[300px] h-[70px] flex items-center justify-center -rotate-12">
+                  <span className="text-white text-4xl font-bold">
+                    {" "}
+                    آمان🔒محتواك.
+                  </span>
+                </div>
+                <div className="bg-[#F4EDE5]  flex items-center justify-center border-[2px] border-black rounded-2xl w-[300px] h-[70px] absolute -rotate-12 right-[25%] 2xl:-bottom-2 -bottom-4 ">
+                  <span className="text-4xl font-bold"> حافظ على</span>
+                  <div className="absolute -left-9 top-2">
+                    <svg
+                      width="51"
+                      height="51"
+                      viewBox="0 0 51 51"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle cx="25.5" cy="25.5" r="25.5" fill="#FFC901" />
+                      <path
+                        d="M25.743 10.6855L27.9439 20.4292L36.39 15.0957L31.0565 23.5418L40.8001 25.7427L31.0565 27.9436L36.39 36.3897L27.9439 31.0562L25.743 40.7998L23.542 31.0562L15.096 36.3897L20.4295 27.9436L10.6858 25.7427L20.4295 23.5418L15.096 15.0957L23.542 20.4292L25.743 10.6855Z"
+                        fill="white"
+                      />
+                    </svg>
+                  </div>
+                </div>
               </div>
               <p className="text-center my-4 text-xl max-w-5xl mt-8 mx-auto">
                 لأننا نؤمن بأن خبراتك ومحتواك هو أثمن مواردك المعرفية، نوفر لك
@@ -136,7 +159,8 @@ export default function Page() {
         </FadeIn>
         <FadeIn>
           <MaxWidthWrapper>
-            <Pricing />
+            {/* <Pricing /> */}
+            <NewPricing />
           </MaxWidthWrapper>
         </FadeIn>
         <StartNew />
