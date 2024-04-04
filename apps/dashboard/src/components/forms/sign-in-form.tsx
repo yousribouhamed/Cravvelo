@@ -32,6 +32,7 @@ import { toast } from "@ui/lib/utils";
 import { OAuthSignIn } from "../auth/oauth-signin";
 import { maketoast } from "../toasts";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import Image from "next/image";
 
 type Inputs = z.infer<typeof authSchemaLogin>;
 export function SignInForm() {
@@ -79,7 +80,17 @@ export function SignInForm() {
   return (
     <Card className="w-[480px] pt-4 min-h-[501.39px] h-fit ">
       <CardHeader>
-        <CardTitle>مرحبًا بعودتك!</CardTitle>
+        <div className="flex items-center justify-between ">
+          <CardTitle>مرحبًا بعودتك!</CardTitle>
+          <div>
+            <Image
+              src="/Cravvelo_Logo-01.svg"
+              alt="logo"
+              width={160}
+              height={60}
+            />
+          </div>
+        </div>
       </CardHeader>
       <CardContent>
         <OAuthSignIn />
