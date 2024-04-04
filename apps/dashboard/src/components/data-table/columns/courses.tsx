@@ -49,7 +49,8 @@ export const columns: ColumnDef<Course>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "title",
+    id: "status",
+    accessorKey: "status",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="عنوان الدورة" />
     ),
@@ -74,6 +75,7 @@ export const columns: ColumnDef<Course>[] = [
     },
   },
   {
+    id: "price",
     accessorKey: "price",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="السعر" />
@@ -91,9 +93,10 @@ export const columns: ColumnDef<Course>[] = [
     },
   },
   {
-    accessorKey: "profit",
+    id: "level",
+    accessorKey: "level",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="إجمالي الأرباح" />
+      <DataTableColumnHeader column={column} title=" المستوى" />
     ),
     cell: ({ row }) => {
       return (
@@ -109,6 +112,7 @@ export const columns: ColumnDef<Course>[] = [
   },
 
   {
+    id: "studenstNbr",
     accessorKey: "studenstNbr",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="    عدد الطلاب الملتحقين" />

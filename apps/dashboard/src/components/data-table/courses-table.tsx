@@ -10,6 +10,8 @@ import {
   getFilteredRowModel,
   useReactTable,
   getPaginationRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
 } from "@tanstack/react-table";
 import { Button } from "@ui/components/ui/button";
 import TableHeader2 from "./table-header";
@@ -24,15 +26,18 @@ import {
 } from "@ui/components/ui/table";
 import { DoubleArrowLeftIcon } from "@radix-ui/react-icons";
 import { ChevronRightIcon } from "lucide-react";
+import { DataTableFilterableColumn } from "@/src/types";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
+  filterableColumns?: DataTableFilterableColumn<TData>[];
   data: TData[];
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  filterableColumns = [],
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -46,20 +51,28 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
+    getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
     state: {
       sorting,
       rowSelection,
       columnFilters,
     },
+    manualPagination: true,
+    manualSorting: true,
+    manualFiltering: true,
   });
+
+  console.log("here are the filtable columns ");
+  console.log(filterableColumns);
 
   return (
     <>
-      <TableHeader2 table={table} />
+      <TableHeader2 table={table} filterableColumns={filterableColumns} />
       <div className="rounded-md border bg-white">
         <Table>
           <TableHeader>

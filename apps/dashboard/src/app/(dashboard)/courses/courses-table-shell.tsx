@@ -26,7 +26,59 @@ const CoursesTableShell: FC<CoursesTableShellProps> = ({ initialData }) => {
   return (
     <div className="w-full min-h-[300px] h-fit flex flex-col ">
       <DeleteCourseModel refetch={refetch} />
-      <DataTable columns={columns} data={data} />
+      <DataTable
+        columns={columns}
+        data={data}
+        filterableColumns={[
+          {
+            id: "status",
+            title: "الحالة",
+            options: [
+              {
+                label: "مسودة",
+
+                value: "DRAFT",
+              },
+              {
+                label: "متاح للجميع",
+
+                value: "PUBLISED",
+              },
+              {
+                label: "الوصول المبكر",
+
+                value: "EARLY_ACCESS",
+              },
+            ],
+          },
+          {
+            id: "level",
+            title: "المستوى",
+            options: [
+              {
+                label: "مبتدئ",
+
+                value: "DRAFT",
+              },
+              {
+                label: "متوسط",
+
+                value: "PUBLISED",
+              },
+              {
+                label: "محترف",
+
+                value: "EARLY_ACCESS",
+              },
+              {
+                label: "كل المستويات",
+
+                value: "EARLY_ACCESS",
+              },
+            ],
+          },
+        ]}
+      />
     </div>
   );
 };
