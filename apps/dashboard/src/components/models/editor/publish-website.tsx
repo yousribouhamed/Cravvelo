@@ -109,7 +109,7 @@ const PublishWebsite: FC = () => {
                   <FormControl>
                     <Textarea
                       rows={3}
-                      className="dark:bg-[#252525] h-[150px]"
+                      className="dark:bg-[#252525] min-h-[100px] h-fit"
                       placeholder="وصف موجز للموقع"
                       {...field}
                     />
@@ -124,7 +124,16 @@ const PublishWebsite: FC = () => {
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>حدد اسم المجال الخاص بك</FormLabel>
-                  <Input placeholder="  حدد اسم المجال الخاص بك" {...field} />
+                  <div className="w-full h-14 border rounded-xl flex items-center p-2">
+                    <div className="w-[150px] h-full flex items-center justify-center bg-gray-50">
+                      <span>carvvelo.com.</span>
+                    </div>
+                    <Input
+                      className="border-none "
+                      placeholder="  حدد اسم المجال الخاص بك"
+                      {...field}
+                    />
+                  </div>
                   <FormDescription>
                     لا تقلق كثيرًا بشأن ذلك، يمكنك إضافة نطاقك المخصص لاحقًا
                   </FormDescription>
