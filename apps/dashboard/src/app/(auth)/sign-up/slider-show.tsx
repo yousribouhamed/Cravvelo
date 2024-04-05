@@ -1,8 +1,6 @@
 "use client";
 
-import { useEffect, type FC } from "react";
-
-import { Card, CardContent } from "@ui/components/ui/card";
+import { type FC } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -10,8 +8,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@ui/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
-import { maketoast } from "@/src/components/toasts";
 
 const Items = [
   {
@@ -36,7 +34,16 @@ const Items = [
 const SliderShow: FC = ({}) => {
   return (
     <>
-      <Carousel dir="ltr" className="w-full h-full p-0 m-0  ">
+      <Carousel
+        plugins={[
+          //@ts-ignore
+          Autoplay({
+            delay: 2000,
+          }),
+        ]}
+        dir="ltr"
+        className="w-full h-full p-0 m-0  "
+      >
         <CarouselNext className="hidden" />
         <CarouselPrevious className="hidden" />
 
@@ -51,10 +58,22 @@ const SliderShow: FC = ({}) => {
                 alt="this is an image"
                 className="w-full h-full "
               />
-              <div>
-                <h2 className="text-2xl font-bold text-white absolute bottom-10 z-[10] mx-4">
+              <div
+                dir="rtl"
+                className="absolute bottom-10 z-[10] w-full h-[200px] flex flex-col justify-center items-start p-4"
+              >
+                <h2 className="text-3xl font-bold text-white  mx-4">
                   {item.title}
                 </h2>
+
+                <Image
+                  src="/logo-in-white.png"
+                  alt="cravvelo logo in white"
+                  width={100}
+                  height={30}
+                  className="absolute bottom-2 left-8"
+                  loading="eager"
+                />
               </div>
             </CarouselItem>
           ))}

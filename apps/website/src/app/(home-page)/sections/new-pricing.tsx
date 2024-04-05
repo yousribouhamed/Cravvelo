@@ -19,7 +19,7 @@ const NewPricing: FC = ({}) => {
     React.useState<boolean>(false);
 
   return (
-    <div className="w-full min-h-[1500px] h-fit my-10">
+    <div className="w-full min-h-[1080px] h-fit my-10">
       <div className="w-full min-h-[150px] h-fit  flex justify-center items-start  pl-48 ">
         <div className="bg-white rounded-full transition-all duration-150 relative shadow-2xl w-fit h-[60px] flex items-center gap-x-4 justify-center p-4">
           <Tabs
@@ -83,7 +83,7 @@ const NewPricing: FC = ({}) => {
               >
                 اشترك الان
               </Button>
-              <span className="text-start my-6 text-[#FC6B00] text-xl  ">
+              <span className="text-start my-6 text-[#FC6B00] text-lg  ">
                 {item.tagline}
               </span>
               <div className="w-full h-fit ">

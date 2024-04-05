@@ -93,6 +93,7 @@
     "context-menu": "^2.0.0",
     "crisp-sdk-web": "^1.0.22",
     "database": "workspace:*",
+    "embla-carousel-autoplay": "^8.0.1",
     "framer-motion": "^10.18.0",
     "handlebars": "^4.7.8",
     "jose": "^5.2.2",

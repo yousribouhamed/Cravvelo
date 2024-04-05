@@ -369,6 +369,9 @@ importers:
       database:
         specifier: workspace:*
         version: link:../../packages/db
+      embla-carousel-autoplay:
+        specifier: ^8.0.1
+        version: 8.0.1(embla-carousel@8.0.1)
       framer-motion:
         specifier: ^10.18.0
         version: 10.18.0(react-dom@18.2.0)(react@18.2.0)
@@ -8814,6 +8817,14 @@ packages:
     resolution: {integrity: sha512-ixj1cyHrKqmdXF5CeHDSLbO0KRuOE1BHdCYKbcRA04dPLaKu8Vi7JDK5KLnGrfD6WxKcSEGm9gtHR4MqBq8gmg==}
     dev: false
 
+  /embla-carousel-autoplay@8.0.1(embla-carousel@8.0.1):
+    resolution: {integrity: sha512-4zcB6jVSGTJSXL7uroccjak9U+lyyoZTO4NISwdCHNMYVbIra8aZGEz0I/4Ql753do6jqjaRE8MsCBhJbt6u6A==}
+    peerDependencies:
+      embla-carousel: 8.0.1
+    dependencies:
+      embla-carousel: 8.0.1
+    dev: false
+
   /embla-carousel-react@8.0.0(react@18.2.0):
     resolution: {integrity: sha512-qT0dii8ZwoCtEIBE6ogjqU2+5IwnGfdt2teKjCzW88JRErflhlCpz8KjWnW8xoRZOP8g0clRtsMEFoAgS/elfA==}
     peerDependencies:
@@ -8834,6 +8845,10 @@ packages:
 
   /embla-carousel@8.0.0:
     resolution: {integrity: sha512-ecixcyqS6oKD2nh5Nj5MObcgoSILWNI/GtBxkidn5ytFaCCmwVHo2SecksaQZHcARMMpIR2dWOlSIdA1LkZFUA==}
+    dev: false
+
+  /embla-carousel@8.0.1:
+    resolution: {integrity: sha512-RsaMRyBCd144N95gb3XoI+H9zj3RI4y0qcfvKYEh2tIAIEenL9CW9vwzltCeoYkWYipGdkvup+HGT9ewG1YTEw==}
     dev: false
 
   /emoji-regex@8.0.0:

@@ -72,7 +72,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <TableHeader2 table={table} filterableColumns={filterableColumns} />
+      <TableHeader2 table={table} />
       <div className="rounded-md border bg-white">
         <Table>
           <TableHeader>

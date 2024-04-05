@@ -6,7 +6,7 @@ const CreateLanch: FC = ({}) => {
     <MaxWidthWrapper className="my-6 p-4 lg:p-0">
       <section
         id="WHIY_US"
-        className="w-full min-h-[300px] h-fit  grid grid-cols-1 lg:grid-cols-2 "
+        className="w-full min-h-[300px] h-fit  grid grid-cols-1 lg:grid-cols-2 px-8 2xl:px-0  "
       >
         <div className="w-full h-full ">
           <div className="w-full mt-8 h-[60px] relative flex items-center justify-start ">
