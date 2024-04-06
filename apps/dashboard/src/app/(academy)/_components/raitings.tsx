@@ -23,8 +23,11 @@ const Raitings: FC<{ course: Course; comments: Comment[] }> = ({
     <div className="w-full flex flex-col bg-white min-h-[400px] h-fit border rounded-xl ">
       <div className="w-full h-[250px]  grid grid-cols-2 ">
         <div className="w-full h-full  flex flex-col p-4 ">
-          {avrage.map((item) => (
-            <div className="w-full h-[40px] flex justify-start items-center gap-x-2">
+          {avrage.map((item, index) => (
+            <div
+              key={item + index + "raiting"}
+              className="w-full h-[40px] flex justify-start items-center gap-x-2"
+            >
               {/* <div className=" h-[9px] rounded-xl bg-primary" /> */}
               <Progress
                 value={calculateRatingPercentage(

@@ -102,6 +102,7 @@ export default function ShoppingCardProduction({
                                   >
                                     <div className="h-32 w-32 flex-shrink-0 overflow-hidden  rounded-xl   ">
                                       <img
+                                        alt={product.name}
                                         src={product.imageUrl}
                                         className="h-full w-full object-cover object-center"
                                       />

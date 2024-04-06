@@ -65,6 +65,7 @@ const Page = async ({ params }: PageProps) => {
                   className="w-[320px] min-h-[300px] h-fit p-0  border  flex flex-col shadow rounded-xl  transition-all duration-700 bg-white cursor-pointer "
                 >
                   <img
+                    alt={item.course.title + "image"}
                     src={item.course.thumnailUrl}
                     className="w-full h-[200px] rounded-t-xl object-cover "
                   />

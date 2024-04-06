@@ -32,8 +32,9 @@ const CourseDisplayContent: FC<CourseContentProps> = ({ course, chapters }) => {
   return (
     <div className="w-full min-h-[300px] h-fit my-4">
       <div className="w-full h-14 bg-white  flex  items-center justify-start gap-x-4 ">
-        {tabs.map((item) => (
+        {tabs.map((item, index) => (
           <button
+            key={item.name + index}
             className={`h-full w-[100px] text-black ${
               tab.value === item.value
                 ? "border-b-2 border-primary font-bold "

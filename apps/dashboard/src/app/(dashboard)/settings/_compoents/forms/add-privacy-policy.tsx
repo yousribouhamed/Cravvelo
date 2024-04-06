@@ -77,7 +77,8 @@ const AddPrivicyPolicy: FC<AddPrivicyPolicyProps> = ({ policy }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    اقرأ هذا القالب وانقر فوق "حفظ" لتنقذ نفسك وعملائك.
+                    اقرأ هذا القالب وانقر فوق &quot;حفظ&quot; لتنقذ نفسك
+                    وعملائك.
                   </FormLabel>
                   <FormControl>
                     <PlateEditor
