@@ -6,7 +6,6 @@ import AcademyHeader from "../_components/layout/academy-header";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import { getStudent } from "../_actions/auth";
 import AcademiaFooter from "../_components/layout/academy-footer";
-import LiarSales from "../_components/Liar-sales";
 import Banner from "../_components/banner";
 import Suspanded from "../_components/suspanded";
 

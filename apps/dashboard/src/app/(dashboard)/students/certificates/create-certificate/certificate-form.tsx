@@ -83,7 +83,10 @@ function CertificateForm() {
         {isCertificateSeen ? (
           <div className="w-full h-full flex flex-wrap gap-4">
             {[1, 2, 3, 4, 5].map((item) => (
-              <div className="w-[130px] h-[80px] bg-white border-2 border-black rounded-xl "></div>
+              <div
+                key={item + item + "some"}
+                className="w-[130px] h-[80px] bg-white border-2 border-black rounded-xl "
+              ></div>
             ))}
           </div>
         ) : (

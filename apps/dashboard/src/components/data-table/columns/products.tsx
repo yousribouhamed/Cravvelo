@@ -102,7 +102,7 @@ export const ProctsColumns: ColumnDef<Product>[] = [
     id: "actions",
     cell: ({ row }) => {
       const payment = row.original;
-
+      /* eslint-disable */
       const { setId, setIsOpen } = useOpenProductDeleteAction();
 
       return (

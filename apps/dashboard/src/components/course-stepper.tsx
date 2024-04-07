@@ -55,7 +55,10 @@ function CourseStepper({ className, ...props }: ExamplesNavProps) {
       >
         {links.map((item, index) => {
           return (
-            <div className="flex flex-col justify-center items-center gap-y-2 w-[100px] relative ">
+            <div
+              key={item.name + index}
+              className="flex flex-col justify-center items-center gap-y-2 w-[100px] relative "
+            >
               <div className="bg-primary z-[10] w-[30px] h-[30px] rounded-[50%] flex items-center justify-center">
                 <span className="text-white font-bold text-sm">
                   {index + 1}

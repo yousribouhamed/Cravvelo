@@ -180,7 +180,7 @@ export const computeSHA256 = async (file: File) => {
 
 export function constructMetadata({
   title = "Cravvelo",
-  description = "Cravvelo is Cravvelo",
+  description = "Cravvelo is a Multi-tenant application which allow users to create their own platform where they can sell their courses and digital products and manage their students all under their costume brad So they can charge their customers /students even a higher prices and keep all the profit to themselves",
   image = "/opengraph-image.png",
   icons = "/favicon.ico",
   noIndex = false,
@@ -211,8 +211,7 @@ export function constructMetadata({
       creator: "@KING_IN_JUNGLE",
     },
     icons,
-    metadataBase: new URL("https://quill-blcrm7149-chrhi.vercel.app"),
-    themeColor: "#FFF",
+    metadataBase: new URL("https://www.cravvelo.com"),
     ...(noIndex && {
       robots: {
         index: false,

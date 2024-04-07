@@ -146,11 +146,8 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
               />
             </PaginationItem>
             {courses.map((item, index) => (
-              <PaginationItem>
-                <PaginationLink
-                  key={item.accountId}
-                  onClick={() => handlePageChange(index + 1)}
-                >
+              <PaginationItem key={item.accountId}>
+                <PaginationLink onClick={() => handlePageChange(index + 1)}>
                   {index + 1}
                 </PaginationLink>
               </PaginationItem>

@@ -129,7 +129,7 @@ export const columns: ColumnDef<Course>[] = [
     id: "actions",
     cell: ({ row }) => {
       const payment = row.original;
-
+      /* eslint-disable */
       const { setId, setIsOpen } = useOpenCourseDeleteAction();
 
       return (

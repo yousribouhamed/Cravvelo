@@ -152,7 +152,10 @@ async function Page({ searchParams }) {
             </div>
             <div className="space-y-4 pt-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <Card className="flex flex-col justify-between  min-h-[150px]">
+                <Card
+                  key={"card1"}
+                  className="flex flex-col justify-between  min-h-[150px]"
+                >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-xl font-bold ">
                       المبيعات{" "}
@@ -174,7 +177,10 @@ async function Page({ searchParams }) {
                     <div className="text-2xl font-bold">{sales.length}</div>
                   </CardFooter>
                 </Card>
-                <Card className="flex flex-col justify-between  min-h-[150px] ">
+                <Card
+                  key={"card2"}
+                  className="flex flex-col justify-between  min-h-[150px] "
+                >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-xl font-bold ">الطلاب</CardTitle>
                     <svg
@@ -196,7 +202,10 @@ async function Page({ searchParams }) {
                     <div className="text-2xl font-bold">{studnets?.length}</div>
                   </CardFooter>
                 </Card>
-                <Card className="flex flex-col justify-between  min-h-[150px] ">
+                <Card
+                  key={"card3"}
+                  className="flex flex-col justify-between  min-h-[150px] "
+                >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-xl font-bold ">
                       صافي الآرباح
@@ -225,7 +234,10 @@ async function Page({ searchParams }) {
                     </div>
                   </CardFooter>
                 </Card>
-                <Card className="flex flex-col justify-between min-h-[150px]">
+                <Card
+                  key={"card4"}
+                  className="flex flex-col justify-between min-h-[150px]"
+                >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-xl font-bold ">
                       التعليقات
@@ -271,7 +283,10 @@ async function Page({ searchParams }) {
                     ) : (
                       <div className="w-full h-full flex flex-col gap-y-2">
                         {sales.map((item) => (
-                          <div className="w-full flex items-center justify-between px-4 border-b p-4">
+                          <div
+                            key={item.id}
+                            className="w-full flex items-center justify-between px-4 border-b p-4"
+                          >
                             <span> DZD {item.price}</span>
                             <span>عنوان المنتج</span>
                           </div>

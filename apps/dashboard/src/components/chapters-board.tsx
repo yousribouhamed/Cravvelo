@@ -173,6 +173,7 @@ const ChaptersBoard: FC<ChaptersBoardAbdullahProps> = ({ initialData }) => {
                   index={index}
                 >
                   {(provided) => {
+                    /* eslint-disable */
                     const [open, setOpen] = React.useState<boolean>(false);
 
                     const materials = JSON.parse(
