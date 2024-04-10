@@ -102,7 +102,11 @@ const UpgradeButton: FC = ({}) => {
                 <p className="text-gray-500 text-xl">
                   <span className="text-4xl font-bold mx-3 text-black">
                     DZD{" "}
-                    {isPaymentByMonth ? item.price : Number(item.price) - 1000}
+                    {isPaymentByMonth
+                      ? item.price
+                      : Math.floor(
+                          Number(item.price) - Number(item.price) * 0.2
+                        )}
                   </span>
                   /شهرياً
                 </p>
@@ -110,12 +114,6 @@ const UpgradeButton: FC = ({}) => {
               <Button
                 disabled={mutation.isLoading}
                 onClick={() => {
-                  console.log("here are the data");
-                  console.log({
-                    amount: Number(item.price),
-                    product_name: item.plan,
-                    success_url: "https://app.cravvelo.com",
-                  });
                   mutation.mutate({
                     amount: Number(item.price),
                     product_name: item.plan,

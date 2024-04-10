@@ -40,8 +40,6 @@ const useHaveAccess = async () => {
 
   const isSubscribed = account.plan ? true : false;
 
-  console.log({ isFreeTrial, isSubscribed });
-
   if (!isFreeTrial && !isSubscribed) {
     redirect("/pricing");
   }

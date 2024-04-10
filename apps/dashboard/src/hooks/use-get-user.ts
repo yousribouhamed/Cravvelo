@@ -3,12 +3,11 @@
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { prisma } from "database/src";
+import { daysLeftInTrial } from "../lib/utils";
 
 // this sunction should run on the server only
 const useGetUser = async () => {
   const user = await currentUser();
-
-  const currentDate = new Date();
 
   if (!user) {
     redirect("/sign-in");
@@ -33,12 +32,15 @@ const useGetUser = async () => {
 
   // here we check if the user is paid user or not
 
-  const isFreeTrial = currentDate > trialEndDate;
+  const isFreeTrial = daysLeftInTrial(account.createdAt) > 0;
+
+  // const isSubscribed = account.plan ? true : false;
 
   const isSubscribed = account.plan ? true : false;
 
   return {
     userId: user.id,
+    currentPlan: account.plan,
     accountId: account?.id,
     firstName: user?.firstName,
     lastName: user?.lastName,
