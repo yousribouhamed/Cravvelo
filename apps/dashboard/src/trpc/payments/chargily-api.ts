@@ -32,7 +32,11 @@ export const chargily = {
           method: "POST",
           headers: {
             // Authorization: `Bearer  ${process.env.CHARGILY_SECRET_KEY}`, // Adding authorization header with secret key
-            Authorization: `Bearer test_sk_0tbIn6qsnP3ALcUh9aNdAqxOb5rcc254olPyRVnK`, // Adding authorization header with secret key
+            Authorization: `Bearer ${
+              process.env.NODE_ENV === "production"
+                ? process.env.CHARGILY_SECRET_KEY
+                : "test_sk_0tbIn6qsnP3ALcUh9aNdAqxOb5rcc254olPyRVnK"
+            }`, // Adding authorization header with secret key
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ name: input.product_name }), // Constructing the body with product_name
@@ -45,7 +49,11 @@ export const chargily = {
           method: "POST",
           headers: {
             // Authorization: `Bearer ${process.env.CHARGILY_SECRET_KEY}`, // Adding authorization header with secret key
-            Authorization: `Bearer test_sk_0tbIn6qsnP3ALcUh9aNdAqxOb5rcc254olPyRVnK`, // Adding authorization header with secret key
+            Authorization: `Bearer ${
+              process.env.NODE_ENV === "production"
+                ? process.env.CHARGILY_SECRET_KEY
+                : "test_sk_0tbIn6qsnP3ALcUh9aNdAqxOb5rcc254olPyRVnK"
+            }`, // Adding authorization header with secret key
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -74,7 +82,11 @@ export const chargily = {
           method: "POST",
           headers: {
             //  Authorization: `Bearer ${process.env.CHARGILY_SECRET_KEY}`, // Adding authorization header with secret key
-            Authorization: `Bearer test_sk_0tbIn6qsnP3ALcUh9aNdAqxOb5rcc254olPyRVnK`, // Adding authorization header with secret key
+            Authorization: `Bearer ${
+              process.env.NODE_ENV === "production"
+                ? process.env.CHARGILY_SECRET_KEY
+                : "test_sk_0tbIn6qsnP3ALcUh9aNdAqxOb5rcc254olPyRVnK"
+            }`, // Adding authorization header with secret key
             "Content-Type": "application/json",
           },
           body: JSON.stringify(payload), // Constructing the body with payload
