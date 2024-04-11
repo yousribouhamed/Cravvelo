@@ -12,8 +12,10 @@ import {
 } from "@ui/components/ui/dropdown-menu";
 import { Checkbox } from "@ui/components/ui/checkbox";
 import { Payments } from "database";
+
 import { maketoast } from "../../toasts";
 import { DataTableColumnHeader } from "../data-table-head";
+import { formatDateInArabic } from "@/src/lib/utils";
 
 export const BillingColumns: ColumnDef<Payments>[] = [
   {
@@ -41,18 +43,49 @@ export const BillingColumns: ColumnDef<Payments>[] = [
     enableSorting: false,
     enableHiding: false,
   },
+
   {
-    accessorKey: "discountType",
+    accessorKey: "plan",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="نمط التخفيض" />
+      <DataTableColumnHeader column={column} title="الخطة" />
     ),
     cell: ({ row }) => {
-      return <p className="font-bold text-sm"></p>;
+      return <p className=" text-sm font-bold ">{row.original.plan}</p>;
+    },
+  },
+  {
+    accessorKey: "createdAt",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="تاريخ البدء" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <p className=" text-sm font-bold ">
+          {formatDateInArabic(row.original.createdAt, "dd MMMM yyyy")}
+        </p>
+      );
+    },
+  },
+  {
+    accessorKey: "end_of_subscription",
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="موعد اعادة تجديد الاشتراك"
+      />
+    ),
+    cell: ({ row }) => {
+      return (
+        <p className=" text-sm font-bold ">
+          {formatDateInArabic(row.original.end_of_subscription, "dd MMMM yyyy")}
+        </p>
+      );
     },
   },
 
   {
     id: "actions",
+
     cell: ({ row }) => {
       const payment = row.original;
 

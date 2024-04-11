@@ -4,18 +4,17 @@ import type { FC } from "react";
 import { PLANS } from "../../../../constants/plans";
 import Image from "next/image";
 import { Button } from "@ui/components/ui/button";
+import { formatDateInArabic } from "@/src/lib/utils";
+
 interface CurrentPlanProps {
   currentPlan: string;
-  // sbscriptionDate: Date;
+  endSubscription: Date;
 }
 
-// display the current plan
-
-// display when the plan will expier
-
-// display an option to upgrade the plan
-
-const CurrentPlan: FC<CurrentPlanProps> = ({ currentPlan }) => {
+const CurrentPlan: FC<CurrentPlanProps> = ({
+  currentPlan,
+  endSubscription,
+}) => {
   const plan = PLANS.find((item) => item.plan_code === currentPlan);
   return (
     <div className="w-full h-fit min-h-[400px] grid grid-cols-3">
@@ -132,12 +131,12 @@ const CurrentPlan: FC<CurrentPlanProps> = ({ currentPlan }) => {
           <div className="w-full h-[60px] flex items-center justify-between px-4">
             <span>نمط الاشتراك</span>
 
-            <span>{plan.price} </span>
+            <span>شهريا</span>
           </div>
           <div className="w-full h-[60px] flex items-center justify-between px-4">
             <span>موعد اعادة تجديد الاشتراك</span>
 
-            <span>{plan.price}</span>
+            <span>{formatDateInArabic(endSubscription, "dd MMMM yyyy")}</span>
           </div>
         </div>
 

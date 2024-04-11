@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  
 }
 
 datasource db {
@@ -22,7 +21,7 @@ model Account {
   avatarUrl       String?           @db.Text
   user_name       String?           @db.Text
   user_bio        String?           @db.Text
-  phone           Int?           
+  phone           Int?
   AcademyIds      Json
   plan            PLANS?
   createdAt       DateTime          @default(now())
@@ -147,25 +146,25 @@ model Video {
 }
 
 model Website {
-  id           String   @unique @default(uuid())
-  accountId    String   @unique
-  name         String?
-  description  String?  @db.Text
-  subdomain    String?  @unique
-  customDomain String?  @unique
+  id             String   @unique @default(uuid())
+  accountId      String   @unique
+  name           String?
+  description    String?  @db.Text
+  subdomain      String?  @unique
+  customDomain   String?  @unique
   pages          Json
-  assets        Json?
-  suspended     Boolean @default(false)
+  assets         Json?
+  suspended      Boolean  @default(false)
   privacy_policy Json?
-  phoneNumber   String?
-  supportEmail  String?
-  favicon      String?  @db.Text @default("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT51NSq8RTDzIs7VaAcWWvKkyiagU5dz6hiAA&usqp=CAU")
-  color        String?
-  logo         String?  @db.VarChar(199)
-  font         String   @default("font-cal")
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  Account      Account? @relation(fields: [accountId], references: [id])
+  phoneNumber    String?
+  supportEmail   String?
+  favicon        String?  @default("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT51NSq8RTDzIs7VaAcWWvKkyiagU5dz6hiAA&usqp=CAU") @db.Text
+  color          String?
+  logo           String?  @db.VarChar(199)
+  font           String   @default("font-cal")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  Account        Account? @relation(fields: [accountId], references: [id])
 }
 
 enum DiscountType {
@@ -239,20 +238,21 @@ model Homework {
 }
 
 model Comment {
-  id            String   @unique @default(uuid())
-  content       String
-  rating        Float
-  studentId     String
-  studentName   String 
-  studentEmail  String
-  studentImage  String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  courseId      String 
-  accountId     String
-  status        String   @default("verification_pending")
-  Course        Course?  @relation(fields: [courseId], references: [id])
-  Account       Account  @relation(fields: [accountId], references: [id])
+  id           String   @unique @default(uuid())
+  content      String
+  rating       Float
+  studentId    String
+  studentName  String
+  studentEmail String
+  studentImage String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  courseId     String
+  accountId    String
+  status       String   @default("verification_pending")
+  Course       Course?  @relation(fields: [courseId], references: [id])
+  Account      Account  @relation(fields: [accountId], references: [id])
+
   @@index([id])
   @@index([courseId])
 }
@@ -285,57 +285,58 @@ model Exam {
 }
 
 model Student {
-  id        String  @unique @default(uuid())
-  full_name String
-  photo_url String? @db.Text
-  bio       String?
-  email     String  @unique
-  phone     String? @unique
-  accountId String
-  password  String
+  id            String    @unique @default(uuid())
+  full_name     String
+  photo_url     String?   @db.Text
+  bio           String?
+  email         String    @unique
+  phone         String?   @unique
+  accountId     String
+  password      String
   confirmeEmail DateTime?
-  bag     Json
-  Account Account @relation(fields: [accountId], references: [id])
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  bag           Json
+  Account       Account   @relation(fields: [accountId], references: [id])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
   @@index([id])
   @@index([accountId])
 }
 
 model Certificate {
-  id        String  @unique @default(uuid())
+  id          String   @unique @default(uuid())
   name        String
   description String?
   issuer      String
   issueDate   DateTime
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   // Add more fields as needed
 }
 
-
-
 model Payments {
-  id        String  @unique @default(uuid())
-  accountId   String
-  Account     Account  @relation(fields: [accountId], references: [id])
-  plan        String 
-  end_of_subscription DateTime 
-  payload     Json
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                  String   @unique @default(uuid())
+  accountId           String
+  Account             Account  @relation(fields: [accountId], references: [id])
+  plan                String
+  end_of_subscription DateTime
+  payload             Json
+  strategy            String // this one can be yearly or mounthly
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
   @@index([id])
   @@index([accountId])
 }
 
-
 model Admin {
-  id        String  @unique @default(uuid())
-  name String?
-  email     String? @unique
+  id        String   @unique @default(uuid())
+  name      String?
+  email     String?  @unique
   photo_url String?
   password  String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([id])
 }

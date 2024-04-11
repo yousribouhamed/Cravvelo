@@ -26,6 +26,12 @@ const useGetUser = async () => {
     redirect("/auth-callback");
   }
 
+  const payment = await prisma.payments.findFirst({
+    where: {
+      accountId: account.id,
+    },
+  });
+
   const trialStartDate = account.createdAt;
   const trialEndDate = new Date(trialStartDate);
   trialEndDate.setDate(trialEndDate.getDate() + 14); // Adding 14 days to trial start date
@@ -40,6 +46,7 @@ const useGetUser = async () => {
 
   return {
     userId: user.id,
+    endSubscription: payment?.end_of_subscription,
     currentPlan: account.plan,
     accountId: account?.id,
     firstName: user?.firstName,
