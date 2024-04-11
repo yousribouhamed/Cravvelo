@@ -8,6 +8,8 @@ import CurrentPlan from "./_compoents/current-plan";
 export default async function Home() {
   const user = await useGetUser();
 
+  console.log(user);
+
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start">

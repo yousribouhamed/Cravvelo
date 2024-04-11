@@ -13,6 +13,7 @@ import {
 import { Checkbox } from "@ui/components/ui/checkbox";
 import { Payments } from "database";
 import { maketoast } from "../../toasts";
+import { DataTableColumnHeader } from "../data-table-head";
 
 export const BillingColumns: ColumnDef<Payments>[] = [
   {
@@ -39,6 +40,15 @@ export const BillingColumns: ColumnDef<Payments>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
+  },
+  {
+    accessorKey: "discountType",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="نمط التخفيض" />
+    ),
+    cell: ({ row }) => {
+      return <p className="font-bold text-sm"></p>;
+    },
   },
 
   {

@@ -3,6 +3,7 @@
 import type { FC } from "react";
 import { PLANS } from "../../../../constants/plans";
 import Image from "next/image";
+import { Button } from "@ui/components/ui/button";
 interface CurrentPlanProps {
   currentPlan: string;
   // sbscriptionDate: Date;
@@ -17,10 +18,10 @@ interface CurrentPlanProps {
 const CurrentPlan: FC<CurrentPlanProps> = ({ currentPlan }) => {
   const plan = PLANS.find((item) => item.plan_code === currentPlan);
   return (
-    <div className="w-full h-fit min-h-[400px] grid grid-cols-2">
+    <div className="w-full h-fit min-h-[400px] grid grid-cols-3">
       <div
         key={plan.plan}
-        className="w-full h-full relative bg-white shadow-2xl border rounded-2xl py-2 px-4 flex flex-col "
+        className="w-full h-full col-span-1 relative bg-white shadow-2xl border rounded-2xl py-2 px-4 flex flex-col "
       >
         <div className="w-full h-[100px] flex items-center justify-start gap-x-4 ">
           <div className="w-[80px] h-[70px] bg-gray-100 rounded-xl flex items-center justify-center">
@@ -117,6 +118,36 @@ const CurrentPlan: FC<CurrentPlanProps> = ({ currentPlan }) => {
               </span>
             </div>
           ))}
+        </div>
+      </div>
+
+      <div className="w-full h-full col-span-2 flex flex-col gap-y-4 p-6">
+        <div className="bg-white w-full h-[250px] flex flex-col gap-y-4 p-4 rounded-xl border ">
+          <h2 className="text-xl font-semibold text-black">تفاصيل الاشتراك</h2>
+          <div className="w-full h-[60px] flex items-center justify-between px-4">
+            <span>المبلغ المدفوع</span>
+
+            <span>{plan.price} DZD </span>
+          </div>
+          <div className="w-full h-[60px] flex items-center justify-between px-4">
+            <span>نمط الاشتراك</span>
+
+            <span>{plan.price} </span>
+          </div>
+          <div className="w-full h-[60px] flex items-center justify-between px-4">
+            <span>موعد اعادة تجديد الاشتراك</span>
+
+            <span>{plan.price}</span>
+          </div>
+        </div>
+
+        <div className="w-full bg-white p-4 h-[50px] flex items-center justify-between border rounded-xl">
+          <p>الترقية إلى خطة النمو</p>
+          <Button>تطوير</Button>
+        </div>
+        <div className="w-full h-[50px] bg-white p-4 flex items-center justify-between border rounded-xl">
+          <p>الترقية إلى الخطة المتقدمة</p>
+          <Button>تطوير</Button>
         </div>
       </div>
     </div>
