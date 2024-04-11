@@ -33,6 +33,7 @@ export async function POST(request: NextRequest) {
           end_of_subscription: new Date(
             currentDate.getTime() + 30 * 24 * 60 * 60 * 1000
           ),
+          strategy: "MOUNTHLY",
           accountId: accountId,
           plan:
             plan_code === "ADVANCED"
