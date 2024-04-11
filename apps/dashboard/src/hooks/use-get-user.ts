@@ -38,11 +38,11 @@ const useGetUser = async () => {
 
   // here we check if the user is paid user or not
 
-  const isFreeTrial = daysLeftInTrial(account.createdAt) > 0;
-
   // const isSubscribed = account.plan ? true : false;
 
   const isSubscribed = account.plan ? true : false;
+
+  const isFreeTrial = !isSubscribed && daysLeftInTrial(account.createdAt) > 0;
 
   return {
     userId: user.id,

@@ -21,9 +21,10 @@ interface Props {
   title: string;
   user: UserData;
   goBack?: boolean;
+  isLoadingPage?: boolean;
 }
 
-const Header: FC<Props> = ({ title, user, goBack }) => {
+const Header: FC<Props> = ({ title, user, goBack, isLoadingPage }) => {
   const router = useRouter();
   return (
     <>
@@ -71,14 +72,14 @@ const Header: FC<Props> = ({ title, user, goBack }) => {
         </div>
       </TooltipProvider>
 
-      {user?.isFreeTrial ? (
+      {user?.isFreeTrial && !user?.isSubscribed && !isLoadingPage ? (
         <div className="w-full h-[70px] flex items-center justify-center bg-gradient-to-r from-primary to-yellow-500">
           <h1 className="text-white font-bold text-md">
             لديك {daysLeftInTrial(user.createdAt)} يومًا متبقيًا في النسخة
             التجريبية المجانية
           </h1>
         </div>
-      ) : !user?.isSubscribed ? (
+      ) : !user?.isSubscribed && !isLoadingPage ? (
         <div className="w-full h-[70px] flex items-center justify-center bg-gradient-to-r from-primary to-yellow-500">
           <h1 className="text-white font-bold text-md">
             انتهت الفترة التجريبية، يجب عليك الاشتراك في أحد الباقات

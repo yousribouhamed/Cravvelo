@@ -7,7 +7,7 @@ const page = ({}) => {
     <MaxWidthWrapper>
       <main className="w-full flex flex-col overflow-y-hidden h-fit  justify-start">
         {/* @ts-ignore */}
-        <Header user={{}} title="الرئيسية" />
+        <Header isLoadingPage user={{}} title="الرئيسية" />
         <div className="w-full h-[30px] flex justify-start items-center mt-10 ">
           <Skeleton className="w-[260px] h-[45px] rounded-xl" />
         </div>
