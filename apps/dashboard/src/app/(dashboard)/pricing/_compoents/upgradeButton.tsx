@@ -119,6 +119,7 @@ const UpgradeButton: FC = ({}) => {
                     product_name: item.plan,
                     success_url: "https://app.cravvelo.com",
                     plan_code: item.plan_code,
+                    isByMounth: isPaymentByMonth,
                   });
                 }}
                 size="lg"

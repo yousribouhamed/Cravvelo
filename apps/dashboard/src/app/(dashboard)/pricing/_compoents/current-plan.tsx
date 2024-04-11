@@ -9,11 +9,13 @@ import { formatDateInArabic } from "@/src/lib/utils";
 interface CurrentPlanProps {
   currentPlan: string;
   endSubscription: Date;
+  strategy: string;
 }
 
 const CurrentPlan: FC<CurrentPlanProps> = ({
   currentPlan,
   endSubscription,
+  strategy,
 }) => {
   const plan = PLANS.find((item) => item.plan_code === currentPlan);
   return (
@@ -126,12 +128,15 @@ const CurrentPlan: FC<CurrentPlanProps> = ({
           <div className="w-full h-[60px] flex items-center justify-between px-4">
             <span>المبلغ المدفوع</span>
 
-            <span>{plan.price} DZD </span>
+            <span>
+              {strategy === "MONTHLY" ? plan.price : Number(plan.price) * 12}{" "}
+              DZD{" "}
+            </span>
           </div>
           <div className="w-full h-[60px] flex items-center justify-between px-4">
             <span>نمط الاشتراك</span>
 
-            <span>شهريا</span>
+            <span>{strategy === "MONTHLY" ? "شهريا" : "سنويا"}</span>
           </div>
           <div className="w-full h-[60px] flex items-center justify-between px-4">
             <span>موعد اعادة تجديد الاشتراك</span>
@@ -142,11 +147,11 @@ const CurrentPlan: FC<CurrentPlanProps> = ({
 
         <div className="w-full bg-white p-4 h-[50px] flex items-center justify-between border rounded-xl">
           <p>الترقية إلى خطة النمو</p>
-          <Button>تطوير</Button>
+          <Button disabled>قريبا</Button>
         </div>
         <div className="w-full h-[50px] bg-white p-4 flex items-center justify-between border rounded-xl">
           <p>الترقية إلى الخطة المتقدمة</p>
-          <Button>تطوير</Button>
+          <Button disabled>قريبا</Button>
         </div>
       </div>
     </div>

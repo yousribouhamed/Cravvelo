@@ -15,6 +15,7 @@ export default async function Home() {
         <PaymentSettingsHeader />
         {user.isSubscribed ? (
           <CurrentPlan
+            strategy={user.strategy}
             endSubscription={user.endSubscription}
             currentPlan={user.currentPlan}
           />

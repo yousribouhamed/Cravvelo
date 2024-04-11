@@ -23,6 +23,7 @@ export const chargily = {
         amount: z.number(), // Schema for amount
         success_url: z.string(), // Schema for success URL
         plan_code: z.string(),
+        isByMounth: z.boolean(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -57,27 +58,26 @@ export const chargily = {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            amount: input.amount,
+            amount: input.isByMounth ? input.amount : input.amount * 12,
             currency: "dzd",
             product_id: product.id,
-          }), // Constructing the body with amount, currency, and product_id
+          }),
         };
-        const response2 = await fetch(`${CHARGILY_BASE_URL}/prices`, options2); // Sending a POST request to create a price
-        const price = (await response2.json()) as Price; // Parsing response JSON into Price type
+        const response2 = await fetch(`${CHARGILY_BASE_URL}/prices`, options2);
+        const price = (await response2.json()) as Price;
 
         const payload = {
-          items: [{ price: price.id, quantity: 1 }], // Constructing the payload for creating a checkout
-          success_url: input.success_url, // Adding success URL to payload
+          items: [{ price: price.id, quantity: 1 }],
+          success_url: input.success_url,
           metadata: [
             {
               accountId: ctx.account.id,
               plan: input.plan_code,
+              strategy: input.isByMounth ? "MONTHLY" : "YEARLY",
             },
           ],
           webhook_endpoint: "https://app.cravvelo.com/api/webhooks/chargily",
         };
-
-        // Constructing request options for creating checkout
         const options3 = {
           method: "POST",
           headers: {

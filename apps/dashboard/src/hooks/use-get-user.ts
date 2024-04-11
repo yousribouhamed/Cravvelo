@@ -46,6 +46,7 @@ const useGetUser = async () => {
 
   return {
     userId: user.id,
+    strategy: payment?.strategy,
     endSubscription: payment?.end_of_subscription,
     currentPlan: account.plan,
     accountId: account?.id,

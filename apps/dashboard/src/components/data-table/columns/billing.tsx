@@ -50,7 +50,15 @@ export const BillingColumns: ColumnDef<Payments>[] = [
       <DataTableColumnHeader column={column} title="الخطة" />
     ),
     cell: ({ row }) => {
-      return <p className=" text-sm font-bold ">{row.original.plan}</p>;
+      return (
+        <p className=" text-sm font-bold ">
+          {row.original.plan === "ADVANCED"
+            ? "الخطة المتقدمة"
+            : row.original.plan === "PRO"
+            ? "الخطة الاحترافية"
+            : "الخطة الاساسية"}
+        </p>
+      );
     },
   },
   {
@@ -66,6 +74,21 @@ export const BillingColumns: ColumnDef<Payments>[] = [
       );
     },
   },
+
+  {
+    accessorKey: "strategy",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="الاستراتجية" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <p className=" text-sm font-bold ">
+          {row.original.strategy === "MONTHLY" ? "شهريا" : "سنويا"}
+        </p>
+      );
+    },
+  },
+
   {
     accessorKey: "end_of_subscription",
     header: ({ column }) => (
