@@ -13,6 +13,16 @@ export async function POST(request: NextRequest) {
 
       const currentDate: Date = new Date();
 
+      const account = await prisma.account.findFirst({
+        where: {
+          id: accountId,
+        },
+      });
+
+      if (account.plan !== null) {
+        return;
+      }
+
       // update the account status
       await prisma.account.update({
         where: {
