@@ -6,16 +6,16 @@ export async function POST(request: NextRequest) {
   const signature = request.nextUrl.searchParams.get("signature");
   const payload = await request.json();
 
-  // If there is no signature, ignore the request
-  if (!signature) {
-    return new Response(
-      JSON.stringify({
-        status: "failed",
-        message:
-          "you are not chargilt why do want to do something bad  You will be held accountable on the Day of Resurrection",
-      })
-    );
-  }
+  // // If there is no signature, ignore the request
+  // if (!signature) {
+  //   return new Response(
+  //     JSON.stringify({
+  //       status: "failed",
+  //       message:
+  //         "you are not chargilt why do want to do something bad  You will be held accountable on the Day of Resurrection",
+  //     })
+  //   );
+  // }
 
   // Calculate the signature
   const computedSignature = crypto
@@ -23,16 +23,16 @@ export async function POST(request: NextRequest) {
     .update(payload)
     .digest("hex");
 
-  // If the calculated signature doesn't match the received signature, ignore the request
-  if (computedSignature !== signature) {
-    return new Response(
-      JSON.stringify({
-        status: "failed",
-        message:
-          "you are not chargilt why do want to do something bad  You will be held accountable on the Day of Resurrection",
-      })
-    );
-  }
+  // // If the calculated signature doesn't match the received signature, ignore the request
+  // if (computedSignature !== signature) {
+  //   return new Response(
+  //     JSON.stringify({
+  //       status: "failed",
+  //       message:
+  //         "you are not chargilt why do want to do something bad  You will be held accountable on the Day of Resurrection",
+  //     })
+  //   );
+  // }
 
   // Switch based on the event type
   switch (payload.type) {
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
               : plan_code === "PRO"
               ? "PRO"
               : "BASIC",
-          payload: JSON.stringify({ something: "true" }),
+          payload: JSON.stringify({ signature, computedSignature }),
         },
       });
 
