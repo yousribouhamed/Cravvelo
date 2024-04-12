@@ -11,6 +11,23 @@ export const course = {
       })
     )
     .mutation(async ({ input, ctx }) => {
+      const courses = await ctx.prisma.course.findMany({
+        where: {
+          accountId: ctx.account.id,
+        },
+      });
+
+      const limits =
+        ctx.account.plan === "BASIC" || ctx.account.plan === null
+          ? 3
+          : ctx.account.plan === "ADVANCED"
+          ? 10
+          : 9999;
+
+      if (courses.length >= limits) {
+        return { success: false, courseId: undefined, planExceeded: true };
+      }
+
       const course = await ctx.prisma.course
         .create({
           data: {
@@ -24,7 +41,7 @@ export const course = {
           throw new TRPCError({ code: "NOT_FOUND" });
         });
 
-      return { success: true, courseId: course.id };
+      return { success: true, courseId: course.id, planExceeded: false };
     }),
 
   getAllCourses: privateProcedure.query(async ({ input, ctx }) => {

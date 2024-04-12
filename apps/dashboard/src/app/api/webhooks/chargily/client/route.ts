@@ -4,28 +4,14 @@ import { StudentBag } from "@/src/types";
 import { addCourseToStudentBag } from "@/src/app/(academy)/_actions/coupon";
 import { create_course_sale } from "@/src/app/(academy)/_actions/sales";
 
-// const Get_client_api_secret_key = async () => {
-//   const user = await useHaveAccess();
-
-//   const payment = await prisma.paymentsConnect.findFirst({
-//     where: {
-//       accountId: user.accountId,
-//     },
-//   });
-
-//   return payment;
-// };
 export async function POST(request: NextRequest) {
   const payload = (await request.json()) as Event;
 
-  // Switch based on the event type
   switch (payload.type) {
     case "checkout.paid":
       const studentId = payload.data.metadata[0]?.studentId;
 
       const productId = payload.data.metadata[0]?.productId;
-
-      // get the student
 
       const student = await prisma.student.findFirst({
         where: {
