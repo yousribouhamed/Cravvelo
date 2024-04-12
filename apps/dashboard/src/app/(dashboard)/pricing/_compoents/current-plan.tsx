@@ -1,14 +1,18 @@
 "use client";
 
-import type { FC } from "react";
+import { useState, type FC } from "react";
 import { PLANS } from "../../../../constants/plans";
 import Image from "next/image";
 import { Button } from "@ui/components/ui/button";
 import { formatDateInArabic } from "@/src/lib/utils";
+import { trpc } from "@/src/app/_trpc/client";
+import { maketoast } from "@/src/components/toasts";
+import { useRouter } from "next/navigation";
 
 interface CurrentPlanProps {
   currentPlan: string;
   endSubscription: Date;
+
   strategy: string;
 }
 
@@ -17,7 +21,37 @@ const CurrentPlan: FC<CurrentPlanProps> = ({
   endSubscription,
   strategy,
 }) => {
+  const router = useRouter();
+  const [byMonth, setByMonth] = useState<boolean>(false);
   const plan = PLANS.find((item) => item.plan_code === currentPlan);
+
+  const mutation = trpc.upgrade_with_chargily.useMutation({
+    onError: (err) => {
+      console.error(err);
+      maketoast.error();
+    },
+    onSuccess: ({ checkout_url }) => {
+      router.push(checkout_url);
+      // create a payment with status processing
+      // when the payment completed set the status to success
+      // if the payment faild set the status to faild
+    },
+  });
+
+  function upgrade_plan(WantedPlan: string) {
+    const wantedPlanObject = PLANS.find(
+      (item) => item.plan_code === WantedPlan
+    );
+    const price = Number(wantedPlanObject.price) - Number(plan.price);
+
+    mutation.mutate({
+      amount: price,
+      isByMounth: byMonth,
+      plan_code: WantedPlan,
+      product_name: wantedPlanObject.plan,
+      success_url: "https://app.cravvelo.com/pricing",
+    });
+  }
   return (
     <div className="w-full h-fit min-h-[400px] grid grid-cols-3">
       <div
@@ -147,11 +181,23 @@ const CurrentPlan: FC<CurrentPlanProps> = ({
 
         <div className="w-full bg-white p-4 h-[50px] flex items-center justify-between border rounded-xl">
           <p>الترقية إلى خطة النمو</p>
-          <Button disabled>قريبا</Button>
+          <Button
+            onClick={() => {
+              upgrade_plan("ADVANCED");
+            }}
+          >
+            ترقية
+          </Button>
         </div>
         <div className="w-full h-[50px] bg-white p-4 flex items-center justify-between border rounded-xl">
           <p>الترقية إلى الخطة المتقدمة</p>
-          <Button disabled>قريبا</Button>
+          <Button
+            onClick={() => {
+              upgrade_plan("PRO");
+            }}
+          >
+            ترقية
+          </Button>
         </div>
       </div>
     </div>
