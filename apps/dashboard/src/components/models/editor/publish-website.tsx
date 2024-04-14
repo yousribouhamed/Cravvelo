@@ -39,9 +39,8 @@ const PublishWebsite: FC = () => {
   const { state } = useThemeEditorStore();
   const mutation = trpc.createWebSite.useMutation({
     onSuccess: (site) => {
-      console.log("here it is the site created");
-      console.log(site);
       setIsOpen(false);
+      window.location.reload();
     },
     onError: (err) => {
       console.log(err);
