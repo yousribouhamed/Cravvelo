@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { privateProcedure } from "../trpc";
 import { Checkout, Price, Product } from "@/src/types";
+import { prisma } from "database/src";
 
 // const CHARGILY_BASE_URL = "https://pay.chargily.net/api/v2";
 const CHARGILY_BASE_URL =
@@ -66,11 +67,36 @@ export const chargily = {
         const response2 = await fetch(`${CHARGILY_BASE_URL}/prices`, options2);
         const price = (await response2.json()) as Price;
 
+        const strategy = input.isByMounth ? "MONTHLY" : "YEARLY";
+        const currentDate: Date = new Date();
+
+        const IntentToPay = await prisma.payments.create({
+          data: {
+            status: "PENDING",
+            end_of_subscription:
+              strategy === "YEARLY"
+                ? new Date(
+                    currentDate.getTime() + 30 * 24 * 60 * 60 * 1000 * 12
+                  )
+                : new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000),
+            strategy: strategy,
+            accountId: ctx.account.id,
+            plan:
+              input.plan_code === "ADVANCED"
+                ? "ADVANCED"
+                : input.plan_code === "PRO"
+                ? "PRO"
+                : "BASIC",
+            payload: JSON.stringify({ payload: "" }),
+          },
+        });
+
         const payload = {
           items: [{ price: price.id, quantity: 1 }],
           success_url: input.success_url,
           metadata: [
             {
+              paymentId: IntentToPay.id,
               accountId: ctx.account.id,
               plan: input.plan_code,
               strategy: input.isByMounth ? "MONTHLY" : "YEARLY",
@@ -158,11 +184,36 @@ export const chargily = {
         const response2 = await fetch(`${CHARGILY_BASE_URL}/prices`, options2);
         const price = (await response2.json()) as Price;
 
+        const strategy = input.isByMounth ? "MONTHLY" : "YEARLY";
+        const currentDate: Date = new Date();
+
+        const IntentToPay = await prisma.payments.create({
+          data: {
+            status: "PENDING",
+            end_of_subscription:
+              strategy === "YEARLY"
+                ? new Date(
+                    currentDate.getTime() + 30 * 24 * 60 * 60 * 1000 * 12
+                  )
+                : new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000),
+            strategy: strategy,
+            accountId: ctx.account.id,
+            plan:
+              input.plan_code === "ADVANCED"
+                ? "ADVANCED"
+                : input.plan_code === "PRO"
+                ? "PRO"
+                : "BASIC",
+            payload: JSON.stringify({ payload: "" }),
+          },
+        });
+
         const payload = {
           items: [{ price: price.id, quantity: 1 }],
           success_url: input.success_url,
           metadata: [
             {
+              paymentId: IntentToPay.id,
               accountId: ctx.account.id,
               plan: input.plan_code,
               strategy: input.isByMounth ? "MONTHLY" : "YEARLY",

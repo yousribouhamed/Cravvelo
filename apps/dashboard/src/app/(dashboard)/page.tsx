@@ -227,10 +227,10 @@ async function Page({ searchParams }) {
                   <CardFooter>
                     <div className="text-2xl font-bold">
                       DZD{" "}
-                      {sales.length > 0 &&
+                      {sales.length > 0 ?
                         sales
                           .map((item) => Number(item.price))
-                          .reduce((current, next) => current + next)}
+                          .reduce((current, next) => current + next) : 0}
                     </div>
                   </CardFooter>
                 </Card>

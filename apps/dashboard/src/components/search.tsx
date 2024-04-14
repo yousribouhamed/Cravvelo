@@ -161,8 +161,11 @@ export const SearchInput: FC = ({}) => {
                       <CommandItem
                         key={item.id}
                         value={item.title}
+                        className="cursor-pointer "
                         onSelect={() =>
-                          handleSelect(() => router.push(`/courses/${item.id}`))
+                          handleSelect(() =>
+                            router.push(`/courses/${item.id}/chapters`)
+                          )
                         }
                       >
                         <span className="truncate">{item.title}</span>

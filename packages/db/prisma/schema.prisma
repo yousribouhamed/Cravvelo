@@ -322,9 +322,9 @@ model Payments {
   end_of_subscription DateTime
   payload             Json
   strategy            String // this one can be yearly or mounthly
+  status              String 
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
-
   @@index([id])
   @@index([accountId])
 }

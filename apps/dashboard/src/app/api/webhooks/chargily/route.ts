@@ -11,8 +11,7 @@ export async function POST(request: NextRequest) {
 
       const plan_code = payload.data.metadata[0]?.plan;
 
-      const strategy = payload.data.metadata[0]?.strategy;
-      const currentDate: Date = new Date();
+      const paymentId = payload.data.metadata[0]?.paymentId;
 
       const account = await prisma.account.findFirst({
         where: {
@@ -39,21 +38,12 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      await prisma.payments.create({
+      await prisma.payments.update({
+        where: {
+          id: paymentId,
+        },
         data: {
-          end_of_subscription:
-            strategy === "YEARLY"
-              ? new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000 * 12)
-              : new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000),
-          strategy: strategy,
-          accountId: accountId,
-          plan:
-            plan_code === "ADVANCED"
-              ? "ADVANCED"
-              : plan_code === "PRO"
-              ? "PRO"
-              : "BASIC",
-          payload: JSON.stringify({ payload }),
+          status: "SUCCESS",
         },
       });
 
@@ -61,6 +51,14 @@ export async function POST(request: NextRequest) {
 
       break;
     case "checkout.failed":
+      await prisma.payments.update({
+        where: {
+          id: paymentId,
+        },
+        data: {
+          status: "FAILD",
+        },
+      });
       break;
   }
 }
