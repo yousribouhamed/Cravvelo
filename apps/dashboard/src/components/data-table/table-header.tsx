@@ -13,9 +13,13 @@ import { CoursesFilterModal } from "../models/filters/courses-filter-modal";
 
 interface TableHeaderProps<TData> {
   table: Table<TData>;
+  academia_url: string;
 }
 
-export function TableHeader<TData>({ table }: TableHeaderProps<TData>) {
+export function TableHeader<TData>({
+  table,
+  academia_url,
+}: TableHeaderProps<TData>) {
   return (
     <div className="w-full h-[70px] flex items-center justify-between">
       <div className="min-w-[200px] w-fit h-full flex  items-center justify-start gap-x-4">
@@ -66,7 +70,7 @@ export function TableHeader<TData>({ table }: TableHeaderProps<TData>) {
         </Button>
         <AddCourse />
         <Link
-          href={`/`}
+          href={`${academia_url}/course-academy`}
           className={cn(
             buttonVariants({ variant: "ghost" }),
             "bg-white rounded-xl border flex items-center gap-x-2"

@@ -10,9 +10,13 @@ import DeleteCourseModel from "@/src/components/models/delete-course-modal";
 
 interface CoursesTableShellProps {
   initialData: Course[];
+  academia_url: string;
 }
 
-const CoursesTableShell: FC<CoursesTableShellProps> = ({ initialData }) => {
+const CoursesTableShell: FC<CoursesTableShellProps> = ({
+  initialData,
+  academia_url,
+}) => {
   const isMounted = useMounted();
 
   const { data, refetch } = trpc.getAllCourses.useQuery(undefined, {
@@ -29,6 +33,7 @@ const CoursesTableShell: FC<CoursesTableShellProps> = ({ initialData }) => {
       <DataTable
         columns={columns}
         data={data}
+        academia_url={academia_url}
         filterableColumns={[
           {
             id: "status",

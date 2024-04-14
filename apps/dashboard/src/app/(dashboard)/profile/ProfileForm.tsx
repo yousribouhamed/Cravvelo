@@ -68,6 +68,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account }) => {
   const mutation = trpc.update_user_profile.useMutation({
     onSuccess: () => {
       maketoast.successWithText({ text: "تم تحديث ملفك الشخصي" });
+      window.location.reload();
     },
     onError: () => {
       maketoast.error();

@@ -32,12 +32,14 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   filterableColumns?: DataTableFilterableColumn<TData>[];
   data: TData[];
+  academia_url: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   filterableColumns = [],
+  academia_url,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -72,7 +74,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <TableHeader2 table={table} />
+      <TableHeader2 academia_url={academia_url} table={table} />
       <div className="rounded-md border bg-white">
         <Table>
           <TableHeader>
