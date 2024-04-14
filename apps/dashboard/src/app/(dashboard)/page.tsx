@@ -36,8 +36,8 @@ const getAllSales = async ({
       createdAt:
         start_date && end_date
           ? {
-              gte: start_date, // Start of date range
-              lte: end_date, // End of date range
+              gte: start_date,
+              lte: end_date,
             }
           : {},
     },
@@ -227,10 +227,11 @@ async function Page({ searchParams }) {
                   <CardFooter>
                     <div className="text-2xl font-bold">
                       DZD{" "}
-                      {sales.length > 0 ?
-                        sales
-                          .map((item) => Number(item.price))
-                          .reduce((current, next) => current + next) : 0}
+                      {sales.length > 0
+                        ? sales
+                            .map((item) => Number(item.price))
+                            .reduce((current, next) => current + next)
+                        : 0}
                     </div>
                   </CardFooter>
                 </Card>
