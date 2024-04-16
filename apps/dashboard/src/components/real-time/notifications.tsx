@@ -33,15 +33,15 @@ const Notifications: FC<NotificationsProps> = ({
 
   useEffect(() => {
     // subscribe to an account id
-    pusherClient.subscribe(accountId);
+    pusherClient?.subscribe(accountId ?? "");
 
-    pusherClient.bind("incomming-notifications", (data: Notification) => {
+    pusherClient?.bind("incomming-notifications", (data: Notification) => {
       console.log(data);
       setIsNewNotifications((prev) => prev + 1);
     });
 
     return () => {
-      pusherClient.unsubscribe("secretId");
+      pusherClient?.unsubscribe(accountId ?? "");
     };
   }, []);
 
