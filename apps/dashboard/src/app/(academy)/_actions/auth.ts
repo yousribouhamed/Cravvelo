@@ -20,6 +20,7 @@ import { StudentBag } from "@/src/types";
 import { getSiteData } from ".";
 import { verifyStudentEmail } from "@/src/lib/resend";
 import jwt from "jsonwebtoken";
+import { pusherServer } from "@/src/lib/pusher";
 
 /**
  * Function to create a new student.
@@ -76,6 +77,15 @@ export const create_student = async ({
     name: "studentIdVerifyEmail",
     value: student.id,
   });
+
+  const notification = await prisma.notification.create({
+    data: {
+      accountId,
+      content: `انضم ${full_name} إلى الأكاديمية`,
+    },
+  });
+
+  pusherServer.trigger(accountId, "incomming-notifications", notification);
 
   return student;
 };

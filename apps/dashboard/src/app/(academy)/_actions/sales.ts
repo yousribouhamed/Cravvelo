@@ -1,5 +1,6 @@
 "use server";
 
+import { pusherServer } from "@/src/lib/pusher";
 import { Course } from "database";
 import { prisma } from "database/src";
 
@@ -24,6 +25,15 @@ export const create_course_sale = async ({
         studentId,
       },
     });
+
+    const notification = await prisma.notification.create({
+      data: {
+        accountId,
+        content: `لديك بيع جديد`,
+      },
+    });
+
+    pusherServer.trigger(accountId, "incomming-notifications", notification);
 
     return sale;
   } catch (err) {
