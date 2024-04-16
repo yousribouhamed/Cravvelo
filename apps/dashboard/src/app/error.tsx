@@ -34,7 +34,7 @@ export default function StoreCheckoutError({
         </h1>
         <p className="text-xl text-gray-600 text-center">{error?.message}</p>
         <div className="w-full h-[100px] flex items-center justify-center gap-x-8">
-          <Button size="lg" onClick={reset}>
+          <Button size="lg" onClick={() => window.location.reload()}>
             إعادة المحاولة
           </Button>
           <Link

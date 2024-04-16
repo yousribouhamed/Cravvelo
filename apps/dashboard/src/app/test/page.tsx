@@ -1,17 +1,22 @@
 import { type FC } from "react";
-import { Button } from "@ui/components/ui/button";
-import { maketoast } from "@/src/components/toasts";
-import { notifyUser } from "@/src/actions/notifications.actions";
-import { pusherServer } from "@/src/lib/pusher";
+import Image from "next/image";
 
 const page: FC = ({}) => {
-  pusherServer.trigger("secretId", "incomming-notifications", {
-    name: "abdullah",
-  });
-
   return (
-    <div className="w-full min-h-screen flex items-center justify-center">
-      <Button onClick={notifyUser}>notify user</Button>
+    <div className="w-full h-screen flex items-center  flex-col gap-y-8 justify-center pt-12">
+      <div className="w-[400px] h-[350px] flex items-center justify-center">
+        <Image
+          src="/suspanded.svg"
+          alt="this is the error page"
+          width={250}
+          height={250}
+        />
+      </div>
+      <div className="w-[600px] h-[300px]">
+        <h1 className="text-xl font-bold text-center">
+          قررنا ايقاف الأكاديمية الخاصة بكم
+        </h1>
+      </div>
     </div>
   );
 };
