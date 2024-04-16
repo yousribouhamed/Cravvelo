@@ -16,7 +16,7 @@ export default function RootLayout({
     <html lang="ar">
       <body
         dir="rtl"
-        className={`selection:bg-[#FC6B00] selection:text-white antialiased `}
+        className={`selection:bg-[#FC6B00] selection:text-white antialiased grainy `}
       >
         <Providers>{children}</Providers>
       </body>

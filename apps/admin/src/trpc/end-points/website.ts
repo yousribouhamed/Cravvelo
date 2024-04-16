@@ -40,4 +40,22 @@ export const website = {
       });
       return websites;
     }),
+
+  unSuspendWebSite: privateProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const websites = await ctx.prisma.website.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          suspended: false,
+        },
+      });
+      return websites;
+    }),
 };
