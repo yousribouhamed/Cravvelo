@@ -31,7 +31,10 @@
         "AWS_BUCKET_REGION",
         "AWS_ACCESS_AMAZON_KEY",
         "AWS_SECRET_ACCESS_KEY",
-        "RESEND_API_KEY"
+        "RESEND_API_KEY",
+        "PUSHER_APP_ID",
+        "NEXT_PUBLIC_PUSHER_APP_KEY",
+        "PUSHER_APP_SECRET"
       ]
     },
     "lint": {},

@@ -18,14 +18,27 @@ async function getData({
   return data;
 }
 
+const getAllNotifications = async ({ accountId }: { accountId: string }) => {
+  const notifications = await prisma.notification.findMany({
+    where: {
+      accountId,
+    },
+  });
+  return notifications;
+};
+
 const Page = async ({}) => {
   const user = await useHaveAccess();
-  const data = await getData({ accountId: user.accountId });
+
+  const [data, notifications] = await Promise.all([
+    getData({ accountId: user.accountId }),
+    getAllNotifications({ accountId: user.accountId }),
+  ]);
 
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
-        <Header user={user} title="الطلاب" />
+        <Header notifications={notifications} user={user} title="الطلاب" />
         <StudentsTableShell initialData={data} />
       </main>
     </MaxWidthWrapper>

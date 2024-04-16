@@ -27,7 +27,12 @@ export default async function Page({ params }: PageProps) {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col min-h-full  h-fit justify-start">
-        <Header user={user} title={"اعدادات الدورة"} goBack />
+        <Header
+          notifications={[]}
+          user={user}
+          title={"اعدادات الدورة"}
+          goBack
+        />
         <CourseHeader />
         <CourseSettingsForm course={course} />
       </main>

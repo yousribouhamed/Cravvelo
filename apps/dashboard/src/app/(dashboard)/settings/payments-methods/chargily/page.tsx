@@ -16,7 +16,7 @@ const PageProps = async ({}) => {
   return (
     <MaxWidthWrapper>
       <main className="w-full min-h-screen h-fit flex flex-col justify-start ">
-        <Header user={user} title="بوابات الدفع" />
+        <Header notifications={[]} user={user} title="بوابات الدفع" />
         <ChargilyConnector data={paymentsConnector} />
       </main>
     </MaxWidthWrapper>

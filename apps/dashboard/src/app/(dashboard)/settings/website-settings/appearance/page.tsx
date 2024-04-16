@@ -20,7 +20,7 @@ const Page = async ({}) => {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
-        <Header user={user} title="إعدادات المظهر" />
+        <Header notifications={[]} user={user} title="إعدادات المظهر" />
         <WebsiteSettingsHeader />
         <div className="w-full h-fit flex flex-col my-8 gap-y-4">
           <AddColorFrom color={website.color} />

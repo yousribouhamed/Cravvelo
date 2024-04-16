@@ -17,7 +17,7 @@ const Page = async ({}) => {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
-        <Header user={user} title="الواجبات المنزلية" />
+        <Header notifications={[]} user={user} title="الواجبات المنزلية" />
         <HomeworksTableShell initialData={data} />
       </main>
     </MaxWidthWrapper>

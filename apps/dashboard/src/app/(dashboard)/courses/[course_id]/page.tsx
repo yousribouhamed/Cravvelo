@@ -25,7 +25,7 @@ export default async function Page({ params }: PageProps) {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
-        <Header goBack user={user} title="ui ux" />
+        <Header notifications={[]} goBack user={user} title="ui ux" />
         <div className="w-full h-[70px]  flex items-center justify-between"></div>
         <div className="w-full min-h-[500px] grid grid-cols-3">
           <p>this page is an error</p>

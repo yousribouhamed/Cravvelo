@@ -16,7 +16,7 @@ const Page = async ({}) => {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
-        <Header user={user} title="بوابات الدفع" />
+        <Header notifications={[]} user={user} title="بوابات الدفع" />
         <PaymentMethodsConnectors data={paymentsConnector} />
       </main>
     </MaxWidthWrapper>

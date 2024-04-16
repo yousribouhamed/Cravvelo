@@ -95,6 +95,15 @@ const getAllCommets = async ({
   return comments;
 };
 
+const getAllNotifications = async ({ accountId }: { accountId: string }) => {
+  const notifications = await prisma.notification.findMany({
+    where: {
+      accountId,
+    },
+  });
+  return notifications;
+};
+
 async function Page({ searchParams }) {
   // Parse search params using zod schema
   const { from, to } = dashboardProductsSearchParamsSchema.parse(searchParams);
@@ -104,7 +113,7 @@ async function Page({ searchParams }) {
 
   const user = await useHaveAccess();
 
-  const [sales, studnets, comments] = await Promise.all([
+  const [sales, studnets, comments, notifications] = await Promise.all([
     getAllSales({
       accountId: user.accountId,
       start_date: fromDay,
@@ -120,12 +129,13 @@ async function Page({ searchParams }) {
       start_date: fromDay,
       end_date: toDay,
     }),
+    getAllNotifications({ accountId: user.accountId }),
   ]);
 
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col overflow-y-hidden h-fit mb-10 justify-start">
-        <Header user={user} title="الرئيسية" />
+        <Header notifications={notifications} user={user} title="الرئيسية" />
         {/* <ConfirmeAccount /> */}
         {!user?.subdomain ? (
           <CreateAcademiaSection />

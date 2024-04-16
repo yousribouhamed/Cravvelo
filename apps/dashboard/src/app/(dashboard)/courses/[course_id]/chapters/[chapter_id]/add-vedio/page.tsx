@@ -10,7 +10,7 @@ export default async function Home() {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
-        <Header goBack user={user} title="اضافة فيديو" />
+        <Header notifications={[]}  goBack user={user} title="اضافة فيديو" />
         <div className="w-full pt-8 min-h-[100px] h-fit mb-10 ">
           <AddVedioForm />
         </div>

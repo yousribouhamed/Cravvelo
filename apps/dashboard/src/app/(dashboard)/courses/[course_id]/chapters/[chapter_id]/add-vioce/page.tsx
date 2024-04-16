@@ -12,7 +12,7 @@ export default async function Home() {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
-        <Header goBack user={user} title="اظافة ملف صوتي" />
+        <Header notifications={[]} goBack user={user} title="اظافة ملف صوتي" />
 
         <div className="w-full pt-8 min-h-[100px] ">
           <PathBuilder

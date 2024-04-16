@@ -10,7 +10,7 @@ export default async function Home() {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
-        <Header goBack user={user} title="ui ux" />
+        <Header notifications={[]} goBack user={user} title="ui ux" />
 
         <div className="w-full pt-8 min-h-[100px] ">
           <PathBuilder

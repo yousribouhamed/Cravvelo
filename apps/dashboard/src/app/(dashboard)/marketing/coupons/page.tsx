@@ -16,7 +16,7 @@ const Page = async () => {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
-        <Header user={user} title="صانع القسائم" />
+        <Header notifications={[]} user={user} title="صانع القسائم" />
         <CouponsTableShell initialData={coupons} />
       </main>
     </MaxWidthWrapper>

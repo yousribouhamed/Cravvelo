@@ -8,7 +8,7 @@ const page = ({}) => {
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
         {/* @ts-ignore */}
-        <Header user={{}} title="الطلاب" />
+        <Header notifications={[]} user={{}} title="الطلاب" />
         <div className="w-full min-h-[400px] h-fit grid grid-cols-3 mt-8 py-2   gap-4">
           <div className="col-span-1 w-full h-full   ">
             <CertificateForm />

@@ -22,7 +22,7 @@ export default async function Home({ params }: PageProps) {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
-        <Header user={user} title="تفاعل الطلاب" goBack />
+        <Header notifications={[]} user={user} title="تفاعل الطلاب" goBack />
         <CourseHeader />
         <StudentEngagment course={course} />
       </main>

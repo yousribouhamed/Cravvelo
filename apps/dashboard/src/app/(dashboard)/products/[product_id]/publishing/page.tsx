@@ -36,7 +36,7 @@ export default async function Page({ params }: PageProps) {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
-        <Header goBack user={user} title="نشر المنتج" />
+        <Header notifications={[]} goBack user={user} title="نشر المنتج" />
         <ProductsHeader />
         <div className="w-full pt-8 min-h-[100px] ">
           <ProductPublishingForm product={product} />

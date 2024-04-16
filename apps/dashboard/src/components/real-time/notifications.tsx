@@ -1,4 +1,6 @@
-import type { FC } from "react";
+"use client";
+
+import { useEffect, type FC } from "react";
 import {
   Popover,
   PopoverContent,
@@ -8,11 +10,28 @@ import { Button } from "@ui/components/ui/button";
 import { Icons } from "../my-icons";
 import Image from "next/image";
 import { useMounted } from "@/src/hooks/use-mounted";
+import { pusherClient } from "@/src/lib/pusher";
+import { ScrollArea } from "@ui/components/ui/scroll-area";
+import { Notification } from "database";
 
-interface notificationsAbdullahProps {}
+interface NotificationsProps {
+  notifications: Notification[];
 
-const Notifications: FC = ({}) => {
+  accountId: string;
+}
+// we have to get a list of all the notifications
+// we need to update the array of notifications
+const Notifications: FC<NotificationsProps> = ({
+  notifications,
+  accountId,
+}) => {
   const isMounted = useMounted();
+
+  useEffect(() => {
+    // subscribe to an account id
+    // updadet the array of notifications
+    // unsbscripe to an account id
+  }, []);
 
   if (!isMounted) {
     return null;
@@ -36,17 +55,23 @@ const Notifications: FC = ({}) => {
           <div className="w-full border-b h-[70px] flex items-center justify-start">
             <p className="text-xl font-bold">الإشعارات</p>
           </div>
-          <div className="w-full h-[330px] flex flex-col justify-center items-center gap-y-5">
-            <Image
-              alt="verified image"
-              src="/notifications.svg"
-              width={300}
-              height={300}
-            />
-            <p className="text-md text-center text-gray-500">
-              لا يوجد إشعارات غير مقروءة بعد
-            </p>
-          </div>
+          {notifications.length === 0 ? (
+            <div className="w-full h-[330px] flex flex-col justify-center items-center gap-y-5">
+              <Image
+                alt="verified image"
+                src="/notifications.svg"
+                width={300}
+                height={300}
+              />
+              <p className="text-md text-center text-gray-500">
+                لا يوجد إشعارات غير مقروءة بعد
+              </p>
+            </div>
+          ) : (
+            <div className="w-full h-[330px] flex flex-col justify-center items-center gap-y-5">
+              <ScrollArea className="h-[330px] w-full ">blabla</ScrollArea>
+            </div>
+          )}
         </div>
       </PopoverContent>
     </Popover>

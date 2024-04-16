@@ -11,7 +11,7 @@ export default async function Home() {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start">
-        <Header user={user} title="التسعير" />
+        <Header notifications={[]} user={user} title="التسعير" />
         <PaymentSettingsHeader />
         {user.isSubscribed ? (
           <CurrentPlan

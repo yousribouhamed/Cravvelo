@@ -48,7 +48,7 @@ export default async function Page({ params }: PageProps) {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
-        <Header user={user} title="ناشر الدورة" goBack />
+        <Header notifications={[]} user={user} title="ناشر الدورة" goBack />
         <CourseHeader />
         <PublishCourseForm course={course} chapters={chapters} />
       </main>

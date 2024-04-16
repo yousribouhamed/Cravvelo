@@ -17,7 +17,7 @@ const Page = async ({}) => {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
-        <Header user={user} title="الارباح" />
+        <Header notifications={[]} user={user} title="الارباح" />
         <CoursesTableShell initialData={data} />
       </main>
     </MaxWidthWrapper>

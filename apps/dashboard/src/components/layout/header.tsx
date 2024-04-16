@@ -16,15 +16,23 @@ import Notifications from "../real-time/notifications";
 import { ArrowRight } from "lucide-react";
 import { UserData } from "@/src/types";
 import { daysLeftInTrial } from "@/src/lib/utils";
+import { Notification } from "database";
 
 interface Props {
   title: string;
   user: UserData;
   goBack?: boolean;
   isLoadingPage?: boolean;
+  notifications: Notification[];
 }
 
-const Header: FC<Props> = ({ title, user, goBack, isLoadingPage }) => {
+const Header: FC<Props> = ({
+  title,
+  user,
+  goBack,
+  isLoadingPage,
+  notifications,
+}) => {
   const router = useRouter();
   return (
     <>
@@ -58,7 +66,10 @@ const Header: FC<Props> = ({ title, user, goBack, isLoadingPage }) => {
           </div>
 
           <div className="w-[25%]  h-full flex items-center justify-end gap-x-2">
-            <Notifications />
+            <Notifications
+              accountId={user.accountId}
+              notifications={notifications}
+            />
 
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>

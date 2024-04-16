@@ -16,7 +16,7 @@ const Page = async ({}) => {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
-        <Header user={user} title="إعدادات القانوني" />
+        <Header notifications={[]} user={user} title="إعدادات القانوني" />
         <WebsiteSettingsHeader />
         <div className="w-full h-fit flex flex-col my-8 gap-y-4">
           <AddPrivicyPolicy policy={website?.privacy_policy} />
