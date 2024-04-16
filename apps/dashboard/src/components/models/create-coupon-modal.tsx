@@ -184,7 +184,7 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
                               reduce_type === "VALUE" ? "0 DZD" : "% 0"
                             } `}
                             {...field}
-                            className="  max-w-[100px]"
+                            className="  max-w-[200px]"
                           />
                         </FormControl>
                         <FormDescription>
@@ -207,12 +207,12 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
                             value={Number(field.value)}
                             onChange={(e) => field.onChange(e.target.value)}
                             placeholder={`0 `}
-                            className="  max-w-[100px]"
+                            className="  max-w-[200px]"
                             {...field}
                           />
                         </FormControl>
                         <FormDescription>
-                          سيتم تخفيض هذه القيمة من مبلغ الدورة او المنتج
+                          كم مرة تريد استخدام هذه القسيمة؟
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -231,7 +231,7 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger defaultValue={"forever"}>
                             <SelectValue placeholder="مرة واحدة" />
                           </SelectTrigger>
                         </FormControl>
@@ -253,7 +253,7 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
                     name="months"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>عدد الاشهر</FormLabel>
+                        <FormLabel>عدد الايام</FormLabel>
                         <FormControl>
                           <Input placeholder="4 اشهر" {...field} />
                         </FormControl>
