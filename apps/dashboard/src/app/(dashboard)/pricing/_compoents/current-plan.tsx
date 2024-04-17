@@ -32,9 +32,6 @@ const CurrentPlan: FC<CurrentPlanProps> = ({
     },
     onSuccess: ({ checkout_url }) => {
       router.push(checkout_url);
-      // create a payment with status processing
-      // when the payment completed set the status to success
-      // if the payment faild set the status to faild
     },
   });
 
@@ -59,7 +56,7 @@ const CurrentPlan: FC<CurrentPlanProps> = ({
         className="w-full h-full col-span-1 relative bg-white shadow-2xl border rounded-2xl py-2 px-4 flex flex-col "
       >
         <div className="w-full h-[100px] flex items-center justify-start gap-x-4 ">
-          <div className="w-[80px] h-[70px] bg-gray-100 rounded-xl flex items-center justify-center">
+          <div className="w-[80px] h-[80px] bg-gray-100 rounded-xl flex items-center justify-center">
             <Image
               src={plan.imageUrl}
               alt="this is the image url"
@@ -179,8 +176,18 @@ const CurrentPlan: FC<CurrentPlanProps> = ({
           </div>
         </div>
 
-        <div className="w-full bg-white p-4 h-[50px] flex items-center justify-between border rounded-xl">
-          <p>الترقية إلى خطة النمو</p>
+        <div className="w-full bg-white p-4 h-[100px] flex items-center justify-between border rounded-xl">
+          <div className="w-[60%] h-full flex items-center justify-start gap-x-4">
+            <div className="w-[70px] h-[70px] bg-gray-200 flex items-center justify-center rounded-xl ">
+              <Image
+                src={"/pricing-icons/infi.png"}
+                alt="this is the advanced plan icon"
+                width={55}
+                height={55}
+              />
+            </div>
+            <p>الترقية إلى خطة النمو</p>
+          </div>
           <Button
             onClick={() => {
               upgrade_plan("ADVANCED");
@@ -189,8 +196,19 @@ const CurrentPlan: FC<CurrentPlanProps> = ({
             ترقية
           </Button>
         </div>
-        <div className="w-full h-[50px] bg-white p-4 flex items-center justify-between border rounded-xl">
-          <p>الترقية إلى الخطة المتقدمة</p>
+        <div className="w-full h-[100px] bg-white p-4 flex items-center justify-between border rounded-xl">
+          <div className="w-[60%] h-full flex items-center justify-start gap-x-4">
+            <div className="w-[70px] h-[70px] bg-gray-200 flex items-center justify-center rounded-xl ">
+              <Image
+                src={"/pricing-icons/pro.png"}
+                alt="this is the advanced plan icon"
+                width={55}
+                height={55}
+              />
+            </div>
+            <p>الترقية إلى الخطة المتقدمة</p>
+          </div>
+
           <Button
             onClick={() => {
               upgrade_plan("PRO");
