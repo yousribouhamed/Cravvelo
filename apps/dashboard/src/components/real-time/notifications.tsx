@@ -13,6 +13,8 @@ import { useMounted } from "@/src/hooks/use-mounted";
 import { pusherClient } from "@/src/lib/pusher";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
 import { Notification } from "database";
+import { Mail } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface NotificationsProps {
   notifications: Notification[];
@@ -27,11 +29,14 @@ const Notifications: FC<NotificationsProps> = ({
 }) => {
   const isMounted = useMounted();
 
+  const router = useRouter();
+
   const [data, setData] = useState<Notification[]>(notifications ?? null);
 
   const [isNewNotifications, setIsNewNotifications] = useState<number>(0);
 
   useEffect(() => {
+    setData(notifications);
     // subscribe to an account id
     pusherClient?.subscribe(accountId ?? "");
 
@@ -43,7 +48,7 @@ const Notifications: FC<NotificationsProps> = ({
     return () => {
       pusherClient?.unsubscribe(accountId ?? "");
     };
-  }, []);
+  }, [notifications, accountId]);
 
   if (!isMounted) {
     return null;
@@ -68,7 +73,7 @@ const Notifications: FC<NotificationsProps> = ({
         align="end"
         className="p-0 border-none ring-none shadow-none"
       >
-        <div className="w-[500px] h-[400px] shadow bg-white p-2 rounded-xl border">
+        <div className="w-[500px] h-[450px] shadow bg-white p-2 rounded-xl border">
           <div className="w-full border-b h-[70px] flex items-center justify-start">
             <p className="text-xl font-bold">الإشعارات</p>
           </div>
@@ -90,17 +95,23 @@ const Notifications: FC<NotificationsProps> = ({
                 {data.map((item) => (
                   <div
                     key={item.id}
-                    className="w-full h-[40px] flex items-center justify-start p-4 gap-x-4"
+                    className="w-full h-[80px] flex items-center justify-end border-b p-4 gap-x-4"
                   >
                     <span className="text-xl font-bold text-black">
                       {" "}
                       {item.content}
                     </span>
+                    <Mail className="w-8 h-8 text-primary" />
                   </div>
                 ))}
               </ScrollArea>
             </div>
           )}
+          <div className="w-full h-[50px] flex items-start pb-2 justify-center">
+            <Button size="sm" onClick={() => router.push("/")} variant="ghost">
+              اظهار الكل
+            </Button>
+          </div>
         </div>
       </PopoverContent>
     </Popover>
