@@ -18,11 +18,9 @@ import { useRouter } from "next/navigation";
 
 interface NotificationsProps {
   notifications: Notification[];
-
   accountId: string;
 }
-// we have to get a list of all the notifications
-// we need to update the array of notifications
+
 const Notifications: FC<NotificationsProps> = ({
   notifications,
   accountId,
