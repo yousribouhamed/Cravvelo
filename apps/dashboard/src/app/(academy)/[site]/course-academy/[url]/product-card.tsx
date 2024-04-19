@@ -73,7 +73,7 @@ export const Product_card = ({
   return (
     <div
       className={` ${
-        isFixed ? "md:fixed md:top-40 md:left-[5%]  " : ""
+        isFixed ? "  " : ""
       } w-full lg:w-[350px] min-h-[500px] h-fit rounded-xl border p-4 flex flex-col gap-y-4 2xl:sticky 2xl:top-[120px] bg-white `}
     >
       <p className="text-2xl font-bold text-start text-black">

@@ -5,12 +5,9 @@ import StarRatings from "react-star-ratings";
 import type { FC } from "react";
 import { useRouter } from "next/navigation";
 import { Course } from "database";
-import { Switch } from "@ui/components/ui/switch";
 import Image from "next/image";
 import Link from "next/link";
-import { Label } from "@ui/components/ui/label";
 import { Checkbox } from "@ui/components/ui/checkbox";
-
 import { RadioGroup, RadioGroupItem } from "@ui/components/ui/radio-group";
 
 interface Props {
@@ -26,7 +23,7 @@ const CoursesGrid: FC<Props> = ({ courses }) => {
 
   return (
     <div className="grid grid-cols-4 h-fit   gap-x-16">
-      <div className="w-full min-w-[300px] col-span-1 p-4 min-h-[200px] h-fit bg-white border rounded-xl flex flex-col gap-y-4 pt-8 gap-x-4">
+      <div className="w-full min-w-[300px] hidden sm:flex sm:col-span-1 p-4 min-h-[200px] h-fit bg-white border rounded-xl  flex-col gap-y-4 pt-8 gap-x-4">
         <RadioGroup defaultValue="option-one">
           <div dir="rtl" className="w-full h-[20px] ">
             <span>التقييم</span>
@@ -183,7 +180,7 @@ const CoursesGrid: FC<Props> = ({ courses }) => {
         </div>
       </div>
 
-      <div className="col-span-3">
+      <div className=" col-span-4 p-4 pt-0  sm:col-span-3">
         <div className="flex flex-wrap   gap-8 w-full h-full mim-h-[500px] ">
           {Array.isArray(courses) && courses.length === 0 && (
             <div className="w-full h-[200px] flex items-center justify-center">

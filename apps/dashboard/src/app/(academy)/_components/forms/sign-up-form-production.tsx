@@ -75,7 +75,9 @@ export function AcademySifnUpForm({
       maketoast.successWithText({ text: "لقد تم إنشاء حسابك" });
 
       router.push("/auth-academy/sign-up/verify-email");
-      maketoast.info();
+      maketoast.successWithText({
+        text: "لقد قمنا بارسال رمز التاكيد الى حسابك",
+      });
     } catch (err) {
       console.error(err);
       maketoast.error();
@@ -103,7 +105,6 @@ export function AcademySifnUpForm({
                   <FormLabel>الاسم الكامل</FormLabel>
                   <FormControl>
                     <Input
-                      className="focus:border-blue-500"
                       placeholder="الرجاء ادخال اسمك القانوني"
                       {...field}
                     />
@@ -122,7 +123,6 @@ export function AcademySifnUpForm({
                   <FormLabel>البريد الإلكتروني</FormLabel>
                   <FormControl>
                     <Input
-                      className="focus:border-blue-500"
                       placeholder="أدخِل عنوان البريد الإلكتروني"
                       {...field}
                     />
@@ -140,11 +140,7 @@ export function AcademySifnUpForm({
                 <FormItem>
                   <FormLabel>كلمة المرور</FormLabel>
                   <FormControl>
-                    <PasswordInput
-                      className="focus:border-blue-500"
-                      placeholder="أدخِل كلمة المرور"
-                      {...field}
-                    />
+                    <PasswordInput placeholder="أدخِل كلمة المرور" {...field} />
                   </FormControl>
 
                   <FormMessage />

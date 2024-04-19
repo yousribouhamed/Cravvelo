@@ -10,7 +10,6 @@ import { LogOut } from "lucide-react";
 import { cn } from "@ui/lib/utils";
 import { ContextMenuProvider } from "./context-menu";
 import StudentProgress from "./student-progress";
-import MaxWidthWrapper from "@/src/app/(academy)/_components/max-width-wrapper";
 import { getStudent } from "@/src/app/(academy)/_actions/auth";
 import CompleteCourse from "./complete-course";
 
@@ -38,6 +37,8 @@ const Page = async ({ params }: PageProps) => {
   const student = await getStudent();
 
   const currentBag = (await JSON.parse(student.bag as string)) as StudentBag;
+
+  // redirect the user if he is not loged in or paid user
 
   console.log("here it the course from the student bag");
 

@@ -134,36 +134,38 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
             );
           })}
       </div>
-      <div
-        dir="ltr"
-        className="w-full h-fit min-h-[100px] flex items-center justify-center "
-      >
-        <Pagination>
-          <PaginationContent dir="rtl">
-            <PaginationItem>
-              <PaginationPrevious
-                onClick={() => handlePageChange(currentPage - 1)}
-              />
-            </PaginationItem>
-            {courses.map((item, index) => (
-              <PaginationItem key={item.accountId}>
-                <PaginationLink onClick={() => handlePageChange(index + 1)}>
-                  {index + 1}
-                </PaginationLink>
+      {courses.length > 3 && (
+        <div
+          dir="ltr"
+          className="w-full h-fit min-h-[100px] flex items-center justify-center "
+        >
+          <Pagination>
+            <PaginationContent dir="rtl">
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() => handlePageChange(currentPage - 1)}
+                />
               </PaginationItem>
-            ))}
+              {courses.map((item, index) => (
+                <PaginationItem key={item.accountId}>
+                  <PaginationLink onClick={() => handlePageChange(index + 1)}>
+                    {index + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
 
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext
-                onClick={() => handlePageChange(currentPage + 1)}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      </div>
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() => handlePageChange(currentPage + 1)}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
     </div>
   );
 };

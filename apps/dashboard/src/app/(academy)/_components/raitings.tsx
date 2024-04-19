@@ -21,12 +21,12 @@ const Raitings: FC<{ course: Course; comments: Comment[] }> = ({
 }) => {
   return (
     <div className="w-full flex flex-col bg-white min-h-[400px] h-fit border rounded-xl ">
-      <div className="w-full h-[250px]  grid grid-cols-2 ">
-        <div className="w-full h-full  flex flex-col p-4 ">
+      <div className="w-full h-[400px] md:h-[250px]  grid grid-cols-1 md:grid-cols-2   ">
+        <div className="w-full h-full  flex flex-col p-4   ">
           {avrage.map((item, index) => (
             <div
               key={item + index + "raiting"}
-              className="w-full h-[40px] flex justify-start items-center gap-x-2"
+              className="w-full h-[40px] flex justify-center md:justify-start items-center gap-x-2"
             >
               {/* <div className=" h-[9px] rounded-xl bg-primary" /> */}
               <Progress
@@ -127,7 +127,7 @@ const Raitings: FC<{ course: Course; comments: Comment[] }> = ({
       </div>
       <div
         dir="ltr"
-        className={` min-h-[200px] h-fit flex flex-col justify-start items-star gap-y-4 w-full `}
+        className={` min-h-[50px] h-fit flex flex-col justify-start items-star gap-y-4 w-full `}
       >
         {comments.map((item) => {
           return (

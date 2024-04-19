@@ -8,11 +8,15 @@ const Banner: FC = ({}) => {
     <div className="w-full h-[250px] bg-primary rounded-xl my-10 grid grid-cols-2 ">
       <div className=" w-full flex flex-col gap-y-2 justify-between items-start p-4">
         <div className="flex flex-col gap-y-4">
-          <span className="text-2xl text-white">مرحباً بك في آكاديمية</span>
-          <h2 className="text-4xl font-bold text-white">يسري بوحامد</h2>
+          <span className=" text-xl sm:text-2xl text-white">
+            مرحباً بك في آكاديمية
+          </span>
+          <h2 className=" text-2xl sm:text-4xl font-bold text-white">
+            يسري بوحامد
+          </h2>
         </div>
 
-        <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-white flex items-center gap-x-2">
+        <div className="relative rounded-full  px-3 py-1 text-sm leading-6 text-white flex items-center gap-x-2">
           يعمل بواسطة{" "}
           <a
             href="https://www.cravvelo.com"
