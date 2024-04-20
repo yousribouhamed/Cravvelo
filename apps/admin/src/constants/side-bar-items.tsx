@@ -65,7 +65,7 @@ export const SIDE_BAR_ITEMS = [
     subitems: [],
   },
   {
-    title: "المستخدمين",
+    title: "الاساتذة",
     slug: "/dashboard/users",
     icon: () => (
       <svg

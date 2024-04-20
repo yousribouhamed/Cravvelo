@@ -11,6 +11,7 @@ import {
   TooltipTrigger,
 } from "@ui/components/ui/tooltip";
 import { ArrowRight } from "lucide-react";
+import SignOutButton from "../sign-out-button";
 
 interface Props {
   title: string;
@@ -27,6 +28,7 @@ const Header: FC<Props> = ({ title, goBack }) => {
           <div className="w-[25%] h-full flex items-center justify-start gap-x-2">
             {/* <div className="lg:hidden">
               <MobildSideBard />
+
             </div> */}
             {goBack && (
               <Tooltip delayDuration={0}>
@@ -51,7 +53,9 @@ const Header: FC<Props> = ({ title, goBack }) => {
             <SearchInput />
           </div>
 
-          <div className="w-[25%]  h-full flex items-center justify-end gap-x-2"></div>
+          <div className="w-[25%]  h-full flex items-center justify-end gap-x-2">
+            <SignOutButton />
+          </div>
         </div>
       </TooltipProvider>
     </>

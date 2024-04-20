@@ -30,7 +30,7 @@ export function SignInForm() {
   const mutation = trpc.SignInAsAdmin.useMutation({
     onSuccess: () => {
       maketoast.success();
-      router.push("/dashboard");
+      window.location.reload();
     },
     onError: () => {
       maketoast.error();

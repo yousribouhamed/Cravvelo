@@ -105,7 +105,6 @@ export const admin = {
         cookies().set({
           name: "jwt",
           value: token,
-          httpOnly: true,
           secure: process.env.NODE_ENV === "production",
         });
 

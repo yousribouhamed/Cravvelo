@@ -13,6 +13,8 @@ import {
 import { Checkbox } from "@ui/components/ui/checkbox";
 import { Admin } from "database";
 import { DataTableColumnHeader } from "../data-table-head";
+import { openAdminDeleteAction } from "@/src/zustand/admin-state";
+import { maketoast } from "../../toasts";
 
 export const AdminColumns: ColumnDef<Admin>[] = [
   {
@@ -56,7 +58,7 @@ export const AdminColumns: ColumnDef<Admin>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original;
+      const { setId, setIsOpen } = openAdminDeleteAction();
 
       return (
         <div className="w-full h-10 flex items-center justify-end gap-x-4">
@@ -72,7 +74,13 @@ export const AdminColumns: ColumnDef<Admin>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
-              <DropdownMenuItem className="w-full h-full flex justify-between items-center px-2">
+              <DropdownMenuItem
+                onClick={() => {
+                  navigator.clipboard.writeText(row.original.email);
+                  maketoast.info();
+                }}
+                className="w-full h-full flex justify-between items-center px-2"
+              >
                 <svg
                   width="16"
                   height="17"
@@ -91,7 +99,13 @@ export const AdminColumns: ColumnDef<Admin>[] = [
               </DropdownMenuItem>
               <DropdownMenuSeparator />
 
-              <DropdownMenuItem className="w-full h-full flex justify-between items-center px-2">
+              <DropdownMenuItem
+                onClick={() => {
+                  setId(row.original.id);
+                  setIsOpen(true);
+                }}
+                className="w-full h-full flex justify-between items-center px-2"
+              >
                 <svg
                   width="16"
                   height="17"

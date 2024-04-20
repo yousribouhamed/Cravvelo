@@ -3,6 +3,7 @@ import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import { Course } from "database";
 import { prisma } from "database/src";
 import CoursesTableShell from "./courses-table-shell";
+import { ConfirmeDeleteOrSuspandAdmin } from "@/src/components/modals/confirme-delete-suspand-course";
 
 export const fetchCache = "force-no-store";
 
@@ -16,6 +17,7 @@ const Page = async ({}) => {
 
   return (
     <MaxWidthWrapper>
+      <ConfirmeDeleteOrSuspandAdmin />
       <main className="w-full flex flex-col justify-start ">
         <Header title="الدورات التدريبية" />
         <CoursesTableShell initialData={data} />

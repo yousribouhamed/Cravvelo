@@ -7,12 +7,14 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
 import { Checkbox } from "@ui/components/ui/checkbox";
 import { Student } from "database";
 import { DataTableColumnHeader } from "../data-table-head";
+import { formatDateInArabic } from "@/src/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@ui/components/ui/avatar";
+import { maketoast } from "../../toasts";
 
 export const StudnetColumns: ColumnDef<Student>[] = [
   {
@@ -40,6 +42,34 @@ export const StudnetColumns: ColumnDef<Student>[] = [
     enableSorting: false,
     enableHiding: false,
   },
+
+  {
+    accessorKey: "photo_url",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="الصورة المرافقة" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <Avatar>
+          <AvatarImage src={row.original.photo_url} />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+      );
+    },
+  },
+  {
+    accessorKey: "createdAt",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="تاريخ الانضمام" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <p className=" text-sm font-bold ">
+          {formatDateInArabic(row.original.createdAt, "dd MMMM yyyy")}
+        </p>
+      );
+    },
+  },
   {
     accessorKey: "full_name",
     header: ({ column }) => (
@@ -51,6 +81,18 @@ export const StudnetColumns: ColumnDef<Student>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="البريد الإلكتروني الطالب" />
     ),
+  },
+  {
+    accessorKey: "phone",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="رقم الهاتف" />
+    ),
+
+    cell: ({ row }) => {
+      return (
+        <p className=" text-sm font-bold ">{row.original.phone ?? "لا يوجد"}</p>
+      );
+    },
   },
 
   {
@@ -72,7 +114,13 @@ export const StudnetColumns: ColumnDef<Student>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
-              <DropdownMenuItem className="w-full h-full flex justify-between items-center px-2">
+              <DropdownMenuItem
+                onClick={() => {
+                  navigator.clipboard.writeText(row.original.email);
+                  maketoast.info();
+                }}
+                className="w-full h-full flex justify-between items-center px-2"
+              >
                 <svg
                   width="16"
                   height="17"

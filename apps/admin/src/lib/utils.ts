@@ -1,4 +1,6 @@
 import { jwtVerify, SignJWT } from "jose";
+import { format } from "date-fns";
+import { ar } from "date-fns/locale";
 
 export function absoluteUrl(path: string) {
   if (typeof window !== "undefined") return path;
@@ -36,6 +38,7 @@ export async function verifyToken({ token }: { token: string }) {
 
     return verified.payload as UserJwtPayload;
   } catch (err) {
+    console.error(err);
     throw new Error("your token has expired");
   }
 }
@@ -53,4 +56,12 @@ export function getValueFromUrl(
   }
 }
 
-export const logout = () => {};
+export function deleteCookie(name) {
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+}
+
+
+// Function to format dates in Arabic
+export function formatDateInArabic(date: Date, formatString: string): string {
+  return format(date, formatString, { locale: ar });
+}

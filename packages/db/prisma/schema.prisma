@@ -15,6 +15,7 @@ enum PLANS {
   PRO
 }
 
+
 model Account {
   id              String            @unique @default(uuid())
   userId          String            @unique
@@ -22,6 +23,7 @@ model Account {
   user_name       String?           @db.Text
   user_bio        String?           @db.Text
   phone           Int?
+  verified        Boolean           @default(false)
   AcademyIds      Json
   plan            PLANS?
   createdAt       DateTime          @default(now())
@@ -83,6 +85,7 @@ model Course {
   nbrChapters            Float      @default(0)
   trainers               String?
   status                 String
+  suspended              Boolean    @default(false)
   level                  String     @default("BEGINNER")
   allowComment           Boolean    @default(true)
   allowRating            Boolean    @default(true)

@@ -2,6 +2,7 @@ import "ui/styles/globals.css";
 
 import type { Metadata } from "next";
 import Providers from "../components/Provider";
+import { Toaster } from "@ui/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Cravvelo-admin",
@@ -20,6 +21,14 @@ export default function RootLayout({
       >
         <Providers>{children}</Providers>
       </body>
+      <Toaster
+        toastOptions={{
+          unstyled: true,
+          classNames: {
+            toast: " rounded-2xl",
+          },
+        }}
+      />
     </html>
   );
 }
