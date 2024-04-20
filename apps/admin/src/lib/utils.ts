@@ -52,3 +52,5 @@ export function getValueFromUrl(
     return null;
   }
 }
+
+export const logout = () => {};
