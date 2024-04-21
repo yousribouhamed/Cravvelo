@@ -17,6 +17,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { trpc } from "@/src/app/_trpc/client";
 import { maketoast } from "../../toasts";
+import { Badge } from "@ui/components/ui/badge";
 
 export const WebsiteColumns: ColumnDef<Website>[] = [
   {
@@ -52,7 +53,7 @@ export const WebsiteColumns: ColumnDef<Website>[] = [
     ),
 
     cell: ({ row }) => (
-      <div className="w-[50px] h-[50px] flex items-center justify-center relative rounded-xl">
+      <div className="min-w-[50px] w-fit h-[50px] flex items-center justify-center relative rounded-xl">
         {row.original.logo ? (
           <Image
             src={row.original.logo}
@@ -61,7 +62,7 @@ export const WebsiteColumns: ColumnDef<Website>[] = [
             className="rounded-xl"
           />
         ) : (
-          "لا يوجد"
+          <Badge variant="destructive">لا يوجد</Badge>
         )}
       </div>
     ),
@@ -105,7 +106,7 @@ export const WebsiteColumns: ColumnDef<Website>[] = [
             {row.original.customDomain}
           </Link>
         ) : (
-          "لا يوجد"
+          <Badge variant="destructive">لا يوجد</Badge>
         )}
       </div>
     ),
@@ -113,19 +114,19 @@ export const WebsiteColumns: ColumnDef<Website>[] = [
   {
     accessorKey: "suspended",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="مجال مخصص" />
+      <DataTableColumnHeader column={column} title="حالة الموقع" />
     ),
-    cell: ({ row }) => (
-      <div
-        className={`w-[100px] h-[30px] flex items-center justify-center  ${
-          row.original.suspended ? "bg-red-500" : "bg-green-500"
-        } rounded-full shadow relative `}
-      >
-        <span className="text-white text-xs">
-          {row.original.suspended ? "إلغاء التنشيط" : "فعال"}
-        </span>
-      </div>
-    ),
+    cell: ({ row }) => {
+      if (row.original.suspended) {
+        return (
+          <Badge variant="default" className="bg-green-500 text-white">
+            فعال
+          </Badge>
+        );
+      }
+
+      return <Badge variant="destructive">غير فعال</Badge>;
+    },
   },
 
   {
