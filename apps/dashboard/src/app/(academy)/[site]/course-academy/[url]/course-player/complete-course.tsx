@@ -16,7 +16,7 @@ const CompleteCourse: FC<CompleteCourseProps> = ({ courseId }) => {
   return (
     <div className="w-full h-[100px] my-4 flex items-center justify-between px-4 border rounded-xl">
       <span className="text-xl font-bold">
-        {state?.currentModule?.title ?? "episode"}
+        {state?.currentModule?.title ?? "الانتقال الى الحلقة التالية"}
       </span>
       <button
         onClick={async () => {

@@ -25,8 +25,8 @@ const getAccounts = async () => {
 };
 
 const getSales = async () => {
-  const sales = await prisma.sale.findMany();
-  return sales;
+  const payments = await prisma.payments.findMany();
+  return payments;
 };
 
 const getCourses = async () => {
@@ -35,7 +35,7 @@ const getCourses = async () => {
 };
 
 export default async function page() {
-  const [students, accounts, sales, courses] = await Promise.all([
+  const [students, accounts, payments, courses] = await Promise.all([
     getStudents(),
     getAccounts(),
     getSales(),
@@ -67,7 +67,7 @@ export default async function page() {
                 </svg>
               </CardHeader>
               <CardFooter>
-                <div className="text-2xl font-bold">{sales.length}</div>
+                <div className="text-2xl font-bold">{payments.length}</div>
               </CardFooter>
             </Card>
             <Card className="flex flex-col justify-between  min-h-[150px] ">
@@ -144,14 +144,14 @@ export default async function page() {
           <div className="grid gap-4 md:grid-cols-2 my-8 h-[300px] w-full mb-10 ">
             <Card className="col-span-1">
               <CardHeader>
-                <CardTitle>الدورات الآكثر مبيعاً</CardTitle>
+                <CardTitle>الآكاديميات الآكثر مبيعاً</CardTitle>
               </CardHeader>
               <CardContent className="flex items-center justify-center"></CardContent>
             </Card>
 
             <Card className="col-span-1">
               <CardHeader>
-                <CardTitle>الطلبات الجديدة</CardTitle>
+                <CardTitle> اخر الطلبيات</CardTitle>
               </CardHeader>
               <CardContent className="flex items-center justify-center"></CardContent>
             </Card>

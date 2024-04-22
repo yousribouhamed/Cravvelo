@@ -12,6 +12,7 @@ import { ContextMenuProvider } from "./context-menu";
 import StudentProgress from "./student-progress";
 import { getStudent } from "@/src/app/(academy)/_actions/auth";
 import CompleteCourse from "./complete-course";
+import VideoChainSheet from "@/src/app/(academy)/_components/course-component/course-player/video-chain-sheet";
 
 interface PageProps {
   params: { site: string; url: string };
@@ -59,27 +60,27 @@ const Page = async ({ params }: PageProps) => {
   return (
     <ContextMenuProvider>
       <div className="w-full h-full bg-white flex flex-col ">
-        <div className="w-[calc(100%-350px)] h-full mr-[350px] flex flex-col ">
-          <div className="w-full  h-[100px]  border-b">
-            <div className="h-full flex items-center justify-between px-4">
-              <h1 className={"text-xl font-bold text-black"}>{course.title}</h1>
-
-              <a href={"/"}>
-                <button
-                  className={cn(
-                    buttonVariants({ variant: "ghost" }),
-                    "space-x-4 flex items-center justify-end gap-x-4 "
-                  )}
-                >
-                  العودة إلى الدورات
-                  <LogOut className="w-4 h-4 text-black" />
-                </button>
-              </a>
+        <div className=" w-full md:w-[calc(100%-350px)] h-full md:mr-[350px] flex flex-col ">
+          <div className="w-full bg-white h-[100px] fixed top-0  z-[10] flex items-center justify-start  border-b">
+            <div className="h-full max-w-[1500px] mx-auto  w-full flex items-center px-4 ">
+              <div className="w-[50%] h-full flex items-center justify-start gap-x-4">
+                <div className="md:hidden">
+                  <VideoChainSheet
+                    currentVideo={currentEpisod ?? 0}
+                    totalVideos={course?.nbrChapters ?? 0}
+                    currentEpisode={currentEpisod}
+                    chapters={chapters}
+                  />
+                </div>
+                <h1 className={"text-xl font-bold text-black"}>
+                  {course.title}
+                </h1>
+              </div>
             </div>
           </div>
-          <div className="px-0 w-full">
+          <div className="px-0 w-full mt-[100px] max-w-[1500px]  mx-auto">
             <div className="w-full  min-h-screen h-fit flex flex-col items-center gap-x-4 p-4   ">
-              <div className="w-full h-fit max-h-[1500px] bg-black flex flex-col items-center  ">
+              <div className="w-full h-fit max-h-[1500px]  bg-black flex flex-col items-center  ">
                 <CourseVideoPlayer videoId={getFirstVideo(chapters[0])} />
               </div>
 
@@ -87,10 +88,10 @@ const Page = async ({ params }: PageProps) => {
             </div>
           </div>
         </div>
-        <div className="fixed top-0 bottom-1 right-0 w-[350px] h-full border-l ">
+        <div className=" hidden md:block fixed top-0 bottom-1 right-0 w-[350px] h-full border-l ">
           <StudentProgress
-            currentVideo={currentEpisod}
-            totalVideos={course?.nbrChapters}
+            currentVideo={currentEpisod ?? 0}
+            totalVideos={course?.nbrChapters ?? 0}
           />
           <div className="w-full h-full col-span-1 flex flex-col items-end py-8 border-l ">
             {" "}
