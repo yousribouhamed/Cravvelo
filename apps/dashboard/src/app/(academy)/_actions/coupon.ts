@@ -67,7 +67,7 @@ export const buyWithCoupon = async ({
         },
       });
 
-      if (Number(coupon.usageLimit) >= Number(coupon.usageCount)) {
+      if (Number(coupon.usageCount) >= Number(coupon.usageLimit)) {
         await prisma.coupon.update({
           where: {
             id: coupon.id,
@@ -109,7 +109,7 @@ export const buyWithCoupon = async ({
         },
       });
 
-      if (Number(coupon.usageLimit) >= Number(coupon.usageCount)) {
+      if (Number(coupon.usageCount) >= Number(coupon.usageLimit)) {
         await prisma.coupon.update({
           where: {
             id: coupon.id,
