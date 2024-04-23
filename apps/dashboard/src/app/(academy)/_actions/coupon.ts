@@ -51,16 +51,6 @@ export const buyWithCoupon = async ({
       if (Number(coupon.discountAmount) < Number(course.price)) {
         throw new Error("Coupon code is not valid.");
       }
-      // TODO : CHECK IF THE USEAGE of the coupon has expired ot not
-      // Deactivate the coupon after successful use.
-      await prisma.coupon.update({
-        where: {
-          id: coupon.id,
-        },
-        data: {
-          isActive: false,
-        },
-      });
 
       // Update the student's bag with the purchased course.
       const studentbag = JSON.parse(student.bag as string) as StudentBag;
@@ -76,6 +66,26 @@ export const buyWithCoupon = async ({
           bag: JSON.stringify(newBag),
         },
       });
+
+      if (Number(coupon.usageLimit) >= Number(coupon.usageCount)) {
+        await prisma.coupon.update({
+          where: {
+            id: coupon.id,
+          },
+          data: {
+            isActive: false,
+          },
+        });
+      } else {
+        await prisma.coupon.update({
+          where: {
+            id: coupon.id,
+          },
+          data: {
+            usageCount: Number(coupon.usageCount) + 1,
+          },
+        });
+      }
     }
 
     // Apply discount for PERCENTAGE type coupons.
@@ -84,16 +94,6 @@ export const buyWithCoupon = async ({
         throw new Error("Coupon code is not valid.");
       }
 
-      // Deactivate the coupon after successful use.
-      await prisma.coupon.update({
-        where: {
-          id: coupon.id,
-        },
-        data: {
-          isActive: false,
-        },
-      });
-
       // Update the student's bag with the purchased course.
       const studentbag = JSON.parse(student.bag as string) as StudentBag;
       const newBag = await addCourseToStudentBag({
@@ -108,6 +108,26 @@ export const buyWithCoupon = async ({
           bag: JSON.stringify(newBag),
         },
       });
+
+      if (Number(coupon.usageLimit) >= Number(coupon.usageCount)) {
+        await prisma.coupon.update({
+          where: {
+            id: coupon.id,
+          },
+          data: {
+            isActive: false,
+          },
+        });
+      } else {
+        await prisma.coupon.update({
+          where: {
+            id: coupon.id,
+          },
+          data: {
+            usageCount: Number(coupon.usageCount) + 1,
+          },
+        });
+      }
     }
     await create_course_sale({
       accountId: coupon.accountId,

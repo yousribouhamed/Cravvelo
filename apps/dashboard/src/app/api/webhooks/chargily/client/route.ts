@@ -10,9 +10,7 @@ export async function POST(request: NextRequest) {
   switch (payload.type) {
     case "checkout.paid":
       const studentId = payload.data.metadata[0]?.studentId;
-
       const productId = payload.data.metadata[0]?.productId;
-
       const student = await prisma.student.findFirst({
         where: {
           id: studentId,
@@ -27,26 +25,18 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      // const newStudentBag = {
-      //   courses: [...studentbag.courses, course],
-      // } as StudentBag;
-
-      // update there bag
-
+      const newBag = await addCourseToStudentBag({
+        bag: studentbag,
+        course: course,
+      });
       await prisma.student.update({
         where: {
-          id: studentId,
+          id: student.id,
         },
         data: {
-          bag: JSON.stringify(
-            addCourseToStudentBag({
-              bag: studentbag,
-              course: course,
-            })
-          ),
+          bag: JSON.stringify(newBag),
         },
       });
-
       await create_course_sale({
         accountId: course.accountId,
         course,

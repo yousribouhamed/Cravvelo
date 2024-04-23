@@ -85,6 +85,7 @@ export const makePayment = async ({
   subdomain: string | null;
 }) => {
   try {
+    console.log("the funtion has been invoked");
     // Fetch all the courses
     const courses = await Promise.all(
       courcesId.map((item) =>
@@ -119,6 +120,8 @@ export const makePayment = async ({
 
     // Process payment based on coupon presence
     if (!couponCode) {
+      console.log("we are paying using chargily");
+
       const paymentUrl = await payWithChargily({
         amount: total,
         metadata: {
