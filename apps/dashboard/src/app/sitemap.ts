@@ -1,37 +1,31 @@
-import type { MetadataRoute } from 'next';
+import { MetadataRoute } from "next";
+import { prisma } from "database/src";
 
-const URL = 'https://typehero.dev';
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap() {
+  // fetch all the subdomain in the platforms
+  const websites = await prisma.website.findMany({
+    select: {
+      subdomain: true,
+    },
+  });
+
+  const siteMapArray = websites.map((item) => {
+    return {
+      url: item,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 1,
+    };
+  });
+
   return [
     {
-      url: `${URL}/`,
+      url: "https://app.cravvelo.com",
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: "yearly",
       priority: 1,
     },
-    {
-      url: `${URL}/explore`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${URL}/tracks`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.5,
-    },
-    {
-      url: `${URL}/tos`,
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.5,
-    },
-    {
-      url: `${URL}/privacy`,
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.5,
-    },
+
+    ...siteMapArray,
   ];
 }
