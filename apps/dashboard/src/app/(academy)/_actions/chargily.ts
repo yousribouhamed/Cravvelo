@@ -9,7 +9,11 @@
 import { Checkout, Price, Product } from "@/src/types";
 import { getChargilyKeys } from ".";
 
-const CHARGILY_BASE_URL = "https://pay.chargily.net/api/v2";
+// const CHARGILY_BASE_URL = "https://pay.chargily.net/api/v2";
+const CHARGILY_BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? ("https://pay.chargily.net/api/v2" as const)
+    : ("https://pay.chargily.net/test/api/v2" as const); // Defining the base URL for Chargily API
 // process.env.NODE_ENV === "production"
 //   ? ( as const)
 //   : ("https://pay.chargily.net/test/api/v2" as const); // Defining the base URL for Chargily API
@@ -32,7 +36,12 @@ export const create_product = async ({
   const options = {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${secret_key.chargiySecretKey}`, // Adding authorization header with secret key
+      //  Authorization: `Bearer ${secret_key.chargiySecretKey}`, // Adding authorization header with secret key
+      Authorization: `Bearer ${
+        process.env.NODE_ENV === "production"
+          ? secret_key.chargiySecretKey
+          : "test_sk_0tbIn6qsnP3ALcUh9aNdAqxOb5rcc254olPyRVnK"
+      }`, // Adding authorization header with secret key
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ name: product_name }), // Body containing the product name
@@ -68,7 +77,12 @@ export const create_price = async ({
   const options = {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${secret_key.chargiySecretKey}`, // Adding authorization header with secret key
+      // Authorization: `Bearer ${secret_key.chargiySecretKey}`, // Adding authorization header with secret key
+      Authorization: `Bearer ${
+        process.env.NODE_ENV === "production"
+          ? secret_key.chargiySecretKey
+          : "test_sk_0tbIn6qsnP3ALcUh9aNdAqxOb5rcc254olPyRVnK"
+      }`, // Adding authorization header with secret key
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ amount, currency: "dzd", product_id }), // Body containing amount, currency, and product ID
@@ -119,7 +133,12 @@ export const create_checkout = async ({
   const options = {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${secret_key.chargiySecretKey}`, // Adding authorization header with secret key
+      //  Authorization: `Bearer ${secret_key.chargiySecretKey}`, // Adding authorization header with secret key
+      Authorization: `Bearer ${
+        process.env.NODE_ENV === "production"
+          ? secret_key.chargiySecretKey
+          : "test_sk_0tbIn6qsnP3ALcUh9aNdAqxOb5rcc254olPyRVnK"
+      }`, // Adding authorization header with secret key
       "Content-Type": "application/json",
     },
     body: JSON.stringify(payload), // Body containing the payload
@@ -157,7 +176,12 @@ export const payWithChargily = async ({
     const options = {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${secret_key.chargiySecretKey}`, // Adding authorization header with secret key
+        // Authorization: `Bearer ${secret_key.chargiySecretKey}`, // Adding authorization header with secret key
+        Authorization: `Bearer ${
+          process.env.NODE_ENV === "production"
+            ? secret_key.chargiySecretKey
+            : "test_sk_0tbIn6qsnP3ALcUh9aNdAqxOb5rcc254olPyRVnK"
+        }`, // Adding authorization header with secret key
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ name: product_name }), // Body containing the product name
@@ -171,7 +195,12 @@ export const payWithChargily = async ({
     const options2 = {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${secret_key.chargiySecretKey}`, // Adding authorization header with secret key
+        //   Authorization: `Bearer ${secret_key.chargiySecretKey}`, // Adding authorization header with secret key
+        Authorization: `Bearer ${
+          process.env.NODE_ENV === "production"
+            ? secret_key.chargiySecretKey
+            : "test_sk_0tbIn6qsnP3ALcUh9aNdAqxOb5rcc254olPyRVnK"
+        }`, // Adding authorization header with secret key
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ amount, currency: "dzd", product_id: product.id }), // Body containing amount, currency, and product ID
@@ -193,7 +222,12 @@ export const payWithChargily = async ({
     const options3 = {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${secret_key.chargiySecretKey}`, // Adding authorization header with secret key
+        //  Authorization: `Bearer ${secret_key.chargiySecretKey}`, // Adding authorization header with secret key
+        Authorization: `Bearer ${
+          process.env.NODE_ENV === "production"
+            ? secret_key.chargiySecretKey
+            : "test_sk_0tbIn6qsnP3ALcUh9aNdAqxOb5rcc254olPyRVnK"
+        }`, // Adding authorization header with secret key
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload), // Body containing the payload
