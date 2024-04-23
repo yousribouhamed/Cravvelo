@@ -15,6 +15,7 @@ interface PageProps {
 
 const Page = async ({ params }: PageProps) => {
   const subdomain = getSubDomainValue({ value: params.site });
+
   const [student, website, courses] = await Promise.all([
     getStudent(),
     getSiteData({
@@ -41,7 +42,7 @@ const Page = async ({ params }: PageProps) => {
       />
       <MaxWidthWrapper className="h-fit mt-[110px] min-h-[calc(100vh-70px)] ">
         <main className="w-full h-fit min-h-full flex flex-col items-center justify-center  p-4 sm:p-0s">
-          <Banner />
+          <Banner websiteName={website?.name} />
           <CoursesReel color={website?.color} courses={courses} />
         </main>
       </MaxWidthWrapper>

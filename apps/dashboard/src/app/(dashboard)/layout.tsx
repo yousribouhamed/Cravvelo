@@ -2,6 +2,9 @@ import { CrispChat } from "@/src/components/crisp-chat";
 import { Sidebar } from "../../components/layout/Sidebar";
 import { ClerkProvider } from "@clerk/nextjs";
 import ConnectionStatusAlert from "@/src/components/connection-status-alert";
+import { constructMetadata } from "@/src/lib/utils";
+
+export const metadata = constructMetadata();
 
 export default async function AdminLayout({
   children,

@@ -1,9 +1,11 @@
 import Image from "next/image";
 import type { FC } from "react";
 
-interface BannerProps {}
+interface BannerProps {
+  websiteName: string;
+}
 
-const Banner: FC = ({}) => {
+const Banner: FC<BannerProps> = ({ websiteName }) => {
   return (
     <div className="w-full h-[250px] bg-primary rounded-xl my-10 grid grid-cols-2 ">
       <div className=" w-full flex flex-col gap-y-2 justify-between items-start p-4">
@@ -12,7 +14,7 @@ const Banner: FC = ({}) => {
             مرحباً بك في آكاديمية
           </span>
           <h2 className=" text-2xl sm:text-4xl font-bold text-white">
-            يسري بوحامد
+            {websiteName}
           </h2>
         </div>
 

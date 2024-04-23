@@ -13,9 +13,39 @@ import Raitings from "../../../_components/raitings";
 import { get_course_rating } from "../../../_actions/rating";
 import AcademiaFooter from "../../../_components/layout/academy-footer";
 import Suspanded from "../../../_components/suspanded";
+import { Metadata } from "next";
 
 interface PageProps {
   params: { site: string; url: string };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { site: string; url: string };
+}): Promise<Metadata | null> {
+  const subdomain = getSubDomainValue({ value: params.site });
+
+  const [data, course] = await Promise.all([
+    getSiteData({
+      subdomain,
+    }),
+    getCourseByUrlPath({ url: params?.url }),
+  ]);
+
+  if (!data) {
+    return null;
+  }
+
+  return {
+    title: `${course.seoTitle} | ${data.name}`,
+    description: `${course.seoDescription} | ${data.name}`,
+    openGraph: {
+      title: `${course.seoTitle} | ${data.name}`,
+      description: `${course.seoDescription} | ${data.name}`,
+      images: [course.thumnailUrl],
+    },
+  };
 }
 
 const Page = async ({ params }: PageProps) => {
