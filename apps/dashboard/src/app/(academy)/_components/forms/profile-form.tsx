@@ -118,6 +118,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ studnet, color }) => {
         });
         setLoading(false);
         maketoast.successWithText({ text: "تم تحديث ملفك" });
+        window.location.reload();
       }
     } catch (err) {
       console.error(err);
@@ -199,7 +200,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ studnet, color }) => {
               className=" rounded-lg "
               type="submit"
               style={{
-                color: color ?? "#FC6B00",
+                backgroundColor: color ?? "#FC6B00",
               }}
             >
               حفظ التعديلات

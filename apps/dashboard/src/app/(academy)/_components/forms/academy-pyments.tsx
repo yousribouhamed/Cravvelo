@@ -134,7 +134,7 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({
 
       <div className="w-full h-1 border-b border-[#E3E8EF] my-2 mt-4" />
       <div className="w-full h-[30px] flex items-center justify-between">
-        <span className="text-[#677489] font-semibold text-md">المجموع</span>
+        <span className="text-[#0e0f10] font-semibold text-md">المجموع</span>
         <span>
           DZD{" "}
           {state?.shoppingBag
@@ -143,7 +143,7 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({
         </span>
       </div>
       <div className="w-full h-[30px] flex items-center justify-between">
-        <span className="text-[#677489] font-semibold text-md">قيمة الخصم</span>
+        <span className="text-[#0e0f10] font-semibold text-md">قيمة الخصم</span>
         <span>
           -DZD{" "}
           {priceAfterCouponCode || priceAfterCouponCode === 0

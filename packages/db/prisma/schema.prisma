@@ -236,6 +236,7 @@ model Comment {
 
   @@index([id])
   @@index([courseId])
+  @@index([accountId])
 }
 
 model Notification {

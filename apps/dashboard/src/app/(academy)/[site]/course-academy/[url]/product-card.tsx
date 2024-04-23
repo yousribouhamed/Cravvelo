@@ -86,7 +86,12 @@ export const Product_card = ({
         {calculateDiscountPercentage(
           Number(course.price),
           Number(course.compareAtPrice)
-        )}
+        )
+          ? calculateDiscountPercentage(
+              Number(course.price),
+              Number(course.compareAtPrice)
+            )
+          : 0}
         % dis
       </p>
 
@@ -134,7 +139,7 @@ export const Product_card = ({
             {calculatePositiveReviewPercentage(
               comments.map((item) => item.rating)
             )}
-            % تقييمات إيجابية ({comments.length})
+            % تقييمات إيجابية ({comments?.length ?? 0})
           </span>
         </div>
 

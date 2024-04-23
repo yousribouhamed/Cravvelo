@@ -23,6 +23,7 @@ const LoadingButton = React.forwardRef<
       className={cn(buttonVariants({ variant, size, className }), "space-x-2")}
       {...props}
       ref={ref}
+      disabled={pending}
     >
       {pending && <LoadingSpinner />}
       {props.children}

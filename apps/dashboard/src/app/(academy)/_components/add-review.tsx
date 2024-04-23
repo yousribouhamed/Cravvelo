@@ -7,6 +7,7 @@ import StarRatings from "react-star-ratings";
 import { Course } from "database";
 import { create_rating } from "../_actions/rating";
 import { maketoast } from "@/src/components/toasts";
+import { revalidatePath } from "next/cache";
 
 export default function AddReview({ course }: { course: Course }) {
   const [open, setOpen] = useState<boolean>(false);
@@ -28,12 +29,14 @@ export default function AddReview({ course }: { course: Course }) {
       maketoast.successWithText({
         text: "لقد تم إرسال تعليقك للمراجعة، عند الموافقة عليه سيتم عرضه",
       });
+      revalidatePath(`/course-academy/${course.id}`);
+      // window?.location?.reload();
     } catch (err) {
       maketoast.error();
       console.error(err);
     } finally {
-      // revalidatePath(`/course-academy/${course.id}`);
-      window?.location?.reload();
+      //
+
       setLoading(false);
       setOpen(false);
     }
@@ -58,7 +61,7 @@ export default function AddReview({ course }: { course: Course }) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            <div className="fixed inset-0 bg-black bg-opacity-75 transition-opacity" />
           </Transition.Child>
 
           <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -118,8 +121,9 @@ export default function AddReview({ course }: { course: Course }) {
                   </div>
                   <div className="bg-gray-50  py-3 sm:flex sm:flex-row-reverse  gap-x-4">
                     <button
+                      disabled={loading}
                       type="button"
-                      className="inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-700 sm:ml-3 sm:w-auto"
+                      className="inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm  text-white shadow-sm hover:bg-orange-700 sm:ml-3 sm:w-auto disabled:opacity-75 disabled:cursor-not-allowed"
                       onClick={() => submiteReview()}
                     >
                       {loading && (
@@ -129,7 +133,7 @@ export default function AddReview({ course }: { course: Course }) {
                     </button>
                     <button
                       type="button"
-                      className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                      className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                       onClick={() => setOpen(false)}
                       ref={cancelButtonRef}
                     >

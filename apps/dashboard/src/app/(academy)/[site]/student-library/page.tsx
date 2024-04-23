@@ -17,7 +17,6 @@ interface PageProps {
 }
 
 const Page = async ({ params }: PageProps) => {
-  await authorization({ origin: null });
   const subdomain = getSubDomainValue({ value: params.site });
 
   const [student, website] = await Promise.all([
@@ -29,6 +28,10 @@ const Page = async ({ params }: PageProps) => {
 
   if (!website) {
     notFound();
+  }
+
+  if (!student) {
+    redirect("/");
   }
 
   const bag = JSON.parse(student.bag as string) as StudentBag;

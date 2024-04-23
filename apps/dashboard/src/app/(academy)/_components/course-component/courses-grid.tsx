@@ -220,7 +220,7 @@ const CoursesGrid: FC<Props> = ({ courses }) => {
                   </div>
 
                   <StarRatings
-                    rating={0}
+                    rating={item.rating}
                     starDimension="20px"
                     starSpacing="1px"
                   />

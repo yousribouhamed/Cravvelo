@@ -49,7 +49,7 @@ export default function ShoppingCardProduction({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            <div className="fixed inset-0 bg-black bg-opacity-75 transition-opacity" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-hidden">
@@ -64,11 +64,11 @@ export default function ShoppingCardProduction({
                   leaveFrom="translate-x-0"
                   leaveTo="translate-x-full"
                 >
-                  <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
-                    <div className="flex h-full flex-col overflow-y-auto bg-[#E3E8EF] shadow-xl">
+                  <Dialog.Panel className="pointer-events-auto w-screen max-w-md border  shadow-xl ">
+                    <div className="flex h-full flex-col overflow-y-auto bg-white ">
                       <div className="flex-1 overflow-y-auto my-4 px-4 py-3 sm:px-6">
                         <div className="flex items-start justify-between">
-                          <Dialog.Title className="text-2xl font-bold text-[#677489]">
+                          <Dialog.Title className="text-2xl font-bold text-black">
                             سلة التسوق
                           </Dialog.Title>
                           <button

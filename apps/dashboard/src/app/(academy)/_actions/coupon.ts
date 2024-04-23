@@ -64,24 +64,17 @@ export const buyWithCoupon = async ({
 
       // Update the student's bag with the purchased course.
       const studentbag = JSON.parse(student.bag as string) as StudentBag;
-
       const newBag = await addCourseToStudentBag({
         bag: studentbag,
         course: course,
       });
-      console.log("the value retued from the funtion");
-      console.log(newBag);
-      const data = await prisma.student.update({
+      await prisma.student.update({
         where: {
           id: student.id,
         },
         data: {
           bag: JSON.stringify(newBag),
         },
-      });
-
-      console.log({
-        updatedData: data,
       });
     }
 
@@ -103,33 +96,28 @@ export const buyWithCoupon = async ({
 
       // Update the student's bag with the purchased course.
       const studentbag = JSON.parse(student.bag as string) as StudentBag;
+      const newBag = await addCourseToStudentBag({
+        bag: studentbag,
+        course: course,
+      });
       await prisma.student.update({
         where: {
           id: student.id,
         },
         data: {
-          bag: JSON.stringify(
-            addCourseToStudentBag({
-              bag: studentbag,
-              course: course,
-            })
-          ),
+          bag: JSON.stringify(newBag),
         },
       });
     }
-
     await create_course_sale({
       accountId: coupon.accountId,
       course,
       studentId: student.id,
     });
-    // // Redirect the user to the student library page after a successful purchase.
-    // redirect("/student-library");
   } catch (error) {
     // Handle any errors that occur during the purchase process.
     console.error("Error while processing the purchase:", error);
-    // You might want to add appropriate error handling and logging mechanisms here.
-    // For example, notifying the user of the error or logging detailed error messages.
+
     throw error; // Re-throwing the error for higher-level handling, if necessary.
   }
 };
