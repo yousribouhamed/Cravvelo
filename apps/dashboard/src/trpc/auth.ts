@@ -20,7 +20,6 @@ export const auth = {
       const newAccount = await prisma.account.create({
         data: {
           userId: user.id,
-          AcademyIds: JSON.stringify([user.id]),
         },
       });
       return { success: true, accountId: newAccount.id };

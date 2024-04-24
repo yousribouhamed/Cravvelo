@@ -71,26 +71,6 @@ export const collector = {
           where: { accountId: account.id },
         });
 
-        const assets = site.assets
-          ? (JSON.parse(site.assets as string) as WebsiteAssets[])
-          : [];
-
-        const newAssets = [
-          ...assets,
-          { name: input.name, fileUrl: input.fileUrl },
-        ];
-
-        console.log("here are the new assets");
-
-        await ctx.prisma.website.update({
-          where: {
-            accountId: account.id,
-          },
-          data: {
-            assets: JSON.stringify(newAssets),
-          },
-        });
-
         return site;
       } catch (err) {
         console.error(err);
@@ -106,11 +86,7 @@ export const collector = {
         where: { accountId: account.id },
       });
 
-      const assets = site.assets
-        ? (JSON.parse(site.assets as string) as WebsiteAssets[])
-        : ([] as WebsiteAssets[]);
-
-      return assets;
+      return [];
     } catch (err) {
       console.error(err);
     }

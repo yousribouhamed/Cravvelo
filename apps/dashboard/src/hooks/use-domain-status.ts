@@ -45,7 +45,7 @@ export function useDomainStatus({ domain }: { domain: string }) {
 
     // Call the function to start fetching every 5000 ms
     verifyCustomDomain();
-  }, []); // Empty dependency array to run the effect only once on mount
+  }, [domain]); // Empty dependency array to run the effect only once on mount
 
   return {
     status: status,
