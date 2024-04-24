@@ -11,6 +11,7 @@ import { notFound, redirect } from "next/navigation";
 import { Progress } from "@ui/components/ui/progress";
 
 import { BookMarked } from "lucide-react";
+import Link from "next/link";
 
 interface PageProps {
   params: { site: string };
@@ -63,43 +64,45 @@ const Page = async ({ params }: PageProps) => {
             )}
             {bag?.courses?.map((item, index) => {
               return (
-                <div
+                <Link
+                  href={`/course-academy/${item.course.id}/course-player`}
                   key={item.course.title + index}
-                  className="w-[320px] min-h-[300px] h-fit p-0  border  flex flex-col shadow rounded-xl  transition-all duration-700 bg-white cursor-pointer "
                 >
-                  <img
-                    alt={item.course.title + "image"}
-                    src={item.course.thumnailUrl}
-                    className="w-full h-[200px] rounded-t-xl object-cover "
-                  />
-                  <div className="w-full h-[50px] px-4 flex items-center justify-between my-4">
-                    <h2 className="text-black  text-lg text-start ">
-                      {item.course.title}
-                    </h2>
-                  </div>
-                  {/* this will hold the stars */}
-                  <div className="w-full h-[10px] flex items-center justify-between my-4 px-4">
-                    <div className="w-[50%] h-[20px] flex items-center justify-start gap-x-2">
-                      <BookMarked className="w-4 h-4 text-gray-500" />
-                      <span className="text-gray-500  text-sm text-start ">
-                        {item.course.nbrChapters} مادة
-                      </span>
+                  <div className="w-[320px] min-h-[300px] h-fit p-0  border  flex flex-col shadow rounded-xl hover:shadow-xl  transition-all duration-700 bg-white cursor-pointer ">
+                    <img
+                      alt={item.course.title + "image"}
+                      src={item.course.thumnailUrl}
+                      className="w-full h-[200px] rounded-t-xl object-cover "
+                    />
+                    <div className="w-full h-[50px] px-4 flex items-center justify-between my-4">
+                      <h2 className="text-black  text-lg text-start ">
+                        {item.course.title}
+                      </h2>
                     </div>
-                  </div>
+                    {/* this will hold the stars */}
+                    <div className="w-full h-[10px] flex items-center justify-between my-4 px-4">
+                      <div className="w-[50%] h-[20px] flex items-center justify-start gap-x-2">
+                        <BookMarked className="w-4 h-4 text-gray-500" />
+                        <span className="text-gray-500  text-sm text-start ">
+                          {item.course.nbrChapters} مادة
+                        </span>
+                      </div>
+                    </div>
 
-                  {/* this will hold the price */}
+                    {/* this will hold the price */}
 
-                  <div className="w-full h-[70px] px-4 flex items-center justify-center gap-x-4  p-2">
-                    {/* <Link
-                      href={`/course-academy/${item.course.id}/course-player`}
+                    <div className="w-full h-[70px] px-4 flex items-center justify-center gap-x-4  p-2">
+                      {/* <Link
+                  
                       className="w-[80%] bg-blue-500 hover:bg-blue-600 text-white p-2 h-[45px] flex items-center justify-center rounded-xl"
                     >
                       شاهد الان
                     </Link> */}
-                    <span className="text-lg text-gray-600">{33}%</span>
-                    <Progress value={33} />
+                      <span className="text-lg text-gray-600">{33}%</span>
+                      <Progress value={33} />
+                    </div>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>

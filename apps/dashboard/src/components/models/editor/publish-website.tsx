@@ -25,7 +25,6 @@ import { Textarea } from "@ui/components/ui/textarea";
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "../../toasts";
-import { useThemeEditorStore } from "@/src/app/(theme-editor)/theme-editor-store";
 
 const FormSchema = z.object({
   title: z.string(),
@@ -36,7 +35,6 @@ const FormSchema = z.object({
 const PublishWebsite: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { state } = useThemeEditorStore();
   const mutation = trpc.createWebSite.useMutation({
     onSuccess: (site) => {
       setIsOpen(false);
@@ -60,7 +58,6 @@ const PublishWebsite: FC = () => {
       description: values.description,
       name: values.title,
       subdomain: values.subdomain,
-      pages: state.pages,
     });
   }
   return (

@@ -34,7 +34,7 @@ const CompleteCourse: FC<CompleteCourseProps> = ({ courseId }) => {
           }
         }}
         disabled={loading}
-        className="bg-blue-600  rounded-xl text-white py-2 px-4 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer "
+        className="bg-primary  rounded-xl text-white py-2 px-4 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer "
       >
         {loading && <Loader className="w-4 h-4 ml-2 animate-spin" />}
         أكمل واستمر

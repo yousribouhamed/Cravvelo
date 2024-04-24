@@ -7,7 +7,6 @@
  */
 
 import { prisma } from "database/src";
-import { ThemePage } from "../../(theme-editor)/theme-editor-store";
 import { Website } from "database";
 
 /**
@@ -16,27 +15,6 @@ import { Website } from "database";
  * @param subdomain The subdomain associated with the website.
  * @returns A Promise that resolves to the retrieved page or null if not found.
  */
-export const getPage = async ({
-  path,
-  subdomain,
-}: {
-  path: string;
-  subdomain: string;
-}): Promise<ThemePage | null> => {
-  const website = await prisma.website.findFirst({
-    where: {
-      subdomain,
-    },
-  });
-
-  if (!website) return null;
-
-  const pages = JSON.parse(website.pages as string) as ThemePage[];
-
-  const page = pages.find((item) => item.path === path);
-
-  return page;
-};
 
 /**
  * Function to retrieve all courses associated with a subdomain.

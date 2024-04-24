@@ -32,6 +32,10 @@ const VideoChain: FC<VideoChainProps> = ({ chapters, currentEpisode }) => {
   const setCurrentModule = useCoursePlayerStore(
     (state) => state.actions.setCurrentModule
   );
+
+  const currentModule = useCoursePlayerStore(
+    (state) => state.state.currentModule
+  );
   return (
     <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 w-full ">
       <div dir="rtl" className="w-full min-h-full h-fit  ">
@@ -65,7 +69,14 @@ const VideoChain: FC<VideoChainProps> = ({ chapters, currentEpisode }) => {
                             return (
                               <button
                                 key={subitem?.title + index}
-                                className="w-full h-[70px] flex items-center justify-start gap-x-4 cursor-pointer  hover:bg-gray-100  transition-all duration-300 ease-in-out "
+                                className={`w-full h-[70px] flex items-center justify-start gap-x-4 cursor-pointer  hover:opacity-75  transition-all duration-300 ease-in-out ${
+                                  currentModule?.fileUrl === subitem?.fileUrl
+                                    ? "bg-primary/50"
+                                    : currentModule?.fileUrl === undefined &&
+                                      index === 0
+                                    ? "bg-primary/50"
+                                    : ""
+                                } `}
                                 onClick={() => {
                                   console.log("this is subitem");
                                   console.log(
@@ -77,9 +88,9 @@ const VideoChain: FC<VideoChainProps> = ({ chapters, currentEpisode }) => {
                               >
                                 <div className="w-[60px] h-full  flex items-center justify-center">
                                   <div
-                                    className={`w-[30px] h-[30px] rounded-[50%]  bg-white border-4 border-[#007AFF] flex items-center justify-center ${
+                                    className={`w-[30px] h-[30px] rounded-[50%]  bg-white border-4 border-primary flex items-center justify-center ${
                                       index < currentEpisode
-                                        ? "bg-[#007AFF]"
+                                        ? "bg-primary"
                                         : index === currentEpisode
                                         ? "bg-green-500"
                                         : ""

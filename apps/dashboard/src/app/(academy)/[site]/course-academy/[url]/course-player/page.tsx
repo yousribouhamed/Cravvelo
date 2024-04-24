@@ -6,8 +6,6 @@ import { Chapter } from "database";
 import { Module, StudentBag } from "@/src/types";
 import { notFound } from "next/navigation";
 import { buttonVariants } from "@ui/components/ui/button";
-import { LogOut } from "lucide-react";
-import { cn } from "@ui/lib/utils";
 import { ContextMenuProvider } from "./context-menu";
 import StudentProgress from "./student-progress";
 import { getStudent } from "@/src/app/(academy)/_actions/auth";
@@ -30,20 +28,12 @@ const getFirstVideo = (chapter: Chapter): string => {
 };
 
 const Page = async ({ params }: PageProps) => {
-  // await authorization({ origin: null });
-
   const course = await getCourseByUrlPath({ url: params?.url });
   const chapters = await get_course_chapters({ courseID: course?.id });
 
   const student = await getStudent();
 
   const currentBag = (await JSON.parse(student.bag as string)) as StudentBag;
-
-  // redirect the user if he is not loged in or paid user
-
-  console.log("here it the course from the student bag");
-
-  console.log({ bag: currentBag?.courses });
 
   if (!course) {
     notFound();
@@ -54,7 +44,11 @@ const Page = async ({ params }: PageProps) => {
   ).currentEpisode;
 
   if (!chapters || chapters?.length === 0) {
-    return <h1>this course is empty</h1>;
+    return (
+      <div className="w-full h-screen flex items-center justify-center flex-col gap-y-6">
+        <h1 className="text-xl font-bold text-black">لقد اشتريت دورة فارغة </h1>
+      </div>
+    );
   }
 
   return (
