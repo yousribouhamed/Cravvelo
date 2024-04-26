@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      const newBag = await addCourseToStudentBag({
+      const newBag = addCourseToStudentBag({
         bag: studentbag,
         course: course,
       });
