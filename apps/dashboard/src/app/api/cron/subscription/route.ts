@@ -2,8 +2,8 @@
 import { NextResponse } from "next/server";
 
 // export const maxDuration = 300; // This function can run for a maximum of 300 seconds
-// export const dynamic = "force-dynamic";
-// export const revalidate = 0;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function GET(request: Request) {
   // try {
@@ -68,7 +68,7 @@ export async function GET(request: Request) {
   //   console.error(err);
   // }
   //TODO : send email to thoses who there subscription eded and who are close to an end
-
+  // TODO : make the request in the admin dashboard
   return NextResponse.json({
     message: "Ok",
   });
