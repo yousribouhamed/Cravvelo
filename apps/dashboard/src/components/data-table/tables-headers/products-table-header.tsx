@@ -5,11 +5,27 @@ import AddProductModel from "../../models/create-product-modal";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 
+//@ts-ignore
+import { download, generateCsv, mkConfig } from "export-to-csv";
+
 interface TableHeaderProps {
   table: any;
+  data: any[];
 }
 
-const ProductsTableHeader: FC<TableHeaderProps> = ({ table }) => {
+const csvConfig = mkConfig({
+  fieldSeparator: ",",
+  decimalSeparator: ".",
+  useKeysAsHeaders: true,
+});
+
+const ProductsTableHeader: FC<TableHeaderProps> = ({ table, data }) => {
+  const handleExportCSV = (data: any[]) => {
+    const csv = generateCsv(csvConfig)(data);
+    //@ts-ignore
+    download(csvConfig)(csv);
+  };
+
   return (
     <div className="w-full h-[70px] flex items-center justify-between">
       <div className="min-w-[200px] w-fit h-full flex  items-center justify-start gap-x-4">
@@ -46,7 +62,7 @@ const ProductsTableHeader: FC<TableHeaderProps> = ({ table }) => {
       </div>
       <div className="min-w-[200px] w-fit h-full flex items-center justify-end gap-x-4">
         <Button
-          disabled
+          onClick={() => handleExportCSV(data)}
           variant="secondary"
           className="bg-white rounded-xl border flex items-center gap-x-2"
         >

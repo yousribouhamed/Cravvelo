@@ -61,7 +61,7 @@ export function CouponDataTable<TData, TValue>({
 
   return (
     <>
-      <CouponsTableHeader refetch={refetch} table={table} />
+      <CouponsTableHeader data={data} refetch={refetch} table={table} />
       <div className="rounded-md border bg-white">
         <Table>
           <TableHeader>

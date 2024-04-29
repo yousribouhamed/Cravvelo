@@ -58,7 +58,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <SimpleTableHeader table={table} />
+      <SimpleTableHeader data={data} table={table} />
       <div className="rounded-md border bg-white">
         <Table>
           <TableHeader>

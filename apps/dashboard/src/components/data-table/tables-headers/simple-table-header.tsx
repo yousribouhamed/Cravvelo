@@ -3,18 +3,34 @@ import type { FC } from "react";
 import { Input } from "@ui/components/ui/input";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
+//@ts-ignore
+import { download, generateCsv, mkConfig } from "export-to-csv";
 
 interface SimpleTableHeaderProps {
   table: any;
+  data: any[];
 }
 
-const SimpleTableHeader: FC<SimpleTableHeaderProps> = ({ table }) => {
+const csvConfig = mkConfig({
+  fieldSeparator: ",",
+  decimalSeparator: ".",
+  useKeysAsHeaders: true,
+});
+
+const SimpleTableHeader: FC<SimpleTableHeaderProps> = ({ table, data }) => {
+  const handleExportCSV = (data: any[]) => {
+    const csv = generateCsv(csvConfig)(data);
+    //@ts-ignore
+    download(csvConfig)(csv);
+  };
+
   return (
     <div className="w-full h-[70px] flex items-center justify-between">
       <div className="min-w-[200px] w-fit h-full flex  items-center justify-start gap-x-4">
         <Button
           variant="secondary"
           className="bg-white rounded-xl border flex items-center gap-x-2"
+          onClick={() => handleExportCSV(data)}
         >
           <svg
             width="18"

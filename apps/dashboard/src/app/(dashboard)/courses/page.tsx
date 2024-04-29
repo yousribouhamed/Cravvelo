@@ -5,6 +5,8 @@ import { prisma } from "database/src";
 import CoursesTableShell from "./courses-table-shell";
 import useHaveAccess from "@/src/hooks/use-have-access";
 
+// react-countup
+
 export const fetchCache = "force-no-store";
 
 async function getData({
