@@ -1,25 +1,37 @@
 import { Button } from "@ui/components/ui/button";
-import type { FC } from "react";
 import AddCourse from "../models/create-course-modal";
 import { Input } from "@ui/components/ui/input";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { buttonVariants } from "../plate-ui/button";
-import { DataTableFilterableColumn } from "@/src/types";
 import { Table } from "@tanstack/react-table";
-import { DataTableFacetedFilter } from "./data-table-faceted-filter";
-import { Cross2Icon } from "@radix-ui/react-icons";
 import { CoursesFilterModal } from "../models/filters/courses-filter-modal";
+//@ts-ignore
+import { download, generateCsv, mkConfig } from "export-to-csv";
 
 interface TableHeaderProps<TData> {
   table: Table<TData>;
   academia_url: string;
+  data: any[];
 }
+
+const csvConfig = mkConfig({
+  fieldSeparator: ",",
+  decimalSeparator: ".",
+  useKeysAsHeaders: true,
+});
 
 export function TableHeader<TData>({
   table,
   academia_url,
+  data,
 }: TableHeaderProps<TData>) {
+  const handleExportCSV = (data: any[]) => {
+    const csv = generateCsv(csvConfig)(data);
+    //@ts-ignore
+    download(csvConfig)(csv);
+  };
+
   return (
     <div className="w-full h-[70px] flex items-center justify-between">
       <div className="min-w-[200px] w-fit h-full flex  items-center justify-start gap-x-4">
@@ -38,7 +50,7 @@ export function TableHeader<TData>({
         <Button
           variant="secondary"
           className="bg-white rounded-xl border flex items-center gap-x-2"
-          disabled
+          onClick={() => handleExportCSV(data)}
         >
           <svg
             width="21"

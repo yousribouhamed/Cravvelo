@@ -74,7 +74,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <TableHeader2 academia_url={academia_url} table={table} />
+      <TableHeader2 data={data} academia_url={academia_url} table={table} />
       <div className="rounded-md border bg-white">
         <Table>
           <TableHeader>

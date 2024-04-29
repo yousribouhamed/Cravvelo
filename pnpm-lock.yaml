@@ -375,6 +375,9 @@ importers:
       embla-carousel-autoplay:
         specifier: ^8.0.1
         version: 8.0.1(embla-carousel@8.0.1)
+      export-to-csv:
+        specifier: ^1.2.4
+        version: 1.2.4
       framer-motion:
         specifier: ^10.18.0
         version: 10.18.0(react-dom@18.2.0)(react@18.2.0)
@@ -9792,6 +9795,11 @@ packages:
       onetime: 6.0.0
       signal-exit: 3.0.7
       strip-final-newline: 3.0.0
+
+  /export-to-csv@1.2.4:
+    resolution: {integrity: sha512-mniFCil3DPLb4esJX00Nm6R77WbTMAqlzgYBlqN++QXZ2juNu19RMnRgmjuPH2pyRbrQvOieKg8zTp5lCwUFyQ==}
+    engines: {node: ^v12.20.0 || >=v14.13.0}
+    dev: false
 
   /extend@3.0.2:
     resolution: {integrity: sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==}
