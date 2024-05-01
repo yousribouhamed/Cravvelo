@@ -25,7 +25,7 @@ const Hero: FC = ({}) => {
                   من مكان واحد، بسهولة كبيرة
                 </h1>
               </div>
-              <p className="sm:mt-10 text-md font-thin 2xl:text-lg text-center sm:text-start text-black">
+              <p className="sm:mt-10 text-sm font-thin 2xl:text-lg text-center sm:text-start text-black">
                 من البناء بلا برمجة إلى التسويق والبيع بدون خبرة، مساق توفّر لك
                 كل الأدوات التي تحتاجها لإنشاء منصتك التعليمية وتنمية أعمالك عبر
                 الإنترنت.

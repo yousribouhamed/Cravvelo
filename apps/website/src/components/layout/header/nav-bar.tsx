@@ -81,13 +81,23 @@ export const NavBar: FC = ({}) => {
         >
           <div className=" flex items-center mx-auto lg:max-w-screen-2xl 2xl:px-20 px-2.5  justify-between rounded-xl gap-x-2 w-full h-[80px]  ">
             {/* this section is for the logo */}
-            <div className="w-[20%] h-full flex items-center justify-start ">
+            <div className="w-[20%] hidden h-full md:flex items-center justify-start ">
               <Link href={"/"}>
                 <Image
                   src="/Cravvelo_Logo-01.svg"
                   alt="logo"
                   width={160}
                   height={60}
+                />
+              </Link>
+            </div>
+            <div className="w-[33%] md:hidden h-full flex items-center justify-start ">
+              <Link href={"/"}>
+                <Image
+                  src="/Cravvelo_Logo-01.svg"
+                  alt="logo"
+                  width={260}
+                  height={160}
                 />
               </Link>
             </div>
