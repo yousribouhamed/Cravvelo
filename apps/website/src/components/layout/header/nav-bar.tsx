@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
 import Image from "next/image";
 import DropDownMenu from "../../drop-down-menu";
+import MobileNav from "./mobile-nav";
 
 const links = [
   {
@@ -101,7 +102,8 @@ export const NavBar: FC = ({}) => {
                   }
                   return (
                     <Link
-                      href={item.href}
+                      // href={item.href}
+                      href={"/"}
                       key={item.name}
                       className={cn(
                         buttonVariants({ variant: "ghost" }),
@@ -120,7 +122,8 @@ export const NavBar: FC = ({}) => {
             </nav>
             <div className="w-[40%] hidden h-full lg:flex items-center justify-end gap-x-4">
               <Link
-                href={"https://app.cravvelo.com/sign-up"}
+                // href={"https://app.cravvelo.com/sign-up"}
+                href={"https://cravvelo.com"}
                 className={cn(
                   buttonVariants(),
                   "bg-primary border border-primary text-white text-xl py-4  h-12 rounded-2xl  font-bold     transition-all duration-150 "
@@ -129,7 +132,8 @@ export const NavBar: FC = ({}) => {
                 انشاء حساب
               </Link>
               <Link
-                href={"https://app.cravvelo.com/sign-in"}
+                // href={"https://app.cravvelo.com/sign-in"}
+                href={"https://cravvelo.com"}
                 className={cn(
                   buttonVariants(),
                   "bg-white border border-primary text-primary text-xl py-4  h-12 rounded-2xl hover:text-white font-bold  hover:bg-[#FC6B00]   transition-all duration-150 "
@@ -139,7 +143,8 @@ export const NavBar: FC = ({}) => {
               </Link>
             </div>
             <div className=" w-fit lg:hidden h-full flex items-center justify-end pl-4">
-              <MobilNavBar />
+              {/* <MobilNavBar /> */}
+              <MobileNav />
             </div>
           </div>
         </div>

@@ -17,8 +17,8 @@ const Hero: FC = ({}) => {
           {/* Left column */}
           <div className="lg:col-span-2 z-20 lg:col-start-1 lg:row-start-1 lg:ml-auto h-fit lg:grid w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 grid-cols-1">
             <div className="w-full sm:max-w-[34rem] h-fit 2xl:max-w-2xl z-20">
-              <div className="w-full sm:min-h-[120px] sm:h-fit h-[350px]  mt-12 overflow-hidden">
-                <h1 className="text-center h-[70px] flex items-center sm:text-start qatar-bold tracking-tight text-black text-3xl 2xl:text-4xl">
+              <div className="w-full sm:min-h-[120px] sm:h-fit  h-[200px]   mt-12 overflow-hidden">
+                <h1 className="text-center h-[110px] sm:h-[70px] flex flex-col sm:flex-row items-center sm:text-start qatar-bold tracking-tight text-black text-3xl 2xl:text-4xl">
                   إنشاء، بيع، إدارة <TextTyper />
                 </h1>
                 <h1 className="qatar-bold  text-center sm:text-start font-bold tracking-tight text-black text-3xl 2xl:text-4xl">
@@ -53,7 +53,7 @@ const Hero: FC = ({}) => {
               <Image
                 fill
                 className=" w-full h-full  rounded-xl "
-                src="/Snap.png"
+                src="/Sggnap.png"
                 alt="hero image of the application"
                 priority
                 loading="eager"
