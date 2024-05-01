@@ -26,7 +26,6 @@ export default function RootLayout({
       <body className={"min-h-screen h-fit  bg-[#FAFAFA] w-full"}>
         <NavBar />
         <div className="  w-full h-fit min-h-full">{children}</div>
-        {children}
       </body>
       {/* 
       <Script
