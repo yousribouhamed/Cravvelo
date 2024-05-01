@@ -69,7 +69,7 @@ const MobileNav = () => {
                     <Link
                       onClick={() => closeOnCurrent("/")}
                       className="flex items-center w-full font-semibold text-gray-600"
-                      href="/sign-up"
+                      href="/"
                     >
                       {item.name}
                     </Link>
