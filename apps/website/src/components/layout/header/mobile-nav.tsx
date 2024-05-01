@@ -14,15 +14,15 @@ const links = [
 
   {
     name: "الخدمات",
-    href: "/features",
+    href: "/",
   },
   {
     name: "معلومات عنا",
-    href: "/about-us",
+    href: "/",
   },
   {
     name: "تواصل معنا",
-    href: "/contact-us",
+    href: "/",
   },
 ];
 
