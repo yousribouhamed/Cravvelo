@@ -5,7 +5,7 @@ import { useTypewriter } from "react-simple-typewriter";
 
 const TextTyper: FC = ({}) => {
   const [text] = useTypewriter({
-    words: ["خبراتك التعليمية ", "برامجك التدريبية "],
+    words: ["خبراتك التعليمية ", "دوراتك  التدريبية "],
     loop: true,
     delaySpeed: 2000,
   });

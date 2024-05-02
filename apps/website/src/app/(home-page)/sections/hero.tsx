@@ -32,6 +32,7 @@ const Hero: FC = ({}) => {
 
               <div className="w-full  my-4 h-[60px] flex flex-col sm:flex-row items-center sm:mt-8 mt-16  gap-y-6 sm:items-end justify-center sm:justify-start gap-x-8">
                 <Button
+                  disabled
                   size="lg"
                   className="bg-[#FC6B00] hover:bg-[#994b13] text-xl py-6 h-14 rounded-2xl text-white qatar-bold  hover:scale-105 transition-all duration-150 "
                 >
