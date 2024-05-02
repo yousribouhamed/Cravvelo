@@ -43,7 +43,7 @@ const Hero: FC = ({}) => {
                 </span>
               </div>
 
-              <Reviews />
+              {/* <Reviews /> */}
             </div>
           </div>
 
