@@ -1,5 +1,4 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
-import Reviews from "@/src/components/reviews";
 import TextTyper from "@/src/components/text-typer";
 import { Button } from "@ui/components/ui/button";
 import Image from "next/image";
@@ -25,13 +24,13 @@ const Hero: FC = ({}) => {
                   من مكان واحد، بسهولة كبيرة
                 </h1>
               </div>
-              <p className="sm:mt-10 text-sm font-thin 2xl:text-lg text-center sm:text-start text-black">
-                من البناء بلا برمجة إلى التسويق والبيع بدون خبرة، مساق توفّر لك
-                كل الأدوات التي تحتاجها لإنشاء منصتك التعليمية وتنمية أعمالك عبر
-                الإنترنت.
+              <p className="sm:mt-10  text-sm font-thin 2xl:text-lg text-center sm:text-start text-black">
+                من البناء بلا برمجة إلى التسويق والبيع بدون خبرة، cravvelo توفّر
+                لك كل الأدوات التي تحتاجها لإنشاء منصتك التعليمية وتنمية أعمالك
+                عبر الإنترنت.
               </p>
 
-              <div className="w-full my-4 h-[60px] flex flex-col sm:flex-row items-center mt-8 gap-y-6 sm:items-end justify-center sm:justify-start gap-x-8">
+              <div className="w-full  my-4 h-[60px] flex flex-col sm:flex-row items-center sm:mt-8 mt-16  gap-y-6 sm:items-end justify-center sm:justify-start gap-x-8">
                 <Button
                   size="lg"
                   className="bg-[#FC6B00] hover:bg-[#994b13] text-xl py-6 h-14 rounded-2xl text-white qatar-bold  hover:scale-105 transition-all duration-150 "
