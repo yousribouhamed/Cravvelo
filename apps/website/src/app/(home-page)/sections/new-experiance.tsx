@@ -8,10 +8,10 @@ const NewExperiance: FC = ({}) => {
         <div className="w-full h-fit min-h-[500px] grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className=" border-[#FFB800] border   bg-[#F8FAE5] col-span-1 rounded-lg"></div>
           <div className="max-w-2xl h-full flex flex-col gap-y-4 col-span-1 pt-4 z-20 space-y-6  ">
-            <h1 className=" text-5xl mb-8  font-bold text-start  tracking-tight text-black ">
+            <h1 className=" text-5xl mb-8  font-bold text-start  tracking-tight leading-[5.5rem] text-black ">
               وفّر{" "}
               <span className="text-[#FC6B00] relative inline-block ">
-                <div className="absolute  -bottom-14  right-0 left-0  ">
+                <div className="absolute  -bottom-8 md:-bottom-14  right-0 left-0  ">
                   <svg
                     width="117"
                     height="45"

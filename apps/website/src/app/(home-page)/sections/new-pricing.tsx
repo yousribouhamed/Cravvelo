@@ -19,7 +19,7 @@ const NewPricing: FC = ({}) => {
     React.useState<boolean>(false);
 
   return (
-    <div className="w-full min-h-[1080px] h-fit my-10">
+    <div className="w-full min-h-[1080px] h-fit my-10 p-4 md:p-0 ">
       <div className="w-full min-h-[150px] h-fit  flex justify-center items-start  pl-48 ">
         <div className="bg-white rounded-full transition-all duration-150 relative shadow-2xl w-fit h-[60px] flex items-center gap-x-4 justify-center p-4">
           <Tabs
@@ -40,12 +40,12 @@ const NewPricing: FC = ({}) => {
         </div>
       </div>
 
-      <div className="w-full h-fit   max-w-6xl mx-auto min-h-[800px] grid grid-cols-3 gap-10 ">
+      <div className="w-full h-fit   max-w-6xl mx-auto min-h-[800px] grid grid-cols-1 md:grid-cols-3  gap-10 ">
         {PLANS.map((item, index) => {
           return (
             <div
               key={item.plan}
-              className="w-full h-full relative bg-white shadow-2xl border rounded-2xl py-2 px-4 flex flex-col "
+              className="w-full h-[90%] relative bg-white shadow-2xl border rounded-2xl py-2 px-4 flex flex-col "
             >
               {index === 1 && (
                 <div className="bg-[#F0B110] absolute rounded-2xl -top-16 z-[-10] flex items-center justify-center  right-0 left-0  h-20 w-full ">
@@ -68,18 +68,18 @@ const NewPricing: FC = ({}) => {
                   {item.plan}
                 </h2>
               </div>
-              <div className="w-full h-[100px] flex items-center justify-center">
+              <div className="w-full h-[140px] flex items-center justify-center">
                 <p className="text-gray-500 text-xl">
-                  <span className="text-4xl font-bold mx-3 text-black">
-                    DZD{" "}
-                    {isPaymentByMonth ? item.price : Number(item.price) - 1000}
+                  <span className="text-4xl font-bold mx-3  text-black">
+                    {/* DZD{" "}
+                    {isPaymentByMonth ? item.price : Number(item.price) - 1000} */}
+                    قريبا
                   </span>
-                  /شهرياً
                 </p>
               </div>
               <Button
                 size="lg"
-                className="rounded-full h-14 w-[80%] text-lg font-bold mx-auto  hover:scale-105 transition-all duration-150"
+                className="rounded-full h-20 w-[80%] text-lg font-bold mx-auto  hover:scale-105 transition-all duration-150 "
               >
                 اشترك الان
               </Button>
