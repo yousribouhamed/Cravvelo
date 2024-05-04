@@ -105,7 +105,7 @@ export default function Page() {
                 والسرقة وغيرها.
               </p>
               {/* bg-[#F8FAE5] */}
-              <div className="w-full h-[400px] border-[#FC6B00] border    bg-blue-500 rounded-lg"></div>
+              <div className="w-full h-[400px] border-[#FC6B00] border   bg-[#F8FAE5] rounded-lg"></div>
             </div>
           </MaxWidthWrapper>
         </FadeIn>
