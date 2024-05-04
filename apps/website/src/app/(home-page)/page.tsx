@@ -1,16 +1,16 @@
-// import MaxWidthWrapper from "../../components/max-width-wrapper";
-// import WhatYouCanDo from "./sections/what-you-can-do";
+import MaxWidthWrapper from "../../components/max-width-wrapper";
+import WhatYouCanDo from "./sections/what-you-can-do";
 import HeroLights from "../../components/svgs/hero-lights";
 // import Pricing from "./sections/pricing";
 import Hero from "./sections/hero";
-// import HowPlatformWorks from "./sections/how-platform-works";
-// import CreateLanch from "./sections/create-lanch";
-// import EaseSpeed from "./sections/ease-speed";
-// import NewExperiance from "./sections/new-experiance";
-// import StartNew from "./sections/start-new";
+import HowPlatformWorks from "./sections/how-platform-works";
+import CreateLanch from "./sections/create-lanch";
+import EaseSpeed from "./sections/ease-speed";
+import NewExperiance from "./sections/new-experiance";
+import StartNew from "./sections/start-new";
 // import SiteFooter from "@/src/components/layout/site-footer";
-// import FadeIn from "@/src/components/animations/fade-in";
-// import NewPricing from "./sections/new-pricing";
+import FadeIn from "@/src/components/animations/fade-in";
+import NewPricing from "./sections/new-pricing";
 
 // diable animations on mobil
 
@@ -22,12 +22,7 @@ export default function Page() {
       <div className="  w-full h-fit min-h-full">
         <Hero />
         <HeroLights />
-        <FadeIn>
-          <WhatYouCanDo />
-        </FadeIn>
-        <FadeIn>
-          <WhatYouCanDo />
-        </FadeIn>
+
         <FadeIn>
           <WhatYouCanDo />
         </FadeIn>
