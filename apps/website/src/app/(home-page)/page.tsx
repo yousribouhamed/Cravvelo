@@ -22,13 +22,13 @@ export default function Page() {
       <div className="  w-full h-fit min-h-full">
         <Hero />
         <HeroLights />
-        {/* <FadeIn>
+        <FadeIn>
           <WhatYouCanDo />
         </FadeIn>
         <FadeIn>
           <WhatYouCanDo />
-        </FadeIn> */}
-        {/* <FadeIn>
+        </FadeIn>
+        <FadeIn>
           <WhatYouCanDo />
         </FadeIn>
         <FadeIn>
@@ -164,12 +164,11 @@ export default function Page() {
         <FadeIn>
           <MaxWidthWrapper>
             {/* <Pricing /> */}
-        {/* <NewPricing />
+            <NewPricing />
           </MaxWidthWrapper>
         </FadeIn>
         <StartNew />
-        <SiteFooter />
-     */}
+        {/* <SiteFooter /> */}
       </div>
     </>
   );
