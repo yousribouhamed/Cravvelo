@@ -35,7 +35,7 @@ export default function Page() {
           <EaseSpeed />
         </FadeIn>
         <FadeIn>
-          <MaxWidthWrapper className="my-16 ">
+          <MaxWidthWrapper className="my-16  ">
             <div className="w-full min-h-[250px] h-fit  flex flex-col justify-center gap-y-8 pt-12  ">
               <h2 className="text-5xl font-bold text-center   leading-[4rem] md:leading-10">
                 قدرات جديدة، بتجربة مذهلة، في
@@ -71,7 +71,7 @@ export default function Page() {
           <NewExperiance />
         </FadeIn>
         <FadeIn>
-          <MaxWidthWrapper className="my-8">
+          <MaxWidthWrapper className="my-8 ">
             <div className="w-full min-h-[250px] h-fit  flex flex-col justify-center  gap-y-8  pt-20 ">
               <div className="w-full h-[100px] relative flex flex-col justify-center items-center">
                 <div className="bg-primary rounded-2xl w-[300px] h-[70px] flex items-center justify-center -rotate-12">
@@ -104,12 +104,13 @@ export default function Page() {
                 أدوات تتيح حماية المحتوى من الاستخدامات غير القانونية كالنسخ
                 والسرقة وغيرها.
               </p>
-              <div className="w-full h-[400px] border-[#FC6B00] border   bg-[#F8FAE5] rounded-lg"></div>
+              {/* bg-[#F8FAE5] */}
+              <div className="w-full h-[400px] border-[#FC6B00] border    bg-blue-500 rounded-lg"></div>
             </div>
           </MaxWidthWrapper>
         </FadeIn>
         <FadeIn>
-          <MaxWidthWrapper className="my-8">
+          <MaxWidthWrapper className="my-8 ">
             <div className="w-full min-h-[250px] h-fit  flex flex-col justify-center gap-y-8  ">
               <h2 className="text-5xl font-bold text-center">أهم المميزات</h2>
               <p className="text-center my-4 text-xl">

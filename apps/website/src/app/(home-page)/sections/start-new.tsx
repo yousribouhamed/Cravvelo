@@ -21,7 +21,7 @@ const StartNew: FC = ({}) => {
             ابدء تجربتك المجانية
           </Button>
         </div>
-        <div className="col-span-1 lg:absolute ml-20 mt-1 left-12 bottom-0  top-0 ">
+        <div className="col-span-1 lg:absolute ml-9 md:ml-20 mt-1 left-10 md:left-12 bottom-0  top-0 ">
           <Image
             src="/teacher.png"
             alt="teacher image"

@@ -20,15 +20,15 @@ const NewPricing: FC = ({}) => {
 
   return (
     <div className="w-full min-h-[1080px] h-fit my-10 p-4 md:p-0 ">
-      <div className="w-full min-h-[150px] h-fit  flex justify-center items-start  pl-48 ">
-        <div className="bg-white rounded-full transition-all duration-150 relative shadow-2xl w-fit h-[60px] flex items-center gap-x-4 justify-center p-4">
+      <div className="w-full min-h-[150px] h-fit  flex justify-center items-start   mx-auto ">
+        <div className="bg-white rounded-full transition-all duration-150 relative shadow-2xl  mx-auto w-[250px] h-full flex items-center  justify-center p-4">
           <Tabs
             setPaymentType={setIsPaymentByMonth}
-            activeTabClassName={"bg-[#FC6B00] text-white"}
+            activeTabClassName={"bg-[#FC6B00] text-white w-full h-full"}
             // containerClassName={`w-full h-full`}
             tabs={[
               {
-                title: "سنوي",
+                title: "سنوي ",
                 value: DISPLAY_VALUES.yearly,
               },
               {
