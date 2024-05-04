@@ -40,7 +40,7 @@ export default function Page() {
               <h2 className="text-5xl font-bold text-center   leading-[4rem] md:leading-10">
                 قدرات جديدة، بتجربة مذهلة، في
                 <span className="text-[#FC6B00] relative block my-12 lg:my-0 lg:inline-block mx-8  ">
-                  <div className="absolute -top-20 bottom-0 right-[4.5rem] md:right-32 lg:-right-5 ">
+                  <div className="absolute -top-20 bottom-0 right-[1.5rem] md:right-32 lg:-right-5 ">
                     <svg
                       width="260"
                       height="220"
@@ -80,7 +80,7 @@ export default function Page() {
                     آمان🔒محتواك.
                   </span>
                 </div>
-                <div className="bg-[#F4EDE5]  flex items-center justify-center border-[2px] border-black rounded-2xl w-[300px] h-[70px] absolute -rotate-12 right-[25%] 2xl:-bottom-2 -bottom-16 md:-bottom-4 ">
+                <div className="bg-[#F4EDE5]  flex items-center justify-center border-[2px] border-black rounded-2xl w-[300px] h-[70px] absolute -rotate-12 right-[9%] md:right-[25%] 2xl:-bottom-2 -bottom-16 md:-bottom-4 ">
                   <span className="text-4xl font-bold"> حافظ على</span>
                   <div className="absolute -left-9 top-2">
                     <svg

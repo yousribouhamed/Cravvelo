@@ -5,7 +5,7 @@ interface EaseSpeedAbdullahProps {}
 
 const EaseSpeed: FC = ({}) => {
   return (
-    <MaxWidthWrapper className="my-6 p-4 lg:p-0">
+    <MaxWidthWrapper className="my-6  p-0">
       <section
         id="FEATURES2"
         className="w-full min-h-[250px] h-fit grid grid-cols-1 lg:grid-cols-3 gap-10 px-8 2xl:px-0  "

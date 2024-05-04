@@ -25,10 +25,12 @@ const CreateLanch: FC = ({}) => {
               </svg>
             </div>
             <div className=" w-[200px]  md:w-[250px]  lg:w-[300px] h-[70px]  rounded-2xl  bg-primary flex items-center justify-center absolute  -bottom-8 p-2 rotate-6 right-3 md:right-5">
-              <p className="text-3xl font-extrabold text-white">أنشئ، وأطلق</p>
+              <p className=" text-xl md:text-3xl font-extrabold text-white">
+                أنشئ، وأطلق
+              </p>
             </div>
-            <div className=" w-[200px] md:w-[250px] lg:w-[300px] h-[70px]  rounded-2xl  bg-[#FFC901] flex items-center justify-center p-2 absolute right-[13rem] lg:right-[20rem] top-0 -rotate-12 z-10">
-              <p className="text-3xl font-extrabold text-black">
+            <div className=" w-[150px] md:w-[250px] lg:w-[300px] h-[70px]  rounded-2xl  bg-[#FFC901] flex items-center justify-center p-2 absolute right-[12rem] lg:right-[20rem] top-0 -rotate-12 z-10">
+              <p className=" text-xl md:text-3xl font-extrabold text-black">
                 {" "}
                 دورتك التدريبية
               </p>
