@@ -171,7 +171,7 @@ export default function Page() {
           <MaxWidthWrapper>
             <div
               dir="ltr"
-              className="w-full  h-full flex items-center flex-col gap-y-4 md:flow-row md:justify-between "
+              className="w-full  h-full flex items-center flex-col gap-y-4 md:flex-row md:justify-between "
             >
               <Image
                 src={"/white-cravvelo-logo.svg"}
