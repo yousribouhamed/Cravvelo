@@ -8,9 +8,11 @@ import CreateLanch from "./sections/create-lanch";
 import EaseSpeed from "./sections/ease-speed";
 import NewExperiance from "./sections/new-experiance";
 import StartNew from "./sections/start-new";
-// import SiteFooter from "@/src/components/layout/site-footer";
+import SiteFooter, { footerLinks } from "@/src/components/layout/site-footer";
 import FadeIn from "@/src/components/animations/fade-in";
 import NewPricing from "./sections/new-pricing";
+import Image from "next/image";
+import Link from "next/link";
 
 // diable animations on mobil
 
@@ -164,6 +166,35 @@ export default function Page() {
         </FadeIn>
         <StartNew />
         {/* <SiteFooter /> */}
+
+        <div className="w-full h-[250px] md:h-[150px] mt-20 bg-primary flex items-center justify-center p-4">
+          <MaxWidthWrapper>
+            <div
+              dir="ltr"
+              className="w-full  h-full flex items-center flex-col gap-y-4 md:flow-row md:justify-between "
+            >
+              <Image
+                src={"/white-cravvelo-logo.svg"}
+                alt="logo"
+                width={200}
+                height={70}
+                // className="w-[200px] h-[70px]"
+              />
+
+              <span className=" text-md lg:text-lg text-white text-start">
+                © 2024 cravvelo. All rights reserved.
+              </span>
+
+              <div className="w-[100px] h-full flex items-center justify-center md:justify-end gap-x-4">
+                {footerLinks.map((item, index) => (
+                  <Link key={item.url + index} href={item.url}>
+                    <item.icons />
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </MaxWidthWrapper>
+        </div>
       </div>
     </>
   );
