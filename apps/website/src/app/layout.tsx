@@ -1,6 +1,6 @@
 import "@ui/styles/globals.css";
 import { NavBar } from "../components/layout/header/nav-bar";
-
+import {Analytics} from "@vercel/analytics/react"
 import { CrispChat } from "../components/crisp-chat";
 import { constructMetadata } from "../lib/utils";
 
@@ -32,6 +32,7 @@ export default function RootLayout({
         src="https://unpkg.com/@material-tailwind/html@latest/scripts/ripple.js"
         async
       /> */}
+      <Analytics />
     </html>
   );
 }
