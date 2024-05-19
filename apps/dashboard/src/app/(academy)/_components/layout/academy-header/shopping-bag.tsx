@@ -9,10 +9,12 @@ import AcademyPyments from "../../forms/academy-pyments";
 
 export default function ShoppingCardProduction({
   subdomain,
+  islogged,
   color,
 }: {
   subdomain: string | null;
   color: string;
+  islogged: boolean;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -161,6 +163,7 @@ export default function ShoppingCardProduction({
                       </div>
                       {state.shoppingBag.length > 0 && (
                         <AcademyPyments
+                          islogged={islogged}
                           setOpen={setOpen}
                           subdomain={subdomain}
                           color={color}

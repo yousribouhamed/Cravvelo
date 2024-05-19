@@ -37,7 +37,11 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
           <LinksNavbar />
         </div>
         <div className="flex w-fir min-w-[100px] justify-end items-center">
-          <ShoppingCardProduction color={color} subdomain={subdomain} />
+          <ShoppingCardProduction
+            islogged={isAuthanticated && student?.id ? true : false}
+            color={color}
+            subdomain={subdomain}
+          />
           {isAuthanticated && student?.id ? (
             <StudentNav student={student} />
           ) : (

@@ -157,6 +157,7 @@ export const SIDE_BAR_ITEMS = [
   {
     title: "الإعدادات",
     icon: Icons.settings,
+    slug: "/settings",
     subitems: [
       // {
       //   title: "إعدادات الاكاديمية",
@@ -179,6 +180,5 @@ export const SIDE_BAR_ITEMS = [
         slug: "/pricing",
       },
     ],
-    slug: "/settings",
   },
 ];

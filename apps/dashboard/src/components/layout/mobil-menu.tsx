@@ -21,6 +21,7 @@ import { ScrollArea } from "@ui/components/ui/scroll-area";
 import { cn } from "@ui/lib/utils";
 import Link from "next/link";
 import { SIDE_BAR_ITEMS } from "../../constants/side-bar-items";
+import { getValueFromUrl } from "@/src/lib/utils";
 
 interface MobileLinkProps extends React.PropsWithChildren {
   href: string;
@@ -63,6 +64,9 @@ const SideBarMenu: FC = ({}) => {
   const router = useRouter();
   const path = usePathname();
 
+  console.log("we get somevalue from the url");
+  console.log(getValueFromUrl(path, 1));
+
   return (
     <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 ">
       <div className="w-full">
@@ -78,7 +82,8 @@ const SideBarMenu: FC = ({}) => {
                     {
                       "text-white bg-[#A44600] hover:bg-[#A44600]":
                         path === item.slug ||
-                        (path.includes(item.slug) && item.slug !== "/"),
+                        (path.includes(getValueFromUrl(item.slug, 1)) &&
+                          item.slug !== "/"),
                     }
                   )}
                 >
@@ -100,7 +105,8 @@ const SideBarMenu: FC = ({}) => {
                     {
                       "text-white bg-[#A44600] hover:bg-[#A44600]":
                         path === item.slug ||
-                        (path.includes(item.slug) && item.slug !== "/"),
+                        (item.slug.includes(getValueFromUrl(path, 1)) &&
+                          item.slug !== "/"),
                     }
                   )}
                 >
@@ -114,7 +120,8 @@ const SideBarMenu: FC = ({}) => {
                     {item.subitems?.map((subItem, index) => (
                       <MobileLink
                         isSelected={
-                          path === subItem.slug || path.includes(subItem.slug)
+                          path === subItem.slug ||
+                          subItem.slug.includes(getValueFromUrl(path, 2))
                         }
                         key={index}
                         href={subItem.slug}

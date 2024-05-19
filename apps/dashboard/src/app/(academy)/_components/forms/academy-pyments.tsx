@@ -12,12 +12,14 @@ interface AcademyPymentsProps {
   subdomain: string | null;
   setOpen: Dispatch<SetStateAction<boolean>>;
   color: string;
+  islogged: boolean;
 }
 
 const AcademyPyments: FC<AcademyPymentsProps> = ({
   subdomain,
   setOpen,
   color,
+  islogged,
 }) => {
   const { state, actions } = useAcademiaStore();
 
@@ -166,7 +168,7 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({
                 ?.reduce((current, next) => current + next)}
         </span>
       </div>
-      {subdomain ? (
+      {islogged ? (
         <button
           onClick={proccessPayment}
           disabled={loading}
