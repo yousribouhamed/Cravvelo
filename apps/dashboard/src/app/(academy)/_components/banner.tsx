@@ -3,11 +3,17 @@ import type { FC } from "react";
 
 interface BannerProps {
   websiteName: string;
+  color: string;
 }
 
-const Banner: FC<BannerProps> = ({ websiteName }) => {
+const Banner: FC<BannerProps> = ({ websiteName, color }) => {
   return (
-    <div className="w-full h-[250px] bg-primary rounded-xl my-10 grid grid-cols-2 ">
+    <div
+      className="w-full h-[250px]  rounded-xl my-10 grid grid-cols-2 "
+      style={{
+        backgroundColor: color ?? "#FC6B00",
+      }}
+    >
       <div className=" w-full flex flex-col gap-y-2 justify-between items-start p-4">
         <div className="flex flex-col gap-y-4">
           <span className=" text-xl sm:text-2xl text-white">
