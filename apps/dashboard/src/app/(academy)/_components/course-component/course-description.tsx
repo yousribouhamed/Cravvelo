@@ -7,7 +7,7 @@ const CourseDescription: FC = (props: any) => {
       <div className="w-full h-[50px] flex items-center justify-start gap-x-4">
         <h3 className="text-xl font-bold">وصف الوردة</h3>
       </div>
-      <div className="w-full h-[200px] ">
+      <div className="w-full min-h-[200px] h-fit ">
         {!props?.value ? (
           <p>there is no description </p>
         ) : (
