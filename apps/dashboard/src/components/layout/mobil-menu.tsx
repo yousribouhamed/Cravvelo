@@ -67,6 +67,9 @@ const SideBarMenu: FC = ({}) => {
   console.log("we get somevalue from the url");
   console.log(getValueFromUrl(path, 1));
 
+  console.log("we get path from the url");
+  console.log(path);
+
   return (
     <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 ">
       <div className="w-full">
@@ -81,9 +84,9 @@ const SideBarMenu: FC = ({}) => {
                     "w-full flex items-center justify-end qatar-semibold text-md  gap-x-2 hover:bg-primary !text-white",
                     {
                       "text-white bg-[#A44600] hover:bg-[#A44600]":
-                        path === item.slug ||
-                        (path.includes(getValueFromUrl(item.slug, 1)) &&
-                          item.slug !== "/"),
+                        (item.slug.includes(getValueFromUrl(path, 1)) &&
+                          path !== "/") ||
+                        path === item.slug,
                     }
                   )}
                 >
@@ -104,9 +107,9 @@ const SideBarMenu: FC = ({}) => {
                     "w-full flex items-center justify-end qatar-semibold group text-md  gap-x-2 hover:bg-primary !text-white ",
                     {
                       "text-white bg-[#A44600] hover:bg-[#A44600]":
-                        path === item.slug ||
                         (item.slug.includes(getValueFromUrl(path, 1)) &&
-                          item.slug !== "/"),
+                          path !== "/") ||
+                        path === item.slug,
                     }
                   )}
                 >
