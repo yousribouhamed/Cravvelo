@@ -48,21 +48,6 @@ export const create_rating = async ({
 
     const newCourseRating = AllRaiting / comments.length;
 
-    console.log("this is the course rating ");
-    console.log(AllRaiting);
-    console.log("this is the current rating ");
-    console.log(rating);
-
-    console.log("this is the lengght");
-    console.log(comments.length);
-
-    console.log("this is the calculated rating");
-
-    console.log(newCourseRating);
-
-    console.log("and this is the id of the course");
-    console.log(course.id);
-
     await prisma.course
       .update({
         where: { id: course.id },
