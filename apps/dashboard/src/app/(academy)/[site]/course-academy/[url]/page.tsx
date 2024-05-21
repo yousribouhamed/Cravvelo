@@ -60,7 +60,7 @@ const Page = async ({ params }: PageProps) => {
   ]);
 
   const chapters = await get_course_chapters({ courseID: course?.id });
-  const comments = await get_course_rating({ courseId: course.id });
+  const comments = await get_course_rating({ courseId: course?.id });
 
   if (!website) {
     notFound();

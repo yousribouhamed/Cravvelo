@@ -87,17 +87,19 @@ const Raitings: FC<{ course: Course; comments: Comment[] }> = ({
                 </div>
               )}
               {comments[0] && (
-                <Image
+                <img
                   width={10}
                   height={10}
                   className="inline-block h-8 w-8 rounded-full ring-2 ring-white"
-                  src={comments[0].studentImage}
+                  src={
+                    "https://cdn.pixabay.com/photo/2021/11/12/03/04/woman-6787784_640.png"
+                  }
                   alt=""
                 />
               )}
 
               {comments[1] && (
-                <Image
+                <img
                   width={10}
                   height={10}
                   className="inline-block h-8 w-8 rounded-full ring-2 ring-white"
@@ -106,7 +108,7 @@ const Raitings: FC<{ course: Course; comments: Comment[] }> = ({
                 />
               )}
               {comments[2] && (
-                <Image
+                <img
                   width={10}
                   height={10}
                   className="inline-block h-8 w-8 rounded-full ring-2 ring-white"

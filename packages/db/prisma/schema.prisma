@@ -37,7 +37,7 @@ model Account {
   Student         Student[]
   PaymentsConnect PaymentsConnect[]
   Payments        Payments[]
-  Comment         Comment[]
+
 }
 
 model PaymentsConnect {
@@ -233,7 +233,7 @@ model Comment {
   accountId    String
   status       String   @default("verification_pending")
   Course       Course?  @relation(fields: [courseId], references: [id])
-  Account      Account  @relation(fields: [accountId], references: [id])
+
 
   @@index([id])
   @@index([courseId])
