@@ -3,7 +3,8 @@ import "@ui/styles/globals.css";
 import Providers from "../components/Providers";
 import Script from "next/script";
 import { Toaster } from "@ui/components/ui/sonner";
-import { constructMetadata } from "../lib/utils";
+
+import { Analytics } from "@vercel/analytics/react";
 
 export default function RootLayout({
   children,
@@ -17,6 +18,8 @@ export default function RootLayout({
         className={`selection:bg-[#FC6B00] selection:text-white antialiased `}
       >
         <Providers>{children}</Providers>
+
+        <Analytics />
       </body>
       <Toaster
         toastOptions={{

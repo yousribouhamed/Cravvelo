@@ -153,6 +153,7 @@ import { withPlaceholders } from "@/src/components/plate-ui/placeholder";
 import { withDraggables } from "@/src/components/plate-ui/with-draggables";
 import { EmojiCombobox } from "@/src/components/plate-ui/emoji-combobox";
 import { TooltipProvider } from "../plate-ui/tooltip";
+import { useRef } from "react";
 
 const plugins = createPlugins(
   [
@@ -361,6 +362,7 @@ export function PlateEditor({
   onChnage: (richTeact: any) => void;
   value?: any;
 }) {
+  const containerRef = useRef(null);
   return (
     <TooltipProvider>
       <DndProvider backend={HTML5Backend}>
@@ -373,19 +375,20 @@ export function PlateEditor({
                   {
                     id: "1",
                     type: "p",
-                    children: [{ text: "وصف المحتوى" }],
+                    children: [{ text: " " }],
                   },
                 ]
           }
           onChange={(val) => onChnage(val)}
           readOnly={false}
         >
-          <div className="bg-white border rounded-xl">
+          <div ref={containerRef} className="bg-white border rounded-xl">
             <FixedToolbar>
               <FixedToolbarButtons />
             </FixedToolbar>
 
             <Editor
+              placeholder=""
               readOnly={false}
               className="min-h-[150px] h-fit  w-full border-none"
             />

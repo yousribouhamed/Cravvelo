@@ -35,20 +35,29 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 // send email to virify student
 
-export const verifyStudentEmail = async ({ email }: { email: string }) => {
-  const secretKey = "abdullahsecretkey";
-  const generateJwt = jwt.sign(
-    { numericToken: generateNumericToken() },
-    secretKey,
-    { expiresIn: "1 hour" }
-  ); // Token expires in 1 hour
-
+export const verifyStudentEmail = async ({
+  email,
+  code,
+}: {
+  email: string;
+  code: number;
+}) => {
+  console.log("this is the email we are sending to ");
+  console.log(email);
   const { data, error } = await resend.emails.send({
     from: "Acme <onboarding@resend.dev>",
     to: [email],
     subject: "قم بتأكيد بريدك الألكتروني",
-    react: CravveloVerifyEmailStudent({ verificationCode: generateJwt }),
+    react: CravveloVerifyEmailStudent({ verificationCode: code.toString() }),
   });
+
+  if (error) {
+    console.log("there is an error");
+    console.log(error.message);
+  }
+
+  console.log("the email has been send with this data");
+  console.log(data);
 };
 
 // reset password  confirme email

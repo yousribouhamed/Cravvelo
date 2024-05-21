@@ -9,7 +9,11 @@
  */
 
 import { prisma } from "database/src";
-import { getJwtSecritKey, verifyToken } from "../lib";
+import {
+  generateRandomSixDigitNumber,
+  getJwtSecritKey,
+  verifyToken,
+} from "../lib";
 import bcrypt from "bcrypt";
 import { jwtVerify, SignJWT } from "jose";
 import { cookies } from "next/headers";
@@ -60,10 +64,12 @@ export const create_student = async ({
     courses: [],
   } as StudentBag;
 
+  const codeOtp = generateRandomSixDigitNumber();
   // Create new student in the database
   const student = await prisma.student.create({
     data: {
       email,
+      otp: generateRandomSixDigitNumber(),
       full_name,
       password: hashedPassword,
       accountId,
@@ -71,7 +77,9 @@ export const create_student = async ({
     },
   });
 
-  await verifyStudentEmail({ email });
+  await verifyStudentEmail({ email, code: codeOtp });
+
+  console.log("the method has to be invoked");
 
   cookies().set({
     name: "studentIdVerifyEmail",
@@ -250,12 +258,8 @@ const verifyJwtAndGetNumericToken = (jwtToken) => {
   }
 };
 
-export const verifyEmailAction = async ({ jwtToken }: { jwtToken: string }) => {
-  console.log("this is the numerique value");
-  console.log(jwtToken);
-  const response = await verifyJwtAndGetNumericToken({ jwtToken });
-
-  console.log(response);
+export const verifyEmailAction = async ({ code }: { code: string }) => {
+  //TODO VIRIFY THE CODE SEND TO THE STUDENT
 
   const studentId = cookies().get("studentIdVerifyEmail")?.value;
   const student = await prisma.student.update({

@@ -51,12 +51,10 @@ export function AcademyVerifyEmailForm({
     try {
       setIsLoading(true);
 
-      const student = await verifyEmailAction({ jwtToken: data.code });
+      const student = await verifyEmailAction({ code: data.code });
 
-      console.log(student);
+      maketoast.successWithText({ text: "تم تاكيد حسابك سجل دخولك الان" });
 
-      maketoast.successWithText({ text: "تم تسجيل الدخول بنجاح" });
-      window.location.reload();
       router.push("/auth-academy/sign-in");
     } catch (err) {
       console.error(err);

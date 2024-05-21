@@ -150,3 +150,9 @@ export function calculateRatingPercentage(
   // Return the percentage with two decimal places
   return parseFloat(ratingPercentage.toFixed(2));
 }
+
+export function generateRandomSixDigitNumber(): number {
+  const min = 100000;
+  const max = 999999;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}

@@ -273,6 +273,7 @@ model Student {
   full_name     String
   photo_url     String?   @db.Text
   bio           String?
+  otp           Int?
   email         String    @unique
   phone         String?   @unique
   accountId     String
