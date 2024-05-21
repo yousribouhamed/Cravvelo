@@ -87,7 +87,11 @@ const Page = async ({ params }: PageProps) => {
             </h1>
 
             <CourseDisplayContent course={course} chapters={chapters} />
-            <Raitings course={course} comments={comments} />
+            <Raitings
+              color={website?.color}
+              course={course}
+              comments={comments}
+            />
           </div>
           <Product_card
             comments={comments}

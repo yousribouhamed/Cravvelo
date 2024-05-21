@@ -9,7 +9,13 @@ import { create_rating } from "../_actions/rating";
 import { maketoast } from "@/src/components/toasts";
 import { revalidatePath } from "next/cache";
 
-export default function AddReview({ course }: { course: Course }) {
+export default function AddReview({
+  course,
+  color,
+}: {
+  course: Course;
+  color: string;
+}) {
   const [open, setOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [rating, setRating] = useState<number>(0);
@@ -29,14 +35,12 @@ export default function AddReview({ course }: { course: Course }) {
       maketoast.successWithText({
         text: "لقد تم إرسال تعليقك للمراجعة، عند الموافقة عليه سيتم عرضه",
       });
-      revalidatePath(`/course-academy/${course.id}`);
-      // window?.location?.reload();
+      // revalidatePath(`/course-academy/${course.id}`);
+      window?.location?.reload();
     } catch (err) {
       maketoast.error();
       console.error(err);
     } finally {
-      //
-
       setLoading(false);
       setOpen(false);
     }
@@ -81,7 +85,7 @@ export default function AddReview({ course }: { course: Course }) {
                       <div className="mt-3 w-full  flex items-center justify-between text-center  sm:mt-0 sm:text-right">
                         <Dialog.Title
                           as="h3"
-                          className="text-base font-semibold leading-6 text-gray-900"
+                          className="text-base font-semibold leading-6 text-black"
                         >
                           إضافة تقييم لهذه الدورة
                         </Dialog.Title>
@@ -114,7 +118,7 @@ export default function AddReview({ course }: { course: Course }) {
                         <textarea
                           value={content}
                           onChange={(e) => setContent(e.target.value)}
-                          className="h-[150px] w-full rounded-lg border placeholder:text-[#8A8A8A] border-[#E6E6E6] bg-white dark:bg-white/10 dark:border-black px-3 py-2 text-sm    focus-visible:outline-none   focus:border-[#FC6B00]   transition-all duration-75  focus:border-2  disabled:cursor-not-allowed disabled:opacity-50 "
+                          className="h-[150px] w-full rounded-lg border placeholder:text-[#8A8A8A] border-[#E6E6E6] bg-white dark:bg-white/10 dark:border-black px-3 py-2 text-sm    focus-visible:outline-none   focus:border-black   transition-all duration-75  focus:border-2  disabled:cursor-not-allowed disabled:opacity-50 "
                         />
                       </div>
                     </div>
@@ -123,7 +127,10 @@ export default function AddReview({ course }: { course: Course }) {
                     <button
                       disabled={loading}
                       type="button"
-                      className="inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm  text-white shadow-sm hover:bg-orange-700 sm:ml-3 sm:w-auto disabled:opacity-75 disabled:cursor-not-allowed"
+                      className="inline-flex w-full justify-center rounded-md  px-3 py-2 text-sm  text-white shadow-sm hover:bg-opacity-50 sm:ml-3 sm:w-auto disabled:opacity-75 disabled:cursor-not-allowed"
+                      style={{
+                        backgroundColor: color,
+                      }}
                       onClick={() => submiteReview()}
                     >
                       {loading && (
@@ -133,7 +140,7 @@ export default function AddReview({ course }: { course: Course }) {
                     </button>
                     <button
                       type="button"
-                      className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                      className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm  text-black shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                       onClick={() => setOpen(false)}
                       ref={cancelButtonRef}
                     >

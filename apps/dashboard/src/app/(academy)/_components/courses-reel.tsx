@@ -87,12 +87,13 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
                       {item.nbrChapters} مادة
                     </span>
                   </div>
-
-                  <StarRatings
-                    rating={item.rating}
-                    starDimension="20px"
-                    starSpacing="1px"
-                  />
+                  <div dir="ltr">
+                    <StarRatings
+                      rating={item.rating}
+                      starDimension="20px"
+                      starSpacing="1px"
+                    />
+                  </div>
                 </div>
 
                 {/* this will hold the price */}

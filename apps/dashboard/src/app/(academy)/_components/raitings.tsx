@@ -11,12 +11,12 @@ import {
   formatDateTime,
 } from "../lib";
 import { Progress } from "@ui/components/ui/progress";
-import Image from "next/image";
 
 const avrage = [5, 4, 3, 2, 1];
 
-const Raitings: FC<{ course: Course; comments: Comment[] }> = ({
+const Raitings: FC<{ course: Course; comments: Comment[]; color: string }> = ({
   course,
+  color,
   comments,
 }) => {
   return (
@@ -122,7 +122,7 @@ const Raitings: FC<{ course: Course; comments: Comment[] }> = ({
       </div>
 
       <div className=" h-[70px] w-full flex justify-between items-center px-4  ">
-        <AddReview course={course} />
+        <AddReview color={color} course={course} />
         <span className="font-bold text-2xl text-black">
           All Reviews ({comments.length})
         </span>

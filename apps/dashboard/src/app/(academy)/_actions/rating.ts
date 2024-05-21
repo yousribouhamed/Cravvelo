@@ -16,9 +16,6 @@ export const create_rating = async ({
   try {
     const student = await getStudent();
 
-    console.log("this is the student when we create the comment");
-    console.log("student");
-
     if (!student || !student.accountId) {
       throw new Error("there is no student");
     }
