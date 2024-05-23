@@ -7,6 +7,7 @@ import "react-circular-progressbar/dist/styles.css";
 interface StudentProgressProps {
   totalVideos: number;
   currentVideo: number;
+  color: string;
 }
 
 function calculateProgress(episode: number, videos: number): number {
@@ -23,6 +24,7 @@ function calculateProgress(episode: number, videos: number): number {
 const studentProgress: FC<StudentProgressProps> = ({
   currentVideo,
   totalVideos,
+  color,
 }) => {
   const percentage = calculateProgress(currentVideo, totalVideos);
   return (
@@ -33,7 +35,7 @@ const studentProgress: FC<StudentProgressProps> = ({
           text={`${percentage}%`}
           styles={buildStyles({
             textColor: "#000000",
-            pathColor: "#FC6B00",
+            pathColor: color,
             trailColor: "#EBEBEB",
             textSize: "25px",
           })}

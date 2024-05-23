@@ -7,9 +7,10 @@ import { Loader } from "lucide-react";
 import { revalidatePath } from "next/cache";
 interface CompleteCourseProps {
   courseId: string;
+  color: string;
 }
 
-const CompleteCourse: FC<CompleteCourseProps> = ({ courseId }) => {
+const CompleteCourse: FC<CompleteCourseProps> = ({ courseId, color }) => {
   const { state } = useCoursePlayerStore();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -34,7 +35,8 @@ const CompleteCourse: FC<CompleteCourseProps> = ({ courseId }) => {
           }
         }}
         disabled={loading}
-        className="bg-primary  rounded-xl text-white py-2 px-4 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer "
+        className="  rounded-xl text-white py-2 px-4 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer "
+        style={{ backgroundColor: color }}
       >
         {loading && <Loader className="w-4 h-4 ml-2 animate-spin" />}
         أكمل واستمر

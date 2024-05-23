@@ -11,6 +11,8 @@ import StudentProgress from "./student-progress";
 import { getStudent } from "@/src/app/(academy)/_actions/auth";
 import CompleteCourse from "./complete-course";
 import VideoChainSheet from "@/src/app/(academy)/_components/course-component/course-player/video-chain-sheet";
+import { getSiteData } from "@/src/app/(academy)/_actions";
+import { getSubDomainValue } from "@/src/app/(academy)/lib";
 
 interface PageProps {
   params: { site: string; url: string };
@@ -29,9 +31,16 @@ const getFirstVideo = (chapter: Chapter): string => {
 
 const Page = async ({ params }: PageProps) => {
   const course = await getCourseByUrlPath({ url: params?.url });
-  const chapters = await get_course_chapters({ courseID: course?.id });
 
-  const student = await getStudent();
+  const subdomain = getSubDomainValue({ value: params.site });
+
+  const [student, website, chapters] = await Promise.all([
+    getStudent(),
+    getSiteData({
+      subdomain,
+    }),
+    get_course_chapters({ courseID: course?.id }),
+  ]);
 
   const currentBag = (await JSON.parse(student.bag as string)) as StudentBag;
 
@@ -60,6 +69,7 @@ const Page = async ({ params }: PageProps) => {
               <div className="w-[50%] h-full flex items-center justify-start gap-x-4">
                 <div className="md:hidden">
                   <VideoChainSheet
+                    color={website.color}
                     currentVideo={currentEpisod ?? 0}
                     totalVideos={course?.nbrChapters ?? 0}
                     currentEpisode={currentEpisod}
@@ -78,18 +88,23 @@ const Page = async ({ params }: PageProps) => {
                 <CourseVideoPlayer videoId={getFirstVideo(chapters[0])} />
               </div>
 
-              <CompleteCourse courseId={course.id} />
+              <CompleteCourse color={website.color} courseId={course.id} />
             </div>
           </div>
         </div>
         <div className=" hidden md:block fixed top-0 bottom-1 right-0 w-[350px] h-full border-l ">
           <StudentProgress
+            color={website.color}
             currentVideo={currentEpisod ?? 0}
             totalVideos={course?.nbrChapters ?? 0}
           />
           <div className="w-full h-full col-span-1 flex flex-col items-end py-8 border-l ">
             {" "}
-            <VideoChain currentEpisode={currentEpisod} chapters={chapters} />
+            <VideoChain
+              color={website.color}
+              currentEpisode={currentEpisod}
+              chapters={chapters}
+            />
           </div>
         </div>
       </div>

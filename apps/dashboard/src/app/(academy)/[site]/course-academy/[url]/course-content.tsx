@@ -67,7 +67,7 @@ const CourseDisplayContent: FC<CourseContentProps> = ({ course, chapters }) => {
                         width: "100%",
                       }}
                       onLoad={() => setVideoLoaded(true)} // Set videoLoaded to true when loaded
-                      allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                      allow="accelerometer; gyroscope;  encrypted-media; picture-in-picture;"
                       allowFullScreen={true}
                     ></iframe>
                   </div>

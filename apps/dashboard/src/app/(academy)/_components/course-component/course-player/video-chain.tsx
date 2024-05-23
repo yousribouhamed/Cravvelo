@@ -24,9 +24,14 @@ function formatDuration(durationSeconds: number): string {
 interface VideoChainProps {
   chapters: Chapter[];
   currentEpisode: number;
+  color: string;
 }
 
-const VideoChain: FC<VideoChainProps> = ({ chapters, currentEpisode }) => {
+const VideoChain: FC<VideoChainProps> = ({
+  chapters,
+  currentEpisode,
+  color,
+}) => {
   // the current episode of the current course
 
   const setCurrentModule = useCoursePlayerStore(
@@ -66,35 +71,40 @@ const VideoChain: FC<VideoChainProps> = ({ chapters, currentEpisode }) => {
                       >
                         {Array.isArray(modules) &&
                           modules?.map((subitem, index) => {
+                            const isActive =
+                              currentModule?.fileUrl === subitem?.fileUrl ||
+                              (currentModule?.fileUrl === undefined &&
+                                index === 0);
+
+                            const getColor = () => {
+                              if (index < currentEpisode) {
+                                return color;
+                              } else if (index === currentEpisode) {
+                                return "bg-green-500";
+                              }
+                              return "bg-white";
+                            };
                             return (
                               <button
                                 key={subitem?.title + index}
-                                className={`w-full h-[70px] flex items-center justify-start gap-x-4 cursor-pointer  hover:opacity-75  transition-all duration-300 ease-in-out ${
-                                  currentModule?.fileUrl === subitem?.fileUrl
-                                    ? "bg-primary/50"
-                                    : currentModule?.fileUrl === undefined &&
-                                      index === 0
-                                    ? "bg-primary/50"
-                                    : ""
-                                } `}
+                                className={`w-full relative h-[70px] flex items-center justify-start gap-x-4 cursor-pointer  hover:opacity-75  transition-all duration-300 ease-in-out `}
                                 onClick={() => {
-                                  console.log("this is subitem");
-                                  console.log(
-                                    "this is the button cliked and it is working as it should"
-                                  );
-                                  console.log(subitem);
                                   setCurrentModule(subitem);
                                 }}
                               >
+                                {isActive && (
+                                  <span
+                                    className="absolute inset-0 opacity-10"
+                                    style={{ backgroundColor: color }}
+                                  ></span>
+                                )}
                                 <div className="w-[60px] h-full  flex items-center justify-center">
                                   <div
-                                    className={`w-[30px] h-[30px] rounded-[50%]  bg-white border-4 border-primary flex items-center justify-center ${
-                                      index < currentEpisode
-                                        ? "bg-primary"
-                                        : index === currentEpisode
-                                        ? "bg-green-500"
-                                        : ""
-                                    }`}
+                                    className={`w-[30px] h-[30px] rounded-[50%]  bg-white border-4  flex items-center justify-center`}
+                                    style={{
+                                      border: `${color} solid 1px`,
+                                      backgroundColor: getColor(),
+                                    }}
                                   >
                                     {index < currentEpisode && (
                                       <Check

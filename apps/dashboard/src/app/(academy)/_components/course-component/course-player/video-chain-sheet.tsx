@@ -12,6 +12,7 @@ interface VideoChainSheetProps {
   currentEpisode: number;
   totalVideos: number;
   currentVideo: number;
+  color: string;
 }
 
 const VideoChainSheet: FC<VideoChainSheetProps> = ({
@@ -19,6 +20,7 @@ const VideoChainSheet: FC<VideoChainSheetProps> = ({
   currentEpisode,
   currentVideo,
   totalVideos,
+  color,
 }) => {
   return (
     <Sheet>
@@ -30,12 +32,17 @@ const VideoChainSheet: FC<VideoChainSheetProps> = ({
       <SheetContent>
         <div className=" w-full h-full  ">
           <StudentProgress
+            color={color}
             currentVideo={currentEpisode}
             totalVideos={totalVideos}
           />
           <div className="w-full h-full col-span-1 flex flex-col items-end py-8  ">
             {" "}
-            <VideoChain currentEpisode={currentEpisode} chapters={chapters} />
+            <VideoChain
+              color={color}
+              currentEpisode={currentEpisode}
+              chapters={chapters}
+            />
           </div>
         </div>
       </SheetContent>

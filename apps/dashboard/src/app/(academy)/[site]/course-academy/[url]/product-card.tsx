@@ -117,7 +117,7 @@ export const Product_card = ({
         dir="ltr"
         className="w-full h-[20px] flex items-center justify-end  gap-x-4 text-red-500"
       >
-        <div className="w-[100px] flex items-center justify-start gap-x-2">
+        <div className="w-[100px] flex items-center justify-start ">
           <span className="text-sm ">{hours}</span>:
           <span className="text-sm ">{minutes}</span>:
           <span className="text-sm ">{seconds}</span>
