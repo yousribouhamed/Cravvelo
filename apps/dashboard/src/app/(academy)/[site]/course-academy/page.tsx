@@ -46,10 +46,10 @@ const Page = async ({ params }: PageProps) => {
           <div className="w-full h-[100px] flex items-center justify-between">
             <h1 className="text-3xl font-bold">الدورات التدربية</h1>
             <div className="md:hidden">
-              <FilterButtonMobile />
+              <FilterButtonMobile  color={website?.color}/>
             </div>
           </div>
-          <CoursesGrid courses={courses} />
+          <CoursesGrid courses={courses} color={website?.color} />
         </div>
       </MaxWidthWrapper>
       <AcademiaFooter />

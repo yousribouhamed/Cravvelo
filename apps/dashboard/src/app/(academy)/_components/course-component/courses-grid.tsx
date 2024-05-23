@@ -12,9 +12,10 @@ import { RadioGroup, RadioGroupItem } from "@ui/components/ui/radio-group";
 
 interface Props {
   courses: Course[];
+  color: string;
 }
 
-const CoursesGrid: FC<Props> = ({ courses }) => {
+const CoursesGrid: FC<Props> = ({ courses, color }) => {
   const router = useRouter();
 
   const handleNavigate = ({ id }: { id: string }) => {
@@ -174,7 +175,12 @@ const CoursesGrid: FC<Props> = ({ courses }) => {
           </div>
         </div>
         <div className="w-full h-fit min-h-[50px] flex flex-col p-4 mb-6">
-          <button className="w-full h-[50px]  bg-primary flex items-center justify-center text-white rounded-xl">
+          <button
+            className="w-full h-[50px]   flex items-center justify-center text-white rounded-xl"
+            style={{
+              background: color,
+            }}
+          >
             تصفية النتائج
           </button>
         </div>
@@ -250,7 +256,10 @@ const CoursesGrid: FC<Props> = ({ courses }) => {
                 <div className="w-full h-[70px] flex items-center justify-center gap-x-4 pt-2 p-4">
                   <button
                     onClick={() => handleNavigate({ id: item.id })}
-                    className="w-[99%] bg-primary text-white p-2 h-[45px] rounded-lg"
+                    className="w-[99%]  text-white p-2 h-[45px] rounded-lg"
+                    style={{
+                      background: color,
+                    }}
                   >
                     اشتري الآن
                   </button>

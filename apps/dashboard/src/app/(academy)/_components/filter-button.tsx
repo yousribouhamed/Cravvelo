@@ -8,7 +8,11 @@ import type { FC } from "react";
 import { RadioGroup, RadioGroupItem } from "@ui/components/ui/radio-group";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
 
-const FilterButtonMobile: FC = ({}) => {
+interface Props {
+  color: string;
+}
+
+const FilterButtonMobile: FC<Props> = ({ color }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -172,7 +176,10 @@ const FilterButtonMobile: FC = ({}) => {
               </div>
             </div>
             <div className="w-full h-fit min-h-[50px] flex flex-col p-4 mb-6">
-              <button className="w-full h-[50px]  bg-primary flex items-center justify-center text-white rounded-xl">
+              <button
+                className="w-full h-[50px]  flex items-center justify-center text-white rounded-xl"
+                style={{ backgroundColor: color }}
+              >
                 تصفية النتائج
               </button>
             </div>

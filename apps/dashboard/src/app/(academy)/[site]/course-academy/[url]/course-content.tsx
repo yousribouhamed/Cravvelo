@@ -31,7 +31,7 @@ const CourseDisplayContent: FC<CourseContentProps> = ({ course, chapters }) => {
   const [videoLoaded, setVideoLoaded] = React.useState(false);
   return (
     <div className="w-full min-h-[300px]  h-fit my-4">
-      <div className="w-full h-14 bg-white  flex  items-center justify-start gap-x-4 ">
+      <div className="w-full h-14 bg-white border rounded-xl  flex  items-center justify-start gap-x-4 ">
         {tabs.map((item, index) => (
           <button
             key={item.name + index}
