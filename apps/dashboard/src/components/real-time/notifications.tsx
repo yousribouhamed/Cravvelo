@@ -39,6 +39,8 @@ const Notifications: FC<NotificationsProps> = ({
     pusherClient?.subscribe(accountId ?? "");
 
     pusherClient?.bind("incomming-notifications", (data: Notification) => {
+      const audio = new Audio("/sounds/notification.mp3");
+      audio.play();
       console.log(data);
       setIsNewNotifications((prev) => prev + 1);
     });
