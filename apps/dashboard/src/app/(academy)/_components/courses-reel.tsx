@@ -74,7 +74,7 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
 
                 <div className="w-full h-[50px] flex items-center justify-between my-4 px-4">
                   <Link href={`/course-academy/${item.id}`}>
-                    <h2 className="text-black font-semibold text-lg text-start hover:text-primary hover:underline  cursor-pointer">
+                    <h2 className="text-black font-semibold text-lg text-start   hover:underline  cursor-pointer">
                       {item.title}
                     </h2>
                   </Link>

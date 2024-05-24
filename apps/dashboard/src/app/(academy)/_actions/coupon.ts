@@ -177,8 +177,5 @@ export const addCourseToStudentBag = ({
     ],
   } as StudentBag;
 
-  console.log("here it is the current student bag");
-  console.log(newStudentBag);
-
   return newStudentBag;
 };

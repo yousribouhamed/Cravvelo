@@ -25,16 +25,37 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      const newBag = addCourseToStudentBag({
-        bag: studentbag,
-        course: course,
-      });
+      const theCourseExists =
+        studentbag?.courses &&
+        studentbag?.courses?.find((item) => item.course.id === course.id);
+
+      // If the course already exists, return the current bag without modification.
+      if (theCourseExists) {
+        return;
+      }
+
+      // If the course doesn't exist, create a new student bag with the added course.
+
+      const oldData =
+        studentbag.courses && studentbag.courses.length > 0
+          ? [...studentbag.courses]
+          : [];
+      const newStudentBag = {
+        courses: [
+          ...oldData,
+          {
+            course,
+            currentEpisode: 0,
+          },
+        ],
+      } as StudentBag;
+
       await prisma.student.update({
         where: {
           id: student.id,
         },
         data: {
-          bag: JSON.stringify(newBag),
+          bag: JSON.stringify(newStudentBag),
         },
       });
       await create_course_sale({
