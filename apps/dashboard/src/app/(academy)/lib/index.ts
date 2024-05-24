@@ -69,13 +69,9 @@ export function calculateDiscountPercentage(
   price: number,
   compareAtPrice: number
 ): number {
-  // Calculate the discount amount
   const discountAmount: number = compareAtPrice - price;
-
-  // Calculate the discount percentage
   const discountPercentage: number = (discountAmount / compareAtPrice) * 100;
-
-  return discountPercentage;
+  return parseFloat(discountPercentage.toFixed(2));
 }
 
 export function formatDateTime(dateTime: Date): string {

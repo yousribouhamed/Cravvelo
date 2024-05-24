@@ -6,7 +6,7 @@ import { useTimer } from "react-timer-hook";
 const LiarSales: FC = ({}) => {
   const expiryTimestamp = new Date();
 
-  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 600 * 12);
+  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 600 * 24);
 
   const { seconds, minutes, hours, days } = useTimer({
     expiryTimestamp,
