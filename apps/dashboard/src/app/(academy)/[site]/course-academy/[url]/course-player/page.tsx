@@ -62,9 +62,9 @@ const Page = async ({ params }: PageProps) => {
 
   return (
     <ContextMenuProvider>
-      <div className="w-full h-full bg-white flex flex-col ">
+      <div className="w-full h-full bg-white  flex flex-col ">
         <div className=" w-full md:w-[calc(100%-350px)] h-full md:mr-[350px] flex flex-col ">
-          <div className="w-full bg-white h-[100px] fixed top-0  z-[10] flex items-center justify-start  border-b">
+          <div className="w-full bg-white h-[100px] fixed top-0 shadow  z-[10] flex items-center justify-start  border-b">
             <div className="h-full max-w-[1500px] mx-auto  w-full flex items-center px-4 ">
               <div className="w-[50%] h-full flex items-center justify-start gap-x-4">
                 <div className="md:hidden">
@@ -82,8 +82,8 @@ const Page = async ({ params }: PageProps) => {
               </div>
             </div>
           </div>
-          <div className="px-0 w-full mt-[100px] max-w-[1500px]  mx-auto">
-            <div className="w-full  min-h-screen h-fit flex flex-col items-center gap-x-4 p-4   ">
+          <div className="px-0 w-full mt-[100px] max-w-[1500px]    mx-auto">
+            <div className="w-full  bg-zinc-50  min-h-screen h-fit flex flex-col items-center gap-x-4 p-4   ">
               <div className="w-full h-fit max-h-[1500px]  bg-black flex flex-col items-center  ">
                 <CourseVideoPlayer
                   color={website.color}
@@ -95,7 +95,7 @@ const Page = async ({ params }: PageProps) => {
             </div>
           </div>
         </div>
-        <div className=" hidden md:block fixed top-0 bottom-1 right-0 w-[350px] h-full border-l ">
+        <div className=" hidden md:block fixed top-0 shadow bottom-1 right-0 w-[350px] h-full border-l ">
           <StudentProgress
             color={website.color}
             currentVideo={currentEpisod ?? 0}

@@ -53,7 +53,11 @@ const VideoChain: FC<VideoChainProps> = ({
                 key={chapter.id + chapterIndex}
                 className="w-full min-h-[50px] h-fit"
               >
-                <Accordion type="single" collapsible>
+                <Accordion
+                  type="single"
+                  collapsible
+                  defaultValue={`item-${chapterIndex}`}
+                >
                   <AccordionItem value={`item-${chapterIndex}`}>
                     <AccordionTrigger asChild>
                       <div className="w-full p-4 h-[50px] flex flex-col items-start justify-center cursor-pointer">
@@ -65,6 +69,7 @@ const VideoChain: FC<VideoChainProps> = ({
                         </span>
                       </div>
                     </AccordionTrigger>
+
                     <AccordionContent
                       asChild
                       className="w-full min-h-[100px] h-fit flex flex-col items-start justify-start gap-y-4 py-4"
