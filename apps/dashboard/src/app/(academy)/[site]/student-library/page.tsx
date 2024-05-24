@@ -104,7 +104,7 @@ const Page = async ({ params }: PageProps) => {
                       <span className="text-lg text-gray-600">
                         {calculateProgress(
                           item.currentEpisode,
-                          item.course.length
+                          item.course.nbrChapters
                         )}
                         %
                       </span>
@@ -112,7 +112,7 @@ const Page = async ({ params }: PageProps) => {
                         color={website?.color}
                         value={calculateProgress(
                           item.currentEpisode,
-                          item.course.length
+                          item.course.nbrChapters
                         )}
                       />
                     </div>

@@ -16,7 +16,7 @@ const LoadingCard: FC<LoadingProps> = ({ className }) => {
         className
       )}
     >
-      <Loader className="w-10 h-10 text-primary animate-spin" />
+      <Loader className="w-10 h-10 text-gray-500 animate-spin" />
     </div>
   );
 };
