@@ -16,6 +16,60 @@ import { Notification } from "database";
 import { Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+function timeSince(createdAt: Date): string {
+  const now = new Date();
+  const createdDate = new Date(createdAt);
+  const seconds = Math.floor((now.getTime() - createdDate.getTime()) / 1000);
+
+  let interval = Math.floor(seconds / 31536000); // seconds in a year
+  if (interval > 1) {
+    return `منذ ${interval} سنوات`;
+  } else if (interval === 1) {
+    return "منذ سنة واحدة";
+  }
+
+  interval = Math.floor(seconds / 2592000); // seconds in a month
+  if (interval > 1) {
+    return `منذ ${interval} أشهر`;
+  } else if (interval === 1) {
+    return "منذ شهر واحد";
+  }
+
+  interval = Math.floor(seconds / 604800); // seconds in a week
+  if (interval > 1) {
+    return `منذ ${interval} أسابيع`;
+  } else if (interval === 1) {
+    return "منذ أسبوع واحد";
+  }
+
+  interval = Math.floor(seconds / 86400); // seconds in a day
+  if (interval > 1) {
+    return `منذ ${interval} أيام`;
+  } else if (interval === 1) {
+    return "منذ يوم واحد";
+  }
+
+  interval = Math.floor(seconds / 3600); // seconds in an hour
+  if (interval > 1) {
+    return `منذ ${interval} ساعات`;
+  } else if (interval === 1) {
+    return "منذ ساعة واحدة";
+  }
+
+  interval = Math.floor(seconds / 60); // seconds in a minute
+  if (interval > 1) {
+    return `منذ ${interval} دقائق`;
+  } else if (interval === 1) {
+    return "منذ دقيقة واحدة";
+  }
+
+  if (seconds < 10) {
+    return "الآن";
+  }
+
+  return `منذ ${seconds} ثواني`;
+}
+
 interface NotificationsProps {
   notifications: Notification[];
   accountId: string;
@@ -41,7 +95,6 @@ const Notifications: FC<NotificationsProps> = ({
     pusherClient?.bind("incomming-notifications", (data: Notification) => {
       const audio = new Audio("/sounds/notification.mp3");
       audio.play();
-      console.log(data);
       setIsNewNotifications((prev) => prev + 1);
     });
 
@@ -95,23 +148,28 @@ const Notifications: FC<NotificationsProps> = ({
                 {data.map((item) => (
                   <div
                     key={item.id}
-                    className="w-full h-[80px] flex items-center justify-end border-b p-4 gap-x-4"
+                    className="w-full h-[60px] flex items-center justify-between border-b px-4 gap-x-4"
                   >
-                    <span className="text-xl font-bold text-black">
-                      {" "}
-                      {item.content}
+                    <span className="text-sm  text-gray-500  ">
+                      {timeSince(item?.createdAt)}
                     </span>
-                    <Mail className="w-8 h-8 text-primary" />
+                    <div className="flex h-full w-fit items-center gap-x-2">
+                      <span className="text-md font-bold text-black">
+                        {" "}
+                        {item.content}
+                      </span>
+                      <Mail className="w-6 h-6 text-primary" />
+                    </div>
                   </div>
                 ))}
               </ScrollArea>
             </div>
           )}
-          <div className="w-full h-[50px] flex items-start pb-2 justify-center">
+          {/* <div className="w-full h-[50px] flex items-start pb-2 justify-center">
             <Button size="sm" onClick={() => router.push("/")} variant="ghost">
               اظهار الكل
             </Button>
-          </div>
+          </div> */}
         </div>
       </PopoverContent>
     </Popover>

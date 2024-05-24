@@ -14,24 +14,35 @@ export const create_course_sale = async ({
   accountId: string;
 }) => {
   try {
-    const sale = await prisma.sale.create({
-      data: {
-        amount: 1,
-        itemId: course.id,
-        price: Number(course.price),
-        itemType: "COURSE",
-        status: "CREATED",
-        accountId,
-        studentId,
-      },
-    });
+    const newStudentNumber = Number(course.studenstNbr) + 1;
 
-    const notification = await prisma.notification.create({
-      data: {
-        accountId,
-        content: `لديك بيع جديد`,
-      },
-    });
+    const [sale, updatedCourse, notification] = await Promise.all([
+      prisma.sale.create({
+        data: {
+          amount: 1,
+          itemId: course.id,
+          price: Number(course.price),
+          itemType: "COURSE",
+          status: "CREATED",
+          accountId,
+          studentId,
+        },
+      }),
+      prisma.course.update({
+        where: {
+          id: course.id,
+        },
+        data: {
+          studenstNbr: newStudentNumber.toString(),
+        },
+      }),
+      prisma.notification.create({
+        data: {
+          accountId,
+          content: ` ${course.price} تم بيع دورة ب `,
+        },
+      }),
+    ]);
 
     pusherServer.trigger(accountId, "incomming-notifications", notification);
 
