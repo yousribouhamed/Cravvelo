@@ -16,6 +16,14 @@ interface CourseContentProps {
   chapters: Chapter[];
 }
 
+function formatDuration(durationSeconds: number): string {
+  const minutes: number = Math.floor(durationSeconds / 60);
+  const seconds: number = durationSeconds % 60;
+  return `${minutes.toString().padStart(2, "0")}:${seconds
+    .toString()
+    .padStart(2, "0")}`;
+}
+
 const CourseContent: FC<CourseContentProps> = ({ chapters }) => {
   return (
     <>
@@ -69,7 +77,7 @@ const CourseContent: FC<CourseContentProps> = ({ chapters }) => {
                                     {subitem.title}
                                   </p>
                                   <span className="text-gray-500 text-xs">
-                                    3:09
+                                    {formatDuration(subitem.length)}
                                   </span>
                                 </div>
                               </div>

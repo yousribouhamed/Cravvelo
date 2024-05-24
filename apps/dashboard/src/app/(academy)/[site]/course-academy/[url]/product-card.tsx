@@ -74,15 +74,13 @@ export const Product_card = ({
     <div
       className={` ${
         isFixed ? "  " : ""
-      } w-full lg:w-[350px] min-h-[500px] h-fit rounded-xl border p-4 flex flex-col gap-y-4 2xl:sticky 2xl:top-[120px] bg-white `}
+      } w-full lg:w-[350px] relative min-h-[500px] h-fit rounded-xl border p-4 flex flex-col gap-y-4 2xl:sticky 2xl:top-[120px] bg-white mt-6 `}
     >
-      <p className="text-2xl font-bold text-start text-black">
-        DZD {course.price}.00
-      </p>
-      <p>
-        <span className="line-through text-red-500 text-lg">
-          DZD {course.compareAtPrice}.00
-        </span>{" "}
+      <span
+        className=" text-xs text-white p-2 rounded-full absolute -top-5 right-0"
+        style={{ backgroundColor: color }}
+      >
+        dis
         {calculateDiscountPercentage(
           Number(course.price),
           Number(course.compareAtPrice)
@@ -92,7 +90,15 @@ export const Product_card = ({
               Number(course.compareAtPrice)
             )
           : 0}
-        % dis
+        %
+      </span>
+      <p className="text-2xl font-bold text-start text-black">
+        DZD {course.price}.00
+      </p>
+      <p>
+        <span className="line-through text-red-500 text-lg">
+          DZD {course.compareAtPrice}.00
+        </span>{" "}
       </p>
 
       <button
@@ -115,9 +121,9 @@ export const Product_card = ({
 
       <div
         dir="ltr"
-        className="w-full h-[20px] flex items-center justify-end  gap-x-4 text-red-500"
+        className="w-full h-[20px] flex items-center justify-end  gap-x-2 text-red-500"
       >
-        <div className="w-[100px] flex items-center justify-start ">
+        <div className="min-w-[10px] w-fit flex items-center justify-start ">
           <span className="text-sm ">{hours}</span>:
           <span className="text-sm ">{minutes}</span>:
           <span className="text-sm ">{seconds}</span>
