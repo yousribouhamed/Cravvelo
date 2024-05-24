@@ -86,7 +86,11 @@ const Page = async ({ params }: PageProps) => {
               {course.title}
             </h1>
 
-            <CourseDisplayContent course={course} chapters={chapters} />
+            <CourseDisplayContent
+              color={website?.color}
+              course={course}
+              chapters={chapters}
+            />
             <Raitings
               color={website?.color}
               course={course}

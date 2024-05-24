@@ -11,6 +11,7 @@ import LoadingCard from "../../../_components/loading";
 interface CourseContentProps {
   course: Course;
   chapters: Chapter[];
+  color: string;
 }
 
 const tabs = [
@@ -24,7 +25,11 @@ const tabs = [
   },
 ];
 
-const CourseDisplayContent: FC<CourseContentProps> = ({ course, chapters }) => {
+const CourseDisplayContent: FC<CourseContentProps> = ({
+  course,
+  chapters,
+  color,
+}) => {
   const [tab, setTab] = React.useState<{ name: string; value: string }>(
     tabs[0]
   );
@@ -58,7 +63,7 @@ const CourseDisplayContent: FC<CourseContentProps> = ({ course, chapters }) => {
                     )}
 
                     <iframe
-                      src={`https://iframe.mediadelivery.net/embed/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/${course?.youtubeUrl}`}
+                      src={`https://iframe.mediadelivery.net/embed/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/${course?.youtubeUrl}?primaryColor=${color}`}
                       loading="lazy"
                       style={{
                         border: "none",

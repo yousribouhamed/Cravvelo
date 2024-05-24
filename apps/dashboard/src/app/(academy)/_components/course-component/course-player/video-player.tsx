@@ -5,9 +5,10 @@ import { useCoursePlayerStore } from "../../../global-state/course-player-store"
 
 interface VideoPlayerProps {
   videoId: string;
+  color: string;
 }
 
-const CourseVideoPlayer: FC<VideoPlayerProps> = ({ videoId }) => {
+const CourseVideoPlayer: FC<VideoPlayerProps> = ({ videoId, color }) => {
   const { state } = useCoursePlayerStore();
   return (
     <>
@@ -23,7 +24,7 @@ const CourseVideoPlayer: FC<VideoPlayerProps> = ({ videoId }) => {
         {state?.currentModule ? (
           <div className="w-full h-[600px] 2xl:h-[800px]  relative ">
             <iframe
-              src={`https://iframe.mediadelivery.net/embed/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/${state?.currentModule?.fileUrl}`}
+              src={`https://iframe.mediadelivery.net/embed/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/${state?.currentModule?.fileUrl}?primaryColor=${color}`}
               loading="lazy"
               style={{
                 border: "none",
@@ -39,7 +40,7 @@ const CourseVideoPlayer: FC<VideoPlayerProps> = ({ videoId }) => {
         ) : (
           <div className="w-full h-[600px] 2xl:h-[800px] relative ">
             <iframe
-              src={`https://iframe.mediadelivery.net/embed/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/${videoId}?autoplay=true`}
+              src={`https://iframe.mediadelivery.net/embed/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/${videoId}?primaryColor=${color}`}
               loading="lazy"
               style={{
                 border: "none",

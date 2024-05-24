@@ -103,9 +103,8 @@ export const columns: ColumnDef<Course>[] = [
         <p className="text-gray-500 text-sm">
           {" "}
           <span className="font-bold text-black">
-            {row.original.profit === null ? 0 : row.original.profit}
+            {row.original.level === "BEGINNER" ? "مبتدئ" : "غير محدد"}
           </span>{" "}
-          دج
         </p>
       );
     },

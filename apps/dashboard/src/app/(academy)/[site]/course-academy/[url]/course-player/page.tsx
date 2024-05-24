@@ -85,7 +85,10 @@ const Page = async ({ params }: PageProps) => {
           <div className="px-0 w-full mt-[100px] max-w-[1500px]  mx-auto">
             <div className="w-full  min-h-screen h-fit flex flex-col items-center gap-x-4 p-4   ">
               <div className="w-full h-fit max-h-[1500px]  bg-black flex flex-col items-center  ">
-                <CourseVideoPlayer videoId={getFirstVideo(chapters[0])} />
+                <CourseVideoPlayer
+                  color={website.color}
+                  videoId={getFirstVideo(chapters[0])}
+                />
               </div>
 
               <CompleteCourse color={website.color} courseId={course.id} />

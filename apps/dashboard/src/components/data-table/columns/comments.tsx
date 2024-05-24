@@ -98,7 +98,7 @@ export const CommentColumns: ColumnDef<Comment>[] = [
     cell: ({ row }) => {
       return (
         <Badge variant="default" className="bg-black text-white ">
-          {row.original.status}
+          published
         </Badge>
       );
     },
