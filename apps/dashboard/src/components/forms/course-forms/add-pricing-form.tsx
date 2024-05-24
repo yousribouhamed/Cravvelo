@@ -59,14 +59,15 @@ function AddPricingForm({ course }: AddPricingFormProps) {
     mode: "onChange",
     resolver: zodResolver(PricingFormSchema),
     defaultValues: {
-      price: course?.price ? course?.price?.toString() : "0",
+      price: course?.price ? course?.price?.toString() : "100",
       compareAtPrice: course?.compareAtPrice
         ? course?.compareAtPrice?.toString()
-        : "0",
+        : "1000",
     },
   });
 
   async function onSubmit(values: z.infer<typeof PricingFormSchema>) {
+    // check if the price is begger then 100
     await mutation.mutateAsync({
       courseId,
       price: Number(values.price),
@@ -98,12 +99,22 @@ function AddPricingForm({ course }: AddPricingFormProps) {
                       <FormLabel asChild>
                         <div className="w-full h-fit flex gap-x-3 items-center">
                           <span>سعر</span>
+                          <Tooltip delayDuration={0}>
+                            <TooltipTrigger>
+                              <HelpCircle className="text-black w-4 h-4" />
+                            </TooltipTrigger>
+                            <TooltipContent className="max-w-[150px]">
+                              <p>
+                                يجب على سعر الدورة ان يكون اكثر من 100 دينار
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
                         </div>
                       </FormLabel>
                       <FormControl>
                         <Input
                           type="number"
-                          placeholder="0 DZD"
+                          placeholder="100 DZD"
                           {...field}
                           disabled={isFree}
                         />

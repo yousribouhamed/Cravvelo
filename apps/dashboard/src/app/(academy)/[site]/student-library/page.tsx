@@ -17,6 +17,17 @@ interface PageProps {
   params: { site: string };
 }
 
+function calculateProgress(episode: number, videos: number): number {
+  if (episode < 0 || videos < 1 || episode > videos) {
+    throw new Error(
+      "Invalid input: Current video or total videos cannot be less than 1, and current video cannot be greater than total videos."
+    );
+  }
+
+  const progressPercentage = (episode / videos) * 100;
+  return parseFloat(progressPercentage.toFixed(0));
+}
+
 const Page = async ({ params }: PageProps) => {
   const subdomain = getSubDomainValue({ value: params.site });
 
@@ -57,9 +68,7 @@ const Page = async ({ params }: PageProps) => {
           <div className="w-full h-full flex flex-wrap gap-6 my-8">
             {Array.isArray(bag?.courses) && bag?.courses?.length === 0 && (
               <div className="w-full h-[200px] flex items-center justify-center">
-                <p className="text-xl font-bold">
-                  انت لم تقم ببناء اي كورس بعد
-                </p>
+                <p className="text-xl font-bold">لا يوجد اي كورسات</p>
               </div>
             )}
             {bag?.courses?.map((item, index) => {
@@ -92,14 +101,20 @@ const Page = async ({ params }: PageProps) => {
                     {/* this will hold the price */}
 
                     <div className="w-full h-[70px] px-4 flex items-center justify-center gap-x-4  p-2">
-                      {/* <Link
-                  
-                      className="w-[80%] bg-blue-500 hover:bg-blue-600 text-white p-2 h-[45px] flex items-center justify-center rounded-xl"
-                    >
-                      شاهد الان
-                    </Link> */}
-                      <span className="text-lg text-gray-600">{33}%</span>
-                      <Progress value={33} />
+                      <span className="text-lg text-gray-600">
+                        {calculateProgress(
+                          item.currentEpisode,
+                          item.course.length
+                        )}
+                        %
+                      </span>
+                      <Progress
+                        color={website?.color}
+                        value={calculateProgress(
+                          item.currentEpisode,
+                          item.course.length
+                        )}
+                      />
                     </div>
                   </div>
                 </Link>

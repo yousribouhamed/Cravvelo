@@ -141,7 +141,7 @@ model Website {
   phoneNumber    String?
   supportEmail   String?
   favicon        String?  @default("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT51NSq8RTDzIs7VaAcWWvKkyiagU5dz6hiAA&usqp=CAU") @db.Text
-  color          String?
+  color          String?  @default("#FC6B00")
   logo           String?  @db.VarChar(199)
   font           String   @default("font-cal")
   createdAt      DateTime @default(now())

@@ -77,7 +77,7 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({
       console.log("this is the chargily url");
       console.log(url);
 
-      // router.push(url);
+      router.push(url);
     } catch (err) {
       console.error("an error in the process payment funtion");
       console.error(err);
