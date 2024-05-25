@@ -9,9 +9,30 @@ export const user_chargily = {
     .input(z.object({ public_key: z.string(), private_key: z.string() }))
     .mutation(async ({ input, ctx }) => {
       try {
-        const chargily = await ctx.prisma.paymentsConnect.create({
-          data: {
+        const charigilyAcount = await ctx.prisma.paymentsConnect.findFirst({
+          where: {
             accountId: ctx.account.id,
+          },
+        });
+
+        if (!charigilyAcount) {
+          const chargily = await ctx.prisma.paymentsConnect.create({
+            data: {
+              accountId: ctx.account.id,
+              chargilyPublicKey: input.public_key,
+              chargiySecretKey: input.private_key,
+            },
+          });
+
+          return chargily;
+        }
+
+        const chargily = await ctx.prisma.paymentsConnect.update({
+          where: {
+            // change this to account id when the internet connectio returns
+            id: ctx.account.id,
+          },
+          data: {
             chargilyPublicKey: input.public_key,
             chargiySecretKey: input.private_key,
           },

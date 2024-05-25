@@ -15,6 +15,7 @@ import { ScrollArea } from "@ui/components/ui/scroll-area";
 import { Notification } from "database";
 import { Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { trpc } from "@/src/app/_trpc/client";
 
 function timeSince(createdAt: Date): string {
   const now = new Date();
@@ -83,7 +84,14 @@ const Notifications: FC<NotificationsProps> = ({
 
   const router = useRouter();
 
-  const [data, setData] = useState<Notification[]>(notifications ?? null);
+  const { data: ourNotifications, refetch } = trpc.getAllNotifications.useQuery(
+    undefined,
+    {
+      initialData: notifications,
+    }
+  );
+
+  const [data, setData] = useState<Notification[]>(ourNotifications ?? null);
 
   const [isNewNotifications, setIsNewNotifications] = useState<number>(0);
 
@@ -96,6 +104,9 @@ const Notifications: FC<NotificationsProps> = ({
       const audio = new Audio("/sounds/notification.mp3");
       audio.play();
       setIsNewNotifications((prev) => prev + 1);
+      refetch().then(() => {
+        setData(ourNotifications);
+      });
     });
 
     return () => {

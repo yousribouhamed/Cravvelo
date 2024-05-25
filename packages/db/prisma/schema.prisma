@@ -42,7 +42,7 @@ model Account {
 
 model PaymentsConnect {
   id                String   @unique @default(uuid())
-  accountId         String
+  accountId         String   @unique
   chargilyPublicKey String
   chargiySecretKey  String
   createdAt         DateTime @default(now())
