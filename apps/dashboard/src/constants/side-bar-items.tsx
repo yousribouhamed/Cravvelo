@@ -15,12 +15,12 @@ export const SIDE_BAR_ITEMS = [
     icon: BookMarked,
     subitems: [],
   },
-  // {
-  //   title: "المنتجات الرقمية",
-  //   slug: "/products",
-  //   icon: Box,
-  //   subitems: [],
-  // },
+  {
+    title: "المنتجات الرقمية",
+    slug: "/products",
+    icon: Box,
+    subitems: [],
+  },
 
   {
     title: "المبيعات",
@@ -102,11 +102,11 @@ export const SIDE_BAR_ITEMS = [
         icon: Icons.Home,
         slug: "/students",
       },
-      // {
-      //   title: "الشهدات",
-      //   icon: Icons.Home,
-      //   slug: "/students/certificates",
-      // },
+      {
+        title: "الشهدات",
+        icon: Icons.Home,
+        slug: "/students/certificates",
+      },
 
       {
         title: "التعليقات ",

@@ -22,6 +22,7 @@ import { Textarea } from "@ui/components/ui/textarea";
 import { PlateEditor } from "../../reich-text-editor/rich-text-editor";
 import { Product } from "database";
 import { maketoast } from "../../toasts";
+import { PdfUploaderS3 } from "../../uploaders/pdf-uploader";
 
 const addProductConentNameSchema = z.object({
   name: z.string().min(1).max(50),
@@ -104,6 +105,10 @@ function ProductContentForm({ product }: ProductContentFormProps) {
                   </FormLabel>
                   <FormControl>
                     {/* in here goes the pdf uploader */}
+                    <PdfUploaderS3
+                      fileUrl={form.watch("fileUrl")}
+                      onChnage={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

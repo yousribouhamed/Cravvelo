@@ -6,9 +6,9 @@ import crypto from "crypto";
 import { TRPCError } from "@trpc/server";
 import { s3 } from "@/src/lib/s3";
 
-const allowedFileTypes = ["image/jpeg", "image/png"];
+const allowedFileTypes = ["image/jpeg", "image/png", "application/pdf"];
 
-const maxFileSize = 1048576 * 10; // 1 MB
+const maxFileSize = 1048576 * 10 * 30; // 1 MB * 30
 
 const generateFileName = (bytes = 32) =>
   crypto.randomBytes(bytes).toString("hex");
