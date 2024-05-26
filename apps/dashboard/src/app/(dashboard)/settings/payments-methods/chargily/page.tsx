@@ -6,17 +6,34 @@ import { prisma } from "database/src";
 
 interface PageProps {}
 
-const PageProps = async ({}) => {
-  const user = await useHaveAccess();
-  const paymentsConnector = await prisma.paymentsConnect.findFirst({
+const getAllNotifications = async ({ accountId }: { accountId: string }) => {
+  const notifications = await prisma.notification.findMany({
     where: {
-      accountId: user.accountId,
+      accountId,
     },
   });
+  return notifications;
+};
+
+const PageProps = async ({}) => {
+  const user = await useHaveAccess();
+
+  const [paymentsConnector, notifications] = await Promise.all([
+    prisma.paymentsConnect.findFirst({
+      where: {
+        accountId: user.accountId,
+      },
+    }),
+    getAllNotifications({ accountId: user.accountId }),
+  ]);
   return (
     <MaxWidthWrapper>
       <main className="w-full min-h-screen h-fit flex flex-col justify-start ">
-        <Header notifications={[]} user={user} title="بوابات الدفع" />
+        <Header
+          notifications={notifications}
+          user={user}
+          title="بوابات الدفع"
+        />
         <ChargilyConnector data={paymentsConnector} />
       </main>
     </MaxWidthWrapper>

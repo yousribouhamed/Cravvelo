@@ -8,14 +8,26 @@ interface PageProps {
   params: { product_id: string };
 }
 
+const getAllNotifications = async ({ accountId }: { accountId: string }) => {
+  const notifications = await prisma.notification.findMany({
+    where: {
+      accountId,
+    },
+  });
+  return notifications;
+};
+
 export default async function Page({ params }: PageProps) {
   const user = await useHaveAccess();
 
-  const product = await prisma.product.findUnique({
-    where: {
-      id: params.product_id,
-    },
-  });
+  const [product, notifications] = await Promise.all([
+    prisma.product.findUnique({
+      where: {
+        id: params.product_id,
+      },
+    }),
+    getAllNotifications({ accountId: user.accountId }),
+  ]);
 
   if (!product) {
     notFound();
@@ -24,7 +36,12 @@ export default async function Page({ params }: PageProps) {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
-        <Header notifications={[]} goBack user={user} title="ui ux" />
+        <Header
+          notifications={notifications}
+          goBack
+          user={user}
+          title="ui ux"
+        />
 
         <div className="w-full min-h-[500px] grid grid-cols-3">
           <h1>

@@ -10,6 +10,15 @@ interface PageProps {
   params: { course_id: string };
 }
 
+const getAllNotifications = async ({ accountId }: { accountId: string }) => {
+  const notifications = await prisma.notification.findMany({
+    where: {
+      accountId,
+    },
+  });
+  return notifications;
+};
+
 export default async function Page({ params }: PageProps) {
   const [user, course] = await Promise.all([
     useHaveAccess(),
@@ -19,6 +28,10 @@ export default async function Page({ params }: PageProps) {
       },
     }),
   ]);
+
+  const notifications = await getAllNotifications({
+    accountId: user.accountId,
+  });
 
   if (!course) {
     notFound();

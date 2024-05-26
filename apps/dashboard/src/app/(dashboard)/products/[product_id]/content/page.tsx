@@ -6,6 +6,15 @@ import ProductContentForm from "@/src/components/forms/product-forms/product-con
 import { notFound } from "next/navigation";
 import { prisma } from "database/src";
 
+const getAllNotifications = async ({ accountId }: { accountId: string }) => {
+  const notifications = await prisma.notification.findMany({
+    where: {
+      accountId,
+    },
+  });
+  return notifications;
+};
+
 const getData = async ({ id }: { id: string }) => {
   try {
     const data = await prisma.product.findFirst({
@@ -30,6 +39,9 @@ export default async function Page({ params }: PageProps) {
     getData({ id: params.product_id }),
   ]);
 
+  const notifications = await getAllNotifications({
+    accountId: user.accountId,
+  });
   if (!product) {
     notFound();
   }
@@ -37,7 +49,12 @@ export default async function Page({ params }: PageProps) {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
-        <Header notifications={[]} goBack user={user} title="محتوى المنتج" />
+        <Header
+          notifications={notifications}
+          goBack
+          user={user}
+          title="محتوى المنتج"
+        />
         <ProductsHeader />
         <div className="w-full pt-8 min-h-[100px] ">
           <ProductContentForm product={product} />

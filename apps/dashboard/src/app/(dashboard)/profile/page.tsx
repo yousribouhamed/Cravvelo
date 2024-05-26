@@ -4,17 +4,26 @@ import useHaveAccess from "@/src/hooks/use-have-access";
 import UserProfileForm from "./ProfileForm";
 import { prisma } from "database/src";
 
+const getAllNotifications = async ({ accountId }: { accountId: string }) => {
+  const notifications = await prisma.notification.findMany({
+    where: {
+      accountId,
+    },
+  });
+  return notifications;
+};
+
 export default async function Home() {
   const user = await useHaveAccess();
 
-  console.log("this is the user avatra");
-  console.log(user.avatar);
-
-  const account = await prisma.account.findFirst({
-    where: {
-      id: user.accountId,
-    },
-  });
+  const [notifications, account] = await Promise.all([
+    getAllNotifications({ accountId: user.accountId }),
+    prisma.account.findFirst({
+      where: {
+        id: user.accountId,
+      },
+    }),
+  ]);
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start">

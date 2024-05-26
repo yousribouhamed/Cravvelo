@@ -6,6 +6,15 @@ import ProductPublishingForm from "@/src/components/forms/product-forms/product-
 import { prisma } from "database/src";
 import { notFound } from "next/navigation";
 
+const getAllNotifications = async ({ accountId }: { accountId: string }) => {
+  const notifications = await prisma.notification.findMany({
+    where: {
+      accountId,
+    },
+  });
+  return notifications;
+};
+
 const getData = async ({ id }: { id: string }) => {
   try {
     const data = await prisma.product.findFirst({
@@ -30,13 +39,22 @@ export default async function Page({ params }: PageProps) {
     getData({ id: params.product_id }),
   ]);
 
+  const notifications = await getAllNotifications({
+    accountId: user.accountId,
+  });
+
   if (!product) {
     notFound();
   }
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
-        <Header notifications={[]} goBack user={user} title="نشر المنتج" />
+        <Header
+          notifications={notifications}
+          goBack
+          user={user}
+          title="نشر المنتج"
+        />
         <ProductsHeader />
         <div className="w-full pt-8 min-h-[100px] ">
           <ProductPublishingForm product={product} />

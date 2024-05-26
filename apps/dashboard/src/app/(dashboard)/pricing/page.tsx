@@ -4,14 +4,28 @@ import UpgradeButton from "@/src/app/(dashboard)/pricing/_compoents/upgradeButto
 import useGetUser from "@/src/hooks/use-get-user";
 import PaymentSettingsHeader from "../settings/_compoents/payment-website-header";
 import CurrentPlan from "./_compoents/current-plan";
+import { prisma } from "database/src";
+
+const getAllNotifications = async ({ accountId }: { accountId: string }) => {
+  const notifications = await prisma.notification.findMany({
+    where: {
+      accountId,
+    },
+  });
+  return notifications;
+};
 
 export default async function Home() {
   const user = await useGetUser();
 
+  const notifications = await getAllNotifications({
+    accountId: user.accountId,
+  });
+
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start">
-        <Header notifications={[]} user={user} title="التسعير" />
+        <Header notifications={notifications} user={user} title="التسعير" />
         <PaymentSettingsHeader />
         {user.isSubscribed ? (
           <CurrentPlan

@@ -33,6 +33,15 @@ const getMaterial = async ({
   }
 };
 
+const getAllNotifications = async ({ accountId }: { accountId: string }) => {
+  const notifications = await prisma.notification.findMany({
+    where: {
+      accountId,
+    },
+  });
+  return notifications;
+};
+
 export default async function Page({ params }: PageProps) {
   const { chapter_id, material_id } = params;
 
@@ -41,10 +50,19 @@ export default async function Page({ params }: PageProps) {
     getMaterial({ chapter_id, fileUrl: material_id }),
   ]);
 
+  const notifications = await getAllNotifications({
+    accountId: user.accountId,
+  });
+
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
-        <Header notifications={[]} goBack user={user} title="تحديث الفيديو" />
+        <Header
+          notifications={notifications}
+          goBack
+          user={user}
+          title="تحديث الفيديو"
+        />
         <div className="w-full pt-8 min-h-[100px] ">
           <UpdateVedioForm material={material} />
         </div>
