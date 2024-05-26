@@ -27,6 +27,7 @@ export default authMiddleware({
     "/student-library(.*)",
     "/student-profile(.*)",
     "/cron(.*)",
+    "/product-academy(.*)",
   ],
 
   beforeAuth: (req) => {

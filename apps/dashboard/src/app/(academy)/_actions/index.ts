@@ -55,6 +55,44 @@ export const getAllCourses = async ({ subdomain }: { subdomain: string }) => {
 };
 
 /**
+ * Function to retrieve all courses associated with a subdomain.
+ * @param subdomain The subdomain associated with the website.
+ * @returns A Promise that resolves to an array of courses.
+ */
+export const getAllProducts = async ({ subdomain }: { subdomain: string }) => {
+  try {
+    const website = await prisma.website.findUnique({
+      where: {
+        subdomain: subdomain,
+      },
+    });
+
+    const account = await prisma.account.findUnique({
+      where: {
+        id: website?.accountId,
+      },
+    });
+
+    if (!account) {
+      throw new Error("there no account linked to this website");
+    }
+
+    const products = await prisma.product.findMany({
+      where: {
+        accountId: account?.id,
+      },
+    });
+
+    const filteredCourses = products.filter(
+      (item) => item.status === "PUBLISED"
+    );
+    return filteredCourses;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+/**
  * Function to retrieve website data based on a subdomain.
  * @param subdomain The subdomain associated with the website.
  * @returns A Promise that resolves to the retrieved website data.

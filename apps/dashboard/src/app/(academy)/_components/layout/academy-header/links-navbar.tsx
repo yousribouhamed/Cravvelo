@@ -34,6 +34,17 @@ function LinksNavbar() {
           الدورات التدريبية
         </button>
       </Link>
+      <Link href={"/product-academy"} className="text-lg ">
+        <button
+          className={cn("  h-[65px]  text-md  bg-transparent ", {
+            "text-black font-bold border-b-4 border-black  ": isCurrentPath({
+              currentPath: "/product-academy",
+            }),
+          })}
+        >
+          المنتجات الرقمية
+        </button>
+      </Link>
     </div>
   );
 }
