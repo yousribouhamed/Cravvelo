@@ -24,9 +24,11 @@ const formSchema = z.object({
 
 import type { FC } from "react";
 
-interface ContactUsFormProps {}
+interface ContactUsFormProps {
+  color: string;
+}
 
-const ContactUsAcademiaForm: FC = ({}) => {
+const ContactUsAcademiaForm: FC<ContactUsFormProps> = ({ color }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -101,11 +103,14 @@ const ContactUsAcademiaForm: FC = ({}) => {
           )}
         />
 
-        <div className="w-full flex items-center justify-center">
+        <div className="w-full flex items-center justify-end">
           <Button
-            className=" flex items-center justify-center bg-primary text-white rounded-xl"
+            className=" flex items-center justify-center  text-white rounded-xl"
             type="submit"
             size="lg"
+            style={{
+              backgroundColor: color,
+            }}
           >
              ارسال
           </Button>
