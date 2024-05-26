@@ -131,4 +131,42 @@ export const products = {
 
       return { success: true, courseId: product.id };
     }),
+
+  createProductContent: privateProcedure
+    .input(
+      z.object({
+        productId: z.string(),
+        filrUrl: z.string(),
+        description: z.any(),
+        subDescription: z.string(),
+        thumnailUrl: z.string(),
+        name: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const product = await ctx.prisma.product
+        .update({
+          where: {
+            id: input.productId,
+          },
+          data: {
+            filrUrl: input.filrUrl,
+            description: JSON.stringify(input.description),
+            subDescription: input.subDescription,
+            thumnailUrl: input.thumnailUrl,
+            title: input.name,
+          },
+        })
+        .catch((err) => {
+          console.log(err);
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: err?.message
+              ? err?.message
+              : "the error in on update product content",
+          });
+        });
+
+      return { success: true, courseId: product.id };
+    }),
 };

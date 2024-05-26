@@ -40,7 +40,7 @@ function ProductContentForm({ product }: ProductContentFormProps) {
   const router = useRouter();
   const path = usePathname();
 
-  const mutation = trpc.createModule.useMutation({
+  const mutation = trpc.createProductContent.useMutation({
     onSuccess: () => {
       maketoast.success();
       router.push(`/products/${product.id}/pricing`);
@@ -68,7 +68,18 @@ function ProductContentForm({ product }: ProductContentFormProps) {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof addProductConentNameSchema>) {}
+  async function onSubmit(values: z.infer<typeof addProductConentNameSchema>) {
+    try {
+      await mutation.mutateAsync({
+        description: values.description,
+        filrUrl: values.fileUrl,
+        productId: product.id,
+        name: values.name,
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   return (
     <div className="w-full grid grid-cols-3 gap-x-8 ">
