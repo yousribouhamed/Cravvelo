@@ -2,7 +2,6 @@ import { Button, buttonVariants } from "@ui/components/ui/button";
 import type { FC } from "react";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
-import CreateCoupon from "../../models/create-coupon-modal";
 
 //@ts-ignore
 import { download, generateCsv, mkConfig } from "export-to-csv";
@@ -19,7 +18,11 @@ const csvConfig = mkConfig({
   useKeysAsHeaders: true,
 });
 
-const CouponsTableHeader: FC<TableHeaderProps> = ({ table, refetch, data }) => {
+const CertificateTableHeader: FC<TableHeaderProps> = ({
+  table,
+  refetch,
+  data,
+}) => {
   const handleExportCSV = (data: any[]) => {
     const csv = generateCsv(csvConfig)(data);
     //@ts-ignore
@@ -63,4 +66,4 @@ const CouponsTableHeader: FC<TableHeaderProps> = ({ table, refetch, data }) => {
   );
 };
 
-export default CouponsTableHeader;
+export default CertificateTableHeader;

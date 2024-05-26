@@ -42,7 +42,7 @@ model Account {
 
 model PaymentsConnect {
   id                String   @unique @default(uuid())
-  accountId         String   @unique
+  accountId         String   
   chargilyPublicKey String
   chargiySecretKey  String
   createdAt         DateTime @default(now())
@@ -292,8 +292,9 @@ model Certificate {
   id          String   @unique @default(uuid())
   name        String
   description String?
-  issuer      String
-  issueDate   DateTime
+  studentId   String
+  courseName  String
+  studentName String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   // Add more fields as needed

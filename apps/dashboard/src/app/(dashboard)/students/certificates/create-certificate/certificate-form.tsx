@@ -12,26 +12,36 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@ui/components/ui/form";
-import { Switch } from "@ui/components/ui/switch";
-import { Card, CardContent } from "@ui/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@ui/components/ui/select";
+
 import { usePathname, useRouter } from "next/navigation";
-import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import { getValueFromUrl } from "@/src/lib/utils";
 import { maketoast } from "@/src/components/toasts";
-import { Course } from "database";
+import { Student } from "database";
 import { Input } from "@ui/components/ui/input";
+import { Card } from "@ui/lib/tremor";
+import { CardContent } from "@ui/components/ui/card";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 const FormSchema = z.object({
-  allowComments: z.boolean(),
-  cerrificate: z.boolean(),
+  studentName: z.string(),
+  courseName: z.string(),
+  cerrificateName: z.string(),
+  studentId: z.string(),
 });
 
-interface StudentEngagmentProps {
-  course: Course;
+interface CertificateProps {
+  students: Student[];
 }
 
-function CertificateForm() {
+function CertificateForm({ students }: CertificateProps) {
   const router = useRouter();
   const path = usePathname();
 
@@ -39,10 +49,10 @@ function CertificateForm() {
   const [isCertificateSeen, setIsCertificateSeen] =
     React.useState<boolean>(false);
 
-  const mutation = trpc.updateCourseStudentEngagment.useMutation({
+  const mutation = trpc.createCertificate.useMutation({
     onSuccess: () => {
       maketoast.success();
-      router.push(`/`);
+      router.push(`/students/certificates`);
     },
     onError: (err) => {
       maketoast.error();
@@ -55,7 +65,14 @@ function CertificateForm() {
     resolver: zodResolver(FormSchema),
   });
 
-  async function onSubmit(values: z.infer<typeof FormSchema>) {}
+  async function onSubmit(values: z.infer<typeof FormSchema>) {
+    await mutation.mutateAsync({
+      cerrificateName: values.cerrificateName,
+      courseName: values.courseName,
+      studentId: values.studentId,
+      studentName: values.studentName,
+    });
+  }
 
   return (
     <div className="w-full h-fir gap-x-8 ">
@@ -69,7 +86,7 @@ function CertificateForm() {
         >
           المحتوى
         </Button>
-        <Button
+        {/* <Button
           onClick={() => setIsCertificateSeen(true)}
           variant="ghost"
           className={`${
@@ -77,7 +94,7 @@ function CertificateForm() {
           } h-full rounded-[0] `}
         >
           التصميم
-        </Button>
+        </Button> */}
       </div>
       <div className="w-full h-full">
         {isCertificateSeen ? (
@@ -96,240 +113,108 @@ function CertificateForm() {
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-8"
             >
-              <div>
-                <div className="space-y-4">
-                  <div className="space-y-2 bg-white rounded-xl border p-3">
-                    <FormField
-                      control={form.control}
-                      name="allowComments"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row bg-white items-center justify-between">
-                          <div className="space-y-0.5">
-                            <FormLabel>اسم الشهادة</FormLabel>
-                          </div>
-                          <FormControl>
-                            <div dir="ltr">
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </div>
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="allowComments"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row bg-white items-center justify-between ">
-                          <FormControl>
-                            <Input className="w-full" />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+              <FormField
+                control={form.control}
+                name="cerrificateName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      اسم الشهادة{" "}
+                      <span className="text-red-600 text-xl">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="اين تذهب الشمس عندما يحل الليل"
+                        {...field}
+                      />
+                    </FormControl>
 
-                  <div className="space-y-2 bg-white rounded-xl border p-3">
-                    <FormField
-                      control={form.control}
-                      name="allowComments"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row  items-center justify-between rounded-lg">
-                          <div className="space-y-0.5">
-                            <FormLabel>العنوان الفرعي</FormLabel>
-                          </div>
-                          <FormControl>
-                            <div dir="ltr">
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </div>
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="allowComments"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row bg-white items-center justify-between ">
-                          <FormControl>
-                            <Input className="w-full" />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                  <div className="space-y-2 bg-white rounded-xl border p-3">
-                    <FormField
-                      control={form.control}
-                      name="allowComments"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row  items-center justify-between rounded-lg">
-                          <div className="space-y-0.5">
-                            <FormLabel>نص ما فوق سبب منح الشهادة</FormLabel>
-                          </div>
-                          <FormControl>
-                            <div dir="ltr">
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </div>
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="allowComments"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row bg-white items-center justify-between ">
-                          <FormControl>
-                            <Input className="w-full" />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+              <FormField
+                control={form.control}
+                name="courseName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      اسم الدورة <span className="text-red-600 text-xl">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="اين تذهب الشمس عندما يحل الليل"
+                        {...field}
+                      />
+                    </FormControl>
 
-                  <div className="space-y-2 bg-white rounded-xl border p-3">
-                    <FormField
-                      control={form.control}
-                      name="allowComments"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row  items-center justify-between rounded-lg">
-                          <div className="space-y-0.5">
-                            <FormLabel>نص ما فوق اسم المعلم</FormLabel>
-                          </div>
-                          <FormControl>
-                            <div dir="ltr">
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </div>
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="allowComments"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row bg-white items-center justify-between ">
-                          <FormControl>
-                            <Input className="w-full" />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                  <div className="space-y-2 bg-white rounded-xl border p-3">
-                    <FormField
-                      control={form.control}
-                      name="allowComments"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row  items-center justify-between rounded-lg">
-                          <div className="space-y-0.5">
-                            <FormLabel>تاريخ اصدار الشهادة</FormLabel>
-                          </div>
-                          <FormControl>
-                            <div dir="ltr">
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </div>
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="allowComments"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row bg-white items-center justify-between ">
-                          <FormControl>
-                            <Input className="w-full" />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+              <FormField
+                control={form.control}
+                name="studentName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      اسم الطالب <span className="text-red-600 text-xl">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="اين تذهب الشمس عندما يحل الليل"
+                        {...field}
+                      />
+                    </FormControl>
 
-                  <div className="space-y-2 bg-white rounded-xl border p-3">
-                    <FormField
-                      control={form.control}
-                      name="allowComments"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row  items-center justify-between rounded-lg">
-                          <div className="space-y-0.5">
-                            <FormLabel>رقم الشهادة التسلسلي</FormLabel>
-                          </div>
-                          <FormControl>
-                            <div dir="ltr">
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </div>
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="allowComments"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row bg-white items-center justify-between ">
-                          <FormControl>
-                            <Input className="w-full" />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="studentId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>الطالب المعني بالشهادة</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a student" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {students.map((item) => {
+                          return (
+                            <SelectItem key={item.id} value={item.id}>
+                              {item.full_name}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
 
-                  <div className="space-y-2 bg-white rounded-xl border p-3">
-                    <FormField
-                      control={form.control}
-                      name="allowComments"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row  items-center justify-between rounded-lg">
-                          <div className="space-y-0.5">
-                            <FormLabel>رابط التحقق من الشهادة</FormLabel>
-                          </div>
-                          <FormControl>
-                            <div dir="ltr">
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </div>
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="allowComments"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row bg-white items-center justify-between ">
-                          <FormControl>
-                            <Input className="w-full" />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-              </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Card className="w-full h-fit border-t bg-white">
+                <CardContent className="w-full h-fit flex justify-end items-center   ">
+                  <Button
+                    disabled={mutation.isLoading}
+                    type="submit"
+                    className=" flex items-center gap-x-2 rounded-xl"
+                  >
+                    {mutation.isLoading ? <LoadingSpinner /> : null}
+                    حفظ والمتابعة
+                  </Button>
+                </CardContent>
+              </Card>
             </form>
           </Form>
         )}
