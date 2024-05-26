@@ -10,26 +10,9 @@ export default async function Home() {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
-        <Header notifications={[]} goBack user={user} title="ui ux" />
+        <Header notifications={[]} goBack user={user} title="جاري التحميل" />
 
         <div className="w-full pt-8 min-h-[100px] ">
-          <PathBuilder
-            links={[
-              {
-                name: "الرئيسية",
-                url: "/",
-              },
-
-              {
-                name: "الدورات التدريبية",
-                url: "/courses",
-              },
-              {
-                name: "ui ux",
-                url: "/courses/iihh",
-              },
-            ]}
-          />
           <LoadingForm />
         </div>
       </main>

@@ -62,23 +62,32 @@ function ProductContentForm({ product }: ProductContentFormProps) {
             {
               id: "1",
               type: "p",
-              children: [{ text: "Hello, World!" }],
+              children: [{ text: "" }],
             },
           ],
     },
   });
 
   async function onSubmit(values: z.infer<typeof addProductConentNameSchema>) {
-    try {
-      await mutation.mutateAsync({
-        description: values.description,
-        filrUrl: values.fileUrl,
-        productId: product.id,
-        name: values.name,
-      });
-    } catch (err) {
-      console.error(err);
-    }
+    console.log("this is the data we are passing");
+
+    console.log({
+      description: values.description,
+      filrUrl: values.fileUrl,
+      productId: product.id,
+      name: values.name,
+      subDescription: values.breifDescription,
+      thumnailUrl: values.imageUrl,
+    });
+
+    await mutation.mutateAsync({
+      description: values.description,
+      filrUrl: values.fileUrl,
+      productId: product.id,
+      name: values.name,
+      subDescription: values.breifDescription,
+      thumnailUrl: values.imageUrl,
+    });
   }
 
   return (
