@@ -96,12 +96,8 @@ const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
       <CardContent className="p-0  w-full h-full">
         <div
           dir="ltr"
-          className="h-[70px]  w-full flex items-center justify-between px-2"
+          className="h-[70px]  w-full flex items-center justify-end px-2"
         >
-          <span className="font-bold text-[#FC6B00] text-sm">
-            (+5) more{" "}
-            <span className="font-thin text-gray-500 text-xs">in 2021</span>
-          </span>
           <div className="w-[300px] h-full flex flex-col items-end justify-center gap-y-2">
             <div className="w-[300px] flex items-center gap-x-4 justify-end">
               <span className="text-sm">الدورات التدريبية</span>

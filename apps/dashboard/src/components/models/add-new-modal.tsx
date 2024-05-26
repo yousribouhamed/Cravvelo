@@ -132,7 +132,18 @@ const AddNew: FC = ({}) => {
     },
   });
 
-  // 1. Define your form.
+  const productMutation = trpc.createProduct.useMutation({
+    onSuccess: ({ id }) => {
+      router.push(`/products/${id}/content`);
+      maketoast.successWithText({ text: "تم انشاء المنتج بنجاح" });
+      setIsOpen(false);
+    },
+    onError: () => {
+      maketoast.error();
+      setIsOpen(false);
+    },
+  });
+
   const form = useForm<z.infer<typeof addCourseSchema>>({
     resolver: zodResolver(addCourseSchema),
     defaultValues: {
@@ -144,14 +155,18 @@ const AddNew: FC = ({}) => {
   async function onSubmit(data: z.infer<typeof addCourseSchema>) {
     const cookie = getCookie("accountId");
     setIsLoading(true);
-    await mutation
-      .mutateAsync({
-        title: data.title,
-        accountId: cookie,
-      })
-      .then(() => {
-        setIsLoading(false);
-      });
+    if (selectedItem === 0) {
+      await mutation
+        .mutateAsync({
+          title: data.title,
+          accountId: cookie,
+        })
+        .then(() => {
+          setIsLoading(false);
+        });
+    }
+    if (selectedItem === 1) {
+    }
   }
 
   return (
@@ -198,7 +213,9 @@ const AddNew: FC = ({}) => {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>عنوان الدورة *</FormLabel>
+                    <FormLabel>
+                      {selectedItem === 0 ? " عنوان الدورة " : "عنوان المنتج"}*
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم"

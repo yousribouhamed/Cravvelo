@@ -108,6 +108,19 @@ const getAllNotifications = async ({ accountId }: { accountId: string }) => {
   return notifications;
 };
 
+const getAllCourses = async ({ accountId }: { accountId: string }) => {
+  const courses = await prisma.course.findMany({
+    where: {
+      accountId,
+    },
+    orderBy: {
+      createdAt: "desc", // Assuming 'createdAt' is the field that stores the date and time the notification was created
+    },
+    take: 30, // Limit the number of notifications to 30
+  });
+  return courses;
+};
+
 async function Page({ searchParams }) {
   // Parse search params using zod schema
   const { from, to } = dashboardProductsSearchParamsSchema.parse(searchParams);
@@ -117,24 +130,27 @@ async function Page({ searchParams }) {
 
   const user = await useHaveAccess();
 
-  const [sales, studnets, comments, notifications] = await Promise.all([
-    getAllSales({
-      accountId: user.accountId,
-      start_date: fromDay,
-      end_date: toDay,
-    }),
-    getAllstudents({
-      accountId: user.accountId,
-      start_date: fromDay,
-      end_date: toDay,
-    }),
-    getAllCommets({
-      accountId: user.accountId,
-      start_date: fromDay,
-      end_date: toDay,
-    }),
-    getAllNotifications({ accountId: user.accountId }),
-  ]);
+  const [sales, studnets, comments, notifications, courses] = await Promise.all(
+    [
+      getAllSales({
+        accountId: user.accountId,
+        start_date: fromDay,
+        end_date: toDay,
+      }),
+      getAllstudents({
+        accountId: user.accountId,
+        start_date: fromDay,
+        end_date: toDay,
+      }),
+      getAllCommets({
+        accountId: user.accountId,
+        start_date: fromDay,
+        end_date: toDay,
+      }),
+      getAllNotifications({ accountId: user.accountId }),
+      getAllCourses({ accountId: user.accountId }),
+    ]
+  );
 
   return (
     <MaxWidthWrapper>
@@ -284,7 +300,21 @@ async function Page({ searchParams }) {
                     <CardTitle>الدورات الآكثر مبيعاً</CardTitle>
                   </CardHeader>
                   <CardContent className="flex items-center justify-center">
-                    <NotFoundCard />
+                    {courses.length === 0 ? (
+                      <NotFoundCard />
+                    ) : (
+                      <div className="w-full h-full flex flex-col gap-y-2">
+                        {courses.map((item) => (
+                          <div
+                            key={item.id}
+                            className="w-full flex items-center justify-between  px-4 border-b p-4"
+                          >
+                            <span> DZD {item.price}</span>
+                            <span>{item.title}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
 
@@ -303,7 +333,10 @@ async function Page({ searchParams }) {
                             className="w-full flex items-center justify-between px-4 border-b p-4"
                           >
                             <span> DZD {item.price}</span>
-                            <span>عنوان المنتج</span>
+                            <span>
+                              {" "}
+                              {item.itemType === "COURSE" ? "دورة" : "منتج"}
+                            </span>
                           </div>
                         ))}
                       </div>

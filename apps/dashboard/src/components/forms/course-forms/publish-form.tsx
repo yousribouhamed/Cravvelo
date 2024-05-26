@@ -39,11 +39,6 @@ const selectionButtoms = [
     description: "سيكون مرئيًا للجميع",
     value: "PUBLISED",
   },
-  {
-    title: "الوصول المبكر",
-    description: "شراء مبكر في الأكاديمية الخاصة بك",
-    value: "EARLY_ACCESS",
-  },
 ];
 
 interface PublishCourseFormProps {
@@ -70,7 +65,8 @@ function PublishCourseForm({ course, chapters }: PublishCourseFormProps) {
   const mutation = trpc.launchCourse.useMutation({
     onSuccess: () => {
       maketoast.success();
-      router.push(`/courses`);
+      // router.push(`/courses`);
+      window.location.href = "app.cravvelo.com/courses";
     },
     onError: () => {
       maketoast.error();
