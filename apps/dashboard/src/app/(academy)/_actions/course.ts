@@ -21,7 +21,22 @@ export const getCourseByUrlPath = async ({ url }: { url: string }) => {
       id: url, // Querying the course by its URL path (assuming 'id' represents the URL path)
     },
   });
-  console.log(course);
+
+  return course; // Returning the retrieved course or null if not found
+};
+
+/**
+ * Function to retrieve a course based on its URL path.
+ * @param url The URL path of the course to be retrieved.
+ * @returns A Promise that resolves to the retrieved course or null if not found.
+ */
+export const getProductByUrlPath = async ({ url }: { url: string }) => {
+  const course = await prisma.product.findFirst({
+    where: {
+      id: url, // Querying the course by its URL path (assuming 'id' represents the URL path)
+    },
+  });
+
   return course; // Returning the retrieved course or null if not found
 };
 
