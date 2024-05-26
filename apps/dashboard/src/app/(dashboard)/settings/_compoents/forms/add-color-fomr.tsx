@@ -74,7 +74,7 @@ const AddColorFrom: FC<ChangeDomainFormProps> = ({ color }) => {
                       type="color"
                       id="colorPicker"
                       name="colorPicker"
-                      className="appearance-none w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      className="appearance-none  py-2 px-3 w-6  text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       {...field}
                     />
                   </FormControl>

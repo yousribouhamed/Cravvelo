@@ -227,7 +227,6 @@ const AddNew: FC = ({}) => {
                   دورة تدريبية
                 </Button>
                 <Button
-                  disabled
                   data-ripple-light="true"
                   type="button"
                   onClick={() => setSelectedItem(1)}
