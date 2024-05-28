@@ -4,7 +4,7 @@ import { prisma } from "database/src";
 import { buyWithCoupon } from "./coupon";
 import { payWithChargily } from "./chargily";
 import { getStudent } from "./auth";
-import { create_course_sale } from "./sales";
+import { create_course_sale, create_product_sale } from "./sales";
 
 /**
  * Apply a coupon to the price based on its type and amount.
@@ -160,6 +160,105 @@ export const makePayment = async ({
         studentId: student?.id,
       },
       product_name: courses[0]?.title,
+      subdomain,
+      success_url: `https://${subdomain}/student-library`,
+    });
+
+    return paymentUrl;
+  } catch (err) {
+    console.error("Error occurred while processing payment");
+    console.error(err);
+  }
+};
+
+export const makePaymentForProduct = async ({
+  couponCode,
+  productsId,
+
+  subdomain,
+}: {
+  couponCode: string | null;
+  productsId: string[];
+
+  subdomain: string | null;
+}) => {
+  try {
+    console.log("the funtion has been invoked");
+    // Fetch all the courses
+    const products = await Promise.all(
+      productsId.map((item) =>
+        prisma.product.findFirst({
+          where: {
+            id: item,
+          },
+        })
+      )
+    );
+
+    // Retrieve student information
+    const student = await getStudent();
+
+    // Validate courses and student
+    if (!products || products?.length === 0) {
+      throw new Error("No courses selected");
+    }
+    if (!student) {
+      throw new Error("No student found");
+    }
+
+    // Calculate the total price of courses
+    const total = products
+      .map((item) => Number(item?.price))
+      .reduce((current, next) => current + next);
+
+    // Check for NaN or zero price
+    if (!total || total === 0) {
+      throw new Error("Invalid total price");
+    }
+
+    // Process payment based on coupon presence
+    if (!couponCode) {
+      console.log("we are paying using chargily");
+
+      const paymentUrl = await payWithChargily({
+        amount: total,
+        metadata: {
+          productId: products[0].id,
+          studentId: student.id,
+        },
+        product_name: products[0].title,
+        subdomain,
+        success_url: `https://${subdomain}/student-library`,
+      });
+      return paymentUrl;
+    }
+
+    // Apply coupon and process payment accordingly
+    const newPrice = await applyCoupon({ couponCode, price: total });
+
+    if (newPrice === 0 || newPrice < 0) {
+      console.log("the price after coupon is equal to 0");
+      await buyWithCoupon({
+        code: couponCode,
+        courseId: products[0].id,
+      });
+
+      await create_product_sale({
+        accountId: products[0].accountId,
+        product: products[0],
+        studentId: student.id,
+      });
+
+      return "/student-library";
+    }
+
+    const paymentUrl = await payWithChargily({
+      amount: newPrice,
+      metadata: {
+        productId: products[0]?.id,
+        studentId: student?.id,
+      },
+      product_name: products[0]?.title,
       subdomain,
       success_url: `https://${subdomain}/student-library`,
     });

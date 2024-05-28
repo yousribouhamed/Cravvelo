@@ -98,6 +98,7 @@ export const Product_card = ({
       <button
         onClick={() => {
           actions.addItem({
+            type: "PRODUCT",
             id: product.id,
             imageUrl: product.thumnailUrl,
             name: product.title,

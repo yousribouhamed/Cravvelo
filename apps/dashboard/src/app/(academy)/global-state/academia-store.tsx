@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 export type ItemCourse = {
+  type: string;
   id: string;
   name: string;
   price: string;

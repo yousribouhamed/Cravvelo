@@ -7,6 +7,7 @@ import LinksNavbar from "./links-navbar";
 import StudentNav from "../../auth/student-nav";
 import type { Student } from "database";
 import LiarSales from "../../Liar-sales";
+import StudentNavigation from "./student-nav";
 
 interface AcademyHeaderProps {
   isAuthanticated: boolean;
@@ -24,7 +25,7 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
   color,
 }) => {
   return (
-    <div className="w-full h-[110px]   border-b z-[8] fixed top-0 bg-white shadow overflow-y-hidden">
+    <div className="w-full h-[110px]   border-b z-[8] fixed top-0 bg-white shadow ">
       <LiarSales />
       <MaxWidthWrapper className="w-full h-[70px] flex items-center justify-between">
         <div className="w-fit h-full flex items-center justify-start md:hidden">
@@ -36,7 +37,7 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
           )}
           <LinksNavbar />
         </div>
-        <div className="flex w-fir min-w-[100px] justify-end items-center">
+        <div className="flex w-fit min-w-[100px] justify-end items-center h-[70px] relative">
           <ShoppingCardProduction
             islogged={isAuthanticated && student?.id ? true : false}
             color={color}
@@ -45,6 +46,7 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
           {isAuthanticated && student?.id ? (
             <StudentNav student={student} />
           ) : (
+            // <StudentNavigation student={student} />
             <Link
               href={"/auth-academy/sign-in"}
               className=" text-white w-[140px] h-[40px] rounded-lg p-2 flex items-center justify-center hover:bg-orange-700 transition-all duration-300"

@@ -104,6 +104,7 @@ export const Product_card = ({
       <button
         onClick={() => {
           actions.addItem({
+            type: "COURSE",
             id: course.id,
             imageUrl: course.thumnailUrl,
             name: course.title,

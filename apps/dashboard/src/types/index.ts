@@ -1,4 +1,4 @@
-import { Certificate, Course } from "database";
+import { Certificate, Course, Product as DataBaseProduct } from "database";
 import { EditorBtns } from "../constants/website-template";
 import { type FileWithPath } from "react-dropzone";
 import { type z } from "zod";
@@ -126,7 +126,7 @@ export interface StudentBag {
     course: Course;
     currentEpisode: number;
   }[];
-  products?: Product[];
+  products?: DataBaseProduct[];
   certificates?: Certificate[];
 }
 

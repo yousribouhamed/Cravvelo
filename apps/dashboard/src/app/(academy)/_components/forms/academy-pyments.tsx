@@ -4,7 +4,11 @@ import { Dispatch, SetStateAction, useState, type FC } from "react";
 import { Label } from "@ui/components/ui/label";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { useAcademiaStore } from "../../global-state/academia-store";
-import { applyCoupon, makePayment } from "../../_actions/payments";
+import {
+  applyCoupon,
+  makePayment,
+  makePaymentForProduct,
+} from "../../_actions/payments";
 import { useRouter } from "next/navigation";
 import { Input } from "@ui/components/ui/input";
 
@@ -68,16 +72,27 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({
         throw new Error("there is no subdmain");
       }
 
-      const url = await makePayment({
-        couponCode,
-        courcesId: state.shoppingBag?.map((item) => item.id),
-        productsId: [],
-        subdomain,
-      });
-      console.log("this is the chargily url");
-      console.log(url);
-
-      router.push(url);
+      if (state.shoppingBag[0]?.type === "COURSE") {
+        const url = await makePayment({
+          couponCode,
+          courcesId: state.shoppingBag?.map((item) => item.id),
+          productsId: [],
+          subdomain,
+        });
+        console.log("this is the chargily url for the courses ");
+        console.log(url);
+        router.push(url);
+      } else {
+        // here handle the payment for the other side
+        const url = await makePaymentForProduct({
+          couponCode,
+          productsId: state.shoppingBag?.map((item) => item.id),
+          subdomain,
+        });
+        console.log("this is the chargily url for the products ");
+        console.log(url);
+        router.push(url);
+      }
     } catch (err) {
       console.error("an error in the process payment funtion");
       console.error(err);
