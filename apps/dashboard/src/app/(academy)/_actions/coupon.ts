@@ -316,9 +316,6 @@ export const addCourseToStudentBag = ({
     ],
   } as StudentBag;
 
-  console.log("this is the new student bug when buing a product");
-  console.log(newStudentBag);
-
   return newStudentBag;
 };
 
@@ -335,13 +332,10 @@ export const addProductToStudentBag = ({
   bag: StudentBag;
   product: Product;
 }): StudentBag => {
-  console.log("here we are in the products add funtion bug");
   // Check if the course already exists in the student's bag.
   const theCourseExists =
     bag?.products && bag?.products?.find((item) => item.id === product.id);
 
-  console.log({ text: "this is if the product exists in the bag bag" });
-  console.log(theCourseExists);
   // If the course already exists, return the current bag without modification.
   if (theCourseExists) {
     return bag;
@@ -355,9 +349,6 @@ export const addProductToStudentBag = ({
     ...bag,
     products: [...oldData, product],
   } as StudentBag;
-
-  console.log("this is the new student bug");
-  console.log(newStudentBag);
 
   return newStudentBag;
 };

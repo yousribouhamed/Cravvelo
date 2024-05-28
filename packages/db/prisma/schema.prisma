@@ -274,8 +274,8 @@ model Student {
   photo_url     String?   @db.Text
   bio           String?
   otp           Int?
-  email         String    @unique
-  phone         String?   @unique
+  email         String   
+  phone         String?  
   accountId     String
   password      String
   confirmeEmail DateTime?
