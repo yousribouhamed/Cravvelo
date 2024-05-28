@@ -190,10 +190,13 @@ export const buyProductWithCoupon = async ({
 
       // Update the student's bag with the purchased course.
       const studentbag = JSON.parse(student.bag as string) as StudentBag;
-      const newBag = await addProductToStudentBag({
+      const newBag = addProductToStudentBag({
         bag: studentbag,
         product,
       });
+
+      console.log({ message: "this is the product  & student bug" });
+      console.log(newBag);
       await prisma.student.update({
         where: {
           id: student.id,
@@ -313,6 +316,9 @@ export const addCourseToStudentBag = ({
     ],
   } as StudentBag;
 
+  console.log("this is the new student bug when buing a product");
+  console.log(newStudentBag);
+
   return newStudentBag;
 };
 
@@ -329,21 +335,29 @@ export const addProductToStudentBag = ({
   bag: StudentBag;
   product: Product;
 }): StudentBag => {
+  console.log("here we are in the products add funtion bug");
   // Check if the course already exists in the student's bag.
   const theCourseExists =
-    bag?.courses && bag?.products?.find((item) => item.id === product.id);
+    bag?.products && bag?.products?.find((item) => item.id === product.id);
 
+  console.log({ text: "this is if the product exists in the bag bag" });
+  console.log(theCourseExists);
   // If the course already exists, return the current bag without modification.
   if (theCourseExists) {
     return bag;
   }
 
   // If the course doesn't exist, create a new student bag with the added course.
+  const oldData =
+    bag.products && bag.products.length > 0 ? [...bag.courses] : [];
 
   const newStudentBag = {
     ...bag,
-    products: [...bag.products, product],
+    products: [...oldData, product],
   } as StudentBag;
+
+  console.log("this is the new student bug");
+  console.log(newStudentBag);
 
   return newStudentBag;
 };

@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "database/src";
-import { buyWithCoupon } from "./coupon";
+import { buyProductWithCoupon, buyWithCoupon } from "./coupon";
 import { payWithChargily } from "./chargily";
 import { getStudent } from "./auth";
 import { create_course_sale, create_product_sale } from "./sales";
@@ -237,11 +237,13 @@ export const makePaymentForProduct = async ({
     const newPrice = await applyCoupon({ couponCode, price: total });
 
     if (newPrice === 0 || newPrice < 0) {
-      console.log("the price after coupon is equal to 0");
-      await buyWithCoupon({
+      console.log("the price after coupon is equal to 0 we enter the funtion");
+      await buyProductWithCoupon({
         code: couponCode,
-        courseId: products[0].id,
-      });
+        productId: products[0].id,
+      }).catch((err) => console.log(err));
+
+      console.log("we have get out of the funtion");
 
       await create_product_sale({
         accountId: products[0].accountId,

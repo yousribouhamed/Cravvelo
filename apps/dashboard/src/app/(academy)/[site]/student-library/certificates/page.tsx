@@ -58,7 +58,7 @@ const Page = async ({ params }: PageProps) => {
     redirect("/");
   }
 
-  // const bag = JSON.parse(student.bag as string) as StudentBag;
+  const bag = JSON.parse(student.bag as string) as StudentBag;
 
   console.log(certificates);
 
