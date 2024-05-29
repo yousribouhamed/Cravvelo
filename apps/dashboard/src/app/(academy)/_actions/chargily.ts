@@ -160,10 +160,12 @@ export const payWithChargily = async ({
   product_name,
   subdomain,
   success_url,
+  webhook_url ,
 }: {
   product_name: string;
   subdomain: string;
   amount: number;
+  webhook_url : string ;
   success_url: string;
   metadata: {
     studentId: string;
@@ -217,7 +219,7 @@ export const payWithChargily = async ({
       items: [{ price: price.id, quantity: 1 }],
       success_url,
       metadata: [metadata],
-      webhook_endpoint: "https://app.cravvelo.com/api/webhooks/chargily/client",
+      webhook_endpoint: webhook_url,
     }; // Payload for creating a checkout
 
     const options3 = {

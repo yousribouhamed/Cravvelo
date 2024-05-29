@@ -124,6 +124,7 @@ export const makePayment = async ({
 
       const paymentUrl = await payWithChargily({
         amount: total,
+        webhook_url: "https://app.cravvelo.com/api/webhooks/chargily/client",
         metadata: {
           productId: courses[0].id,
           studentId: student.id,
@@ -155,6 +156,7 @@ export const makePayment = async ({
 
     const paymentUrl = await payWithChargily({
       amount: newPrice,
+      webhook_url: "https://app.cravvelo.com/api/webhooks/chargily/client",
       metadata: {
         productId: courses[0]?.id,
         studentId: student?.id,
@@ -221,6 +223,8 @@ export const makePaymentForProduct = async ({
       console.log("we are paying using chargily");
 
       const paymentUrl = await payWithChargily({
+        webhook_url:
+          "https://app.cravvelo.com/api/webhooks/chargily/client/product",
         amount: total,
         metadata: {
           productId: products[0].id,
@@ -237,13 +241,10 @@ export const makePaymentForProduct = async ({
     const newPrice = await applyCoupon({ couponCode, price: total });
 
     if (newPrice === 0 || newPrice < 0) {
-      console.log("the price after coupon is equal to 0 we enter the funtion");
       await buyProductWithCoupon({
         code: couponCode,
         productId: products[0].id,
       }).catch((err) => console.log(err));
-
-      console.log("we have get out of the funtion");
 
       await create_product_sale({
         accountId: products[0].accountId,
@@ -255,6 +256,8 @@ export const makePaymentForProduct = async ({
     }
 
     const paymentUrl = await payWithChargily({
+      webhook_url:
+        "https://app.cravvelo.com/api/webhooks/chargily/client/product",
       amount: newPrice,
       metadata: {
         productId: products[0]?.id,

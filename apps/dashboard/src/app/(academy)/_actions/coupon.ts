@@ -195,8 +195,6 @@ export const buyProductWithCoupon = async ({
         product,
       });
 
-      console.log({ message: "this is the product  & student bug" });
-      console.log(newBag);
       await prisma.student.update({
         where: {
           id: student.id,
@@ -343,7 +341,7 @@ export const addProductToStudentBag = ({
 
   // If the course doesn't exist, create a new student bag with the added course.
   const oldData =
-    bag.products && bag.products.length > 0 ? [...bag.courses] : [];
+    bag.products && bag.products.length > 0 ? [...bag.products] : [];
 
   const newStudentBag = {
     ...bag,
