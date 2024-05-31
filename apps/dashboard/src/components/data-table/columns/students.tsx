@@ -15,6 +15,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@ui/components/ui/avatar";
 import { maketoast } from "../../toasts";
 import { Button } from "@ui/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
+import { Info } from "lucide-react";
+import Link from "next/link";
 
 export const StudentsColumns: ColumnDef<Student>[] = [
   {
@@ -122,8 +124,6 @@ export const StudentsColumns: ColumnDef<Student>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
-              <DropdownMenuSeparator />
-
               <DropdownMenuItem
                 onClick={() => {
                   navigator.clipboard.writeText(payment.email);
@@ -147,6 +147,17 @@ export const StudentsColumns: ColumnDef<Student>[] = [
                 </svg>
                 نسخ البريد الإلكتروني
               </DropdownMenuItem>
+              <Link href={`/students/${row.original.id}`}>
+                <DropdownMenuItem
+                  onClick={() => {
+                    navigator.clipboard.writeText(payment.email);
+                  }}
+                  className="w-full h-full flex justify-between items-center gap-x-2 px-2"
+                >
+                  <Info className="w-4 h-4" />
+                  مزيد من المعلومات
+                </DropdownMenuItem>
+              </Link>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

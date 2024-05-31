@@ -48,8 +48,6 @@ const Page = async ({ params }: PageProps) => {
 
   const bag = JSON.parse(student.bag as string) as StudentBag;
 
-  console.log(bag);
-
   return (
     <>
       <AcademyHeader

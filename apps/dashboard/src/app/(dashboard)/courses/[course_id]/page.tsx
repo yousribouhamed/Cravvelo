@@ -21,11 +21,14 @@ const getAllNotifications = async ({ accountId }: { accountId: string }) => {
 export default async function Page({ params }: PageProps) {
   const user = await useHaveAccess();
 
-  const course = await prisma.course.findUnique({
-    where: {
-      id: params.course_id,
-    },
-  });
+  const [notifications, course] = await Promise.all([
+    getAllNotifications({ accountId: user.accountId }),
+    prisma.course.findUnique({
+      where: {
+        id: params.course_id,
+      },
+    }),
+  ]);
 
   if (!course) {
     notFound();
@@ -34,7 +37,12 @@ export default async function Page({ params }: PageProps) {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col  justify-start">
-        <Header notifications={[]} goBack user={user} title="ui ux" />
+        <Header
+          notifications={notifications}
+          goBack
+          user={user}
+          title="ui ux"
+        />
         <div className="w-full h-[70px]  flex items-center justify-between"></div>
         <div className="w-full min-h-[500px] grid grid-cols-3">
           <p>this page is an error</p>
