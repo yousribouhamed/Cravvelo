@@ -20,6 +20,7 @@ import PublishWebsite from "@/src/components/models/editor/publish-website";
 import { prisma } from "database/src";
 import { dashboardProductsSearchParamsSchema } from "@/src/lib/validators/cart";
 import CreateAcademiaSection from "@/src/components/create-academia-section";
+import ConfirmeAccount from "@/src/components/confirme-account";
 
 const getAllSales = async ({
   accountId,
@@ -156,7 +157,7 @@ async function Page({ searchParams }) {
     <MaxWidthWrapper>
       <main className="w-full flex flex-col overflow-y-hidden h-fit mb-10 justify-start">
         <Header notifications={notifications} user={user} title="الرئيسية" />
-        {/* <ConfirmeAccount /> */}
+        <ConfirmeAccount />
         {!user?.subdomain ? (
           <CreateAcademiaSection />
         ) : (

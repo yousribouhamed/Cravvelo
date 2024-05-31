@@ -38,6 +38,12 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({
 
   const [loading, setLoading] = useState<boolean>(false);
 
+  const isCourseFree =
+    priceAfterCouponCode === 0 || Number(state.shoppingBag[0].price) === 0;
+  const totalAmount = state.shoppingBag
+    .map((item) => Number(item.price))
+    .reduce((current, next) => current + next, 0);
+
   // make the applay button
 
   const applayCouponCode = async () => {
@@ -191,18 +197,14 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({
         <button
           onClick={proccessPayment}
           disabled={loading}
-          className="mt-8 w-full h-12  flex items-center justify-center text-white gap-x-4 disabled:opacity-[50%]"
-          style={{
-            background: color ?? "#FC6B00",
-          }}
+          className="mt-8 w-full h-12 flex items-center   justify-center text-white gap-x-4 disabled:opacity-[50%]"
+          style={{ background: color ?? "#FC6B00" }}
         >
           {loading && <LoadingSpinner />}
-          دفع DZD{" "}
-          {priceAfterCouponCode
-            ? priceAfterCouponCode || priceAfterCouponCode === 0
-            : state?.shoppingBag
-                ?.map((item) => Number(item.price))
-                ?.reduce((current, next) => current + next)}
+          {isCourseFree ? "المطالبة بالدورة" : " دفع DZD"}
+          {priceAfterCouponCode !== undefined
+            ? priceAfterCouponCode
+            : totalAmount}
         </button>
       ) : (
         <button

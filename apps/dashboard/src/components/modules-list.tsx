@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import {
   DragDropContext,
   Droppable,
@@ -32,31 +32,44 @@ const ModulesList: FC<ChapterProps> = ({
 
   const isMounted = useMounted();
 
-  const onDragEnd = (result: DropResult) => {
-    if (!result) return;
-    if (!result.destination) return;
+  const onDragEnd = useCallback(
+    (result: DropResult) => {
+      if (!result.destination) return;
 
-    const items = modules;
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
+      const updatedModules = Array.from(modules);
+      const [reorderedItem] = updatedModules.splice(result.source.index, 1);
+      updatedModules.splice(result.destination.index, 0, reorderedItem);
 
-    const startIndex = Math.min(result.source.index, result.destination.index);
-    const endIndex = Math.max(result.source.index, result.destination.index);
+      setModules(updatedModules);
+    },
+    [modules]
+  );
 
-    const updatedSections = items.slice(startIndex, endIndex + 1);
+  // const onDragEnd = (result: DropResult) => {
+  //   if (!result) return;
+  //   if (!result.destination) return;
 
-    setModules(updatedSections);
+  //   const items = modules;
+  //   const [reorderedItem] = items.splice(result.source.index, 1);
+  //   items.splice(result.destination.index, 0, reorderedItem);
 
-    // const bulkUpdateData = updatedSections.map((section) => ({
-    //   id: section.id,
-    //   position: items.findIndex((item) => item.id === section.id),
-    // }));
+  //   const startIndex = Math.min(result.source.index, result.destination.index);
+  //   const endIndex = Math.max(result.source.index, result.destination.index);
 
-    // mutation.mutate({
-    //   courseID,
-    //   bulkUpdateData,
-    // });
-  };
+  //   const updatedSections = items.slice(startIndex, endIndex + 1);
+
+  //   setModules(updatedSections);
+
+  //   // const bulkUpdateData = updatedSections.map((section) => ({
+  //   //   id: section.id,
+  //   //   position: items.findIndex((item) => item.id === section.id),
+  //   // }));
+
+  //   // mutation.mutate({
+  //   //   courseID,
+  //   //   bulkUpdateData,
+  //   // });
+  // };
 
   if (!isMounted) {
     return null;
@@ -112,7 +125,7 @@ const ModulesList: FC<ChapterProps> = ({
                     <Link
                       href={`/courses/${courseId}/chapters/${chapterID}/${chapter.fileUrl}/update-video`}
                     >
-                      <p className="text-black font-bold text-xl hover:text-primary transition-all duration-300 ">
+                      <p className="text-black  text-lg hover:text-blue-500 transition-all duration-300 ">
                         {" "}
                         {chapter.title}
                       </p>

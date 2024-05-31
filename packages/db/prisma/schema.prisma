@@ -326,3 +326,14 @@ model Admin {
 
   @@index([id])
 }
+
+
+model AcademiaMessage {
+  id              String   @unique @default(uuid())
+  senderName      String
+  senderEmail     String
+  senderMessage   String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  @@index([id])
+}

@@ -125,7 +125,9 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
                       background: color ?? "#FC6B00",
                     }}
                   >
-                    اشتري الآن
+                    {Number(item.price) === 0
+                      ? "المطالبة بالدورة"
+                      : "اشتري الآن"}
                   </button>
                   <button className="w-[60px]  h-[45px]  rounded-lg bg-secondary flex items-center justify-center cursor-pointer ">
                     <ShoppingCart className="w-4 h-4 text-black" />

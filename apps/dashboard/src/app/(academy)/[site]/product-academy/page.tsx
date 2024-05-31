@@ -46,9 +46,6 @@ const Page = async ({ params }: PageProps) => {
         <div className="  w-full h-fit min-h-screen flex flex-col gap-4 items-start py-4">
           <div className="w-full h-[100px] flex items-center justify-between">
             <h1 className="text-3xl font-bold">المنتجات الرقمية</h1>
-            <div className="md:hidden">
-              <FilterButtonMobile color={website?.color} />
-            </div>
           </div>
           <ProductsGrid products={products} color={website?.color} />
         </div>

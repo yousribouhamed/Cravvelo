@@ -8,9 +8,8 @@ import { getSubDomainValue } from "../../../lib";
 import { getSiteData } from "../../../_actions";
 import AcademiaFooter from "../../../_components/layout/academy-footer";
 import { notFound, redirect } from "next/navigation";
-
-import { BookMarked } from "lucide-react";
-import Link from "next/link";
+import DonwloadButton from "./donwload-button";
+import { ArrowBigDownDash } from "lucide-react";
 
 interface PageProps {
   params: { site: string };
@@ -61,32 +60,31 @@ const Page = async ({ params }: PageProps) => {
             )}
             {bag?.products?.map((item, index) => {
               return (
-                <Link
-                  href={`/course-academy/${item.id}/course-player`}
-                  key={item.title + index}
-                >
+                <div key={item.title + index}>
                   <div className="w-[320px] min-h-[300px] h-fit p-0  border  flex flex-col shadow rounded-xl hover:shadow-xl  transition-all duration-700 bg-white cursor-pointer ">
                     <img
                       alt={item.title + "image"}
                       src={item.thumnailUrl}
                       className="w-full h-[200px] rounded-t-xl object-cover "
                     />
-                    <div className="w-full h-[50px] px-4 flex items-center justify-between my-4">
+                    <div className="w-full h-[25px] px-4 flex items-center justify-between my-2">
                       <h2 className="text-black  text-lg text-start ">
                         {item.title}
                       </h2>
                     </div>
                     {/* this will hold the stars */}
-                    <div className="w-full h-[10px] flex items-center justify-between my-4 px-4">
+                    <div className="w-full h-[20px] flex items-center justify-between my-2 px-4">
                       <div className="w-[50%] h-[20px] flex items-center justify-start gap-x-2">
-                        <BookMarked className="w-4 h-4 text-gray-500" />
+                        <ArrowBigDownDash className="w-4 h-4 text-gray-500" />
                         <span className="text-gray-500  text-sm text-start ">
-                          {item.numberOfDownloads} مادة
+                          {item.numberOfDownloads} عدد المشترين
                         </span>
                       </div>
                     </div>
+
+                    <DonwloadButton fileUrl={item.filrUrl} />
                   </div>
-                </Link>
+                </div>
               );
             })}
           </div>
