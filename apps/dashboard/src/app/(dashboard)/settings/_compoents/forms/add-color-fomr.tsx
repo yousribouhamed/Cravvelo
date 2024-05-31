@@ -61,7 +61,7 @@ const AddColorFrom: FC<ChangeDomainFormProps> = ({ color }) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card className="border rounded-xl shadow-none">
           <CardHeader>
-            <CardTitle> لون أصلي</CardTitle>
+            <CardTitle>اللون الرئيسي للاكادمية</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
@@ -74,7 +74,7 @@ const AddColorFrom: FC<ChangeDomainFormProps> = ({ color }) => {
                       type="color"
                       id="colorPicker"
                       name="colorPicker"
-                      className="appearance-none  py-2 px-3 w-6  text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      className="appearance-none  p-1 w-[50px]  text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       {...field}
                     />
                   </FormControl>

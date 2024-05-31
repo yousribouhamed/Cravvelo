@@ -170,7 +170,7 @@ export const ImageUploaderS3 = ({
                   );
                 case "COMPLETE":
                   return (
-                    <div className="relative w-full h-full flex items-center justify-center gap-x-4 ">
+                    <div className="relative w-full h-full flex items-center justify-end gap-x-4 ">
                       <Button
                         variant="ghost"
                         size="icon"
@@ -182,21 +182,21 @@ export const ImageUploaderS3 = ({
                       >
                         <X className="w-4 h-4 " />
                       </Button>
-                      <div className="w-[140px] h-[140px] relative">
+                      <div className="w-[150px] h-[150px] border shadow rounded-xl relative">
                         {fileUrl && (
                           <Image fill alt="course image" src={fileUrl} />
                         )}
                       </div>
                       <div className="flex flex-col gap-y-4 items-start">
-                        <span className="text-xl font-bold text-black">
+                        <span className="text-md font-bold text-gray-500">
                           {acceptedFiles[0]?.name}
                         </span>
 
-                        <span className="text-xl font-bold text-black">
+                        <span className="text-md font-bold text-gray-500">
                           {acceptedFiles[0]?.size}
                         </span>
 
-                        <span className="text-xl font-bold text-black">
+                        <span className="text-md font-bold text-gray-500">
                           {acceptedFiles[0]?.type}
                         </span>
                       </div>

@@ -38,7 +38,7 @@ const Header: FC<Props> = ({
     <>
       <TooltipProvider>
         <div className="w-full h-[96px] flex justify-between items-center border-b  ">
-          <div className="w-[25%] h-full flex items-center justify-start gap-x-2">
+          <div className="lg:w-[25%] w-[40%] h-full flex items-center justify-start gap-x-2">
             <div className="lg:hidden">
               <MobildSideBard />
             </div>
@@ -65,7 +65,7 @@ const Header: FC<Props> = ({
             <SearchInput />
           </div>
 
-          <div className="w-[25%]  h-full flex items-center justify-end gap-x-2">
+          <div className=" lg:w-[25%] w-[40%]   h-full flex items-center justify-end gap-x-2">
             <Notifications
               accountId={user.accountId}
               notifications={notifications}

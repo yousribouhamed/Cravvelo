@@ -13,6 +13,8 @@ import {
 import { Checkbox } from "@ui/components/ui/checkbox";
 import { Certificate } from "database";
 import { maketoast } from "../../toasts";
+import { DataTableColumnHeader } from "../data-table-head";
+import { formatDateInArabic } from "@/src/lib/utils";
 
 export const CertificateColumns: ColumnDef<Certificate>[] = [
   {
@@ -39,6 +41,32 @@ export const CertificateColumns: ColumnDef<Certificate>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
+  },
+  {
+    accessorKey: "createdAt",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="وقت الانشاء" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <p className=" text-sm font-bold ">
+          {formatDateInArabic(row.original.createdAt, "dd MMMM yyyy")}
+        </p>
+      );
+    },
+  },
+
+  {
+    accessorKey: "name",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="اسم الشهادة" />
+    ),
+  },
+  {
+    accessorKey: "studentName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="اسم الطالب" />
+    ),
   },
 
   {

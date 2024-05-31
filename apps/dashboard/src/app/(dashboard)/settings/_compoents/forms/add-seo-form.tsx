@@ -92,7 +92,7 @@ const AddSeoForm: FC<AddSeoFormProps> = ({ description, title }) => {
                 <FormItem>
                   <FormLabel> هنا حاول أن تصف أكاديميتك .</FormLabel>
                   <FormControl>
-                    <Textarea {...field} />
+                    <Textarea {...field} className="min-h-[140px]" />
                   </FormControl>
                   <FormDescription>
                     استخدم شيئًا سيبحث عنه الناس
