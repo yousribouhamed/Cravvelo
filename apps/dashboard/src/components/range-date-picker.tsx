@@ -94,7 +94,7 @@ export function DatePickerWithRange({
             id="date"
             variant={"secondary"}
             className={cn(
-              "w-[260px] justify-start text-left gap-x-4 font-normal bg-white rounded-xl border",
+              "w-fit justify-start text-left gap-x-4 font-normal bg-white rounded-xl border",
               !date && "text-muted-foreground"
             )}
           >
