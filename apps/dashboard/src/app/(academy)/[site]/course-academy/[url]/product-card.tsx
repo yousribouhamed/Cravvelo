@@ -76,30 +76,45 @@ export const Product_card = ({
         isFixed ? "  " : ""
       } w-full lg:w-[350px] relative min-h-[500px] h-fit rounded-xl border p-4 flex flex-col gap-y-4 2xl:sticky 2xl:top-[120px] bg-white mt-6 `}
     >
-      <span
-        className=" text-xs text-white p-2 rounded-full absolute -top-5 right-0"
-        style={{ backgroundColor: color }}
-      >
-        dis
-        {calculateDiscountPercentage(
-          Number(course.price),
-          Number(course.compareAtPrice)
-        )
-          ? calculateDiscountPercentage(
-              Number(course.price),
-              Number(course.compareAtPrice)
-            )
-          : 0}
-        %
-      </span>
-      <p className="text-2xl font-bold text-start text-black">
-        DZD {course.price}.00
-      </p>
-      <p>
-        <span className="line-through text-red-500 text-lg">
-          DZD {course.compareAtPrice}.00
-        </span>{" "}
-      </p>
+      {Number(course.price) > 0 && (
+        <span
+          className=" text-xs text-white p-2 rounded-full absolute -top-5 right-0"
+          style={{ backgroundColor: color }}
+        >
+          dis
+          {+" " +
+          calculateDiscountPercentage(
+            Number(course.price),
+            Number(course.compareAtPrice)
+          )
+            ? calculateDiscountPercentage(
+                Number(course.price),
+                Number(course.compareAtPrice)
+              )
+            : 0}
+          %
+        </span>
+      )}
+      {Number(course.price) === 0 && (
+        <span
+          className=" text-xs text-white p-2 rounded-full absolute -top-5 right-0"
+          style={{ backgroundColor: color }}
+        >
+          مجانا
+        </span>
+      )}
+      {Number(course.price) > 0 && (
+        <p className="text-2xl font-bold text-start text-black">
+          DZD {course.price}.00
+        </p>
+      )}
+      {Number(course.price) > 0 && (
+        <p>
+          <span className="line-through text-red-500 text-lg">
+            DZD {course.compareAtPrice}.00
+          </span>{" "}
+        </p>
+      )}
 
       <button
         onClick={() => {
@@ -117,7 +132,7 @@ export const Product_card = ({
           background: color ?? "#FC6B00",
         }}
       >
-        اضف الى السلة
+        {Number(course.price) > 0 ? "اضف الى السلة" : "المطالبة بالدورة"}
       </button>
 
       <div

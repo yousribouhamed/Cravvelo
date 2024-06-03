@@ -40,7 +40,7 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   // Slice the data array to get items for the current page
-  const currentItems = courses.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = courses?.slice(indexOfFirstItem, indexOfLastItem);
 
   // Function to handle page change
   const handlePageChange = (pageNumber) => {
@@ -137,7 +137,7 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
             );
           })}
       </div>
-      {courses.length > 3 && (
+      {courses?.length > 3 && (
         <div
           dir="ltr"
           className="w-full h-fit min-h-[100px] flex items-center justify-center "
