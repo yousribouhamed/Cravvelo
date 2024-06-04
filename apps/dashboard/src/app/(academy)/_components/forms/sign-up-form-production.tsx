@@ -74,7 +74,12 @@ export function AcademySifnUpForm({
 
       maketoast.successWithText({ text: "لقد تم إنشاء حسابك" });
 
-      router.push("/auth-academy/sign-up/verify-email");
+      // Pass email as a query parameter
+      router.push(
+        `/auth-academy/sign-up/verify-email?email=${encodeURIComponent(
+          values.email
+        )}`
+      );
       maketoast.successWithText({
         text: "لقد قمنا بارسال رمز التاكيد الى حسابك",
       });

@@ -46,15 +46,15 @@ export const create_student = async ({
   accountId: string;
 }) => {
   // Verify if the email exists
-  // const student_with_same_email = await prisma.student.findFirst({
-  //   where: {
-  //     email,
-  //   },
-  // });
+  const student_with_same_email = await prisma.student.findFirst({
+    where: {
+      AND: [{ email: email }, { accountId: accountId }],
+    },
+  });
 
-  // if (student_with_same_email) {
-  //   throw new Error("Student already exists");
-  // }
+  if (student_with_same_email) {
+    throw new Error("Student already exists");
+  }
 
   // Hash the password
   const hashedPassword: string = await bcrypt?.hash(password, 10);

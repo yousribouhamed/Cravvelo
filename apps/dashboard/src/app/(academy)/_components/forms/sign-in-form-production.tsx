@@ -134,7 +134,21 @@ export function AcademySignInForm({
         </Form>
         <div className="w-full my-4 h-[20px] flex justify-center">
           <span>
-            ليس لديك حساب؟{" "}
+            هل نسيت كلمة المرور ؟
+            <Link href={"/auth-academy/sign-in"}>
+              <span
+                style={{
+                  color: color ?? "#FC6B00",
+                }}
+              >
+                ساضيفها قريبا
+              </span>
+            </Link>
+          </span>
+        </div>
+        <div className="w-full my-4 h-[20px] flex justify-center">
+          <span>
+            ليس لديك حساب ؟{" "}
             <Link href={"/auth-academy/sign-up"}>
               <span
                 style={{

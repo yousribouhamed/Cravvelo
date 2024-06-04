@@ -27,6 +27,8 @@ import { verifyEmailSchema } from "@/src/lib/validators/auth";
 import { sign_in_as_student, verifyEmailAction } from "../../_actions/auth";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
+import { verifyStudentEmail } from "@/src/lib/resend";
+import { useParams } from "next/navigation";
 
 type Inputs = z.infer<typeof verifyEmailSchema>;
 
@@ -42,10 +44,20 @@ export function AcademyVerifyEmailForm({
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const router = useRouter();
+  const params = useParams();
+
+  console.log("these are the params from the url");
+  console.log(params);
 
   const form = useForm<Inputs>({
     resolver: zodResolver(verifyEmailSchema),
   });
+
+  async function resendEmailAgain() {
+    try {
+      // await verifyStudentEmail({code})
+    } catch (err) {}
+  }
 
   async function onSubmit(data: z.infer<typeof verifyEmailSchema>) {
     try {
@@ -92,6 +104,18 @@ export function AcademyVerifyEmailForm({
                 </FormItem>
               )}
             />
+            <div className="w-full my-4 h-[20px] gap-x-2 flex justify-center">
+              <span>لم تتلقى بريد الكتروني ؟</span>
+              <Button
+                variant="link"
+                className="text-sm "
+                style={{
+                  color: color ?? "#FC6B00",
+                }}
+              >
+                ارسل مجددا
+              </Button>
+            </div>
             <Button
               data-ripple-light="true"
               type="submit"

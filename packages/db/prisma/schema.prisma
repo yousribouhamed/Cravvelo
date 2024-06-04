@@ -17,7 +17,7 @@ enum PLANS {
 
 
 model Account {
-  id              String            @unique @default(uuid())
+  id              String            @unique @default(cuid())
   userId          String            @unique
   avatarUrl       String?           @db.Text
   user_name       String?           @db.Text
@@ -41,7 +41,7 @@ model Account {
 }
 
 model PaymentsConnect {
-  id                String   @unique @default(uuid())
+  id                String   @unique @default(cuid())
   accountId         String   
   chargilyPublicKey String
   chargiySecretKey  String
@@ -56,7 +56,7 @@ model PaymentsConnect {
 
 
 model Course {
-  id                     String     @unique @default(uuid())
+  id                     String     @unique @default(cuid())
   rating                 Float      @default(0)
   accountId              String
   title                  String
@@ -95,7 +95,7 @@ model Course {
 }
 
 model Chapter {
-  id          String   @unique @default(uuid())
+  id          String   @unique @default(cuid())
   courseID    String
   title       String
   modules     Json?
@@ -106,7 +106,7 @@ model Chapter {
 }
 
 model Product {
-  id                String   @unique @default(uuid())
+  id                String   @unique @default(cuid())
   title             String
   price             Float?
   numberOfDownloads Int?
@@ -130,7 +130,7 @@ model Product {
 
 
 model Website {
-  id             String   @unique @default(uuid())
+  id             String   @unique @default(cuid())
   accountId      String   @unique
   name           String?
   description    String?  @db.Text
@@ -155,7 +155,7 @@ enum DiscountType {
 }
 
 model Coupon {
-  id             String       @unique @default(uuid())
+  id             String       @unique @default(cuid())
   accountId      String
   code           String
   description    String?
@@ -188,7 +188,7 @@ enum ItemType {
 }
 
 model Sale {
-  id          String     @unique @default(uuid())
+  id          String     @unique @default(cuid())
   orderNumber Int        @unique @default(autoincrement())
   accountId   String
   amount      Float
@@ -206,7 +206,7 @@ model Sale {
 }
 
 model Homework {
-  id          String   @unique @default(uuid())
+  id          String   @unique @default(cuid())
   title       String
   description String?
   dueDate     DateTime
@@ -220,7 +220,7 @@ model Homework {
 }
 
 model Comment {
-  id           String   @unique @default(uuid())
+  id           String   @unique @default(cuid())
   content      String
   rating       Float
   studentId    String
@@ -241,7 +241,7 @@ model Comment {
 }
 
 model Notification {
-  id        String   @unique @default(uuid())
+  id        String   @unique @default(cuid())
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -254,7 +254,7 @@ model Notification {
 }
 
 model Exam {
-  id          String   @unique @default(uuid())
+  id          String   @unique @default(cuid())
   title       String
   description String?
   date        DateTime
@@ -269,7 +269,7 @@ model Exam {
 }
 
 model Student {
-  id            String    @unique @default(uuid())
+  id            String    @unique @default(cuid())
   full_name     String
   photo_url     String?   @db.Text
   bio           String?
@@ -289,7 +289,7 @@ model Student {
 }
 
 model Certificate {
-  id          String   @unique @default(uuid())
+  id          String   @unique @default(cuid())
   name        String
   description String?
   studentId   String
@@ -301,7 +301,7 @@ model Certificate {
 }
 
 model Payments {
-  id                  String   @unique @default(uuid())
+  id                  String   @unique @default(cuid())
   accountId           String
   Account             Account  @relation(fields: [accountId], references: [id])
   plan                String
@@ -316,7 +316,7 @@ model Payments {
 }
 
 model Admin {
-  id        String   @unique @default(uuid())
+  id        String   @unique @default(cuid())
   name      String?
   email     String?  @unique
   photo_url String?
@@ -329,11 +329,27 @@ model Admin {
 
 
 model AcademiaMessage {
-  id              String   @unique @default(uuid())
+  id              String   @unique @default(cuid())
   senderName      String
   senderEmail     String
   senderMessage   String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   @@index([id])
+}
+
+
+model OtpCode {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  code      String
+  type      OtpType
+  expiresAt DateTime
+
+  @@index([id])
+}
+
+enum OtpType {
+  CONFIRM_ACCOUNT
+  FORGOT_PASSWORD
 }

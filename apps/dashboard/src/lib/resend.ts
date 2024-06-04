@@ -42,8 +42,6 @@ export const verifyStudentEmail = async ({
   email: string;
   code: number;
 }) => {
-  console.log("this is the email we are sending to ");
-  console.log(email);
   const { data, error } = await resend.emails.send({
     from: "Acme <onboarding@resend.dev>",
     to: [email],
