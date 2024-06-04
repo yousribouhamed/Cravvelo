@@ -66,7 +66,7 @@ function PublishCourseForm({ course, chapters }: PublishCourseFormProps) {
     onSuccess: () => {
       maketoast.success();
       // router.push(`/courses`);
-      window.location.href = "app.cravvelo.com/courses";
+      window.location.href = "/courses";
     },
     onError: () => {
       maketoast.error();

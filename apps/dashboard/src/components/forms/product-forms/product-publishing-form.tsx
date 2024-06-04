@@ -69,7 +69,7 @@ function ProductPublishingForm({ product }: PublishProductFormProps) {
   const mutation = trpc.launchProduct.useMutation({
     onSuccess: () => {
       maketoast.success();
-      window.location.href = "app.cravvelo.com/products";
+      window.location.href = "/products";
     },
     onError: () => {
       maketoast.error();
