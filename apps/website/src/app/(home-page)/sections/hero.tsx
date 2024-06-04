@@ -50,14 +50,14 @@ const Hero: FC = ({}) => {
           {/* Right column - Image */}
           <div className="xl:ml-20 lg:-ml-10 h-fit sm:-ml-24 z-[10] lg:mt-0 lg:col-start-2 lg:row-span-2 lg:row-start-1">
             <div className="w-[32rem]  h-[700px] max-w-none rounded-xl sm:w-[40rem] xl:w-[57rem] 2xl:w-[60rem] relative">
-              {/* <Image
+              <Image
                 fill
                 className=" w-full h-full  rounded-xl "
-                src="/Sggnap.png"
+                src="/hero-image.png"
                 alt="hero image of the application"
                 priority
                 loading="eager"
-              /> */}
+              />
             </div>
           </div>
         </div>
