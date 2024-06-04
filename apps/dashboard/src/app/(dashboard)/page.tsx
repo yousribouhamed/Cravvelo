@@ -157,7 +157,7 @@ async function Page({ searchParams }) {
     <MaxWidthWrapper>
       <main className="w-full flex flex-col overflow-y-hidden h-fit mb-10 justify-start">
         <Header notifications={notifications} user={user} title="الرئيسية" />
-        <ConfirmeAccount />
+        {/* <ConfirmeAccount /> */}
         {!user?.subdomain ? (
           <CreateAcademiaSection />
         ) : (
