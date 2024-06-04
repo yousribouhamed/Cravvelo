@@ -3,10 +3,10 @@ import type { FC } from "react";
 
 const CreateLanch: FC = ({}) => {
   return (
-    <MaxWidthWrapper className="my-6 p-4 lg:p-0">
+    <MaxWidthWrapper className="my-6   ">
       <section
         id="WHIY_US"
-        className="w-full min-h-[300px] h-fit  grid grid-cols-1 lg:grid-cols-2 px-2 md:px-8 2xl:px-0  "
+        className="mx-auto w-full  lg:max-w-screen-2xl min-h-[300px] h-fit   grid grid-cols-1 lg:grid-cols-2 px-2 md:px-8 lg:px-0  "
       >
         <div className="w-full h-full ">
           <div className="w-full mt-8 h-[60px] relative flex items-center justify-start ">
