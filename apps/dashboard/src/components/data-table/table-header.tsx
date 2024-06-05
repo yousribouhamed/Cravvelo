@@ -50,7 +50,7 @@ export function TableHeader<TData>({
     <div className="w-full h-[70px] flex items-center justify-between">
       <div className="min-w-[200px] w-fit h-full flex  items-center justify-start gap-x-4">
         <CoursesFilterModal />
-        <Input
+        {/* <Input
           placeholder="Filter emails..."
           defaultValue={
             (table.getColumn("title")?.getFilterValue() as string) ?? ""
@@ -64,7 +64,7 @@ export function TableHeader<TData>({
             );
           }}
           className="max-w-sm"
-        />
+        /> */}
       </div>
       <div className="min-w-[200px] w-fit h-full flex items-center justify-end gap-x-4">
         <Button
