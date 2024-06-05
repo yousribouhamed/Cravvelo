@@ -15,6 +15,19 @@ interface TableHeaderProps<TData> {
   data: any[];
 }
 
+// Define a function to prepare the data for CSV export
+const prepareDataForCsv = (data: any[]) => {
+  return data.map((item) => ({
+    "Course Title": item.title,
+    "Instructor Name": item.instructorName,
+    Category: item.category,
+    "Duration (hours)": item.duration,
+    "Enrolled Students": item.enrolledStudents,
+    "Start Date": item.startDate,
+    "End Date": item.endDate,
+  }));
+};
+
 const csvConfig = mkConfig({
   fieldSeparator: ",",
   decimalSeparator: ".",
@@ -27,7 +40,8 @@ export function TableHeader<TData>({
   data,
 }: TableHeaderProps<TData>) {
   const handleExportCSV = (data: any[]) => {
-    const csv = generateCsv(csvConfig)(data);
+    const preparedData = prepareDataForCsv(data);
+    const csv = generateCsv(csvConfig)(preparedData);
     //@ts-ignore
     download(csvConfig)(csv);
   };
@@ -37,13 +51,19 @@ export function TableHeader<TData>({
       <div className="min-w-[200px] w-fit h-full flex  items-center justify-start gap-x-4">
         <CoursesFilterModal />
         <Input
-          placeholder="البحث عن الدورات..."
-          //@ts-ignore
-          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
+          placeholder="Filter emails..."
+          defaultValue={
+            (table.getColumn("title")?.getFilterValue() as string) ?? ""
           }
-          className="max-w-sm rounded-xl border bg-white h-10 "
+          onChange={(event) => {
+            table.getColumn("title")?.setFilterValue(event.target.value);
+            console.log(event.target.value);
+            console.log(table.getColumn("title")?.getFilterValue());
+            console.log(
+              table.getColumn("title")?.setFilterValue(event.target.value)
+            );
+          }}
+          className="max-w-sm"
         />
       </div>
       <div className="min-w-[200px] w-fit h-full flex items-center justify-end gap-x-4">

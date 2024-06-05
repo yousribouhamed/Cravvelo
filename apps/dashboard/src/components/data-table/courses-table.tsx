@@ -27,6 +27,7 @@ import {
 import { DoubleArrowLeftIcon } from "@radix-ui/react-icons";
 import { ChevronRightIcon } from "lucide-react";
 import { DataTableFilterableColumn } from "@/src/types";
+import { Input } from "@ui/components/ui/input";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -38,7 +39,7 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
-  filterableColumns = [],
+
   academia_url,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
@@ -64,16 +65,22 @@ export function DataTable<TData, TValue>({
       rowSelection,
       columnFilters,
     },
-    manualPagination: true,
-    manualSorting: true,
-    manualFiltering: true,
+    // manualPagination: true,
+    // manualSorting: true,
+    // manualFiltering: true,
   });
-
-  console.log("here are the filtable columns ");
-  console.log(filterableColumns);
-
   return (
     <>
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Filter emails..."
+          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("title")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
       <TableHeader2 data={data} academia_url={academia_url} table={table} />
       <div className="rounded-md border bg-white">
         <Table>
