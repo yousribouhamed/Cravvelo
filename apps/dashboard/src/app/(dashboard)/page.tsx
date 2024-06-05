@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@ui/components/ui/card";
+import { ScrollArea } from "@ui/components/ui/scroll-area";
 
 import AreaChartOverview from "@/src/components/area-chart";
 import { DatePickerWithRange } from "@/src/components/range-date-picker";
@@ -157,7 +158,7 @@ async function Page({ searchParams }) {
     <MaxWidthWrapper>
       <main className="w-full flex flex-col overflow-y-hidden h-fit mb-10 justify-start">
         <Header notifications={notifications} user={user} title="الرئيسية" />
-        {/* <ConfirmeAccount /> */}
+        <ConfirmeAccount />
         {!user?.subdomain ? (
           <CreateAcademiaSection />
         ) : (
@@ -298,49 +299,66 @@ async function Page({ searchParams }) {
               <div className="grid gap-4 md:grid-cols-2 my-8 h-[300px] w-full mb-10 ">
                 <Card className="col-span-1">
                   <CardHeader>
-                    <CardTitle>الدورات الآكثر مبيعاً</CardTitle>
+                    <p>الدورات الآكثر مبيعاً</p>
                   </CardHeader>
-                  <CardContent className="flex items-center justify-center">
+                  <CardContent className="flex flex-col items-center justify-center">
+                    <div className="w-full h-[50px] bg-primary flex items-center justify-between px-4">
+                      <p className="text-white text-md">اسم الدورة </p>
+                      <p className="text-white text-md"> عدد الطلاب</p>
+                      <p className="text-white text-md">سعر الدورة</p>
+                    </div>
                     {courses.length === 0 ? (
                       <NotFoundCard />
                     ) : (
-                      <div className="w-full h-full flex flex-col gap-y-2">
-                        {courses.map((item) => (
-                          <div
-                            key={item.id}
-                            className="w-full flex items-center justify-between  px-4 border-b p-4"
-                          >
-                            <span> DZD {item.price}</span>
-                            <span>{item.title}</span>
-                          </div>
-                        ))}
-                      </div>
+                      <ScrollArea className="w-full h-[300px]">
+                        <div className="w-full h-fit   flex flex-col ">
+                          {courses.map((item) => (
+                            <div
+                              key={item.id}
+                              className="w-full flex items-center  justify-between  px-4 border  p-4"
+                            >
+                              <span className="text-sm">
+                                {" "}
+                                DZD {item.price ?? 0.0}
+                              </span>
+                              <span>{item.studenstNbr ?? 0}</span>
+                              <span>{item.title}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </ScrollArea>
                     )}
                   </CardContent>
                 </Card>
 
                 <Card className="col-span-1">
                   <CardHeader>
-                    <CardTitle>الطلبات الجديدة</CardTitle>
+                    <p>الطلبات الجديدة</p>
                   </CardHeader>
-                  <CardContent className="flex items-center justify-center">
+                  <CardContent className="flex flex-col items-center justify-center">
+                    <div className="w-full h-[50px] bg-primary flex items-center justify-between px-4">
+                      <p className="text-white text-md">نوع الطلبية</p>
+                      <p className="text-white text-md">مبلغ الطلبية</p>
+                    </div>
                     {sales.length === 0 ? (
                       <NotFoundCard />
                     ) : (
-                      <div className="w-full h-full flex flex-col gap-y-2">
-                        {sales.map((item) => (
-                          <div
-                            key={item.id}
-                            className="w-full flex items-center justify-between px-4 border-b p-4"
-                          >
-                            <span> DZD {item.price}</span>
-                            <span>
-                              {" "}
-                              {item.itemType === "COURSE" ? "دورة" : "منتج"}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
+                      <ScrollArea className="w-full h-[300px]">
+                        <div className="w-full h-fit   flex flex-col ">
+                          {sales.map((item) => (
+                            <div
+                              key={item.id}
+                              className="w-full flex items-center justify-between px-4 border p-4"
+                            >
+                              <span> DZD {item.price}</span>
+                              <span>
+                                {" "}
+                                {item.itemType === "COURSE" ? "دورة" : "منتج"}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </ScrollArea>
                     )}
                   </CardContent>
                 </Card>
