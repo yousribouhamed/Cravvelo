@@ -54,7 +54,7 @@ export const StudentsColumns: ColumnDef<Student>[] = [
       return (
         <div className="w-[40px] h-[40px] flex items-center justify-between ">
           <Avatar>
-            <AvatarImage src={row.original.photo_url} />
+            <AvatarImage src={row.original.photo_url ?? "/avatar.png"} />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
         </div>
@@ -69,7 +69,7 @@ export const StudentsColumns: ColumnDef<Student>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex flex-col gap-y-2 justify-center items-start ">
-          <p className="font-bold text-xs ">{row.original?.full_name}</p>
+          <p className="font-bold text-[15px] ">{row.original?.full_name}</p>
         </div>
       );
     },
@@ -83,7 +83,7 @@ export const StudentsColumns: ColumnDef<Student>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex flex-col gap-y-2 justify-center items-start ">
-          <p className="font-bold text-[10px]">{row.original?.email}</p>
+          <p className="font-bold text-[15px]">{row.original?.email}</p>
         </div>
       );
     },
@@ -107,6 +107,7 @@ export const StudentsColumns: ColumnDef<Student>[] = [
 
   {
     id: "actions",
+
     cell: ({ row }) => {
       const payment = row.original;
 
@@ -129,7 +130,7 @@ export const StudentsColumns: ColumnDef<Student>[] = [
                   navigator.clipboard.writeText(payment.email);
                   maketoast.info();
                 }}
-                className="w-full h-full flex justify-between items-center px-2"
+                className="w-full h-full flex justify-between items-center p-2"
               >
                 <svg
                   width="16"
@@ -152,7 +153,7 @@ export const StudentsColumns: ColumnDef<Student>[] = [
                   onClick={() => {
                     navigator.clipboard.writeText(payment.email);
                   }}
-                  className="w-full h-full flex justify-between items-center gap-x-2 px-2"
+                  className="w-full h-full flex justify-between items-center gap-x-2 p-2"
                 >
                   <Info className="w-4 h-4" />
                   مزيد من المعلومات

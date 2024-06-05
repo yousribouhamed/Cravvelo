@@ -23,7 +23,6 @@ const StudentsTableShell: FC<StudentsTableShellProps> = ({ initialData }) => {
     return <DataTableLoading columnCount={6} />;
   }
 
-  console.log(data);
   return (
     <div className="w-full min-h-[300px] h-fit flex flex-col mt-8">
       <DataTable columns={StudentsColumns} data={data} />

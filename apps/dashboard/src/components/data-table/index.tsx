@@ -24,6 +24,7 @@ import {
 import CouponsTableHeader from "./tables-headers/coupons-table-header";
 import SimpleTableHeader from "./tables-headers/simple-table-header";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import StudentTableHeader from "./tables-headers/students-table-header";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -61,7 +62,8 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <SimpleTableHeader data={data} table={table} />
+      {/* <SimpleTableHeader data={data} table={table} /> */}
+      <StudentTableHeader data={data} table={table} />
       <div className="rounded-md border bg-white">
         <Table>
           <TableHeader>

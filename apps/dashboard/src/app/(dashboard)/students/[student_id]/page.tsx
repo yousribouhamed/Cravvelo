@@ -68,7 +68,7 @@ export default async function Page({ params }: PageProps) {
           <div className="w-full h-[300px]  flex items-center justify-start gap-x-4">
             <div className="w-[300px] h-full relative rounded-xl border ">
               <Image
-                src={student?.photo_url}
+                src={student?.photo_url ?? "/avatar.png"}
                 alt={student?.full_name + "photo"}
                 fill
                 className="rounded-xl"
