@@ -21,7 +21,7 @@ const NewPricing: FC = ({}) => {
   return (
     <div className="w-full min-h-[1080px] h-fit my-10 p-4 md:p-0 ">
       <div className="w-full min-h-[150px] h-fit  flex justify-center items-start   mx-auto ">
-        <div className="bg-white rounded-full transition-all duration-150 relative shadow-2xl  mx-auto w-[250px] h-full flex items-center  justify-center p-4">
+        <div className="bg-white rounded-full transition-all duration-150 relative shadow-2xl  mx-auto w-[250px] h-full flex items-center  justify-center p-2">
           <Tabs
             setPaymentType={setIsPaymentByMonth}
             activeTabClassName={"bg-[#FC6B00] text-white w-full h-full"}
@@ -48,8 +48,8 @@ const NewPricing: FC = ({}) => {
               className="w-full h-[90%] relative bg-white shadow-2xl border rounded-2xl py-2 px-4 flex flex-col "
             >
               {index === 1 && (
-                <div className="bg-[#F0B110] absolute rounded-2xl -top-16 z-[-10] flex items-center justify-center  right-0 left-0  h-20 w-full ">
-                  <p className="text-3xl font-bold text-black text-center">
+                <div className="bg-[#FC6B00] absolute rounded-2xl -top-16 z-[-10] flex items-center justify-center  right-0 left-0  h-20 w-full ">
+                  <p className="text-3xl font-bold text-white text-center">
                     لصناع المحتوى
                   </p>
                 </div>
