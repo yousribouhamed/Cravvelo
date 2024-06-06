@@ -13,6 +13,7 @@ import FadeIn from "@/src/components/animations/fade-in";
 import NewPricing from "./sections/new-pricing";
 import Image from "next/image";
 import Link from "next/link";
+import BestBenefits from "./sections/best-benifits";
 
 // diable animations on mobil
 
@@ -113,49 +114,7 @@ export default function Page() {
         </FadeIn>
         <FadeIn>
           <MaxWidthWrapper className="my-8 ">
-            <div className="w-full min-h-[250px] h-fit  flex flex-col justify-center gap-y-8  ">
-              <h2 className="text-5xl font-bold text-center">أهم المميزات</h2>
-              <p className="text-center my-4 text-xl">
-                إنشاء وتسويق وبيع الدورات التدريبية عبر الإنترنت، في مكان واحد.
-              </p>
-            </div>
-            <div className="w-full min-h-[250px] h-fit grid grid-cols-1 lg:grid-cols-3 gap-10  ">
-              <div className="w-full h-full border border-yellow-500 rounded-xl bg-[#F8FAE5] p-8">
-                <div className="w-full h-[50px] flex items-center justify-start gap-x-4">
-                  <div className="w-[50px] h-[50px] bg-green-500" />
-                  <h3 className="text-4xl font-bold  text-start">بيع</h3>
-                </div>
-
-                <p className="text-xl text-gray-700 mt-4 text-start">
-                  {" "}
-                  نوفر لك مجموعة من الأدوات تمكنك من النمو وبيع خبراتك بسهولة.
-                </p>
-              </div>
-
-              <div className="w-full h-full border border-yellow-500 rounded-xl bg-[#F8FAE5] p-8">
-                <div className="w-full h-[50px] flex items-center justify-start gap-x-4">
-                  <div className="w-[50px] h-[50px] bg-green-500" />
-                  <h3 className="text-4xl font-bold  text-start">إدارة</h3>
-                </div>
-
-                <p className="text-xl text-gray-700 mt-4 text-start">
-                  {" "}
-                  لوحة تحكم سهلة، بتجربة مذهلة، تتيح إدارة كل دوراتك.
-                </p>
-              </div>
-
-              <div className="w-full h-full border border-yellow-500 rounded-xl bg-[#F8FAE5] p-8">
-                <div className="w-full h-[50px] flex items-center justify-start gap-x-4">
-                  <div className="w-[50px] h-[50px] bg-green-500" />
-                  <h3 className="text-4xl font-bold  text-start">تحليل</h3>
-                </div>
-
-                <p className="text-xl text-gray-700 mt-4 text-start">
-                  {" "}
-                  تقارير وإحصاءات متقدمة تساعدك في الارتقاء بعملك.
-                </p>
-              </div>
-            </div>
+            <BestBenefits />
           </MaxWidthWrapper>
         </FadeIn>
         <FadeIn>
