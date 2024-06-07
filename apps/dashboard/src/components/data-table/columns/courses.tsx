@@ -112,8 +112,8 @@ export const columns: ColumnDef<Course>[] = [
   },
 
   {
-    id: "createAtH",
-    accessorKey: "createdAt",
+    id: "status",
+    accessorKey: "status",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="تاريخ الانشاء" />
     ),

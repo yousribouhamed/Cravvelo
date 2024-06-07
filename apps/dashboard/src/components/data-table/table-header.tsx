@@ -1,13 +1,43 @@
 import { Button } from "@ui/components/ui/button";
 import AddCourse from "../models/create-course-modal";
-import { Input } from "@ui/components/ui/input";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { buttonVariants } from "../plate-ui/button";
 import { Table } from "@tanstack/react-table";
-import { CoursesFilterModal } from "../models/filters/courses-filter-modal";
 //@ts-ignore
 import { download, generateCsv, mkConfig } from "export-to-csv";
+import { DataTableFacetedFilter } from "./data-table-faceted-filter";
+import { Pencil, ArrowUpCircle } from "lucide-react";
+
+export const statuses = [
+  {
+    value: "DRAFT",
+    label: "مسودة",
+    icon: Pencil,
+  },
+  {
+    value: "PUBLISHED",
+    label: "منشور",
+    icon: ArrowUpCircle,
+  },
+];
+export const levels = [
+  {
+    value: "BIGENNER",
+    label: "مبتدئ",
+    icon: Pencil,
+  },
+  {
+    value: "ADVANCED",
+    label: "متوسط",
+    icon: ArrowUpCircle,
+  },
+  {
+    value: "ADVANCED",
+    label: "متقدم",
+    icon: ArrowUpCircle,
+  },
+];
 
 interface TableHeaderProps<TData> {
   table: Table<TData>;
@@ -49,22 +79,21 @@ export function TableHeader<TData>({
   return (
     <div className="w-full h-[70px] flex items-center justify-between">
       <div className="min-w-[200px] w-fit h-full flex  items-center justify-start gap-x-4">
-        <CoursesFilterModal />
-        {/* <Input
-          placeholder="Filter emails..."
-          defaultValue={
-            (table.getColumn("title")?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event) => {
-            table.getColumn("title")?.setFilterValue(event.target.value);
-            console.log(event.target.value);
-            console.log(table.getColumn("title")?.getFilterValue());
-            console.log(
-              table.getColumn("title")?.setFilterValue(event.target.value)
-            );
-          }}
-          className="max-w-sm"
-        /> */}
+        {table.getColumn("status") && (
+          <DataTableFacetedFilter
+            column={table.getColumn("status")}
+            title="الحالة"
+            options={statuses}
+          />
+        )}
+
+        {table.getColumn("level") && (
+          <DataTableFacetedFilter
+            column={table.getColumn("level")}
+            title="المستوى"
+            options={levels}
+          />
+        )}
       </div>
       <div className="min-w-[200px] w-fit h-full flex items-center justify-end gap-x-4">
         <Button

@@ -65,9 +65,9 @@ export function DataTable<TData, TValue>({
       rowSelection,
       columnFilters,
     },
-    // manualPagination: true,
-    // manualSorting: true,
-    // manualFiltering: true,
+    manualPagination: true,
+    manualSorting: true,
+    manualFiltering: true,
   });
   return (
     <>
