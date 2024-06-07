@@ -15,7 +15,7 @@ import {
 } from "@tanstack/react-table";
 import { Button } from "@ui/components/ui/button";
 import TableHeader2 from "./table-header";
-import React from "react";
+import React, { ChangeEvent } from "react";
 import {
   Table,
   TableBody,
@@ -25,7 +25,7 @@ import {
   TableRow,
 } from "@ui/components/ui/table";
 import { DoubleArrowLeftIcon } from "@radix-ui/react-icons";
-import { ChevronRightIcon } from "lucide-react";
+import { ChevronRightIcon, Search } from "lucide-react";
 import { DataTableFilterableColumn } from "@/src/types";
 import { Input } from "@ui/components/ui/input";
 
@@ -71,15 +71,31 @@ export function DataTable<TData, TValue>({
   });
   return (
     <>
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+      <div className="flex items-center py-4   justify-start">
+        <div className="w-full max-w-sm  h-[50px] p-4 rounded-xl bg-white border flex items-center justify-start gap-x-4">
+          <Search className="text-black w-4 h-4" />
+          <input
+            className="border-none bg-none focus:border-none focus:ring-0  "
+            placeholder="البحث عن المنتجات..."
+            value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+            onChange={
+              (event) => {
+                const value = event.target.value;
+
+                table.getAllColumns().forEach((column) => {
+                  if (
+                    ["title", "description", "category"].includes(
+                      column.id as string
+                    )
+                  ) {
+                    column.setFilterValue(value); // Adjust this line based on your filtering logic
+                  }
+                });
+              }
+              // table.getColumn("title")?.setFilterValue(event.target.value)
+            }
+          />
+        </div>
       </div>
       <TableHeader2 data={data} academia_url={academia_url} table={table} />
       <div className="rounded-md border bg-white">
