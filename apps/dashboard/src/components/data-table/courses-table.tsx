@@ -146,21 +146,6 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
 
-      {table.getColumn("level") && (
-        <DataTableFacetedFilter
-          column={table.getColumn("level")}
-          title="المستوى"
-          options={levels}
-        />
-      )}
-      {table.getColumn("status") && (
-        <DataTableFacetedFilter
-          column={table.getColumn("status")}
-          title="الحالة"
-          options={statuses}
-        />
-      )}
-
       <TableHeader2 data={data} academia_url={academia_url} table={table} />
       <div className="rounded-md border bg-white">
         <Table>

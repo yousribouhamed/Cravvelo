@@ -153,6 +153,7 @@ export function TableHeader<TData>({
         </Button>
         <AddCourse />
         <Link
+          target="_blank"
           href={`${academia_url}/course-academy`}
           className={cn(
             buttonVariants({ variant: "ghost" }),
