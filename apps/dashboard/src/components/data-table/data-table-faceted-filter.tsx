@@ -115,8 +115,12 @@ export function DataTableFacetedFilter<TData, TValue>({
                         selectedValues.add(option.value);
                       }
                       const filterValues = Array.from(selectedValues);
+                      console.log("here are all the selected values");
+                      console.log(filterValues);
+                      console.log(filterValues.length);
+                      console.log(column);
                       column?.setFilterValue(
-                        filterValues.length ? filterValues : undefined
+                        filterValues.length ? filterValues[0] : undefined
                       );
                     }}
                   >
@@ -149,7 +153,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                 <CommandGroup>
                   <CommandItem
                     onSelect={() => column?.setFilterValue(undefined)}
-                    className="justify-center text-center"
+                    className="justify-center text-center bg-black text-white"
                   >
                     Clear filters
                   </CommandItem>
