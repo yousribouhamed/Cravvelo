@@ -46,11 +46,19 @@ export const create_student = async ({
   accountId: string;
 }) => {
   // Verify if the email exists
-  const student_with_same_email = await prisma.student.findFirst({
+  // const student_with_same_email = await prisma.student.findFirst({
+  //   where: {
+  //     AND: [{ email: email }, { accountId: accountId }],
+  //   },
+  // });
+
+  const students = await prisma.student.findMany({
     where: {
-      AND: [{ email: email }, { accountId: accountId }],
+      accountId,
     },
   });
+
+  const student_with_same_email = students.find((item) => item.email === email);
 
   if (student_with_same_email) {
     throw new Error("Student already exists");
