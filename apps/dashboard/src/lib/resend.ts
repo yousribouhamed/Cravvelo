@@ -43,7 +43,7 @@ export const verifyStudentEmail = async ({
   code: number;
 }) => {
   const { data, error } = await resend.emails.send({
-    from: "Acme <onboarding@resend.dev>",
+    from: "Cravvelo <onboarding@resend.dev>",
     to: [email],
     subject: "قم بتأكيد بريدك الألكتروني",
     react: CravveloVerifyEmailStudent({ verificationCode: code.toString() }),

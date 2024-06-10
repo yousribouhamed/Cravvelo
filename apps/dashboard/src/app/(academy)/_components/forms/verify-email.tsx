@@ -22,13 +22,14 @@ import {
 import { Input } from "@ui/components/ui/input";
 import Link from "next/link";
 import { PasswordInput } from "@/src/components/password-input";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { verifyEmailSchema } from "@/src/lib/validators/auth";
 import { sign_in_as_student, verifyEmailAction } from "../../_actions/auth";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 import { verifyStudentEmail } from "@/src/lib/resend";
 import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 type Inputs = z.infer<typeof verifyEmailSchema>;
 
@@ -46,16 +47,15 @@ export function AcademyVerifyEmailForm({
   const router = useRouter();
   const params = useParams();
 
-  console.log("these are the params from the url");
-  console.log(params);
+  const searchParams = useSearchParams();
 
   const form = useForm<Inputs>({
     resolver: zodResolver(verifyEmailSchema),
   });
 
-  async function resendEmailAgain() {
+  async function resendEmailAgain(code: number, email: string) {
     try {
-      // await verifyStudentEmail({code})
+      await verifyStudentEmail({ code, email });
     } catch (err) {}
   }
 

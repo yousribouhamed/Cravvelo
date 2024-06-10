@@ -124,7 +124,7 @@ export function DataTable<TData, TValue>({
           <Search className="text-black w-4 h-4" />
           <input
             className="border-none bg-none focus:border-none focus:ring-0  "
-            placeholder="البحث عن المنتجات..."
+            placeholder="البحث عن الدورات..."
             value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
             onChange={
               (event) => {

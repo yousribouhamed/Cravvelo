@@ -20,3 +20,7 @@ export const dashboardProductsSearchParamsSchema = z.object({
   from: z.string().optional(),
   to: z.string().optional(),
 });
+
+export const studentVerifyEmailParamsSchema = z.object({
+  email: z.string().optional(),
+});

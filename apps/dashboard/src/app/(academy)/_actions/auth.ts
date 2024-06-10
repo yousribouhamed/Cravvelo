@@ -270,3 +270,9 @@ export const verifyEmailAction = async ({ code }: { code: string }) => {
   });
   return student;
 };
+
+export const sendEmailAgain = async ({ email }: { email: string }) => {
+  // where can i get the code from here ??
+
+  await verifyStudentEmail({ code, email });
+};
