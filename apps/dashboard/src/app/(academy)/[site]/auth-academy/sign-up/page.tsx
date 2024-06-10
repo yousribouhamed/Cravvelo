@@ -39,6 +39,7 @@ const Page = async ({ params }: PageProps) => {
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
       />
+
       <div className="w-full min-h-[700px] h-fit   flex items-center justify-center mt-[110px] p-4">
         <AcademySifnUpForm
           color={website?.color}

@@ -24,7 +24,11 @@ import Link from "next/link";
 import { PasswordInput } from "@/src/components/password-input";
 import { useRouter } from "next/navigation";
 import { verifyEmailSchema } from "@/src/lib/validators/auth";
-import { sign_in_as_student, verifyEmailAction } from "../../_actions/auth";
+import {
+  sendEmailAgain,
+  sign_in_as_student,
+  verifyEmailAction,
+} from "../../_actions/auth";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 import { verifyStudentEmail } from "@/src/lib/resend";
@@ -45,7 +49,6 @@ export function AcademyVerifyEmailForm({
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const router = useRouter();
-  const params = useParams();
 
   const searchParams = useSearchParams();
 
@@ -53,17 +56,21 @@ export function AcademyVerifyEmailForm({
     resolver: zodResolver(verifyEmailSchema),
   });
 
-  async function resendEmailAgain(code: number, email: string) {
+  async function resendEmailAgain(email: string) {
     try {
-      await verifyStudentEmail({ code, email });
-    } catch (err) {}
+      console.log("we are sending to this email");
+      console.log({ email });
+      await sendEmailAgain({ email, accountId });
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   async function onSubmit(data: z.infer<typeof verifyEmailSchema>) {
     try {
       setIsLoading(true);
 
-      const student = await verifyEmailAction({ code: data.code });
+      await verifyEmailAction({ code: data.code });
 
       maketoast.successWithText({ text: "تم تاكيد حسابك سجل دخولك الان" });
 
@@ -95,7 +102,7 @@ export function AcademyVerifyEmailForm({
                   <FormLabel>شفرة</FormLabel>
                   <FormControl>
                     <Input
-                      className="focus:border-orange-500"
+                      className="focus:border-black"
                       placeholder="أدخل الرمز الذي أرسلناه إلى بريدك الإلكتروني"
                       {...field}
                     />
@@ -107,10 +114,18 @@ export function AcademyVerifyEmailForm({
             <div className="w-full my-4 h-[20px] gap-x-2 flex justify-center">
               <span>لم تتلقى بريد الكتروني ؟</span>
               <Button
+                type="button"
                 variant="link"
                 className="text-sm "
                 style={{
                   color: color ?? "#FC6B00",
+                }}
+                onClick={() => {
+                  resendEmailAgain(searchParams.get("email")).then(() => {
+                    maketoast.successWithText({
+                      text: "email wa succesfully delived to you",
+                    });
+                  });
                 }}
               >
                 ارسل مجددا

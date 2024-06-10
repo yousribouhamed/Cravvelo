@@ -88,7 +88,7 @@ export function AcademySignInForm({
                   <FormLabel>البريد الإلكتروني</FormLabel>
                   <FormControl>
                     <Input
-                      className="focus:border-orange-500"
+                      className="focus:border-black"
                       placeholder="أدخِل عنوان البريد الإلكتروني"
                       {...field}
                     />
@@ -106,11 +106,25 @@ export function AcademySignInForm({
                   <FormLabel>كلمة المرور</FormLabel>
                   <FormControl>
                     <PasswordInput
-                      className="focus:border-orange-500"
+                      className="focus:border-black"
                       placeholder="أدخِل كلمة المرور"
                       {...field}
                     />
                   </FormControl>
+
+                  <div className="w-full  h-[10px] text-sm flex justify-start">
+                    <span>
+                      <Link href={"/auth-academy/sign-in/reset-password"}>
+                        <span
+                          style={{
+                            color: color ?? "#FC6B00",
+                          }}
+                        >
+                          هل نسيت كلمة المرور ؟
+                        </span>
+                      </Link>
+                    </span>
+                  </div>
 
                   <FormMessage />
                 </FormItem>
@@ -132,20 +146,7 @@ export function AcademySignInForm({
             </Button>
           </form>
         </Form>
-        <div className="w-full my-4 h-[20px] flex justify-center">
-          <span>
-            هل نسيت كلمة المرور ؟
-            <Link href={"/auth-academy/sign-in"}>
-              <span
-                style={{
-                  color: color ?? "#FC6B00",
-                }}
-              >
-                ساضيفها قريبا
-              </span>
-            </Link>
-          </span>
-        </div>
+
         <div className="w-full my-4 h-[20px] flex justify-center">
           <span>
             ليس لديك حساب ؟{" "}

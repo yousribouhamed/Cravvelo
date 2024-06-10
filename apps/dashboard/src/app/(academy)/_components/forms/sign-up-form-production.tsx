@@ -75,11 +75,7 @@ export function AcademySifnUpForm({
       maketoast.successWithText({ text: "لقد تم إنشاء حسابك" });
 
       // Pass email as a query parameter
-      router.push(
-        `/auth-academy/sign-up/verify-email?email=${encodeURIComponent(
-          values.email
-        )}`
-      );
+      router.push(`/auth-academy/sign-up/verify-email?email=${values.email}`);
       maketoast.successWithText({
         text: "لقد قمنا بارسال رمز التاكيد الى حسابك",
       });
@@ -110,6 +106,7 @@ export function AcademySifnUpForm({
                   <FormLabel>الاسم الكامل</FormLabel>
                   <FormControl>
                     <Input
+                      className="focus:border-black"
                       placeholder="الرجاء ادخال اسمك القانوني"
                       {...field}
                     />
@@ -128,6 +125,7 @@ export function AcademySifnUpForm({
                   <FormLabel>البريد الإلكتروني</FormLabel>
                   <FormControl>
                     <Input
+                      className="focus:border-black"
                       placeholder="أدخِل عنوان البريد الإلكتروني"
                       {...field}
                     />
@@ -145,7 +143,11 @@ export function AcademySifnUpForm({
                 <FormItem>
                   <FormLabel>كلمة المرور</FormLabel>
                   <FormControl>
-                    <PasswordInput placeholder="أدخِل كلمة المرور" {...field} />
+                    <PasswordInput
+                      className="focus:border-black"
+                      placeholder="أدخِل كلمة المرور"
+                      {...field}
+                    />
                   </FormControl>
 
                   <FormMessage />

@@ -55,7 +55,7 @@ export const verifyStudentEmail = async ({
   }
 
   console.log("the email has been send with this data");
-  console.log(data);
+  console.log({ email, code });
 };
 
 // reset password  confirme email

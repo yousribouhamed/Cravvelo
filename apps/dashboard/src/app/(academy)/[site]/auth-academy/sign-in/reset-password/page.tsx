@@ -5,6 +5,7 @@ import { getStudent } from "@/src/app/(academy)/_actions/auth";
 import { getSubDomainValue } from "../../../../lib";
 import AcademiaFooter from "@/src/app/(academy)/_components/layout/academy-footer";
 import AcademyHeader from "@/src/app/(academy)/_components/layout/academy-header";
+import { AcademyRestPasswordStep1Form } from "@/src/app/(academy)/_components/forms/reset-password-form";
 
 interface PageProps {
   params: { site: string };
@@ -38,7 +39,7 @@ const Page = async ({ params }: PageProps) => {
         logo={website?.logo}
       />
       <div className="w-full min-h-[500px] h-fit flex items-center justify-center mt-[110px] p-4">
-        <AcademySignInForm
+        <AcademyRestPasswordStep1Form
           color={website?.color}
           accountId={website.accountId}
         />

@@ -271,8 +271,22 @@ export const verifyEmailAction = async ({ code }: { code: string }) => {
   return student;
 };
 
-export const sendEmailAgain = async ({ email }: { email: string }) => {
+export const sendEmailAgain = async ({
+  email,
+  accountId,
+}: {
+  email: string;
+  accountId: string;
+}) => {
   // where can i get the code from here ??
 
-  await verifyStudentEmail({ code, email });
+  const students = await prisma.student.findMany({
+    where: {
+      accountId,
+    },
+  });
+
+  const student = students.find((item) => item.email === email);
+
+  await verifyStudentEmail({ code: student.otp, email });
 };
