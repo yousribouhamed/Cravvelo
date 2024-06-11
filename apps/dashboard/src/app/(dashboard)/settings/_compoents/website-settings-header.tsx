@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@ui/components/ui/button";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { usePathname } from "next/navigation";
@@ -20,6 +19,10 @@ const getLinks = ({ id }: { id: string }) => {
     {
       name: " إعدادات القانوني ",
       href: `/settings/website-settings/legal`,
+    },
+    {
+      name: "التسويق بالعمولة",
+      href: `/settings/website-settings/marketing`,
     },
   ];
 

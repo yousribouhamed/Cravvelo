@@ -18,6 +18,7 @@ import { generators } from "./generators";
 import { users } from "./end-points/users";
 import { s3_bucket } from "./aws/s3";
 import { search } from "./end-points/search";
+import { referral } from "./end-points/referral";
 
 export const appRouter = router({
   ...auth,
@@ -38,6 +39,7 @@ export const appRouter = router({
   ...users,
   ...search,
   ...s3_bucket,
+  ...referral,
 });
 
 export type AppRouter = typeof appRouter;

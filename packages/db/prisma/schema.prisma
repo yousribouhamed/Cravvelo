@@ -15,7 +15,6 @@ enum PLANS {
   PRO
 }
 
-
 model Account {
   id              String            @unique @default(cuid())
   userId          String            @unique
@@ -37,12 +36,12 @@ model Account {
   Student         Student[]
   PaymentsConnect PaymentsConnect[]
   Payments        Payments[]
-
+  Referral        Referral[]
 }
 
 model PaymentsConnect {
   id                String   @unique @default(cuid())
-  accountId         String   
+  accountId         String
   chargilyPublicKey String
   chargiySecretKey  String
   createdAt         DateTime @default(now())
@@ -52,8 +51,6 @@ model PaymentsConnect {
   @@index([id])
   @@index([accountId])
 }
-
-
 
 model Course {
   id                     String     @unique @default(cuid())
@@ -128,7 +125,6 @@ model Product {
   @@index([accountId])
 }
 
-
 model Website {
   id             String   @unique @default(cuid())
   accountId      String   @unique
@@ -137,6 +133,7 @@ model Website {
   subdomain      String?  @unique
   customDomain   String?  @unique
   suspended      Boolean  @default(false)
+  enableReferral Boolean  @default(false)
   privacy_policy Json?
   phoneNumber    String?
   supportEmail   String?
@@ -234,7 +231,6 @@ model Comment {
   status       String   @default("verification_pending")
   Course       Course?  @relation(fields: [courseId], references: [id])
 
-
   @@index([id])
   @@index([courseId])
   @@index([accountId])
@@ -246,7 +242,7 @@ model Notification {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   accountId String
-  isRead    Boolean @default(false)
+  isRead    Boolean  @default(false)
   Account   Account  @relation(fields: [accountId], references: [id])
 
   @@index([id])
@@ -274,8 +270,8 @@ model Student {
   photo_url     String?   @db.Text
   bio           String?
   otp           Int?
-  email         String   
-  phone         String?  
+  email         String
+  phone         String?
   accountId     String
   password      String
   confirmeEmail DateTime?
@@ -301,16 +297,18 @@ model Certificate {
 }
 
 model Payments {
-  id                  String   @unique @default(cuid())
-  accountId           String
-  Account             Account  @relation(fields: [accountId], references: [id])
+  id        String @unique @default(cuid())
+  accountId String
+
   plan                String
   end_of_subscription DateTime
   payload             Json
   strategy            String // this one can be yearly or mounthly
-  status              String 
+  status              String
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
+  Account             Account  @relation(fields: [accountId], references: [id])
+
   @@index([id])
   @@index([accountId])
 }
@@ -327,20 +325,19 @@ model Admin {
   @@index([id])
 }
 
-
 model AcademiaMessage {
-  id              String   @unique @default(cuid())
-  senderName      String
-  senderEmail     String
-  senderMessage   String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id            String   @unique @default(cuid())
+  senderName    String
+  senderEmail   String
+  senderMessage String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
   @@index([id])
 }
 
-
 model OtpCode {
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   userId    Int
   code      String
   type      OtpType
@@ -352,4 +349,20 @@ model OtpCode {
 enum OtpType {
   CONFIRM_ACCOUNT
   FORGOT_PASSWORD
+}
+
+model Referral {
+  id                       String   @unique @default(cuid())
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+  studentId                String
+  studentName              String
+  studentImage             String
+  accountId                String
+  ccp                      String
+  numberOfReferredStudents Int
+  Account                  Account  @relation(fields: [accountId], references: [id])
+
+  @@index([id])
+  @@index([accountId])
 }

@@ -1,8 +1,10 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
 import useHaveAccess from "@/src/hooks/use-have-access";
-import ReferralTableShell from "./referral-table-shell";
+
+import WebsiteSettingsHeader from "../../_compoents/website-settings-header";
 import { prisma } from "database/src";
+import DisableReferralForm from "../../_compoents/forms/disable-referral-form";
 
 const getAllNotifications = async ({ accountId }: { accountId: string }) => {
   const notifications = await prisma.notification.findMany({
@@ -13,16 +15,19 @@ const getAllNotifications = async ({ accountId }: { accountId: string }) => {
   return notifications;
 };
 
-const Page = async () => {
+const Page = async ({}) => {
   const user = await useHaveAccess();
 
-  const [subscribers, notifications] = await Promise.all([
-    prisma.referral.findMany({
+  const [notifications, website] = await Promise.all([
+    getAllNotifications({
+      accountId: user.accountId,
+    }),
+
+    prisma.website.findFirst({
       where: {
         accountId: user.accountId,
       },
     }),
-    getAllNotifications({ accountId: user.accountId }),
   ]);
 
   return (
@@ -33,7 +38,10 @@ const Page = async () => {
           user={user}
           title="التسويق بالعمولة"
         />
-        <ReferralTableShell initialData={subscribers} />
+        <WebsiteSettingsHeader />
+        <div className="w-full h-fit flex flex-col my-8 gap-y-4">
+          <DisableReferralForm enabled={website.enableReferral} />
+        </div>
       </main>
     </MaxWidthWrapper>
   );

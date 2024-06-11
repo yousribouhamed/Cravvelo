@@ -73,6 +73,11 @@ export const SIDE_BAR_ITEMS = [
         icon: Icons.Home,
         slug: "/marketing/coupons",
       },
+      {
+        title: "التسويق بالعمولة",
+        icon: Icons.Home,
+        slug: "/marketing/affiliate-marketing",
+      },
     ],
   },
 
