@@ -51,6 +51,7 @@ const Page = async ({ params }: PageProps) => {
   return (
     <>
       <AcademyHeader
+        referralEnabled={website.enableReferral}
         color={website?.color}
         student={student}
         isAuthanticated={student ? true : false}

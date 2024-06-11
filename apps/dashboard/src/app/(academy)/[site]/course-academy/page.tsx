@@ -35,6 +35,7 @@ const Page = async ({ params }: PageProps) => {
   return (
     <>
       <AcademyHeader
+        referralEnabled={website.enableReferral}
         color={website?.color}
         student={student}
         isAuthanticated={student ? true : false}
@@ -46,7 +47,7 @@ const Page = async ({ params }: PageProps) => {
           <div className="w-full h-[100px] flex items-center justify-between">
             <h1 className="text-3xl font-bold">الدورات التدربية</h1>
             <div className="md:hidden">
-              <FilterButtonMobile  color={website?.color}/>
+              <FilterButtonMobile color={website?.color} />
             </div>
           </div>
           <CoursesGrid courses={courses} color={website?.color} />

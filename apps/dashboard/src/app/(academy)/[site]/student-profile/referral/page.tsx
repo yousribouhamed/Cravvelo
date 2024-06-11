@@ -1,10 +1,11 @@
-import { notFound } from "next/navigation";
-import { getSiteData } from "../../../_actions";
-import { getSubDomainValue } from "../../../lib";
-import AcademyHeader from "../../../_components/layout/academy-header";
-import MaxWidthWrapper from "@/src/components/max-width-wrapper";
+import React from "react";
+import ProfileForm from "../../../_components/forms/profile-form";
 import { getStudent } from "../../../_actions/auth";
-import ContactUsAcademiaForm from "../../../_components/forms/academy-contactus";
+import { getSubDomainValue } from "../../../lib";
+import { getSiteData } from "../../../_actions";
+import { notFound, redirect } from "next/navigation";
+import MaxWidthWrapper from "../../../_components/max-width-wrapper";
+import AcademyHeader from "../../../_components/layout/academy-header";
 import AcademiaFooter from "../../../_components/layout/academy-footer";
 
 interface PageProps {
@@ -25,9 +26,9 @@ const Page = async ({ params }: PageProps) => {
     notFound();
   }
 
-  // const blurData = await Promise.all(
-  //   courses.map(async (item) => await getBase64(item?.thumnailUrl))
-  // );
+  if (!student) {
+    redirect("/");
+  }
 
   return (
     <>
@@ -39,11 +40,12 @@ const Page = async ({ params }: PageProps) => {
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
       />
-      <MaxWidthWrapper className="h-fit mt-[70px] min-h-[calc(100vh-110px)] ">
-        <div className="w-full h-fit min-h-[300px] mt-[40px] grid grid-cols-1 ">
-          <div className=" w-full max-w-[800px] h-full col-span-1 flex items-center justify-start p-8 pt-[80px]">
-            <ContactUsAcademiaForm color={website?.color} />
+      <MaxWidthWrapper className="h-fit mt-[110px] min-h-[calc(100vh-110px)] ">
+        <div className="w-full h-full flex flex-col items-center py-4">
+          <div className="w-full h-[50px] flex items-center justify-start">
+            <h1 className="text-xl font-bold">التسويق بالعمولة</h1>
           </div>
+          <ProfileForm color={website?.color} studnet={student} />
         </div>
       </MaxWidthWrapper>
       <AcademiaFooter />

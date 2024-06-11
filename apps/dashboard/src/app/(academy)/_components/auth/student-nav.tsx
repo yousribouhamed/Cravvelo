@@ -21,9 +21,10 @@ function deleteCookie(name) {
 
 interface studentNavProps {
   student: Student;
+  referralEnabled: boolean;
 }
 
-const StudentNav: FC<studentNavProps> = ({ student }) => {
+const StudentNav: FC<studentNavProps> = ({ student, referralEnabled }) => {
   const mounted = useMounted();
 
   const logOut = () => {
@@ -87,6 +88,22 @@ const StudentNav: FC<studentNavProps> = ({ student }) => {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
+
+          {referralEnabled && (
+            <>
+              <DropdownMenuItem className="w-full  h-full flex justify-between items-center  ">
+                <Link
+                  className="w-full  h-full flex justify-between items-center p-2 "
+                  href={"/student-profile/studentId"}
+                >
+                  <User className=" h-4 w-4" />
+                  <span>التسويق بالعمولة</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </>
+          )}
+
           <DropdownMenuItem
             onClick={logOut}
             className="  w-full  h-full flex justify-between items-center p-3"

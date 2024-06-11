@@ -15,6 +15,7 @@ interface AcademyHeaderProps {
   subdomain: string | null;
   logo: string | null;
   color: string;
+  referralEnabled: boolean;
 }
 
 const AcademyHeader: FC<AcademyHeaderProps> = ({
@@ -23,6 +24,7 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
   subdomain,
   logo,
   color,
+  referralEnabled,
 }) => {
   return (
     <div className="w-full h-[110px]   border-b z-[8] fixed top-0 bg-white shadow ">
@@ -44,7 +46,7 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
             subdomain={subdomain}
           />
           {isAuthanticated && student?.id ? (
-            <StudentNav student={student} />
+            <StudentNav student={student} referralEnabled={referralEnabled} />
           ) : (
             // <StudentNavigation student={student} />
             <Link

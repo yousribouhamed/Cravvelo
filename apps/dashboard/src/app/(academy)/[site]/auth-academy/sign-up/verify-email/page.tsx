@@ -31,6 +31,7 @@ const Page = async ({ params }: PageProps) => {
   return (
     <>
       <AcademyHeader
+        referralEnabled={false}
         color={website?.color}
         student={student}
         isAuthanticated={student ? true : false}
