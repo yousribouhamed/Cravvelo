@@ -324,7 +324,7 @@ export const sendRestPasswordEmail = async ({
 
     await ResSetPassword({
       email,
-      url: `${website.subdomain}/sign-in/reset-password/${student.id}`,
+      url: `${website.subdomain}/auth-academy/sign-in/reset-password/${student.id}`,
     });
   } catch (err) {
     console.log(err);
