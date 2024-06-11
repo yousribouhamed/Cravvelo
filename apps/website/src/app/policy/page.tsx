@@ -1,0 +1,135 @@
+import MaxWidthWrapper from "@/src/components/max-width-wrapper";
+import HeroLights from "@/src/components/svgs/hero-lights";
+import type { FC } from "react";
+import SiteFooter, { footerLinks } from "@/src/components/layout/site-footer";
+import Image from "next/image";
+import Link from "next/link";
+
+const Page: FC = ({}) => {
+  return (
+    <>
+      <MaxWidthWrapper>
+        <div className="w-full h-fit min-h-screen mt-[140px] flex flex-col gap-y-4 items-start ">
+          <h1 className="text-4xl font-bold mt-8">سياسة الخصوصية </h1>
+          <p>
+            نحن في كرافيلو نحترم خصوصيتك ونلتزم بحماية بياناتك الشخصية. تهدف هذه
+            السياسة إلى إيضاح كيفية جمع واستخدام وحماية المعلومات التي تزودنا
+            بها عند استخدامك لموقعنا.{" "}
+          </p>
+
+          <h2 className="text-xl font-bold">المعلومات الشخصية </h2>
+
+          <p>
+            قد نقوم بجمع المعلومات الشخصية التالية منك: - الاسم الكامل, عنوان
+            البريد الإلكتروني, رقم الهاتف
+          </p>
+
+          <h2 className="text-xl font-bold my-4">المعلومات غير الشخصية</h2>
+
+          <p>- الصفحات التي تزورها على موقعنا </p>
+
+          <p>- الوقت الذي تقضيه على الموقع </p>
+
+          <h2 className="text-xl font-bold my-4">كيفية استخدام المعلومات </h2>
+
+          <p>نستخدم المعلومات التي نجمعها للأغراض التالية: </p>
+
+          <p>- توفير وتحسين خدماتنا </p>
+          <p>- معالجة الدفعات </p>
+          <p>- التواصل معك بشأن حسابك أو الدورات التي تنشئها أو تلتحق بها </p>
+          <p>- إرسال تحديثات أو إشعارات متعلقة بالخدمات </p>
+          <p>- الامتثال للالتزامات القانونية </p>
+
+          <p>
+            نحن نتبع معايير أمان صارمة لحماية بياناتك من الوصول غير المصرح به أو
+            التعديل أو الكشف أو التدمير. ومع ذلك، لا يمكننا ضمان أمان البيانات
+            المرسلة عبر الإنترنت بشكل كامل.{" "}
+          </p>
+
+          <h2 className="text-xl font-bold my-4">مشاركة المعلومات </h2>
+
+          <h3>
+            نحن لا نبيع أو نؤجر أو نشارك معلوماتك الشخصية مع أطراف ثالثة دون
+            موافقتك، إلا في الحالات التالية:{" "}
+          </h3>
+
+          <p>- الامتثال للقوانين أو الأنظمة أو الإجراءات القانونية </p>
+          <p>- حماية حقوق أو ملكية أو أمان كرافيلو أو مستخدمينا </p>
+
+          <h2 className="text-xl font-bold my-4">
+            {" "}
+            ملفات تعريف الارتباط (Cookies){" "}
+          </h2>
+
+          <p>
+            نحن نستخدم ملفات تعريف الارتباط لتحسين تجربتك على موقعنا. يمكنك
+            التحكم في استخدام ملفات تعريف الارتباط عبر إعدادات المتصفح الخاص بك.{" "}
+          </p>
+
+          <h2 className="text-xl font-bold my-4"> حقوقك </h2>
+
+          <p>
+            لديك الحق في الوصول إلى معلوماتك الشخصية وتصحيحها أو طلب حذفها أو
+            تقييد معالجتها. إذا كنت ترغب في ممارسة أي من هذه الحقوق، يرجى
+            التواصل معنا على support@cravvelo.com.{" "}
+          </p>
+
+          <p>التغييرات على سياسة الخصوصية </p>
+
+          <p>
+            قد نقوم بتحديث سياسة الخصوصية هذه من وقت لآخر. سنقوم بإخطارك بأي
+            تغييرات من خلال نشر السياسة الجديدة على هذه الصفحة.{" "}
+          </p>
+
+          <p> الاتصال بنا </p>
+
+          <p>
+            إذا كان لديك أي أسئلة أو مخاوف بشأن سياسة الخصوصية هذه، يرجى الاتصال
+            بنا على:{" "}
+          </p>
+
+          <p>- البريد الإلكتروني: support@cravvelo.com </p>
+
+          <p>- الهاتف: 0XXXXXXXX </p>
+
+          <p>
+            بتسجيلك أو استخدامك لموقعنا، فإنك توافق على هذه السياسة وتفهم كيفية
+            جمع واستخدام وحماية معلوماتك الشخصية.{" "}
+          </p>
+        </div>
+      </MaxWidthWrapper>
+      <HeroLights />
+      <div className="w-full h-[250px] md:h-[150px] mt-20 bg-primary flex items-center justify-center p-4">
+        <MaxWidthWrapper>
+          <div
+            dir="ltr"
+            className="w-full  h-full flex items-center flex-col gap-y-4 md:flex-row md:justify-between "
+          >
+            <Image
+              src={"/white-cravvelo-logo.svg"}
+              alt="logo"
+              width={200}
+              height={70}
+              // className="w-[200px] h-[70px]"
+            />
+
+            <span className=" text-md lg:text-lg text-white text-start">
+              © 2024 cravvelo. All rights reserved. |{" "}
+              <Link href={"/policy"}>website policy</Link>
+            </span>
+
+            <div className="w-[100px] h-full flex items-center justify-center md:justify-end gap-x-4">
+              {footerLinks.map((item, index) => (
+                <Link key={item.url + index} href={item.url}>
+                  <item.icons />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </MaxWidthWrapper>
+      </div>
+    </>
+  );
+};
+
+export default Page;

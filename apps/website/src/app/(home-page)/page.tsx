@@ -141,7 +141,8 @@ export default function Page() {
               />
 
               <span className=" text-md lg:text-lg text-white text-start">
-                © 2024 cravvelo. All rights reserved.
+                © 2024 cravvelo. All rights reserved. |{" "}
+                <Link href={"/policy"}>website policy</Link>
               </span>
 
               <div className="w-[100px] h-full flex items-center justify-center md:justify-end gap-x-4">
