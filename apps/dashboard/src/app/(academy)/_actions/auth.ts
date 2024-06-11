@@ -121,12 +121,13 @@ export const sign_in_as_student = async ({
   accountId: string;
 }) => {
   // Find the user by the email
-  const student = await prisma.student.findFirst({
+  const students = await prisma.student.findMany({
     where: {
-      email,
       accountId,
     },
   });
+
+  const student = await students.find((item) => item.email === email);
 
   if (!student) {
     throw new Error("There is no student with such email");
@@ -138,6 +139,8 @@ export const sign_in_as_student = async ({
     .catch((error) => {
       throw new Error("Password is incorrect");
     });
+
+  console.log({ response, student });
 
   if (response) {
     // Generate and set JWT token in the cookies
@@ -159,6 +162,8 @@ export const sign_in_as_student = async ({
       name: "studentId",
       value: student.id,
     });
+  } else {
+    throw new Error("something went wrong");
   }
 };
 
@@ -338,13 +343,30 @@ export const changeStudentpassword = async ({
   password: string;
   studentId: string;
 }) => {
-  const hashedPassword: string = await bcrypt?.hash(password, 10);
-  const student = await prisma.student.update({
-    where: {
-      id: studentId,
-    },
-    data: {
-      password: hashedPassword,
-    },
-  });
+  try {
+    const hashedPassword: string = await bcrypt?.hash(password, 10);
+
+    const oldStudent = await prisma.student.findFirst({
+      where: {
+        id: studentId,
+      },
+    });
+
+    const student = await prisma.student.update({
+      where: {
+        id: studentId,
+      },
+      data: {
+        password: hashedPassword,
+      },
+    });
+
+    console.log({
+      hashedPassword,
+      new: student.password,
+      old: oldStudent.password,
+    });
+  } catch (err) {
+    console.error(err);
+  }
 };

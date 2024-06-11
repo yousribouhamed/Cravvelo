@@ -115,7 +115,7 @@ export function ResetPasswordFormStep2({
               }}
             >
               {isLoading ? <LoadingSpinner /> : null}
-              ارسل الى هذا العنوان
+              تغير كلمة المرور
             </Button>
           </form>
         </Form>
