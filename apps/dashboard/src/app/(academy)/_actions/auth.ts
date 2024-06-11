@@ -330,3 +330,21 @@ export const sendRestPasswordEmail = async ({
     console.log(err);
   }
 };
+
+export const changeStudentpassword = async ({
+  password,
+  studentId,
+}: {
+  password: string;
+  studentId: string;
+}) => {
+  const hashedPassword: string = await bcrypt?.hash(password, 10);
+  const student = await prisma.student.update({
+    where: {
+      id: studentId,
+    },
+    data: {
+      password: hashedPassword,
+    },
+  });
+};
