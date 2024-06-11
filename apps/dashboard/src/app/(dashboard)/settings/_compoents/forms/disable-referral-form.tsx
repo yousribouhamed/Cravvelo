@@ -99,8 +99,7 @@ const DisableReferralForm: FC<DisableReferralFormAbdullahProps> = ({
               disabled={mutation.isLoading}
               type="submit"
               form="add-text"
-              className="w-full flex items-center gap-x-2 max-w-[200px]"
-              size="lg"
+              className="w-full  rounded-xl flex items-center gap-x-2 max-w-[200px]"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
               حفظ والمتابعة

@@ -1,7 +1,6 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
 import useHaveAccess from "@/src/hooks/use-have-access";
-
 import WebsiteSettingsHeader from "../../_compoents/website-settings-header";
 import { prisma } from "database/src";
 import DisableReferralForm from "../../_compoents/forms/disable-referral-form";
