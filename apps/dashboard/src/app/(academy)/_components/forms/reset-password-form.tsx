@@ -21,19 +21,16 @@ import {
   FormMessage,
 } from "@ui/components/ui/form";
 import { Input } from "@ui/components/ui/input";
-import Link from "next/link";
-import { PasswordInput } from "@/src/components/password-input";
 import { useRouter } from "next/navigation";
-import { verifyEmailSchema } from "@/src/lib/validators/auth";
 import {
-  sendEmailAgain,
-  sign_in_as_student,
-  verifyEmailAction,
-} from "../../_actions/auth";
+  restPasswordStep2,
+  verifyEmailSchema,
+} from "@/src/lib/validators/auth";
+import { sendRestPasswordEmail } from "../../_actions/auth";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 
-type Inputs = z.infer<typeof verifyEmailSchema>;
+type Inputs = z.infer<typeof restPasswordStep2>;
 
 interface AcademyRestPasswordStep1FormProps {
   accountId: string;
@@ -50,16 +47,18 @@ export function AcademyRestPasswordStep1Form({
   const router = useRouter();
 
   const form = useForm<Inputs>({
-    resolver: zodResolver(verifyEmailSchema),
+    resolver: zodResolver(restPasswordStep2),
   });
 
-  async function onSubmit(data: z.infer<typeof verifyEmailSchema>) {
+  async function onSubmit(data: z.infer<typeof restPasswordStep2>) {
     try {
       setIsLoading(true);
+      await sendRestPasswordEmail({ accountId, email: data.email });
 
-      await verifyEmailAction({ code: data.code });
-
-      maketoast.successWithText({ text: "تم تاكيد حسابك سجل دخولك الان" });
+      setIsEmailSent(true);
+      maketoast.successWithText({
+        text: "تم ارسال البريد الالكتروني الى حسابك",
+      });
 
       router.push("/auth-academy/sign-in");
     } catch (err) {
@@ -87,10 +86,9 @@ export function AcademyRestPasswordStep1Form({
           >
             <FormField
               control={form.control}
-              name="code"
+              name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>شفرة</FormLabel>
                   <FormControl>
                     <Input
                       className="focus:border-black"

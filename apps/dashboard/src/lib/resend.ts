@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { CravveloVerifyEmailStudent } from "@/src/emails/student-verify-email";
 import { Resend } from "resend";
+import StudentResetPasswordEmail from "../emails/student-reset-password";
 
 // Generate a random numeric token (e.g., 6-digit OTP)
 const generateNumericToken = () => {
@@ -61,7 +62,7 @@ export const verifyStudentEmail = async ({
 // reset password  confirme email
 
 export const resetPasswordEmail = async ({ email }: { email: string }) => {
-  const { data, error } = await resend.emails.send({
+  await resend.emails.send({
     from: "Acme <onboarding@resend.dev>",
     to: [email],
     subject: "Hello world",
@@ -72,10 +73,26 @@ export const resetPasswordEmail = async ({ email }: { email: string }) => {
 // sen wolcom email to students
 
 export const SendWolcomEmail = async ({ email }: { email: string }) => {
-  const { data, error } = await resend.emails.send({
+  await resend.emails.send({
     from: "Acme <onboarding@resend.dev>",
     to: [email],
     subject: "Hello world",
     react: CravveloVerifyEmailStudent({ verificationCode: "90000" }),
+  });
+};
+
+export const ResSetPassword = async ({
+  email,
+
+  url,
+}: {
+  email: string;
+  url: string;
+}) => {
+  await resend.emails.send({
+    from: "Cravvelo <onboarding@resend.dev>",
+    to: [email],
+    subject: "Cravvelo reset password",
+    react: StudentResetPasswordEmail({ url }),
   });
 };

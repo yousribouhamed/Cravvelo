@@ -22,7 +22,7 @@ import { redirect } from "next/navigation";
 import { Student } from "database";
 import { StudentBag } from "@/src/types";
 import { getSiteData } from ".";
-import { verifyStudentEmail } from "@/src/lib/resend";
+import { ResSetPassword, verifyStudentEmail } from "@/src/lib/resend";
 import jwt from "jsonwebtoken";
 import { pusherServer } from "@/src/lib/pusher";
 
@@ -297,4 +297,36 @@ export const sendEmailAgain = async ({
   const student = students.find((item) => item.email === email);
 
   await verifyStudentEmail({ code: student.otp, email });
+};
+
+export const sendRestPasswordEmail = async ({
+  email,
+  accountId,
+}: {
+  email: string;
+  accountId: string;
+}) => {
+  try {
+    const [students, website] = await Promise.all([
+      prisma.student.findMany({
+        where: {
+          accountId,
+        },
+      }),
+      prisma.website.findFirst({
+        where: {
+          accountId,
+        },
+      }),
+    ]);
+
+    const student = students.find((item) => item.email);
+
+    await ResSetPassword({
+      email,
+      url: `${website.subdomain}/sign-in/reset-password/${student.id}`,
+    });
+  } catch (err) {
+    console.log(err);
+  }
 };

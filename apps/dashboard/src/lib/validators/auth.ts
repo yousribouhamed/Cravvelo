@@ -25,6 +25,12 @@ export const authSchemaLogin = z.object({
     .max(100),
 });
 
+export const restPasswordStep2 = z.object({
+  email: z.string().email({
+    message: "يرجى إدخال عنوان بريد إلكتروني صالح",
+  }),
+});
+
 export const verifyEmailSchema = z.object({
   code: z
     .string()
