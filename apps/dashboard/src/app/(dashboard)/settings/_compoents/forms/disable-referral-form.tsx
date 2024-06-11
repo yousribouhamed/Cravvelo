@@ -19,7 +19,7 @@ import { maketoast } from "@/src/components/toasts";
 import { Switch } from "@ui/components/ui/switch";
 
 const formSchema = z.object({
-  enabled: z.boolean(),
+  isEnabled: z.boolean(),
 });
 
 interface DisableReferralFormAbdullahProps {
@@ -41,13 +41,13 @@ const DisableReferralForm: FC<DisableReferralFormAbdullahProps> = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      enabled,
+      isEnabled: enabled,
     },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     await mutation.mutateAsync({
-      enabled,
+      enabled: data.isEnabled,
     });
   }
 
@@ -70,7 +70,7 @@ const DisableReferralForm: FC<DisableReferralFormAbdullahProps> = ({
             <div className="space-y-4">
               <FormField
                 control={form.control}
-                name="enabled"
+                name="isEnabled"
                 render={({ field }) => (
                   <FormItem className="flex flex-row bg-white items-center justify-between rounded-lg border p-3 shadow-sm">
                     <div className="space-y-0.5">
