@@ -325,7 +325,7 @@ export const sendRestPasswordEmail = async ({
       }),
     ]);
 
-    const student = students.find((item) => item.email);
+    const student = students.find((item) => item.email === email);
 
     await ResSetPassword({
       email,
