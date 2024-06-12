@@ -166,7 +166,7 @@ const StudentProfile: FC = ({}) => {
           </Form>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <Button>حفظ التغييرات</Button>
+          <Button data-ripple-light="true">حفظ التغييرات</Button>
         </CardFooter>
       </Card>
     );

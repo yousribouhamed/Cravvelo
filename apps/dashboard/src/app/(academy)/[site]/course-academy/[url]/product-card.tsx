@@ -117,6 +117,7 @@ export const Product_card = ({
       )}
 
       <button
+        data-ripple-light="true"
         onClick={() => {
           actions.addItem({
             type: "COURSE",

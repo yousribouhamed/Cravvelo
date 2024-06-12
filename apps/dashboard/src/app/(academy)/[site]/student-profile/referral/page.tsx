@@ -7,6 +7,7 @@ import { notFound, redirect } from "next/navigation";
 import MaxWidthWrapper from "../../../_components/max-width-wrapper";
 import AcademyHeader from "../../../_components/layout/academy-header";
 import AcademiaFooter from "../../../_components/layout/academy-footer";
+import ReferralSubscribtionForm from "../../../_components/forms/referral-subscribe-form";
 
 interface PageProps {
   params: { site: string };
@@ -45,7 +46,12 @@ const Page = async ({ params }: PageProps) => {
           <div className="w-full h-[50px] flex items-center justify-start">
             <h1 className="text-xl font-bold">التسويق بالعمولة</h1>
           </div>
-          <ProfileForm color={website?.color} studnet={student} />
+
+          <ReferralSubscribtionForm
+            accountId={website.accountId}
+            color={website?.color}
+            studnet={student}
+          />
         </div>
       </MaxWidthWrapper>
       <AcademiaFooter />

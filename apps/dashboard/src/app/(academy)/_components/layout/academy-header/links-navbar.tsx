@@ -14,6 +14,7 @@ function LinksNavbar() {
     <div className="min-w-[100px] h-full w-fit flex items-center gap-x-6 justify-start px-6">
       <Link href={"/"}>
         <button
+          data-ripple-light="true"
           className={cn("  h-[65px] text-gray-500 text-md  bg-transparent  ", {
             "text-black font-bold border-b-4 border-black  ": isCurrentPath({
               currentPath: "/",
@@ -25,6 +26,7 @@ function LinksNavbar() {
       </Link>
       <Link href={"/course-academy"} className="text-md ">
         <button
+          data-ripple-light="true"
           className={cn("  h-[65px] text-gray-500 text-md  bg-transparent ", {
             "text-black font-bold border-b-4 border-black  ": isCurrentPath({
               currentPath: "/course-academy",
@@ -36,6 +38,7 @@ function LinksNavbar() {
       </Link>
       <Link href={"/product-academy"} className="text-md ">
         <button
+          data-ripple-light="true"
           className={cn("  h-[65px] text-gray-500 text-md  bg-transparent ", {
             "text-black font-bold border-b-4 border-black  ": isCurrentPath({
               currentPath: "/product-academy",

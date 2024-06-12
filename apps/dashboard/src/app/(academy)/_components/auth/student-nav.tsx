@@ -94,7 +94,7 @@ const StudentNav: FC<studentNavProps> = ({ student, referralEnabled }) => {
               <DropdownMenuItem className="w-full  h-full flex justify-between items-center  ">
                 <Link
                   className="w-full  h-full flex justify-between items-center p-2 "
-                  href={"/student-profile/studentId"}
+                  href={"/student-profile/referral"}
                 >
                   <User className=" h-4 w-4" />
                   <span>التسويق بالعمولة</span>

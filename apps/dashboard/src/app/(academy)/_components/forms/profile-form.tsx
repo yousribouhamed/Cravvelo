@@ -167,7 +167,11 @@ const ProfileForm: FC<ProfileFormProps> = ({ studnet, color }) => {
               <FormItem>
                 <FormLabel>الاسم الكامل</FormLabel>
                 <FormControl>
-                  <Input placeholder="مثلا : عبدالله" {...field} />
+                  <Input
+                    className="focus:border-black"
+                    placeholder="مثلا : عبدالله"
+                    {...field}
+                  />
                 </FormControl>
                 <FormDescription>
                   هذا هو اسم العرض العام الخاص بك.
@@ -184,7 +188,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ studnet, color }) => {
                 <FormLabel>السيرة الذاتية</FormLabel>
                 <FormControl>
                   <Textarea
-                    className="min-h-[150px] h-fit"
+                    className="min-h-[150px] h-fit focus:border-black"
                     placeholder="يمكنك كتابة اي شيئ هنا"
                     {...field}
                   />
