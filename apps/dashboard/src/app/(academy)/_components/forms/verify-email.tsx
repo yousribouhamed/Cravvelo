@@ -58,8 +58,6 @@ export function AcademyVerifyEmailForm({
 
   async function resendEmailAgain(email: string) {
     try {
-      console.log("we are sending to this email");
-      console.log({ email });
       await sendEmailAgain({ email, accountId });
     } catch (err) {
       console.error(err);

@@ -10,25 +10,42 @@ import { LoadingButton } from "@/src/components/loading-button";
 import { Student } from "database";
 import { subscribe } from "../../_actions/referral";
 import { academiatoast } from "../academia-toasts";
+import { Button } from "@ui/components/ui/button";
 
 interface ReferralFormProps {
-  studnet: Student;
-  accountId: string;
   color: string;
+  subdomain: string;
+  referralId: string;
 }
 
-const ReferralSubscribtionForm: FC<ReferralFormProps> = ({
-  studnet,
+const ReferralUnSubscribtionForm: FC<ReferralFormProps> = ({
+  referralId,
   color,
-  accountId,
+  subdomain,
 }) => {
   const [loading, setLoading] = React.useState<boolean>(false);
 
   return (
     <div className="w-full h-fit min-h-[300px] bg-white shadow border rounded-xl max-w-2xl p-8">
-      <div className="w-full my-4 h-[50px] bg-black"></div>
+      <h1>احصل على الإيرادات المتكررة مدى الحياة!</h1>
+
+      <div className="w-full flex flex-col gap-y-2 my-4 h-fit min-h-[50px] bg-black">
+        <p>رابط الإحالة الخاص بك</p>
+
+        <div className="w-full h-[40px] flex items-center justify-between rounded-xl border">
+          <span>{`${subdomain}/?ref=${referralId}`}</span>
+
+          <Button
+            style={{
+              backgroundColor: color,
+            }}
+          >
+            نسخ
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default ReferralSubscribtionForm;
+export default ReferralUnSubscribtionForm;

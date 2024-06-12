@@ -1,5 +1,4 @@
 import React from "react";
-import ProfileForm from "../../../_components/forms/profile-form";
 import { getStudent } from "../../../_actions/auth";
 import { getSubDomainValue } from "../../../lib";
 import { getSiteData } from "../../../_actions";
@@ -8,6 +7,8 @@ import MaxWidthWrapper from "../../../_components/max-width-wrapper";
 import AcademyHeader from "../../../_components/layout/academy-header";
 import AcademiaFooter from "../../../_components/layout/academy-footer";
 import ReferralSubscribtionForm from "../../../_components/forms/referral-subscribe-form";
+import { prisma } from "database/src";
+import ReferralUnSubscribtionForm from "../../../_components/forms/referral-unsbscribe-form";
 
 interface PageProps {
   params: { site: string };
@@ -22,6 +23,14 @@ const Page = async ({ params }: PageProps) => {
       subdomain,
     }),
   ]);
+
+  const referrals = await prisma.referral.findMany({
+    where: {
+      accountId: website.accountId,
+    },
+  });
+
+  const referral = referrals.find((item) => item.studentId === student.id);
 
   if (!website) {
     notFound();
@@ -46,12 +55,19 @@ const Page = async ({ params }: PageProps) => {
           <div className="w-full h-[50px] flex items-center justify-start">
             <h1 className="text-xl font-bold">التسويق بالعمولة</h1>
           </div>
-
-          <ReferralSubscribtionForm
-            accountId={website.accountId}
-            color={website?.color}
-            studnet={student}
-          />
+          {referral ? (
+            <ReferralUnSubscribtionForm
+              referralId={referral.id}
+              color={website?.color}
+              subdomain={website.subdomain}
+            />
+          ) : (
+            <ReferralSubscribtionForm
+              accountId={website.accountId}
+              color={website?.color}
+              studnet={student}
+            />
+          )}
         </div>
       </MaxWidthWrapper>
       <AcademiaFooter />

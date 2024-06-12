@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import Head from "next/head";
 import { getSiteData } from "../_actions";
 import { getSubDomainValue } from "../lib";
+import ReferralDetactor from "../_components/referral-detactor";
 
 export const fetchCache = "force-no-store";
 
@@ -68,6 +69,7 @@ export default async function RootLayout({
       </Head>
       <Providers>
         <body className={` antialiased bg-zinc-50 h-fit min-h-screen`}>
+          <ReferralDetactor />
           {children}
           {/* <AcademiaFooter /> */}
         </body>
