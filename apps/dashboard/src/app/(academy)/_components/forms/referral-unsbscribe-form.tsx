@@ -2,6 +2,7 @@
 
 import React, { type FC } from "react";
 import { Button } from "@ui/components/ui/button";
+import { academiatoast } from "../academia-toasts";
 
 interface ReferralFormProps {
   color: string;
@@ -27,12 +28,21 @@ const ReferralUnSubscribtionForm: FC<ReferralFormProps> = ({
       </div>
 
       <div className="w-full flex flex-col gap-y-2 my-4 h-fit min-h-[50px] ">
-        <p>رابط الإحالة الخاص بك</p>
+        <p> رابط الإحالة الخاص بك 💁👌🎍😍</p>
 
         <div className="w-full h-[60px] flex items-center justify-between rounded-xl border gap-x-4 p-4">
           <Button
             style={{
               backgroundColor: color,
+            }}
+            onClick={() => {
+              navigator.clipboard.writeText(`${subdomain}?ref=${referralId}`);
+              academiatoast.make({
+                color,
+                message: "تم النسخ بنجاح",
+                title: "نجاح",
+                type: "SUCCESS",
+              });
             }}
           >
             نسخ

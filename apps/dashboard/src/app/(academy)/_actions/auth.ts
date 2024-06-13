@@ -370,3 +370,32 @@ export const changeStudentpassword = async ({
     console.error(err);
   }
 };
+
+export const applayReferral = async (): Promise<null> => {
+  const referral_code = cookies().get("referral_code");
+
+  if (!referral_code) {
+    return null;
+  }
+
+  try {
+    const getreferral = await prisma.referral.findFirst({
+      where: {
+        id: referral_code.value,
+      },
+    });
+
+    const newReferralNumber = getreferral.numberOfReferredStudents + 1;
+
+    await prisma.referral.update({
+      where: {
+        id: referral_code.value,
+      },
+      data: {
+        numberOfReferredStudents: newReferralNumber,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};

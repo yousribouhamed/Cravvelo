@@ -3,6 +3,7 @@
 import { pusherServer } from "@/src/lib/pusher";
 import { Course, Product } from "database";
 import { prisma } from "database/src";
+import { applayReferral } from "./auth";
 
 export const create_course_sale = async ({
   accountId,
@@ -42,6 +43,7 @@ export const create_course_sale = async ({
           content: ` ${course.price} تم بيع دورة ب `,
         },
       }),
+      applayReferral(),
     ]);
 
     pusherServer.trigger(accountId, "incomming-notifications", notification);
@@ -90,6 +92,7 @@ export const create_product_sale = async ({
           content: ` ${product.price} تم بيع المنتج ب `,
         },
       }),
+      applayReferral(),
     ]);
 
     pusherServer.trigger(accountId, "incomming-notifications", notification);
