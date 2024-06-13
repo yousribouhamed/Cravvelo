@@ -1,40 +1,35 @@
 "use client";
 
 import React, { type FC } from "react";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-
-import { Input } from "@ui/components/ui/input";
-import { LoadingButton } from "@/src/components/loading-button";
-import { Student } from "database";
-import { subscribe } from "../../_actions/referral";
-import { academiatoast } from "../academia-toasts";
 import { Button } from "@ui/components/ui/button";
 
 interface ReferralFormProps {
   color: string;
   subdomain: string;
   referralId: string;
+  referredPeople: number;
 }
 
 const ReferralUnSubscribtionForm: FC<ReferralFormProps> = ({
   referralId,
   color,
   subdomain,
+  referredPeople,
 }) => {
-  const [loading, setLoading] = React.useState<boolean>(false);
-
   return (
     <div className="w-full h-fit min-h-[300px] bg-white shadow border rounded-xl max-w-2xl p-8">
       <h1>احصل على الإيرادات المتكررة مدى الحياة!</h1>
 
-      <div className="w-full flex flex-col gap-y-2 my-4 h-fit min-h-[50px] bg-black">
+      <div className="w-full h-[100px] flex justify-between items-center p-4">
+        <span>عدد الأشخاص المشار إليهم</span>
+
+        <span>{referredPeople}</span>
+      </div>
+
+      <div className="w-full flex flex-col gap-y-2 my-4 h-fit min-h-[50px] ">
         <p>رابط الإحالة الخاص بك</p>
 
-        <div className="w-full h-[40px] flex items-center justify-between rounded-xl border">
-          <span>{`${subdomain}/?ref=${referralId}`}</span>
-
+        <div className="w-full h-[60px] flex items-center justify-between rounded-xl border gap-x-4 p-4">
           <Button
             style={{
               backgroundColor: color,
@@ -42,6 +37,7 @@ const ReferralUnSubscribtionForm: FC<ReferralFormProps> = ({
           >
             نسخ
           </Button>
+          <span className="text-sm text-gray-500">{`${subdomain}?ref=${referralId}`}</span>
         </div>
       </div>
     </div>

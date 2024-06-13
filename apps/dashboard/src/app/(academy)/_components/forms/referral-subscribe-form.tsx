@@ -102,7 +102,7 @@ const ReferralSubscribtionForm: FC<ReferralFormProps> = ({
                 backgroundColor: color ?? "#FC6B00",
               }}
             >
-              حفظ التعديلات
+              اشترك الان
             </LoadingButton>
           </div>
         </form>

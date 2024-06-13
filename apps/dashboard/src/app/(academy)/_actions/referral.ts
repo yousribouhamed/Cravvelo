@@ -22,7 +22,9 @@ export const subscribe = async (payload: Tsubscribe) => {
       accountId: data.accountId,
       numberOfReferredStudents: 0,
       studentId: student.id,
-      studentImage: student.photo_url,
+      studentImage:
+        student.photo_url ??
+        "https://logowik.com/content/uploads/images/ethereum-eth7803.logowik.com.webp",
       studentName: student.full_name,
     },
   });

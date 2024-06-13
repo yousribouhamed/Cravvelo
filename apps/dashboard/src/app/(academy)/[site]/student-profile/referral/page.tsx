@@ -58,6 +58,7 @@ const Page = async ({ params }: PageProps) => {
           {referral ? (
             <ReferralUnSubscribtionForm
               referralId={referral.id}
+              referredPeople={referral.numberOfReferredStudents}
               color={website?.color}
               subdomain={website.subdomain}
             />
