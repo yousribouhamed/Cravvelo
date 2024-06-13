@@ -22,37 +22,37 @@ export const academiatoast = {
           <div className="w-10 h-10 rounded-[50%] bg-white  flex items-center justify-center ">
             {type === "SUCCESS" ? (
               <Check
-                className="w-6 h-6 "
+                className="w-8 h-8 "
                 style={{
-                  backgroundColor: color,
+                  color: color,
                 }}
               />
             ) : type === "ERROR" ? (
               <AlertTriangle
-                className="w-6 h-6 "
+                className="w-8 h-8 "
                 style={{
-                  backgroundColor: color,
+                  color: color,
                 }}
               />
             ) : type === "WARNNING" ? (
               <AlertTriangle
-                className="w-6 h-6 "
+                className="w-8 h-8 "
                 style={{
-                  backgroundColor: color,
+                  color: color,
                 }}
               />
             ) : (
               <Book
-                className="w-6 h-6 "
+                className="w-8 h-8 "
                 style={{
-                  backgroundColor: color,
+                  color: color,
                 }}
               />
             )}
           </div>
           <div className="w-[80%] flex flex-col justify-start  items-start p-2">
-            <span className="text-xl font-bold text-white ">{title}</span>
-            <span className="text-white text-xl text-start">{message}</span>
+            <span className="text-lg font-bold text-black ">{title}</span>
+            <span className="text-black text-md text-start">{message}</span>
           </div>
           <X
             onClick={() => toast.dismiss(t)}

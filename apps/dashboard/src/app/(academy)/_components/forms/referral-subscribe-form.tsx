@@ -54,6 +54,8 @@ const ReferralSubscribtionForm: FC<ReferralFormProps> = ({
         title: "نجاح",
         type: "SUCCESS",
       });
+
+      window.location.reload();
     } catch (err) {
       console.error(err);
       academiatoast.make({

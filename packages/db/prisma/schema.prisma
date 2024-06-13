@@ -36,7 +36,7 @@ model Account {
   Student         Student[]
   PaymentsConnect PaymentsConnect[]
   Payments        Payments[]
-  Referral        Referral[]
+
 }
 
 model PaymentsConnect {
@@ -361,8 +361,8 @@ model Referral {
   accountId                String
   ccp                      String
   numberOfReferredStudents Int
-  Account                  Account  @relation(fields: [accountId], references: [id])
+
 
   @@index([id])
-  @@index([accountId])
+
 }
