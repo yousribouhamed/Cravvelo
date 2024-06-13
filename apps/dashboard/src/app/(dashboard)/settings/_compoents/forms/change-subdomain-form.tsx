@@ -71,7 +71,16 @@ const ChangeSubDomainForm: FC<ChangeDomainFormProps> = ({ subdomain }) => {
                 <FormItem>
                   <FormLabel>النطاق الفرعي لموقعك.</FormLabel>
                   <FormControl>
-                    <Input placeholder="app.vercel.com" {...field} />
+                    <div className="w-full h-14 border rounded-xl flex items-center p-2">
+                      <div className="w-[150px] h-full flex items-center justify-center bg-gray-50">
+                        <span>carvvelo.com.</span>
+                      </div>
+                      <Input
+                        className="border-none "
+                        placeholder="  حدد اسم المجال الخاص بك"
+                        {...field}
+                      />
+                    </div>
                   </FormControl>
                   <FormDescription>
                     يرجى استخدام 32 حرفًا كحد أقصى.

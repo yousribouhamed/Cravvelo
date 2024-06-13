@@ -29,6 +29,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
+import { academiatoast } from "../academia-toasts";
 
 const formSchema = z.object({
   full_name: z.string({ required_error: "يرجى ملئ الحقل" }),
@@ -76,12 +77,21 @@ export function AcademySifnUpForm({
 
       // Pass email as a query parameter
       router.push(`/auth-academy/sign-up/verify-email?email=${values.email}`);
-      maketoast.successWithText({
-        text: "لقد قمنا بارسال رمز التاكيد الى حسابك",
+
+      academiatoast.make({
+        color,
+        message: "لقد قمنا بارسال رمز التاكيد الى حسابك",
+        title: "نجاح",
+        type: "SUCCESS",
       });
     } catch (err) {
       console.error(err);
-      maketoast.error();
+      academiatoast.make({
+        color,
+        message: "حدث خطأ ما",
+        title: "فشل",
+        type: "ERROR",
+      });
     } finally {
       setIsLoading(false);
     }

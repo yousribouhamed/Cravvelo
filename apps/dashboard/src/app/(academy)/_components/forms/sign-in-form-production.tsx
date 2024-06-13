@@ -27,6 +27,7 @@ import { authSchemaLogin } from "@/src/lib/validators/auth";
 import { sign_in_as_student } from "../../_actions/auth";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
+import { academiatoast } from "../academia-toasts";
 
 type Inputs = z.infer<typeof authSchemaLogin>;
 
@@ -57,13 +58,23 @@ export function AcademySignInForm({
         password: data.password,
         accountId,
       });
-      console.log("this is the value of the origin");
-      console.log(origin);
-      maketoast.successWithText({ text: "تم تسجيل الدخول بنجاح" });
+
+      academiatoast.make({
+        color,
+        message: "تم تسجيل الدخول بنجاح",
+        title: "نجاح",
+        type: "SUCCESS",
+      });
       window.location.reload();
     } catch (err) {
       console.error(err);
-      maketoast.error();
+
+      academiatoast.make({
+        color,
+        message: "حدث خطأ ما",
+        title: "فشل",
+        type: "ERROR",
+      });
     } finally {
       setIsLoading(false);
     }

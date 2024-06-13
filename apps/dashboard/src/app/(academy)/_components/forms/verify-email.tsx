@@ -34,6 +34,7 @@ import { maketoast } from "@/src/components/toasts";
 import { verifyStudentEmail } from "@/src/lib/resend";
 import { useParams } from "next/navigation";
 import { useSearchParams } from "next/navigation";
+import { academiatoast } from "../academia-toasts";
 
 type Inputs = z.infer<typeof verifyEmailSchema>;
 
@@ -70,12 +71,22 @@ export function AcademyVerifyEmailForm({
 
       await verifyEmailAction({ code: data.code });
 
-      maketoast.successWithText({ text: "تم تاكيد حسابك سجل دخولك الان" });
+      academiatoast.make({
+        color,
+        message: "تم تاكيد حسابك سجل دخولك الان",
+        title: "نجاح",
+        type: "SUCCESS",
+      });
 
       router.push("/auth-academy/sign-in");
     } catch (err) {
       console.error(err);
-      maketoast.error();
+      academiatoast.make({
+        color,
+        message: "حدث خطأ ما",
+        title: "فشل",
+        type: "ERROR",
+      });
     } finally {
       setIsLoading(false);
     }

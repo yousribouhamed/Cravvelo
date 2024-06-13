@@ -95,13 +95,10 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({
           productsId: state.shoppingBag?.map((item) => item.id),
           subdomain,
         });
-        console.log("this is the chargily url for the products ");
-        console.log(url);
+
         router.push(url);
       }
     } catch (err) {
-      console.error("an error in the process payment funtion");
-      console.error(err);
       setError(true);
     } finally {
       setLoading(false);
@@ -201,10 +198,7 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({
           style={{ background: color ?? "#FC6B00" }}
         >
           {loading && <LoadingSpinner />}
-          {isCourseFree ? "المطالبة بالدورة" : " دفع DZD"}
-          {priceAfterCouponCode !== undefined
-            ? priceAfterCouponCode
-            : totalAmount}
+          {isCourseFree ? "المطالبة بالدورة" : "اذهب إلى الدفع"}
         </button>
       ) : (
         <button

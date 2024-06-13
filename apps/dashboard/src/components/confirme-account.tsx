@@ -6,11 +6,14 @@ import type { FC } from "react";
 const ConfirmeAccount: FC = ({}) => {
   return (
     <div className="w-full min-h-[300px] h-fit mt-8 bg-white rounded-xl shadow border flex items-center  gap-x-4 p-8">
-      <div className="w-[50%] h-full flex flex-col items-start justify-start p-4 border rounded-xl">
+      <div className="w-[60%] h-full flex flex-col items-start justify-start p-4 border rounded-xl">
         <h2 className="text-xl font-bold">بعض الأشياء للإعداد!</h2>
 
         <div className="w-full h-[50px] flex flex-col items-start p-2 my-4">
-          <Link href={"/"} className="flex items-center justify-start gap-x-2">
+          <Link
+            href={"/profile"}
+            className="flex items-center justify-start gap-x-2"
+          >
             <p className="text-lg hover:underline">قم بانهاء ملفك الشخصي</p>
           </Link>
           <p className="text-sm text-gray-500">
@@ -18,7 +21,7 @@ const ConfirmeAccount: FC = ({}) => {
           </p>
         </div>
         <div className="w-full h-[50px] flex flex-col items-start p-2 my-4">
-          <Link href={"/"}>
+          <Link href={"/courses"}>
             <p className="text-lg hover:underline">قم برفع اول دورة لك</p>
           </Link>
           <p className="text-sm text-gray-500">
@@ -27,7 +30,7 @@ const ConfirmeAccount: FC = ({}) => {
           </p>
         </div>
         <div className="w-full h-[50px] flex flex-col items-start p-2 my-4">
-          <Link href={"/"}>
+          <Link href={"/settings/payments-methods"}>
             <p className="text-lg hover:underline">ادخل وسيلة الدفع</p>
           </Link>
           <p className="text-sm text-gray-500">
@@ -36,7 +39,7 @@ const ConfirmeAccount: FC = ({}) => {
           </p>
         </div>
       </div>
-      <div className="w-[50%] h-full flex items-center justify-center">
+      <div className="w-[40%] h-full flex items-center justify-center">
         <div className="relative w-full h-full">
           <iframe
             width="460"

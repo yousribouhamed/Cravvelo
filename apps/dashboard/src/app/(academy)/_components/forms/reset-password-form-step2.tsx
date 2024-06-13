@@ -24,6 +24,7 @@ import { changeStudentpassword } from "../../_actions/auth";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 import { PasswordInput } from "@/src/components/password-input";
+import { academiatoast } from "../academia-toasts";
 
 const formSchema = z.object({
   password: z
@@ -59,14 +60,22 @@ export function ResetPasswordFormStep2({
 
       await changeStudentpassword({ password: data.password, studentId });
 
-      maketoast.successWithText({
-        text: "تم تغير كلمة المرور",
+      academiatoast.make({
+        color,
+        message: "تم تغير كلمة المرور",
+        title: "نجاح",
+        type: "SUCCESS",
       });
 
       router.push("/auth-academy/sign-in");
     } catch (err) {
       console.error(err);
-      maketoast.error();
+      academiatoast.make({
+        color,
+        message: "حدث خطأ ما",
+        title: "فشل",
+        type: "ERROR",
+      });
     } finally {
       setIsLoading(false);
     }

@@ -29,6 +29,7 @@ import {
 import { sendRestPasswordEmail } from "../../_actions/auth";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
+import { academiatoast } from "../academia-toasts";
 
 type Inputs = z.infer<typeof restPasswordStep2>;
 
@@ -56,14 +57,23 @@ export function AcademyRestPasswordStep1Form({
       await sendRestPasswordEmail({ accountId, email: data.email });
 
       setIsEmailSent(true);
-      maketoast.successWithText({
-        text: "تم ارسال البريد الالكتروني الى حسابك",
+
+      academiatoast.make({
+        color,
+        message: "تم ارسال البريد الالكتروني الى حسابك",
+        title: "نجاح",
+        type: "SUCCESS",
       });
 
       router.push("/auth-academy/sign-in");
     } catch (err) {
       console.error(err);
-      maketoast.error();
+      academiatoast.make({
+        color,
+        message: "حدث خطأ ما",
+        title: "فشل",
+        type: "ERROR",
+      });
     } finally {
       setIsLoading(false);
     }

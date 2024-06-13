@@ -22,6 +22,7 @@ import { computeSHA256 } from "@/src/lib/utils";
 import { update_profile } from "../../_actions/auth";
 import { maketoast } from "@/src/components/toasts";
 import { Student } from "database";
+import { academiatoast } from "../academia-toasts";
 
 const formSchema = z.object({
   full_name: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
@@ -117,11 +118,23 @@ const ProfileForm: FC<ProfileFormProps> = ({ studnet, color }) => {
           imageUrl: "",
         });
         setLoading(false);
-        maketoast.successWithText({ text: "تم تحديث ملفك" });
+
+        academiatoast.make({
+          color,
+          message: "تم تحديث ملفك",
+          title: "نجاح",
+          type: "SUCCESS",
+        });
         window.location.reload();
       }
     } catch (err) {
       console.error(err);
+      academiatoast.make({
+        color,
+        message: "حدث خطأ ما",
+        title: "فشل",
+        type: "ERROR",
+      });
     }
   }
   return (
