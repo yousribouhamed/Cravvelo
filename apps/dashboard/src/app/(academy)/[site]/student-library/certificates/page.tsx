@@ -86,11 +86,10 @@ const Page = async ({ params }: PageProps) => {
             )}
             {certificates?.map((item, index) => {
               return (
-                <Link
-                  href={`/course-academy/999/course-player`}
-                  key={"huu" + index}
-                >
-                  <div className="w-[200px] h-[150px] bg-pink-500 "></div>
+                <Link href={item.fileUrl} key={"huu" + index} target="_blank">
+                  <div className="w-[200px] h-[150px] hover:shadow-2xl cursor-pointer  bg-slate-950  ">
+                    <p className="text-white text-md">{item.studentName}</p>
+                  </div>
                 </Link>
               );
             })}

@@ -291,8 +291,10 @@ model Certificate {
   studentId   String
   courseName  String
   studentName String
+  fileUrl     String   @db.Text
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
   // Add more fields as needed
 }
 

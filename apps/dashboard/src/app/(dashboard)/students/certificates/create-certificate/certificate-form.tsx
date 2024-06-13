@@ -86,7 +86,7 @@ function CertificateForm({ students }: CertificateProps) {
         >
           المحتوى
         </Button>
-        {/* <Button
+        <Button
           onClick={() => setIsCertificateSeen(true)}
           variant="ghost"
           className={`${
@@ -94,17 +94,16 @@ function CertificateForm({ students }: CertificateProps) {
           } h-full rounded-[0] `}
         >
           التصميم
-        </Button> */}
+        </Button>
       </div>
       <div className="w-full h-full">
         {isCertificateSeen ? (
-          <div className="w-full h-full flex flex-wrap gap-4">
-            {[1, 2, 3, 4, 5].map((item) => (
-              <div
-                key={item + item + "some"}
-                className="w-[130px] h-[80px] bg-white border-2 border-black rounded-xl "
-              ></div>
-            ))}
+          <div className="w-full h-full flex flex-wrap gap-4 ">
+            <div className="bg-slate-900 w-[160px] h-[100px] border-blue-500 border-[10px] cursor-pointer p-4">
+              <div className="bg-white w-full h-full rounded-xl flex items-center justify-center">
+                <p className="text-slate-700 text-sm font-bold">blur ocean</p>
+              </div>
+            </div>
           </div>
         ) : (
           <Form {...form}>
@@ -203,18 +202,16 @@ function CertificateForm({ students }: CertificateProps) {
                   </FormItem>
                 )}
               />
-              <Card className="w-full h-fit border-t bg-white">
-                <CardContent className="w-full h-fit flex justify-end items-center   ">
-                  <Button
-                    disabled={mutation.isLoading}
-                    type="submit"
-                    className=" flex items-center gap-x-2 rounded-xl"
-                  >
-                    {mutation.isLoading ? <LoadingSpinner /> : null}
-                    حفظ والمتابعة
-                  </Button>
-                </CardContent>
-              </Card>
+              <div className="w-full h-[100px] bg-white shadow border flex items-center justify-end p-4">
+                <Button
+                  disabled={mutation.isLoading}
+                  type="submit"
+                  className=" flex items-center gap-x-2 rounded-xl"
+                >
+                  {mutation.isLoading ? <LoadingSpinner /> : null}
+                  حفظ والمتابعة
+                </Button>
+              </div>
             </form>
           </Form>
         )}
