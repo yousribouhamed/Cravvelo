@@ -14,6 +14,7 @@ import { Checkbox } from "@ui/components/ui/checkbox";
 import { Referral } from "database";
 import { maketoast } from "../../toasts";
 import { DataTableColumnHeader } from "../data-table-head";
+import { formatDateInArabic } from "@/src/lib/utils";
 
 export const ReferralColumns: ColumnDef<Referral>[] = [
   {
@@ -49,9 +50,8 @@ export const ReferralColumns: ColumnDef<Referral>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <p>
-          {/* todo : add funtion to fransform date to string in arabic */}
-          {/* {row.original.expirationDate} */}
+        <p className=" text-sm font-bold ">
+          {formatDateInArabic(row.original.createdAt, "dd MMMM yyyy")}
         </p>
       );
     },
@@ -60,46 +60,22 @@ export const ReferralColumns: ColumnDef<Referral>[] = [
   {
     accessorKey: "studentName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="العنوان" />
+      <DataTableColumnHeader column={column} title="اسم الطالب" />
     ),
-    cell: ({ row }) => {
-      return (
-        <p>
-          {/* todo : add funtion to fransform date to string in arabic */}
-          {/* {row.original.expirationDate} */}
-        </p>
-      );
-    },
   },
 
   {
     accessorKey: "ccp",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="الوصف" />
+      <DataTableColumnHeader column={column} title="ccp" />
     ),
-    cell: ({ row }) => {
-      return (
-        <p>
-          {/* todo : add funtion to fransform date to string in arabic */}
-          {/* {row.original.expirationDate} */}
-        </p>
-      );
-    },
   },
 
   {
     accessorKey: "numberOfReferredStudents",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="الوصف" />
+      <DataTableColumnHeader column={column} title="رقم الإحالة" />
     ),
-    cell: ({ row }) => {
-      return (
-        <p>
-          {/* todo : add funtion to fransform date to string in arabic */}
-          {/* {row.original.expirationDate} */}
-        </p>
-      );
-    },
   },
 
   {
@@ -121,11 +97,9 @@ export const ReferralColumns: ColumnDef<Referral>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
-              <DropdownMenuSeparator />
-
               <DropdownMenuItem
                 onClick={() => {
-                  navigator.clipboard.writeText(payment.id);
+                  navigator.clipboard.writeText(payment.ccp);
                   maketoast.info();
                 }}
                 className="w-full h-full flex justify-between items-center px-2"
@@ -144,11 +118,8 @@ export const ReferralColumns: ColumnDef<Referral>[] = [
                     stroke-linejoin="round"
                   />
                 </svg>
-                استنساخ
+                copy ccp
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
-
-              <DropdownMenuSeparator />
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
