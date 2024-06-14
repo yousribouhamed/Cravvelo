@@ -18,23 +18,25 @@ export const generatePdf = async (pdfFileAsString: string) => {
   await page.evaluate(() => {
     const style = document.createElement("style");
     style.textContent = `
-    @page {
-      size: A4 landscape;
-      margin: 2rem;
-      padding-top: 2rem; /* Add top padding between pages */
-      padding-bottom: 2rem; /* Add bottom padding between pages */
-    }
-    body {
-      margin: 2rem;
-    }
+  
   `;
     document.head.appendChild(style);
   });
 
   await page.setContent(html);
   const buffer = (
-    await page.pdf({ printBackground: true, width: "700px", height: "450px" })
+    await page.pdf({ printBackground: true, width: "700px", height: "500px" })
   ).buffer;
   await browser.close();
   return buffer;
 };
+
+// @page {
+//   size: A4 landscape;
+//   margin: 2rem;
+//   padding-top: 2rem; /* Add top padding between pages */
+//   padding-bottom: 2rem; /* Add bottom padding between pages */
+// }
+// body {
+//   margin: 2rem;
+// }
