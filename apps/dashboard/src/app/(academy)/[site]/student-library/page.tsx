@@ -12,6 +12,7 @@ import { Progress } from "@ui/components/ui/progress";
 
 import { BookMarked } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface PageProps {
   params: { site: string };
@@ -66,7 +67,14 @@ const Page = async ({ params }: PageProps) => {
           <LibraryNavigation />
           <div className="w-full h-full flex flex-wrap gap-6 my-8">
             {Array.isArray(bag?.courses) && bag?.courses?.length === 0 && (
-              <div className="w-full h-[200px] flex items-center justify-center">
+              <div className="w-full h-[300px] flex flex-col gap-y-2 items-center justify-center">
+                <Image
+                  src="/academia/no-video.svg"
+                  alt="this is the error page"
+                  width={400}
+                  height={400}
+                />
+
                 <p className="text-xl font-bold">لا يوجد اي كورسات</p>
               </div>
             )}
@@ -102,16 +110,16 @@ const Page = async ({ params }: PageProps) => {
                     <div className="w-full h-[70px] px-4 flex items-center justify-center gap-x-4  p-2">
                       <span className="text-lg text-gray-600">
                         {calculateProgress(
-                          item.currentEpisode,
-                          item.course.nbrChapters
+                          item?.currentEpisode,
+                          item.course?.nbrChapters
                         )}
                         %
                       </span>
                       <Progress
                         color={website?.color}
                         value={calculateProgress(
-                          item.currentEpisode,
-                          item.course.nbrChapters
+                          item?.currentEpisode,
+                          item.course?.nbrChapters
                         )}
                       />
                     </div>

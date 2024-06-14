@@ -47,16 +47,16 @@ const Page = async ({ params }: PageProps) => {
         <main className="w-full h-fit min-h-full flex flex-col items-center justify-center  p-4 sm:p-0s">
           <Banner websiteName={website?.name} color={website?.color} />
           {courses.length === 0 ? (
-            <div className="w-full h-[400px] flex items-center flex-col gap-y-4 justify-center">
+            <div className="w-full h-fit min-h-[250px] flex items-center flex-col gap-y-1 justify-center">
               <Image
-                src="/welcome.svg"
+                src="/academia/welcome.svg"
                 alt="this is the error page"
                 width={400}
                 height={400}
               />
 
               <p className="font-bold text-2xl text-black">
-                👋اهلا بك في الأكاديمية لا توجد اي دورة حاليا
+                اهلا بك في الأكاديمية لا توجد اي دورة حاليا 👋
               </p>
             </div>
           ) : (

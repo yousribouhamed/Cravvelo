@@ -13,6 +13,7 @@ import { Progress } from "@ui/components/ui/progress";
 import { BookMarked } from "lucide-react";
 import Link from "next/link";
 import { prisma } from "database/src";
+import Image from "next/image";
 
 interface PageProps {
   params: { site: string };
@@ -80,8 +81,15 @@ const Page = async ({ params }: PageProps) => {
           <LibraryNavigation />
           <div className="w-full h-full flex flex-wrap gap-6 my-8">
             {Array.isArray(certificates) && certificates?.length === 0 && (
-              <div className="w-full h-[200px] flex items-center justify-center">
-                <p className="text-xl font-bold"> حاليا لا تملك اي شهادة </p>
+              <div className="w-full h-[300px] flex flex-col gap-y-2 items-center justify-center">
+                <Image
+                  src="/academia/notfound-taken.svg"
+                  alt="this is the error page"
+                  width={400}
+                  height={400}
+                />
+
+                <p className="text-xl font-bold">لا يوجد اي كورسات</p>
               </div>
             )}
             {certificates?.map((item, index) => {

@@ -189,8 +189,14 @@ const CoursesGrid: FC<Props> = ({ courses, color }) => {
       <div className=" col-span-4 p-4 pt-0  sm:col-span-3">
         <div className="flex flex-wrap   gap-8 w-full h-full mim-h-[500px] ">
           {Array.isArray(courses) && courses.length === 0 && (
-            <div className="w-full h-[200px] flex items-center justify-center">
-              <p className="text-xl font-bold">
+            <div className="w-full h-[300px] flex flex-col gap-y-4 items-center justify-center">
+              <Image
+                src="/academia/no-video.svg"
+                alt="this is the error page"
+                width={400}
+                height={400}
+              />
+              <p className="text-2xl font-bold">
                 لا توجد دورات حتى الآن في الأكاديمية
               </p>
             </div>
