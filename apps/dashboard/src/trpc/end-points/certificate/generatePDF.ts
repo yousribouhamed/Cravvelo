@@ -33,7 +33,7 @@ export const generatePdf = async (pdfFileAsString: string) => {
 
   await page.setContent(html);
   const buffer = (
-    await page.pdf({ printBackground: true, width: "700px", height: "400px" })
+    await page.pdf({ printBackground: true, width: "700px", height: "450px" })
   ).buffer;
   await browser.close();
   return buffer;
