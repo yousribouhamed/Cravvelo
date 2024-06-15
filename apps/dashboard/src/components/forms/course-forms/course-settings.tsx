@@ -218,6 +218,23 @@ export function CourseSettingsForm({ course }: ComponentProps) {
 
               <FormField
                 control={form.control}
+                name="youtubeUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      أو يمكنك إضافة عنوان URL لفيديو يوتيوب
+                    </FormLabel>
+                    <FormControl>
+                      <Input placeholder="https://youtu.be/" {...field} />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="courseResume"
                 render={({ field }) => (
                   <FormItem className="w-full ">
