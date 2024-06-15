@@ -278,7 +278,7 @@ export const verifyEmailAction = async ({ code }: { code: string }) => {
       id: studentId,
     },
     data: {
-      confirmeEmail: new Date(),
+      confirmedEmail: new Date(),
     },
   });
   return student;

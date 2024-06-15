@@ -52,7 +52,7 @@ export const BlueOcean = ({
         }
       }
     </style>
-    <main class="w-[800px] mx-auto bg-slate-950 h-[500px] flex items-center justify-center p-[25px]">
+    <main class="w-[700px] mx-auto bg-slate-950 h-[500px] flex items-center justify-center p-[25px]">
       <div class="bg-slate-50 w-full h-full rounded-xl">
         <div class="w-full h-[100px] flex items-center justify-between px-4">
           <p class="text-2xl font-bold text-black">${certificateName}</p>

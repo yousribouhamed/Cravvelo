@@ -107,7 +107,7 @@ export const course = {
             courseUrl: input.courseUrl,
             seoDescription: input.seoDescription,
             seoTitle: input.seoTitle,
-            thumnailUrl: input.thumnailUrl,
+            thumbnailUrl: input.thumnailUrl,
             title: input.title,
             youtubeUrl: input.youtubeUrl,
           },

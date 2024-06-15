@@ -20,7 +20,7 @@ export const user_chargily = {
             data: {
               accountId: ctx.account.id,
               chargilyPublicKey: input.public_key,
-              chargiySecretKey: input.private_key,
+              chargilySecretKey: input.private_key,
             },
           });
 
@@ -29,12 +29,11 @@ export const user_chargily = {
 
         const chargily = await ctx.prisma.paymentsConnect.update({
           where: {
-            // change this to account id when the internet connectio returns
             id: ctx.account.id,
           },
           data: {
             chargilyPublicKey: input.public_key,
-            chargiySecretKey: input.private_key,
+            chargilySecretKey: input.private_key,
           },
         });
 

@@ -100,7 +100,7 @@ export const Product_card = ({
           actions.addItem({
             type: "PRODUCT",
             id: product.id,
-            imageUrl: product.thumnailUrl,
+            imageUrl: product.thumbnailUrl,
             name: product.title,
             price: product.price.toString(),
           });

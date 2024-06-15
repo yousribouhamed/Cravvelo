@@ -53,7 +53,9 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
   const form = useForm<Inputs>({
     resolver: zodResolver(ChargilyConnectSchema),
     defaultValues: {
-      chargilyPrivateKey: data?.chargiySecretKey ? data?.chargiySecretKey : "",
+      chargilyPrivateKey: data?.chargilySecretKey
+        ? data?.chargilySecretKey
+        : "",
       chargilyPublicKey: data?.chargilyPublicKey ? data?.chargilyPublicKey : "",
     },
   });

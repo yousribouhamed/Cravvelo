@@ -23,7 +23,7 @@ const PaymentMethodsConnectors: FC<PaymentMethodsConnectorsProps> = ({
   const router = useRouter();
 
   const isChargilyConnected =
-    data && data?.chargilyPublicKey && data?.chargiySecretKey ? true : false;
+    data && data?.chargilyPublicKey && data?.chargilySecretKey ? true : false;
 
   return (
     <div className="w-full min-h-[400px]  flex flex-wrap gap-4 m-8">

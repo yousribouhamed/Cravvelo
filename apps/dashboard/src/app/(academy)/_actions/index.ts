@@ -135,6 +135,6 @@ export const getChargilyKeys = async ({ subdomain }: { subdomain: string }) => {
 
   return {
     chargilyPublicKey: payments?.chargilyPublicKey,
-    chargiySecretKey: payments?.chargiySecretKey,
+    chargiySecretKey: payments?.chargilySecretKey,
   };
 };

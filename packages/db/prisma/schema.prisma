@@ -5,8 +5,6 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  // uncomment next line if you use Prisma <5.10
-  // directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 enum PLANS {
@@ -40,13 +38,13 @@ model Account {
 }
 
 model PaymentsConnect {
-  id                String   @unique @default(cuid())
-  accountId         String
-  chargilyPublicKey String
-  chargiySecretKey  String
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  Account           Account? @relation(fields: [accountId], references: [id])
+  id                  String   @unique @default(cuid())
+  accountId           String   @unique
+  chargilyPublicKey   String
+  chargilySecretKey   String
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  Account             Account? @relation(fields: [accountId], references: [id])
 
   @@index([id])
   @@index([accountId])
@@ -59,7 +57,7 @@ model Course {
   title                  String
   courseUrl              String?    @db.VarChar(199)
   youtubeUrl             String?    @db.VarChar(199)
-  thumnailUrl            String?    @db.VarChar(199)
+  thumbnailUrl            String?    @db.VarChar(199)
   courseResume           String?    @db.VarChar(199)
   courseRequirements     String?    @db.VarChar(199)
   courseWhatYouWillLearn String?    @db.VarChar(199)
@@ -68,7 +66,7 @@ model Course {
   seoDescription         String?
   price                  Float?
   compareAtPrice         Float?
-  studenstNbr            String?
+  studentsNbr            Int?
   profit                 String?
   length                 Float      @default(0)
   nbrChapters            Float      @default(0)
@@ -84,8 +82,6 @@ model Course {
   createdAt              DateTime   @default(now())
   updatedAt              DateTime   @updatedAt
   Comment                Comment[]
-  Homework               Homework[]
-  Exam                   Exam[]
 
   @@index([id])
   @@index([accountId])
@@ -110,8 +106,8 @@ model Product {
   subDescription    String?  @db.VarChar(199)
   SeoTitle          String?
   SeoDescription    String?  @db.VarChar(199)
-  thumnailUrl       String?
-  filrUrl           String?
+  thumbnailUrl       String?
+  fileUrl           String?
   description       Json?
   status            String?
   compareAtPrice    Float?
@@ -202,19 +198,6 @@ model Sale {
   @@index([accountId])
 }
 
-model Homework {
-  id          String   @unique @default(cuid())
-  title       String
-  description String?
-  dueDate     DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  courseId    String
-  Course      Course?  @relation(fields: [courseId], references: [id])
-
-  @@index([id])
-  @@index([courseId])
-}
 
 model Comment {
   id           String   @unique @default(cuid())
@@ -249,20 +232,7 @@ model Notification {
   @@index([accountId])
 }
 
-model Exam {
-  id          String   @unique @default(cuid())
-  title       String
-  description String?
-  date        DateTime
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  courseId  String
-  Course    Course?  @relation(fields: [courseId], references: [id])
-
-  @@index([id])
-  @@index([courseId])
-}
 
 model Student {
   id            String    @unique @default(cuid())
@@ -274,7 +244,7 @@ model Student {
   phone         String?
   accountId     String
   password      String
-  confirmeEmail DateTime?
+  confirmedEmail DateTime?
   bag           Json
   Account       Account   @relation(fields: [accountId], references: [id])
   createdAt     DateTime  @default(now())
@@ -294,8 +264,6 @@ model Certificate {
   fileUrl     String   @db.Text
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  // Add more fields as needed
 }
 
 model Payments {
@@ -305,7 +273,7 @@ model Payments {
   plan                String
   end_of_subscription DateTime
   payload             Json
-  strategy            String // this one can be yearly or mounthly
+  strategy            String 
   status              String
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt

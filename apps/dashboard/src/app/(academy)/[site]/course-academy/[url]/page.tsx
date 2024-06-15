@@ -38,12 +38,14 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${course.seoTitle} | ${data.name}`,
+    title: `${course.seoTitle ?? course.title} | ${data.name}`,
     description: `${course.seoDescription} | ${data.name}`,
     openGraph: {
-      title: `${course.seoTitle} | ${data.name}`,
-      description: `${course.seoDescription} | ${data.name}`,
-      images: [course.thumnailUrl],
+      title: `${course.seoTitle ?? course.title} | ${data.name}`,
+      description: `${course.seoDescription ?? course.courseDescription} | ${
+        data.name
+      }`,
+      images: [course.thumbnailUrl],
     },
   };
 }
@@ -73,7 +75,7 @@ const Page = async ({ params }: PageProps) => {
   return (
     <>
       <AcademyHeader
-         referralEnabled={website.enableReferral}
+        referralEnabled={website.enableReferral}
         color={website?.color}
         student={student}
         isAuthanticated={student ? true : false}

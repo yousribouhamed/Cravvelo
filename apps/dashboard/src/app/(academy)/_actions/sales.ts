@@ -15,7 +15,7 @@ export const create_course_sale = async ({
   accountId: string;
 }) => {
   try {
-    const newStudentNumber = Number(course.studenstNbr) + 1;
+    const newStudentNumber = Number(course.studentsNbr) + 1;
 
     const [sale, updatedCourse, notification] = await Promise.all([
       prisma.sale.create({
@@ -34,7 +34,7 @@ export const create_course_sale = async ({
           id: course.id,
         },
         data: {
-          studenstNbr: newStudentNumber.toString(),
+          studentsNbr: newStudentNumber,
         },
       }),
       prisma.notification.create({

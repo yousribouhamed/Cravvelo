@@ -8,9 +8,7 @@ import { website } from "./website";
 import { orders } from "./end-points/orders";
 import { notifications } from "./notifications";
 import { students } from "./end-points/students";
-import { homework } from "./end-points/homework";
 import { cetificate } from "./end-points/certificate";
-import { exams } from "./end-points/exams";
 import { comments } from "./end-points/comments";
 import { academia } from "./end-points/academia";
 import { coubons } from "./end-points/coupons";
@@ -30,9 +28,7 @@ export const appRouter = router({
   ...orders,
   ...notifications,
   ...students,
-  ...homework,
   ...cetificate,
-  ...exams,
   ...comments,
   ...academia,
   ...coubons,

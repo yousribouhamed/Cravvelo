@@ -73,7 +73,7 @@ const Page = async ({ params }: PageProps) => {
                   <div className="w-[320px] min-h-[300px] h-fit p-0  border  flex flex-col shadow rounded-xl hover:shadow-xl  transition-all duration-700 bg-white cursor-pointer ">
                     <img
                       alt={item.title + "image"}
-                      src={item.thumnailUrl}
+                      src={item.thumbnailUrl}
                       className="w-full h-[200px] rounded-t-xl object-cover "
                     />
                     <div className="w-full h-[25px] px-4 flex items-center justify-between my-2">
@@ -91,7 +91,7 @@ const Page = async ({ params }: PageProps) => {
                       </div>
                     </div>
 
-                    <DonwloadButton fileUrl={item.filrUrl} />
+                    <DonwloadButton fileUrl={item.fileUrl} />
                   </div>
                 </div>
               );

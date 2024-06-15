@@ -122,7 +122,7 @@ export const Product_card = ({
           actions.addItem({
             type: "COURSE",
             id: course.id,
-            imageUrl: course.thumnailUrl,
+            imageUrl: course.thumbnailUrl,
             name: course.title,
             price: course.price.toString(),
           });
@@ -173,7 +173,7 @@ export const Product_card = ({
               color: color ?? "#FC6B00",
             }}
           />
-          <span>{course.studenstNbr ? course.studenstNbr : 0} طالبا</span>
+          <span>{course.studentsNbr ? course.studentsNbr : 0} طالبا</span>
         </div>
 
         <div className="w-full flex items-center justify-start gap-x-4">

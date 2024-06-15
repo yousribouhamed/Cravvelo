@@ -150,10 +150,10 @@ export const products = {
             id: input.productId,
           },
           data: {
-            filrUrl: input.filrUrl,
+            fileUrl: input.filrUrl,
             description: JSON.stringify(input.description),
             subDescription: input.subDescription,
-            thumnailUrl: input.thumnailUrl,
+            thumbnailUrl: input.thumnailUrl,
             title: input.name,
           },
         })

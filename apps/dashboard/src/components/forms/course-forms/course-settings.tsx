@@ -67,7 +67,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
       courseResume: course?.courseResume ?? "",
 
       title: course?.title ?? "",
-      thumnailUrl: course?.thumnailUrl ?? "",
+      thumnailUrl: course?.thumbnailUrl ?? "",
       youtubeUrl: course?.youtubeUrl ?? "",
       seoDescription: course?.seoDescription ?? "",
       seoTitle: course?.seoTitle ?? "",

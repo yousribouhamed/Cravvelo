@@ -330,7 +330,7 @@ async function Page({ searchParams }) {
                                 {" "}
                                 DZD {item.price ?? 0.0}
                               </span>
-                              <span>{item.studenstNbr ?? 0}</span>
+                              <span>{item.studentsNbr ?? 0}</span>
                               <span>{item.title}</span>
                             </div>
                           ))}

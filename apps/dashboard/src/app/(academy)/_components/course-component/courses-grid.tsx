@@ -210,7 +210,7 @@ const CoursesGrid: FC<Props> = ({ courses, color }) => {
                 <div className="h-[200px] w-full rounded-t-xl relative">
                   <Image
                     alt={item.title}
-                    src={item.thumnailUrl}
+                    src={item.thumbnailUrl}
                     className="  object-cover rounded-t-xl"
                     fill
                   />
