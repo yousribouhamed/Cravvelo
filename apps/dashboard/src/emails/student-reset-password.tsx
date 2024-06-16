@@ -39,13 +39,13 @@ export default function StudentResetPasswordEmail({
       <Tailwind>
         <Body
           dir="rtl"
-          className="w-full h-full flex items-center justify-center min-h-[600px] mx-auto relative  "
+          className="w-full h-full flex items-center justify-center min-h-[600px] bg-black mx-auto relative  "
         >
           <Container className=" w-[400px]  h-fit min-h-[600px] mx-auto relative ">
             <Section>
-              <Section className="flex flex-col bg-[#F8FAE5] ">
+              <Section className="flex flex-col bg-white ">
                 <Section className=" w-full h-fit  p-4 ">
-                  <Text>اعد ضبط كلمه السر</Text>
+                  <Text className="text-xl font-bold">اعد ضبط كلمه السر</Text>
 
                   <Text>
                     إذا لم تكن قد قدمت هذا الطلب، فما عليك سوى تجاهل هذه الرسالة
@@ -59,7 +59,7 @@ export default function StudentResetPasswordEmail({
                         backgroundColor: "#1a73e8",
                         color: "#ffffff",
                         padding: "12px 24px",
-                        borderRadius: "4px",
+                        borderRadius: "20px",
                         textDecoration: "none",
                         fontWeight: "bold",
                         display: "inline-block",
