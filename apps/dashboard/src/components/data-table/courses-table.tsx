@@ -47,6 +47,7 @@ import { Badge } from "@ui/components/ui/badge";
 import { Column } from "@tanstack/react-table";
 import { Check, LucideIcon, PlusCircle } from "lucide-react";
 import { Pencil, ArrowUpCircle } from "lucide-react";
+import Image from "next/image";
 
 export const levels = [
   {
@@ -195,7 +196,15 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  لم يتم العثور على نتائج
+                  <div className="h-[300px]   flex flex-col justify-center items-center gap-y-1 text-center">
+                    <Image
+                      src={"/academia/not-found.svg"}
+                      alt="this is the error page"
+                      width={300}
+                      height={300}
+                    />
+                    لم يتم العثور على نتائج
+                  </div>
                 </TableCell>
               </TableRow>
             )}

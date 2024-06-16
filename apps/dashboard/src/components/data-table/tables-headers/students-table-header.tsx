@@ -48,15 +48,6 @@ const StudentTableHeader: FC<StudentsTableHeaderProps> = ({ table, data }) => {
           </svg>
           تصفية
         </Button>
-        <Input
-          placeholder="البحث عن الطلاب..."
-          //@ts-ignore
-          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm rounded-xl border bg-white h-10 "
-        />
       </div>
       <div className="min-w-[200px] w-fit h-full flex items-center justify-end gap-x-4">
         <Button

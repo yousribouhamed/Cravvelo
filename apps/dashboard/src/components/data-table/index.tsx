@@ -25,6 +25,8 @@ import CouponsTableHeader from "./tables-headers/coupons-table-header";
 import SimpleTableHeader from "./tables-headers/simple-table-header";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import StudentTableHeader from "./tables-headers/students-table-header";
+import Image from "next/image";
+import { Search } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -62,6 +64,32 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
+      <div className="flex items-center py-4   justify-start">
+        <div className="w-full max-w-sm  h-[50px] p-4 rounded-xl bg-white border flex items-center justify-start gap-x-4">
+          <Search className="text-black w-4 h-4" />
+          <input
+            className="border-none bg-none focus:border-none focus:ring-0  "
+            placeholder="البحث  ..."
+            value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+            onChange={
+              (event) => {
+                const value = event.target.value;
+
+                table.getAllColumns().forEach((column) => {
+                  if (
+                    ["title", "description", "category"].includes(
+                      column.id as string
+                    )
+                  ) {
+                    column.setFilterValue(value); // Adjust this line based on your filtering logic
+                  }
+                });
+              }
+              // table.getColumn("title")?.setFilterValue(event.target.value)
+            }
+          />
+        </div>
+      </div>
       {/* <SimpleTableHeader data={data} table={table} /> */}
       <StudentTableHeader data={data} table={table} />
       <div className="rounded-md border bg-white">
@@ -112,7 +140,15 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  لم يتم العثور على نتائج
+                  <div className="h-[300px]   flex flex-col justify-center items-center gap-y-1 text-center">
+                    <Image
+                      src={"/academia/not-found.svg"}
+                      alt="this is the error page"
+                      width={300}
+                      height={300}
+                    />
+                    لم يتم العثور على نتائج
+                  </div>
                 </TableCell>
               </TableRow>
             )}

@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import Ripples from "react-ripples";
 import {
   Form,
   FormControl,
@@ -228,36 +229,39 @@ const AddNew: FC = ({}) => {
                 )}
               />
               <div className="w-full h-[70px] flex items-center justify-center gap-x-10">
-                <Button
-                  data-ripple-light="true"
-                  type="button"
-                  onClick={() => setSelectedItem(0)}
-                  variant="secondary"
-                  size="lg"
-                  className={`bg-white flex items-center gap-x-4 text-lg font-bold border text-black h-16 ${
-                    selectedItem === 0 ? "border-[#FC6B00] border-2" : ""
-                  }`}
-                >
-                  <div className="w-fit h-fit shadow-md bg-transparent border-none shadow-primary flex items-center justify-center">
-                    <icons.icons1 />
-                  </div>
-                  دورة تدريبية
-                </Button>
-                <Button
-                  data-ripple-light="true"
-                  type="button"
-                  onClick={() => setSelectedItem(1)}
-                  variant="secondary"
-                  size="lg"
-                  className={`bg-white text-lg font-bold border flex items-center gap-x-4 text-black h-16 ${
-                    selectedItem === 1 ? "border-[#FC6B00] border-2" : ""
-                  }`}
-                >
-                  <div className="w-fit h-fit shadow-md bg-transparent border-none shadow-primary flex items-center justify-center">
-                    <icons.icon2 />
-                  </div>
-                  منتج رقمي
-                </Button>
+                <Ripples color="#fc69005c" during={1200}>
+                  <Button
+                    type="button"
+                    onClick={() => setSelectedItem(0)}
+                    variant="secondary"
+                    size="lg"
+                    className={`bg-white flex items-center gap-x-4 text-lg font-bold border text-black h-16 ${
+                      selectedItem === 0 ? "border-[#FC6B00] border-2" : ""
+                    }`}
+                  >
+                    <div className="w-fit h-fit shadow-md bg-transparent border-none shadow-primary flex items-center justify-center">
+                      <icons.icons1 />
+                    </div>
+                    دورة تدريبية
+                  </Button>
+                </Ripples>
+
+                <Ripples color="#fc69005c" during={1200}>
+                  <Button
+                    type="button"
+                    onClick={() => setSelectedItem(1)}
+                    variant="secondary"
+                    size="lg"
+                    className={`bg-white text-lg font-bold border flex items-center gap-x-4 text-black h-16 ${
+                      selectedItem === 1 ? "border-[#FC6B00] border-2" : ""
+                    }`}
+                  >
+                    <div className="w-fit h-fit shadow-md bg-transparent border-none shadow-primary flex items-center justify-center">
+                      <icons.icon2 />
+                    </div>
+                    منتج رقمي
+                  </Button>
+                </Ripples>
               </div>
               <DialogFooter className="w-full h-[50px] flex items-center  justify-center gap-x-4">
                 <Button

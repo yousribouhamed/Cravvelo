@@ -24,6 +24,7 @@ import {
 import CouponsTableHeader from "./tables-headers/coupons-table-header";
 import { ChevronRightIcon } from "lucide-react";
 import { ChevronLeftIcon } from "lucide-react";
+import Image from "next/image";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -110,7 +111,15 @@ export function CouponDataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  لم يتم العثور على نتائج
+                  <div className="h-[300px]   flex flex-col justify-center items-center gap-y-1 text-center">
+                    <Image
+                      src={"/academia/not-found.svg"}
+                      alt="this is the error page"
+                      width={300}
+                      height={300}
+                    />
+                    لم يتم العثور على نتائج
+                  </div>
                 </TableCell>
               </TableRow>
             )}
