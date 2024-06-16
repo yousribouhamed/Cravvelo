@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { publicProcedure, privateProcedure } from "../../trpc";
 import { prisma } from "database/src";
+import { increaseVerificationSteps } from "@/src/lib/actions/increase-steps";
 
 export const users = {
   update_user_profile: privateProcedure
@@ -25,6 +26,8 @@ export const users = {
             phone: input.phoneNumber,
           },
         });
+
+        await increaseVerificationSteps({ accountId: ctx.account.id });
 
         return account;
       } catch (err) {

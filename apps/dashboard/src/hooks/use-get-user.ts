@@ -60,6 +60,8 @@ const useGetUser = async () => {
     subdomain: account.Website[0]?.subdomain,
     customDomain: account.Website[0]?.customDomain,
     createdAt: account.createdAt,
+    verified: account.verified,
+    verification_steps: account.verification_steps,
   };
 };
 

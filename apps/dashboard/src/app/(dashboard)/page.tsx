@@ -131,13 +131,14 @@ async function Page({ searchParams }) {
     <MaxWidthWrapper>
       <main className="w-full flex flex-col overflow-y-hidden h-fit mb-10 justify-start">
         <Header notifications={notifications} user={user} title="الرئيسية" />
-        <ConfirmeAccount />
+        {!user.verified && <ConfirmeAccount />}
         {!user?.subdomain ? (
           <CreateAcademiaSection />
         ) : (
           <>
             <div className="w-full h-[30px] flex justify-between items-center mt-10 ">
               <DatePickerWithRange />
+
               {user?.subdomain ? (
                 <Link
                   target="_blank"
@@ -177,7 +178,7 @@ async function Page({ searchParams }) {
               <div className="grid gap-4 md:grid-cols-3  my-8 h-[450px] w-full ">
                 <AreaChartOverview sales={sales} />
               </div>
-              <div className="grid gap-4 md:grid-cols-2 my-8 h-[300px] w-full mb-10 ">
+              <div className="grid gap-4 md:grid-cols-2 my-8 h-[450px] w-full mb-10 ">
                 <Card className="col-span-1">
                   <CardHeader>
                     <p>الدورات الآكثر مبيعاً</p>

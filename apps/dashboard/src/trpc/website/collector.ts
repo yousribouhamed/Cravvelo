@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { privateProcedure } from "../trpc";
 import { z } from "zod";
 import { WebsiteAssets } from "@/src/types";
+import { increaseVerificationSteps } from "@/src/lib/actions/increase-steps";
 
 export const collector = {
   addWebSiteFont: privateProcedure
@@ -133,6 +134,8 @@ export const collector = {
             privacy_policy: JSON.stringify(input.policy),
           },
         });
+
+        await increaseVerificationSteps({ accountId: ctx.account.id });
 
         return site;
       } catch (err) {

@@ -65,6 +65,8 @@ export type UserData = {
   subdomain: string;
   customDomain: string;
   createdAt: Date;
+  verified: boolean;
+  verification_steps: number;
 };
 
 export interface Product {

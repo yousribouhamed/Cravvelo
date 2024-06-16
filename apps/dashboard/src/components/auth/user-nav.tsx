@@ -75,7 +75,11 @@ export default function UserNav({ user }: UserNavProps) {
           <div className="w-full h-[50px] flex items-center justify-between">
             <ArrowLeft className="w-4 h-4" />
             <div className="w-[70%] h-full flex items-center justify-end gap-x-2">
-              <p className="text-sm text-black text-start">ابدأ التوثيق الآن</p>
+              <p className="text-sm text-black text-start">
+                {user.verification_steps === 3
+                  ? "تم التوثيق بنجاح"
+                  : " ابدأ التوثيق الآن"}
+              </p>
               <Image
                 alt="verified image"
                 src="/verified.png"
@@ -89,7 +93,18 @@ export default function UserNav({ user }: UserNavProps) {
             dir="rtl"
             className="w-full h-[20px] flex justify-center items-center"
           >
-            <Progress value={25} className="h-1 w-full bg-[#EFEFEF]" />
+            <Progress
+              value={
+                user.verification_steps === 0
+                  ? 0
+                  : user.verification_steps === 1
+                  ? 25
+                  : user.verification_steps === 2
+                  ? 75
+                  : 100
+              }
+              className="h-1 w-full bg-[#EFEFEF]"
+            />
           </div>
         </div>
         <DropdownMenuSeparator />

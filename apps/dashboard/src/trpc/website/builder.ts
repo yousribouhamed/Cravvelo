@@ -1,3 +1,4 @@
+import { increaseVerificationSteps } from "@/src/lib/actions/increase-steps";
 import { privateProcedure } from "../trpc";
 import { z } from "zod";
 
@@ -24,6 +25,7 @@ export const builder = {
             subdomain: input.subdomain + ".cravvelo.com",
           },
         });
+        await increaseVerificationSteps({ accountId: ctx.account.id });
         return site;
       } catch (err) {
         console.error(err);
