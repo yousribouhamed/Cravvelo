@@ -221,8 +221,6 @@ export function constructMetadata({
   };
 }
 
-
-
 export function timeSince(createdAt: Date): string {
   const now = new Date();
   const createdDate = new Date(createdAt);
@@ -275,4 +273,19 @@ export function timeSince(createdAt: Date): string {
   }
 
   return `منذ ${seconds} ثواني`;
+}
+
+export function formatDZD(amount: number): string {
+  // Create a number formatter for Algerian Dinar
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "DZD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+  // Format the amount and replace the currency symbol with "DZD"
+  const formattedAmount = formatter.format(amount).replace("DZD", "").trim();
+
+  return `${formattedAmount} DZD`;
 }

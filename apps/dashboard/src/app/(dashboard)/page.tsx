@@ -8,7 +8,6 @@ import {
   CardTitle,
 } from "@ui/components/ui/card";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
-
 import AreaChartOverview from "@/src/components/area-chart";
 import { DatePickerWithRange } from "@/src/components/range-date-picker";
 import { NotFoundCard } from "@/src/components/not-found-card";
@@ -18,140 +17,114 @@ import { cn } from "@ui/lib/utils";
 import { Eye } from "lucide-react";
 import Link from "next/link";
 import PublishWebsite from "@/src/components/models/editor/publish-website";
-import { prisma } from "database/src";
 import { dashboardProductsSearchParamsSchema } from "@/src/lib/validators/cart";
 import CreateAcademiaSection from "@/src/components/create-academia-section";
 import ConfirmeAccount from "@/src/components/confirme-account";
+import {
+  getAllSales,
+  getAllCommets,
+  getAllCourses,
+  getAllNotifications,
+  getAllstudents,
+  getPreviousPeriodComments,
+  getPreviousPeriodSales,
+  getPreviousPeriodStudents,
+} from "./actions";
+import DashboardCards from "@/src/components/dashboard-cards";
 
-const getAllSales = async ({
-  accountId,
-  end_date,
-  start_date,
-}: {
-  accountId: string;
-  start_date: Date | undefined;
-  end_date: Date | undefined;
-}) => {
-  const sales = await prisma.sale.findMany({
-    where: {
-      accountId,
-      createdAt:
-        start_date && end_date
-          ? {
-              gte: start_date,
-              lte: end_date,
-            }
-          : {},
-    },
-  });
-
-  return sales;
-};
-
-const getAllstudents = async ({
-  accountId,
-  end_date,
-  start_date,
-}: {
-  accountId: string;
-  start_date: Date | undefined;
-  end_date: Date | undefined;
-}) => {
-  const students = await prisma.student.findMany({
-    where: {
-      accountId,
-      createdAt:
-        start_date && end_date
-          ? {
-              gte: start_date, // Start of date range
-              lte: end_date, // End of date range
-            }
-          : {},
-    },
-  });
-
-  return students;
-};
-const getAllCommets = async ({
-  accountId,
-  end_date,
-  start_date,
-}: {
-  accountId: string;
-  start_date: Date | undefined;
-  end_date: Date | undefined;
-}) => {
-  const comments = await prisma.comment.findMany({
-    where: {
-      accountId,
-      createdAt:
-        start_date && end_date
-          ? {
-              gte: start_date, // Start of date range
-              lte: end_date, // End of date range
-            }
-          : {},
-    },
-  });
-
-  return comments;
-};
-
-const getAllNotifications = async ({ accountId }: { accountId: string }) => {
-  const notifications = await prisma.notification.findMany({
-    where: {
-      accountId,
-    },
-    orderBy: {
-      createdAt: "desc", // Assuming 'createdAt' is the field that stores the date and time the notification was created
-    },
-    take: 30, // Limit the number of notifications to 30
-  });
-  return notifications;
-};
-
-const getAllCourses = async ({ accountId }: { accountId: string }) => {
-  const courses = await prisma.course.findMany({
-    where: {
-      accountId,
-    },
-    orderBy: {
-      createdAt: "desc", // Assuming 'createdAt' is the field that stores the date and time the notification was created
-    },
-    take: 30, // Limit the number of notifications to 30
-  });
-  return courses;
+const calculatePercentageChange = (current, previous) => {
+  if (previous === 0)
+    return { percentage: current * 100, isPositive: current >= 0 };
+  const percentageChange = ((current - previous) / previous) * 100;
+  return { percentage: percentageChange, isPositive: percentageChange >= 0 };
 };
 
 async function Page({ searchParams }) {
-  // Parse search params using zod schema
   const { from, to } = dashboardProductsSearchParamsSchema.parse(searchParams);
 
   const fromDay = from ? new Date(from) : undefined;
   const toDay = to ? new Date(to) : undefined;
 
+  // Calculate previous period dates
+  const previousFromDay = fromDay ? new Date(fromDay) : new Date();
+  const previousToDay = toDay ? new Date(toDay) : new Date();
+
+  if (previousFromDay) previousFromDay.setMonth(previousFromDay.getMonth() - 1);
+  if (previousToDay) previousToDay.setMonth(previousToDay.getMonth() - 1);
+
   const user = await useHaveAccess();
 
-  const [sales, studnets, comments, notifications, courses] = await Promise.all(
-    [
-      getAllSales({
-        accountId: user.accountId,
-        start_date: fromDay,
-        end_date: toDay,
-      }),
-      getAllstudents({
-        accountId: user.accountId,
-        start_date: fromDay,
-        end_date: toDay,
-      }),
-      getAllCommets({
-        accountId: user.accountId,
-        start_date: fromDay,
-        end_date: toDay,
-      }),
-      getAllNotifications({ accountId: user.accountId }),
-      getAllCourses({ accountId: user.accountId }),
-    ]
+  const [
+    sales,
+    students,
+    comments,
+    notifications,
+    courses,
+    previousSales,
+    previousStudents,
+    previousComments,
+  ] = await Promise.all([
+    getAllSales({
+      accountId: user.accountId,
+      start_date: fromDay,
+      end_date: toDay,
+    }),
+    getAllstudents({
+      accountId: user.accountId,
+      start_date: fromDay,
+      end_date: toDay,
+    }),
+    getAllCommets({
+      accountId: user.accountId,
+      start_date: fromDay,
+      end_date: toDay,
+    }),
+    getAllNotifications({ accountId: user.accountId }),
+    getAllCourses({ accountId: user.accountId }),
+    getPreviousPeriodSales({
+      accountId: user.accountId,
+      start_date: previousFromDay,
+      end_date: previousToDay,
+    }),
+    getPreviousPeriodStudents({
+      accountId: user.accountId,
+      start_date: previousFromDay,
+      end_date: previousToDay,
+    }),
+    getPreviousPeriodComments({
+      accountId: user.accountId,
+      start_date: previousFromDay,
+      end_date: previousToDay,
+    }),
+  ]);
+
+  const currentProfits =
+    sales.length > 0
+      ? sales.map((item) => Number(item.price)).reduce((a, b) => a + b, 0)
+      : 0;
+  const previousProfits =
+    previousSales.length > 0
+      ? previousSales
+          .map((item) => Number(item.price))
+          .reduce((a, b) => a + b, 0)
+      : 0;
+
+  const profitsPercentageChange = calculatePercentageChange(
+    currentProfits,
+    previousProfits
+  );
+
+  const salesPercentageChange = calculatePercentageChange(
+    sales.length,
+    previousSales.length
+  );
+  const studentsPercentageChange = calculatePercentageChange(
+    students.length,
+    previousStudents.length
+  );
+  const commentsPercentageChange = calculatePercentageChange(
+    comments.length,
+    previousComments.length
   );
 
   return (
@@ -183,125 +156,24 @@ async function Page({ searchParams }) {
               )}
             </div>
             <div className="space-y-4 pt-4">
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <Link href="/orders">
-                  <Card
-                    key={"card1"}
-                    className="flex flex-col justify-between  min-h-[150px]"
-                  >
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-xl font-bold ">
-                        المبيعات{" "}
-                      </CardTitle>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        className="h-8 w-8 text-[#FC6B00]"
-                      >
-                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                      </svg>
-                    </CardHeader>
-                    <CardFooter>
-                      <div className="text-2xl font-bold">{sales.length}</div>
-                    </CardFooter>
-                  </Card>
-                </Link>
-                <Link href="/students">
-                  <Card
-                    key={"card2"}
-                    className="flex flex-col justify-between  min-h-[150px] "
-                  >
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-xl font-bold ">
-                        الطلاب
-                      </CardTitle>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        className="h-8 w-8 text-[#FC6B00]"
-                      >
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                        <circle cx="9" cy="7" r="4" />
-                        <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                      </svg>
-                    </CardHeader>
-                    <CardFooter>
-                      <div className="text-2xl font-bold">
-                        {studnets?.length}
-                      </div>
-                    </CardFooter>
-                  </Card>
-                </Link>
-
-                <Card
-                  key={"card3"}
-                  className="flex flex-col justify-between  min-h-[150px] "
-                >
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-xl font-bold ">
-                      صافي الآرباح
-                    </CardTitle>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="h-8 w-8 text-[#FC6B00]"
-                    >
-                      <rect width="20" height="14" x="2" y="5" rx="2" />
-                      <path d="M2 10h20" />
-                    </svg>
-                  </CardHeader>
-                  <CardFooter>
-                    <div className="text-2xl font-bold">
-                      DZD{" "}
-                      {sales.length > 0
-                        ? sales
-                            .map((item) => Number(item.price))
-                            .reduce((current, next) => current + next)
-                        : 0}
-                    </div>
-                  </CardFooter>
-                </Card>
-                <Card
-                  key={"card4"}
-                  className="flex flex-col justify-between min-h-[150px]"
-                >
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-xl font-bold ">
-                      التعليقات
-                    </CardTitle>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="h-8 w-8 text-[#FC6B00]"
-                    >
-                      <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                    </svg>
-                  </CardHeader>
-                  <CardFooter>
-                    <div className="text-2xl  font-bold">{comments.length}</div>
-                  </CardFooter>
-                </Card>
-              </div>
+              <DashboardCards
+                percentageChange={{
+                  commentsPercentageChange,
+                  salesPercentageChange,
+                  studentsPercentageChange,
+                  profitsPercentageChange,
+                }}
+                commentsNumber={comments?.length}
+                profits={
+                  sales.length > 0
+                    ? sales
+                        .map((item) => Number(item.price))
+                        .reduce((current, next) => current + next)
+                    : 0
+                }
+                salesNumber={sales?.length}
+                studentsNumber={students?.length}
+              />
               <div className="grid gap-4 md:grid-cols-3  my-8 h-[450px] w-full ">
                 <AreaChartOverview sales={sales} />
               </div>

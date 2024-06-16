@@ -6,7 +6,7 @@ import type { FC } from "react";
 const ConfirmeAccount: FC = ({}) => {
   return (
     <div className="w-full min-h-[300px] h-fit mt-8 bg-white rounded-xl shadow border flex items-center  gap-x-4 p-8">
-      <div className="w-[60%] h-full flex flex-col items-start justify-start p-4 border rounded-xl">
+      <div className=" w-[50%] 2xl:w-[60%] h-full flex flex-col items-start justify-start p-4 border rounded-xl">
         <h2 className="text-xl font-bold">بعض الأشياء للإعداد!</h2>
 
         <div className="w-full h-[50px] flex flex-col items-start p-2 my-4">
@@ -39,7 +39,7 @@ const ConfirmeAccount: FC = ({}) => {
           </p>
         </div>
       </div>
-      <div className="w-[40%] h-full flex items-center justify-center">
+      <div className=" w-[50%] 2xl:w-[40%] h-full flex items-center justify-center">
         <div className="relative w-full h-full">
           <iframe
             width="460"
