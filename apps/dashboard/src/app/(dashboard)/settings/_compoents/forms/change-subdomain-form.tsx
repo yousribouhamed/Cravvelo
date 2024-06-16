@@ -25,13 +25,24 @@ import { Input } from "@ui/components/ui/input";
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
+// List of restricted words
+const restrictedWords = ["admin", "app", "badword1", "badword2"]; // Add more words as needed
+
 const formSchema = z.object({
   subdomain: z
     .string()
     .min(3, {
-      message: "Username must be at least 2 characters.",
+      message: "Username must be at least 3 characters.",
     })
-    .max(32),
+    .max(32, {
+      message: "Username must be at most 32 characters.",
+    })
+    .regex(/^[a-zA-Z0-9-]+$/, {
+      message: "Subdomain can only contain letters, numbers, and hyphens.",
+    })
+    .refine((val) => !restrictedWords.includes(val.toLowerCase()), {
+      message: "Subdomain contains a restricted word.",
+    }),
 });
 
 interface ChangeDomainFormProps {
@@ -39,6 +50,8 @@ interface ChangeDomainFormProps {
 }
 
 const ChangeSubDomainForm: FC<ChangeDomainFormProps> = ({ subdomain }) => {
+  const initialSubdomain = subdomain ? subdomain.split(".")[0] : "";
+
   const mutation = trpc.chnageSubDmain.useMutation({
     onSuccess: () => {},
     onError: () => {},
@@ -47,15 +60,16 @@ const ChangeSubDomainForm: FC<ChangeDomainFormProps> = ({ subdomain }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      subdomain: subdomain ? subdomain : "",
+      subdomain: initialSubdomain,
     },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     await mutation.mutateAsync({
-      subdomain: data.subdomain,
+      subdomain: data.subdomain + ".cravvelo.com",
     });
   }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -72,7 +86,7 @@ const ChangeSubDomainForm: FC<ChangeDomainFormProps> = ({ subdomain }) => {
                   <FormLabel>النطاق الفرعي لموقعك.</FormLabel>
                   <FormControl>
                     <div className="w-full h-14 border rounded-xl flex items-center p-2">
-                      <div className="w-[150px] h-full flex items-center justify-center bg-gray-50">
+                      <div className="w-[150px] h-full flex items-center justify-center bg-primary text-white">
                         <span>carvvelo.com.</span>
                       </div>
                       <Input
