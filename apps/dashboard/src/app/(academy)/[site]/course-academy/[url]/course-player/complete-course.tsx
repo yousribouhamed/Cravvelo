@@ -35,7 +35,7 @@ const CompleteCourse: FC<CompleteCourseProps> = ({ courseId, color }) => {
           }
         }}
         disabled={loading}
-        className="  rounded-xl text-white py-2 px-4 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer "
+        className="  rounded-xl w-fit text-white py-2 px-4 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer "
         style={{ backgroundColor: color }}
       >
         {loading && <Loader className="w-4 h-4 ml-2 animate-spin" />}

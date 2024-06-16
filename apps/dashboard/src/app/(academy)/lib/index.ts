@@ -128,7 +128,12 @@ export function calculatePositiveReviewPercentage(ratings: number[]): number {
     (positiveRatings.length / ratings.length) * 100;
 
   // Return the positive percentage with two decimal places
-  return parseFloat(positivePercentage.toFixed(2));
+
+  if (Number(parseFloat(positivePercentage.toFixed(2)))) {
+    return parseFloat(positivePercentage.toFixed(2));
+  }
+
+  return 0;
 }
 
 export function calculateRatingPercentage(

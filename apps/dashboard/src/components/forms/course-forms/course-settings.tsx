@@ -53,7 +53,6 @@ const formSchema = z.object({
 
 export function CourseSettingsForm({ course }: ComponentProps) {
   const router = useRouter();
-  const path = usePathname();
 
   const [open, setOpen] = React.useState<boolean>(false);
 
@@ -96,18 +95,6 @@ export function CourseSettingsForm({ course }: ComponentProps) {
     },
   });
 
-  // this will help me debug the issue
-  // React.useEffect(() => {
-  //   if (Object.keys(form.formState.errors).length) {
-  //     for (const [_key, value] of Object.entries(form.formState.errors)) {
-  //       console.log("this is the useEffect form");
-  //       console.log(form.formState);
-  //       console.log(form.formState.errors);
-  //       console.error((value as { message: string }).message);
-  //     }
-  //   }
-  // }, [form.formState.errors]);
-
   function onSubmit(values: z.infer<typeof formSchema>) {
     mutation.mutate({
       courseDescription: values.courseDescription,
@@ -119,6 +106,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
       thumnailUrl: values.thumnailUrl,
       title: values.title,
       youtubeUrl: values.youtubeUrl,
+      level: values.level,
     });
   }
 
@@ -233,7 +221,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 )}
               />
 
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="courseResume"
                 render={({ field }) => (
@@ -254,9 +242,9 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
 
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="courseWhatYouWillLearn"
                 render={({ field }) => (
@@ -274,9 +262,9 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
 
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="courseRequirements"
                 render={({ field }) => (
@@ -294,7 +282,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
 
               <FormField
                 control={form.control}

@@ -95,6 +95,7 @@ const Page = async ({ params }: PageProps) => {
               chapters={chapters}
             />
             <Raitings
+              isAuthanticated={student ? true : false}
               color={website?.color}
               course={course}
               comments={comments}

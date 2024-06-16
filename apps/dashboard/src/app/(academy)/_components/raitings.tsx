@@ -14,11 +14,12 @@ import { Progress } from "@ui/components/ui/progress";
 
 const avrage = [5, 4, 3, 2, 1];
 
-const Raitings: FC<{ course: Course; comments: Comment[]; color: string }> = ({
-  course,
-  color,
-  comments,
-}) => {
+const Raitings: FC<{
+  course: Course;
+  comments: Comment[];
+  color: string;
+  isAuthanticated: boolean;
+}> = ({ course, color, comments, isAuthanticated }) => {
   return (
     <div className="w-full flex flex-col bg-white min-h-[400px] h-fit border rounded-xl ">
       <div className="w-full h-[400px] md:h-[250px]  grid grid-cols-1 md:grid-cols-2   ">
@@ -122,7 +123,8 @@ const Raitings: FC<{ course: Course; comments: Comment[]; color: string }> = ({
       </div>
 
       <div className=" h-[70px] w-full flex justify-between items-center px-4  ">
-        <AddReview color={color} course={course} />
+        {isAuthanticated && <AddReview color={color} course={course} />}
+
         <span className="font-bold text-2xl text-black">
           All Reviews ({comments.length})
         </span>
