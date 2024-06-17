@@ -204,7 +204,7 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
                   console.log("funtion completed");
                 }}
                 type="button"
-                className="w-full flex items-center gap-x-2 bg-red-500"
+                className="w-full flex items-center gap-x-2 bg-red-500 hover:bg-red-900 transition-all duration-300"
                 size="lg"
               >
                 {delete_mutation.isLoading ? <LoadingSpinner /> : null}

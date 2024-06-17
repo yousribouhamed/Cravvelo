@@ -31,7 +31,7 @@ const Chapter: FC<ChapterProps> = ({ chapterID, title, modules }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-    <Card className="p-0">
+    <Card className="p-0  ">
       <CardContent className="h-fit w-full min-h-[70px] bg-[#F2F4F4] rounded-lg flex items-center  py-0  border relative">
         <Accordion type="single" className="w-full " collapsible>
           <AccordionItem value="item-1" className="p-0 w-full">

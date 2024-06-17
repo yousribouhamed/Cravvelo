@@ -1,7 +1,8 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, Users } from "lucide-react";
+
 import { Button, buttonVariants } from "@ui/components/ui/button";
 import {
   DropdownMenu,
@@ -18,7 +19,7 @@ import { Course } from "database";
 import { Badge } from "@ui/components/ui/badge";
 import { maketoast } from "../../toasts";
 import { useOpenCourseDeleteAction } from "@/src/lib/zustand/delete-actions";
-import { timeSince } from "@/src/lib/utils";
+import { formatDZD, timeSince } from "@/src/lib/utils";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -82,15 +83,7 @@ export const columns: ColumnDef<Course>[] = [
       <DataTableColumnHeader column={column} title="السعر" />
     ),
     cell: ({ row }) => {
-      return (
-        <p className="text-gray-500 text-sm">
-          {" "}
-          <span className="font-bold text-black">
-            {row.original.price === null ? 0 : row.original.price}
-          </span>{" "}
-          DZD
-        </p>
-      );
+      return formatDZD(row.original.price === null ? 0 : row.original.price);
     },
   },
   {
@@ -101,12 +94,13 @@ export const columns: ColumnDef<Course>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <p className="text-gray-500 text-sm">
-          {" "}
-          <span className="font-bold text-black">
-            {row.original.level === "BEGINNER" ? "مبتدئ" : "غير محدد"}
-          </span>{" "}
-        </p>
+        <Badge className="bg-[#2ECA8B]  text-white rounded-md">
+          {row.original.level === "BEGINNER"
+            ? "مبتدئ"
+            : row.original.level === "INTERMEDIATE"
+            ? "متوسط"
+            : "صعب"}
+        </Badge>
       );
     },
   },
@@ -130,9 +124,12 @@ export const columns: ColumnDef<Course>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <p>
-          {row.original.studentsNbr === null ? 0 : row.original.studentsNbr}
-        </p>
+        <div className="flex items-center gap-x-2">
+          <Users className="w-4 h-4 text-black" />
+          <p>
+            {row.original.studentsNbr === null ? 0 : row.original.studentsNbr}
+          </p>
+        </div>
       );
     },
   },

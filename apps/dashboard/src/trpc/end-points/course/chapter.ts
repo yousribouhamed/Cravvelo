@@ -4,6 +4,7 @@ import { TRPCError } from "@trpc/server";
 import { Module } from "@/src/types";
 import type { Chapter } from "database";
 import axios from "axios";
+import { prisma } from "database/src";
 
 export const chapter = {
   createChapter: privateProcedure
@@ -136,6 +137,28 @@ export const chapter = {
         console.error(
           "this error is comming from trpc router called update chapters"
         );
+        console.error(err);
+      }
+    }),
+
+  updateModulesOrders: privateProcedure
+    .input(
+      z.object({
+        chapterID: z.string(),
+        modules: z.any(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        await prisma.chapter.update({
+          where: {
+            id: input.chapterID,
+          },
+          data: {
+            modules: JSON.stringify(input.modules),
+          },
+        });
+      } catch (err) {
         console.error(err);
       }
     }),

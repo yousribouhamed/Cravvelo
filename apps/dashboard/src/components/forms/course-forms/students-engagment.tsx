@@ -60,8 +60,8 @@ function StudentEngagment({ course }: StudentEngagmentProps) {
       allowComment: values.allowComments,
       certificate: values.cerrificate,
       courseId: course.id,
-      allowRating: values.allowRating,
-      forceWatchAllCourse: values.forceWatchAllCourse,
+      allowRating: false,
+      forceWatchAllCourse: false,
     });
   }
 
@@ -102,25 +102,7 @@ function StudentEngagment({ course }: StudentEngagmentProps) {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="forceWatchAllCourse"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 bg-white shadow-sm">
-                      <div className="space-y-0.5">
-                        <FormLabel>يجب مشاهدة جميع مواد الدورة</FormLabel>
-                      </div>
-                      <FormControl>
-                        <div dir="ltr">
-                          <Switch
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </div>
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
+
                 <FormLabel className="text-xl  block font-bold text-black">
                   التفاعل مع المحتوى
                 </FormLabel>
@@ -134,26 +116,6 @@ function StudentEngagment({ course }: StudentEngagmentProps) {
                     <FormItem className="flex flex-row bg-white items-center justify-between rounded-lg border p-3 shadow-sm">
                       <div className="space-y-0.5">
                         <FormLabel>السماح بالتعليقات على هذه الدورة</FormLabel>
-                      </div>
-                      <FormControl>
-                        <div dir="ltr">
-                          <Switch
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </div>
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="allowRating"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row bg-white items-center justify-between rounded-lg border p-3 shadow-sm">
-                      <div className="space-y-0.5">
-                        <FormLabel> السماح بالتقيمات</FormLabel>
                       </div>
                       <FormControl>
                         <div dir="ltr">

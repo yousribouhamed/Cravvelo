@@ -66,6 +66,8 @@ export const NewVideoUploader = ({
   const startSimulatedProgress = () => {
     setProgress(0);
 
+    const increment = 95 / 1800; // 95% over 1800 seconds (30 minutes)
+
     const interval = setInterval(() => {
       setProgress((prevProgress) => {
         if (prevProgress >= 95) {
@@ -73,7 +75,7 @@ export const NewVideoUploader = ({
           return prevProgress;
         }
 
-        return prevProgress + 2;
+        return prevProgress + increment;
       });
     }, 1000);
 
@@ -191,6 +193,9 @@ export const NewVideoUploader = ({
                         value={progress}
                         className="h-1 w-full bg-[#EFEFEF]"
                       />
+                      {progress === 95 && (
+                        <p> يمكن ان يستغرق رفع الفيديو بعض الوقت </p>
+                      )}
                     </div>
                   );
                 case "COMPLETE":

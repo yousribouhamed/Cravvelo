@@ -1,20 +1,18 @@
 "use client";
 
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import {
   DragDropContext,
   Droppable,
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { Grip, Pencil } from "lucide-react";
 import { Module } from "../types";
 import { cn } from "@ui/lib/utils";
-import { Badge } from "@ui/components/ui/badge";
 import { useMounted } from "../hooks/use-mounted";
 import Link from "next/link";
-
-interface ModulesListProps {}
+import { trpc } from "../app/_trpc/client";
+import { maketoast } from "./toasts";
 
 interface ChapterProps {
   title: string;
@@ -32,6 +30,12 @@ const ModulesList: FC<ChapterProps> = ({
 
   const isMounted = useMounted();
 
+  const updateOrderMutation = trpc.updateModulesOrders.useMutation({
+    onError: () => {
+      maketoast.error();
+    },
+  });
+
   const onDragEnd = useCallback(
     (result: DropResult) => {
       if (!result.destination) return;
@@ -41,35 +45,16 @@ const ModulesList: FC<ChapterProps> = ({
       updatedModules.splice(result.destination.index, 0, reorderedItem);
 
       setModules(updatedModules);
+
+      updateOrderMutation.mutate({
+        chapterID,
+        modules: updatedModules,
+      });
+
+      console.log(updatedModules);
     },
     [modules]
   );
-
-  // const onDragEnd = (result: DropResult) => {
-  //   if (!result) return;
-  //   if (!result.destination) return;
-
-  //   const items = modules;
-  //   const [reorderedItem] = items.splice(result.source.index, 1);
-  //   items.splice(result.destination.index, 0, reorderedItem);
-
-  //   const startIndex = Math.min(result.source.index, result.destination.index);
-  //   const endIndex = Math.max(result.source.index, result.destination.index);
-
-  //   const updatedSections = items.slice(startIndex, endIndex + 1);
-
-  //   setModules(updatedSections);
-
-  //   // const bulkUpdateData = updatedSections.map((section) => ({
-  //   //   id: section.id,
-  //   //   position: items.findIndex((item) => item.id === section.id),
-  //   // }));
-
-  //   // mutation.mutate({
-  //   //   courseID,
-  //   //   bulkUpdateData,
-  //   // });
-  // };
 
   if (!isMounted) {
     return null;
@@ -92,7 +77,7 @@ const ModulesList: FC<ChapterProps> = ({
                 {(provided) => (
                   <div
                     className={cn(
-                      "flex items-center gap-x-2 bg-transparent  h-[35px] justify-start  rounded-md my-4 text-sm"
+                      "flex items-center gap-x-1 bg-transparent  h-[35px] justify-start  rounded-md my-3 text-sm"
                     )}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
@@ -125,7 +110,7 @@ const ModulesList: FC<ChapterProps> = ({
                     <Link
                       href={`/courses/${courseId}/chapters/${chapterID}/${chapter.fileUrl}/update-video`}
                     >
-                      <p className="text-black  text-lg hover:text-blue-500 transition-all duration-300 ">
+                      <p className="text-black  text-md hover:text-blue-500 transition-all duration-300 ">
                         {" "}
                         {chapter.title}
                       </p>

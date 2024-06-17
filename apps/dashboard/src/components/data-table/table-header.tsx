@@ -154,7 +154,7 @@ export function TableHeader<TData>({
         <AddCourse />
         <Link
           target="_blank"
-          href={`${academia_url}/course-academy`}
+          href={`https://${academia_url}/course-academy`}
           className={cn(
             buttonVariants({ variant: "ghost" }),
             "bg-white rounded-xl border flex items-center gap-x-2"
