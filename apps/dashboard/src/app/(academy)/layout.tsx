@@ -12,11 +12,6 @@ export default async function RootLayout({
   return (
     <html suppressHydrationWarning dir="rtl" lang="ar">
       {children}
-
-      <Script
-        src="https://unpkg.com/@material-tailwind/html@latest/scripts/ripple.js"
-        async
-      />
     </html>
   );
 }

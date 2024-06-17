@@ -8,9 +8,14 @@ import { revalidatePath } from "next/cache";
 interface CompleteCourseProps {
   courseId: string;
   color: string;
+  refetch: () => Promise<any>;
 }
 
-const CompleteCourse: FC<CompleteCourseProps> = ({ courseId, color }) => {
+const CompleteCourse: FC<CompleteCourseProps> = ({
+  courseId,
+  color,
+  refetch,
+}) => {
   const { state } = useCoursePlayerStore();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -26,7 +31,8 @@ const CompleteCourse: FC<CompleteCourseProps> = ({ courseId, color }) => {
             await updateStudentProgress({
               courseId,
             });
-            revalidatePath(`/course-academy/${courseId}/course-player`);
+
+            await refetch();
           } catch (err) {
             console.error(err);
           } finally {
