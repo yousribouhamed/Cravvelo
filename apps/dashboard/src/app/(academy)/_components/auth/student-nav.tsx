@@ -54,16 +54,16 @@ const StudentNav: FC<studentNavProps> = ({ student, referralEnabled }) => {
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className=" w-56 z-[99] ">
-        <div className="w-full h-[60px] flex items-center justify-between px-2">
-          <div className="w-[30%] h-full flex items-center justify-start">
+        <div className="w-full h-[60px] flex items-center justify-between">
+          <div className="w-[70%] h-full flex flex-col justify-center items-end gap-y-2">
+            <p className="text-sm font-bold">{student?.full_name}</p>
+            <p className="text-gray-500 text-xs truncate">{student?.email}</p>
+          </div>
+          <div className="w-[30%] h-full flex items-center  justify-end pr-2">
             <Avatar className="w-10 h-10 ring-primary   rounded-[50%]">
               <AvatarImage src={student.photo_url} />
               <AvatarFallback>AB</AvatarFallback>
             </Avatar>
-          </div>
-          <div className="w-[70%] h-full flex flex-col justify-center gap-y-2">
-            <p className="text-sm font-bold">{student?.full_name}</p>
-            <p className="text-gray-500 text-xs truncate">{student?.email}</p>
           </div>
         </div>
         <DropdownMenuGroup>

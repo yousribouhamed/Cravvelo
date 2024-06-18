@@ -97,3 +97,65 @@ export const updateStudentProgress = async ({
     },
   });
 };
+export const getCoursesButFiltered = async ({
+  subdomain,
+  level,
+  price,
+  rating,
+}: {
+  subdomain: string;
+  level?: string;
+  price?: number;
+  rating?: number;
+}) => {
+  try {
+    const website = await prisma.website.findUnique({
+      where: {
+        subdomain: subdomain,
+      },
+    });
+
+    if (!website) {
+      throw new Error("Website not found");
+    }
+
+    const account = await prisma.account.findUnique({
+      where: {
+        id: website.accountId,
+      },
+    });
+
+    if (!account) {
+      throw new Error("There is no account linked to this website");
+    }
+
+    const courses = await prisma.course.findMany({
+      where: {
+        accountId: account.id,
+      },
+    });
+
+    const publishedCourses = courses.filter(
+      (item) => item.status === "PUBLISHED"
+    );
+
+    let filteredData = publishedCourses;
+
+    if (level) {
+      filteredData = filteredData.filter((item) => item.level === level);
+    }
+
+    if (rating !== undefined) {
+      filteredData = filteredData.filter((item) => item.rating === rating);
+    }
+
+    if (price !== undefined) {
+      filteredData = filteredData.filter((item) => item.price === price);
+    }
+
+    return filteredData;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};

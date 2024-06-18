@@ -8,6 +8,7 @@ import { getStudent } from "../../_actions/auth";
 import AcademiaFooter from "../../_components/layout/academy-footer";
 import Suspanded from "../../_components/suspanded";
 import FilterButtonMobile from "../../_components/filter-button";
+import CoursesBoard from "./courses-board";
 export const fetchCache = "force-no-store";
 
 interface PageProps {
@@ -44,13 +45,7 @@ const Page = async ({ params }: PageProps) => {
       />
       <MaxWidthWrapper className="h-fit mt-[110px] min-h-[calc(100vh-70px)] ">
         <div className="  w-full h-fit min-h-screen flex flex-col gap-4 items-start py-4">
-          <div className="w-full h-[100px] flex items-center justify-between">
-            <h1 className="text-3xl font-bold">الدورات التدربية</h1>
-            <div className="md:hidden">
-              <FilterButtonMobile color={website?.color} />
-            </div>
-          </div>
-          <CoursesGrid courses={courses} color={website?.color} />
+          <CoursesBoard website={website} courses={courses} />
         </div>
       </MaxWidthWrapper>
       <AcademiaFooter />

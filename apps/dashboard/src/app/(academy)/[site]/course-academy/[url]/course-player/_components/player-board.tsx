@@ -44,7 +44,7 @@ const PlayerBoard: FC<PlayerBoardProps> = ({
   course,
   url,
 }) => {
-  const { isLoading, error, data, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["courses"],
     queryFn: async () => {
       const data = await getStudent();
