@@ -12,9 +12,7 @@ interface StudentProgressProps {
 
 function calculateProgress(episode: number, videos: number): number {
   if (episode < 0 || videos < 1 || episode > videos) {
-    throw new Error(
-      "Invalid input: Current video or total videos cannot be less than 1, and current video cannot be greater than total videos."
-    );
+    return 100;
   }
 
   const progressPercentage = (episode / videos) * 100;

@@ -17,7 +17,7 @@ const PlayerLobby: FC<PlayerLobbyProps> = ({
   refetch,
 }) => {
   return (
-    <div className="px-0 w-full ">
+    <div className="px-0 w-full mx-auto ">
       <div className="w-full  bg-zinc-50  min-h-screen h-fit flex flex-col items-center gap-x-4 p-4   ">
         <div className="w-full h-fit max-h-[1500px]  bg-black flex flex-col items-center  ">
           <CourseVideoPlayer color={website.color} videoId={firstVideo} />

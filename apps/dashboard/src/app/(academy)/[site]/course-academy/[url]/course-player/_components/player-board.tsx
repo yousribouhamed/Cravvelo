@@ -51,8 +51,8 @@ const PlayerBoard: FC<PlayerBoardProps> = ({
   ).currentEpisode;
 
   return (
-    <div className="w-full h-screen  relative">
-      <div className="w-[calc(100%-350px)] mr-[350px]">
+    <div className="w-full h-screen  max-w-screen-2xl mx-auto relative flex flex-col items-center">
+      <div className=" w-[calc(100%-350px)] h-fit min-h-screen  mx-auto mr-[350px]">
         <PlayerLobby
           refetch={refetch}
           course={course}
