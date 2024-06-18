@@ -20,9 +20,8 @@ import { Textarea } from "@ui/components/ui/textarea";
 import { getOurSignedUrl } from "../../_actions/aws/s3";
 import { computeSHA256 } from "@/src/lib/utils";
 import { update_profile } from "../../_actions/auth";
-import { maketoast } from "@/src/components/toasts";
 import { Student } from "database";
-import { academiatoast } from "../academia-toasts";
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
   full_name: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
@@ -84,9 +83,6 @@ const ProfileForm: FC<ProfileFormProps> = ({ studnet, color }) => {
         });
         // upload it to aws
 
-        console.log("this is from aws");
-        console.log(success);
-
         if (!success || !success?.url) {
           console.log("there is no selected file");
           throw new Error("there is no selected file");
@@ -101,15 +97,14 @@ const ProfileForm: FC<ProfileFormProps> = ({ studnet, color }) => {
 
         // update the data on our app
 
-        console.log("we are uploding the image url");
-
         await update_profile({
           bio: values.bio,
           full_name: values.full_name,
           imageUrl: success.url.split("?")[0],
         });
         setLoading(false);
-        maketoast.successWithText({ text: "تم تحديث ملفك" });
+
+        toast.success("تم تحديث ملفك");
       } else {
         // update the data on our app
         await update_profile({
@@ -119,22 +114,12 @@ const ProfileForm: FC<ProfileFormProps> = ({ studnet, color }) => {
         });
         setLoading(false);
 
-        academiatoast.make({
-          color,
-          message: "تم تحديث ملفك",
-          title: "نجاح",
-          type: "SUCCESS",
-        });
+        toast.success("تم تحديث ملفك");
         window.location.reload();
       }
     } catch (err) {
       console.error(err);
-      academiatoast.make({
-        color,
-        message: "حدث خطأ ما",
-        title: "فشل",
-        type: "ERROR",
-      });
+      toast.error("حدث خطأ ما");
     }
   }
   return (

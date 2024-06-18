@@ -16,6 +16,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@ui/components/ui/tabs";
+import toast from "react-hot-toast";
 
 import { Input } from "@ui/components/ui/input";
 import { useChargily } from "../../../../hooks/use-chargily";

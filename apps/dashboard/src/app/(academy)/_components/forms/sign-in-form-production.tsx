@@ -28,6 +28,7 @@ import { sign_in_as_student } from "../../_actions/auth";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 import { academiatoast } from "../academia-toasts";
+import toast from "react-hot-toast";
 
 type Inputs = z.infer<typeof authSchemaLogin>;
 
@@ -38,6 +39,7 @@ interface AcademySifnIpFormProps {
 
 export function AcademySignInForm({
   accountId,
+
   color,
 }: AcademySifnIpFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -59,22 +61,12 @@ export function AcademySignInForm({
         accountId,
       });
 
-      academiatoast.make({
-        color,
-        message: "تم تسجيل الدخول بنجاح",
-        title: "نجاح",
-        type: "SUCCESS",
-      });
+      toast.success("تم تسجيل الدخول بنجاح");
       window.location.reload();
     } catch (err) {
       console.error(err);
 
-      academiatoast.make({
-        color,
-        message: "حدث خطأ ما",
-        title: "فشل",
-        type: "ERROR",
-      });
+      toast.error("حدث خطأ ما");
     } finally {
       setIsLoading(false);
     }

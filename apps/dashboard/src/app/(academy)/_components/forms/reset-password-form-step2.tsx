@@ -25,6 +25,7 @@ import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 import { PasswordInput } from "@/src/components/password-input";
 import { academiatoast } from "../academia-toasts";
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
   password: z
@@ -60,22 +61,12 @@ export function ResetPasswordFormStep2({
 
       await changeStudentpassword({ password: data.password, studentId });
 
-      academiatoast.make({
-        color,
-        message: "تم تغير كلمة المرور",
-        title: "نجاح",
-        type: "SUCCESS",
-      });
+      toast.success("تم تغير كلمة المرور");
 
       router.push("/auth-academy/sign-in");
     } catch (err) {
       console.error(err);
-      academiatoast.make({
-        color,
-        message: "حدث خطأ ما",
-        title: "فشل",
-        type: "ERROR",
-      });
+      toast.error("حدث خطأ ما");
     } finally {
       setIsLoading(false);
     }

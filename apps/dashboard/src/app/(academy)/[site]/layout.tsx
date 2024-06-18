@@ -5,6 +5,7 @@ import Head from "next/head";
 import { getSiteData } from "../_actions";
 import { getSubDomainValue } from "../lib";
 import ReferralDetactor from "../_components/referral-detactor";
+import { Toaster } from "react-hot-toast";
 
 export const fetchCache = "force-no-store";
 
@@ -72,6 +73,7 @@ export default async function RootLayout({
           <ReferralDetactor />
           {children}
           {/* <AcademiaFooter /> */}
+          <Toaster />
         </body>
       </Providers>
     </>

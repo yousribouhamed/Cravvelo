@@ -3,6 +3,7 @@
 import React, { type FC } from "react";
 import { Button } from "@ui/components/ui/button";
 import { academiatoast } from "../academia-toasts";
+import toast from "react-hot-toast";
 
 interface ReferralFormProps {
   color: string;
@@ -37,11 +38,13 @@ const ReferralUnSubscribtionForm: FC<ReferralFormProps> = ({
             }}
             onClick={() => {
               navigator.clipboard.writeText(`${subdomain}?ref=${referralId}`);
-              academiatoast.make({
-                color,
-                message: "تم النسخ بنجاح",
-                title: "نجاح",
-                type: "SUCCESS",
+
+              toast.success("تم النسخ بنجاح", {
+                style: {
+                  borderRadius: "10px",
+                  background: "#333",
+                  color: "#fff",
+                },
               });
             }}
           >
