@@ -27,6 +27,15 @@ interface PlayerBoardProps {
   course: Course;
 }
 
+function calculateProgress(episode: number, videos: number): number {
+  if (episode < 0 || videos < 1 || episode > videos) {
+    return 100;
+  }
+
+  const progressPercentage = (episode / videos) * 100;
+  return parseFloat(progressPercentage.toFixed(0));
+}
+
 const PlayerBoard: FC<PlayerBoardProps> = ({
   chapters,
   initialStudent,
@@ -50,6 +59,8 @@ const PlayerBoard: FC<PlayerBoardProps> = ({
     (item) => item?.course.id === course?.id
   ).currentEpisode;
 
+  const progress = calculateProgress(currentEpisode, course?.nbrChapters ?? 0);
+
   return (
     <div className="w-full h-screen  max-w-screen-2xl mx-auto relative flex flex-col items-center">
       <div className=" w-[calc(100%-350px)] h-fit min-h-screen  mx-auto mr-[350px]">
@@ -57,6 +68,7 @@ const PlayerBoard: FC<PlayerBoardProps> = ({
           refetch={refetch}
           course={course}
           firstVideo={getFirstVideo(chapters[0])}
+          progress={progress}
           website={website}
         />
       </div>

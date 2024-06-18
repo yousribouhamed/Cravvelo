@@ -6,12 +6,14 @@ import CompleteCourse from "../complete-course";
 interface PlayerLobbyProps {
   website: Website;
   firstVideo: string;
+  progress: number;
   course: Course;
   refetch: () => Promise<any>;
 }
 
 const PlayerLobby: FC<PlayerLobbyProps> = ({
   firstVideo,
+  progress,
   website,
   course,
   refetch,
@@ -24,6 +26,7 @@ const PlayerLobby: FC<PlayerLobbyProps> = ({
         </div>
 
         <CompleteCourse
+          progress={progress}
           color={website.color}
           courseId={course.id}
           refetch={refetch}

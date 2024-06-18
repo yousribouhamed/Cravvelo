@@ -27,7 +27,7 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
   referralEnabled,
 }) => {
   return (
-    <div className="w-full h-[110px]   border-b z-[8] fixed top-0 bg-white shadow ">
+    <div className="w-full h-[110px]   border-b z-[8] fixed top-0 bg-white  ">
       <LiarSales />
       <MaxWidthWrapper className="w-full h-[70px] flex items-center justify-between">
         <div className="w-fit h-full flex items-center justify-start md:hidden">
@@ -49,6 +49,7 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
             <StudentNav student={student} referralEnabled={referralEnabled} />
           ) : (
             // <StudentNavigation student={student} />
+
             <Link
               href={"/auth-academy/sign-in"}
               className=" text-white w-[140px] h-[40px] rounded-lg p-2 flex items-center justify-center hover:bg-orange-700 transition-all duration-300"
