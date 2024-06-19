@@ -92,9 +92,9 @@ export const course = {
         seoTitle: z.string(),
         thumnailUrl: z.string(),
         title: z.string(),
-        youtubeUrl: z.string(),
+        youtubeUrl: z.string().optional(),
         level: z.string(),
-        preview_video: z.string(),
+        preview_video: z.string().optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -111,9 +111,9 @@ export const course = {
             seoTitle: input.seoTitle,
             thumbnailUrl: input.thumnailUrl,
             title: input.title,
-            youtubeUrl: input.youtubeUrl,
+            youtubeUrl: input.youtubeUrl ?? null,
             level: input.level,
-            preview_video: input.preview_video,
+            preview_video: input.preview_video ?? null,
           },
         })
         .catch((err) => {

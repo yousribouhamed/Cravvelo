@@ -45,11 +45,11 @@ const formSchema = z.object({
   seoTitle: z.string({ required_error: "يرجى ملئ الحقل" }),
   thumnailUrl: z.string({ required_error: "يرجى ملئ الحقل" }),
   title: z.string({ required_error: "يرجى ملئ الحقل" }),
-  youtubeUrl: z.string({ required_error: "يرجى ملئ الحقل" }),
+  youtubeUrl: z.string().optional(),
   courseRequirements: z.string({ required_error: "يرجى ملئ الحقل" }),
   courseWhatYouWillLearn: z.string({ required_error: "يرجى ملئ الحقل" }),
   level: z.string({ required_error: "يرجى ملئ الحقل" }),
-  preview_video: z.string({ required_error: "يرجى ملئ الحقل" }),
+  preview_video: z.string().optional(),
 });
 
 export function CourseSettingsForm({ course }: ComponentProps) {
