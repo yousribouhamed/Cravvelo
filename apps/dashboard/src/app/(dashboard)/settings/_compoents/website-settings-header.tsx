@@ -22,7 +22,7 @@ const getLinks = ({ id }: { id: string }) => {
       href: `/settings/website-settings/legal`,
     },
     {
-      name: "التسويق بالعمولة",
+      name: "الصلاحيات",
       href: `/settings/website-settings/marketing`,
     },
   ];

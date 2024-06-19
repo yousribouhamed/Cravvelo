@@ -35,7 +35,7 @@ const Page = async ({}) => {
         <Header
           notifications={notifications}
           user={user}
-          title="التسويق بالعمولة"
+          title="الصلاحيات"
         />
         <WebsiteSettingsHeader />
         <div className="w-full h-fit flex flex-col my-8 gap-y-4">

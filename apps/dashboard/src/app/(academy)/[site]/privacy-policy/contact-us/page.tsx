@@ -2,9 +2,8 @@ import { notFound } from "next/navigation";
 import { getSiteData } from "../../../_actions";
 import { getSubDomainValue } from "../../../lib";
 import AcademyHeader from "../../../_components/layout/academy-header";
-import MaxWidthWrapper from "@/src/components/max-width-wrapper";
+import MaxWidthWrapper from "../../../_components/max-width-wrapper";
 import { getStudent } from "../../../_actions/auth";
-import ContactUsAcademiaForm from "../../../_components/forms/academy-contactus";
 import AcademiaFooter from "../../../_components/layout/academy-footer";
 
 interface PageProps {
@@ -25,10 +24,6 @@ const Page = async ({ params }: PageProps) => {
     notFound();
   }
 
-  // const blurData = await Promise.all(
-  //   courses.map(async (item) => await getBase64(item?.thumnailUrl))
-  // );
-
   return (
     <>
       <AcademyHeader
@@ -39,10 +34,22 @@ const Page = async ({ params }: PageProps) => {
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
       />
-      <MaxWidthWrapper className="h-fit mt-[70px] min-h-[calc(100vh-110px)] ">
+      <MaxWidthWrapper className="h-fit mt-[160px] min-h-[calc(100vh-110px)] ">
         <div className="w-full h-fit min-h-[300px] mt-[40px] grid grid-cols-1 ">
-          <div className=" w-full max-w-[800px] h-full col-span-1 flex items-center justify-start p-8 pt-[80px]">
-            <ContactUsAcademiaForm color={website?.color} />
+          <div className="w-full h-[100px] flex items-center justify-start">
+            <h1 className="text-3xl  font-bold text-start text-black my-4">
+              يمكنك التواصل مع مشرف الأكاديمية بكل حرية عبر الوسائل ادناه 😹
+            </h1>
+          </div>
+
+          <div className="w-full h-[50px] flex items-center justify-start gap-x-4">
+            <span className="text-xl font-bold">
+              {" "}
+              📪 mahdi.chahri55@gaml.com{" "}
+            </span>
+          </div>
+          <div className="w-full h-[50px] flex items-center justify-start gap-x-4">
+            <span className="text-xl font-bold"> 🤳 0988877654 </span>
           </div>
         </div>
       </MaxWidthWrapper>

@@ -49,6 +49,7 @@ const formSchema = z.object({
   courseRequirements: z.string({ required_error: "يرجى ملئ الحقل" }),
   courseWhatYouWillLearn: z.string({ required_error: "يرجى ملئ الحقل" }),
   level: z.string({ required_error: "يرجى ملئ الحقل" }),
+  preview_video: z.string({ required_error: "يرجى ملئ الحقل" }),
 });
 
 export function CourseSettingsForm({ course }: ComponentProps) {
@@ -64,7 +65,6 @@ export function CourseSettingsForm({ course }: ComponentProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       courseResume: course?.courseResume ?? "",
-
       title: course?.title ?? "",
       thumnailUrl: course?.thumbnailUrl ?? "",
       youtubeUrl: course?.youtubeUrl ?? "",
@@ -107,6 +107,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
       title: values.title,
       youtubeUrl: values.youtubeUrl,
       level: values.level,
+      preview_video: values.preview_video,
     });
   }
 
@@ -172,10 +173,6 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                       <span className="text-red-600 text-xl">*</span>
                     </FormLabel>
                     <FormControl>
-                      {/* <ImageUploader
-                        fileUrl={form.watch("thumnailUrl")}
-                        onChnage={field.onChange}
-                      /> */}
                       <ImageUploaderS3
                         fileUrl={form.watch("thumnailUrl")}
                         onChnage={field.onChange}
@@ -188,10 +185,11 @@ export function CourseSettingsForm({ course }: ComponentProps) {
 
               <FormField
                 control={form.control}
-                name="youtubeUrl"
+                name="preview_video"
                 render={({ field }) => (
                   <FormItem className="w-full ">
                     <FormLabel>الفيديو الدعائي </FormLabel>
+
                     <FormControl>
                       <NewVideoUploader
                         open={open}
@@ -210,7 +208,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      أو يمكنك إضافة عنوان URL لفيديو يوتيوب
+                      ▶️ أو يمكنك إضافة عنوان URL لفيديو يوتيوب
                     </FormLabel>
                     <FormControl>
                       <Input placeholder="https://youtu.be/" {...field} />
@@ -221,7 +219,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 )}
               />
 
-              {/* <FormField
+              <FormField
                 control={form.control}
                 name="courseResume"
                 render={({ field }) => (
@@ -242,9 +240,9 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                     <FormMessage />
                   </FormItem>
                 )}
-              /> */}
+              />
 
-              {/* <FormField
+              <FormField
                 control={form.control}
                 name="courseWhatYouWillLearn"
                 render={({ field }) => (
@@ -262,9 +260,9 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                     <FormMessage />
                   </FormItem>
                 )}
-              /> */}
+              />
 
-              {/* <FormField
+              <FormField
                 control={form.control}
                 name="courseRequirements"
                 render={({ field }) => (
@@ -282,7 +280,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                     <FormMessage />
                   </FormItem>
                 )}
-              /> */}
+              />
 
               <FormField
                 control={form.control}

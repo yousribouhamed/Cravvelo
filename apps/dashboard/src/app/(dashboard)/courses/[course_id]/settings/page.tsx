@@ -1,7 +1,7 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
 import CourseHeader from "@/src/components/course-header";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { CourseSettingsForm } from "@/src/components/forms/course-forms/course-settings";
 import { prisma } from "database/src";
 import useHaveAccess from "@/src/hooks/use-have-access";
@@ -41,7 +41,7 @@ export default async function Page({ params }: PageProps) {
     <MaxWidthWrapper>
       <main className="w-full flex flex-col min-h-full  h-fit justify-start">
         <Header
-          notifications={[]}
+          notifications={notifications}
           user={user}
           title={"اعدادات الدورة"}
           goBack

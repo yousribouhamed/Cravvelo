@@ -66,13 +66,14 @@ model Course {
   seoTitle               String?
   seoDescription         String?
   price                  Float?
-  compareAtPrice         Float?
+  compareAtPrice         Float?  
   studentsNbr            Int?
+  preview_video          String?    @db.VarChar(199)
   profit                 String?
   length                 Float      @default(0)
   nbrChapters            Float      @default(0)
-  trainers               String?
   status                 String
+  trainers               String?
   suspended              Boolean    @default(false)
   level                  String     @default("BEGINNER")
   allowComment           Boolean    @default(true)
