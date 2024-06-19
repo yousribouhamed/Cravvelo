@@ -11,6 +11,7 @@ enum PLANS {
   BASIC
   ADVANCED
   PRO
+  BLACK_KING
 }
 
 model Account {

@@ -177,3 +177,60 @@ export const PLANS = [
     ],
   },
 ] as const;
+
+export const black_king_plan = {
+  plan: "الملك الاسود",
+  plan_code: "BLACK_KING",
+  price: "0",
+  imageUrl: "/pricing-icons/Black-Crown.png",
+  tagline: "الملوك السود قادرون على غزو العالم",
+  quota: 10,
+  icon: () => (
+    <svg
+      width="49"
+      height="50"
+      viewBox="0 0 49 50"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M0 49.43H49V0.43H0V49.43Z" fill="black" />
+    </svg>
+  ),
+  priceIds: {
+    test: "price_1ObeduCxv0KQVM5xHees3z9n",
+    production: "",
+  },
+
+  features: [
+    {
+      text: "دورات غير محدودة",
+    },
+    {
+      text: "عدد طلاب غير محدود",
+    },
+    {
+      text: "منتجات غير محدودة",
+    },
+
+    {
+      text: "شهادات غير محدودة",
+    },
+
+    {
+      text: "بوابات دفع الكتروني",
+    },
+    {
+      text: "التصميم الجميل لاكاديميتك",
+    },
+    {
+      text: "مجال مخصص",
+    },
+    {
+      text: "تحسينات تحسين محركات البحث",
+    },
+    {
+      text: "إزالة هوية جدارة",
+      negative: false,
+    },
+  ],
+};

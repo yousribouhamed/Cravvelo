@@ -5,6 +5,7 @@ import useGetUser from "@/src/hooks/use-get-user";
 import PaymentSettingsHeader from "../settings/_compoents/payment-website-header";
 import CurrentPlan from "./_compoents/current-plan";
 import { prisma } from "database/src";
+import BlackKing from "./_compoents/black-king";
 
 const getAllNotifications = async ({ accountId }: { accountId: string }) => {
   const notifications = await prisma.notification.findMany({
@@ -26,13 +27,17 @@ export default async function Home() {
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start">
         <Header notifications={notifications} user={user} title="التسعير" />
-        <PaymentSettingsHeader />
+        {user?.currentPlan !== "BLACK_KING" && <PaymentSettingsHeader />}
         {user.isSubscribed ? (
-          <CurrentPlan
-            strategy={user.strategy}
-            endSubscription={user.endSubscription}
-            currentPlan={user.currentPlan}
-          />
+          user.currentPlan === "BLACK_KING" ? (
+            <BlackKing />
+          ) : (
+            <CurrentPlan
+              strategy={user.strategy}
+              endSubscription={user.endSubscription}
+              currentPlan={user.currentPlan}
+            />
+          )
         ) : (
           <UpgradeButton />
         )}
