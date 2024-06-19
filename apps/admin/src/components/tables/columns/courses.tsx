@@ -115,7 +115,7 @@ export const CourseColumns: ColumnDef<Course>[] = [
     cell: ({ row }) => {
       return (
         <p>
-          {row.original.studenstNbr === null ? 0 : row.original.studenstNbr}
+          {row.original.studentsNbr === null ? 0 : row.original.studentsNbr}
         </p>
       );
     },
