@@ -1,7 +1,12 @@
 "use server";
 
 import { prisma } from "database/src";
-import { buyProductWithCoupon, buyWithCoupon } from "./coupon";
+import {
+  buyProductWithCoupon,
+  buyWithCoupon,
+  getFreeCourse,
+  getFreeProduct,
+} from "./coupon";
 import { payWithChargily } from "./chargily";
 import { getStudent } from "./auth";
 import { create_course_sale, create_product_sale } from "./sales";
@@ -113,10 +118,20 @@ export const makePayment = async ({
       .map((item) => Number(item?.price))
       .reduce((current, next) => current + next);
 
-    // Check for NaN or zero price
-    if (!total || total === 0) {
-      throw new Error("Invalid total price");
+    console.log(courses);
+
+    if (courses[0].price === 0) {
+      await getFreeCourse({
+        courseId: courses[0].id,
+      });
+
+      return "/student-library";
     }
+
+    // // Check for NaN or zero price
+    // if (!total || total === 0) {
+    //   throw new Error("Invalid total price");
+    // }
 
     // Process payment based on coupon presence
     if (!couponCode) {
@@ -213,6 +228,15 @@ export const makePaymentForProduct = async ({
       .map((item) => Number(item?.price))
       .reduce((current, next) => current + next);
 
+    if (products[0].price === 0) {
+      await getFreeProduct({
+        productId: products[0].id,
+      });
+
+      return "/student-library";
+    }
+
+    //getFreeProduct
     // Check for NaN or zero price
     if (!total || total === 0) {
       throw new Error("Invalid total price");

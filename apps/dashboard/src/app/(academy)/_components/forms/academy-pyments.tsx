@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, useState, type FC } from "react";
 import { Label } from "@ui/components/ui/label";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { useAcademiaStore } from "../../global-state/academia-store";
+import { formatDZD } from "@/src/lib/utils";
 import {
   applyCoupon,
   makePayment,
@@ -11,6 +12,7 @@ import {
 } from "../../_actions/payments";
 import { useRouter } from "next/navigation";
 import { Input } from "@ui/components/ui/input";
+import toast from "react-hot-toast";
 
 interface AcademyPymentsProps {
   subdomain: string | null;
@@ -72,6 +74,7 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({
   const proccessPayment = async () => {
     try {
       setError(false);
+
       setLoading(true);
 
       if (!subdomain) {
@@ -87,6 +90,14 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({
         });
         console.log("this is the chargily url for the courses ");
         console.log(url);
+        toast("جاري معالجة الطلب", {
+          icon: "💸",
+          style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+          },
+        });
         router.push(url);
       } else {
         // here handle the payment for the other side
@@ -100,6 +111,7 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({
       }
     } catch (err) {
       setError(true);
+      toast.error("حدث خطأ ما");
     } finally {
       setLoading(false);
       setOpen(false);
@@ -160,41 +172,44 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({
       <div className="w-full h-[30px] flex items-center justify-between">
         <span className="text-[#0e0f10] font-semibold text-md">المجموع</span>
         <span>
-          DZD{" "}
-          {state?.shoppingBag
-            ?.map((item) => Number(item.price))
-            ?.reduce((current, next) => current + next)}
+          {formatDZD(
+            state?.shoppingBag
+              ?.map((item) => Number(item.price))
+              ?.reduce((current, next) => current + next)
+          )}
         </span>
       </div>
       <div className="w-full h-[30px] flex items-center justify-between">
         <span className="text-[#0e0f10] font-semibold text-md">قيمة الخصم</span>
         <span>
-          -DZD{" "}
-          {priceAfterCouponCode || priceAfterCouponCode === 0
-            ? state?.shoppingBag
-                ?.map((item) => Number(item.price))
-                ?.reduce((current, next) => current + next) -
-              priceAfterCouponCode
-            : 0}
+          {formatDZD(
+            priceAfterCouponCode || priceAfterCouponCode === 0
+              ? state?.shoppingBag
+                  ?.map((item) => Number(item.price))
+                  ?.reduce((current, next) => current + next) -
+                  priceAfterCouponCode
+              : 0
+          )}{" "}
         </span>
       </div>
       <div className="w-full h-1 border-b border-[#E3E8EF] my-2" />
       <div className="w-full h-[30px] flex items-center justify-between">
         <span className="text-black font-semibold text-md">المجموع</span>
         <span>
-          DZD{" "}
-          {priceAfterCouponCode || priceAfterCouponCode === 0
-            ? priceAfterCouponCode
-            : state?.shoppingBag
-                ?.map((item) => Number(item.price))
-                ?.reduce((current, next) => current + next)}
+          {formatDZD(
+            priceAfterCouponCode || priceAfterCouponCode === 0
+              ? priceAfterCouponCode
+              : state?.shoppingBag
+                  ?.map((item) => Number(item.price))
+                  ?.reduce((current, next) => current + next)
+          )}
         </span>
       </div>
       {islogged ? (
         <button
           onClick={proccessPayment}
           disabled={loading}
-          className="mt-8 w-full h-12 flex items-center   justify-center text-white gap-x-4 disabled:opacity-[50%]"
+          className="mt-8 w-full h-12 flex items-center   justify-center text-white gap-x-4 disabled:opacity-[50%] rounded-xl"
           style={{ background: color ?? "#FC6B00" }}
         >
           {loading && <LoadingSpinner />}
@@ -203,7 +218,7 @@ const AcademyPyments: FC<AcademyPymentsProps> = ({
       ) : (
         <button
           onClick={() => router.push("/auth-academy/sign-up")}
-          className="mt-8 w-full h-12  flex items-center justify-center text-white gap-x-4 disabled:opacity-[50%]"
+          className="mt-8 w-full h-12  flex items-center justify-center text-white gap-x-4 disabled:opacity-[50%] rounded-xl"
           style={{
             background: color ?? "#FC6B00",
           }}

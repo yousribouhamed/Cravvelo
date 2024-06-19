@@ -155,7 +155,7 @@ export const Product_card = ({
           <Star
             className="w-5 h-5 "
             style={{
-              color: color ?? "#FC6B00",
+              color: "#000000",
             }}
           />
           <span>
@@ -170,7 +170,7 @@ export const Product_card = ({
           <User
             className="w-5 h-5 "
             style={{
-              color: color ?? "#FC6B00",
+              color: "#000000",
             }}
           />
           <span>{course.studentsNbr ? course.studentsNbr : 0} طالبا</span>
@@ -180,7 +180,7 @@ export const Product_card = ({
           <Clock
             className="w-5 h-5 "
             style={{
-              color: color ?? "#FC6B00",
+              color: "#000000",
             }}
           />
           <span>
@@ -192,7 +192,7 @@ export const Product_card = ({
           <Globe
             className="w-5 h-5 "
             style={{
-              color: color ?? "#FC6B00",
+              color: "#000000",
             }}
           />
           <span>عبر الإنترنت وبالسرعة التي تناسبك</span>
@@ -201,7 +201,7 @@ export const Product_card = ({
           <Headphones
             className="w-5 h-5 "
             style={{
-              color: color ?? "#FC6B00",
+              color: "#000000",
             }}
           />
           <span>الصوت: عربي</span>
@@ -211,7 +211,7 @@ export const Product_card = ({
           <ArrowBigUp
             className="w-5 h-5 "
             style={{
-              color: color ?? "#FC6B00",
+              color: "#000000",
             }}
           />
           <span>المستوى: مبتدئ</span>
@@ -221,7 +221,7 @@ export const Product_card = ({
           <Infinity
             className="w-5 h-5 "
             style={{
-              color: color ?? "#FC6B00",
+              color: "#000000",
             }}
           />
           <span>وصول غير محدود إلى الأبد</span>
@@ -232,7 +232,7 @@ export const Product_card = ({
             <GraduationCap
               className="w-5 h-5 "
               style={{
-                color: color ?? "#FC6B00",
+                color: "#000000",
               }}
             />
             <span>ستحصل على شهادة بعد اتمام الدورة</span>

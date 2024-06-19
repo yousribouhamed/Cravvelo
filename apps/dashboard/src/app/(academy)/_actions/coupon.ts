@@ -142,6 +142,41 @@ export const buyWithCoupon = async ({
   }
 };
 
+export const getFreeCourse = async ({ courseId }: { courseId: string }) => {
+  try {
+    // Retrieve essential data concurrently: student, coupon, and course.
+    const [student, course] = await Promise.all([
+      getStudent(),
+
+      prisma.course.findFirst({
+        where: {
+          id: courseId,
+        },
+      }),
+    ]);
+
+    // Update the student's bag with the purchased course.
+    const studentbag = JSON.parse(student.bag as string) as StudentBag;
+    const newBag = await addCourseToStudentBag({
+      bag: studentbag,
+      course: course,
+    });
+    await prisma.student.update({
+      where: {
+        id: student.id,
+      },
+      data: {
+        bag: JSON.stringify(newBag),
+      },
+    });
+  } catch (error) {
+    // Handle any errors that occur during the purchase process.
+    console.error("Error while processing the purchase:", error);
+
+    throw error; // Re-throwing the error for higher-level handling, if necessary.
+  }
+};
+
 /**
  * This function facilitates the process of purchasing a course using a coupon code.
  * It verifies the validity of the coupon code, applies the discount if applicable,
@@ -271,6 +306,41 @@ export const buyProductWithCoupon = async ({
     //   product,
     //   studentId: student.id,
     // });
+  } catch (error) {
+    // Handle any errors that occur during the purchase process.
+    console.error("Error while processing the purchase:", error);
+
+    throw error; // Re-throwing the error for higher-level handling, if necessary.
+  }
+};
+
+export const getFreeProduct = async ({ productId }: { productId: string }) => {
+  try {
+    // Retrieve essential data concurrently: student, coupon, and course.
+    const [student, product] = await Promise.all([
+      getStudent(),
+
+      prisma.product.findFirst({
+        where: {
+          id: productId,
+        },
+      }),
+    ]);
+
+    const studentbag = JSON.parse(student.bag as string) as StudentBag;
+    const newBag = addProductToStudentBag({
+      bag: studentbag,
+      product,
+    });
+
+    await prisma.student.update({
+      where: {
+        id: student.id,
+      },
+      data: {
+        bag: JSON.stringify(newBag),
+      },
+    });
   } catch (error) {
     // Handle any errors that occur during the purchase process.
     console.error("Error while processing the purchase:", error);

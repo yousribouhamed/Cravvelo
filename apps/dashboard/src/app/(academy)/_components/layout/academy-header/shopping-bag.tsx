@@ -6,6 +6,7 @@ import { ShoppingBag, X } from "lucide-react";
 import { useAcademiaStore } from "../../../global-state/academia-store";
 import { useMounted } from "@/src/hooks/use-mounted";
 import AcademyPyments from "../../forms/academy-pyments";
+import { formatDZD } from "@/src/lib/utils";
 
 export default function ShoppingCardProduction({
   subdomain,
@@ -110,7 +111,7 @@ export default function ShoppingCardProduction({
                                       />
                                     </div>
 
-                                    <div className="ml-4 flex flex-1 flex-col">
+                                    <div className="mr-4 flex flex-1 flex-col">
                                       <div>
                                         <div className="flex justify-between text-base font-medium text-gray-900">
                                           <h3 className="font-bold text-xl text-black">
@@ -119,7 +120,7 @@ export default function ShoppingCardProduction({
                                         </div>
                                       </div>
                                       <div className="flex w-full flex-1 items-end justify-between text-sm">
-                                        <div className="flex justify-between items-end w-full ">
+                                        <div className="flex justify-end gap-x-1 items-end w-full ">
                                           <div
                                             style={{
                                               background: color ?? "#FC6B00",
@@ -127,7 +128,11 @@ export default function ShoppingCardProduction({
                                             className=" px-4 py-3  rounded-full flex items-center justify-center "
                                           >
                                             <p className=" text-white font-bold">
-                                              {product.price} DZD
+                                              {Number(product.price) === 0
+                                                ? "مجانا"
+                                                : formatDZD(
+                                                    Number(product.price)
+                                                  )}
                                             </p>
                                           </div>
 
