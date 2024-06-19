@@ -14,6 +14,7 @@ import { get_course_rating } from "../../../_actions/rating";
 import AcademiaFooter from "../../../_components/layout/academy-footer";
 import Suspanded from "../../../_components/suspanded";
 import { Metadata } from "next";
+import { getEmbedUrl } from "@/src/lib/utils";
 
 interface PageProps {
   params: { site: string; url: string };
@@ -82,6 +83,7 @@ const Page = async ({ params }: PageProps) => {
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
       />
+
       <MaxWidthWrapper className="h-fit mt-[110px] min-h-[calc(100vh-70px)]  ">
         <div className="  w-full h-fit min-h-screen flex flex-col lg:flex-row  justify-between gap-x-4 items-start py-4">
           <div className=" w-full lg:w-[calc(100%-300px)] min-h-[500px] h-fit px-2 py-8 lg:p-8 pb-4">
@@ -94,6 +96,7 @@ const Page = async ({ params }: PageProps) => {
               course={course}
               chapters={chapters}
             />
+
             <Raitings
               isAuthanticated={student ? true : false}
               color={website?.color}

@@ -5,8 +5,8 @@ import React from "react";
 import { Chapter, Course } from "database";
 import CourseDescription from "../../../_components/course-component/course-description";
 import CourseContent from "../../../_components/course-component/course-content";
-import Feedbacks from "../../../_components/course-component/feedbacks";
 import LoadingCard from "../../../_components/loading";
+import { getEmbedUrl } from "@/src/lib/utils";
 
 interface CourseContentProps {
   course: Course;
@@ -57,25 +57,45 @@ const CourseDisplayContent: FC<CourseContentProps> = ({
             case "informations":
               return (
                 <>
-                  <div className="w-full h-[500px] relative ">
-                    {!videoLoaded && (
-                      <LoadingCard className="h-[500px] w-full bg-white" />
-                    )}
+                  <div className="w-full h-fit">
+                    {course?.preview_video ? (
+                      <div className="w-full h-[500px] relative ">
+                        {!videoLoaded && (
+                          <LoadingCard className="h-[500px] w-full bg-white" />
+                        )}
 
-                    <iframe
-                      src={`https://iframe.mediadelivery.net/embed/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/${course?.youtubeUrl}?primaryColor=${color}`}
-                      loading="lazy"
-                      style={{
-                        border: "none",
-                        position: "absolute",
-                        height: "100%",
-                        width: "100%",
-                      }}
-                      onLoad={() => setVideoLoaded(true)} // Set videoLoaded to true when loaded
-                      allow="accelerometer; gyroscope;  encrypted-media; picture-in-picture;"
-                      allowFullScreen={true}
-                    ></iframe>
+                        <iframe
+                          src={`https://iframe.mediadelivery.net/embed/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/${course?.preview_video}?primaryColor=${color}`}
+                          loading="lazy"
+                          style={{
+                            border: "none",
+                            position: "absolute",
+                            height: "100%",
+                            width: "100%",
+                          }}
+                          onLoad={() => setVideoLoaded(true)} // Set videoLoaded to true when loaded
+                          allow="accelerometer; gyroscope;  encrypted-media; picture-in-picture;"
+                          allowFullScreen={true}
+                        ></iframe>
+                      </div>
+                    ) : (
+                      <div className="w-full h-[500px] relative ">
+                        <div className="relative w-full h-full">
+                          <iframe
+                            width="100%"
+                            height="500"
+                            className="!rounded-md"
+                            src={getEmbedUrl({
+                              url: course?.youtubeUrl,
+                            })}
+                            title="YouTube video player"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          ></iframe>
+                        </div>
+                      </div>
+                    )}
                   </div>
+
                   <CourseDescription
                     // @ts-ignore
                     value={JSON.parse(course?.courseDescription as string)}

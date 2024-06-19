@@ -289,3 +289,22 @@ export function formatDZD(amount: number): string {
 
   return `${formattedAmount} DZD`;
 }
+
+/**
+ * Transforms a YouTube URL into an embeddable URL for an iframe.
+ * @param {string} url - The YouTube URL to be transformed.
+ * @returns {string} - The embeddable YouTube URL.
+ */
+export function getEmbedUrl({ url }: { url: string }) {
+  // Regular expression to extract the video ID from the YouTube URL
+  const videoIdRegex =
+    /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+  const match = url.match(videoIdRegex);
+
+  // If the video ID is found, construct the embed URL
+  if (match && match[1]) {
+    return `https://www.youtube.com/embed/${match[1]}`;
+  } else {
+    return `https://youtu.be/sc-FApGZXB0?si=DpPpTpCTdyL1qD13`;
+  }
+}
