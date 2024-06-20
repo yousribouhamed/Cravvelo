@@ -6,6 +6,7 @@ import { trpc } from "@/src/app/_trpc/client";
 import { AccountColumns } from "@/src/components/tables/columns/users";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DataTableLoading } from "@/src/components/tables/table-loading";
+import BlackKing from "@/src/components/modals/black-king";
 
 interface CoursesTableShellProps {
   initialData: Account[];
@@ -23,9 +24,12 @@ const UsersTableShell: FC<CoursesTableShellProps> = ({ initialData }) => {
   }
 
   return (
-    <div className="w-full min-h-[300px] h-fit flex flex-col ">
-      <DataTable columns={AccountColumns} data={data} />
-    </div>
+    <>
+      <BlackKing />
+      <div className="w-full min-h-[300px] h-fit flex flex-col ">
+        <DataTable columns={AccountColumns} data={data} />
+      </div>
+    </>
   );
 };
 

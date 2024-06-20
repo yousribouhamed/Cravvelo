@@ -23,3 +23,17 @@ export const openCourseDeleteOrSuspandAction = create<StateShape>()((set) => ({
   setIsOpen: (open: boolean) => set({ open: open }),
   setAction: (action: string) => set({ action: action }),
 }));
+
+interface BlackKingStateShape {
+  id: string | null;
+  setId: (id: string) => void;
+  open: boolean;
+  setIsOpen: (open: boolean) => void;
+}
+
+export const openBlackKing = create<BlackKingStateShape>()((set) => ({
+  id: null,
+  open: false,
+  setId: (val: string) => set({ id: val }),
+  setIsOpen: (open: boolean) => set({ open: open }),
+}));

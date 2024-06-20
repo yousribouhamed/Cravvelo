@@ -21,31 +21,7 @@ import { openCourseDeleteOrSuspandAction } from "@/src/zustand/admin-state";
 // You can use a Zod schema here if you want.
 
 export const CourseColumns: ColumnDef<Course>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        //@ts-ignore
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-        className="!mr-4"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-        className="!mr-4"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+  
   {
     accessorKey: "title",
     header: ({ column }) => (

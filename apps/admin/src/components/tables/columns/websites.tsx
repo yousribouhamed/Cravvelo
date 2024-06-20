@@ -21,32 +21,6 @@ import { Badge } from "@ui/components/ui/badge";
 
 export const WebsiteColumns: ColumnDef<Website>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        //@ts-ignore
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-        className="!mr-4"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-        className="!mr-4"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-
-  {
     accessorKey: "logo",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="شعار الأكاديمية" />

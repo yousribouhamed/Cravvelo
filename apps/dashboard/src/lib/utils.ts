@@ -295,16 +295,16 @@ export function formatDZD(amount: number): string {
  * @param {string} url - The YouTube URL to be transformed.
  * @returns {string} - The embeddable YouTube URL.
  */
-export function getEmbedUrl({ url }: { url: string }) {
-  // Regular expression to extract the video ID from the YouTube URL
+export function getEmbedUrl({ url }) {
   const videoIdRegex =
     /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+
   const match = url.match(videoIdRegex);
 
-  // If the video ID is found, construct the embed URL
   if (match && match[1]) {
     return `https://www.youtube.com/embed/${match[1]}`;
   } else {
+    // Return a default or fallback embed URL if the video ID is not found
     return `https://youtu.be/sc-FApGZXB0?si=DpPpTpCTdyL1qD13`;
   }
 }
