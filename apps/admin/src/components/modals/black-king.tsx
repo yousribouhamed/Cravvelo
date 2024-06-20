@@ -1,20 +1,28 @@
 import type { FC } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@ui/components/ui/dialog";
+import { Dialog, DialogContent } from "@ui/components/ui/dialog";
 import { openBlackKing } from "@/src/zustand/admin-state";
 import { Button } from "@ui/components/ui/button";
 import { Crown } from "lucide-react";
+import { trpc } from "@/src/app/_trpc/client";
+import { maketoast } from "../toasts";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
-interface blackKingProps {}
+interface blackKingProps {
+  refetch: () => Promise<any>;
+}
 
-const BlackKing: FC = ({}) => {
+const BlackKing: FC<blackKingProps> = ({ refetch }) => {
   const { open, id, setIsOpen } = openBlackKing();
+
+  const mutation = trpc.createBlackKing.useMutation({
+    onSuccess: async () => {
+      await refetch();
+      maketoast.success();
+    },
+    onError: () => {
+      maketoast.error();
+    },
+  });
 
   return (
     <Dialog open={open} onOpenChange={(val) => setIsOpen(val)}>
@@ -26,9 +34,17 @@ const BlackKing: FC = ({}) => {
             دون أي قيود ودون الحاجة إلى تجديد الاشتراك
           </p>
 
-          <div className="w-full h-[50px] flex items-center justify-end">
-            <Button className="bg-black hover:bg-black text-white flex gap-x-2">
-              <Crown className="w-4 h-4 text-white" strokeWidth={3} />
+          <div className="w-full h-[50px] flex items-center gap-x-2 justify-end">
+            <Button
+              disabled={mutation.isLoading}
+              onClick={() => mutation.mutate({ id })}
+              className="bg-black hover:bg-black text-white flex gap-x-2"
+            >
+              {mutation.isLoading ? (
+                <LoadingSpinner />
+              ) : (
+                <Crown className="w-4 h-4 text-white" strokeWidth={3} />
+              )}
               اصنع ملكا أسود
             </Button>
           </div>

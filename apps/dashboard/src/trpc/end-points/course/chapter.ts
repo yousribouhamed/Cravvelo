@@ -184,6 +184,19 @@ export const chapter = {
           },
         }
       );
+      console.log("this is the file url");
+      console.log(input.fileUrl);
+
+      console.log("this is the data we get from bunny");
+      console.log(data);
+
+      console.log("this is the input we are passing");
+      console.log({
+        chapterID: input.chapterID,
+        title: input.title,
+        content: input.content,
+        length: input.length,
+      });
 
       // first we need to get all the modules
       const chapter = await ctx.prisma.chapter.findFirst({
@@ -254,6 +267,16 @@ export const chapter = {
     )
     .mutation(async ({ input, ctx }) => {
       try {
+        const { data } = await axios.get(
+          `https://video.bunnycdn.com/library/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/videos/${input.fileUrl}`,
+          {
+            headers: {
+              "Content-Type": "application/octet-stream",
+              AccessKey: process.env["NEXT_PUBLIC_BUNNY_API_KEY"],
+            },
+          }
+        );
+
         const targetChapter = await ctx.prisma.chapter.findFirst({
           where: {
             id: input.chapterID,
@@ -277,10 +300,11 @@ export const chapter = {
           orderNumber: targetMaterial.orderNumber,
           fileType: targetMaterial.fileType,
           title: input.title,
+          length: data?.length,
         } as Module;
 
         const newMaterials = oldMaterials.filter(
-          (item) => item.fileUrl !== input.fileUrl
+          (item) => item.fileUrl !== targetMaterial.fileUrl
         );
 
         const newChapter = await ctx.prisma.chapter.update({

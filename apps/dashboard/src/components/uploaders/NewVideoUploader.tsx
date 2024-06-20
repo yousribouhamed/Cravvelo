@@ -23,6 +23,7 @@ export const NewVideoUploader = ({
   className?: string;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+
   initialVideoId?: string;
   setVideoSize?: React.Dispatch<React.SetStateAction<number>>;
 }) => {

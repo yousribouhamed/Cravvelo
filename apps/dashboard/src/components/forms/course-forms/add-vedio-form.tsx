@@ -50,6 +50,11 @@ function AddVedioForm() {
     },
   });
 
+  React.useEffect(() => {
+    console.log({ chapterID });
+    console.log({ videoSize });
+  }, []);
+
   const form = useForm<z.infer<typeof addVedioSchema>>({
     mode: "onChange",
     resolver: zodResolver(addVedioSchema),
