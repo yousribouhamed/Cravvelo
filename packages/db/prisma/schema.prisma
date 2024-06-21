@@ -224,13 +224,13 @@ model Comment {
 
 model Notification {
   id        String   @unique @default(cuid())
-  content   String
+  content   String  
+  type      String   @default("WARNNING")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   accountId String
   isRead    Boolean  @default(false)
   Account   Account  @relation(fields: [accountId], references: [id])
-
   @@index([id])
   @@index([accountId])
 }

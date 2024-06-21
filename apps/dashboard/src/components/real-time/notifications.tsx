@@ -8,14 +8,29 @@ import {
 } from "@ui/components/ui/popover";
 import { Button } from "@ui/components/ui/button";
 import { Icons } from "../my-icons";
-import Image from "next/image";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { pusherClient } from "@/src/lib/pusher";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
 import { Notification } from "database";
-import { Mail } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Archive, MailWarning } from "lucide-react";
 import { trpc } from "@/src/app/_trpc/client";
+import { Badge } from "@ui/components/ui/badge";
+
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@ui/components/ui/tabs";
+import { Package } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@ui/components/ui/tooltip";
+import Image from "next/image";
+import { cn } from "@ui/lib/utils";
 
 function timeSince(createdAt: Date): string {
   const now = new Date();
@@ -82,8 +97,6 @@ const Notifications: FC<NotificationsProps> = ({
 }) => {
   const isMounted = useMounted();
 
-  const router = useRouter();
-
   const { data: ourNotifications, refetch } = trpc.getAllNotifications.useQuery(
     undefined,
     {
@@ -91,12 +104,13 @@ const Notifications: FC<NotificationsProps> = ({
     }
   );
 
-  const [data, setData] = useState<Notification[]>(ourNotifications ?? null);
+  const [data, setData] = useState<Notification[]>(ourNotifications);
 
-  const [isNewNotifications, setIsNewNotifications] = useState<number>(0);
+  const [isNewNotifications, setIsNewNotifications] = useState<number>(
+    ourNotifications.filter((item) => item.isRead !== true).length
+  );
 
   useEffect(() => {
-    setData(notifications);
     // subscribe to an account id
     pusherClient?.subscribe(accountId ?? "");
 
@@ -137,11 +151,92 @@ const Notifications: FC<NotificationsProps> = ({
         align="end"
         className="p-0 border-none ring-none shadow-none"
       >
-        <div className="w-[500px] h-[450px] shadow bg-white p-2 rounded-xl border">
-          <div className="w-full border-b h-[70px] flex items-center justify-start">
-            <p className="text-xl font-bold">الإشعارات</p>
+        <div className="w-[500px] h-[450px] shadow bg-white  rounded-xl border">
+          <div className="w-full h-[50px] flex items-center justify-start p-4">
+            <p className="text-lg font-bold">الإشعارات</p>
           </div>
-          {data.length === 0 ? (
+
+          <Tabs defaultValue="all" className=" w-full ">
+            <TabsList className="w-full flex items-center justify-end h-[40px]   border-b">
+              <TabsTrigger value="archived">
+                مؤرشف
+                <Package className="w-4 h-4 ml-2" />
+              </TabsTrigger>
+              <TabsTrigger value="all">الكل</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="all">
+              <ScrollArea className="h-[330px] w-full flex flex-col gap-y-2  ">
+                {data.map((item) => (
+                  <div
+                    key={item.id}
+                    className={`w-full h-[75px] flex items-center justify-between border-b p-4   gap-x-4  ${
+                      item.isRead ? "bg-primary/5" : ""
+                    }`}
+                  >
+                    <div className="w-[50px] h-full flex items-center justify-center gap-x-2">
+                      <TooltipProvider>
+                        <Tooltip delayDuration={0}>
+                          <TooltipTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <Archive className="w-4 h-4 text-black" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>ارشفت هذا الاشعار</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                    <div className="flex items-center justify-end gap-x-3">
+                      <div className="flex flex-col h-full w-fit items-start justify-between  gap-2">
+                        <div className="w-full h-[90%] flex items-start justify-start">
+                          <span className="text-md font-medium text-black">
+                            {" "}
+                            {item.content}
+                          </span>
+                        </div>
+                        <div className="flex w-full h-[10%] items-center justify-end gap-x-3">
+                          <span className="text-xs  text-gray-500  ">
+                            {timeSince(item?.createdAt)}
+                          </span>
+                          {!item.isRead && (
+                            <Badge
+                              variant="default"
+                              className="bg-[#2ECA8B] text-white"
+                            >
+                              جديد
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="bg-primary/20 flex items-center justify-center w-[50px] h-[50px] rounded-xl">
+                        {/* <Mail className="w-6 h-6 text-primary" /> */}
+                        <MailWarning className="w-6 h-6 text-primary" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="archived">
+              <div className="w-full h-[330px] flex flex-col justify-center items-center gap-y-5">
+                <Image
+                  loading="eager"
+                  alt="verified image"
+                  src="/notifications.svg"
+                  width={300}
+                  height={300}
+                />
+                <p className="text-md text-center text-gray-500">
+                  لا يوجد إشعارات غير مقروءة بعد
+                </p>
+              </div>
+            </TabsContent>
+          </Tabs>
+
+          {/* {data.length === 0 ? (
             <div className="w-full h-[330px] flex flex-col justify-center items-center gap-y-5">
               <Image
                 alt="verified image"
