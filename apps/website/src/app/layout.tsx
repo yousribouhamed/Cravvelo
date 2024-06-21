@@ -1,5 +1,5 @@
 import "@ui/styles/globals.css";
-import { NavBar } from "../components/layout/header/nav-bar";
+import NavBar from "../components/layout/header/nav-bar";
 import { Analytics } from "@vercel/analytics/react";
 import { CrispChat } from "../components/crisp-chat";
 import { constructMetadata } from "../lib/utils";
@@ -28,11 +28,6 @@ export default function RootLayout({
         <div className="  w-full h-fit min-h-full">{children}</div>
         <Analytics />
       </body>
-      {/* 
-      <Script
-        src="https://unpkg.com/@material-tailwind/html@latest/scripts/ripple.js"
-        async
-      /> */}
     </html>
   );
 }
