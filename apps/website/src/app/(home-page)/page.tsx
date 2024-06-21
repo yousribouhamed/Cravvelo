@@ -1,7 +1,6 @@
 import MaxWidthWrapper from "../../components/max-width-wrapper";
 import WhatYouCanDo from "./sections/what-you-can-do";
 import HeroLights from "../../components/svgs/hero-lights";
-// import Pricing from "./sections/pricing";
 import Hero from "./sections/hero";
 import HowPlatformWorks from "./sections/how-platform-works";
 import CreateLanch from "./sections/create-lanch";
@@ -15,10 +14,6 @@ import Image from "next/image";
 import Link from "next/link";
 import BestBenefits from "./sections/best-benifits";
 import SecureContent from "./sections/secure-content";
-
-// diable animations on mobil
-
-// use lazy motion
 
 export default function Page() {
   return (
@@ -84,12 +79,10 @@ export default function Page() {
         </FadeIn>
         <FadeIn>
           <MaxWidthWrapper>
-            {/* <Pricing /> */}
             <NewPricing />
           </MaxWidthWrapper>
         </FadeIn>
         <StartNew />
-        {/* <SiteFooter /> */}
 
         <div className="w-full h-[250px] md:h-[150px] mt-20 bg-primary flex items-center justify-center p-4">
           <MaxWidthWrapper>
@@ -102,7 +95,6 @@ export default function Page() {
                 alt="logo"
                 width={200}
                 height={70}
-                // className="w-[200px] h-[70px]"
               />
 
               <span className=" text-md lg:text-lg text-white text-start">
