@@ -230,6 +230,7 @@ model Notification {
   updatedAt DateTime @updatedAt
   accountId String
   isRead    Boolean  @default(false)
+  isArchived Boolean  @default(false)
   Account   Account  @relation(fields: [accountId], references: [id])
   @@index([id])
   @@index([accountId])

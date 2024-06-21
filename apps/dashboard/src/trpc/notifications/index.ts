@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { privateProcedure } from "../trpc";
 
 export const notifications = {
@@ -14,4 +15,43 @@ export const notifications = {
 
     return allNotifications;
   }),
+  makeNotificationRead: privateProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const notification = await ctx.prisma.notification.update({
+        where: {
+          id: input.id,
+        },
+
+        data: {
+          isRead: true,
+        },
+      });
+
+      return notification;
+    }),
+
+  makeNotificationArchived: privateProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const notification = await ctx.prisma.notification.update({
+        where: {
+          id: input.id,
+        },
+
+        data: {
+          isArchived: true,
+        },
+      });
+
+      return notification;
+    }),
 };
