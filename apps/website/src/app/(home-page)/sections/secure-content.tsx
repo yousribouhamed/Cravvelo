@@ -55,20 +55,39 @@ const SecureContent: FC = ({}) => {
           />
 
           <div className="w-[250px] h-[50px] bg-white rounded-full shadow-2xl px-4 gap-x-2 flex items-center justify-start ml-[300px] lg:ml-[500px] z-[80]">
-            <Image alt="something" src="/pen.svg" width={60} height={60} />
+            <Image
+              loading="eager"
+              alt="something"
+              src="/pen.svg"
+              width={60}
+              height={60}
+            />
 
             <span className="text-lg font-bold">تعطيل نسخ النص</span>
           </div>
 
           <div className="w-[390px] mt-[70px] ml-[50px] lg:ml-[200px] h-[50px] bg-white rounded-full shadow-2xl px-2 gap-x-2 flex items-center justify-start z-[80]">
-            <Image alt="something" src="/lock.svg" width={60} height={60} />
+            <Image
+              loading="eager"
+              alt="something"
+              src="/lock.svg"
+              width={60}
+              height={60}
+            />
             <span className="text-lg font-bold">
               تقييد تسجيل الدخول من جهاز واحد
             </span>
           </div>
 
           <div className="w-[800px] absolute top-[10px] right-[0px] bottom-0  h-full flex items-center justify-center">
-            <Image alt="something" src="/flower.svg" width={800} height={800} />
+            <Image
+              priority
+              loading="eager"
+              alt="something"
+              src="/flower.svg"
+              width={800}
+              height={800}
+            />
           </div>
         </div>
       </div>
