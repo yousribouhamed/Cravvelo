@@ -8,7 +8,7 @@ import CreateLanch from "./sections/create-lanch";
 import EaseSpeed from "./sections/ease-speed";
 import NewExperiance from "./sections/new-experiance";
 import StartNew from "./sections/start-new";
-import SiteFooter, { footerLinks } from "@/src/components/layout/site-footer";
+import { footerLinks } from "@/src/components/layout/site-footer";
 import FadeIn from "@/src/components/animations/fade-in";
 import NewPricing from "./sections/new-pricing";
 import Image from "next/image";

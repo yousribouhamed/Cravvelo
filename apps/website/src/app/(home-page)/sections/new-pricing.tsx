@@ -20,24 +20,22 @@ const NewPricing: FC = ({}) => {
 
   return (
     <div className="w-full min-h-[1080px] h-fit my-10 p-4 md:p-0 ">
-      <div className="w-full min-h-[150px] h-fit  flex justify-center items-start   mx-auto ">
-        <div className="bg-white rounded-full transition-all duration-150 relative shadow-2xl  mx-auto w-[250px] h-full flex items-center  justify-center p-2">
-          <Tabs
-            setPaymentType={setIsPaymentByMonth}
-            activeTabClassName={"bg-[#FC6B00] text-white w-full h-full"}
-            // containerClassName={`w-full h-full`}
-            tabs={[
-              {
-                title: "سنوي ",
-                value: DISPLAY_VALUES.yearly,
-              },
-              {
-                title: "  شهري",
-                value: DISPLAY_VALUES.monthly,
-              },
-            ]}
-          />
-        </div>
+      <div className="w-[250px] h-[50px] bg-white  shadow-2xl rounded-full mx-auto  mt-6 mb-10 md:mb-20">
+        <Tabs
+          setPaymentType={setIsPaymentByMonth}
+          activeTabClassName={"bg-[#FC6B00] text-white "}
+          // containerClassName={`w-full h-full`}
+          tabs={[
+            {
+              title: "سنوي ",
+              value: DISPLAY_VALUES.yearly,
+            },
+            {
+              title: "  شهري",
+              value: DISPLAY_VALUES.monthly,
+            },
+          ]}
+        />
       </div>
 
       <div className="w-full h-fit   max-w-6xl mx-auto min-h-[800px] grid grid-cols-1 md:grid-cols-3  gap-10 ">

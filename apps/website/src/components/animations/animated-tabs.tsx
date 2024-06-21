@@ -42,7 +42,7 @@ export const Tabs = ({
     <>
       <div
         className={cn(
-          "flex flex-row  items-center justify-center   relative overflow-auto sm:overflow-visible no-visible-scrollbar  rounded-2xl  h-full w-[1200px]",
+          "flex  items-center justify-center   relative overflow-auto sm:overflow-visible no-visible-scrollbar  rounded-2xl  h-full w-full ",
           containerClassName
         )}
       >
@@ -60,7 +60,7 @@ export const Tabs = ({
             onMouseEnter={() => setHovering(true)}
             onMouseLeave={() => setHovering(false)}
             className={cn(
-              `relative px-6 py-2 rounded-full  ${
+              `relative px-6  py-2 rounded-full  ${
                 tab.value === "YEARLY"
                   ? "w-fit flex items-center justify-center gap-x-1"
                   : ""

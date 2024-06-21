@@ -48,11 +48,11 @@ const Hero: FC = ({}) => {
           </div>
 
           {/* Right column - Image */}
-          <div className="2xl:-ml-[18rem] lg:-ml-10 h-fit sm:-ml-24 z-[10] lg:mt-0 lg:col-start-2 lg:row-span-2 lg:row-start-1">
-            <div className="w-[32rem]  h-[700px] max-w-none rounded-xl sm:w-[40rem] xl:w-[57rem] 2xl:w-[100rem] 2xl:h-[1100px] relative">
+          <div className="2xl:-ml-[1rem] lg:-ml-10 h-fit sm:-ml-24 z-[10] lg:mt-0 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+            <div className="  w-[45rem]  h-[450px] max-w-none rounded-xl sm:w-[40rem] xl:w-[57rem] xl:h-[700px] 2xl:w-[65rem] 2xl:h-[730px] relative">
               <Image
                 fill
-                className=" w-full h-full  rounded-xl "
+                className=" w-full h-full  rounded-xl  "
                 src="/hero-image.png"
                 alt="hero image of the application"
                 priority
