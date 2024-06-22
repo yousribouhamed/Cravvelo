@@ -136,7 +136,7 @@ const Notifications: FC<NotificationsProps> = ({
           </div>
 
           <Tabs defaultValue="all" className=" w-full ">
-            <TabsList className="w-full flex items-center justify-end h-[40px]   border-b">
+            <TabsList className="w-full flex items-center justify-end h-[50px]   border-b">
               <TabsTrigger value="archived">
                 مؤرشف
                 <Package className="w-4 h-4 ml-2" />
