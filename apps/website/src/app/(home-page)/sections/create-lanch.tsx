@@ -1,4 +1,5 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
+import Image from "next/image";
 import type { FC } from "react";
 
 const CreateLanch: FC = ({}) => {
@@ -37,8 +38,13 @@ const CreateLanch: FC = ({}) => {
             </div>
           </div>
         </div>
-        <div className=" border border-[#FFB800] rounded-2xl mt-16 p-4 col-span-1">
-          <div className="w-full h-[500px]  rounded-2xl" />
+        <div className=" border h-[400px] relative rounded-2xl mt-16 p-4 col-span-1">
+          <Image
+            src={"/money-man.jpg"}
+            alt="money"
+            fill
+            className="rounded-2xl object-cover"
+          />
         </div>
       </section>
     </MaxWidthWrapper>

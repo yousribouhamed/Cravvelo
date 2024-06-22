@@ -1,4 +1,5 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
+import Image from "next/image";
 import type { FC } from "react";
 
 const NewExperiance: FC = ({}) => {
@@ -6,7 +7,14 @@ const NewExperiance: FC = ({}) => {
     <MaxWidthWrapper>
       <div className="w-full h-fit p-4 lg:p-0 ">
         <div className="w-full h-fit min-h-[500px] grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className=" border-[#FFB800] border   bg-[#F8FAE5] col-span-1 rounded-lg"></div>
+          <div className="   bg-[#F8FAE5] relative col-span-1 rounded-2xl">
+            <Image
+              src={"/woman-leanning.png"}
+              alt="woman using cravvelo"
+              fill
+              className="rounded-2xl object-cover"
+            />
+          </div>
           <div className="max-w-2xl h-full flex flex-col gap-y-4 col-span-1 pt-4 z-20 space-y-6  ">
             <h1 className=" text-5xl mb-8  font-bold text-start  tracking-tight leading-[5.5rem] text-black ">
               وفّر{" "}
