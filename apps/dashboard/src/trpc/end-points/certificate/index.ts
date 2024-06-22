@@ -4,6 +4,7 @@ import { BlueOcean } from "./certificate-templates/blue-ocean";
 import { generatePdf } from "./generatePDF";
 import { PutObjectCommand, ObjectCannedACL } from "@aws-sdk/client-s3";
 import { s3 } from "@/src/lib/s3";
+import { designO1 } from "./certificate-templates/design-01";
 
 export const cetificate = {
   getAllCertificates: privateProcedure.query(async ({ ctx }) => {
@@ -22,13 +23,13 @@ export const cetificate = {
     )
     .mutation(async ({ ctx, input }) => {
       // Generate the PDF buffer
-      const pdfBuffer = await generatePdf(
-        BlueOcean({
-          certificateName: input.cerrificateName,
-          courseName: input.courseName,
-          studentName: input.courseName,
-        })
-      );
+      const pdfBuffer = await generatePdf(designO1());
+
+      // BlueOcean({
+      //   certificateName: input.cerrificateName,
+      //   courseName: input.courseName,
+      //   studentName: input.courseName,
+      // })
 
       // Convert ArrayBuffer to Buffer
       const buffer = Buffer.from(pdfBuffer);
