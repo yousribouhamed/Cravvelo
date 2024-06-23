@@ -4,7 +4,6 @@ import { Student } from "database";
 import { prisma } from "database/src";
 import useHaveAccess from "@/src/hooks/use-have-access";
 import CertificateForm from "./certificate-form";
-import CertificateViewer from "./certificate-viewer";
 
 async function getData({
   accountId,
@@ -45,14 +44,8 @@ const Page = async ({}) => {
           user={user}
           title="باني الشهادة"
         />
-        <div className="w-full min-h-[400px] h-fit grid grid-cols-3 mt-8 py-2   gap-4">
-          <div className="col-span-1 w-full h-full   ">
-            <CertificateForm students={data} />
-          </div>
-          <div className="col-span-2 w-full h-full  ">
-            <CertificateViewer />
-          </div>
-        </div>
+
+        <CertificateForm students={data} />
       </main>
     </MaxWidthWrapper>
   );

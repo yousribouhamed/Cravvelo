@@ -36,6 +36,7 @@ model Account {
   Student         Student[]
   PaymentsConnect PaymentsConnect[]
   Payments        Payments[]
+  Certificate     Certificate[]
 
 }
 
@@ -263,11 +264,13 @@ model Certificate {
   name        String
   description String?
   studentId   String
+  accountId   String
   courseName  String
   studentName String
   fileUrl     String   @db.Text
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  Account   Account  @relation(fields: [accountId], references: [id])
 }
 
 model Payments {
