@@ -1,4 +1,5 @@
 import { formatDateInArabic } from "@/src/lib/utils";
+import { getCurrentDate } from "../utils";
 
 export const design02 = ({
   certificateName,

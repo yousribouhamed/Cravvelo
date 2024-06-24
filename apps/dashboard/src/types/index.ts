@@ -1,5 +1,4 @@
 import { Certificate, Course, Product as DataBaseProduct } from "database";
-import { EditorBtns } from "../constants/website-template";
 import { type FileWithPath } from "react-dropzone";
 import { type z } from "zod";
 import type { cartLineItemSchema } from "@/src/lib/validators/cart";
@@ -11,40 +10,6 @@ export type Module = {
   orderNumber: number;
   fileUrl: string;
   fileType: string;
-};
-
-export type WebSitePage = {
-  pathname: string;
-  title: string;
-  elements: EditorElement[];
-};
-
-export type EditorElement = {
-  image?: string;
-  id: string;
-  styles: React.CSSProperties;
-  name: string;
-  type: EditorBtns;
-  content:
-    | EditorElement[]
-    | { href?: string; innerText?: string; src?: string };
-};
-
-export type Editor = {
-  pages: WebSitePage[];
-  selectedElement: EditorElement;
-  selectedPageIndex: number;
-};
-
-export type HistoryState = {
-  history: Editor[];
-  currentIndex: number;
-};
-
-export type EditorState = {
-  editor: Editor;
-  history: HistoryState;
-  isSelectionMode: boolean;
 };
 
 export type WebsiteAssets = {

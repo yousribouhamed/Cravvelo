@@ -1,8 +1,7 @@
 import { z } from "zod";
 import { privateProcedure } from "../../trpc";
-import { BlueOcean } from "./certificate-templates/blue-ocean";
 import { generatePdf } from "./generatePDF";
-import { PutObjectCommand, ObjectCannedACL } from "@aws-sdk/client-s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3 } from "@/src/lib/s3";
 import { designO1 } from "./certificate-templates/design-01";
 import { design02 } from "./certificate-templates/design-02";
@@ -48,13 +47,6 @@ export const cetificate = {
 
       // Generate the PDF buffer
       const pdfBuffer = await generatePdf(pdfAsString);
-
-      // BlueOcean({
-
-      //   certificateName: input.cerrificateName,
-      //   courseName: input.courseName,
-      //   studentName: input.courseName,
-      // })
 
       // Convert ArrayBuffer to Buffer
       const buffer = Buffer.from(pdfBuffer);

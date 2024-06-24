@@ -1,3 +1,5 @@
+import { getCurrentDate } from "../utils";
+
 export const designO1 = ({
   courseName,
   studentName,

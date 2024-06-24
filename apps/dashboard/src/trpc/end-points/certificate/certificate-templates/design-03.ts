@@ -1,5 +1,6 @@
 import { splitName } from "@/src/app/(dashboard)/students/certificates/create-certificate/certificate-viewer";
 import { formatDateInArabic } from "@/src/lib/utils";
+import { getCurrentDate } from "../utils";
 
 export const designO3 = ({
   certificateName,
