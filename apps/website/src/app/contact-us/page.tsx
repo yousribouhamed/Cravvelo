@@ -2,7 +2,7 @@ import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import HeroLights from "@/src/components/svgs/hero-lights";
 import type { FC } from "react";
 import ContactUsForm from "./_components/forms/contact-us-form";
-import SiteFooter, { footerLinks } from "@/src/components/layout/site-footer";
+import { footerLinks } from "@/src/components/layout/site-footer";
 import Image from "next/image";
 import Link from "next/link";
 
