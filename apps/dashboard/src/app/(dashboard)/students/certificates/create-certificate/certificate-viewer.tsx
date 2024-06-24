@@ -43,7 +43,10 @@ const CertificateViewer: FC<certificateViewerProps> = ({
 
 export default CertificateViewer;
 
-function splitName(fullName: string): { firstName: string; lastName: string } {
+export function splitName(fullName: string): {
+  firstName: string;
+  lastName: string;
+} {
   if (!fullName) {
     return { firstName: "", lastName: "" };
   }

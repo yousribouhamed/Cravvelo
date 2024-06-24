@@ -5,6 +5,8 @@ import { generatePdf } from "./generatePDF";
 import { PutObjectCommand, ObjectCannedACL } from "@aws-sdk/client-s3";
 import { s3 } from "@/src/lib/s3";
 import { designO1 } from "./certificate-templates/design-01";
+import { design02 } from "./certificate-templates/design-02";
+import { designO3 } from "./certificate-templates/design-03";
 
 export const cetificate = {
   getAllCertificates: privateProcedure.query(async ({ ctx }) => {
@@ -23,13 +25,29 @@ export const cetificate = {
       })
     )
     .mutation(async ({ ctx, input }) => {
-      // Generate the PDF buffer
-      const pdfBuffer = await generatePdf(
-        designO1({
+      let pdfAsString = "";
+
+      if (input.code === "DEAD_DEER") {
+        pdfAsString = await designO1({
           courseName: input.courseName,
           studentName: input.studentName,
-        })
-      );
+        });
+      } else if (input.code === "PARTY_UNDER_SUN") {
+        pdfAsString = await design02({
+          courseName: input.courseName,
+          studentName: input.studentName,
+          certificateName: input.cerrificateName,
+        });
+      } else {
+        pdfAsString = await designO3({
+          courseName: input.courseName,
+          studentName: input.studentName,
+          certificateName: input.cerrificateName,
+        });
+      }
+
+      // Generate the PDF buffer
+      const pdfBuffer = await generatePdf(pdfAsString);
 
       // BlueOcean({
 

@@ -102,7 +102,7 @@ export const designO1 = ({
       >
 
       <div class="absolute bottom-20 mb-4 left-10 z-[4]">
-        <span class="text-black text-xs"> 20/06/2024 صدرت الشهادة بتاريخ</span>
+        <span class="text-black text-xs"> ${getCurrentDate()} صدرت الشهادة بتاريخ</span>
       </div>
       <img
         src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/Group+(2).png"

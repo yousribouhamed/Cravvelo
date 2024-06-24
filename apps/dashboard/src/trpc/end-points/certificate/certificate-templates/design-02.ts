@@ -1,6 +1,6 @@
 import { formatDateInArabic } from "@/src/lib/utils";
 
-export const BlueOcean = ({
+export const design02 = ({
   certificateName,
   courseName,
   studentName,
@@ -10,8 +10,8 @@ export const BlueOcean = ({
   courseName: string;
 }) => {
   return `
-     <!DOCTYPE html>
-<html lang="ar">
+    <!DOCTYPE html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -28,9 +28,16 @@ export const BlueOcean = ({
 
   <body>
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap");
+      @font-face {
+        font-family: "montserrat";
+        src: url("https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/Montserrat-Arabic+Regular+400.0722a65d.otf")
+          format("opentype");
+        font-weight: normal;
+        font-style: normal;
+      }
+
       * {
-        font-family: "Poppins", "sans-serif" !important ;
+        font-family: "montserrat" !important ;
       }
       html {
         -webkit-print-color-adjust: exact;
@@ -52,36 +59,42 @@ export const BlueOcean = ({
         }
       }
     </style>
-    <main class="w-[700px] mx-auto bg-slate-950 h-[500px] flex items-center justify-center p-[25px]">
-      <div class="bg-slate-50 w-full h-full rounded-xl">
-        <div class="w-full h-[100px] flex items-center justify-between px-4">
-          <p class="text-2xl font-bold text-black">${certificateName}</p>
+    <main
+      class="w-[700px] h-[500px] mx-auto flex flex-col items-center relative justify-start pt-20 gap-y-4 bg-[#FAF5EC]"
+    >
+      <img
+        src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/%D8%B4%D9%87%D8%A7%D8%AF%D8%A9+%D9%85%D8%B4%D8%A7%D8%B1%D9%83%D8%A9.png"
+        class="w-[350px] h-[60px] z-[4]"
+      />
+      <img
+        src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/%D8%A8%D9%83%D9%84+%D9%81%D8%AE%D8%B1+%D9%87%D8%B0%D9%87+%D8%A7%D9%84%D8%B4%D9%87%D8%A7%D8%AF%D8%A9+%D8%AA%D9%85%D9%86%D8%AD+%D9%84%D9%84%D8%B7%D8%A7%D9%84%D8%A8.png"
+        class="w-[200px] h-[16px] z-[4] mt-6"
+      />
 
-          <p class="text-md font-bold text-gray-500">${formatDateInArabic(
-            new Date(),
-            "dd MMMM yyyy"
-          )}</p>
-        </div>
+      <h1 class="text-4xl text-[#1A3661] font-bold z-[4]">${studentName}</h1>
 
-        <div class="h-[250px] w-[60%] mx-auto flex items-center justify-center">
-          <h1 class="text-4xl font-bold text-slate-950 text-center">
-            نشهد بأن الطالب المذكور قد أتم بنجاح جميع متطلبات الدورة التدريبية
-            المعنية بكل تفوق وإتقان
-          </h1>
-        </div>
-        <div class="h-[150px] w-[100%] flex items-start justify-between p-4">
-          <img
-            src="https://cravvel-bucket.s3.eu-west-1.amazonaws.com/certificate-design.png"
-            class="w-20 h-20"
-            alt="ah"
-          />
-          <p class="text-xl font-bold text-black">${studentName}</p>
-        </div>
+      <h2 class="text-sm mt-6 text-[#1A3661] z-[4]">
+        تقديرًا لحضوره بنجاح دورة
+        <span class="font-bold"> ${courseName} </span>
+        واستكماله جميع المتطلبات.
+      </h2>
+
+      <img
+        src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/Clip+path+group.png"
+        class="w-full h-full absolute top-0 right-0 left-0 bottom-0 z-[1]"
+      />
+
+      <div class="absolute bottom-14 mb-4 left-[10rem] z-[4]">
+        <span class="text-black text-xs"> ${getCurrentDate()} صدرت الشهادة بتاريخ</span>
+      </div>
+      <div class="absolute bottom-12 right-[13rem] z-[4]">
+        <img src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/%D8%A7%D9%84%D8%AA%D9%88%D9%82%D9%8A%D8%B9.png" class="w-[66px] h-[24px] z-[4]" />
       </div>
     </main>
   </body>
   <script src="https://cdn.tailwindcss.com"></script>
 </html>
+
 
       `;
 };
