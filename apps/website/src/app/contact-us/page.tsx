@@ -2,7 +2,9 @@ import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import HeroLights from "@/src/components/svgs/hero-lights";
 import type { FC } from "react";
 import ContactUsForm from "./_components/forms/contact-us-form";
-import SiteFooter from "@/src/components/layout/site-footer";
+import SiteFooter, { footerLinks } from "@/src/components/layout/site-footer";
+import Image from "next/image";
+import Link from "next/link";
 
 const Page: FC = ({}) => {
   return (
@@ -72,7 +74,34 @@ const Page: FC = ({}) => {
         </div>
       </MaxWidthWrapper>
       <HeroLights />
-      <SiteFooter />
+      <div className="w-full h-[250px] md:h-[150px] mt-20 bg-primary flex items-center justify-center p-4">
+        <MaxWidthWrapper>
+          <div
+            dir="ltr"
+            className="w-full  h-full flex items-center flex-col gap-y-4 md:flex-row md:justify-between "
+          >
+            <Image
+              src={"/white-cravvelo-logo.svg"}
+              alt="logo"
+              width={200}
+              height={70}
+            />
+
+            <span className=" text-md lg:text-lg text-white text-start">
+              © 2024 cravvelo. All rights reserved. |{" "}
+              <Link href={"/policy"}>website policy</Link>
+            </span>
+
+            <div className="w-[100px] h-full flex items-center justify-center md:justify-end gap-x-4">
+              {footerLinks.map((item, index) => (
+                <Link key={item.url + index} href={item.url}>
+                  <item.icons />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </MaxWidthWrapper>
+      </div>
     </>
   );
 };

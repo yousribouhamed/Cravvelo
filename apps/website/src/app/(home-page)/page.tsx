@@ -34,7 +34,7 @@ export default function Page() {
           <EaseSpeed />
         </FadeIn>
         <FadeIn>
-          <MaxWidthWrapper className="my-16  ">
+          <MaxWidthWrapper className="my-[200px] overflow-hidden xl:overflow-visible ">
             <div className="w-full min-h-[250px] h-fit  flex flex-col justify-center gap-y-8 pt-12  ">
               <h2 className="text-5xl font-bold text-center   leading-[4rem] md:leading-10">
                 قدرات جديدة، بتجربة مذهلة، في
@@ -62,7 +62,44 @@ export default function Page() {
                 الجودة، بالإضافة إلى موقع إلكتروني ومجتمع رقمي خاص، في مكان
                 واحد.
               </p>
-              <div className="w-full h-[600px] rounded-2xl border  border-[#FC6B00] bg-[#F8FAE5]"></div>
+
+              <div className="w-full mt-8 relative h-[800px] rounded-2xl border  border-[#FC6B00] bg-[#F8FAE5]">
+                <Image
+                  src="/all-in-one/add-content.svg"
+                  alt="add content new"
+                  width={850}
+                  height={550}
+                  className="absolute -bottom-16 left-0"
+                />
+                <Image
+                  src="/all-in-one/Group 1000005917.svg"
+                  alt="add content new"
+                  width={1288}
+                  height={406}
+                  className="absolute -top-10 -left-10"
+                />
+                <Image
+                  src="/all-in-one/makethisfree.svg"
+                  alt="add content new"
+                  width={905}
+                  height={307}
+                  className="absolute bottom-[3.5rem] -right-[18rem]"
+                />
+                <Image
+                  src="/all-in-one/permition.svg"
+                  alt="add content new"
+                  width={555}
+                  height={84}
+                  className="absolute bottom-20 left-0"
+                />
+                <Image
+                  src="/all-in-one/switch.svg"
+                  alt="switchs"
+                  width={372}
+                  height={158}
+                  className="absolute bottom-[40%] left-[28%]"
+                />
+              </div>
             </div>
           </MaxWidthWrapper>
         </FadeIn>
