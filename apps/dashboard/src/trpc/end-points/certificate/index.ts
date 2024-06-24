@@ -19,13 +19,20 @@ export const cetificate = {
         courseName: z.string(),
         cerrificateName: z.string(),
         studentId: z.string(),
+        code: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       // Generate the PDF buffer
-      const pdfBuffer = await generatePdf(designO1());
+      const pdfBuffer = await generatePdf(
+        designO1({
+          courseName: input.courseName,
+          studentName: input.studentName,
+        })
+      );
 
       // BlueOcean({
+
       //   certificateName: input.cerrificateName,
       //   courseName: input.courseName,
       //   studentName: input.courseName,
@@ -65,6 +72,7 @@ export const cetificate = {
       // Create a new certificate record in the database with the S3 URL
       const newCertificate = await ctx.prisma.certificate.create({
         data: {
+          accountId: ctx.account.id,
           courseName: input.courseName,
           name: input.cerrificateName,
           studentId: input.studentId,

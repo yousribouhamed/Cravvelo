@@ -78,6 +78,7 @@ function CertificateForm({ students }: CertificateProps) {
       courseName: values.courseName,
       studentId: values.studentId,
       studentName: values.studentName,
+      code: certificateTheme,
     });
   }
 
