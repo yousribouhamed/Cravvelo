@@ -32,6 +32,9 @@ import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import CertificateViewer from "./certificate-viewer";
 import { CERTIFICATE_VARIANTS } from "@/src/constants/data";
 import Image from "next/image";
+import SunCertificateViewer from "./sun-certificate-viewer";
+import DeerCertificateViewer from "./deer-certificate-viewer";
+import { Hammer } from "lucide-react";
 
 const FormSchema = z.object({
   studentName: z.string(),
@@ -242,7 +245,11 @@ function CertificateForm({ students }: CertificateProps) {
                       type="submit"
                       className=" flex items-center gap-x-2 rounded-xl"
                     >
-                      {mutation.isLoading ? <LoadingSpinner /> : null}
+                      {mutation.isLoading ? (
+                        <LoadingSpinner />
+                      ) : (
+                        <Hammer className="text-white w-4 h-4" />
+                      )}
                       حفظ والمتابعة
                     </Button>
                   </div>
@@ -253,7 +260,22 @@ function CertificateForm({ students }: CertificateProps) {
         </div>
       </div>
       <div className="col-span-2 w-full h-full  ">
-        <CertificateViewer courseName={courseName} student_name={studentName} />
+        {certificateTheme === "COLD_CERTIFICATE" ? (
+          <CertificateViewer
+            courseName={courseName}
+            student_name={studentName}
+          />
+        ) : certificateTheme === "DEAD_DEER" ? (
+          <DeerCertificateViewer
+            courseName={courseName}
+            student_name={studentName}
+          />
+        ) : (
+          <SunCertificateViewer
+            courseName={courseName}
+            student_name={studentName}
+          />
+        )}
       </div>
     </div>
   );

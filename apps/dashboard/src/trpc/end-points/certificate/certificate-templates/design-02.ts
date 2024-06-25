@@ -91,6 +91,12 @@ export const design02 = ({
       <div class="absolute bottom-12 right-[13rem] z-[4]">
         <img src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/%D8%A7%D9%84%D8%AA%D9%88%D9%82%D9%8A%D8%B9.png" class="w-[66px] h-[24px] z-[4]" />
       </div>
+
+
+       <img
+        src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/working_by_crqvvelo.png"
+        class="w-[159px] h-[35px] absolute left-[180px] bottom-5 z-[5]"
+      />
     </main>
   </body>
   <script src="https://cdn.tailwindcss.com"></script>

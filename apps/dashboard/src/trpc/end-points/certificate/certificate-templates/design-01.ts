@@ -76,7 +76,7 @@ export const designO1 = ({
           />
         </svg>
 
-        <span>مشاركة</span>
+        <span class="text-black">مشاركة</span>
         <svg
           width="163"
           height="8"
@@ -103,7 +103,7 @@ export const designO1 = ({
         المتطلبات.</span
       >
 
-      <div class="absolute bottom-20 mb-4 left-10 z-[4]">
+   <div class="absolute bottom-20 mb-[0.5rem] left-10 z-[4]">
         <span class="text-black text-xs"> ${getCurrentDate()} صدرت الشهادة بتاريخ</span>
       </div>
       <img
@@ -125,7 +125,10 @@ export const designO1 = ({
         src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/Group.png"
         class="w-full h-full absolute top-0 right-0 left-0 bottom-0 z-[1]"
       />
-
+<img
+        src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/working_by_crqvvelo.png"
+        class="w-[159px] h-[35px] absolute left-20 bottom-10 z-[5]"
+      />
       <img
         src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/Vector.png"
         class="w-full h-full absolute top-0 right-0 left-0 bottom-0 z-[1]"

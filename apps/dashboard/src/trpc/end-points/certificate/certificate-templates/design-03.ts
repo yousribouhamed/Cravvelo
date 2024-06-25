@@ -1,5 +1,4 @@
 import { splitName } from "@/src/app/(dashboard)/students/certificates/create-certificate/certificate-viewer";
-import { formatDateInArabic } from "@/src/lib/utils";
 import { getCurrentDate } from "../utils";
 
 export const designO3 = ({
@@ -66,8 +65,16 @@ export const designO3 = ({
 
     </style>
     <main
-      class="w-[700px] h-[500px] mx-auto flex flex-col items-center relative justify-start pt-20 gap-y-4 bg-[#FAF5EC]"
+    class="w-[700px] h-[500px] mx-auto flex flex-col items-end relative justify-between p-4 gap-y-4 bg-[#FAF5EC]"
     >
+     <div
+        class="z-[4] absolute flex top-[9.5rem] right-[19.5rem] mb-1 flex-col items-start gap-y-4"
+      >
+        <span class="text-black text-lg font-bold">${firstName} </span>
+        <span class="text-black text-lg font-bold">${lastName}</span>
+      </div>
+
+
       <img
         src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/blue-blue.png"
         class="w-full h-full absolute top-0 right-0 left-0 bottom-0 z-[1]"
@@ -79,6 +86,32 @@ export const designO3 = ({
       <div class="absolute bottom-12 right-[13rem] z-[4]">
         <img src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/%D8%A7%D9%84%D8%AA%D9%88%D9%82%D9%8A%D8%B9.png" class="w-[66px] h-[24px] z-[4]" />
       </div>
+
+       <div class="z-[4] flex flex-col items-end">
+        <span class="text-[#0168D1] text-md font-semibold">صدرت الشهادة</span>
+        <span class="text-[#0168D1] text-md font-semibold">
+          بتاريخ ${getCurrentDate()} </span
+        >
+      </div>
+      <h2 class="text-sm max-w-md text-end mr-10 mt-6 text-[#1A3661] z-[4]">
+    تقديرًا لحضوره بنجاح دورة
+        <span class="font-bold"> ${courseName} </span>
+        واستكماله جميع المتطلبات.
+      </h2>
+      <div class="z-[4] flex flex-col items-end">
+        <span class="text-[#0168D1] text-md font-semibold">شهادة </span>
+        <span class="text-[#0168D1] text-md font-semibold"> مشاركة</span>
+      </div>
+
+      <div class="absolute bottom-12 right-[13rem] z-[4]">
+        <img src="./design-02/التوقيع.png" class="w-[66px] h-[24px] z-[4]" />
+      </div>
+
+      
+      <img
+        src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/working_by_crqvvelo.png"
+        class="w-[159px] h-[35px] absolute top-5 left-5 z-[5]"
+      />
     </main>
   </body>
   <script src="https://cdn.tailwindcss.com"></script>
