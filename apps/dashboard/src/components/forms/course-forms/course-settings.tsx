@@ -41,6 +41,7 @@ interface ComponentProps {
 const formSchema = z.object({
   courseResume: z.string({ required_error: "يرجى ملئ الحقل" }),
   courseDescription: z.any(),
+  sound: z.string(),
   seoDescription: z.string({ required_error: "يرجى ملئ الحقل" }),
   seoTitle: z.string({ required_error: "يرجى ملئ الحقل" }),
   thumnailUrl: z.string({ required_error: "يرجى ملئ الحقل" }),
@@ -73,6 +74,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
       courseRequirements: course.courseRequirements ?? "",
       courseWhatYouWillLearn: course?.courseRequirements ?? "",
       level: course.level,
+      sound: "ARABIC",
       courseDescription: course?.courseDescription
         ? JSON.parse(course?.courseDescription as string)
         : [
@@ -335,6 +337,50 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                           value="ADVANCED"
                         >
                           متقدم
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      هذا الحقل خاص بتحديد الفئة المستهدفة لهذه الدورات
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="sound"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>الصوت في الدورة</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="حدد صوت لعرضه" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem
+                          value="ARABIC"
+                          className="flex items-center justify-end"
+                        >
+                          عربي
+                        </SelectItem>
+                        <SelectItem
+                          className="flex items-center justify-end"
+                          value="FRENSH"
+                        >
+                          فرنسي
+                        </SelectItem>
+                        <SelectItem
+                          className="flex items-center justify-end"
+                          value="ENGLISH"
+                        >
+                          انجليزي
                         </SelectItem>
                       </SelectContent>
                     </Select>
