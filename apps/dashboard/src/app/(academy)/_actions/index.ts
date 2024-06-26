@@ -7,7 +7,9 @@
  */
 
 import { prisma } from "database/src";
-import { Website } from "database";
+import { Course, Website } from "database";
+import { getStudent } from "./auth";
+import { CourseWithEpisode, StudentBag } from "@/src/types";
 
 /**
  * Function to retrieve a specific page based on its path and subdomain.
@@ -15,13 +17,16 @@ import { Website } from "database";
  * @param subdomain The subdomain associated with the website.
  * @returns A Promise that resolves to the retrieved page or null if not found.
  */
-
 /**
  * Function to retrieve all courses associated with a subdomain.
  * @param subdomain The subdomain associated with the website.
- * @returns A Promise that resolves to an array of courses.
+ * @returns A Promise that resolves to an array of courses with current episode information.
  */
-export const getAllCourses = async ({ subdomain }: { subdomain: string }) => {
+export const getAllCourses = async ({
+  subdomain,
+}: {
+  subdomain: string;
+}): Promise<CourseWithEpisode[]> => {
   try {
     const website = await prisma.website.findUnique({
       where: {
@@ -29,28 +34,50 @@ export const getAllCourses = async ({ subdomain }: { subdomain: string }) => {
       },
     });
 
-    const account = await prisma.account.findUnique({
-      where: {
-        id: website?.accountId,
-      },
-    });
+    if (!website) {
+      throw new Error("Website not found for the given subdomain");
+    }
+
+    const [account, student] = await Promise.all([
+      prisma.account.findUnique({
+        where: {
+          id: website.accountId,
+        },
+      }),
+      getStudent(),
+    ]);
 
     if (!account) {
-      throw new Error("there no account linked to this website");
+      throw new Error("No account linked to this website");
     }
+
+    const bag: StudentBag = student
+      ? JSON.parse(student.bag as string)
+      : { courses: [] };
 
     const courses = await prisma.course.findMany({
       where: {
-        accountId: account?.id,
+        accountId: account.id,
       },
     });
 
-    const filteredCourses = courses.filter(
-      (item) => item.status === "PUBLISED"
-    );
+    const filteredCourses = courses
+      .filter((item) => item.status === "PUBLISED")
+      .map((course) => {
+        const studentCourse = bag.courses?.find(
+          (c) => c.course.id === course.id
+        );
+        return {
+          ...course,
+          currentEpisode: studentCourse?.currentEpisode ?? null,
+          owned: studentCourse?.course ? true : false,
+        };
+      });
+
     return filteredCourses;
   } catch (err) {
     console.error(err);
+    throw new Error("Failed to retrieve courses");
   }
 };
 
@@ -137,4 +164,74 @@ export const getChargilyKeys = async ({ subdomain }: { subdomain: string }) => {
     chargilyPublicKey: payments?.chargilyPublicKey,
     chargiySecretKey: payments?.chargilySecretKey,
   };
+};
+
+/**
+ * Function to retrieve all courses associated with a subdomain that the student owns.
+ * @param subdomain The subdomain associated with the website.
+ * @returns A Promise that resolves to an array of courses with current episode information.
+ */
+export const getCoursesStudentOwns = async ({
+  subdomain,
+}: {
+  subdomain: string;
+}): Promise<CourseWithEpisode[]> => {
+  try {
+    const website = await prisma.website.findUnique({
+      where: {
+        subdomain: subdomain,
+      },
+    });
+
+    if (!website) {
+      throw new Error("Website not found for the given subdomain");
+    }
+
+    const [account, student] = await Promise.all([
+      prisma.account.findUnique({
+        where: {
+          id: website.accountId,
+        },
+      }),
+      getStudent(),
+    ]);
+
+    if (!account) {
+      throw new Error("No account linked to this website");
+    }
+
+    if (!student) {
+      throw new Error("No student found");
+    }
+
+    const bag: StudentBag = student
+      ? JSON.parse(student.bag as string)
+      : { courses: [] };
+
+    const studentCourseIds =
+      bag.courses?.map((studentCourse) => studentCourse.course.id) || [];
+
+    const courses = await prisma.course.findMany({
+      where: {
+        accountId: account.id,
+        id: {
+          in: studentCourseIds,
+        },
+        status: "PUBLISHED",
+      },
+    });
+
+    const filteredCourses: CourseWithEpisode[] = courses.map((course) => {
+      const studentCourse = bag.courses?.find((c) => c.course.id === course.id);
+      return {
+        ...course,
+        currentEpisode: studentCourse?.currentEpisode ?? 0,
+      } as CourseWithEpisode;
+    });
+
+    return filteredCourses;
+  } catch (err) {
+    console.error(err);
+    throw new Error("Failed to retrieve courses");
+  }
 };

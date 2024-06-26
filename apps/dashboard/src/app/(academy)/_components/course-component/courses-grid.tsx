@@ -9,9 +9,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { Checkbox } from "@ui/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@ui/components/ui/radio-group";
+import { CourseWithEpisode } from "@/src/types";
 
 interface Props {
-  courses: Course[];
+  courses: CourseWithEpisode[];
   color: string;
 }
 

@@ -12,45 +12,48 @@ import {
 } from "../../../lib";
 import { useTimer } from "react-timer-hook";
 import React from "react";
+import { makePayment } from "../../../_actions/payments";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
-const formatVideoLength = (sizeInBytes) => {
-  const totalSeconds = sizeInBytes / 1000; // Convert bytes to seconds
-  const OurHours = Math.floor(totalSeconds / 3600);
-  const OurMinutes = Math.floor((totalSeconds % 3600) / 60);
-  const OurSeconds = Math.floor(totalSeconds % 60);
-
-  const expiryTimestamp = new Date();
-
-  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 600 * 12);
+const formatVideoLength = (totalSeconds) => {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = Math.floor(totalSeconds % 60);
 
   let formattedTime = "";
-  if (OurHours > 0) {
-    formattedTime += `${OurHours} ساعة و `;
+  if (hours > 0) {
+    formattedTime += `${hours} ساعة و `;
   }
-  if (OurMinutes > 0) {
-    formattedTime += `${OurMinutes} دقيقة و `;
+  if (minutes > 0) {
+    formattedTime += `${minutes} دقيقة و `;
   }
-  formattedTime += `${OurSeconds} ثانية`;
+  formattedTime += `${seconds} ثانية`;
 
   return formattedTime.trim();
 };
-
 // {formatVideoDuration(course.length)}
 
 export const Product_card = ({
   course,
   comments,
   color,
+  subdomain,
 }: {
   course: Course;
   comments: Comment[];
   color: string;
+  subdomain: string;
 }) => {
   const { actions, state } = useAcademiaStore();
 
   const expiryTimestamp = new Date();
 
   const [isFixed, setIsFixed] = React.useState(false);
+
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const router = useRouter();
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -115,26 +118,59 @@ export const Product_card = ({
           </span>{" "}
         </p>
       )}
+      {Number(course.price) > 0 ? (
+        <button
+          data-ripple-light="true"
+          onClick={() => {
+            actions.addItem({
+              type: "COURSE",
+              id: course.id,
+              imageUrl: course.thumbnailUrl,
+              name: course.title,
+              price: course.price.toString(),
+            });
+          }}
+          disabled={state.shoppingBag.length > 0}
+          className="w-full h-12 rounded-lg  text-white flex items-center justify-center border-black disabled:cursor-not-allowed disabled:opacity-[50%]"
+          style={{
+            background: color ?? "#FC6B00",
+          }}
+        >
+          {state.shoppingBag.length > 0 ? "ان السلة ممتلئة" : "اضف الى السلة"}
+        </button>
+      ) : (
+        <button
+          data-ripple-light="true"
+          onClick={async () => {
+            setIsLoading(true);
+            console.log("the funtion is running right know");
+            const url = await makePayment({
+              couponCode: null,
+              courcesId: [course.id],
+              productsId: [],
+              subdomain,
+            });
 
-      <button
-        data-ripple-light="true"
-        onClick={() => {
-          actions.addItem({
-            type: "COURSE",
-            id: course.id,
-            imageUrl: course.thumbnailUrl,
-            name: course.title,
-            price: course.price.toString(),
-          });
-        }}
-        disabled={state.shoppingBag.length > 0}
-        className="w-full h-12 rounded-lg  text-white flex items-center justify-center border-black disabled:cursor-not-allowed disabled:opacity-[50%]"
-        style={{
-          background: color ?? "#FC6B00",
-        }}
-      >
-        {Number(course.price) > 0 ? "اضف الى السلة" : "المطالبة بالدورة"}
-      </button>
+            toast("جاري معالجة الطلب", {
+              icon: "💸",
+              style: {
+                borderRadius: "10px",
+                background: "#333",
+                color: "#fff",
+              },
+            });
+            router.push(url);
+            setIsLoading(false);
+          }}
+          disabled={isLoading}
+          className="w-full h-12 rounded-lg  text-white flex items-center justify-center border-black disabled:cursor-not-allowed disabled:opacity-[50%]"
+          style={{
+            background: color ?? "#FC6B00",
+          }}
+        >
+          {isLoading ? "جاري المعالجة" : "المطالبة بالدورة"}
+        </button>
+      )}
 
       <div
         dir="ltr"

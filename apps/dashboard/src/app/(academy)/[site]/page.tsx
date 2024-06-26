@@ -9,6 +9,7 @@ import AcademiaFooter from "../_components/layout/academy-footer";
 import Banner from "../_components/banner";
 import Suspanded from "../_components/suspanded";
 import Image from "next/image";
+import { Course } from "database";
 
 interface PageProps {
   params: { site: string };

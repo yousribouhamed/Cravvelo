@@ -1,6 +1,5 @@
 "use client";
 
-import { Course } from "database";
 import { BookMarked } from "lucide-react";
 import StarRatings from "react-star-ratings";
 import type { FC } from "react";
@@ -18,9 +17,11 @@ import {
 } from "@ui/components/ui/pagination";
 import React from "react";
 import { ShoppingCart } from "lucide-react";
+import { CourseWithEpisode } from "@/src/types";
+import { Play } from "lucide-react";
 
 interface CoursesReelProps {
-  courses: Course[];
+  courses: CourseWithEpisode[];
   color: string;
 }
 
@@ -116,22 +117,39 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
                 )}
 
                 <div className="w-full h-[70px] flex items-center justify-center gap-x-4 pt-2 p-4">
-                  <button
-                    onClick={() => {
-                      handleRouting({ id: item.id });
-                    }}
-                    className="w-[99%]  text-white p-2 h-[45px] rounded-lg"
-                    style={{
-                      background: color ?? "#FC6B00",
-                    }}
-                  >
-                    {Number(item.price) === 0
-                      ? "المطالبة بالدورة"
-                      : "اشتري الآن"}
-                  </button>
-                  <button className="w-[60px]  h-[45px]  rounded-lg bg-secondary flex items-center justify-center cursor-pointer ">
-                    <ShoppingCart className="w-4 h-4 text-black" />
-                  </button>
+                  {item.owned ? (
+                    <button
+                      className="w-[99%]  text-white p-2 h-[45px] flex items-center justify-center gap-x-2 rounded-lg"
+                      style={{
+                        background: color ?? "#FC6B00",
+                      }}
+                    >
+                      <Play
+                        className="w-4 h-4 text-white ml-2"
+                        strokeWidth={3}
+                      />
+                      المشاهدة الان
+                    </button>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => {
+                          handleRouting({ id: item.id });
+                        }}
+                        className="w-[99%]  text-white p-2 h-[45px] rounded-lg"
+                        style={{
+                          background: color ?? "#FC6B00",
+                        }}
+                      >
+                        {Number(item.price) === 0
+                          ? "المطالبة بالدورة"
+                          : "اشتري الآن"}
+                      </button>
+                      <button className="w-[60px]  h-[45px]  rounded-lg bg-secondary flex items-center justify-center cursor-pointer ">
+                        <ShoppingCart className="w-4 h-4 text-black" />
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             );

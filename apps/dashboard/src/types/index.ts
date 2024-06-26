@@ -142,3 +142,38 @@ export interface DataTableFilterableColumn<TData>
   extends DataTableSearchableColumn<TData> {
   options: Option[];
 }
+
+export interface CourseWithEpisode {
+  id: string;
+  rating: number;
+  accountId: string;
+  title: string;
+  courseUrl?: string | null;
+  youtubeUrl?: string | null;
+  thumbnailUrl?: string | null;
+  courseResume?: string | null;
+  courseRequirements?: string | null;
+  courseWhatYouWillLearn?: string | null;
+  courseDescription?: any; // Adjust the type if you have a specific structure
+  seoTitle?: string | null;
+  seoDescription?: string | null;
+  price?: number | null;
+  compareAtPrice?: number | null;
+  studentsNbr?: number | null;
+  preview_video?: string | null;
+  profit?: string | null;
+  length: number;
+  nbrChapters: number;
+  status: string;
+  trainers?: string | null;
+  suspended: boolean;
+  level: string;
+  allowComment: boolean;
+  allowRating: boolean;
+  forceWatchAllCourse: boolean;
+  certificate: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  currentEpisode: number | null;
+  owned: boolean;
+}

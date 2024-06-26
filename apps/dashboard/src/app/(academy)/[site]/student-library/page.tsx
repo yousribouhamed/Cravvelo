@@ -1,15 +1,13 @@
 import React from "react";
 import LibraryNavigation from "../../_components/library-navigation";
-import { authorization, getStudent } from "../../_actions/auth";
-import { StudentBag } from "@/src/types";
+import { getStudent } from "../../_actions/auth";
 import AcademyHeader from "../../_components/layout/academy-header";
 import MaxWidthWrapper from "../../_components/max-width-wrapper";
 import { getSubDomainValue } from "../../lib";
-import { getSiteData } from "../../_actions";
+import { getCoursesStudentOwns, getSiteData } from "../../_actions";
 import AcademiaFooter from "../../_components/layout/academy-footer";
 import { notFound, redirect } from "next/navigation";
 import { Progress } from "@ui/components/ui/progress";
-
 import { BookMarked } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -30,9 +28,12 @@ function calculateProgress(episode: number, videos: number): number {
 const Page = async ({ params }: PageProps) => {
   const subdomain = getSubDomainValue({ value: params.site });
 
-  const [student, website] = await Promise.all([
+  const [student, website, courses] = await Promise.all([
     getStudent(),
     getSiteData({
+      subdomain,
+    }),
+    getCoursesStudentOwns({
       subdomain,
     }),
   ]);
@@ -44,8 +45,6 @@ const Page = async ({ params }: PageProps) => {
   if (!student) {
     redirect("/");
   }
-
-  const bag = JSON.parse(student.bag as string) as StudentBag;
 
   return (
     <>
@@ -64,7 +63,7 @@ const Page = async ({ params }: PageProps) => {
           </div>
           <LibraryNavigation />
           <div className="w-full h-full flex flex-wrap gap-6 my-8">
-            {Array.isArray(bag?.courses) && bag?.courses?.length === 0 && (
+            {courses?.length === 0 && (
               <div className="w-full h-[300px] flex flex-col gap-y-2 items-center justify-center">
                 <Image
                   src="/academia/no-video.svg"
@@ -76,21 +75,21 @@ const Page = async ({ params }: PageProps) => {
                 <p className="text-xl font-bold">لا يوجد اي كورسات</p>
               </div>
             )}
-            {bag?.courses?.map((item, index) => {
+            {courses?.map((item, index) => {
               return (
                 <Link
-                  href={`/course-academy/${item.course.id}/course-player`}
-                  key={item.course.title + index}
+                  href={`/course-academy/${item.id}/course-player`}
+                  key={item.title + index}
                 >
                   <div className="w-[320px] min-h-[300px] h-fit p-0  border  flex flex-col shadow rounded-xl hover:shadow-xl  transition-all duration-700 bg-white cursor-pointer ">
                     <img
-                      alt={item.course.title + "image"}
-                      src={item.course.thumbnailUrl}
+                      alt={item.title + "image"}
+                      src={item.thumbnailUrl}
                       className="w-full h-[200px] rounded-t-xl object-cover "
                     />
                     <div className="w-full h-[50px] px-4 flex items-center justify-between my-4">
                       <h2 className="text-black  text-lg text-start ">
-                        {item.course.title}
+                        {item.title}
                       </h2>
                     </div>
                     {/* this will hold the stars */}
@@ -98,7 +97,7 @@ const Page = async ({ params }: PageProps) => {
                       <div className="w-[50%] h-[20px] flex items-center justify-start gap-x-2">
                         <BookMarked className="w-4 h-4 text-gray-500" />
                         <span className="text-gray-500  text-sm text-start ">
-                          {item.course.nbrChapters} مادة
+                          {item.nbrChapters} مادة
                         </span>
                       </div>
                     </div>
@@ -109,7 +108,7 @@ const Page = async ({ params }: PageProps) => {
                       <span className="text-lg text-gray-600">
                         {calculateProgress(
                           item?.currentEpisode,
-                          item.course?.nbrChapters
+                          item?.nbrChapters
                         )}
                         %
                       </span>
@@ -117,7 +116,7 @@ const Page = async ({ params }: PageProps) => {
                         color={website?.color}
                         value={calculateProgress(
                           item?.currentEpisode,
-                          item.course?.nbrChapters
+                          item?.nbrChapters
                         )}
                       />
                     </div>

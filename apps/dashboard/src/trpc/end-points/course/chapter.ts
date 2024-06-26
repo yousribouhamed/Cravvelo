@@ -191,11 +191,6 @@ export const chapter = {
         input.fileUrl,
         process.env["NEXT_PUBLIC_BUNNY_API_KEY"]
       );
-      console.log("this is the file url");
-      console.log(input.fileUrl);
-
-      console.log("this is the data we get from bunny");
-      console.log(videoLength);
 
       console.log("this is the input we are passing");
       console.log({

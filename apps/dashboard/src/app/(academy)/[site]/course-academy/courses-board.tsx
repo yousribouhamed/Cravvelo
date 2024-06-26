@@ -6,10 +6,11 @@ import CoursesGrid from "../../_components/course-component/courses-grid";
 import { Course, Website } from "database";
 import { useQuery } from "@tanstack/react-query";
 import { getCoursesButFiltered } from "../../_actions/course";
+import { CourseWithEpisode } from "@/src/types";
 
 interface CoursesBoardProps {
   website: Website;
-  courses: Course[];
+  courses: CourseWithEpisode[];
 }
 
 const AVAILABLE_FILTER_VALUES = {
@@ -25,7 +26,7 @@ type Tfilter = {
 };
 
 const CoursesBoard: FC<CoursesBoardProps> = ({ courses, website }) => {
-  const [data, setData] = useState<Course[]>(courses);
+  const [data, setData] = useState<CourseWithEpisode[]>(courses);
 
   const [filterState, setFilterState] = useState<Tfilter>({
     level: AVAILABLE_FILTER_VALUES.level,

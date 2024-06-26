@@ -105,6 +105,7 @@ const Page = async ({ params }: PageProps) => {
             />
           </div>
           <Product_card
+            subdomain={website.subdomain}
             comments={comments}
             color={website?.color}
             course={course}
