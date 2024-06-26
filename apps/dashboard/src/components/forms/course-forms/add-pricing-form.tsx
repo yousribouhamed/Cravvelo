@@ -44,7 +44,7 @@ function AddPricingForm({ course }: AddPricingFormProps) {
   const router = useRouter();
   const path = usePathname();
   const courseId = getValueFromUrl(path, 2);
-  const [isFree, setIsFree] = useState(false);
+  const [isFree, setIsFree] = useState(course?.price === 0 ? true : false);
   const mutation = trpc.priceCourse.useMutation({
     onSuccess: () => {
       maketoast.success();
@@ -70,8 +70,8 @@ function AddPricingForm({ course }: AddPricingFormProps) {
     // check if the price is begger then 100
     await mutation.mutateAsync({
       courseId,
-      price: Number(values.price),
-      compairAtPrice: Number(values.compareAtPrice),
+      price: isFree ? 0 : Number(values.price),
+      compairAtPrice: isFree ? 0 : Number(values.compareAtPrice),
     });
   }
 

@@ -183,7 +183,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 )}
               />
 
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="preview_video"
                 render={({ field }) => (
@@ -200,7 +200,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
 
               <FormField
                 control={form.control}
@@ -208,7 +208,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      ▶️ أو يمكنك إضافة عنوان URL لفيديو يوتيوب
+                      أو يمكنك إضافة عنوان URL لفيديو يوتيوب
                     </FormLabel>
                     <FormControl>
                       <Input placeholder="https://youtu.be/" {...field} />
