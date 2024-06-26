@@ -6,6 +6,7 @@ import { ar } from "date-fns/locale";
 
 import { maketoast } from "../components/toasts";
 import { Metadata } from "next";
+import axios from "axios";
 
 export function absoluteUrl(path: string) {
   if (typeof window !== "undefined") return path;
@@ -307,4 +308,48 @@ export function getEmbedUrl({ url }) {
     // Return a default or fallback embed URL if the video ID is not found
     return `https://youtu.be/sc-FApGZXB0?si=DpPpTpCTdyL1qD13`;
   }
+}
+
+export async function getVideoLength(
+  videoLibrary,
+  fileUrl,
+  apiKey,
+  maxRetries = 5,
+  delay = 2000
+) {
+  let retries = 0;
+  let videoLength = 0;
+
+  while (retries < maxRetries) {
+    try {
+      const { data } = await axios.get(
+        `https://video.bunnycdn.com/library/${videoLibrary}/videos/${fileUrl}`,
+        {
+          headers: {
+            "Content-Type": "application/octet-stream",
+            AccessKey: apiKey,
+          },
+        }
+      );
+
+      videoLength = data?.length;
+
+      if (videoLength && videoLength > 0) {
+        return videoLength;
+      } else {
+        // Log the attempt and length
+        console.log(
+          `Attempt ${retries + 1}: Video length is ${videoLength}. Retrying...`
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching video length:", error);
+      // Optionally, you can handle specific error types here (e.g., network issues)
+    }
+
+    retries++;
+    await new Promise((resolve) => setTimeout(resolve, delay)); // Wait for a bit before retrying
+  }
+
+  throw new Error(`Failed to fetch video length after ${maxRetries} attempts`);
 }

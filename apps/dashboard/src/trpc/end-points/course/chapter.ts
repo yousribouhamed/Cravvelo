@@ -5,6 +5,7 @@ import { Module } from "@/src/types";
 import type { Chapter } from "database";
 import axios from "axios";
 import { prisma } from "database/src";
+import { getVideoLength } from "@/src/lib/utils";
 
 export const chapter = {
   createChapter: privateProcedure
@@ -175,20 +176,26 @@ export const chapter = {
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const { data } = await axios.get(
-        `https://video.bunnycdn.com/library/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/videos/${input.fileUrl}`,
-        {
-          headers: {
-            "Content-Type": "application/octet-stream",
-            AccessKey: process.env["NEXT_PUBLIC_BUNNY_API_KEY"],
-          },
-        }
+      // const { data } = await axios.get(
+      //   `https://video.bunnycdn.com/library/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/videos/${input.fileUrl}`,
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/octet-stream",
+      //       AccessKey: process.env["NEXT_PUBLIC_BUNNY_API_KEY"],
+      //     },
+      //   }
+      // );
+
+      const videoLength = await getVideoLength(
+        process.env["NEXT_PUBLIC_VIDEO_LIBRARY"],
+        input.fileUrl,
+        process.env["NEXT_PUBLIC_BUNNY_API_KEY"]
       );
       console.log("this is the file url");
       console.log(input.fileUrl);
 
       console.log("this is the data we get from bunny");
-      console.log(data);
+      console.log(videoLength);
 
       console.log("this is the input we are passing");
       console.log({
@@ -213,7 +220,7 @@ export const chapter = {
         ...modules,
         {
           content: input.content,
-          length: data?.length,
+          length: videoLength,
           fileType: input.fileType,
           fileUrl: input.fileUrl,
           orderNumber: modules.length + 1,
@@ -247,7 +254,7 @@ export const chapter = {
           id: chapter.courseID,
         },
         data: {
-          length: data?.length + courseOldData.length,
+          length: videoLength + courseOldData.length,
           nbrChapters: 1 + courseOldData.nbrChapters,
         },
       });
@@ -267,14 +274,20 @@ export const chapter = {
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const { data } = await axios.get(
-          `https://video.bunnycdn.com/library/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/videos/${input.fileUrl}`,
-          {
-            headers: {
-              "Content-Type": "application/octet-stream",
-              AccessKey: process.env["NEXT_PUBLIC_BUNNY_API_KEY"],
-            },
-          }
+        // const { data } = await axios.get(
+        //   `https://video.bunnycdn.com/library/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/videos/${input.fileUrl}`,
+        //   {
+        //     headers: {
+        //       "Content-Type": "application/octet-stream",
+        //       AccessKey: process.env["NEXT_PUBLIC_BUNNY_API_KEY"],
+        //     },
+        //   }
+        // );
+
+        const videoLength = await getVideoLength(
+          process.env["NEXT_PUBLIC_VIDEO_LIBRARY"],
+          input.fileUrl,
+          process.env["NEXT_PUBLIC_BUNNY_API_KEY"]
         );
 
         const targetChapter = await ctx.prisma.chapter.findFirst({
@@ -300,7 +313,7 @@ export const chapter = {
           orderNumber: targetMaterial.orderNumber,
           fileType: targetMaterial.fileType,
           title: input.title,
-          length: data?.length,
+          length: videoLength,
         } as Module;
 
         const newMaterials = oldMaterials.filter(
