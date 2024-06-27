@@ -1,5 +1,5 @@
 "use client";
-import { DataTable } from "@/src/components/data-table";
+
 import { Certificate } from "database";
 import type { FC } from "react";
 import { trpc } from "@/src/app/_trpc/client";
@@ -8,6 +8,7 @@ import { useMounted } from "@/src/hooks/use-mounted";
 import { DataTableLoading } from "@/src/components/data-table/table-loading";
 import DeleteCourseModel from "@/src/components/models/delete-course-modal";
 import { CertificateDataTable } from "@/src/components/data-table/certificate-table";
+import DeleteCertificateModel from "@/src/components/models/delete-certificate.modal";
 
 interface TableShellProps {
   initialData: Certificate[];
@@ -27,7 +28,7 @@ const CertificateTableShell: FC<TableShellProps> = ({ initialData }) => {
   console.log(data);
   return (
     <div className="w-full min-h-[300px] my-4 h-fit flex flex-col ">
-      <DeleteCourseModel refetch={refetch} />
+      <DeleteCertificateModel refetch={refetch} />
       <CertificateDataTable
         columns={CertificateColumns}
         data={data}

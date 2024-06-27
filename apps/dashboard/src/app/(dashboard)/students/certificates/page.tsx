@@ -12,7 +12,7 @@ async function getData({
 }): Promise<Certificate[]> {
   const data = await prisma.certificate.findMany({
     where: {
-      accountId 
+      accountId,
     },
   });
   return data;
@@ -42,7 +42,12 @@ const Page = async ({}) => {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
-        <Header notifications={notifications} user={user} title="الشهادات" />
+        <Header
+          goBack
+          notifications={notifications}
+          user={user}
+          title="الشهادات"
+        />
         <CertificateTableShell initialData={data} />
       </main>
     </MaxWidthWrapper>

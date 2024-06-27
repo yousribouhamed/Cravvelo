@@ -20,3 +20,10 @@ export const useOpenCourseDeleteAction = create<StateShape>()((set) => ({
   setId: (val: string) => set({ id: val }),
   setIsOpen: (open: boolean) => set({ open: open }),
 }));
+
+export const useOpenCertificateDeleteAction = create<StateShape>()((set) => ({
+  id: null,
+  open: false,
+  setId: (val: string) => set({ id: val }),
+  setIsOpen: (open: boolean) => set({ open: open }),
+}));

@@ -250,7 +250,7 @@ function CertificateForm({ students }: CertificateProps) {
                       ) : (
                         <Hammer className="text-white w-4 h-4" />
                       )}
-                      حفظ والمتابعة
+                      بناء الشهادة
                     </Button>
                   </div>
                 </form>

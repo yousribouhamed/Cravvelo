@@ -9,7 +9,11 @@ import { designO3 } from "./certificate-templates/design-03";
 
 export const cetificate = {
   getAllCertificates: privateProcedure.query(async ({ ctx }) => {
-    const allCertificates = await ctx.prisma.certificate.findMany();
+    const allCertificates = await ctx.prisma.certificate.findMany({
+      where: {
+        accountId: ctx.account.id,
+      },
+    });
     return allCertificates;
   }),
 
@@ -93,5 +97,25 @@ export const cetificate = {
       });
 
       return newCertificate;
+    }),
+
+  deleteCertificate: privateProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const course = await ctx.prisma.certificate.delete({
+          where: {
+            id: input.id,
+          },
+        });
+
+        return course;
+      } catch (err) {
+        console.error(err);
+      }
     }),
 };
