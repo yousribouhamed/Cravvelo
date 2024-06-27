@@ -7,8 +7,6 @@ import * as React from "react";
 import { Tabs } from "@/src/components/animations/animated-tabs";
 import Image from "next/image";
 
-import { useRouter } from "next/navigation";
-
 const DISPLAY_VALUES = {
   monthly: "MONTHLY",
   yearly: "YEARLY",

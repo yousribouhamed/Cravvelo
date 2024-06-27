@@ -32,42 +32,22 @@ const UpgradeButton: FC = ({}) => {
 
   return (
     <div className="w-full min-h-[1000px] h-fit my-4">
-      <div className="w-full min-h-[150px] h-fit  flex justify-center items-start pt-8 pl-48 ">
-        <div className="w-[200px] h-[50px]   flex items-center justify-start">
-          <span className="text-[#FC6B00] text-2xl font-bold">وفر 20٪</span>
-        </div>
-        <div className="bg-white rounded-full transition-all duration-150 relative shadow-2xl w-fit h-[60px] flex items-center gap-x-4 justify-between p-4">
-          <Tabs
-            setPaymentType={setIsPaymentByMonth}
-            activeTabClassName={"bg-[#FC6B00] text-white"}
-            // containerClassName={`w-full h-full`}
-            tabs={[
-              {
-                title: "سنوي",
-                value: DISPLAY_VALUES.yearly,
-              },
-              {
-                title: "  شهري",
-                value: DISPLAY_VALUES.monthly,
-              },
-            ]}
-          />
-
-          <div className="absolute right-[-118px] -bottom-5">
-            <svg
-              width="114"
-              height="45"
-              viewBox="0 0 114 45"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M0 25.75L3.81084 35.6249L10.4574 27.3872L0 25.75ZM111.901 0.654144C107.185 12.2311 92.5022 28.0965 73.1539 36.8122C53.8678 45.5 30.0584 47.0378 6.96571 30.1938L5.88533 31.6749C29.6138 48.9828 54.1463 47.3852 73.9069 38.4838C93.6055 29.6102 108.675 13.4324 113.599 1.34586L111.901 0.654144Z"
-                fill="#0B2110"
-              />
-            </svg>
-          </div>
-        </div>
+      <div className="w-[250px] h-[50px] bg-white  shadow-2xl rounded-full mx-auto  mt-6 mb-10 md:mb-20">
+        <Tabs
+          setPaymentType={setIsPaymentByMonth}
+          activeTabClassName={"bg-[#FC6B00] text-white "}
+          // containerClassName={`w-full h-full`}
+          tabs={[
+            {
+              title: "سنوي ",
+              value: DISPLAY_VALUES.yearly,
+            },
+            {
+              title: "  شهري",
+              value: DISPLAY_VALUES.monthly,
+            },
+          ]}
+        />
       </div>
 
       <div className="w-full h-fit   max-w-6xl mx-auto min-h-[800px] grid grid-cols-3 gap-10 ">

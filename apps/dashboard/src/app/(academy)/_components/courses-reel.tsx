@@ -52,7 +52,7 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
     <div className="w-full min-h-[400px] h-fit flex flex-col items-center p-4 gap-y-4">
       <div className="w-full h-[50px] flex items-center justify-between">
         <h2 className="text-3xl  font-bold text-zinc-900 text-start">
-          الدورات البارزة
+          الدورات
         </h2>
       </div>
       <div className="w-full min-h-[200px] h-fit flex items-start justify-center gap-8 flex-wrap">
@@ -118,18 +118,20 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
 
                 <div className="w-full h-[70px] flex items-center justify-center gap-x-4 pt-2 p-4">
                   {item.owned ? (
-                    <button
-                      className="w-[99%]  text-white p-2 h-[45px] flex items-center justify-center gap-x-2 rounded-lg"
-                      style={{
-                        background: color ?? "#FC6B00",
-                      }}
-                    >
-                      <Play
-                        className="w-4 h-4 text-white ml-2"
-                        strokeWidth={3}
-                      />
-                      المشاهدة الان
-                    </button>
+                    <Link href={`/course-academy/${item.id}/course-player`}>
+                      <button
+                        className="w-[99%]  text-white p-2 h-[45px] flex items-center justify-center gap-x-2 rounded-lg"
+                        style={{
+                          background: color ?? "#FC6B00",
+                        }}
+                      >
+                        <Play
+                          className="w-4 h-4 text-white ml-2"
+                          strokeWidth={3}
+                        />
+                        المشاهدة الان
+                      </button>
+                    </Link>
                   ) : (
                     <>
                       <button

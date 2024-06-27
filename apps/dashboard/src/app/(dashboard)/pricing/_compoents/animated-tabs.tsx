@@ -42,7 +42,7 @@ export const Tabs = ({
     <>
       <div
         className={cn(
-          "flex flex-row items-center justify-start [perspective:1000px] relative overflow-auto sm:overflow-visible no-visible-scrollbar max-w-full w-full",
+          "flex  items-center justify-center   relative overflow-auto sm:overflow-visible no-visible-scrollbar  rounded-2xl  h-full w-full ",
           containerClassName
         )}
       >
@@ -59,7 +59,14 @@ export const Tabs = ({
             }}
             onMouseEnter={() => setHovering(true)}
             onMouseLeave={() => setHovering(false)}
-            className={cn("relative px-4 py-2 rounded-full", tabClassName)}
+            className={cn(
+              `relative px-6  py-2 rounded-full  ${
+                tab.value === "YEARLY"
+                  ? "w-fit flex items-center justify-center gap-x-1"
+                  : ""
+              }`,
+              tabClassName
+            )}
             style={{
               transformStyle: "preserve-3d",
             }}
@@ -75,10 +82,22 @@ export const Tabs = ({
               />
             )}
 
+            {tab.value === "YEARLY" && (
+              <span
+                className={` block z-[99] rounded-xl px-2   ${
+                  active.value === tab.value
+                    ? "text-primary bg-white"
+                    : "text-white bg-primary"
+                }`}
+              >
+                {" "}
+                40%{" "}
+              </span>
+            )}
             <span
               className={`relative block   ${
                 active.value === tab.value ? "text-white" : "text-black"
-              }`}
+              } `}
             >
               {tab.title}
             </span>
