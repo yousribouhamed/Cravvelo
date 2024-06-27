@@ -34,6 +34,9 @@ import {
 import { NewVideoUploader } from "../../uploaders/NewVideoUploader";
 import { ImageUploaderS3 } from "../../uploaders/image-uploader";
 
+const youtubeUrlRegex =
+  /^(https:\/\/www\.youtube\.com\/watch\?v=|https:\/\/youtu\.be\/)[\w-]+(&\S*)?(\?\S*)?$/;
+
 interface ComponentProps {
   course: Course;
 }
@@ -46,7 +49,16 @@ const formSchema = z.object({
   seoTitle: z.string({ required_error: "يرجى ملئ الحقل" }),
   thumnailUrl: z.string({ required_error: "يرجى ملئ الحقل" }),
   title: z.string({ required_error: "يرجى ملئ الحقل" }),
-  youtubeUrl: z.string().optional(),
+  youtubeUrl: z
+    .string()
+    .optional()
+    .refine(
+      (val) => {
+        if (!val) return true; // if the value is empty or undefined, it is valid since it is optional
+        return youtubeUrlRegex.test(val);
+      },
+      { message: "يرجى إدخال رابط يوتيوب صالح" }
+    ),
   courseRequirements: z.string({ required_error: "يرجى ملئ الحقل" }),
   courseWhatYouWillLearn: z.string({ required_error: "يرجى ملئ الحقل" }),
   level: z.string({ required_error: "يرجى ملئ الحقل" }),
