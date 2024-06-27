@@ -8,6 +8,7 @@ import Link from "next/link";
 import { buttonVariants } from "@ui/components/ui/button";
 import Ripples from "react-ripples";
 import { ListChecks } from "lucide-react";
+import { Eye } from "lucide-react";
 
 interface CompleteCourseProps {
   progress: number;
@@ -69,7 +70,7 @@ const CompleteCourse: FC<CompleteCourseProps> = ({
             {loading ? (
               <Loader className="w-4 h-4 ml-2 animate-spin" />
             ) : (
-              <ListChecks className="w-4 h-4 ml-2" />
+              <Eye className="w-4 h-4 ml-2" />
             )}
             توثيق اكمال المشاهدة
           </button>

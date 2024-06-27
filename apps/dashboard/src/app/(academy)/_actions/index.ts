@@ -217,7 +217,7 @@ export const getCoursesStudentOwns = async ({
         id: {
           in: studentCourseIds,
         },
-        status: "PUBLISHED",
+        status: "PUBLISED",
       },
     });
 

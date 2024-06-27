@@ -46,6 +46,9 @@ const Page = async ({ params }: PageProps) => {
     redirect("/");
   }
 
+  console.log("these are all the courses");
+  console.log(courses);
+
   return (
     <>
       <AcademyHeader
