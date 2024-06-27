@@ -54,7 +54,7 @@ const SecureContent: FC = ({}) => {
             height={400}
           />
 
-          <div className="w-[250px] h-[50px] bg-white rounded-full shadow-2xl px-4 gap-x-2 flex items-center justify-start ml-[300px] lg:ml-[500px] z-[80]">
+          <div className="min-w-[250px] w-fit min-h-[50px] h-fit bg-white rounded-full shadow-2xl px-2 gap-x-2 flex items-center justify-start ml-[300px] lg:ml-[500px] z-[80]">
             <Image
               loading="eager"
               alt="something"
@@ -66,7 +66,7 @@ const SecureContent: FC = ({}) => {
             <span className="text-lg font-bold">تعطيل نسخ النص</span>
           </div>
 
-          <div className="w-[390px] mt-[70px] ml-[50px] lg:ml-[200px] h-[50px] bg-white rounded-full shadow-2xl px-2 gap-x-2 flex items-center justify-start z-[80]">
+          <div className="min-w-[390px] w-fit mt-[70px] ml-[50px] lg:ml-[200px] min-h-[50px] h-fit bg-white rounded-full shadow-2xl px-2 gap-x-2 flex items-center justify-start z-[80]">
             <Image
               loading="eager"
               alt="something"
@@ -74,7 +74,7 @@ const SecureContent: FC = ({}) => {
               width={60}
               height={60}
             />
-            <span className="text-lg font-bold">
+            <span className="text-lg font-bold ">
               تقييد تسجيل الدخول من جهاز واحد
             </span>
           </div>
