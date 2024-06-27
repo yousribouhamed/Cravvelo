@@ -28,8 +28,18 @@ interface CoursesReelProps {
 const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
   const router = useRouter();
 
-  const handleRouting = ({ id }: { id: string }) => {
-    router.push(`/course-academy/${id}`);
+  const handleRouting = ({
+    id,
+    direction = "LANDING",
+  }: {
+    id: string;
+    direction?: "PLAYER" | "LANDING";
+  }) => {
+    if (direction === "LANDING") {
+      router.push(`/course-academy/${id}`);
+      return;
+    }
+    router.push(`/course-academy/${id}/course-player`);
   };
 
   // State to keep track of current page
@@ -60,7 +70,12 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
           currentItems?.map((item, index) => {
             return (
               <div
-                onClick={() => handleRouting({ id: item.id })}
+                onClick={() =>
+                  handleRouting({
+                    id: item.id,
+                    direction: item.owned ? "PLAYER" : "LANDING",
+                  })
+                }
                 key={item.title + index}
                 className="w-[320px] h-[450px] bg-white   flex flex-col border rounded-xl  transition-all shadow  duration-700 cursor-pointer hover:-translate-y-2  "
               >
@@ -118,26 +133,21 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
 
                 <div className="w-full h-[70px] flex items-center justify-center gap-x-4 pt-2 p-4">
                   {item.owned ? (
-                    <Link href={`/course-academy/${item.id}/course-player`}>
-                      <button
-                        className="w-[99%]  text-white p-2 h-[45px] flex items-center justify-center gap-x-2 rounded-lg"
-                        style={{
-                          background: color ?? "#FC6B00",
-                        }}
-                      >
-                        <Play
-                          className="w-4 h-4 text-white ml-2"
-                          strokeWidth={3}
-                        />
-                        المشاهدة الان
-                      </button>
-                    </Link>
+                    <button
+                      className="w-[99%]  text-white p-2 h-[45px] flex items-center justify-center gap-x-2 rounded-lg"
+                      style={{
+                        background: color ?? "#FC6B00",
+                      }}
+                    >
+                      <Play
+                        className="w-4 h-4 text-white ml-2"
+                        strokeWidth={3}
+                      />
+                      المشاهدة الان
+                    </button>
                   ) : (
                     <>
                       <button
-                        onClick={() => {
-                          handleRouting({ id: item.id });
-                        }}
                         className="w-[99%]  text-white p-2 h-[45px] rounded-lg"
                         style={{
                           background: color ?? "#FC6B00",
