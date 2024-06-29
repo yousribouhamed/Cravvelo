@@ -1,7 +1,10 @@
 "use client";
 
 import { AlertCircle, CheckCircle2, XCircle } from "lucide-react";
-import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import {
+  LoadingSpinner,
+  OrangeLoadingSpinner,
+} from "@ui/icons/loading-spinner";
 import { useDomainStatus } from "../hooks/use-domain-status";
 import {
   DomainResponse,
@@ -48,7 +51,7 @@ export default function DomainStatus({ domain }: { domain: string }) {
   }, [domain]); // Empty dependency array to run the effect only once on mount
 
   return loading ? (
-    <LoadingSpinner />
+    <OrangeLoadingSpinner />
   ) : status === "Valid Configuration" ? (
     <CheckCircle2
       fill="#2563EB"

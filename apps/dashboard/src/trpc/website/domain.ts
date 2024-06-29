@@ -73,10 +73,10 @@ export const domain = {
         where: { accountId: account.id },
       });
 
-      if (input.customdomain.includes("jadir.vercel.app")) {
+      if (input.customdomain.includes("cravvelo.com")) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Cannot use vercel.pub subdomain as your custom domain",
+          message: "Cannot use cravvelo.com subdomain as your custom domain",
         });
 
         // if the custom domain is valid, we need to add it to Vercel
@@ -92,7 +92,7 @@ export const domain = {
         await Promise.all([
           addDomainToVercel(input.customdomain),
           // Optional: add www subdomain as well and redirect to apex domain
-          addDomainToVercel(`www.${input.customdomain}`),
+          // addDomainToVercel(`www.${input.customdomain}`),
         ]);
 
         console.log("this is the domains are added to vercel");
