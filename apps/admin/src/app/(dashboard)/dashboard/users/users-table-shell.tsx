@@ -25,7 +25,7 @@ const UsersTableShell: FC<CoursesTableShellProps> = ({ initialData }) => {
 
   return (
     <>
-      <BlackKing />
+      <BlackKing refetch={refetch} />
       <div className="w-full min-h-[300px] h-fit flex flex-col ">
         <DataTable columns={AccountColumns} data={data} />
       </div>
