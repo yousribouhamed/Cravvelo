@@ -27,10 +27,7 @@ import { useRouter } from "next/navigation";
 import { useSignIn } from "@clerk/nextjs";
 import { authSchemaLogin } from "@/src/lib/validators/auth";
 import { catchClerkError } from "@/src/lib/utils";
-import { Icons } from "../my-icons";
-import { toast } from "@ui/lib/utils";
 import { OAuthSignIn } from "../auth/oauth-signin";
-import { maketoast } from "../toasts";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import Image from "next/image";
 
@@ -48,9 +45,7 @@ export function SignInForm() {
     },
   });
 
-  // 2. Define a submit handler.
   async function onSubmit(data: z.infer<typeof authSchemaLogin>) {
-    console.log(data);
     if (!isLoaded) {
       return;
     }

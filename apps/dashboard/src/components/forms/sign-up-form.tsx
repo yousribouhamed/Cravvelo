@@ -39,10 +39,8 @@ type Inputs = z.infer<typeof authSchema>;
 export function SignUpForm() {
   const { isLoaded, signUp } = useSignUp();
   const router = useRouter();
-  const [isPending, startTransition] = React.useTransition();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  // react-hook-form
   const form = useForm<Inputs>({
     resolver: zodResolver(authSchema),
     defaultValues: {
@@ -51,36 +49,33 @@ export function SignUpForm() {
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(data: z.infer<typeof authSchema>) {
+  async function onSubmit(data: z.infer<typeof authSchema>) {
     if (!isLoaded) return;
 
-    startTransition(async () => {
-      try {
-        setIsLoading(true);
-        await signUp.create({
-          emailAddress: data.email,
-          password: data.password,
-          // firstName: data.firstName,
-        });
+    try {
+      setIsLoading(true);
+      await signUp.create({
+        emailAddress: data.email,
+        password: data.password,
+        // firstName: data.firstName,
+      });
 
-        // Send email verification code
-        await signUp.prepareEmailAddressVerification({
-          strategy: "email_code",
-        });
+      // Send email verification code
+      await signUp.prepareEmailAddressVerification({
+        strategy: "email_code",
+      });
 
-        router.push("/sign-up/verify-email");
+      router.push("/sign-up/verify-email");
 
-        toast.success("Check your email", {
-          description: "We sent you a 6-digit verification code",
-        });
-      } catch (err) {
-        catchClerkError(err);
-        console.log(err);
-      } finally {
-        setIsLoading(false);
-      }
-    });
+      toast.success("Check your email", {
+        description: "We sent you a 6-digit verification code",
+      });
+    } catch (err) {
+      catchClerkError(err);
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (

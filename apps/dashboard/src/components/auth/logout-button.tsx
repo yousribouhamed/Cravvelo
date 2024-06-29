@@ -11,7 +11,6 @@ import { LogOut } from "lucide-react";
 const LogoutButton: FC = ({}) => {
   const router = useRouter();
   const mounted = useMounted();
-  const [isPending, startTransition] = React.useTransition();
 
   if (!mounted) {
     return (
