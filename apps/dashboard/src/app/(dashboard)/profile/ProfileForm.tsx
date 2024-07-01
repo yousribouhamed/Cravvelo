@@ -60,7 +60,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account }) => {
     defaultValues: {
       full_name: account.user_name,
       bio: account.user_bio,
-      email: "",
+      email: account.support_email,
       phone: account.phone ? account.phone?.toString() : "",
     },
   });
@@ -104,6 +104,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account }) => {
         await mutation.mutateAsync({
           avatarUrl: success.url.split("?")[0],
           user_bio: values.bio,
+          support_email: values.email,
           user_name: values.full_name,
           phoneNumber: Number(values.phone),
         });
@@ -113,6 +114,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account }) => {
           avatarUrl: "",
           user_bio: values.bio,
           user_name: values.full_name,
+          support_email: values.email,
           phoneNumber: Number(values.phone),
         });
         setLoading(false);

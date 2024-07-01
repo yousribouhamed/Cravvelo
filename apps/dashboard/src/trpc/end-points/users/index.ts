@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { publicProcedure, privateProcedure } from "../../trpc";
+import { privateProcedure } from "../../trpc";
 import { prisma } from "database/src";
 import { increaseVerificationSteps } from "@/src/lib/actions/increase-steps";
 
@@ -11,6 +11,7 @@ export const users = {
         user_bio: z.string(),
         avatarUrl: z.string(),
         phoneNumber: z.number(),
+        support_email: z.string().email(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -24,6 +25,7 @@ export const users = {
             user_name: input.user_name,
             user_bio: input.user_bio,
             phone: input.phoneNumber,
+            support_email: input.support_email,
           },
         });
 

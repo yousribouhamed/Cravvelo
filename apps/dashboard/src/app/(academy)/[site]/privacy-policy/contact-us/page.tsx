@@ -5,6 +5,7 @@ import AcademyHeader from "../../../_components/layout/academy-header";
 import MaxWidthWrapper from "../../../_components/max-width-wrapper";
 import { getStudent } from "../../../_actions/auth";
 import AcademiaFooter from "../../../_components/layout/academy-footer";
+import { prisma } from "database/src";
 
 interface PageProps {
   params: { site: string };
@@ -24,6 +25,12 @@ const Page = async ({ params }: PageProps) => {
     notFound();
   }
 
+  const account = await prisma.account.findFirst({
+    where: {
+      id: website.accountId,
+    },
+  });
+
   return (
     <>
       <AcademyHeader
@@ -38,18 +45,18 @@ const Page = async ({ params }: PageProps) => {
         <div className="w-full h-fit min-h-[300px] mt-[40px] grid grid-cols-1 ">
           <div className="w-full h-[100px] flex items-center justify-start">
             <h1 className="text-3xl  font-bold text-start text-black my-4">
-              يمكنك التواصل مع مشرف الأكاديمية بكل حرية عبر الوسائل ادناه 😹
+              يمكنك التواصل مع مشرف الأكاديمية بكل حرية عبر الوسائل ادناه
             </h1>
           </div>
 
           <div className="w-full h-[50px] flex items-center justify-start gap-x-4">
             <span className="text-xl font-bold">
               {" "}
-              📪 mahdi.chahri55@gaml.com{" "}
+              📪 {account.support_email}{" "}
             </span>
           </div>
           <div className="w-full h-[50px] flex items-center justify-start gap-x-4">
-            <span className="text-xl font-bold"> 🤳 0988877654 </span>
+            <span className="text-xl font-bold"> 🤳 {account.phone} </span>
           </div>
         </div>
       </MaxWidthWrapper>
