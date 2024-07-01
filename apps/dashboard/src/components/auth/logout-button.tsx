@@ -7,6 +7,7 @@ import { SignOutButton } from "@clerk/nextjs";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DropdownMenuItem } from "@ui/components/ui/dropdown-menu";
 import { LogOut } from "lucide-react";
+import { deleteAllCookies } from "@/src/lib/utils";
 
 const LogoutButton: FC = ({}) => {
   const router = useRouter();
@@ -25,7 +26,12 @@ const LogoutButton: FC = ({}) => {
   }
 
   return (
-    <SignOutButton signOutCallback={() => router.push(`/sign-in`)}>
+    <SignOutButton
+      signOutCallback={() => {
+        deleteAllCookies();
+        window.location.reload();
+      }}
+    >
       <DropdownMenuItem className="w-full h-full flex justify-between items-center p-3 ">
         <LogOut className=" h-4 w-4 text-red-500" />
         <span className="text-red-500">تسجيل الخروج</span>

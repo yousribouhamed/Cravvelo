@@ -353,3 +353,21 @@ export async function getVideoLength(
 
   throw new Error(`Failed to fetch video length after ${maxRetries} attempts`);
 }
+
+
+export function deleteAllCookies() {
+  // Get all the cookies for the current site
+  var cookies = document.cookie.split(";");
+
+  // Loop through each cookie and delete it
+  for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i];
+      var eqPos = cookie.indexOf("=");
+      var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+      
+      // Set the cookie expiration date to the past to delete it
+      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+  }
+
+  console.log("All cookies deleted.");
+}

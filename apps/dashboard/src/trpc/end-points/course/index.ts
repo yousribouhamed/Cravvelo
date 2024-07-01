@@ -95,6 +95,8 @@ export const course = {
         youtubeUrl: z.string().optional(),
         level: z.string(),
         preview_video: z.string().optional(),
+        courseWhatYouWillLearn: z.string().optional(),
+        courseRequirements: z.string().optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -105,15 +107,17 @@ export const course = {
           },
           data: {
             courseDescription: JSON.stringify(input.courseDescription),
-            courseResume: input.courseResume,
-            courseUrl: input.courseUrl,
-            seoDescription: input.seoDescription,
-            seoTitle: input.seoTitle,
-            thumbnailUrl: input.thumnailUrl,
-            title: input.title,
-            youtubeUrl: input.youtubeUrl ?? null,
-            level: input.level,
-            preview_video: input.preview_video ?? null,
+            courseResume: input?.courseResume,
+            courseUrl: input?.courseUrl,
+            seoDescription: input?.seoDescription,
+            seoTitle: input?.seoTitle,
+            thumbnailUrl: input?.thumnailUrl,
+            title: input?.title,
+            youtubeUrl: input?.youtubeUrl ?? null,
+            level: input?.level,
+            preview_video: input?.preview_video ?? null,
+            courseWhatYouWillLearn: input?.courseWhatYouWillLearn ?? null,
+            courseRequirements: input?.courseRequirements ?? null,
           },
         })
         .catch((err) => {

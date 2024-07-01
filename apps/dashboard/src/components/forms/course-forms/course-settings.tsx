@@ -54,7 +54,7 @@ const formSchema = z.object({
     .optional()
     .refine(
       (val) => {
-        if (!val) return true; // if the value is empty or undefined, it is valid since it is optional
+        if (!val) return true;
         return youtubeUrlRegex.test(val);
       },
       { message: "يرجى إدخال رابط يوتيوب صالح" }
@@ -84,7 +84,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
       seoDescription: course?.seoDescription ?? "",
       seoTitle: course?.seoTitle ?? "",
       courseRequirements: course.courseRequirements ?? "",
-      courseWhatYouWillLearn: course?.courseRequirements ?? "",
+      courseWhatYouWillLearn: course?.courseWhatYouWillLearn ?? "",
       level: course.level,
       sound: "ARABIC",
       courseDescription: course?.courseDescription
@@ -104,7 +104,8 @@ export function CourseSettingsForm({ course }: ComponentProps) {
       maketoast.success();
       router.push(`/courses/${course.id}/pricing`);
     },
-    onError: () => {
+    onError: (err) => {
+      console.error(err);
       maketoast.error();
     },
   });
@@ -115,6 +116,8 @@ export function CourseSettingsForm({ course }: ComponentProps) {
       courseId: course.id,
       courseResume: values.courseResume,
       courseUrl: "",
+      courseRequirements: values.courseRequirements,
+      courseWhatYouWillLearn: values.courseWhatYouWillLearn,
       seoDescription: values?.seoDescription,
       seoTitle: values.seoTitle,
       thumnailUrl: values.thumnailUrl,
