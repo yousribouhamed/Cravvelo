@@ -77,8 +77,7 @@ const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
   const [showCourses, setShowCourses] = useState(true);
   const [showProducts, setShowProducts] = useState(true);
 
-  // Aggregate sales data by month
-  const aggregateSalesByMonth = () => {
+  const aggregateSalesByMonth = (sales) => {
     const aggregatedData = {};
 
     sales.forEach((sale) => {
@@ -93,10 +92,15 @@ const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
         };
       }
 
-      if (sale.itemType === "PRODUCT") {
-        aggregatedData[month]["المنتجات الرقمية"] += sale.price;
-      } else if (sale.itemType === "COURSE") {
-        aggregatedData[month]["الدورات التدريبية"] += sale.price;
+      switch (sale.itemType) {
+        case "PRODUCT":
+          aggregatedData[month]["المنتجات الرقمية"] += sale.price;
+          break;
+        case "COURSE":
+          aggregatedData[month]["الدورات التدريبية"] += sale.price;
+          break;
+        default:
+          break;
       }
     });
 
@@ -142,8 +146,8 @@ const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
               width={730}
               height={250}
               // aggregateSalesByMonth()
-              data={data}
-              // data={aggregateSalesByMonth()}
+              // data={data}
+              data={aggregateSalesByMonth(sales)}
               margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
             >
               <defs>
