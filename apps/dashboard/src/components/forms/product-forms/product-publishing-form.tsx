@@ -1,6 +1,6 @@
 "use client";
 
-import * as z from "zod";
+import { z } from "@/src/lib/zod-error-map";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@ui/components/ui/button";

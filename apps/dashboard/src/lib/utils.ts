@@ -3,10 +3,12 @@ import type { User } from "@clerk/nextjs/server";
 import { z } from "zod";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
-
 import { maketoast } from "../components/toasts";
 import { Metadata } from "next";
 import axios from "axios";
+import { translateClerkErrorToArabic } from "./exceptions";
+
+const unknownErrArabic = "حدث خطأ ما، يرجى المحاولة مرة أخرى لاحقًا.";
 
 export function absoluteUrl(path: string) {
   if (typeof window !== "undefined") return path;
@@ -42,19 +44,22 @@ export function catchError(err: unknown) {
 }
 
 export function catchClerkError(err: unknown) {
-  const unknownErr = "Something went wrong, please try again later.";
-
   if (err instanceof z.ZodError) {
     const errors = err.issues.map((issue) => {
       return issue.message;
     });
     return maketoast.errorWithTest({ text: errors.join("\n") });
   } else if (isClerkAPIResponseError(err)) {
+    const clerkErrorMessages = err.errors.map((error) =>
+      translateClerkErrorToArabic(error.longMessage)
+    );
     return maketoast.errorWithTest({
-      text: err.errors[0]?.longMessage ?? unknownErr,
+      text: clerkErrorMessages.join("\n") || unknownErrArabic,
     });
   } else {
-    return maketoast.error();
+    return maketoast.errorWithTest({
+      text: unknownErrArabic,
+    });
   }
 }
 
@@ -354,19 +359,18 @@ export async function getVideoLength(
   throw new Error(`Failed to fetch video length after ${maxRetries} attempts`);
 }
 
-
 export function deleteAllCookies() {
   // Get all the cookies for the current site
   var cookies = document.cookie.split(";");
 
   // Loop through each cookie and delete it
   for (var i = 0; i < cookies.length; i++) {
-      var cookie = cookies[i];
-      var eqPos = cookie.indexOf("=");
-      var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-      
-      // Set the cookie expiration date to the past to delete it
-      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+    var cookie = cookies[i];
+    var eqPos = cookie.indexOf("=");
+    var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+
+    // Set the cookie expiration date to the past to delete it
+    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
   }
 
   console.log("All cookies deleted.");
