@@ -85,7 +85,11 @@ export const create_student = async ({
     },
   });
 
-  await verifyStudentEmail({ email, code: codeOtp });
+  await verifyStudentEmail({
+    email,
+    code: codeOtp,
+    sender_name: "i will update this",
+  });
 
   cookies().set({
     name: "studentIdVerifyEmail",
@@ -273,15 +277,26 @@ export const verifyEmailAction = async ({ code }: { code: string }) => {
   //TODO VIRIFY THE CODE SEND TO THE STUDENT
 
   const studentId = cookies().get("studentIdVerifyEmail")?.value;
-  const student = await prisma.student.update({
+
+  const student = await prisma.student.findFirst({
     where: {
       id: studentId,
     },
-    data: {
-      confirmedEmail: new Date(),
-    },
   });
-  return student;
+
+  if (student.otp === Number(code)) {
+    await prisma.student.update({
+      where: {
+        id: studentId,
+      },
+      data: {
+        confirmedEmail: new Date(),
+      },
+    });
+    return student;
+  } else {
+    throw new Error("code is not currect");
+  }
 };
 
 export const sendEmailAgain = async ({
@@ -301,7 +316,11 @@ export const sendEmailAgain = async ({
 
   const student = students.find((item) => item.email === email);
 
-  await verifyStudentEmail({ code: student.otp, email });
+  await verifyStudentEmail({
+    code: student.otp,
+    email,
+    sender_name: "i will update this",
+  });
 };
 
 export const sendRestPasswordEmail = async ({
@@ -330,6 +349,7 @@ export const sendRestPasswordEmail = async ({
     await ResSetPassword({
       email,
       url: `${website.subdomain}/auth-academy/sign-in/reset-password/${student.id}`,
+      sender_name: "i will update this",
     });
   } catch (err) {
     console.log(err);

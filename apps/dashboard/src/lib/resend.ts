@@ -1,50 +1,20 @@
-import jwt from "jsonwebtoken";
-
-import type { NextApiRequest, NextApiResponse } from "next";
-import { CravveloVerifyEmailStudent } from "@/src/emails/student-verify-email";
+import CravveloVerifyEmailStudent from "@/src/emails/student-verify-email";
 import { Resend } from "resend";
 import StudentResetPasswordEmail from "../emails/student-reset-password";
 
-// Generate a random numeric token (e.g., 6-digit OTP)
-const generateNumericToken = () => {
-  return Math.floor(100000 + Math.random() * 900000); // Generates a 6-digit number
-};
-
 const resend = new Resend(process.env.RESEND_API_KEY);
-
-// export default async (req: NextApiRequest, res: NextApiResponse) => {
-//   const secretKey = "abdullahsecretkey";
-//   const generateJwt = jwt.sign(
-//     { numericToken: generateNumericToken() },
-//     secretKey,
-//     { expiresIn: "1 hour" }
-//   ); // Token expires in 1 hour
-
-//   const { data, error } = await resend.emails.send({
-//     from: "Acme <onboarding@resend.dev>",
-//     to: ["delivered@resend.dev"],
-//     subject: "Hello world",
-//     react: CravveloVerifyEmailStudent({ verificationCode: "90000" }),
-//   });
-
-//   if (error) {
-//     return res.status(400).json(error);
-//   }
-
-//   res.status(200).json(data);
-// };
-
-// send email to virify student
 
 export const verifyStudentEmail = async ({
   email,
   code,
+  sender_name,
 }: {
   email: string;
   code: number;
+  sender_name: string;
 }) => {
   const { data, error } = await resend.emails.send({
-    from: "anyname@cravvelo.com",
+    from: `${sender_name}@cravvelo.com`,
     to: [email],
     subject: "قم بتأكيد بريدك الألكتروني",
     react: CravveloVerifyEmailStudent({ verificationCode: code.toString() }),
@@ -61,11 +31,18 @@ export const verifyStudentEmail = async ({
 
 // reset password  confirme email
 
-export const resetPasswordEmail = async ({ email }: { email: string }) => {
+// this one we are not using
+export const resetPasswordEmail = async ({
+  email,
+  sender_name,
+}: {
+  email: string;
+  sender_name: string;
+}) => {
   await resend.emails.send({
     from: "anyname@cravvelo.com",
     to: [email],
-    subject: "Hello world",
+    subject: "اعادة ضبط كلمة المرور",
     react: CravveloVerifyEmailStudent({ verificationCode: "90000" }),
   });
 };
@@ -83,16 +60,17 @@ export const SendWolcomEmail = async ({ email }: { email: string }) => {
 
 export const ResSetPassword = async ({
   email,
-
+  sender_name,
   url,
 }: {
   email: string;
   url: string;
+  sender_name: string;
 }) => {
   await resend.emails.send({
-    from: "anyname@cravvelo.com",
+    from: `${sender_name}@cravvelo.com`,
     to: [email],
-    subject: "Cravvelo reset password",
+    subject: "اعادة ضبط كلمة المرور",
     react: StudentResetPasswordEmail({ url }),
   });
 };

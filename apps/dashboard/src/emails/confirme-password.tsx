@@ -52,9 +52,9 @@ export default function CravveloVerifyEmail({
                   className="absolute inset-0 z-[-10]"
                 />
 
-                {/* <Text className="text-white font-bold text-2xl ">
+                <Text className="text-white font-bold text-2xl ">
                   الدخول الى حسابك في كرافيلو
-                </Text> */}
+                </Text>
               </Section>
               <Section className="flex flex-col bg-[#F8FAE5] ">
                 <Section className=" w-full h-fit  p-4 ">

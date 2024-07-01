@@ -18,7 +18,7 @@ interface CravveloVerifyEmailProps {
 
 const baseUrl = process.env.VERCEL_URL ? process.env.VERCEL_URL : "/static";
 
-export function CravveloVerifyEmailStudent({
+export default function CravveloVerifyEmailStudent({
   verificationCode,
 }: CravveloVerifyEmailProps) {
   return (
@@ -45,6 +45,7 @@ export function CravveloVerifyEmailStudent({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          backgroundColor: "#000000",
         }}
       >
         <Container
@@ -66,30 +67,18 @@ export function CravveloVerifyEmailStudent({
                 padding: "2px",
                 position: "relative",
               }}
-            >
-              <Img
-                src={`https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/email-image.png`}
-                width="100%"
-                height="100%"
-                alt="cravvelo"
-                style={{ position: "absolute", inset: "0", zIndex: "-10" }}
-              />
-              <Text
-                style={{ color: "white", fontWeight: "bold", fontSize: "24px" }}
-              >
-                الدخول الى حسابك في كرافيلو
-              </Text>
-            </Section>
+            ></Section>
             <Section
               style={{
                 display: "flex",
                 flexDirection: "column",
-                backgroundColor: "#F8FAE5",
+                backgroundColor: "#FFFFFF",
+                borderRadius: "16px",
               }}
             >
               <Section style={{ width: "100%", padding: "16px" }}>
                 <Text>أهلاً 👋</Text>
-                <Text>أدخل الرمز لتتمكن من إنشاء حساب على جدير:</Text>
+                <Text>أدخل الرمز لتتمكن من إنشاء حسابك في الأكاديمية:</Text>
                 <Heading
                   style={{
                     fontWeight: "800",
@@ -103,24 +92,6 @@ export function CravveloVerifyEmailStudent({
                   إذا لم تكن تحاول الدخول إلى أحد منتجات جدير بإستخدام هذا
                   البريد يمكنك تجاهل هذه الرسالة.
                 </Text>
-              </Section>
-              <Hr />
-              <Section
-                style={{
-                  width: "100%",
-                  height: "50px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "end",
-                  padding: "16px",
-                }}
-              >
-                <Img
-                  src={`https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/Cravvelo-transparent.png`}
-                  width="100"
-                  height="30"
-                  alt="cravvelo logo"
-                />
               </Section>
             </Section>
           </Section>

@@ -1,12 +1,6 @@
 import MaxWidthWrapper from "../../components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@ui/components/ui/card";
+import { Card, CardContent, CardHeader } from "@ui/components/ui/card";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
 import AreaChartOverview from "@/src/components/area-chart";
 import { DatePickerWithRange } from "@/src/components/range-date-picker";

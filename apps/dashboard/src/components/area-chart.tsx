@@ -13,7 +13,6 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { formatDateInArabic } from "../lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
