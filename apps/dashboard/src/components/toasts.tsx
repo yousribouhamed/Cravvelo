@@ -1,23 +1,23 @@
 import { toast } from "@ui/lib/utils";
-import { AlertTriangle, Bone, Book, Check, Info, X } from "lucide-react";
+import { AlertTriangle, Book, Check, X } from "lucide-react";
 
 export const maketoast = {
   success: () =>
     toast.custom(
       (t) => (
-        <div className="w-[380px] h-[90px] rounded-2xl bg-[#186d2b] flex items-center px-4 ">
-          <div className="w-10 h-10 rounded-[50%] bg-white  flex items-center justify-center ">
-            <Check className="w-6 h-6 text-[#186d2b]" />
+        <div className="w-[380px] min-h-[90px] h-fit rounded-2xl bg-white border shadow flex items-center px-4 ">
+          <div className="w-10 h-10 rounded-[50%] bg-green-500  flex items-center justify-center ">
+            <Check className="w-6 h-6 text-white" />
           </div>
           <div className="w-[80%] flex flex-col justify-start  items-start p-2">
-            <span className="text-xl font-bold text-white ">نجاح</span>
-            <span className="text-white text-xl text-start">
+            <span className="text-xl font-bold text-black ">نجاح</span>
+            <span className="text-black text-lg text-start">
               كان الإجراء السابق ناجحا
             </span>
           </div>
           <X
             onClick={() => toast.dismiss(t)}
-            className="cursor-pointer text-white "
+            className="cursor-pointer text-black "
           />
         </div>
       ),
@@ -29,17 +29,17 @@ export const maketoast = {
   successWithText: ({ text }: { text: string }) =>
     toast.custom(
       (t) => (
-        <div className="w-[380px] h-[90px] rounded-2xl bg-[#186d2b] flex items-center px-4 ">
-          <div className="w-10 h-10 rounded-[50%] bg-white flex items-center justify-center ">
-            <Check className="w-6 h-6 text-[[#186d2b]" />
+        <div className="w-[380px] min-h-[90px] h-fit rounded-2xl bg-white border shadow flex items-center px-4 ">
+          <div className="w-10 h-10 rounded-[50%] bg-green-500  flex items-center justify-center ">
+            <Check className="w-6 h-6 text-white" />
           </div>
           <div className="w-[80%] flex flex-col justify-start items-start p-2">
-            <span className="text-xl font-bold text-white ">نجاح</span>
-            <span className="text-white text-xl text-start">{text}</span>
+            <span className="text-xl font-bold text-black ">نجاح</span>
+            <span className="text-black text-lg text-start">{text}</span>
           </div>
           <X
             onClick={() => toast.dismiss(t)}
-            className="cursor-pointer text-white"
+            className="cursor-pointer text-black"
           />
         </div>
       ),
@@ -50,17 +50,17 @@ export const maketoast = {
   error: () =>
     toast.custom(
       (t) => (
-        <div className="w-[380px] h-[90px] rounded-2xl bg-red-500 shadow  flex items-center px-4 ">
-          <div className="w-10 h-10 rounded-[50%] bg-white flex items-center justify-center ">
-            <AlertTriangle className="w-6 h-6 text-red-500" />
+        <div className="w-[380px] min-h-[90px] h-fit rounded-2xl bg-white shadow  border flex items-center px-4 ">
+          <div className="w-10 h-10 rounded-[50%] bg-[#FF616D] flex items-center justify-center ">
+            <AlertTriangle className="w-6 h-6 text-white" />
           </div>
           <div className="w-[80%] flex flex-col justify-start items-start p-2">
-            <span className="text-xl font-bold text-white ">خطأ</span>
-            <span className="text-white text-xl text-start">هناك خطأ ما</span>
+            <span className="text-xl font-bold text-black ">خطأ</span>
+            <span className=" text-lg text-black">هناك خطأ ما</span>
           </div>
           <X
             onClick={() => toast.dismiss(t)}
-            className="cursor-pointer text-white"
+            className="cursor-pointer text-black"
           />
         </div>
       ),
@@ -71,15 +71,18 @@ export const maketoast = {
   errorWithTest: ({ text }: { text: string }) =>
     toast.custom(
       (t) => (
-        <div className="w-[380px] h-[90px] rounded-2xl bg-white  flex items-center px-4 ">
+        <div className=" w-[380px] min-h-[90px] h-fit  rounded-2xl bg-white border shadow  flex items-center px-4 ">
           <div className="w-10 h-10 rounded-[50%] bg-[#FF616D] flex items-center justify-center ">
             <AlertTriangle className="w-6 h-6 text-white" />
           </div>
-          <div className="w-[80%] flex flex-col justify-start items-start p-2">
-            <span className="text-xl font-bold text-black ">نجاح</span>
-            <span className="text-gray-500 text-xl text-start">{text}</span>
+          <div className="w-[80%] min-h-full h-fit flex flex-col justify-start items-start p-2">
+            <span className="text-xl font-bold text-black ">خطأ</span>
+            <span className="text-black text-lg text-start">{text}</span>
           </div>
-          <X onClick={() => toast.dismiss(t)} className="cursor-pointer" />
+          <X
+            onClick={() => toast.dismiss(t)}
+            className="cursor-pointer text-black"
+          />
         </div>
       ),
       {
@@ -90,17 +93,20 @@ export const maketoast = {
   info: () =>
     toast.custom(
       (t) => (
-        <div className="w-[380px] h-[90px] rounded-2xl bg-white flex items-center px-4 ">
+        <div className="w-[380px] min-h-[90px] h-fit rounded-2xl bg-white border shadow  flex items-center px-4 ">
           <div className="w-10 h-10 rounded-[50%] bg-[#006FFD] flex items-center justify-center ">
             <Book className="w-6 h-6 text-white" />
           </div>
           <div className="w-[80%] flex flex-col justify-start items-start p-2">
-            <span className="text-xl font-bold text-black ">معلومات</span>
-            <span className="text-gray-500 text-xl text-start">
-              عليك أن تكون على علم بشيء ما
+            <span className="text-xl font-bold text-black ">معلومة</span>
+            <span className="text-black text-lg text-start">
+              تم تنفيذ الاجراء
             </span>
           </div>
-          <X onClick={() => toast.dismiss(t)} className="cursor-pointer" />
+          <X
+            onClick={() => toast.dismiss(t)}
+            className="cursor-pointer text-black"
+          />
         </div>
       ),
       {
@@ -111,17 +117,20 @@ export const maketoast = {
   warnning: () =>
     toast.custom(
       (t) => (
-        <div className="w-[380px] h-[90px] rounded-2xl bg-white flex items-center px-4 ">
-          <div className="w-10 h-10 rounded-[50%] bg-[#FFB37C] flex items-center justify-center ">
+        <div className="w-[380px] min-h-[90px] h-fit rounded-2xl bg-white border shadow flex items-center px-4 ">
+          <div className="w-10 h-10 rounded-[50%] bg-yellow-500 flex items-center justify-center ">
             <AlertTriangle className="w-6 h-6 text-white" />
           </div>
           <div className="w-[80%] flex flex-col justify-start items-start p-2">
             <span className="text-xl font-bold text-black ">كن حذرا</span>
-            <span className="text-gray-500 text-xl text-start">
+            <span className="text-black text-lg text-start">
               كن على علم بأن شيئًا ما قد حدث للتو
             </span>
           </div>
-          <X onClick={() => toast.dismiss(t)} className="cursor-pointer" />
+          <X
+            onClick={() => toast.dismiss(t)}
+            className="cursor-pointer text-black"
+          />
         </div>
       ),
       {

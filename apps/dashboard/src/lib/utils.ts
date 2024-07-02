@@ -43,7 +43,28 @@ export function catchError(err: unknown) {
   }
 }
 
+// Extract error message from stack trace
+function extractErrorMessage(error) {
+  if (error.stack) {
+    const match = error.stack.match(/Error:\s*(.*)/);
+    if (match && match[1]) {
+      return match[1];
+    }
+  }
+  return unknownErrArabic;
+}
+
 export function catchClerkError(err: unknown) {
+  const errorMessage = extractErrorMessage(err);
+
+  console.log("this is the message we got from the error");
+
+  console.log(errorMessage);
+
+  if (isClerkAPIResponseError(err)) {
+    console.log(err.errors);
+  }
+
   if (err instanceof z.ZodError) {
     const errors = err.issues.map((issue) => {
       return issue.message;
@@ -51,14 +72,16 @@ export function catchClerkError(err: unknown) {
     return maketoast.errorWithTest({ text: errors.join("\n") });
   } else if (isClerkAPIResponseError(err)) {
     const clerkErrorMessages = err.errors.map((error) =>
-      translateClerkErrorToArabic(error.longMessage)
+      translateClerkErrorToArabic(error.code)
     );
     return maketoast.errorWithTest({
       text: clerkErrorMessages.join("\n") || unknownErrArabic,
     });
   } else {
+    // Extract the error message from the stack trace
+    const errorMessage = extractErrorMessage(err);
     return maketoast.errorWithTest({
-      text: unknownErrArabic,
+      text: errorMessage,
     });
   }
 }

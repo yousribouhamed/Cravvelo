@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "@/src/lib/zod-error-map";
@@ -32,10 +32,12 @@ import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import Image from "next/image";
 
 type Inputs = z.infer<typeof authSchemaLogin>;
+
 export function SignInForm() {
   const router = useRouter();
   const { isLoaded, signIn, setActive } = useSignIn();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [rememberMe, setRememberMe] = React.useState<boolean>(false);
 
   const form = useForm<Inputs>({
     resolver: zodResolver(authSchemaLogin),
@@ -44,6 +46,17 @@ export function SignInForm() {
       password: "",
     },
   });
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("email");
+    const savedPassword = localStorage.getItem("password");
+
+    if (savedEmail && savedPassword) {
+      form.setValue("email", savedEmail);
+      form.setValue("password", savedPassword);
+      setRememberMe(true);
+    }
+  }, [form]);
 
   async function onSubmit(data: z.infer<typeof authSchemaLogin>) {
     if (!isLoaded) {
@@ -59,9 +72,18 @@ export function SignInForm() {
 
       if (result.status === "complete") {
         await setActive({ session: result.createdSessionId });
+
+        if (rememberMe) {
+          localStorage.setItem("email", data.email);
+          localStorage.setItem("password", data.password);
+        } else {
+          localStorage.removeItem("email");
+          localStorage.removeItem("password");
+        }
+
         router.push(`/auth-callback`);
       } else {
-        /*Investigate why the login hasn't completed */
+        /* Investigate why the login hasn't completed */
         console.log(result);
       }
     } catch (err) {
@@ -73,9 +95,9 @@ export function SignInForm() {
   }
 
   return (
-    <Card className="w-[480px] pt-4 min-h-[501.39px] h-fit ">
+    <Card className="w-[480px] pt-4 min-h-[501.39px] h-fit">
       <CardHeader>
-        <div className="flex items-center justify-between ">
+        <div className="flex items-center justify-between">
           <CardTitle>مرحبًا بعودتك!</CardTitle>
           <div>
             <Image
@@ -107,7 +129,6 @@ export function SignInForm() {
                       {...field}
                     />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -121,16 +142,22 @@ export function SignInForm() {
                   <FormControl>
                     <PasswordInput placeholder="أدخِل كلمة المرور" {...field} />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div className="w-full h-[20px] flex justify-between items-center">
               <div className="flex items-center space-x-2">
-                <Checkbox id="terms" className="ml-2" />
+                <Checkbox
+                  id="rememberMe"
+                  className="ml-2"
+                  checked={rememberMe}
+                  onCheckedChange={(checked) =>
+                    setRememberMe(checked.valueOf() ? true : false)
+                  }
+                />
                 <label
-                  htmlFor="terms"
+                  htmlFor="rememberMe"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   تذكَّر بياناتي

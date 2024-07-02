@@ -4,13 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "@/src/lib/zod-error-map";
 import { Button } from "@ui/components/ui/button";
-import { Checkbox } from "@ui/components/ui/checkbox";
 import React from "react";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@ui/components/ui/card";
@@ -24,15 +21,12 @@ import {
   FormMessage,
 } from "@ui/components/ui/form";
 import { Input } from "@ui/components/ui/input";
-import Link from "next/link";
-import { PasswordInput } from "../password-input";
 import { useSignIn } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { checkEmailSchema, verifyEmailSchema } from "@/src/lib/validators/auth";
-import { Icons } from "../my-icons";
-import { toast } from "@ui/lib/utils";
 import { catchClerkError } from "@/src/lib/utils";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { maketoast } from "../toasts";
 
 type Inputs = z.infer<typeof checkEmailSchema>;
 
@@ -41,7 +35,6 @@ export function ResetPasswordForm() {
   const { isLoaded, signIn } = useSignIn();
   const [isPending, startTransition] = React.useTransition();
 
-  // react-hook-form
   const form = useForm<Inputs>({
     resolver: zodResolver(checkEmailSchema),
     defaultValues: {
@@ -61,8 +54,9 @@ export function ResetPasswordForm() {
 
         if (firstFactor.status === "needs_first_factor") {
           router.push("/sign-in/reset-password/step2");
-          toast.message("Check your email", {
-            description: "We sent you a 6-digit verification code.",
+
+          maketoast.successWithText({
+            text: "لقد أرسلنا لك رمز التحقق المكون من 6 أرقام.",
           });
         }
       } catch (err) {

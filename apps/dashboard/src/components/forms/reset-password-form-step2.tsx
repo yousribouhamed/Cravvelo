@@ -24,11 +24,10 @@ import { Input } from "@ui/components/ui/input";
 import { useSignIn } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { resetPasswordSchema } from "@/src/lib/validators/auth";
-import { Icons } from "../my-icons";
-import { toast } from "@ui/lib/utils";
 import { catchClerkError } from "@/src/lib/utils";
 import { PasswordInput } from "../password-input";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { maketoast } from "../toasts";
 
 type Inputs = z.infer<typeof resetPasswordSchema>;
 
@@ -65,7 +64,10 @@ export function ResetPasswordStep2Form() {
             session: attemptFirstFactor.createdSessionId,
           });
           router.push(`${window.location.origin}/`);
-          toast.success("Password reset successfully.");
+
+          maketoast.successWithText({
+            text: "تم إعادة تعيين كلمة المرور بنجاح.",
+          });
         } else {
           console.error(attemptFirstFactor);
         }

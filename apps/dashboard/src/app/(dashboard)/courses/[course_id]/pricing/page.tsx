@@ -6,6 +6,8 @@ import AddPricingForm from "@/src/components/forms/course-forms/add-pricing-form
 import { prisma } from "database/src";
 import useHaveAccess from "@/src/hooks/use-have-access";
 
+export const fetchCache = "force-no-store";
+
 interface PageProps {
   params: { course_id: string };
 }
