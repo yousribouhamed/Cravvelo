@@ -319,7 +319,6 @@ export const sendEmailAgain = async ({
   await verifyStudentEmail({
     code: student.otp,
     email,
-    sender_name: "i will update this",
   });
 };
 
@@ -349,7 +348,6 @@ export const sendRestPasswordEmail = async ({
     await ResSetPassword({
       email,
       url: `${website.subdomain}/auth-academy/sign-in/reset-password/${student.id}`,
-      sender_name: "i will update this",
     });
   } catch (err) {
     console.log(err);

@@ -7,14 +7,13 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export const verifyStudentEmail = async ({
   email,
   code,
-  sender_name,
 }: {
   email: string;
   code: number;
   sender_name: string;
 }) => {
   const { data, error } = await resend.emails.send({
-    from: "noreply@cravvelo.com",
+    from: "sender@cravvelo.com",
     to: [email],
     subject: "قم بتأكيد بريدك الألكتروني",
     react: CravveloVerifyEmailStudent({ verificationCode: code.toString() }),
@@ -34,13 +33,12 @@ export const verifyStudentEmail = async ({
 // this one we are not using
 export const resetPasswordEmail = async ({
   email,
-  sender_name,
 }: {
   email: string;
   sender_name: string;
 }) => {
   await resend.emails.send({
-    from: "noreply@cravvelo.com",
+    from: "sender@cravvelo.com",
     to: [email],
     subject: "اعادة ضبط كلمة المرور",
     react: CravveloVerifyEmailStudent({ verificationCode: "90000" }),
@@ -51,7 +49,7 @@ export const resetPasswordEmail = async ({
 
 export const SendWolcomEmail = async ({ email }: { email: string }) => {
   await resend.emails.send({
-    from: "noreply@cravvelo.com",
+    from: "sender@cravvelo.com",
     to: [email],
     subject: "Hello world",
     react: CravveloVerifyEmailStudent({ verificationCode: "90000" }),
@@ -68,7 +66,7 @@ export const ResSetPassword = async ({
   sender_name: string;
 }) => {
   await resend.emails.send({
-    from: "noreply@cravvelo.com",
+    from: "sender@cravvelo.com",
     to: [email],
     subject: "اعادة ضبط كلمة المرور",
     react: StudentResetPasswordEmail({ url }),
