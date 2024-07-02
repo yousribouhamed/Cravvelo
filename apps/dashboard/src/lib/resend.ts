@@ -10,7 +10,6 @@ export const verifyStudentEmail = async ({
 }: {
   email: string;
   code: number;
-  sender_name: string;
 }) => {
   const { data, error } = await resend.emails.send({
     from: "sender@cravvelo.com",
@@ -28,23 +27,6 @@ export const verifyStudentEmail = async ({
   console.log({ email, code });
 };
 
-// reset password  confirme email
-
-// this one we are not using
-export const resetPasswordEmail = async ({
-  email,
-}: {
-  email: string;
-  sender_name: string;
-}) => {
-  await resend.emails.send({
-    from: "sender@cravvelo.com",
-    to: [email],
-    subject: "اعادة ضبط كلمة المرور",
-    react: CravveloVerifyEmailStudent({ verificationCode: "90000" }),
-  });
-};
-
 // sen wolcom email to students
 
 export const SendWolcomEmail = async ({ email }: { email: string }) => {
@@ -58,12 +40,11 @@ export const SendWolcomEmail = async ({ email }: { email: string }) => {
 
 export const ResSetPassword = async ({
   email,
-  sender_name,
+
   url,
 }: {
   email: string;
   url: string;
-  sender_name: string;
 }) => {
   await resend.emails.send({
     from: "sender@cravvelo.com",

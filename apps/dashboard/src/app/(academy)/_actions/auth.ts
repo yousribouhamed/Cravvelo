@@ -88,7 +88,6 @@ export const create_student = async ({
   await verifyStudentEmail({
     email,
     code: codeOtp,
-    sender_name: "i will update this",
   });
 
   cookies().set({
