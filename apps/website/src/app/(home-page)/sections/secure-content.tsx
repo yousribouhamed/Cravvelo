@@ -1,8 +1,8 @@
+"use client";
+
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Image from "next/image";
 import type { FC } from "react";
-
-interface SecureContentProps {}
 
 const SecureContent: FC = ({}) => {
   return (
@@ -43,6 +43,8 @@ const SecureContent: FC = ({}) => {
           className="w-full h-[590px]    flex flex-col items-end justify-start p-8 overflow-hidden  relative rounded-2xl"
           style={{
             background:
+              "linear-gradient(50deg, rgba(252, 107, 0, 1) 0%, rgba(6, 6, 6, 1) 89%, rgba(13, 13, 13, 1) 100%);",
+            backgroundColor:
               "linear-gradient(50deg, rgba(252, 107, 0, 1) 0%, rgba(6, 6, 6, 1) 89%, rgba(13, 13, 13, 1) 100%);",
           }}
         >

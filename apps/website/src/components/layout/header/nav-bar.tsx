@@ -37,7 +37,7 @@ const NavBar = () => {
         {!close && (
           <div className="w-full h-[41px] bg-gradient-to-r from-[#ffeb38] to-[#fab508] flex justify-center items-center gap-x-20">
             <p className="text-black font-bold text-base">
-              ابدأ رحلتك اليوم وقم ببناء أكاديميتك
+              الآن cravvelo في النسخة التجريبية المفتوحة
             </p>
             <Button
               onClick={() => setClose(true)}
@@ -103,7 +103,8 @@ const NavBar = () => {
             </nav>
             <div className="w-[40%] hidden lg:flex items-center justify-end gap-x-4">
               <Link
-                href="https://cravvelo.com"
+                target="_blank"
+                href="https://app.cravvelo.com/sign-up"
                 className={cn(
                   buttonVariants(),
                   "bg-primary border border-primary text-white text-xl py-4 h-12 rounded-2xl font-bold transition-all duration-150"
@@ -112,7 +113,8 @@ const NavBar = () => {
                 انشاء حساب
               </Link>
               <Link
-                href="https://cravvelo.com"
+                target="_blank"
+                href="https://app.cravvelo.com/sign-in"
                 className={cn(
                   buttonVariants(),
                   "bg-white border border-primary text-primary text-xl py-4 h-12 rounded-2xl hover:text-white font-bold hover:bg-[#FC6B00] transition-all duration-150"

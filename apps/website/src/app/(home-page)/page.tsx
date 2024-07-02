@@ -2,7 +2,7 @@ import MaxWidthWrapper from "../../components/max-width-wrapper";
 import WhatYouCanDo from "./sections/what-you-can-do";
 import HeroLights from "../../components/svgs/hero-lights";
 import Hero from "./sections/hero";
-import HowPlatformWorks from "./sections/how-platform-works";
+// import HowPlatformWorks from "./sections/how-platform-works";
 import CreateLanch from "./sections/create-lanch";
 import EaseSpeed from "./sections/ease-speed";
 import NewExperiance from "./sections/new-experiance";
@@ -23,9 +23,6 @@ export default function Page() {
         <HeroLights />
         <FadeIn>
           <WhatYouCanDo />
-        </FadeIn>
-        <FadeIn>
-          <HowPlatformWorks />
         </FadeIn>
         <FadeIn>
           <CreateLanch />

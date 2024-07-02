@@ -2,6 +2,7 @@ import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import TextTyper from "@/src/components/text-typer";
 import { Button } from "@ui/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 import type { FC } from "react";
 
 const Hero: FC = ({}) => {
@@ -31,13 +32,15 @@ const Hero: FC = ({}) => {
               </p>
 
               <div className="w-full  my-4 h-[60px] flex flex-col sm:flex-row items-center sm:mt-8 mt-16  gap-y-6 sm:items-end justify-center sm:justify-start gap-x-8">
-                <Button
-                  disabled
-                  size="lg"
-                  className="bg-[#FC6B00] hover:bg-[#994b13] text-xl py-6 h-14 rounded-2xl text-white qatar-bold  hover:scale-105 transition-all duration-150 "
-                >
-                  ابدء تجربتك المجانية 👋
-                </Button>
+                <Link target="_blank" href={"https://app.cravvelo.com/sign-up"}>
+                  <Button
+                    size="lg"
+                    className="bg-[#FC6B00] hover:bg-[#994b13] text-xl py-6 h-14 rounded-2xl text-white qatar-bold  hover:scale-105 transition-all duration-150 "
+                  >
+                    ابدء تجربتك المجانية 👋
+                  </Button>
+                </Link>
+
                 <span className="text-xl leading-8 mb-3 block text-black">
                   14 يومًا تجريبيًّا
                 </span>
