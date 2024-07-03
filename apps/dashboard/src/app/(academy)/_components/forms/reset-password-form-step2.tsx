@@ -29,11 +29,16 @@ import toast from "react-hot-toast";
 
 const formSchema = z.object({
   password: z
-    .string()
+    .string({
+      required_error: "كلمة المرور مطلوبة",
+      invalid_type_error: "يجب أن تكون كلمة المرور نصية",
+    })
     .min(7, {
       message: "يجب أن تتكون كلمة المرور من 7 أحرف على الأقل",
     })
-    .max(100),
+    .max(100, {
+      message: "يجب ألا تتجاوز كلمة المرور 100 حرف",
+    }),
 });
 
 type Inputs = z.infer<typeof formSchema>;
@@ -76,10 +81,7 @@ export function ResetPasswordFormStep2({
     <Card className="w-[480px] pt-4 min-h-[200px] h-fit ">
       <CardHeader>
         <CardTitle>اعادة تعيين كلمة المرور</CardTitle>
-        <CardDescription>
-          أدخل عنوان بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيين كلمة المرور
-          الخاصة بك.
-        </CardDescription>
+        <CardDescription>قم بادخال كلمة مرور جديدة و بصحتك !</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -95,7 +97,7 @@ export function ResetPasswordFormStep2({
                   <FormControl>
                     <PasswordInput
                       className="focus:border-black"
-                      placeholder="أدخِل كلمة المرور"
+                      placeholder="كلمة السر الجديدة"
                       {...field}
                     />
                   </FormControl>

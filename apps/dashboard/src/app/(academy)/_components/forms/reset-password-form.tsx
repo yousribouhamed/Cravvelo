@@ -17,7 +17,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@ui/components/ui/form";
 import { Input } from "@ui/components/ui/input";
@@ -28,8 +27,6 @@ import {
 } from "@/src/lib/validators/auth";
 import { sendRestPasswordEmail } from "../../_actions/auth";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import { maketoast } from "@/src/components/toasts";
-import { academiatoast } from "../academia-toasts";
 import toast from "react-hot-toast";
 
 type Inputs = z.infer<typeof restPasswordStep2>;

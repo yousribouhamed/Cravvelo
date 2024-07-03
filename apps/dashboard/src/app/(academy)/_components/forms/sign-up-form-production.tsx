@@ -29,7 +29,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
-import { academiatoast } from "../academia-toasts";
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
   full_name: z.string({ required_error: "يرجى ملئ الحقل" }),
@@ -37,11 +37,16 @@ const formSchema = z.object({
     message: "يرجى إدخال عنوان بريد إلكتروني صالح",
   }),
   password: z
-    .string()
+    .string({
+      required_error: "كلمة المرور مطلوبة",
+      invalid_type_error: "يجب أن تكون كلمة المرور نصية",
+    })
     .min(7, {
       message: "يجب أن تتكون كلمة المرور من 7 أحرف على الأقل",
     })
-    .max(100),
+    .max(100, {
+      message: "يجب ألا تتجاوز كلمة المرور 100 حرف",
+    }),
 });
 
 interface AcademySifnUpFormProps {
@@ -57,12 +62,10 @@ export function AcademySifnUpForm({
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsLoading(true);
@@ -78,20 +81,11 @@ export function AcademySifnUpForm({
       // Pass email as a query parameter
       router.push(`/auth-academy/sign-up/verify-email?email=${values.email}`);
 
-      academiatoast.make({
-        color,
-        message: "لقد قمنا بارسال رمز التاكيد الى حسابك",
-        title: "نجاح",
-        type: "SUCCESS",
-      });
+      toast.success("لقد قمنا بارسال رمز التاكيد الى حسابك");
     } catch (err) {
       console.error(err);
-      academiatoast.make({
-        color,
-        message: "حدث خطأ ما",
-        title: "فشل",
-        type: "ERROR",
-      });
+
+      toast.error("حدث خطأ ما");
     } finally {
       setIsLoading(false);
     }
