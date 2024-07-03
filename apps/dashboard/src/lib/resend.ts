@@ -27,17 +27,6 @@ export const verifyStudentEmail = async ({
   console.log({ email, code });
 };
 
-// sen wolcom email to students
-
-export const SendWolcomEmail = async ({ email }: { email: string }) => {
-  await resend.emails.send({
-    from: "sender@cravvelo.com",
-    to: [email],
-    subject: "Hello world",
-    react: CravveloVerifyEmailStudent({ verificationCode: "90000" }),
-  });
-};
-
 export const ResSetPassword = async ({
   email,
 
