@@ -20,15 +20,9 @@ import {
   FormMessage,
 } from "@ui/components/ui/form";
 import { Input } from "@ui/components/ui/input";
-import Link from "next/link";
-import { PasswordInput } from "@/src/components/password-input";
 import { useRouter } from "next/navigation";
 import { verifyEmailSchema } from "@/src/lib/validators/auth";
-import {
-  sendEmailAgain,
-  sign_in_as_student,
-  verifyEmailAction,
-} from "../../_actions/auth";
+import { sendEmailAgain, verifyEmailAction } from "../../_actions/auth";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 import { verifyStudentEmail } from "@/src/lib/resend";
@@ -120,12 +114,12 @@ export function AcademyVerifyEmailForm({
                 </FormItem>
               )}
             />
-            <div className="w-full my-4 h-[20px] gap-x-2 flex justify-center">
-              <span>لم تتلقى بريد الكتروني ؟</span>
+            <div className="w-full my-4 h-[20px] gap-x-1 flex justify-start items-center">
+              <span className="text-md ">لم تتلقى بريد الكتروني ؟</span>
               <Button
                 type="button"
                 variant="link"
-                className="text-sm "
+                className="text-md "
                 style={{
                   color: color ?? "#FC6B00",
                 }}

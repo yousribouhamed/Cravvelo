@@ -1,11 +1,14 @@
 import { getSiteData } from "../../../../../_actions";
-import { notFound, redirect } from "next/navigation";
-import { getStudent } from "@/src/app/(academy)/_actions/auth";
+import { notFound } from "next/navigation";
 import { getSubDomainValue } from "../../../../../lib";
 import AcademiaFooter from "@/src/app/(academy)/_components/layout/academy-footer";
 import AcademyHeader from "@/src/app/(academy)/_components/layout/academy-header";
-import { AcademyRestPasswordStep1Form } from "@/src/app/(academy)/_components/forms/reset-password-form";
 import ResetPasswordFormStep2 from "@/src/app/(academy)/_components/forms/reset-password-form-step2";
+import MaxWidthWrapper from "@/src/app/(academy)/_components/max-width-wrapper";
+import Link from "next/link";
+import { cn } from "@ui/lib/utils";
+import { buttonVariants } from "@ui/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 interface PageProps {
   params: { site: string; id: string };
@@ -38,7 +41,21 @@ const Page = async ({ params }: PageProps) => {
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
       />
-      <div className="w-full h-screen flex items-center justify-center  p-4">
+      <div className="w-full h-screen flex flex-col items-center justify-center  p-4">
+        <div className="w-full h-[50px] flex items-center justify-start">
+          <MaxWidthWrapper>
+            <Link
+              href={"/auth-academy/sign-in"}
+              className={cn(
+                buttonVariants({ variant: "secondary" }),
+                "bg-white border"
+              )}
+            >
+              <ArrowRight className="w-4 h-4 ml-2 text-black" />
+              العودة
+            </Link>
+          </MaxWidthWrapper>
+        </div>
         <ResetPasswordFormStep2
           studentId={params.id}
           color={website?.color}
