@@ -50,7 +50,7 @@ export function OAuthSignIn() {
         variant="secondary"
         className="w-full h-14  bg-white rounded-lg flex items-center justify-center gap-x-4 border-input shadow font-bold "
         onClick={() => void oauthSignIn(oauthProviders[0].strategy)}
-        disabled={true}
+        disabled={isLoading !== null}
       >
         تسجيل الدخول من خلال جوجل
         {isLoading === oauthProviders[0].strategy ? (
@@ -69,8 +69,7 @@ export function OAuthSignIn() {
         variant="secondary"
         className="w-full h-14 bg-[#1877F2] flex items-center justify-center gap-x-4  rounded-lg font-bold text-white "
         onClick={() => void oauthSignIn(oauthProviders[1].strategy)}
-        disabled={true}
-        // disabled={isLoading !== null}
+        disabled={isLoading !== null}
       >
         تسجيل الدخول من خلال فايسبوك
         {isLoading === oauthProviders[1].strategy ? (
