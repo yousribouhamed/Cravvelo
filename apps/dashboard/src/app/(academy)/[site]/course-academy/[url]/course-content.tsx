@@ -102,13 +102,13 @@ const CourseDisplayContent: FC<CourseContentProps> = ({
                   />
                   {/* what you are gonna learn */}
                   {course.courseWhatYouWillLearn && (
-                    <div className="w-full my-4 mt-10 min-h-[200px] h-fit flex flex-col rounded-xl">
-                      <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
+                    <div className="w-full my-4  min-h-[50px] h-fit flex flex-col rounded-xl">
+                      <div className="w-full h-[50px]  flex items-center justify-start gap-x-4">
                         <h3 className="text-xl font-bold">
                           ماذا ستتعلم في هذه الدورة
                         </h3>
                       </div>
-                      <div className="w-full h-[300px] flex flex-col bg-white  gap-y-4 rounded-xl  p-4">
+                      <div className="w-full min-h-[50px] h-fit flex flex-col bg-white  gap-y-4 rounded-xl border  p-4">
                         <p className="text-lg text-black">
                           {course?.courseWhatYouWillLearn}
                         </p>
@@ -118,13 +118,13 @@ const CourseDisplayContent: FC<CourseContentProps> = ({
                   {/* requirements */}
 
                   {course.courseRequirements && (
-                    <div className="w-full min-h-[200px] h-fit flex flex-col rounded-xl">
+                    <div className="w-full min-h-[100px] h-fit flex flex-col rounded-xl">
                       <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
                         <h3 className="text-xl font-bold">
                           متطلبات حضور الدورة
                         </h3>
                       </div>
-                      <div className="w-full h-[300px] flex flex-col bg-white gap-y-4 rounded-xl  p-4">
+                      <div className="w-full min-h-[100px] h-fit flex flex-col bg-white gap-y-4 border rounded-xl  p-4">
                         <p className="text-lg text-black">
                           {course?.courseRequirements}
                         </p>

@@ -84,7 +84,7 @@ export const Product_card = ({
           className=" text-xs text-white p-2 rounded-full absolute -top-5 right-0"
           style={{ backgroundColor: color }}
         >
-          dis
+          تخفيض
           {+" " +
           calculateDiscountPercentage(
             Number(course.price),
@@ -240,7 +240,14 @@ export const Product_card = ({
               color: "#000000",
             }}
           />
-          <span>الصوت: عربي</span>
+          <span>
+            الصوت:{" "}
+            {course.sound === "ARABIC"
+              ? "عربي"
+              : course.sound === "FRENSH"
+              ? "فرنسي"
+              : "انجليزي"}
+          </span>
         </div>
 
         <div className="w-full flex items-center justify-start gap-x-4">
@@ -250,7 +257,14 @@ export const Product_card = ({
               color: "#000000",
             }}
           />
-          <span>المستوى: مبتدئ</span>
+          <span>
+            المستوى:{" "}
+            {course.level === "BEGINNER"
+              ? "مبتدئ"
+              : course.level === "INTERMEDIATE"
+              ? "متوسط"
+              : "متقدم"}
+          </span>
         </div>
 
         <div className="w-full flex items-center justify-start gap-x-4">

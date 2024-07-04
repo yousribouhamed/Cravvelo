@@ -97,6 +97,7 @@ export const course = {
         preview_video: z.string().optional(),
         courseWhatYouWillLearn: z.string().optional(),
         courseRequirements: z.string().optional(),
+        sound: z.string().optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -118,6 +119,7 @@ export const course = {
             preview_video: input?.preview_video ?? null,
             courseWhatYouWillLearn: input?.courseWhatYouWillLearn ?? null,
             courseRequirements: input?.courseRequirements ?? null,
+            sound: input.sound ?? null,
           },
         })
         .catch((err) => {

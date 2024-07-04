@@ -85,8 +85,8 @@ export function CourseSettingsForm({ course }: ComponentProps) {
       seoTitle: course?.seoTitle ?? "",
       courseRequirements: course.courseRequirements ?? "",
       courseWhatYouWillLearn: course?.courseWhatYouWillLearn ?? "",
-      level: course.level,
-      sound: "ARABIC",
+      level: course.level ?? "",
+      sound: course.sound ?? "",
       courseDescription: course?.courseDescription
         ? JSON.parse(course?.courseDescription as string)
         : [
@@ -124,6 +124,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
       title: values.title,
       youtubeUrl: values.youtubeUrl,
       level: values.level,
+      sound: values.sound,
       preview_video: values.preview_video,
     });
   }

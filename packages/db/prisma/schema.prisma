@@ -15,76 +15,76 @@ enum PLANS {
 }
 
 model Account {
-  id              String            @unique @default(cuid())
-  userId          String            @unique
-  avatarUrl       String?           @db.Text
-  user_name       String?           @db.Text
-  user_bio        String?           @db.Text
-  phone           Int?
-  support_email   String?
-  verified        Boolean           @default(false)
-  verification_steps        Int           @default(0)
-  plan            PLANS?
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  Course          Course[]
-  Product         Product[]
-  Website         Website[]
-  Coupon          Coupon[]
-  Sale            Sale[]
-  Notification    Notification[]
-  Student         Student[]
-  PaymentsConnect PaymentsConnect[]
-  Payments        Payments[]
-  Certificate     Certificate[]
-
+  id                 String            @unique @default(cuid())
+  userId             String            @unique
+  avatarUrl          String?           @db.Text
+  user_name          String?           @db.Text
+  user_bio           String?           @db.Text
+  phone              Int?
+  support_email      String?
+  verified           Boolean           @default(false)
+  verification_steps Int               @default(0)
+  plan               PLANS?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  Course             Course[]
+  Product            Product[]
+  Website            Website[]
+  Coupon             Coupon[]
+  Sale               Sale[]
+  Notification       Notification[]
+  Student            Student[]
+  PaymentsConnect    PaymentsConnect[]
+  Payments           Payments[]
+  Certificate        Certificate[]
 }
 
 model PaymentsConnect {
-  id                  String   @unique @default(cuid())
-  accountId           String   @unique
-  chargilyPublicKey   String
-  chargilySecretKey   String
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-  Account             Account? @relation(fields: [accountId], references: [id])
+  id                String   @unique @default(cuid())
+  accountId         String   @unique
+  chargilyPublicKey String
+  chargilySecretKey String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  Account           Account? @relation(fields: [accountId], references: [id])
 
   @@index([id])
   @@index([accountId])
 }
 
 model Course {
-  id                     String     @unique @default(cuid())
-  rating                 Float      @default(0)
+  id                     String    @unique @default(cuid())
+  rating                 Float     @default(0)
   accountId              String
   title                  String
-  courseUrl              String?    @db.VarChar(199)
-  youtubeUrl             String?    @db.VarChar(199)
-  thumbnailUrl            String?    @db.VarChar(199)
-  courseResume           String?    @db.VarChar(199)
-  courseRequirements     String?    @db.VarChar(199)
-  courseWhatYouWillLearn String?    @db.VarChar(199)
+  courseUrl              String?   @db.VarChar(199)
+  youtubeUrl             String?   @db.VarChar(199)
+  thumbnailUrl           String?   @db.VarChar(199)
+  courseResume           String?   @db.VarChar(199)
+  courseRequirements     String?   @db.VarChar(199)
+  courseWhatYouWillLearn String?   @db.VarChar(199)
   courseDescription      Json?
   seoTitle               String?
   seoDescription         String?
   price                  Float?
-  compareAtPrice         Float?  
+  compareAtPrice         Float?
   studentsNbr            Int?
-  preview_video          String?    @db.VarChar(199)
+  preview_video          String?   @db.VarChar(199)
   profit                 String?
-  length                 Float      @default(0)
-  nbrChapters            Float      @default(0)
+  length                 Float     @default(0)
+  nbrChapters            Float     @default(0)
   status                 String
   trainers               String?
-  suspended              Boolean    @default(false)
-  level                  String     @default("BEGINNER")
-  allowComment           Boolean    @default(true)
-  allowRating            Boolean    @default(true)
-  forceWatchAllCourse    Boolean    @default(true)
-  certificate            Boolean    @default(false)
-  Account                Account?   @relation(fields: [accountId], references: [id])
-  createdAt              DateTime   @default(now())
-  updatedAt              DateTime   @updatedAt
+  suspended              Boolean   @default(false)
+  level                  String?   @default("BEGINNER")
+  sound                  String?   @default("ARABIC")
+  allowComment           Boolean   @default(true)
+  allowRating            Boolean   @default(true)
+  forceWatchAllCourse    Boolean   @default(true)
+  certificate            Boolean   @default(false)
+  Account                Account?  @relation(fields: [accountId], references: [id])
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
   Comment                Comment[]
 
   @@index([id])
@@ -110,7 +110,7 @@ model Product {
   subDescription    String?  @db.VarChar(199)
   SeoTitle          String?
   SeoDescription    String?  @db.VarChar(199)
-  thumbnailUrl       String?
+  thumbnailUrl      String?
   fileUrl           String?
   description       Json?
   status            String?
@@ -202,7 +202,6 @@ model Sale {
   @@index([accountId])
 }
 
-
 model Comment {
   id           String   @unique @default(cuid())
   content      String
@@ -224,36 +223,35 @@ model Comment {
 }
 
 model Notification {
-  id        String   @unique @default(cuid())
-  content   String  
-  type      String   @default("WARNNING")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  accountId String
-  isRead    Boolean  @default(false)
+  id         String   @unique @default(cuid())
+  content    String
+  type       String   @default("WARNNING")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  accountId  String
+  isRead     Boolean  @default(false)
   isArchived Boolean  @default(false)
-  Account   Account  @relation(fields: [accountId], references: [id])
+  Account    Account  @relation(fields: [accountId], references: [id])
+
   @@index([id])
   @@index([accountId])
 }
 
-
-
 model Student {
-  id            String    @unique @default(cuid())
-  full_name     String
-  photo_url     String?   @db.Text
-  bio           String?
-  otp           Int?
-  email         String
-  phone         String?
-  accountId     String
-  password      String
+  id             String    @unique @default(cuid())
+  full_name      String
+  photo_url      String?   @db.Text
+  bio            String?
+  otp            Int?
+  email          String
+  phone          String?
+  accountId      String
+  password       String
   confirmedEmail DateTime?
-  bag           Json
-  Account       Account   @relation(fields: [accountId], references: [id])
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  bag            Json
+  Account        Account   @relation(fields: [accountId], references: [id])
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
   @@index([id])
   @@index([accountId])
@@ -270,7 +268,7 @@ model Certificate {
   fileUrl     String   @db.Text
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  Account   Account  @relation(fields: [accountId], references: [id])
+  Account     Account  @relation(fields: [accountId], references: [id])
 }
 
 model Payments {
@@ -280,7 +278,7 @@ model Payments {
   plan                String
   end_of_subscription DateTime
   payload             Json
-  strategy            String 
+  strategy            String
   status              String
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
@@ -339,7 +337,5 @@ model Referral {
   ccp                      String
   numberOfReferredStudents Int
 
-
   @@index([id])
-
 }

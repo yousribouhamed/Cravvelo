@@ -97,12 +97,14 @@ const Page = async ({ params }: PageProps) => {
               chapters={chapters}
             />
 
-            <Raitings
-              isAuthanticated={student ? true : false}
-              color={website?.color}
-              course={course}
-              comments={comments}
-            />
+            {course.allowComment && (
+              <Raitings
+                isAuthanticated={student ? true : false}
+                color={website?.color}
+                course={course}
+                comments={comments}
+              />
+            )}
           </div>
           <Product_card
             subdomain={website.subdomain}

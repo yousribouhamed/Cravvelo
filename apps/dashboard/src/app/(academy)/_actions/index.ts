@@ -225,6 +225,7 @@ export const getCoursesStudentOwns = async ({
       const studentCourse = bag.courses?.find((c) => c.course.id === course.id);
       return {
         ...course,
+        owned: studentCourse?.currentEpisode ? true : false,
         currentEpisode: studentCourse?.currentEpisode ?? 0,
       } as CourseWithEpisode;
     });
