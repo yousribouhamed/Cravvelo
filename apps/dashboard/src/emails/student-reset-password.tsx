@@ -1,27 +1,29 @@
 import {
   Body,
   Container,
+  Font,
   Head,
   Hr,
   Html,
+  Preview,
   Section,
-  Font,
   Text,
-  Tailwind,
 } from "@react-email/components";
 import * as React from "react";
+
+const baseUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "";
 
 interface CravveloVerifyEmailProps {
   url: string;
 }
 
-const baseUrl = process.env.VERCEL_URL ? process.env.VERCEL_URL : "/static";
-
 export default function StudentResetPasswordEmail({
   url,
 }: CravveloVerifyEmailProps) {
   return (
-    <Html lang="ar">
+    <Html lang="ar" dir="ltr">
       <Head>
         <Font
           fontFamily="montserrat"
@@ -34,45 +36,84 @@ export default function StudentResetPasswordEmail({
           fontStyle="normal"
         />
       </Head>
-      <Tailwind>
-        <Body
-          dir="rtl"
-          className="w-full h-full flex items-center justify-center min-h-[600px] bg-black mx-auto relative  "
-        >
-          <Container className=" w-[400px]  h-fit min-h-[600px] mx-auto relative ">
-            <Section>
-              <Section className="flex flex-col bg-white ">
-                <Section className=" w-full h-fit  p-4 ">
-                  <Text className="text-xl font-bold">اعد ضبط كلمه السر</Text>
 
-                  <Text>
-                    إذا لم تكن قد قدمت هذا الطلب، فما عليك سوى تجاهل هذه الرسالة
-                    الإلكترونية. إذا قمت بتقديم هذا الطلب، يرجى إعادة تعيين كلمة
-                    المرور الخاصة بك عن طريق النقر على هذا الزر.
-                  </Text>
-                  <Section className="w-full flex justify-center mt-4">
-                    <a
-                      href={url}
-                      style={{
-                        backgroundColor: "#1a73e8",
-                        color: "#ffffff",
-                        padding: "12px 24px",
-                        borderRadius: "20px",
-                        textDecoration: "none",
-                        fontWeight: "bold",
-                        display: "inline-block",
-                      }}
-                    >
-                      إعادة تعيين كلمة المرور
-                    </a>
-                  </Section>
-                </Section>
-                <Hr />
-              </Section>
-            </Section>
-          </Container>
-        </Body>
-      </Tailwind>
+      <Preview>قم بتغير كلمة المرور</Preview>
+      <Body style={main} dir="ltr">
+        <Container dir="ltr" style={container}>
+          <Section dir="ltr" style={box}>
+            <Text dir="ltr" style={paragraph}>
+              طلب شخص ما مؤخرًا تغيير كلمة المرور لحساب الخاص بك. إذا كنت أنت،
+              فيمكنك تعيين كلمة مرور جديدة هنا
+            </Text>
+
+            <a style={button} href={url}>
+              إعادة تعيين كلمة المرور
+            </a>
+            <Hr style={hr} />
+            <Text dir="ltr" style={paragraph}>
+              إذا كنت لا ترغب في تغيير كلمة المرور الخاصة بك أو لم تطلب ذلك، فما
+              عليك سوى تجاهل هذه الرسالة وحذفها.
+            </Text>
+            <Text dir="ltr" style={paragraph}>
+              للحفاظ على أمان حسابك، يرجى عدم إعادة توجيه هذه الرسالة
+              الإلكترونية إلى أي شخص.
+            </Text>
+          </Section>
+        </Container>
+      </Body>
     </Html>
   );
 }
+
+const main = {
+  backgroundColor: "#FC6B0033",
+  fontFamily: "Montserrat",
+};
+
+const container = {
+  backgroundColor: "#ffffff",
+  margin: "0 auto",
+  padding: "20px 0 48px",
+  marginBottom: "64px",
+};
+
+const box = {
+  padding: "0 48px",
+};
+
+const hr = {
+  borderColor: "#e6ebf1",
+  margin: "20px 0",
+};
+
+const paragraph = {
+  color: "#000000",
+
+  fontSize: "16px",
+  lineHeight: "24px",
+  textAlign: "right" as const,
+};
+
+const anchor = {
+  color: "#556cd6",
+};
+
+const button = {
+  backgroundColor: "#FC6B00",
+  cursor: "pointer",
+  borderRadius: "5px",
+  color: "#fff",
+  fontSize: "16px",
+  fontWeight: "bold",
+  textDecoration: "none",
+  textAlign: "center" as const,
+  display: "block",
+  width: "100%",
+  padding: "10px",
+};
+
+const footer = {
+  color: "#8898aa",
+  fontSize: "12px",
+  lineHeight: "16px",
+};

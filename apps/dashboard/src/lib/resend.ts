@@ -22,9 +22,6 @@ export const verifyStudentEmail = async ({
     console.log("there is an error");
     console.log(error.message);
   }
-
-  console.log("the email has been send with this data");
-  console.log({ email, code });
 };
 
 export const ResSetPassword = async ({
