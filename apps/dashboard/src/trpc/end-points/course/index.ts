@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { privateProcedure } from "../../trpc";
 import { TRPCError } from "@trpc/server";
+import { deleteFileFromS3Bucket, getKeyFromUrl } from "../../aws/s3";
 
 export const course = {
   createCourse: privateProcedure
@@ -177,6 +178,10 @@ export const course = {
           where: {
             id: input.courseId,
           },
+        });
+
+        await deleteFileFromS3Bucket({
+          fileName: getKeyFromUrl(course.thumbnailUrl),
         });
 
         return course;

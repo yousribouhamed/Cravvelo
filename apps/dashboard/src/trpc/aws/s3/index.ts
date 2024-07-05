@@ -1,5 +1,5 @@
 import { privateProcedure, publicProcedure } from "../../trpc";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { z } from "zod";
 import crypto from "crypto";
@@ -65,3 +65,35 @@ export const s3_bucket = {
       }
     }),
 };
+
+export const deleteFileFromS3Bucket = async ({
+  fileName,
+}: {
+  fileName: string;
+}) => {
+  const params = {
+    Bucket: "cravvel-bucket",
+    Key: fileName,
+  };
+
+  try {
+    const command = new DeleteObjectCommand(params);
+    await s3.send(command);
+  } catch (error) {
+    console.error("Error deleting image from S3:", error);
+    throw new Error("Error deleting image from S3");
+  }
+};
+
+export function getKeyFromUrl(url) {
+  // Extract the key from the URL
+  const urlPattern =
+    /https:\/\/cravvel-bucket\.s3\.[^/]+\.amazonaws\.com\/(.+)/;
+  const match = url.match(urlPattern);
+
+  if (match && match[1]) {
+    return match[1];
+  } else {
+    throw new Error("Invalid URL format");
+  }
+}

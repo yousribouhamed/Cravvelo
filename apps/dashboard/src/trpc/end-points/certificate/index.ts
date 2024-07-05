@@ -6,6 +6,7 @@ import { s3 } from "@/src/lib/s3";
 import { designO1 } from "./certificate-templates/design-01";
 import { design02 } from "./certificate-templates/design-02";
 import { designO3 } from "./certificate-templates/design-03";
+import { deleteFileFromS3Bucket, getKeyFromUrl } from "../../aws/s3";
 
 export const cetificate = {
   getAllCertificates: privateProcedure.query(async ({ ctx }) => {
@@ -107,13 +108,17 @@ export const cetificate = {
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const course = await ctx.prisma.certificate.delete({
+        const certificate = await ctx.prisma.certificate.delete({
           where: {
             id: input.id,
           },
         });
 
-        return course;
+        await deleteFileFromS3Bucket({
+          fileName: getKeyFromUrl(certificate.fileUrl),
+        });
+
+        return certificate;
       } catch (err) {
         console.error(err);
       }
