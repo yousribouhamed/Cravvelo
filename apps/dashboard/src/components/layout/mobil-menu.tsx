@@ -64,12 +64,6 @@ const SideBarMenu: FC = ({}) => {
   const router = useRouter();
   const path = usePathname();
 
-  console.log("we get somevalue from the url");
-  console.log(getValueFromUrl(path, 1));
-
-  console.log("we get path from the url");
-  console.log(path);
-
   return (
     <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 ">
       <div className="w-full">
@@ -91,7 +85,7 @@ const SideBarMenu: FC = ({}) => {
                   )}
                 >
                   {item.title}
-                  <item.icon className={`w-4 h-4 `} />
+                  <item.icon className={`w-5 h-5 text-white`} strokeWidth={3} />
                 </Link>
               )}
 
@@ -114,7 +108,7 @@ const SideBarMenu: FC = ({}) => {
                   )}
                 >
                   {item.title}
-                  <item.icon className={`w-4 h-4 text-white`} />
+                  <item.icon className={`w-5 h-5 text-white`} strokeWidth={3} />
                 </AccordionTrigger>
               )}
               {item.subitems?.length > 0 && (

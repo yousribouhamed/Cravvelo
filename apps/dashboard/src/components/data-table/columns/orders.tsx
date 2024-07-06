@@ -14,7 +14,8 @@ import { Checkbox } from "@ui/components/ui/checkbox";
 import { Sale } from "database";
 import { maketoast } from "../../toasts";
 import { DataTableColumnHeader } from "../data-table-head";
-import { formatDateInArabic } from "@/src/lib/utils";
+import { formatDateInArabic, formatDZD } from "@/src/lib/utils";
+import { Badge } from "@ui/components/ui/badge";
 
 export const OrderColumns: ColumnDef<Sale>[] = [
   {
@@ -73,7 +74,9 @@ export const OrderColumns: ColumnDef<Sale>[] = [
       <DataTableColumnHeader column={column} title="السعر" />
     ),
     cell: ({ row }) => {
-      return <p className=" text-sm font-bold ">DZD ${row.original.price}</p>;
+      return (
+        <p className=" text-sm font-bold ">{formatDZD(row.original.price)}</p>
+      );
     },
   },
 
@@ -84,9 +87,9 @@ export const OrderColumns: ColumnDef<Sale>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <p className=" text-sm font-bold ">
+        <Badge className="bg-[#2ECA8B]  text-white rounded-md">
           {row.original.itemType === "COURSE" ? "دورة" : "منتج"}
-        </p>
+        </Badge>
       );
     },
   },
