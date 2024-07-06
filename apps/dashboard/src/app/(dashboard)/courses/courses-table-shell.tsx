@@ -7,6 +7,7 @@ import { columns } from "@/src/components/data-table/columns/courses";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DataTableLoading } from "@/src/components/data-table/table-loading";
 import DeleteCourseModel from "@/src/components/models/delete-course-modal";
+import PlanExceededPopup from "@/src/components/models/pyment-plan-exceeded";
 
 interface CoursesTableShellProps {
   initialData: Course[];
@@ -30,6 +31,7 @@ const CoursesTableShell: FC<CoursesTableShellProps> = ({
   return (
     <div className="w-full min-h-[300px] h-fit flex flex-col ">
       <DeleteCourseModel refetch={refetch} />
+
       <DataTable
         columns={columns}
         data={data}

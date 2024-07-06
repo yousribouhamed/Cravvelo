@@ -20,9 +20,9 @@ export const course = {
 
       const limits =
         ctx.account.plan === "BASIC" || ctx.account.plan === null
-          ? 3
+          ? 1
           : ctx.account.plan === "ADVANCED"
-          ? 10
+          ? 2
           : 9999;
 
       if (courses.length >= limits) {
