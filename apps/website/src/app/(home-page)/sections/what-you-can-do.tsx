@@ -7,6 +7,109 @@ import * as React from "react";
 import Image from "next/image";
 // bg-[#8000FF]
 
+const PREVIEW_ITEM = [
+  {
+    jsk: () => (
+      <div className=" border  bg-[#F8FAE5]  overflow-hidden flex flex-col items-end p-12  w-full h-full min-h-[300px]  relative  rounded-2xl  xl:col-span-2">
+        <Image
+          src={"/preview/common/image-01.png"}
+          fill
+          loading="eager"
+          className=""
+          alt="image preview"
+        />
+
+        <div className="  w-[300px] h-[300px] md:w-[492px] md:h-[452px]  relative   z-[10]">
+          <img
+            src="/preview/firstimage/mac-book.svg"
+            className="z-[11] absolute top-3 left-5 md:w-[90px] md:h-[20px] h-[15px] w-[70px]"
+          />
+          <Image
+            src={"/preview/firstimage/create.png"}
+            loading="eager"
+            alt="image ya image"
+            className=""
+            fill
+          />
+        </div>
+        <img
+          src="/preview/firstimage/image-03.png"
+          className="z-[11] absolute bottom-1 right-4  md:bottom-16 md:right-28 w-[200px] h-[50px]"
+        />
+      </div>
+    ),
+  },
+  {
+    jsk: () => (
+      <div className=" border  bg-[#F8FAE5]  overflow-hidden flex flex-col items-end  pl-0  w-full h-full min-h-[300px]  relative  rounded-2xl  xl:col-span-2">
+        <Image
+          src={"/preview/image-02/background-image.png"}
+          fill
+          loading="eager"
+          className=""
+          alt="image preview"
+        />
+
+        <div className="  w-[720px] h-[574px] relative   z-[10]">
+          <Image
+            src={"/preview/image-02/image-content.png"}
+            loading="eager"
+            alt="image ya image"
+            className=""
+            fill
+          />
+        </div>
+      </div>
+    ),
+  },
+  {
+    jsk: () => (
+      <div className=" border  bg-[#F8FAE5]  overflow-hidden flex flex-col items-end  pl-0  w-full h-full min-h-[300px]  relative  rounded-2xl  xl:col-span-2">
+        <Image
+          src={"/preview/image-02/background-image.png"}
+          fill
+          loading="eager"
+          className=""
+          alt="image preview"
+        />
+
+        <div className="  w-[720px] h-[574px] relative   z-[10]">
+          <Image
+            src={"/preview/image-02/image-content.png"}
+            loading="eager"
+            alt="image ya image"
+            className=""
+            fill
+          />
+        </div>
+      </div>
+    ),
+  },
+  {
+    jsk: () => (
+      <div className=" border  bg-[#F8FAE5]  overflow-hidden flex flex-col items-end  pl-0  w-full h-full min-h-[300px]  relative  rounded-2xl  xl:col-span-2">
+        <Image
+          src={"/preview/image-02/background-image.png"}
+          fill
+          loading="eager"
+          className=""
+          alt="image preview"
+        />
+
+        <div className="  w-[720px] h-[574px] relative   z-[10]">
+          <Image
+            src={"/preview/image-02/image-content.png"}
+            loading="eager"
+            alt="image ya image"
+            className=""
+            fill
+          />
+        </div>
+      </div>
+    ),
+  },
+];
+
 const WhatYouCanDo: FC = () => {
   const [selected, setSelected] = React.useState<number>(0);
   return (
@@ -23,33 +126,7 @@ const WhatYouCanDo: FC = () => {
         </div>
       </section>
       <div className="w-full h-fit min-h-[500px]   grid grid-cols-1  xl:grid-cols-3 gap-2">
-        <div className=" border  bg-[#F8FAE5]  flex flex-col items-end p-12  w-full h-full min-h-[300px]  relative  rounded-2xl  xl:col-span-2">
-          <Image
-            src={"/preview/common/image-01.png"}
-            fill
-            loading="eager"
-            className=""
-            alt="image preview"
-          />
-
-          <div className="  w-[300px] h-[300px] md:w-[492px] md:h-[452px]  relative   z-[10]">
-            <img
-              src="/preview/firstimage/mac-book.svg"
-              className="z-[11] absolute top-3 left-5 md:w-[90px] md:h-[20px] h-[15px] w-[70px]"
-            />
-            <Image
-              src={"/preview/firstimage/create.png"}
-              loading="eager"
-              alt="image ya image"
-              className=""
-              fill
-            />
-          </div>
-          <img
-            src="/preview/firstimage/image-03.png"
-            className="z-[11] absolute bottom-1 right-4  md:bottom-16 md:right-28 w-[200px] h-[50px]"
-          />
-        </div>
+        {PREVIEW_ITEM[selected].jsk()}
         <div className="border border-[#FFB800] col-span-1 transition-all duration-100 ease-in-out bg-white flex flex-col p-4  rounded-lg">
           {what_to_do.map((item, index) => (
             <div
