@@ -1,6 +1,7 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import { Button } from "@ui/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 import type { FC } from "react";
 
 const StartNew: FC = ({}) => {
@@ -14,12 +15,14 @@ const StartNew: FC = ({}) => {
             تجارية ناجحة. لأنك <br />
             تستطيع!
           </p>
-          <Button
-            size="lg"
-            className="w-[350px] h-[60px] bg-[#F8FAE5] rounded-[17px] text-[#FC6B00] hover:bg-[#F8FAE5]  hover:translate-y-[-0.3rem] transition-all duration-150 text-2xl qatar-bold "
-          >
-            ابدء تجربتك المجانية
-          </Button>
+          <Link target="_blank" href={"https://beta.cravvelo.com/sign-up"}>
+            <Button
+              size="lg"
+              className="w-[350px] h-[60px] bg-[#F8FAE5] rounded-[17px] text-[#FC6B00] hover:bg-[#F8FAE5]  hover:translate-y-[-0.3rem] transition-all duration-150 text-2xl qatar-bold "
+            >
+              ابدء تجربتك المجانية
+            </Button>
+          </Link>
         </div>
         <div className="col-span-1 lg:absolute ml-9 md:ml-20 mt-1 left-10 md:left-12 bottom-0  top-0 ">
           <Image

@@ -189,7 +189,7 @@ export default function DropDownMenu() {
                         className="font-semibold text-gray-900 flex gap-x-2 group-hover:gap-x-3 transition-all duration-500 "
                       >
                         {item.name}
-                        <svg
+                        {/* <svg
                           width="15"
                           height="18"
                           viewBox="0 0 15 18"
@@ -210,7 +210,7 @@ export default function DropDownMenu() {
                             stroke-linecap="round"
                             stroke-linejoin="round"
                           />
-                        </svg>
+                        </svg> */}
                       </a>
                       <p className="mt-1 text-gray-500 text-md">
                         {item.description}

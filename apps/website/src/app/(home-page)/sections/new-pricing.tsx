@@ -2,10 +2,12 @@
 
 import type { FC } from "react";
 import { PLANS } from "@/src/constants/pricing";
-import { Button } from "@ui/components/ui/button";
+import { Button, buttonVariants } from "@ui/components/ui/button";
 import * as React from "react";
 import { Tabs } from "@/src/components/animations/animated-tabs";
 import Image from "next/image";
+import Link from "next/link";
+import { cn } from "@ui/lib/utils";
 
 const DISPLAY_VALUES = {
   monthly: "MONTHLY",
@@ -76,12 +78,17 @@ const NewPricing: FC = ({}) => {
                   </span>
                 </p>
               </div>
-              <Button
-                size="lg"
-                className="rounded-full h-20 w-[80%] text-lg font-bold mx-auto  hover:scale-105 transition-all duration-150 "
+              <Link
+                target="_blank"
+                href={"https://beta.cravvelo.com/sign-up"}
+                className={cn(
+                  buttonVariants({ size: "lg" }),
+                  "rounded-full h-20 w-[80%] text-lg font-bold mx-auto  hover:scale-105 transition-all duration-150 "
+                )}
               >
                 اشترك الان
-              </Button>
+              </Link>
+
               <span className="text-start my-6 text-[#FC6B00] text-lg  ">
                 {item.tagline}
               </span>
