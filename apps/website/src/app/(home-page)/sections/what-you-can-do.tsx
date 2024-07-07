@@ -4,6 +4,7 @@ import type { FC } from "react";
 import MaxWidthWrapper from "../../../components/max-width-wrapper";
 import { what_to_do } from "@/src/constants/data";
 import * as React from "react";
+import Image from "next/image";
 // bg-[#8000FF]
 
 const WhatYouCanDo: FC = ({}) => {
@@ -23,7 +24,9 @@ const WhatYouCanDo: FC = ({}) => {
       </section>
       <div className="w-full h-fit min-h-[500px]  grid grid-cols-1  xl:grid-cols-3 gap-2">
         <div className=" border border-[#FFB800] bg-[#F8FAE5]  rounded-2xl p-4 xl:col-span-2">
-          <div className="w-full h-full min-h-[300px]  rounded-2xl" />
+          <div className="w-full h-full min-h-[300px]  rounded-2xl relative">
+            <Image src={"/preview/image-01.svg"} fill alt="image preview" />
+          </div>
         </div>
         <div className="border border-[#FFB800] col-span-1 transition-all duration-100 ease-in-out bg-white flex flex-col p-4  rounded-lg">
           {what_to_do.map((item, index) => (
