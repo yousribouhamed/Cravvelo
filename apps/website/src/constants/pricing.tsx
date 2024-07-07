@@ -2,7 +2,7 @@ export const PLANS = [
   {
     plan: "الباقة الآساسية",
     plan_code: "BASIC",
-    price: "20",
+    price: "1500",
     imageUrl: "/pricing-icons/beginner.png",
     tagline:
       "إنشاء منصتك التعليمية ومنتجاتك الرقمية وبيعها وتسويقها عبر الإنترنت.",
@@ -25,19 +25,16 @@ export const PLANS = [
 
     features: [
       {
-        text: "3 دورات تدريبية",
+        text: "1 دورات تدريبية",
       },
       {
         text: "عدد طلاب غير محدود",
       },
       {
-        text: "3 منتجات رقمية",
+        text: "1 منتجات رقمية",
       },
       {
         text: "اختبارات وواجبات",
-      },
-      {
-        text: "تخصيص تصميم شهادة واحدة",
       },
 
       {
@@ -53,7 +50,7 @@ export const PLANS = [
         text: "تحسينات تحسين محركات البحث",
       },
       {
-        text: "إزالة هوية جدارة",
+        text: "إزالة هوية cravvelo",
         negative: true,
       },
     ],
@@ -67,7 +64,7 @@ export const PLANS = [
     imageUrl: "/pricing-icons/infi.png",
     plan_code: "ADVANCED",
     plan: "باقة النمو",
-    price: "4999",
+    price: "2490",
     icon: () => (
       <svg
         width="49"
@@ -82,22 +79,18 @@ export const PLANS = [
     tagline:
       "ارتقِ بمستوى عملك من خلال ميزات تساعدك على تحقيق نمو فائق السرعة.",
     quota: 10,
-
     features: [
       {
-        text: "10 دورات تدريبية",
+        text: "2 دورات تدريبية",
       },
       {
         text: "عدد طلاب غير محدود",
       },
       {
-        text: "10 منتجات رقمية",
+        text: "2 منتجات رقمية",
       },
       {
         text: "اختبارات وواجبات",
-      },
-      {
-        text: "تخصيص تصميم 3 شهادات",
       },
 
       {
@@ -113,7 +106,7 @@ export const PLANS = [
         text: "تحسينات تحسين محركات البحث",
       },
       {
-        text: "إزالة هوية جدارة",
+        text: "إزالة هوية cravvelo",
         negative: true,
       },
     ],
@@ -127,7 +120,7 @@ export const PLANS = [
     imageUrl: "/pricing-icons/pro.png",
     plan_code: "PRO",
     plan: "الباقة الاحترافية",
-    price: "19999",
+    price: "8990",
     tagline: "سعة غير محدودة وأدوات متقدمة تساعدك على التوسّع بعملك ومنتجاتك.",
     quota: 10,
     icon: () => (
@@ -155,9 +148,6 @@ export const PLANS = [
       {
         text: "اختبارات وواجبات",
       },
-      {
-        text: "تخصيص تصميم 10 شهادات",
-      },
 
       {
         text: "بوابات دفع الكتروني",
@@ -172,7 +162,7 @@ export const PLANS = [
         text: "تحسينات تحسين محركات البحث",
       },
       {
-        text: "إزالة هوية جدارة",
+        text: "إزالة هوية cravvelo",
       },
     ],
   },

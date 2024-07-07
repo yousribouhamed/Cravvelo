@@ -9,7 +9,7 @@ import { Icons } from "../my-icons";
 
 const oauthProviders = [
   { name: "Google", strategy: "oauth_google", icon: "google" },
-  { name: "Facebook", strategy: "oauth_facebook", icon: "facebook" },
+  // { name: "Facebook", strategy: "oauth_facebook", icon: "facebook" },
 ] satisfies {
   name: string;
   icon: keyof typeof Icons;

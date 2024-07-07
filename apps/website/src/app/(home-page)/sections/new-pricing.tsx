@@ -67,9 +67,12 @@ const NewPricing: FC = ({}) => {
               <div className="w-full h-[140px] flex items-center justify-center">
                 <p className="text-gray-500 text-xl">
                   <span className="text-4xl font-bold mx-3  text-black">
-                    {/* DZD{" "}
-                    {isPaymentByMonth ? item.price : Number(item.price) - 1000} */}
-                    قريبا
+                    DZD{" "}
+                    {isPaymentByMonth
+                      ? item.price
+                      : Math.floor(
+                          Number(item.price) - Number(item.price) * 0.2
+                        )}
                   </span>
                 </p>
               </div>

@@ -66,35 +66,35 @@ export default function Page() {
                   alt="add content new"
                   width={850}
                   height={550}
-                  className="absolute -bottom-16 left-0"
+                  className="absolute bottom-5 left-2 md:-bottom-16 md:left-0"
                 />
                 <Image
                   src="/all-in-one/Group 1000005917.svg"
                   alt="add content new"
                   width={1288}
                   height={406}
-                  className="absolute -top-10 -left-10"
+                  className="absolute top-52 -left-5 md:-top-10 md:-left-10"
                 />
                 <Image
                   src="/all-in-one/makethisfree.svg"
                   alt="add content new"
                   width={905}
                   height={307}
-                  className="absolute bottom-[3.5rem] -right-[18rem]"
+                  className="absolute left-[10] md:bottom-[3.5rem] md:-right-[18rem]"
                 />
                 <Image
                   src="/all-in-one/permition.svg"
                   alt="add content new"
                   width={555}
                   height={84}
-                  className="absolute bottom-20 left-0"
+                  className="absolute bottom-36 md:bottom-20 md:left-0"
                 />
                 <Image
                   src="/all-in-one/switch.svg"
                   alt="switchs"
                   width={372}
                   height={158}
-                  className="absolute bottom-[40%] left-[28%]"
+                  className="absolute bottom-80 md:bottom-[40%] md:left-[28%]"
                 />
               </div>
             </div>
@@ -131,7 +131,7 @@ export default function Page() {
                 height={70}
               />
 
-              <span className=" text-md lg:text-lg text-white text-start">
+              <span className=" text-md lg:text-lg text-white text-center">
                 © 2024 cravvelo. All rights reserved. |{" "}
                 <Link href={"/policy"}>website policy</Link>
               </span>

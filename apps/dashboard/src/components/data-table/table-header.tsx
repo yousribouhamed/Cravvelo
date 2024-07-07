@@ -97,6 +97,7 @@ export function TableHeader<TData>({
         )}
       </div> */}
       <Button
+        disabled
         variant="secondary"
         className="bg-white rounded-xl border flex items-center gap-x-2"
       >

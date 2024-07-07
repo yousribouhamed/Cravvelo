@@ -112,7 +112,7 @@ const ConfirmeAccount: FC = ({}) => {
             width="450"
             height="270"
             className="!rounded-2xl"
-            src="https://www.youtube.com/embed/a_feKqxjY-4?si=SDZlRSzMXzjHIkU0"
+            src="https://www.youtube.com/embed/"
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           ></iframe>

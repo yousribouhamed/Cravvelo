@@ -28,6 +28,7 @@ const SimpleTableHeader: FC<SimpleTableHeaderProps> = ({ table, data }) => {
     <div className="w-full h-[70px] flex items-center justify-between">
       <div className="min-w-[200px] w-fit h-full flex  items-center justify-start gap-x-4">
         <Button
+          disabled
           variant="secondary"
           className="bg-white rounded-xl border flex items-center gap-x-2"
           onClick={() => handleExportCSV(data)}
