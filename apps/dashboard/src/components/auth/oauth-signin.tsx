@@ -47,7 +47,7 @@ export function OAuthSignIn() {
         aria-label={`Sign in with ${oauthProviders[0].name}`}
         key={oauthProviders[0].strategy}
         variant="secondary"
-        className="w-full h-14  bg-white rounded-lg flex items-center justify-center gap-x-4 border-input shadow font-bold "
+        className="w-full h-14  bg-white rounded-lg flex items-center justify-center gap-x-4 border shadow font-bold "
         onClick={() => void oauthSignIn(oauthProviders[0].strategy)}
         disabled={isLoading !== null}
       >
@@ -61,7 +61,7 @@ export function OAuthSignIn() {
           <Icons.google className="mr-2 h-4 w-4" aria-hidden="true" />
         )}
       </Button>
-      <Button
+      {/* <Button
         size="lg"
         aria-label={`Sign in with ${oauthProviders[1].name}`}
         key={oauthProviders[1].strategy}
@@ -79,7 +79,7 @@ export function OAuthSignIn() {
         ) : (
           <Icons.facebook className="mr-2 h-4 w-4" aria-hidden="true" />
         )}
-      </Button>
+      </Button> */}
     </div>
   );
 }
