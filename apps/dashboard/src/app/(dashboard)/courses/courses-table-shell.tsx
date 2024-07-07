@@ -7,7 +7,6 @@ import { columns } from "@/src/components/data-table/columns/courses";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DataTableLoading } from "@/src/components/data-table/table-loading";
 import DeleteCourseModel from "@/src/components/models/delete-course-modal";
-import PlanExceededPopup from "@/src/components/models/pyment-plan-exceeded";
 
 interface CoursesTableShellProps {
   initialData: Course[];
