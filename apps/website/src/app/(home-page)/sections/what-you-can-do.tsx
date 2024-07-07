@@ -75,7 +75,7 @@ const PREVIEW_ITEM = [
 
         <div className="  w-[720px] h-[574px] relative   z-[10]">
           <Image
-            src={"/preview/image-02/image-content.png"}
+            src={"/preview/image-03/graph-image.svg"}
             loading="eager"
             alt="image ya image"
             className=""
