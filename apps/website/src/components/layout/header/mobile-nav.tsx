@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import NestedMobileDropdownMenu from "./mobile-dropdown-menu";
+import { boolean } from "zod";
 
 const links = [
   {
@@ -27,7 +28,11 @@ const links = [
   },
 ];
 
-const MobileNav = () => {
+interface MobileNavProps {
+  isTopAdOpen: boolean;
+}
+
+const MobileNav = ({ isTopAdOpen = true }: MobileNavProps) => {
   const [isOpen, setOpen] = useState<boolean>(false);
 
   const toggleOpen = () => setOpen((prev) => !prev);
@@ -61,7 +66,11 @@ const MobileNav = () => {
       </Button>
 
       {isOpen ? (
-        <div className="fixed h-fit animate-in slide-in-from-top-5 fade-in-20 inset-0 top-[120px] z-0 w-full border-t shadow-xl">
+        <div
+          className={`fixed h-fit animate-in slide-in-from-top-5 fade-in-20 inset-0 ${
+            isTopAdOpen ? "top-[120px]" : "top-[70px]"
+          }  z-0 w-full border-t shadow-xl`}
+        >
           <ul className="absolute bg-white border-b border-zinc-200 shadow-xl grid w-full gap-3 px-10 pt-10 pb-8">
             <>
               {links.map((item, index) => {

@@ -124,7 +124,7 @@ const NavBar = () => {
               </Link>
             </div>
             <div className="w-fit lg:hidden flex items-center pl-4">
-              <MobileNav />
+              <MobileNav isTopAdOpen={!close} />
             </div>
           </div>
         </div>
