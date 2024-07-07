@@ -104,7 +104,7 @@ const NavBar = () => {
             <div className="w-[40%] hidden lg:flex items-center justify-end gap-x-4">
               <Link
                 target="_blank"
-                href="https://app.cravvelo.com/sign-up"
+                href="https://beta.cravvelo.com/sign-up"
                 className={cn(
                   buttonVariants(),
                   "bg-primary border border-primary text-white text-xl py-4 h-12 rounded-2xl font-bold transition-all duration-150"
@@ -114,7 +114,7 @@ const NavBar = () => {
               </Link>
               <Link
                 target="_blank"
-                href="https://app.cravvelo.com/sign-in"
+                href="https://beta.cravvelo.com/sign-in"
                 className={cn(
                   buttonVariants(),
                   "bg-white border border-primary text-primary text-xl py-4 h-12 rounded-2xl hover:text-white font-bold hover:bg-[#FC6B00] transition-all duration-150"
