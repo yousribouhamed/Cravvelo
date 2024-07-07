@@ -7,7 +7,7 @@ import * as React from "react";
 import Image from "next/image";
 // bg-[#8000FF]
 
-const WhatYouCanDo: FC = ({}) => {
+const WhatYouCanDo: FC = () => {
   const [selected, setSelected] = React.useState<number>(0);
   return (
     <MaxWidthWrapper>
