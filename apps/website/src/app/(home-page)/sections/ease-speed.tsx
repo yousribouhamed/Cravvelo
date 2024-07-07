@@ -16,7 +16,7 @@ const EaseSpeed: FC = ({}) => {
             <div className="w-[90px] h-[70px] shadow rounded-2xl   flex items-center justify-center">
               <Image
                 alt="something"
-                src="/icons/checked-icon.svg"
+                src="/icons/Group 11.svg"
                 width={400}
                 height={400}
               />
@@ -31,7 +31,14 @@ const EaseSpeed: FC = ({}) => {
 
         <div className="w-full h-full border border-[#FFB800] rounded-xl bg-[#F8FAE5] p-8">
           <div className="w-full h-[50px] flex items-center justify-start gap-x-4">
-            <div className="w-[50px] h-[50px] bg-green-500" />
+            <div className="w-[70px] h-[70px] shadow rounded-2xl   flex items-center justify-center">
+              <Image
+                alt="something"
+                src="/icons/Group 19.svg"
+                width={300}
+                height={300}
+              />
+            </div>
             <h3 className="text-4xl font-bold  text-start">تجربة متكاملة</h3>
           </div>
 
@@ -44,7 +51,14 @@ const EaseSpeed: FC = ({}) => {
 
         <div className="w-full h-full border border-[#FFB800] rounded-xl bg-[#F8FAE5] p-8">
           <div className="w-full h-[50px] flex items-center justify-start gap-x-4">
-            <div className="w-[50px] h-[50px] bg-green-500" />
+            <div className="w-[70px] h-[70px] shadow rounded-2xl   flex items-center justify-center">
+              <Image
+                alt="something"
+                src="/icons/Group 10.svg"
+                width={300}
+                height={300}
+              />
+            </div>
             <h3 className="text-4xl font-bold  text-start">إختبار وتتبع</h3>
           </div>
 
