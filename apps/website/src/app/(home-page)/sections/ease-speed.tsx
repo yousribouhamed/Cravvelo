@@ -1,4 +1,5 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
+import Image from "next/image";
 import type { FC } from "react";
 
 interface EaseSpeedAbdullahProps {}
@@ -12,7 +13,14 @@ const EaseSpeed: FC = ({}) => {
       >
         <div className="w-full h-full border border-yellow-500 rounded-xl bg-[#F8FAE5] p-8">
           <div className="w-full h-[50px] flex items-center justify-start gap-x-4">
-            <div className="w-[50px] h-[50px] bg-green-500" />
+            <div className="w-[90px] h-[70px] shadow rounded-2xl   flex items-center justify-center">
+              <Image
+                alt="something"
+                src="/icons/checked-icon.svg"
+                width={400}
+                height={400}
+              />
+            </div>
             <h3 className="text-4xl font-bold  text-start">السهولة والسرعة</h3>
           </div>
           <p className="text-xl text-[#8B8B8B] mt-4 text-start">

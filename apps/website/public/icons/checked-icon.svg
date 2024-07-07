@@ -1,0 +1,33 @@
+<svg width="87" height="87" viewBox="0 0 87 87" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_b_3377_12018)">
+<circle cx="34.6938" cy="52.9184" r="15.5102" fill="url(#paint0_linear_3377_12018)"/>
+</g>
+<g filter="url(#filter1_d_3377_12018)">
+<path d="M33.9186 36.6326C24.7257 36.6326 17.2451 44.1123 17.2451 53.3041C17.2451 62.496 24.7257 69.9795 33.9186 69.9795C43.1115 69.9795 50.5921 62.4998 50.5921 53.308C50.5921 44.1161 43.1115 36.6326 33.9186 36.6326ZM41.1028 50.126L32.7642 59.1024C32.3871 59.5103 31.8714 59.718 31.352 59.718C30.9056 59.718 30.4631 59.5641 30.0975 59.2563L25.6069 55.4087C24.7988 54.7162 24.7064 53.5042 25.3991 52.6962C26.0917 51.8882 27.3038 51.792 28.1119 52.4884L31.198 55.1317L38.2784 47.5097C39.0018 46.7325 40.2178 46.6863 40.9989 47.4096C41.7801 48.133 41.8224 49.3488 41.1028 50.126Z" fill="url(#paint1_linear_3377_12018)"/>
+</g>
+<defs>
+<filter id="filter0_b_3377_12018" x="-13.4655" y="4.75915" width="96.3186" height="96.3186" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feGaussianBlur in="BackgroundImageFix" stdDeviation="16.3245"/>
+<feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_3377_12018"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_3377_12018" result="shape"/>
+</filter>
+<filter id="filter1_d_3377_12018" x="0.755569" y="0.355561" width="86.1132" height="86.1135" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="9.89373" dy="-9.89373"/>
+<feGaussianBlur stdDeviation="13.1916"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.698039 0 0 0 0 0.968627 0 0 0 0 0.388235 0 0 0 0.2 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_3377_12018"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_3377_12018" result="shape"/>
+</filter>
+<linearGradient id="paint0_linear_3377_12018" x1="48.0047" y1="43.0099" x2="9.34869" y2="37.6648" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white" stop-opacity="0.61"/>
+</linearGradient>
+<linearGradient id="paint1_linear_3377_12018" x1="50.5921" y1="36.6326" x2="27.0794" y2="64.1318" gradientUnits="userSpaceOnUse">
+<stop stop-color="#B2F763"/>
+<stop offset="1" stop-color="#26AB3F"/>
+</linearGradient>
+</defs>
+</svg>
