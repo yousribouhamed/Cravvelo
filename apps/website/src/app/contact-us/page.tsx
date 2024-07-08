@@ -8,9 +8,10 @@ import Link from "next/link";
 
 const Page: FC = ({}) => {
   return (
-    <>
+    <div className="w-full h-full overflow-hidden">
       <MaxWidthWrapper>
-        <div className="w-full h-fit min-h-[300px] mt-[140px] grid grid-cols-2 ">
+        <div className="w-full  h-screen mt-[140px] grid grid-cols-2 overflow-hidden ">
+          {/* <HeroLights /> */}
           <div className="w-full h-full col-span-1 flex flex-col items-center justify-center gap-y-32 pt-[80px] ">
             {/* the first writing */}
             <div className="w-full h-[50px] mr-[200px] xl:mr-[350px] relative space-x-2 flex items-center justify-start gap-x-4">
@@ -73,7 +74,7 @@ const Page: FC = ({}) => {
           </div>
         </div>
       </MaxWidthWrapper>
-      <HeroLights />
+
       <div className="w-full h-[250px] md:h-[150px] mt-20 bg-primary flex items-center justify-center p-4">
         <MaxWidthWrapper>
           <div
@@ -102,7 +103,7 @@ const Page: FC = ({}) => {
           </div>
         </MaxWidthWrapper>
       </div>
-    </>
+    </div>
   );
 };
 

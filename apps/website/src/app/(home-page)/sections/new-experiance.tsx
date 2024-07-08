@@ -44,37 +44,37 @@ const NewExperiance: FC = ({}) => {
             </p>
             <div className="w-full h-fit flex flex-col gap-y-4 ">
               <div className="w-full h-[70px] px-4 gap-x-4  flex items-center justify-start">
-                <div className="w-[55px] rounded-[18.22px] relative  bg-[#3130364D] h-[55px] flex items-center justify-center ">
-                  <img
-                    src="/icons/lamb.svg"
-                    alt="this is the image"
-                    className="w-[60px] h-[60px]"
-                  />
-                </div>
+                <Image
+                  src="/icons/lamp.svg"
+                  alt="this is the image"
+                  width={60}
+                  height={60}
+                />
+
                 <p className="text-black font-semibold text-xl">
                   إمكانية إدارة الطالب لحسابه وإثراء تجربته
                 </p>
               </div>
               <div className="w-full h-[70px] px-4 gap-x-4 flex items-center justify-start">
-                <div className="w-[55px] rounded-[18.22px] relative  bg-[#3130364D] h-[55px] flex items-center justify-center ">
-                  <img
-                    src="/icons/discount.svg"
-                    alt="this is the image"
-                    className="w-[70px] h-[70px]"
-                  />
-                </div>
+                <Image
+                  src="/icons/ring.svg"
+                  alt="this is the image"
+                  width={60}
+                  height={60}
+                />
+
                 <p className="text-black font-semibold text-xl">
                   مشاهدة الدورة{" "}
                 </p>
               </div>
               <div className="w-full h-[70px] px-4  gap-x-4  flex items-center justify-start">
-                <div className="w-[55px] rounded-[18.22px] relative  bg-[#3130364D] h-[55px] flex items-center justify-center ">
-                  <img
-                    src="/icons/bill.svg"
-                    alt="this is the image"
-                    className="w-[40px] h-[40px]"
-                  />
-                </div>
+                <Image
+                  src="/icons/Group 12.svg"
+                  alt="this is the image"
+                  width={60}
+                  height={60}
+                />
+
                 <p className="text-black font-semibold text-xl">
                   إمكانية إدارة الطالب لحسابه وإثراء تجربته
                 </p>

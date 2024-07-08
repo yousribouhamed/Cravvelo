@@ -137,10 +137,12 @@ const WhatYouCanDo: FC = () => {
               } transition-all duration-100 ease-in-out pt-2 mb-4 `}
             >
               <div className="w-[70px] h-full flex flex-col justify-start items-end pl-2  ">
-                <div className="rounded-[50%] bg-[#FC6B00] mt-1  flex items-center justify-center w-[40px] h-[40px]">
-                  {" "}
-                  <item.icons />{" "}
-                </div>
+                <Image
+                  src={`/what-you-can-do${item.icon_url}`}
+                  alt="icon image"
+                  width={40}
+                  height={40}
+                />
               </div>
               <div className="w-[calc(100%-70px)] h-fit gap-y-6 p-2 flex flex-col justify-start  ">
                 <h3 className="text-2xl font-semibold text-start">
