@@ -141,7 +141,7 @@ export default function DropDownMenu() {
             onMouseEnter={() => buttonRef?.current?.click()}
             className={cn(
               buttonVariants({ variant: "ghost" }),
-              "font-semibold text-lg text-black leading-[40px]   rounded-full transition-all duration-150  "
+              "font-semibold xl:text-lg text-sm text-black leading-[40px]   rounded-full transition-all duration-150  "
             )}
             style={{
               cursor: "pointer",

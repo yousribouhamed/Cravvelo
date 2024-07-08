@@ -10,7 +10,7 @@ const HeroLights: FC = ({}) => {
           alt="background"
           width={1920}
           height={3743}
-          loading="eager"
+          loading="lazy"
         />
       </div>
     </>

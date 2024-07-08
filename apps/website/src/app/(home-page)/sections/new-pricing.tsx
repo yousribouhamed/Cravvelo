@@ -38,7 +38,7 @@ const NewPricing: FC = ({}) => {
         />
       </div>
 
-      <div className="w-full h-fit   max-w-6xl mx-auto min-h-[800px] grid grid-cols-1 md:grid-cols-3  gap-10 ">
+      <div className="w-full h-fit   max-w-6xl mx-auto min-h-[800px] grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-10 ">
         {PLANS.map((item, index) => {
           return (
             <div

@@ -131,7 +131,7 @@ export default function Page() {
                 height={70}
               />
 
-              <span className=" text-md lg:text-lg text-white text-center">
+              <span className=" text-sm md:text-md lg:text-lg text-white text-center">
                 © 2024 cravvelo. All rights reserved. |{" "}
                 <Link href={"/policy"}>website policy</Link>
               </span>

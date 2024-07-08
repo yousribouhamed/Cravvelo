@@ -39,42 +39,41 @@ const SecureContent: FC = ({}) => {
           تتيح حماية المحتوى من الاستخدامات غير القانونية كالنسخ والسرقة وغيرها.
         </p>
         {/* bg-[#F8FAE5] */}
-        <div
-          className="w-full h-[590px]    flex flex-col items-end justify-start p-8 overflow-hidden  relative rounded-2xl"
-          style={{
-            background:
-              "linear-gradient(50deg, rgba(252, 107, 0, 1) 0%, rgba(6, 6, 6, 1) 89%, rgba(13, 13, 13, 1) 100%);",
-            backgroundColor:
-              "linear-gradient(50deg, rgba(252, 107, 0, 1) 0%, rgba(6, 6, 6, 1) 89%, rgba(13, 13, 13, 1) 100%);",
-          }}
-        >
+        <div className="w-full h-[590px] overflow-hidden   flex flex-col items-end justify-start  relative   rounded-2xl">
+          <div
+            // style={{
+            //   background:
+            //     "linear-gradient(50deg, rgba(252, 107, 0, 1) 0%, rgba(6, 6, 6, 1) 89%, rgba(13, 13, 13, 1) 100%);",
+            // }}
+            className="w-full h-full z-[-10] absolute inset-0 rounded-2xl  bg-gradient-to-br from-[#FC6B00] via-[#060606] to-[#0D0D0D]"
+          />
           <Image
             alt="something"
             className="z-[80]"
             src="/folder.svg"
-            width={400}
-            height={400}
+            width={370}
+            height={370}
           />
 
-          <div className="min-w-[250px] w-fit min-h-[50px] h-fit bg-white rounded-full shadow-2xl px-2 gap-x-2 flex items-center justify-start ml-[300px] lg:ml-[500px] z-[80]">
+          <div className="min-w-[250px] w-fit min-h-[50px] h-fit bg-white rounded-full shadow-2xl px-4 gap-x-2 flex items-center justify-start ml-[300px] lg:ml-[500px] z-[80]">
             <Image
               loading="eager"
               alt="something"
-              src="/pen.svg"
-              width={60}
-              height={60}
+              src="/icons/Pencil.svg"
+              width={30}
+              height={30}
             />
 
             <span className="text-lg font-bold">تعطيل نسخ النص</span>
           </div>
 
-          <div className="min-w-[390px] w-fit mt-[70px] ml-[50px] lg:ml-[200px] min-h-[50px] h-fit bg-white rounded-full shadow-2xl px-2 gap-x-2 flex items-center justify-start z-[80]">
+          <div className="min-w-[390px] w-fit mt-[70px] ml-[50px] lg:ml-[200px] min-h-[50px] h-fit bg-white rounded-full shadow-2xl px-4 gap-x-2 flex items-center justify-start z-[80]">
             <Image
               loading="eager"
               alt="something"
-              src="/lock.svg"
-              width={60}
-              height={60}
+              src="/icons/Lock.svg"
+              width={30}
+              height={30}
             />
             <span className="text-lg font-bold ">
               تقييد تسجيل الدخول من جهاز واحد

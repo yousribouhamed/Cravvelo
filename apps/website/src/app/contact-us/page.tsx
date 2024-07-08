@@ -8,11 +8,10 @@ import Link from "next/link";
 
 const Page: FC = ({}) => {
   return (
-    <div className="w-full h-full overflow-hidden">
+    <>
       <MaxWidthWrapper>
-        <div className="w-full  h-screen mt-[140px] grid grid-cols-2 overflow-hidden ">
-          {/* <HeroLights /> */}
-          <div className="w-full h-full col-span-1 flex flex-col items-center justify-center gap-y-32 pt-[80px] ">
+        <div className="w-full  h-fit min-h-screen mt-[140px] grid grid-cols-1 md:grid-cols-2 ">
+          <div className="w-full h-full col-span-1 flex flex-col items-center justify-start gap-y-32 pt-[80px] ">
             {/* the first writing */}
             <div className="w-full h-[50px] mr-[200px] xl:mr-[350px] relative space-x-2 flex items-center justify-start gap-x-4">
               <div className="bg-[#FC6B00] rotate-6 p-4  flex items-center justify-center w-[100px] h-[50px] rounded-xl">
@@ -74,8 +73,8 @@ const Page: FC = ({}) => {
           </div>
         </div>
       </MaxWidthWrapper>
-
-      <div className="w-full h-[250px] md:h-[150px] mt-20 bg-primary flex items-center justify-center p-4">
+      {/* <HeroLights /> */}
+      <div className="w-full mt-auto h-[250px]  md:h-[150px]  bg-primary flex items-center justify-center p-4">
         <MaxWidthWrapper>
           <div
             dir="ltr"
@@ -88,7 +87,7 @@ const Page: FC = ({}) => {
               height={70}
             />
 
-            <span className=" text-md lg:text-lg text-white text-start">
+            <span className=" text-sm md:text-md lg:text-lg text-white text-start">
               © 2024 cravvelo. All rights reserved. |{" "}
               <Link href={"/policy"}>website policy</Link>
             </span>
@@ -103,7 +102,7 @@ const Page: FC = ({}) => {
           </div>
         </MaxWidthWrapper>
       </div>
-    </div>
+    </>
   );
 };
 

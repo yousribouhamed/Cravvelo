@@ -50,7 +50,7 @@ const MobileNav = ({ isTopAdOpen = true }: MobileNavProps) => {
   };
 
   return (
-    <div className="sm:hidden h-fit">
+    <div className="xl:hidden h-fit">
       {/* <Menu
         onClick={toggleOpen}
         className="relative z-50 h-5 w-5 text-zinc-900 hover:bg-primary"

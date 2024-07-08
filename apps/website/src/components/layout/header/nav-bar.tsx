@@ -35,8 +35,8 @@ const NavBar = () => {
     <>
       <div className={`w-full h-[120px] z-[99] fixed top-0`}>
         {!close && (
-          <div className="w-full h-[41px] bg-gradient-to-r from-[#ffeb38] to-[#fab508] flex justify-center items-center gap-x-20">
-            <p className="text-black font-bold text-base">
+          <div className="w-full h-[41px] bg-gradient-to-r from-[#ffeb38] to-[#fab508] flex justify-center items-center gap-x-2 px-4 md:gap-x-20">
+            <p className="text-black text-xs md:text-base font-bold ">
               الآن cravvelo في النسخة التجريبية المفتوحة
             </p>
             <Button
@@ -77,7 +77,7 @@ const NavBar = () => {
                 />
               </Link>
             </div>
-            <nav className="w-[60%] hidden lg:flex items-center justify-center">
+            <nav className="w-[60%] hidden xl:flex items-center justify-center">
               <ul className="flex w-[22rem] flex-wrap items-center justify-center gap-y-1 text-[0.9rem] font-medium text-gray-500 sm:w-auto sm:flex-nowrap sm:gap-5">
                 {links.map((item, index) =>
                   index === 1 ? (
@@ -88,7 +88,7 @@ const NavBar = () => {
                       key={item.name}
                       className={cn(
                         buttonVariants({ variant: "ghost" }),
-                        "font-semibold text-lg text-black leading-[40px] rounded-full transition-all duration-150",
+                        "font-semibold 2xl:text-lg text-sm text-black leading-[40px] rounded-full transition-all duration-150",
                         {
                           "border-[#FFB700] border-2 font-bold bg-[#FFEEC5]":
                             item.href === path,
@@ -101,13 +101,13 @@ const NavBar = () => {
                 )}
               </ul>
             </nav>
-            <div className="w-[40%] hidden lg:flex items-center justify-end gap-x-4">
+            <div className="w-[40%] hidden xl:flex items-center justify-end gap-x-4">
               <Link
                 target="_blank"
                 href="https://beta.cravvelo.com/sign-up"
                 className={cn(
                   buttonVariants(),
-                  "bg-primary border border-primary text-white text-xl py-4 h-12 rounded-2xl font-bold transition-all duration-150"
+                  "bg-primary border border-primary text-white xl:text-xl text-md py-4 h-12 rounded-2xl font-bold transition-all duration-150"
                 )}
               >
                 انشاء حساب
@@ -117,13 +117,13 @@ const NavBar = () => {
                 href="https://beta.cravvelo.com/sign-in"
                 className={cn(
                   buttonVariants(),
-                  "bg-white border border-primary text-primary text-xl py-4 h-12 rounded-2xl hover:text-white font-bold hover:bg-[#FC6B00] transition-all duration-150"
+                  "bg-white border border-primary text-primary xl:text-xl text-md py-4 h-12 rounded-2xl hover:text-white font-bold hover:bg-[#FC6B00] transition-all duration-150"
                 )}
               >
                 تسجيل الدخول
               </Link>
             </div>
-            <div className="w-fit lg:hidden flex items-center pl-4">
+            <div className="w-fit xl:hidden flex items-center pl-4">
               <MobileNav isTopAdOpen={!close} />
             </div>
           </div>
