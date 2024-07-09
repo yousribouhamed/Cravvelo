@@ -121,7 +121,7 @@ export const PLANS = [
     imageUrl: "/pricing-icons/pro.png",
     plan_code: "PRO",
     plan: "الباقة الاحترافية",
-    price: "8990",
+    price: "6990",
     tagline: "سعة غير محدودة وأدوات متقدمة تساعدك على التوسّع بعملك ومنتجاتك.",
     quota: 10,
     icon: () => (
@@ -138,7 +138,7 @@ export const PLANS = [
 
     features: [
       {
-        text: "عدد دورات غير محدود",
+        text: "6 دورات تدريبية",
       },
       {
         text: "عدد طلاب غير محدود",

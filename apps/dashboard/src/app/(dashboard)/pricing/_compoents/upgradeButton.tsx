@@ -85,7 +85,7 @@ const UpgradeButton: FC = ({}) => {
                     {isPaymentByMonth
                       ? item.price
                       : Math.floor(
-                          Number(item.price) - Number(item.price) * 0.4
+                          Number(item.price) - Number(item.price) * 0.1
                         )}
                   </span>
                   /شهرياً

@@ -59,7 +59,7 @@ export const chargily = {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            amount: input.isByMounth ? input.amount : input.amount * 12,
+            amount: input.isByMounth ? input.amount : (input.amount  - input.amount * 0.1)* 12,
             currency: "dzd",
             product_id: product.id,
           }),
