@@ -42,7 +42,7 @@ const PaymentMethodsConnectors: FC<PaymentMethodsConnectorsProps> = ({
         </CardHeader>
         <CardContent>
           <p className="text-xl  text-start ">
-            المصة الاولى في الجزائر لاستقبال الاموال عبر الانترنت دون الحاجة
+            المنصة الاولى في الجزائر لاستقبال الاموال عبر الانترنت دون الحاجة
             لسجل تجاري
           </p>
         </CardContent>
