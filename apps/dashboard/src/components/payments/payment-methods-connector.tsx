@@ -41,7 +41,7 @@ const PaymentMethodsConnectors: FC<PaymentMethodsConnectorsProps> = ({
           </div>
         </CardHeader>
         <CardContent>
-          <p className="text-xl font-bold text-start ">
+          <p className="text-xl  text-start ">
             المصة الاولى في الجزائر لاستقبال الاموال عبر الانترنت دون الحاجة
             لسجل تجاري
           </p>
@@ -58,6 +58,32 @@ const PaymentMethodsConnectors: FC<PaymentMethodsConnectorsProps> = ({
           {isChargilyConnected && (
             <Button className={` hover:bg-vilet-600 bg-green-500`}>متصل</Button>
           )}
+        </CardFooter>
+      </Card>
+
+      <Card className="w-full max-w-sm h-[300px] rounded-2xl">
+        <CardHeader>
+          <div className="flex items-center justify-start gap-x-2">
+            <Image
+              src="/stripe-2.svg"
+              alt="chargily image"
+              width={50}
+              height={50}
+              className="object-fill rounded-xl"
+            />
+            <CardTitle>stripe</CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <p className="text-xl  text-start ">
+            Stripe هي منصة مدفوعات عبر الإنترنت تتيح للشركات قبول المدفوعات
+            وإدارة العمليات المالية بسهولة.
+          </p>
+        </CardContent>
+        <CardFooter className="flex items-center  gap-x-4 mb-4">
+          <Button className={`bg-blue-700`} disabled>
+            قريبا
+          </Button>
         </CardFooter>
       </Card>
     </div>

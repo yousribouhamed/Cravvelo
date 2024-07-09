@@ -38,7 +38,7 @@ const Header: FC<Props> = ({
     <>
       <TooltipProvider>
         <div className="w-full h-[96px] flex justify-between items-center border-b  ">
-          <div className="lg:w-[25%] w-[40%] h-full flex items-center justify-start gap-x-2">
+          <div className="lg:w-[25%] w-[50%] h-full flex items-center justify-start gap-x-2">
             <div className="lg:hidden">
               <MobildSideBard />
             </div>
@@ -59,13 +59,15 @@ const Header: FC<Props> = ({
                 </TooltipContent>
               </Tooltip>
             )}
-            <h1 className="text-xl font-bold text-start">{title}</h1>
+            <h1 className=" text-lg md:text-xl font-bold text-start">
+              {title}
+            </h1>
           </div>
           <div className="w-[50%] h-[88px] flex items-center justify-center px-4">
             <SearchInput />
           </div>
 
-          <div className=" lg:w-[25%] w-[40%]   h-full flex items-center justify-end gap-x-2">
+          <div className=" lg:w-[25%] w-[50%]   h-full flex items-center justify-end gap-x-2">
             <Notifications
               accountId={user.accountId}
               notifications={notifications}
@@ -85,14 +87,14 @@ const Header: FC<Props> = ({
 
       {user?.isFreeTrial && !user?.isSubscribed && !isLoadingPage ? (
         <div className="w-full h-[70px] flex items-center justify-center bg-gradient-to-r from-primary to-yellow-500">
-          <h1 className="text-white font-bold text-md">
+          <h1 className="text-white font-bold text-xs md:text-lg ">
             لديك {daysLeftInTrial(user.createdAt)} يومًا متبقيًا في النسخة
             التجريبية المجانية
           </h1>
         </div>
       ) : !user?.isSubscribed && !isLoadingPage ? (
         <div className="w-full h-[70px] flex items-center justify-center bg-gradient-to-r from-primary to-yellow-500">
-          <h1 className="text-white font-bold text-md">
+          <h1 className="text-white font-bold text-xs md:text-lg">
             انتهت الفترة التجريبية، يجب عليك الاشتراك في أحد الباقات
           </h1>
         </div>

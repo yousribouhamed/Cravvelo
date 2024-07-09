@@ -116,7 +116,7 @@ export function TableHeader<TData>({
             stroke-linejoin="round"
           />
         </svg>
-        تصفية
+        <span className="hidden md:block">تصفية</span>
       </Button>
       <div className="min-w-[200px] w-fit h-full flex items-center justify-end gap-x-4">
         <Button
@@ -150,8 +150,9 @@ export function TableHeader<TData>({
               mask="url(#path-1-inside-1_119_3304)"
             />
           </svg>
-          تصدير البيانات
+          <span className="hidden md:block">تصدير البيانات</span>
         </Button>
+
         <AddCourse />
         <Link
           target="_blank"
@@ -161,7 +162,8 @@ export function TableHeader<TData>({
             "bg-white rounded-xl border flex items-center gap-x-2"
           )}
         >
-          معاينة كطالب
+          <span className="hidden md:block">معاينة كطالب</span>
+
           <svg
             width="16"
             height="17"

@@ -123,14 +123,14 @@ async function Page({ searchParams }) {
 
   return (
     <MaxWidthWrapper>
-      <main className="w-full flex flex-col overflow-y-hidden h-fit mb-10 justify-start">
+      <main className="w-full flex flex-col overflow-y-hidden h-fit mb-10 justify-start ">
         <Header notifications={notifications} user={user} title="الرئيسية" />
         {!user.verified && <ConfirmeAccount />}
         {!user?.subdomain ? (
           <CreateAcademiaSection />
         ) : (
           <>
-            <div className="w-full h-[30px] flex justify-between items-center mt-10 ">
+            <div className="w-full h-[30px] flex  justify-start md:justify-between items-center mt-10 ">
               <DatePickerWithRange />
 
               {user?.subdomain ? (
@@ -142,7 +142,7 @@ async function Page({ searchParams }) {
                   )}
                   href={`https://${user?.subdomain}`}
                 >
-                  <span>معاينة الأكاديمية</span>
+                  <span className="hidden md:block">معاينة الأكاديمية</span>
 
                   <Eye className=" h-4 w-4" />
                 </Link>
@@ -172,12 +172,12 @@ async function Page({ searchParams }) {
               <div className="grid gap-4 md:grid-cols-3  my-8 h-[450px] w-full ">
                 <AreaChartOverview sales={sales} />
               </div>
-              <div className="grid gap-4 md:grid-cols-2 my-8 h-[450px] w-full mb-10 ">
+              <div className="grid gap-4 md:grid-cols-2 my-8 min-h-[450px] h-fit w-full mb-10 ">
                 <Card className="col-span-1">
                   <CardHeader>
                     <p>الدورات الآكثر مبيعاً</p>
                   </CardHeader>
-                  <CardContent className="flex flex-col items-center justify-center">
+                  <CardContent className="flex flex-col items-center justify-center overflow-x-auto">
                     <div className="w-full h-[50px] bg-primary flex items-center justify-between px-4">
                       <p className="text-white text-md">اسم الدورة </p>
                       <p className="text-white text-md"> عدد الطلاب</p>
@@ -211,7 +211,7 @@ async function Page({ searchParams }) {
                   <CardHeader>
                     <p>الطلبات الجديدة</p>
                   </CardHeader>
-                  <CardContent className="flex flex-col items-center justify-center">
+                  <CardContent className="flex flex-col items-center justify-center overflow-x-auto">
                     <div className="w-full h-[50px] bg-primary flex items-center justify-between px-4">
                       <p className="text-white text-md">نوع الطلبية</p>
                       <p className="text-white text-md">مبلغ الطلبية</p>

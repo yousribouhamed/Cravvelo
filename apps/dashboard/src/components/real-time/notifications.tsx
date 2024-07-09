@@ -116,7 +116,7 @@ const Notifications: FC<NotificationsProps> = ({
         <Button
           size="icon"
           variant="secondary"
-          className="bg-white border rounded-xl  relative"
+          className="bg-white border rounded-xl w-10 h-10  relative"
         >
           {isNewNotifications > 0 && (
             <span className="rounded-[50%] w-5 h-5 text-white flex items-center justify-center bg-red-500 absolute top-0 right-0 font-bold text-xs">

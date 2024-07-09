@@ -114,7 +114,7 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
               stroke-linejoin="round"
             />
           </svg>
-          انشاء القسيمة
+          <span className="hidden md:block">انشاء القسيمة</span>
         </Button>
       </DialogTrigger>
       <DialogContent

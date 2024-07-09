@@ -82,9 +82,9 @@ const AddCourse: FC = ({}) => {
         <DialogTrigger asChild>
           <Button className=" rounded-xl border flex items-center gap-x-2">
             <svg
-              width="18"
-              height="18"
-              viewBox="0 0 18 18"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -96,7 +96,7 @@ const AddCourse: FC = ({}) => {
                 stroke-linejoin="round"
               />
             </svg>
-            أنشئ دورة جديدة
+            <span className="hidden md:block">أنشئ دورة جديدة</span>
           </Button>
         </DialogTrigger>
         <DialogContent className="max-w-lg" title="إضافة دورة جديدة">

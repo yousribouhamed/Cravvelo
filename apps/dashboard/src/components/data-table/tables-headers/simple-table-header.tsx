@@ -48,7 +48,7 @@ const SimpleTableHeader: FC<SimpleTableHeaderProps> = ({ table, data }) => {
               stroke-linejoin="round"
             />
           </svg>
-          تصفية
+          <span className="hidden md:block">تصفية</span>
         </Button>
         <Input
           placeholder="البحث عن منتجات..."
@@ -92,7 +92,7 @@ const SimpleTableHeader: FC<SimpleTableHeaderProps> = ({ table, data }) => {
               mask="url(#path-1-inside-1_119_3304)"
             />
           </svg>
-          تصدير البيانات
+          <span className="hidden md:block">تصدير البيانات</span>
         </Button>
       </div>
     </div>

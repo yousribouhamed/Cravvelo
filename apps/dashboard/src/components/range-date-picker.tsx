@@ -134,18 +134,20 @@ export function DatePickerWithRange({
                 stroke-linejoin="round"
               />
             </svg>
-
-            {date?.from ? (
-              date.to ? (
-                <>
-                  {formatDayInArabic(date.from)} - {formatDayInArabic(date.to)}
-                </>
+            <span className="hidden md:block">
+              {date?.from ? (
+                date.to ? (
+                  <>
+                    {formatDayInArabic(date.from)} -{" "}
+                    {formatDayInArabic(date.to)}
+                  </>
+                ) : (
+                  formatDayInArabic(date.from)
+                )
               ) : (
-                formatDayInArabic(date.from)
-              )
-            ) : (
-              <span>تاريخ التقرير</span>
-            )}
+                <>{" تاريخ التقرير"}</>
+              )}
+            </span>
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0 bg-white shadow-lg" align="start">

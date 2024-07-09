@@ -49,7 +49,7 @@ const CouponsTableHeader: FC<TableHeaderProps> = ({ table, refetch, data }) => {
               stroke-linejoin="round"
             />
           </svg>
-          تصفية
+          <span className="hidden md:block">تصفية</span>
         </Button>
       </div>
       <div className="min-w-[200px] w-fit h-full flex items-center justify-end gap-x-4">

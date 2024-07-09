@@ -29,7 +29,7 @@ export default function UserNav({ user }: UserNavProps) {
         <div
           className={` ${buttonVariants({
             variant: "ghost",
-          })}  cursor-pointer  w-48   flex items-center  rounded-xl border justify-start gap-x-4 bg-white !p-2 `}
+          })}  cursor-pointer  w-20 md:w-48   flex items-center  rounded-xl border justify-start gap-x-6 md:gap-x-4 bg-white !p-2 `}
         >
           <div className="w-[20%] h-full flex items-center justify-start ">
             <Avatar className="w-8 h-8  rounded-[50%]">
@@ -37,8 +37,8 @@ export default function UserNav({ user }: UserNavProps) {
               <AvatarFallback>AB</AvatarFallback>
             </Avatar>
           </div>
-          <div className="w-[80%] h-full flex justify-end items-center gap-x-2">
-            <p className="text-md w-fit  text-black">
+          <div className=" md:w-[80%] w-4 h-full  justify-end items-center flex gap-x-2">
+            <p className="text-md w-fit  hidden md:flex text-black">
               {user?.user_name
                 ? user?.user_name
                 : user?.firstName

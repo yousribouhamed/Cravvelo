@@ -49,7 +49,8 @@ const ProductsTableHeader: FC<TableHeaderProps> = ({ table, data }) => {
               stroke-linejoin="round"
             />
           </svg>
-          تصفية
+
+          <span className="hidden md:block">تصفية</span>
         </Button>
       </div>
       <div className="min-w-[200px] w-fit h-full flex items-center justify-end gap-x-4">
@@ -84,7 +85,7 @@ const ProductsTableHeader: FC<TableHeaderProps> = ({ table, data }) => {
               mask="url(#path-1-inside-1_119_3304)"
             />
           </svg>
-          تصدير البيانات
+          <span className="hidden md:block">تصدير البيانات</span>
         </Button>
 
         <AddProductModel />
@@ -95,7 +96,8 @@ const ProductsTableHeader: FC<TableHeaderProps> = ({ table, data }) => {
             "bg-white rounded-xl border flex items-center gap-x-2"
           )}
         >
-          معاينة كطالب
+          <span className="hidden md:block">معاينة كطالب</span>
+
           <svg
             width="16"
             height="17"

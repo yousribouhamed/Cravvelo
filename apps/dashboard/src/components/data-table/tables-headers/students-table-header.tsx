@@ -47,7 +47,7 @@ const StudentTableHeader: FC<StudentsTableHeaderProps> = ({ table, data }) => {
               stroke-linejoin="round"
             />
           </svg>
-          تصفية
+          <span className="hidden md:block"> تصفية</span>
         </Button>
       </div>
       <div className="min-w-[200px] w-fit h-full flex items-center justify-end gap-x-4">
@@ -82,7 +82,7 @@ const StudentTableHeader: FC<StudentsTableHeaderProps> = ({ table, data }) => {
               mask="url(#path-1-inside-1_119_3304)"
             />
           </svg>
-          تصدير البيانات
+          <span className="hidden md:block">تصدير البيانات</span>
         </Button>
       </div>
     </div>

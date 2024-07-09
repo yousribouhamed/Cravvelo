@@ -6,8 +6,8 @@ import type { FC } from "react";
 
 const ConfirmeAccount: FC = ({}) => {
   return (
-    <div className="w-full min-h-[300px] h-fit mt-8  rounded-xl flex-col-reverse md:flex-row  flex items-start  gap-x-4 ">
-      <div className=" w-full md:w-[50%] bg-white 2xl:w-[60%] h-full flex flex-col items-start justify-start p-4 px-6 shadow border rounded-xl">
+    <div className="w-full min-h-[300px] h-fit mt-8  rounded-xl flex-col-reverse md:flex-col xl:flex-row  flex items-start  gap-6 xl:gap-2  ">
+      <div className=" w-full xl:w-[50%] bg-white 2xl:w-[60%] h-full flex flex-col items-start justify-start p-4 md:px-6 px-2 shadow border rounded-xl">
         <h2 className="text-xl font-bold">دعنا نذهب لتأكيد حسابك ❤️</h2>
 
         <div className="w-full h-fit flex flex-col ">
@@ -101,7 +101,7 @@ const ConfirmeAccount: FC = ({}) => {
           </div>
         </div>
       </div>
-      <div className=" w-full md:w-[50%] p-4 2xl:w-[40%] min-h-[350px] rounded-2xl h-fit flex items-center flex-col gap-y-4 bg-white shadow border justify-start">
+      <div className=" w-full xl:w-[50%] p-4 2xl:w-[40%] min-h-[350px] rounded-2xl h-fit flex items-center flex-col gap-y-4 bg-white shadow border justify-start">
         <div className="h-[20%]  w-full flex items-start justify-start">
           <h3 className="text-xl font-bold ">
             استعد لبدء بيع دوراتك ومنتجاتك الرقمية
