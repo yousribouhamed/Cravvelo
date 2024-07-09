@@ -80,7 +80,7 @@ const SecureContent: FC = ({}) => {
             </span>
           </div>
 
-          <div className="w-[800px] absolute top-[10px] right-[0px] bottom-0  h-full flex items-center justify-center">
+          <div className="w-[800px] hidden md:flex absolute top-[10px] right-[0px] bottom-0  h-full  items-center justify-center">
             <Image
               priority
               loading="eager"

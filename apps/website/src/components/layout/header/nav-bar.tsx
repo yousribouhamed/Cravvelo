@@ -88,7 +88,7 @@ const NavBar = () => {
                       key={item.name}
                       className={cn(
                         buttonVariants({ variant: "ghost" }),
-                        "font-semibold 2xl:text-lg text-sm text-black leading-[40px] rounded-full transition-all duration-150",
+                        "font-semibold text-lg  text-black leading-[40px] rounded-full transition-all duration-150",
                         {
                           "border-[#FFB700] border-2 font-bold bg-[#FFEEC5]":
                             item.href === path,

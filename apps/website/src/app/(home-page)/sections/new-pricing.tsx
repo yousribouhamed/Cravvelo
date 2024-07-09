@@ -38,7 +38,7 @@ const NewPricing: FC = ({}) => {
         />
       </div>
 
-      <div className="w-full h-fit   max-w-6xl mx-auto min-h-[800px] grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-10 ">
+      <div className="w-full h-fit  mt-6  max-w-6xl mx-auto min-h-[800px] grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-10 ">
         {PLANS.map((item, index) => {
           return (
             <div
@@ -47,7 +47,7 @@ const NewPricing: FC = ({}) => {
             >
               {index === 1 && (
                 <div className="bg-[#FC6B00] absolute rounded-2xl -top-16 z-[-10] flex items-center justify-center  right-0 left-0  h-20 w-full ">
-                  <p className="text-3xl font-bold text-white text-center">
+                  <p className="text-3xl font-bold mb-4 text-white text-center">
                     لصناع المحتوى
                   </p>
                 </div>

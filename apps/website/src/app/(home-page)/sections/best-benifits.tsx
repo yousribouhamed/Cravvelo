@@ -12,7 +12,7 @@ const BestBenefits: FC = ({}) => {
           إنشاء وتسويق وبيع الدورات التدريبية عبر الإنترنت، في مكان واحد.
         </p>
       </div>
-      <div className="w-full min-h-[250px] h-fit grid grid-cols-1 lg:grid-cols-3 gap-10  ">
+      <div className="w-full min-h-[150px] h-fit grid grid-cols-1 lg:grid-cols-3 gap-10  ">
         <div className="w-full h-full border border-yellow-500 rounded-xl bg-[#F8FAE5] p-8">
           <div className="w-full h-[50px] flex items-center justify-start gap-x-4">
             <div className="w-[70px] h-[70px] shadow rounded-2xl bg-white">
