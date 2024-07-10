@@ -31,7 +31,7 @@ export default function Page() {
           <EaseSpeed />
         </FadeIn>
         <FadeIn>
-          <MaxWidthWrapper className="my-[200px] overflow-hidden xl:overflow-visible ">
+          <MaxWidthWrapper className=" my-8 md:my-[200px] overflow-hidden xl:overflow-visible ">
             <div className="w-full min-h-[250px] h-fit  flex flex-col justify-center gap-y-8 pt-12  ">
               <h2 className="text-5xl font-bold text-center   leading-[4rem] md:leading-10">
                 قدرات جديدة، بتجربة مذهلة، في

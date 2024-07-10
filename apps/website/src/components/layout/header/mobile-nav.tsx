@@ -1,12 +1,12 @@
 "use client";
 
-import { Button } from "@ui/components/ui/button";
+import { Button, buttonVariants } from "@ui/components/ui/button";
 import { ArrowRight, Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import NestedMobileDropdownMenu from "./mobile-dropdown-menu";
-import { boolean } from "zod";
+import { cn } from "@ui/lib/utils";
 
 const links = [
   {
@@ -20,11 +20,11 @@ const links = [
   },
   {
     name: "معلومات عنا",
-    href: "/",
+    href: "/about-us",
   },
   {
     name: "تواصل معنا",
-    href: "/",
+    href: "/contact-us",
   },
 ];
 
@@ -83,7 +83,7 @@ const MobileNav = ({ isTopAdOpen = true }: MobileNavProps) => {
                 return (
                   <li key={item.name}>
                     <Link
-                      onClick={() => closeOnCurrent("/")}
+                      onClick={() => closeOnCurrent(item.href)}
                       className="flex items-center w-full font-semibold text-gray-600"
                       href="/"
                     >
@@ -93,15 +93,26 @@ const MobileNav = ({ isTopAdOpen = true }: MobileNavProps) => {
                 );
               })}
 
-              <Button
-                variant="outline"
-                className="w-full h-[40px] flex items-center justify-center mt-4 "
+              <Link
+                target="_blank"
+                href="https://beta.cravvelo.com/sign-in"
+                className={cn(
+                  buttonVariants({ variant: "outline" }),
+                  "w-full h-[40px] flex items-center justify-center mt-4 "
+                )}
               >
                 تسجيل الدخول
-              </Button>
-              <Button className="w-full h-[40px] flex items-center justify-center ">
+              </Link>
+              <Link
+                target="_blank"
+                href="https://beta.cravvelo.com/sign-up"
+                className={cn(
+                  buttonVariants(),
+                  "w-full h-[40px] flex items-center justify-center "
+                )}
+              >
                 انشاء حساب
-              </Button>
+              </Link>
             </>
           </ul>
         </div>

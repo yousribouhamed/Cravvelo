@@ -115,8 +115,8 @@ const WhatYouCanDo: FC = () => {
   return (
     <MaxWidthWrapper>
       <section id="features" className="w-full h-fit p-4 lg:p-0 ">
-        <div className="max-w-2xl h-fit md:h-[152px]  my-6 md:mb-6 mb-52 z-20  ">
-          <h1 className="text-[49px] qatar-bold text-start font-bold tracking-tight text-black sm:text-4xl">
+        <div className="max-w-2xl h-fit md:h-[152px]  my-6 md:mb-6  mb-16 z-20   ">
+          <h1 className="text-4xl qatar-bold text-start font-bold tracking-tight text-black ">
             ما يمكنك فعله باستخدام جدارة؟
           </h1>
           <p className="mt-6   text-xl font-thin leading-10 text-start text-black">
