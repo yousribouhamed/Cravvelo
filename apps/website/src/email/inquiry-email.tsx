@@ -8,8 +8,10 @@ interface EmailTemplateProps {
 
 export const InquiryEmail: React.FC<Readonly<EmailTemplateProps>> = ({
   name,
+  message,
 }) => (
   <div>
     <h1>Welcome, {name}!</h1>
+    <p>Message : {message}</p>
   </div>
 );

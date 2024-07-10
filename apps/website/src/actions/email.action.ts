@@ -16,7 +16,7 @@ export const sendInquiryEmail = async ({
   try {
     const { data, error } = await resend.emails.send({
       from: ` inquiry from ${name} <inquiry@cravvelo.com>`,
-      to: [email],
+      to: ["support@cravvelo.com"],
       subject: `inquiry from ${name}`,
       react: InquiryEmail({ name, message }),
     });

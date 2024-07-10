@@ -26,6 +26,7 @@ import type { FC } from "react";
 import { sendInquiryEmail } from "@/src/actions/email.action";
 import toast from "react-hot-toast";
 import React from "react";
+import { LoadingSpinner } from "../../../../../../../packages/ui/icons/loading-spinner";
 
 const ContactUsForm: FC = ({}) => {
   const [loading, setIsLoading] = React.useState<boolean>(false);
@@ -129,7 +130,7 @@ const ContactUsForm: FC = ({}) => {
             type="submit"
             size="lg"
           >
-             ارسال
+            {loading ? <LoadingSpinner /> : " ارسال"}
           </Button>
         </div>
       </form>
