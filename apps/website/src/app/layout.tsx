@@ -4,6 +4,8 @@ import { Analytics } from "@vercel/analytics/react";
 import { CrispChat } from "../components/crisp-chat";
 import { constructMetadata } from "../lib/utils";
 
+import { Toaster } from "react-hot-toast";
+
 export const metadata = constructMetadata({
   title: "Cravvelo - أنشئ وبيع دوراتك بسهولة",
   description:

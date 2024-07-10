@@ -17,29 +17,49 @@ import { Textarea } from "@ui/components/ui/textarea";
 import { Input } from "@ui/components/ui/input";
 
 const formSchema = z.object({
-  username: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
+  name: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
   email: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
   message: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
 });
 
 import type { FC } from "react";
-
-interface ContactUsFormProps {}
+import { sendInquiryEmail } from "@/src/actions/email.action";
+import toast from "react-hot-toast";
+import React from "react";
 
 const ContactUsForm: FC = ({}) => {
-  // 1. Define your form.
+  const [loading, setIsLoading] = React.useState<boolean>(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      email: "",
+      name: "",
+      message: "",
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      setIsLoading(true);
+      await sendInquiryEmail({
+        email: values.email,
+        message: values.message,
+        name: values.name,
+      });
+
+      toast("تم ارسال رسالتك شكرا", {
+        icon: "😅",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    } catch (err) {
+      toast.error("فشلنا في ارسال الرسالة");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -50,7 +70,7 @@ const ContactUsForm: FC = ({}) => {
       >
         <FormField
           control={form.control}
-          name="username"
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>

@@ -90,7 +90,7 @@ export const Tabs = ({
                 }`}
               >
                 {" "}
-                40%{" "}
+                10%{" "}
               </span>
             )}
             <span

@@ -8,7 +8,7 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "ui:add": "pnpm --filter ui ui:add",
-    "db:push": "pnpm --filter database db:push "
+    "email": "email dev --dir src/emails"
   },
   "devDependencies": {
     "@turbo/gen": "^1.9.7",
