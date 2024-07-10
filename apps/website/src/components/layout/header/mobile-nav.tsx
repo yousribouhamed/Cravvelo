@@ -3,7 +3,7 @@
 import { Button, buttonVariants } from "@ui/components/ui/button";
 import { ArrowRight, Menu } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import NestedMobileDropdownMenu from "./mobile-dropdown-menu";
 import { cn } from "@ui/lib/utils";
@@ -35,6 +35,8 @@ interface MobileNavProps {
 const MobileNav = ({ isTopAdOpen = true }: MobileNavProps) => {
   const [isOpen, setOpen] = useState<boolean>(false);
 
+  const router = useRouter();
+
   const toggleOpen = () => setOpen((prev) => !prev);
 
   const pathname = usePathname();
@@ -46,7 +48,16 @@ const MobileNav = ({ isTopAdOpen = true }: MobileNavProps) => {
   const closeOnCurrent = (href: string) => {
     if (pathname === href) {
       toggleOpen();
+
+      console.log("thi is it on the close retuen mode");
+      return;
     }
+    router.push(href);
+    toggleOpen();
+
+    console.log("we are moving to the next level");
+    console.log(href);
+    return;
   };
 
   return (
@@ -82,13 +93,12 @@ const MobileNav = ({ isTopAdOpen = true }: MobileNavProps) => {
 
                 return (
                   <li key={item.name}>
-                    <Link
+                    <button
                       onClick={() => closeOnCurrent(item.href)}
                       className="flex items-center w-full font-semibold text-gray-600"
-                      href="/"
                     >
                       {item.name}
-                    </Link>
+                    </button>
                   </li>
                 );
               })}

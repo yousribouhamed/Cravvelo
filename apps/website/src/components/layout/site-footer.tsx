@@ -30,7 +30,7 @@ export const footerLinks = [
         </defs>
       </svg>
     ),
-    url: "/",
+    url: "https://www.instagram.com/cravvelo/",
   },
   {
     icons: () => (
@@ -60,7 +60,7 @@ export const footerLinks = [
       </svg>
     ),
 
-    url: "/",
+    url: "https://www.instagram.com/cravvelo/",
   },
   {
     icons: () => (
@@ -90,7 +90,7 @@ export const footerLinks = [
       </svg>
     ),
 
-    url: "/",
+    url: "https://www.instagram.com/cravvelo/",
   },
   {
     icons: () => (
@@ -122,7 +122,7 @@ export const footerLinks = [
       </svg>
     ),
 
-    url: "/",
+    url: "https://www.instagram.com/cravvelo/",
   },
   {
     icons: () => (
@@ -142,7 +142,7 @@ export const footerLinks = [
       </svg>
     ),
 
-    url: "/",
+    url: "https://www.instagram.com/cravvelo/",
   },
 ];
 

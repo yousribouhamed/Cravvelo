@@ -10,7 +10,7 @@ const page = async () => {
   }
 
   return (
-    <div className="w-full h-screen flex items-center bg-[#FAFAFA] justify-center">
+    <div className="w-full h-screen flex items-center bg-[#FAFAFA] justify-center p-4 md:p-0">
       <SignInForm />
     </div>
   );

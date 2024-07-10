@@ -128,9 +128,9 @@ const Notifications: FC<NotificationsProps> = ({
       </PopoverTrigger>
       <PopoverContent
         align="end"
-        className="p-0 border-none ring-none shadow-none"
+        className="p-0 border-none ring-none shadow-none  w-screen h-screen sm:w-[500px] sm:h-[450px]"
       >
-        <div className="w-[500px] h-[450px] shadow bg-white  rounded-xl border">
+        <div className="  shadow bg-white  rounded-xl border">
           <div className="w-full h-[50px] flex items-center justify-start p-4">
             <p className="text-lg font-bold">الإشعارات</p>
           </div>
@@ -254,7 +254,7 @@ const Notifications: FC<NotificationsProps> = ({
               </ScrollArea>
             </TabsContent>
             <TabsContent value="archived">
-              <ScrollArea className="h-[330px] w-full flex flex-col gap-y-2  ">
+              <ScrollArea className="  h-[330px] w-full flex flex-col gap-y-2  ">
                 {archivedNotifications.length === 0 ? (
                   <div className="w-full h-[330px] flex flex-col justify-center items-center gap-y-5">
                     <Image
