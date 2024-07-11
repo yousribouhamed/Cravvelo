@@ -37,10 +37,10 @@ const NewExperiance: FC = ({}) => {
               </span>{" "}
               أفضل لطلابك
             </h1>
-            <p className="mt-6  block  text-[25px] font-thin leading-10 text-start text-black">
+            <p className="mt-6  block  text-[20px]  leading-10 text-start ">
               إتاحة بوابة للطلاب احترافية لتوفير تجربة سلسة وبناء الثقة في
               دوراتك وتعزيز الولاء، بالإضافة إلى خلق ميزة تنافسية لأعمالك
-              الرقمية. من خلال إتاحة:
+              الرقمية. من خلال إتاحة :
             </p>
             <div className="w-full h-fit flex flex-col gap-y-4 ">
               <div className="w-full h-[70px] px-4 gap-x-4  flex items-center justify-start">
@@ -57,7 +57,7 @@ const NewExperiance: FC = ({}) => {
               </div>
               <div className="w-full h-[70px] px-4 gap-x-4 flex items-center justify-start">
                 <Image
-                  src="/icons/ring.svg"
+                  src="/icons/Group 12.svg"
                   alt="this is the image"
                   width={60}
                   height={60}
@@ -69,14 +69,14 @@ const NewExperiance: FC = ({}) => {
               </div>
               <div className="w-full h-[70px] px-4  gap-x-4  flex items-center justify-start">
                 <Image
-                  src="/icons/Group 12.svg"
+                  src="/icons/ring.svg"
                   alt="this is the image"
                   width={60}
                   height={60}
                 />
 
                 <p className="text-black font-semibold text-xl">
-                  إمكانية إدارة الطالب لحسابه وإثراء تجربته
+                  مساحة مخصصة لإستلام شهاداته
                 </p>
               </div>
             </div>
