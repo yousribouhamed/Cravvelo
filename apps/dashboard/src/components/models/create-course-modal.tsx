@@ -96,7 +96,7 @@ const AddCourse: FC = ({}) => {
                 stroke-linejoin="round"
               />
             </svg>
-            <span className="hidden md:block">أنشئ دورة جديدة</span>
+            <span className="text-xs md:text-base">أنشئ دورة جديدة</span>
           </Button>
         </DialogTrigger>
         <DialogContent className="max-w-lg" title="إضافة دورة جديدة">

@@ -130,7 +130,7 @@ async function Page({ searchParams }) {
           <CreateAcademiaSection />
         ) : (
           <>
-            <div className="w-full h-[30px] flex  justify-start md:justify-between items-center mt-10 ">
+            <div className="w-full h-[30px] gap-x-4 flex  justify-between items-center mt-10 ">
               <DatePickerWithRange />
 
               {user?.subdomain ? (
@@ -142,7 +142,7 @@ async function Page({ searchParams }) {
                   )}
                   href={`https://${user?.subdomain}`}
                 >
-                  <span className="hidden md:block">معاينة الأكاديمية</span>
+                  <span>معاينة الأكاديمية</span>
 
                   <Eye className=" h-4 w-4" />
                 </Link>
