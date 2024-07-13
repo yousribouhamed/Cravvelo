@@ -26,7 +26,7 @@ const PaymentMethodsConnectors: FC<PaymentMethodsConnectorsProps> = ({
     data && data?.chargilyPublicKey && data?.chargilySecretKey ? true : false;
 
   return (
-    <div className="w-full min-h-[400px]  flex flex-wrap gap-4 m-8">
+    <div className="w-full min-h-[400px]  flex flex-wrap my-4  gap-4 md:m-8 md:my-8">
       <Card className="w-full max-w-sm h-[300px] rounded-2xl">
         <CardHeader>
           <div className="flex items-center justify-start gap-x-2">

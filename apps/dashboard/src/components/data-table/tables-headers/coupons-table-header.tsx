@@ -52,7 +52,7 @@ const CouponsTableHeader: FC<TableHeaderProps> = ({ table, refetch, data }) => {
           <span className="hidden md:block">تصفية</span>
         </Button>
       </div>
-      <div className="min-w-[200px] w-fit h-full flex items-center justify-end gap-x-4">
+      <div className="w-fit  h-full flex items-center justify-end gap-x-4">
         <CreateCoupon refetch={refetch} />
       </div>
     </div>

@@ -55,7 +55,7 @@ const CertificateTableHeader: FC<TableHeaderProps> = ({
           تصفية
         </Button>
       </div>
-      <div className="min-w-[200px] w-fit h-full flex items-center justify-end gap-x-4">
+      <div className=" w-fit h-full flex items-center justify-end gap-x-4">
         <Link
           href={"/students/certificates/create-certificate"}
           className={cn(buttonVariants(), "rounded-xl")}

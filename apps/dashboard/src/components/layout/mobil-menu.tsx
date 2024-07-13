@@ -34,8 +34,6 @@ interface MobileLinkProps extends React.PropsWithChildren {
 function MobileLink({
   children,
   href,
-  disabled,
-  segment,
   setIsOpen,
   isSelected,
 }: MobileLinkProps) {

@@ -81,7 +81,7 @@ function PublishCourseForm({ course, chapters }: PublishCourseFormProps) {
   }
 
   return (
-    <div className="w-full grid grid-cols-3 gap-x-8 ">
+    <div className="w-full grid grid-cols-2 md:grid-cols-3 gap-x-8 ">
       <div className="col-span-2 w-full h-full">
         <Form {...form}>
           <form
@@ -111,7 +111,7 @@ function PublishCourseForm({ course, chapters }: PublishCourseFormProps) {
           <CourseContent chapters={chapters} />
         </div>
       </div>
-      <div className="col-span-1 w-full h-full ">
+      <div className="col-span-1 hidden md:block w-full h-full ">
         <Card>
           <CardContent className="w-full bg-[#F2F4F4]  h-fit flex flex-col pt-4  space-y-2">
             {selectionButtoms.map((item) => (

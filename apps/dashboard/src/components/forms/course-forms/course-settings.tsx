@@ -137,7 +137,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
         videoId={form?.watch("youtubeUrl") ?? ""}
       />
 
-      <div className="w-full  h-fit grid grid-cols-3 mt-4 gap-x-8 ">
+      <div className="w-full  h-fit grid grid-cols-2 md:grid-cols-3 mt-4 gap-x-8 ">
         <div className="col-span-2 w-full min-h-full h-fit pb-6">
           <Form {...form}>
             <form
@@ -505,7 +505,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
             </form>
           </Form>
         </div>
-        <div className="col-span-1 w-full h-full ">
+        <div className="col-span-1 w-full h-full hidden md:block ">
           <Card>
             <CardContent className="w-full h-fit flex flex-col p-6  space-y-4">
               <Button

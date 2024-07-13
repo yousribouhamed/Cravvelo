@@ -47,11 +47,11 @@ function CourseHeader({ className, ...props }: ExamplesNavProps) {
   const links = getLinks({ id: courseId });
 
   return (
-    <div className="relative  w-full my-4 h-[60px]">
+    <div className="relative  w-full overflow-x-auto overflow-y-hidden   my-4 h-[60px]">
       <div
         className={cn(
           "mb-4 w-fit flex items-center ",
-          ` w-full  bg-white  border flex items-center justify-start   rounded-lg  h-full`
+          ` w-fit  bg-white  border flex items-center justify-start    rounded-lg  h-[60px]`
         )}
       >
         {links.map((item, index) => (
@@ -59,7 +59,7 @@ function CourseHeader({ className, ...props }: ExamplesNavProps) {
             <Link
               href={item.href}
               className={cn(
-                "flex h-[60px] items-center justify-center border-b px-4 text-center text-sm transition-colors hover:text-primary",
+                "flex w-fit min-w-[100px] h-[60px] items-center justify-center border-b px-1 sm:px-4 text-center text-xs sm:text-sm transition-colors hover:text-primary",
                 pathname?.includes(item.href) ||
                   (index === 0 && pathname === "/")
                   ? "border-b-2 border-[#F0B110] text-black font-bold"

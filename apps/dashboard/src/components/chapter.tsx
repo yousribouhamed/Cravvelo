@@ -266,12 +266,12 @@ export const AddToChapter = ({
   ];
 
   return (
-    <div className="w-full min-h-[100px] h-fit pb-4 border-2  border-dashed  border-gray-950 bg-white rounded-lg mx-auto p-8">
+    <div className="w-full min-h-[100px] h-fit pb-4 border-2  border-dashed  border-gray-950 bg-white rounded-lg mx-auto p-2 md:p-8">
       <div className="w-full flex items-center justify-start gap-x-4">
         <div className="w-[20px] h-[20px] rounded-[50%] bg-primary flex items-center justify-center">
           <svg
-            width="15"
-            height="15"
+            width="21"
+            height="21"
             viewBox="0 0 21 21"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -285,11 +285,11 @@ export const AddToChapter = ({
             />
           </svg>
         </div>
-        <h3 className="text-start font-bold text-xl ">
+        <h3 className="text-start font-bold text-md md:text-xl ">
           أضف مواد تعليمية جديدة إلى القسم
         </h3>
       </div>
-      <div className="w-full mt-4 h-[50px] flex items-center justify-start gap-x-6">
+      <div className="w-full mt-4 h-[80px] md:h-[50px] overflow-x-auto flex items-center justify-start gap-x-6">
         {maps.map((item) => {
           return (
             <Link

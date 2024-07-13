@@ -123,12 +123,9 @@ const AddCourse: FC = ({}) => {
                     </FormItem>
                   )}
                 />
-                <DialogFooter className="w-full h-[50px] flex items-center justify-end gap-x-4">
-                  <Button data-ripple-light="true" variant="ghost">
-                    إلغاء
-                  </Button>
+                <DialogFooter className="w-full h-[50px] flex items-center bg-black flex-nowrap justify-end gap-x-1 md:gap-x-4">
+                  <Button variant="ghost">إلغاء</Button>
                   <Button
-                    data-ripple-light="true"
                     className=" flex items-center gap-x-2"
                     disabled={isLaoding}
                     type="submit"

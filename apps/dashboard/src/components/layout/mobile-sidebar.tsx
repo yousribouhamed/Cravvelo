@@ -17,7 +17,7 @@ const MobildSideBard: FC = ({}) => {
         <Button
           size="icon"
           variant="secondary"
-          className="rounded-2xl bg-white border text-black"
+          className="rounded-2xl bg-white  text-black"
         >
           <Menu />
         </Button>
