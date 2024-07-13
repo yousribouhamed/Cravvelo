@@ -6,11 +6,19 @@ import { AlignJustify } from "lucide-react";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { Home } from "lucide-react";
 import { School } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function MobilNavgiationProduction() {
   const [open, setOpen] = useState(false);
 
   const isMounted = useMounted();
+
+  const router = useRouter();
+
+  const navigateWithClose = (path: string) => {
+    router.push(path);
+    setOpen(false);
+  };
 
   if (!isMounted) {
     return null;
@@ -53,13 +61,26 @@ export default function MobilNavgiationProduction() {
                 >
                   <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
                     <div className="flex h-full flex-col overflow-y-auto gap-y-4 p-4 bg-white shadow-xl">
-                      <button className=" w-full h-[45px] flex items-center justify-start gap-x-4">
+                      <button
+                        onClick={() => navigateWithClose("/")}
+                        className=" w-full h-[45px] flex items-center justify-start gap-x-4"
+                      >
                         <Home strokeWidth={3} className=" w-6 h-6 " />
                         الصفحة الرئيسية
                       </button>
-                      <button className=" w-full h-[45px] flex items-center justify-start gap-x-4">
+                      <button
+                        onClick={() => navigateWithClose("/course-academy")}
+                        className=" w-full h-[45px] flex items-center justify-start gap-x-4"
+                      >
                         <School strokeWidth={3} className=" w-6 h-6 " />
                         الدورات التدريبية
+                      </button>
+                      <button
+                        onClick={() => navigateWithClose("/product-academy")}
+                        className=" w-full h-[45px] flex items-center justify-start gap-x-4"
+                      >
+                        <School strokeWidth={3} className=" w-6 h-6 " />
+                        المنتجات الرقمية
                       </button>
                     </div>
                   </Dialog.Panel>
