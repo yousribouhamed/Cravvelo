@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "@/src/lib/zod-error-map";
 import { Button } from "@ui/components/ui/button";
-import { toast } from "@ui/lib/utils";
 import {
   Card,
   CardContent,
@@ -14,7 +13,6 @@ import {
 } from "@ui/components/ui/card";
 import { useSignUp } from "@clerk/nextjs";
 import React from "react";
-// import { catchClerkError } from "@/lib/utils"
 import {
   Form,
   FormControl,
@@ -31,8 +29,9 @@ import { authSchema } from "@/src/lib/validators/auth";
 import { useRouter } from "next/navigation";
 
 import { Icons } from "../my-icons";
-import { catchClerkError, catchError } from "@/src/lib/utils";
+import { catchClerkError, catchError, getCookie } from "@/src/lib/utils";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { maketoast } from "../toasts";
 
 type Inputs = z.infer<typeof authSchema>;
 
@@ -53,6 +52,12 @@ export function SignUpForm() {
     if (!isLoaded) return;
 
     try {
+      const cookie = getCookie("machine_id");
+      if (cookie) {
+        maketoast.errorWithTest({
+          text: "يا اخي انت تملك حساب بالفعل",
+        });
+      }
       setIsLoading(true);
       await signUp.create({
         emailAddress: data.email,
@@ -67,8 +72,8 @@ export function SignUpForm() {
 
       router.push("/sign-up/verify-email");
 
-      toast.success("Check your email", {
-        description: "We sent you a 6-digit verification code",
+      maketoast.successWithText({
+        text: "لقد أرسلنا لك رمز التحقق المكون من 6 أرقام",
       });
     } catch (err) {
       catchClerkError(err);

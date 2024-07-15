@@ -1,8 +1,7 @@
 import { z } from "zod";
 import { privateProcedure } from "../../trpc/trpc";
-import { TRPCError } from "@trpc/server";
 import bcrypt from "bcrypt";
-import { jwtVerify, SignJWT } from "jose";
+import {  SignJWT } from "jose";
 import { cookies } from "next/headers";
 import { v4 as uuidv4 } from "uuid";
 import { prisma } from "database/src";
