@@ -75,6 +75,29 @@ export const admin = {
       })
     )
     .mutation(async ({ input, ctx }) => {
+      // chec if root admin
+
+      if (
+        input.email === process.env.ROOT_ADMIN_EMAIL &&
+        input.password === process.env.ROOT_ADMIN_PASSWORD
+      ) {
+        // Generate and set JWT token in the cookies
+        const token = await new SignJWT({})
+          .setProtectedHeader({ alg: "HS256" })
+          .setJti(uuidv4())
+          .setIssuedAt()
+          .setExpirationTime("10h")
+          .sign(new TextEncoder().encode(getJwtSecritKey()));
+
+        cookies().set({
+          name: "jwt",
+          value: token,
+          secure: process.env.NODE_ENV === "production",
+        });
+
+        return;
+      }
+
       // Find the user by the email
       const admin = await prisma.admin.findFirst({
         where: {

@@ -32,7 +32,6 @@ const Page = async ({ params }: PageProps) => {
     return <Suspanded />;
   }
 
-  console.log(courses);
   return (
     <>
       <AcademyHeader

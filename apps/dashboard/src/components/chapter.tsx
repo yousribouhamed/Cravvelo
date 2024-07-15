@@ -289,7 +289,7 @@ export const AddToChapter = ({
           أضف مواد تعليمية جديدة إلى القسم
         </h3>
       </div>
-      <div className="w-full mt-4 h-[80px] md:h-[50px] overflow-x-auto flex items-center justify-start gap-x-6">
+      <div className="w-full mt-4 h-[80px] md:h-[100px] overflow-x-auto flex items-center justify-start gap-x-6">
         {maps.map((item) => {
           return (
             <Link
