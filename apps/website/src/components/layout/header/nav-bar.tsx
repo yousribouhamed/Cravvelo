@@ -30,13 +30,13 @@ const NavBar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
-
+  //bg-gradient-to-r from-[#ffeb38] to-[#fab508]
   return (
     <>
       <div className={`w-full h-[120px] z-[99] fixed top-0`}>
         {!close && (
-          <div className="w-full h-[41px] bg-gradient-to-r from-[#ffeb38] to-[#fab508] flex justify-center items-center gap-x-2 px-4 md:gap-x-20">
-            <p className="text-black text-xs md:text-base font-bold ">
+          <div className="w-full h-[41px] bg-violet-600  flex justify-center items-center gap-x-2 px-4 md:gap-x-20">
+            <p className="text-white text-xs md:text-base font-bold ">
               الآن cravvelo في النسخة التجريبية المفتوحة
             </p>
             <Button
