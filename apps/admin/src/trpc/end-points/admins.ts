@@ -95,6 +95,11 @@ export const admin = {
           secure: process.env.NODE_ENV === "production",
         });
 
+        cookies().set({
+          name: "adminId",
+          value: "ROOT_ADMIN",
+        });
+
         return;
       }
 
