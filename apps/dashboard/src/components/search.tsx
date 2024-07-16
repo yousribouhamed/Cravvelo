@@ -3,15 +3,12 @@
 import type { FC } from "react";
 import * as React from "react";
 import {
-  Command,
   CommandDialog,
-  CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
   CommandSeparator,
-  CommandShortcut,
 } from "@ui/components/ui/command";
 
 import { useRouter } from "next/navigation";
@@ -19,11 +16,19 @@ import { useDebounce } from "../hooks/use-debounce";
 import { Button } from "@ui/components/ui/button";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { isMacOs } from "../lib/utils";
-import { cn } from "@ui/lib/utils";
 import { Course, Product } from "database";
 import { trpc } from "../app/_trpc/client";
 import { maketoast } from "./toasts";
-import { Skeleton } from "@ui/components/ui/skeleton";
+import {
+  Box,
+  Gem,
+  Ghost,
+  Palette,
+  PiggyBank,
+  Warehouse,
+  Youtube,
+} from "lucide-react";
+import { OrangeLoadingSpinner } from "@ui/icons/loading-spinner";
 
 interface ProductGroup {
   pages: { name: string; path: string }[];
@@ -34,6 +39,7 @@ interface ProductGroup {
 export const SearchInput: FC = ({}) => {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
+  const [clicked, setClicked] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const debouncedQuery = useDebounce(query, 300);
   const [isPending, startTransition] = React.useTransition();
@@ -43,8 +49,7 @@ export const SearchInput: FC = ({}) => {
     onSuccess: (data) => {
       setData(data);
 
-      console.log("this is the query data");
-      console.log(data);
+      setClicked(true);
     },
     onError: () => {
       maketoast.error();
@@ -67,10 +72,6 @@ export const SearchInput: FC = ({}) => {
 
     return () => setData(null);
   }, [debouncedQuery]);
-
-  // courses
-  // digital products
-  // pages
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -120,32 +121,127 @@ export const SearchInput: FC = ({}) => {
           value={query}
           onValueChange={setQuery}
         />
+        {!data && !isPending && !clicked && (
+          <div className="w-full h-[300px] pb-2 ">
+            <div
+              onClick={() => {
+                router.push("/settings/payments-methods");
+                setOpen(false);
+              }}
+              className="w-full h-[70px] border-b flex items-center justify-between px-4 cursor-pointer hover:bg-gray-50"
+            >
+              <div className="w-[50px] h-[45px]  bg-violet-500 rounded-2xl shadow flex items-center justify-center">
+                <PiggyBank className="w-5 h-5 text-white" strokeWidth={3} />
+              </div>
+              <div className="w-[calc(100%-60px)] h-full flex flex-col items-start justify-center">
+                <span className="text-xl font-bold text-black">
+                  وسائل الدفع
+                </span>
+                <span className="text-gray-600 text-start ">
+                  هناك الكثير من الامور للبحث عنها
+                </span>
+              </div>
+            </div>
+
+            <div
+              onClick={() => {
+                router.push("/settings/website-settings/appearance");
+                setOpen(false);
+              }}
+              className="w-full h-[70px] border-b flex items-center justify-between px-4 cursor-pointer hover:bg-gray-50"
+            >
+              <div className="w-[50px] h-[50px]  bg-red-500 rounded-2xl shadow flex items-center justify-center">
+                <Palette className="w-5 h-5 text-white" strokeWidth={3} />
+              </div>
+              <div className="w-[calc(100%-60px)] h-full flex flex-col items-start justify-center ">
+                <span className="text-xl font-bold text-black">
+                  تخصيص الاكادمية
+                </span>
+                <span className="text-gray-600 text-start ">
+                  عدل الالوان و الشعار في الأكاديمية
+                </span>
+              </div>
+            </div>
+
+            <div
+              onClick={() => {
+                router.push("/orders");
+                setOpen(false);
+              }}
+              className="w-full h-[70px] border-b flex items-center justify-between px-4 cursor-pointer hover:bg-gray-50"
+            >
+              <div className="w-[50px] h-[50px]  bg-blue-500 rounded-2xl shadow flex items-center justify-center">
+                <Gem className="w-5 h-5 text-white" strokeWidth={3} />
+              </div>
+              <div className="w-[calc(100%-60px)] h-full flex flex-col items-start justify-center">
+                <span className="text-xl font-bold text-black">
+                  اخر المبيعات
+                </span>
+                <span className="text-gray-600 text-start ">
+                  كل عملية شراء في الأكاديمية تعتبر مبيعة
+                </span>
+              </div>
+            </div>
+
+            <div
+              onClick={() => {
+                router.push("/settings/website-settings/legal");
+                setOpen(false);
+              }}
+              className="w-full h-[70px] border-b flex items-center justify-between px-4 cursor-pointer hover:bg-gray-50"
+            >
+              <div className="w-[50px] h-[50px]  bg-green-500 rounded-2xl shadow flex items-center justify-center">
+                <Warehouse className="w-5 h-5 text-white" strokeWidth={3} />
+              </div>
+              <div className="w-[calc(100%-60px)] h-full flex flex-col items-start justify-center">
+                <span className="text-xl font-bold text-black">
+                  {" "}
+                  سياسة الاكاديمية
+                </span>
+                <span className="text-gray-600 text-start ">
+                  احم نفسك و طلابك
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
         <CommandList>
-          <CommandEmpty
-            className={cn(isPending ? "hidden" : "py-6 text-center text-sm")}
-          >
-            No products found.
-          </CommandEmpty>
           {isPending ? (
-            <div className="space-y-1 overflow-hidden px-1 py-2">
-              <Skeleton className="h-4 w-10 rounded" />
-              <Skeleton className="h-8 rounded-sm" />
-              <Skeleton className="h-8 rounded-sm" />
+            <div className="space-y-1 h-[300px] flex items-center justify-center overflow-hidden px-1 py-2">
+              <OrangeLoadingSpinner height={50} width={50} />
             </div>
           ) : (
             <>
               {data && data?.products?.length > 0 && (
-                <CommandGroup className="capitalize" heading={"products"}>
+                <CommandGroup
+                  className="capitalize h-[300px]"
+                  heading={"المنتجات"}
+                >
                   {data?.products.map((item) => {
                     return (
                       <CommandItem
                         key={item.id}
                         value={item.title}
+                        className={
+                          "w-full h-[70px] border-b flex items-center justify-between px-4 cursor-pointer hover:bg-gray-50"
+                        }
                         onSelect={() =>
                           handleSelect(() => router.push(`/product/${item.id}`))
                         }
                       >
-                        <span className="truncate">{item.title}</span>
+                        <div className="w-[50px] h-[50px]  bg-green-500 rounded-2xl shadow flex items-center justify-center">
+                          <Box className="w-5 h-5 text-white" strokeWidth={3} />
+                        </div>
+                        <div className="w-[calc(100%-60px)] h-full flex flex-col items-start justify-center">
+                          <span className="text-xl font-bold text-black">
+                            {" "}
+                            {item.title}
+                          </span>
+                          <span className="text-gray-600 text-start  truncate">
+                            {item?.SeoDescription ?? ""}
+                          </span>
+                        </div>
                       </CommandItem>
                     );
                   })}
@@ -155,20 +251,39 @@ export const SearchInput: FC = ({}) => {
               <CommandSeparator />
 
               {data && data?.courses?.length > 0 && (
-                <CommandGroup className="capitalize" heading={"courses"}>
+                <CommandGroup
+                  className="capitalize h-[300px]"
+                  heading={"الدورات"}
+                >
                   {data.courses.map((item) => {
                     return (
                       <CommandItem
                         key={item.id}
                         value={item.title}
-                        className="cursor-pointer "
+                        className={
+                          "w-full h-[70px] border-b flex items-center justify-between px-4 cursor-pointer hover:bg-gray-50"
+                        }
                         onSelect={() =>
                           handleSelect(() =>
                             router.push(`/courses/${item.id}/chapters`)
                           )
                         }
                       >
-                        <span className="truncate">{item.title}</span>
+                        <div className="w-[50px] h-[50px]  bg-violet-500 rounded-2xl shadow flex items-center justify-center">
+                          <Youtube
+                            className="w-5 h-5 text-white"
+                            strokeWidth={3}
+                          />
+                        </div>
+                        <div className="w-[calc(100%-60px)] h-full flex flex-col items-start justify-center">
+                          <span className="text-xl font-bold text-black">
+                            {" "}
+                            {item.title}
+                          </span>
+                          <span className="text-gray-600 text-start  truncate">
+                            {item?.courseResume ?? ""}
+                          </span>
+                        </div>
                       </CommandItem>
                     );
                   })}
