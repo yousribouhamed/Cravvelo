@@ -67,10 +67,10 @@ export function FacetedFilter<TData>({
         >
           {title}
           <ChevronDown className="w-4 h-4 text-black" strokeWidth={3} />
-          {fliterState.length > 0 && (
+          {ACTIVE_FILTERS.length !== 0 && (
             <span className="w-5 h-5 text-white rounded-full bg-red-500 flex items-center justify-center">
               {" "}
-              {fliterState.length}{" "}
+              {ACTIVE_FILTERS.length}{" "}
             </span>
           )}
         </Button>
@@ -80,6 +80,7 @@ export function FacetedFilter<TData>({
           const isActive = ACTIVE_FILTERS.includes(item.value);
           return (
             <DropdownMenuItem
+              key={item.value}
               onClick={() => onItemClicked(isActive, item.value)}
               dir="rtl"
               className="w-full h-[40px] flex items-center justify-start gap-x-2"

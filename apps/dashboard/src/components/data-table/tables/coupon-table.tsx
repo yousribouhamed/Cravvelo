@@ -21,10 +21,9 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/components/ui/table";
+import CouponsTableHeader from "@/src/components/data-table/tables-headers/coupons-table-header";
 import { ChevronRightIcon } from "lucide-react";
 import { ChevronLeftIcon } from "lucide-react";
-import CertificateTableHeader from "./tables-headers/certificates-table-header";
-import { Search } from "lucide-react";
 import Image from "next/image";
 
 interface DataTableProps<TData, TValue> {
@@ -33,7 +32,7 @@ interface DataTableProps<TData, TValue> {
   refetch?: () => Promise<any>;
 }
 
-export function CertificateDataTable<TData, TValue>({
+export function CouponDataTable<TData, TValue>({
   columns,
   data,
   refetch,
@@ -63,37 +62,12 @@ export function CertificateDataTable<TData, TValue>({
 
   return (
     <>
-      <div className="flex items-center py-4   justify-start">
-        <div className="w-full max-w-sm  h-[50px] p-4 rounded-xl bg-white border flex items-center justify-start gap-x-4">
-          <Search className="text-black w-4 h-4" />
-          <input
-            className="border-none bg-none focus:border-none focus:ring-0  "
-            placeholder="البحث عن الشهادات..."
-            value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-            onChange={
-              (event) => {
-                const value = event.target.value;
-
-                table.getAllColumns().forEach((column) => {
-                  if (
-                    [
-                      "title",
-                      "description",
-                      "category",
-                      "name",
-                      "email",
-                    ].includes(column.id as string)
-                  ) {
-                    column.setFilterValue(value); // Adjust this line based on your filtering logic
-                  }
-                });
-              }
-              // table.getColumn("title")?.setFilterValue(event.target.value)
-            }
-          />
-        </div>
-      </div>
-      <CertificateTableHeader data={data} refetch={refetch} table={table} />
+      <CouponsTableHeader
+        setColumnFilters={setColumnFilters}
+        data={data}
+        refetch={refetch}
+        table={table}
+      />
       <div className="rounded-md border bg-white">
         <Table>
           <TableHeader>

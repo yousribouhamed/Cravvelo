@@ -14,7 +14,9 @@ import {
   getFacetedUniqueValues,
 } from "@tanstack/react-table";
 import { Button } from "@ui/components/ui/button";
-import TableHeader2, { statuses } from "./table-header";
+import TableHeader2, {
+  statuses,
+} from "@/src/components/data-table/tables-headers/course-table-header";
 import React, { ChangeEvent } from "react";
 import {
   Table,
@@ -93,7 +95,7 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
-  ); // can set initial column filter state here
+  );
 
   const table = useReactTable({
     data,

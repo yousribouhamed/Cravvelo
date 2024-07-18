@@ -32,7 +32,7 @@ const AddProductModel: FC = ({}) => {
   const [isLaoding, setIsLoading] = React.useState(false);
   const mutation = trpc.createProduct.useMutation({
     onSuccess: ({ id }) => {
-      router.push(`/products/${id}/setting`);
+      router.push(`/products/${id}/content`);
     },
     onError: () => {},
   });

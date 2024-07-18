@@ -1,14 +1,13 @@
 import { Button } from "@ui/components/ui/button";
-import AddCourse from "../models/create-course-modal";
+import AddCourse from "../../models/create-course-modal";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
-import { buttonVariants } from "../plate-ui/button";
+import { buttonVariants } from "../../plate-ui/button";
 import { ColumnFiltersState, Table } from "@tanstack/react-table";
 //@ts-ignore
 import { download, generateCsv, mkConfig } from "export-to-csv";
-import { DataTableFacetedFilter } from "./data-table-faceted-filter";
 import { Pencil, ArrowUpCircle } from "lucide-react";
-import { FacetedFilter } from "./faceted-filter";
+import { FacetedFilter } from "@/src/components/data-table/table-helpers/faceted-filter";
 
 export const statuses = [
   {
@@ -17,7 +16,7 @@ export const statuses = [
     icon: Pencil,
   },
   {
-    value: "PUBLISHED",
+    value: "PUBLISED",
     label: "منشور",
     icon: ArrowUpCircle,
   },
@@ -88,6 +87,13 @@ export function TableHeader<TData>({
           table={table}
           title="المستوى"
           options={levels}
+        />
+        <FacetedFilter
+          setColumnFilters={setColumnFilters}
+          id={"status"}
+          table={table}
+          title="الحالة"
+          options={statuses}
         />
       </div>
 

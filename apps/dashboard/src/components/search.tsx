@@ -71,7 +71,7 @@ export const SearchInput: FC = ({}) => {
     startTransition(fetchData);
 
     return () => setData(null);
-  }, [debouncedQuery]);
+  }, [debouncedQuery, mutation]);
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -82,7 +82,7 @@ export const SearchInput: FC = ({}) => {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [mutation]);
 
   const handleSelect = React.useCallback((callback: () => unknown) => {
     setOpen(false);

@@ -105,7 +105,7 @@ const Notifications: FC<NotificationsProps> = ({
     return () => {
       pusherClient?.unsubscribe(accountId ?? "");
     };
-  }, [notifications, accountId]);
+  }, [notifications, accountId , ourNotifications , refetch]);
 
   if (!isMounted) {
     return null;

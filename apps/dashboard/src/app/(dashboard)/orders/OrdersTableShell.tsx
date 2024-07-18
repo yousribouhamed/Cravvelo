@@ -6,7 +6,6 @@ import { trpc } from "@/src/app/_trpc/client";
 import { OrderColumns } from "@/src/components/data-table/columns/orders";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DataTableLoading } from "@/src/components/data-table/table-loading";
-import DeleteCourseModel from "@/src/components/models/delete-course-modal";
 
 interface OrdersTableShellProps {
   initialData: Sale[];

@@ -7,7 +7,7 @@ import { CertificateColumns } from "@/src/components/data-table/columns/certific
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DataTableLoading } from "@/src/components/data-table/table-loading";
 import DeleteCourseModel from "@/src/components/models/delete-course-modal";
-import { CertificateDataTable } from "@/src/components/data-table/certificate-table";
+import { CertificateDataTable } from "@/src/components/data-table/tables/certificate-table";
 import DeleteCertificateModel from "@/src/components/models/delete-certificate.modal";
 
 interface TableShellProps {

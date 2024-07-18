@@ -6,11 +6,13 @@ import CreateCoupon from "../../models/create-coupon-modal";
 
 //@ts-ignore
 import { download, generateCsv, mkConfig } from "export-to-csv";
+import { ColumnFiltersState } from "@tanstack/react-table";
 
 interface TableHeaderProps {
   table: any;
   refetch: () => Promise<any>;
   data: any[];
+  setColumnFilters: React.Dispatch<React.SetStateAction<ColumnFiltersState>>;
 }
 
 const csvConfig = mkConfig({
