@@ -1,11 +1,11 @@
 "use client";
-import { DataTable } from "@/src/components/data-table";
+import { DataTable } from "@/src/components/data-table/tables";
 import { Sale } from "database";
 import type { FC } from "react";
 import { trpc } from "@/src/app/_trpc/client";
 import { OrderColumns } from "@/src/components/data-table/columns/orders";
 import { useMounted } from "@/src/hooks/use-mounted";
-import { DataTableLoading } from "@/src/components/data-table/table-loading";
+import { DataTableLoading } from "@/src/components/data-table/table-helpers/table-loading";
 
 interface OrdersTableShellProps {
   initialData: Sale[];

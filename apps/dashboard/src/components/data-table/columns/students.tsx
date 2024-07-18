@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@ui/components/ui/checkbox";
 import { Student } from "database";
-import { DataTableColumnHeader } from "../data-table-head";
+import { DataTableColumnHeader } from "../table-helpers/data-table-head";
 import {
   DropdownMenu,
   DropdownMenuContent,

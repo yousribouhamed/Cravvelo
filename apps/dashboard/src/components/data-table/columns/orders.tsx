@@ -13,7 +13,7 @@ import {
 import { Checkbox } from "@ui/components/ui/checkbox";
 import { Sale } from "database";
 import { maketoast } from "../../toasts";
-import { DataTableColumnHeader } from "../data-table-head";
+import { DataTableColumnHeader } from "../table-helpers/data-table-head";
 import { formatDateInArabic, formatDZD } from "@/src/lib/utils";
 import { Badge } from "@ui/components/ui/badge";
 

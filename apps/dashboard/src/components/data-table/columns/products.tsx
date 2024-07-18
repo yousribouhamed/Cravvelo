@@ -12,7 +12,7 @@ import {
 } from "@ui/components/ui/dropdown-menu";
 import { Checkbox } from "@ui/components/ui/checkbox";
 import Link from "next/link";
-import { DataTableColumnHeader } from "../data-table-head";
+import { DataTableColumnHeader } from "../table-helpers/data-table-head";
 import { Product } from "database";
 import { Badge } from "@ui/components/ui/badge";
 import { maketoast } from "../../toasts";

@@ -5,7 +5,7 @@ import type { FC } from "react";
 import { trpc } from "../../_trpc/client";
 import { columns } from "@/src/components/data-table/columns/courses";
 import { useMounted } from "@/src/hooks/use-mounted";
-import { DataTableLoading } from "@/src/components/data-table/table-loading";
+import { DataTableLoading } from "@/src/components/data-table/table-helpers/table-loading";
 import DeleteCourseModel from "@/src/components/models/delete-course-modal";
 
 interface CoursesTableShellProps {

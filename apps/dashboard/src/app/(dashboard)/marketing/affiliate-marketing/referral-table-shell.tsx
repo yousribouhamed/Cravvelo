@@ -4,9 +4,9 @@ import { Referral } from "database";
 import type { FC } from "react";
 import { trpc } from "@/src/app/_trpc/client";
 import { useMounted } from "@/src/hooks/use-mounted";
-import { DataTableLoading } from "@/src/components/data-table/table-loading";
+import { DataTableLoading } from "@/src/components/data-table/table-helpers/table-loading";
 import { ReferralColumns } from "@/src/components/data-table/columns/referral";
-import { DataTable } from "@/src/components/data-table";
+import { DataTable } from "@/src/components/data-table/tables";
 
 interface CouponTableShellProps {
   initialData: Referral[];

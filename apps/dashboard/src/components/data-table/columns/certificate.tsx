@@ -12,7 +12,7 @@ import {
 } from "@ui/components/ui/dropdown-menu";
 import { Checkbox } from "@ui/components/ui/checkbox";
 import { Certificate } from "database";
-import { DataTableColumnHeader } from "../data-table-head";
+import { DataTableColumnHeader } from "../table-helpers/data-table-head";
 import { formatDateInArabic } from "@/src/lib/utils";
 import Link from "next/link";
 import { useOpenCertificateDeleteAction } from "@/src/lib/zustand/delete-actions";

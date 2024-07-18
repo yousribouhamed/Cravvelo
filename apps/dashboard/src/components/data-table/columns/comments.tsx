@@ -13,7 +13,7 @@ import {
 import { Checkbox } from "@ui/components/ui/checkbox";
 import { Comment } from "database";
 import { maketoast } from "../../toasts";
-import { DataTableColumnHeader } from "../data-table-head";
+import { DataTableColumnHeader } from "../table-helpers/data-table-head";
 import StarRatings from "react-star-ratings";
 import { Badge } from "@ui/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@ui/components/ui/avatar";

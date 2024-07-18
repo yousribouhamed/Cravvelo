@@ -5,7 +5,7 @@ import type { FC } from "react";
 import { trpc } from "@/src/app/_trpc/client";
 import { CertificateColumns } from "@/src/components/data-table/columns/certificate";
 import { useMounted } from "@/src/hooks/use-mounted";
-import { DataTableLoading } from "@/src/components/data-table/table-loading";
+import { DataTableLoading } from "@/src/components/data-table/table-helpers/table-loading";
 import DeleteCourseModel from "@/src/components/models/delete-course-modal";
 import { CertificateDataTable } from "@/src/components/data-table/tables/certificate-table";
 import DeleteCertificateModel from "@/src/components/models/delete-certificate.modal";

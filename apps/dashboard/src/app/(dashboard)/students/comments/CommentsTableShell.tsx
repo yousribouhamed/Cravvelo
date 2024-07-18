@@ -1,11 +1,11 @@
 "use client";
-import { DataTable } from "@/src/components/data-table";
+import { DataTable } from "@/src/components/data-table/tables";
 import { Comment } from "database";
 import type { FC } from "react";
 import { trpc } from "@/src/app/_trpc/client";
 import { CommentColumns } from "@/src/components/data-table/columns/comments";
 import { useMounted } from "@/src/hooks/use-mounted";
-import { DataTableLoading } from "@/src/components/data-table/table-loading";
+import { DataTableLoading } from "@/src/components/data-table/table-helpers/table-loading";
 import DeleteCourseModel from "@/src/components/models/delete-course-modal";
 
 interface TableShellProps {

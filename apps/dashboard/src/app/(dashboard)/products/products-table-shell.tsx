@@ -1,10 +1,10 @@
 "use client";
-import { DataTable } from "@/src/components/data-table/products-table";
+import { DataTable } from "@/src/components/data-table/tables/products-table";
 import { Product } from "database";
 import type { FC } from "react";
 import { trpc } from "../../_trpc/client";
 import { useMounted } from "@/src/hooks/use-mounted";
-import { DataTableLoading } from "@/src/components/data-table/table-loading";
+import { DataTableLoading } from "@/src/components/data-table/table-helpers/table-loading";
 import { ProctsColumns } from "@/src/components/data-table/columns/products";
 import DeleteProductModel from "@/src/components/models/delete-product-modal";
 

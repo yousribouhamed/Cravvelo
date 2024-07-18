@@ -12,7 +12,7 @@ import {
 import { Checkbox } from "@ui/components/ui/checkbox";
 import { Referral } from "database";
 import { maketoast } from "../../toasts";
-import { DataTableColumnHeader } from "../data-table-head";
+import { DataTableColumnHeader } from "../table-helpers/data-table-head";
 import { formatDateInArabic } from "@/src/lib/utils";
 
 export const ReferralColumns: ColumnDef<Referral>[] = [

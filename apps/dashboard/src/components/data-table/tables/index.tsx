@@ -21,10 +21,10 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/components/ui/table";
-import CouponsTableHeader from "./tables-headers/coupons-table-header";
-import SimpleTableHeader from "./tables-headers/simple-table-header";
+import CouponsTableHeader from "../tables-headers/coupons-table-header";
+import SimpleTableHeader from "../tables-headers/simple-table-header";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import StudentTableHeader from "./tables-headers/students-table-header";
+import StudentTableHeader from "../tables-headers/students-table-header";
 import Image from "next/image";
 import { Search } from "lucide-react";
 

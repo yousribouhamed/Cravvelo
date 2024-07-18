@@ -14,7 +14,7 @@ import {
 import { Checkbox } from "@ui/components/ui/checkbox";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
-import { DataTableColumnHeader } from "../data-table-head";
+import { DataTableColumnHeader } from "../table-helpers/data-table-head";
 import { Course } from "database";
 import { Badge } from "@ui/components/ui/badge";
 import { maketoast } from "../../toasts";

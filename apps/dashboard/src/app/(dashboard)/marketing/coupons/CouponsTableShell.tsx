@@ -5,7 +5,7 @@ import type { FC } from "react";
 import { trpc } from "@/src/app/_trpc/client";
 import { CouponColumns } from "@/src/components/data-table/columns/cobons";
 import { useMounted } from "@/src/hooks/use-mounted";
-import { DataTableLoading } from "@/src/components/data-table/table-loading";
+import { DataTableLoading } from "@/src/components/data-table/table-helpers/table-loading";
 import { CouponDataTable } from "@/src/components/data-table/tables/coupon-table";
 
 interface CouponTableShellProps {

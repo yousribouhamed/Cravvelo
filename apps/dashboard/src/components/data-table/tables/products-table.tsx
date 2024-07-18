@@ -11,7 +11,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Button } from "@ui/components/ui/button";
-import TableHeader2 from "./tables-headers/products-table-header";
 import React from "react";
 import {
   Table,
@@ -21,7 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/components/ui/table";
-import ProductsTableHeader from "./tables-headers/products-table-header";
+import ProductsTableHeader from "../tables-headers/products-table-header";
 import Image from "next/image";
 import { Search } from "lucide-react";
 
