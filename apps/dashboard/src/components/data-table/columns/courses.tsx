@@ -75,6 +75,7 @@ export const columns: ColumnDef<Course>[] = [
         </div>
       );
     },
+    filterFn: "includesString", // use built-in filter function
   },
   {
     id: "price",
@@ -85,6 +86,7 @@ export const columns: ColumnDef<Course>[] = [
     cell: ({ row }) => {
       return formatDZD(row.original.price === null ? 0 : row.original.price);
     },
+    filterFn: "inNumberRange",
   },
   {
     id: "level",
@@ -103,6 +105,7 @@ export const columns: ColumnDef<Course>[] = [
         </Badge>
       );
     },
+    filterFn: "includesString", // use built-in filter function
   },
 
   {
@@ -114,6 +117,7 @@ export const columns: ColumnDef<Course>[] = [
     cell: ({ row }) => {
       return <p>{timeSince(row.original.createdAt)}</p>;
     },
+    filterFn: "includesString", // use built-in filter function
   },
 
   {

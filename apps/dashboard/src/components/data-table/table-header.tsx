@@ -3,11 +3,12 @@ import AddCourse from "../models/create-course-modal";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { buttonVariants } from "../plate-ui/button";
-import { Table } from "@tanstack/react-table";
+import { ColumnFiltersState, Table } from "@tanstack/react-table";
 //@ts-ignore
 import { download, generateCsv, mkConfig } from "export-to-csv";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
 import { Pencil, ArrowUpCircle } from "lucide-react";
+import { FacetedFilter } from "./faceted-filter";
 
 export const statuses = [
   {
@@ -28,7 +29,7 @@ export const levels = [
     icon: Pencil,
   },
   {
-    value: "ADVANCED",
+    value: "INTERMEDIATE",
     label: "متوسط",
     icon: ArrowUpCircle,
   },
@@ -43,6 +44,7 @@ interface TableHeaderProps<TData> {
   table: Table<TData>;
   academia_url: string;
   data: any[];
+  setColumnFilters: React.Dispatch<React.SetStateAction<ColumnFiltersState>>;
 }
 
 // Define a function to prepare the data for CSV export
@@ -67,6 +69,7 @@ const csvConfig = mkConfig({
 export function TableHeader<TData>({
   table,
   academia_url,
+  setColumnFilters,
   data,
 }: TableHeaderProps<TData>) {
   const handleExportCSV = (data: any[]) => {
@@ -78,25 +81,17 @@ export function TableHeader<TData>({
 
   return (
     <div className="w-full h-[70px] flex items-center justify-between">
-      {/* <div className="min-w-[200px] w-fit h-full flex  items-center justify-start gap-x-4">
-        {table.getColumn("status") && (
-          <DataTableFacetedFilter
-            column={table.getColumn("status")}
-            title="الحالة"
-            options={statuses}
-          />
-        )}
+      <div className="min-w-[200px] w-fit h-full flex  items-center justify-start gap-x-4">
+        <FacetedFilter
+          setColumnFilters={setColumnFilters}
+          id={"level"}
+          table={table}
+          title="المستوى"
+          options={levels}
+        />
+      </div>
 
-        
-        {table.getColumn("level") && (
-          <DataTableFacetedFilter
-            column={table.getColumn("level")}
-            title="المستوى"
-            options={levels}
-          />
-        )}
-      </div> */}
-      <Button
+      {/* <Button
         disabled
         variant="secondary"
         className="bg-white rounded-xl border flex items-center gap-x-2"
@@ -117,7 +112,7 @@ export function TableHeader<TData>({
           />
         </svg>
         <span className="hidden md:block">تصفية</span>
-      </Button>
+      </Button> */}
       <div className="min-w-[200px] w-fit h-full flex items-center justify-end gap-x-4">
         <Button
           variant="secondary"

@@ -41,9 +41,9 @@ const useHaveAccess = async () => {
   const isSubscribed = account.plan ? true : false;
 
   // this one checks if you are
-  // if (!isFreeTrial && !isSubscribed) {
-  //   redirect("/pricing");
-  // }
+  if (!isFreeTrial && !isSubscribed && process.env.NODE_ENV === "production") {
+    redirect("/pricing");
+  }
 
   return {
     userId: user.id,

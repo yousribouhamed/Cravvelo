@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Column } from "@tanstack/react-table";
+import { Column, Table } from "@tanstack/react-table";
 import { Check, LucideIcon, PlusCircle } from "lucide-react";
 
 import { cn } from "@ui/lib/utils";
@@ -24,6 +24,8 @@ import { Badge } from "@ui/components/ui/badge";
 
 interface DataTableFacetedFilter<TData, TValue> {
   column?: Column<TData, TValue>;
+
+  table: Table<TData>;
   title?: string;
   options: {
     label: string;
@@ -36,9 +38,19 @@ export function DataTableFacetedFilter<TData, TValue>({
   column,
   title,
   options,
+  table,
 }: DataTableFacetedFilter<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues();
   const selectedValues = new Set(column?.getFilterValue() as string[]);
+
+  const fliterState = table.getState().columnFilters;
+
+  console.log("this is the table filter insisde the facited filter");
+
+  console.log(fliterState);
+  console.log(
+    fliterState.filter((item) => item.id === "level").map((item) => item.value)
+  );
 
   return (
     <Popover>

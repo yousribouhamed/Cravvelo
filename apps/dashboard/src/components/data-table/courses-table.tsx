@@ -93,12 +93,22 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
-  );
+  ); // can set initial column filter state here
 
   const table = useReactTable({
     data,
 
     columns,
+
+    state: {
+      sorting,
+      rowSelection,
+      columnFilters,
+    },
+
+    initialState: {
+      columnFilters: [],
+    },
     getCoreRowModel: getCoreRowModel(),
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
@@ -108,15 +118,10 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
-    state: {
-      sorting,
-      rowSelection,
-      columnFilters,
-    },
-    // manualPagination: true,
-    // manualSorting: true,
-    // manualFiltering: true,
   });
+
+  console.log("this is the table coirse");
+  console.log({ columnFilters: table.getState().columnFilters }); // access the column filters state from the table instance
 
   return (
     <>
@@ -124,7 +129,7 @@ export function DataTable<TData, TValue>({
         <div className="w-full max-w-sm  h-[50px] p-4 rounded-xl bg-white border flex items-center justify-start gap-x-4">
           <Search className="text-black w-4 h-4" />
           <input
-            className="border-none bg-none focus:border-none focus:ring-0  "
+            className="border-none bg-none  focus:outline-none focus:border-none focus:ring-0  "
             placeholder="البحث عن الدورات..."
             value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
             onChange={
@@ -147,7 +152,12 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
 
-      <TableHeader2 data={data} academia_url={academia_url} table={table} />
+      <TableHeader2
+        setColumnFilters={setColumnFilters}
+        data={data}
+        academia_url={academia_url}
+        table={table}
+      />
       <div className="rounded-md border bg-white">
         <Table>
           <TableHeader>

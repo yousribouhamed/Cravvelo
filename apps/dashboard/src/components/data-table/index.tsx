@@ -34,6 +34,13 @@ interface DataTableProps<TData, TValue> {
   refetch?: () => Promise<any>;
 }
 
+interface ColumnFilter {
+  id: string;
+  value: unknown;
+}
+
+type TColumnFiltersState = ColumnFilter[];
+
 export function DataTable<TData, TValue>({
   columns,
   data,
@@ -54,6 +61,7 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+
     getPaginationRowModel: getPaginationRowModel(),
     state: {
       sorting,
@@ -61,6 +69,9 @@ export function DataTable<TData, TValue>({
       columnFilters,
     },
   });
+
+  console.log("this is the table coirse");
+  console.log({ columnFilters: table.getState().columnFilters }); // access the column filters state from the table instance
 
   return (
     <>
