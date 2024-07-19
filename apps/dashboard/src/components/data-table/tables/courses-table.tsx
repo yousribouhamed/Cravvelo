@@ -26,7 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/components/ui/table";
-import { ChevronRightIcon, Search } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, Search } from "lucide-react";
 import { DataTableFilterableColumn } from "@/src/types";
 import { ArrowLeftIcon } from "lucide-react";
 import { cn } from "@ui/lib/utils";
@@ -228,6 +228,7 @@ export function DataTable<TData, TValue>({
             disabled={!table.getCanPreviousPage()}
             aria-label="Go to previous page"
             onClick={() => table.previousPage()}
+            className="bg-white rounded-xl border flex items-center gap-x-2"
             variant="ghost"
           >
             <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
@@ -238,10 +239,11 @@ export function DataTable<TData, TValue>({
             aria-label="Go to next page"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
+            className="bg-white rounded-xl border flex items-center gap-x-2"
             variant="ghost"
           >
             التالي
-            <ArrowLeftIcon className="h-4 w-4" aria-hidden="true" />
+            <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
       </div>

@@ -21,8 +21,6 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/components/ui/table";
-import CouponsTableHeader from "../tables-headers/coupons-table-header";
-import SimpleTableHeader from "../tables-headers/simple-table-header";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import StudentTableHeader from "../tables-headers/students-table-header";
 import Image from "next/image";
@@ -79,7 +77,7 @@ export function DataTable<TData, TValue>({
         <div className="w-full max-w-sm  h-[50px] p-4 rounded-xl bg-white border flex items-center justify-start gap-x-4">
           <Search className="text-black w-4 h-4" />
           <input
-            className="border-none bg-none focus:border-none focus:ring-0  "
+            className="border-none bg-none  focus:outline-none focus:border-none focus:ring-0  "
             placeholder="البحث  ..."
             value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
             onChange={
@@ -169,6 +167,7 @@ export function DataTable<TData, TValue>({
           <Button
             disabled={!table.getCanPreviousPage()}
             aria-label="Go to previous page"
+            className="bg-white rounded-xl border flex items-center gap-x-2"
             onClick={() => table.previousPage()}
             variant="ghost"
           >
@@ -181,6 +180,7 @@ export function DataTable<TData, TValue>({
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
             variant="ghost"
+            className="bg-white rounded-xl border flex items-center gap-x-2"
           >
             التالي
             <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />

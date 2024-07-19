@@ -22,7 +22,7 @@ import {
 } from "@ui/components/ui/table";
 import ProductsTableHeader from "../tables-headers/products-table-header";
 import Image from "next/image";
-import { Search } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, Search } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -61,7 +61,7 @@ export function DataTable<TData, TValue>({
         <div className="w-full max-w-sm  h-[50px] p-4 rounded-xl bg-white border flex items-center justify-start gap-x-4">
           <Search className="text-black w-4 h-4" />
           <input
-            className="border-none bg-none focus:border-none focus:ring-0  "
+            className="border-none bg-none  focus:outline-none focus:border-none focus:ring-0  "
             placeholder="البحث عن المنتجات..."
             value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
             onChange={
@@ -151,6 +151,29 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
+      </div>
+      <div className="w-full h-[60px] border-t flex items-center justify-start gap-x-6 p-2">
+        <Button
+          disabled={!table.getCanPreviousPage()}
+          aria-label="Go to previous page"
+          onClick={() => table.previousPage()}
+          variant="ghost"
+          className="bg-white rounded-xl border flex items-center gap-x-2"
+        >
+          <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+          سابق
+        </Button>
+
+        <Button
+          aria-label="Go to next page"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+          variant="ghost"
+          className="bg-white rounded-xl border flex items-center gap-x-2"
+        >
+          التالي
+          <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+        </Button>
       </div>
     </>
   );

@@ -67,7 +67,7 @@ export function CertificateDataTable<TData, TValue>({
         <div className="w-full max-w-sm  h-[50px] p-4 rounded-xl bg-white border flex items-center justify-start gap-x-4">
           <Search className="text-black w-4 h-4" />
           <input
-            className="border-none bg-none focus:border-none focus:ring-0  "
+            className="border-none bg-none  focus:outline-none focus:border-none focus:ring-0  "
             placeholder="البحث عن الشهادات..."
             value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
             onChange={
@@ -161,6 +161,7 @@ export function CertificateDataTable<TData, TValue>({
             disabled={!table.getCanPreviousPage()}
             aria-label="Go to previous page"
             onClick={() => table.previousPage()}
+            className="bg-white rounded-xl border flex items-center gap-x-2"
             variant="ghost"
           >
             <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
@@ -171,6 +172,7 @@ export function CertificateDataTable<TData, TValue>({
             aria-label="Go to next page"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
+            className="bg-white rounded-xl border flex items-center gap-x-2"
             variant="ghost"
           >
             التالي

@@ -1,11 +1,6 @@
 import { Button, buttonVariants } from "@ui/components/ui/button";
 import type { FC } from "react";
-import Link from "next/link";
-import { cn } from "@ui/lib/utils";
 import CreateCoupon from "../../models/create-coupon-modal";
-
-//@ts-ignore
-import { download, generateCsv, mkConfig } from "export-to-csv";
 import { ColumnFiltersState } from "@tanstack/react-table";
 
 interface TableHeaderProps {
@@ -15,19 +10,7 @@ interface TableHeaderProps {
   setColumnFilters: React.Dispatch<React.SetStateAction<ColumnFiltersState>>;
 }
 
-const csvConfig = mkConfig({
-  fieldSeparator: ",",
-  decimalSeparator: ".",
-  useKeysAsHeaders: true,
-});
-
 const CouponsTableHeader: FC<TableHeaderProps> = ({ table, refetch, data }) => {
-  const handleExportCSV = (data: any[]) => {
-    const csv = generateCsv(csvConfig)(data);
-    //@ts-ignore
-    download(csvConfig)(csv);
-  };
-
   return (
     <div className="w-full h-[70px] flex items-center justify-between">
       <div className="min-w-[200px] w-fit h-full flex  items-center justify-start gap-x-4">

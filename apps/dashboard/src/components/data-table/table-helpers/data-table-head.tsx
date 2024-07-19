@@ -49,9 +49,19 @@ export function DataTableColumnHeader<TData, TValue>({
           >
             <span>{title}</span>
             {column.getIsSorted() === "desc" ? (
-              <ArrowDownIcon className="ml-2 h-4 w-4" aria-hidden="true" />
+              <div className="w-6 h-6 bg-red-600 flex items-center justify-center rounded-lg  mr-2">
+                <ArrowDownIcon
+                  className=" h-4 w-4 text-white"
+                  aria-hidden="true"
+                />
+              </div>
             ) : column.getIsSorted() === "asc" ? (
-              <ArrowUpIcon className="mr-2 h-4 w-4" aria-hidden="true" />
+              <div className="w-6 h-6 bg-green-600 flex items-center justify-center rounded-lg  mr-2">
+                <ArrowUpIcon
+                  className=" h-4 w-4 text-white"
+                  aria-hidden="true"
+                />
+              </div>
             ) : (
               <CaretSortIcon className="ml-r h-4 w-4" aria-hidden="true" />
             )}
@@ -63,10 +73,12 @@ export function DataTableColumnHeader<TData, TValue>({
             className="w-full items-center justify-between p-2"
             onClick={() => column.toggleSorting(false)}
           >
-            <ArrowUpIcon
-              className="ml-2 h-3.5 w-3.5 text-muted-foreground/70"
-              aria-hidden="true"
-            />
+            <div className="w-6 h-6 bg-green-600 flex items-center justify-center rounded-lg  mr-2">
+              <ArrowUpIcon
+                className=" h-3.5 w-3.5 text-white"
+                aria-hidden="true"
+              />
+            </div>
             ترتيب تصاعدي
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -75,10 +87,12 @@ export function DataTableColumnHeader<TData, TValue>({
             className="w-full items-center justify-between p-2"
             onClick={() => column.toggleSorting(true)}
           >
-            <ArrowDownIcon
-              className="ml-2 h-3.5 w-3.5 text-muted-foreground/70"
-              aria-hidden="true"
-            />
+            <div className="w-6 h-6 bg-red-600 flex items-center justify-center rounded-lg  mr-2">
+              <ArrowDownIcon
+                className=" h-3.5 w-3.5 text-white"
+                aria-hidden="true"
+              />
+            </div>
             ترتيب تفصيلي
           </DropdownMenuItem>
         </DropdownMenuContent>
