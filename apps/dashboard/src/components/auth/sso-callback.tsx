@@ -17,7 +17,7 @@ export default function SSOCallback({ searchParams }: SSOCallbackPageProps) {
     <div
       aria-label="Loading"
       aria-describedby="loading-description"
-      className="w-full h-screen flex flex-col bg-white items-center justify-center gap-y-4"
+      className="w-screeen h-screen flex flex-col bg-white items-center justify-center gap-y-4"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -33,11 +33,11 @@ export default function SSOCallback({ searchParams }: SSOCallbackPageProps) {
           fy=".3125"
           gradientTransform="scale(1.5)"
         >
-          <stop offset="0" stop-color="#43766C"></stop>
-          <stop offset=".3" stop-color="#43766C" stop-opacity=".9"></stop>
-          <stop offset=".6" stop-color="#43766C" stop-opacity=".6"></stop>
-          <stop offset=".8" stop-color="#43766C" stop-opacity=".3"></stop>
-          <stop offset="1" stop-color="#43766C" stop-opacity="0"></stop>
+          <stop offset="0" stop-color="#FC6B00"></stop>
+          <stop offset=".3" stop-color="#FC6B00" stop-opacity=".9"></stop>
+          <stop offset=".6" stop-color="#FC6B00" stop-opacity=".6"></stop>
+          <stop offset=".8" stop-color="#FC6B00" stop-opacity=".3"></stop>
+          <stop offset="1" stop-color="#FC6B00" stop-opacity="0"></stop>
         </radialGradient>
         <circle
           transform-origin="center"
@@ -66,7 +66,7 @@ export default function SSOCallback({ searchParams }: SSOCallbackPageProps) {
           transform-origin="center"
           fill="none"
           opacity=".2"
-          stroke="#43766C"
+          stroke="#FC6B00"
           stroke-width="27"
           stroke-linecap="round"
           cx="100"
