@@ -1,4 +1,5 @@
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
+import chrome from "chrome-aws-lambda";
 import hb from "handlebars";
 
 export const generatePdf = async (pdfFileAsString: string) => {
@@ -7,11 +8,13 @@ export const generatePdf = async (pdfFileAsString: string) => {
   const result = template(data);
   const html = result;
 
-  // Connect to the puppeteer browser
-  const browser = await puppeteer.connect({
-    browserWSEndpoint:
-      "wss://chrome.browserless.io?token=c8dc96e8-a6c8-4b7c-97e3-5e7977f7389f",
+  // Launch Puppeteer with chrome-aws-lambda
+  const browser = await puppeteer.launch({
+    args: chrome.args,
+    executablePath: await chrome.executablePath,
+    headless: chrome.headless,
   });
+
   const page = await browser.newPage();
 
   // Add custom CSS to the page
@@ -32,14 +35,12 @@ export const generatePdf = async (pdfFileAsString: string) => {
   await page.setContent(html);
 
   // Generate the PDF with the specified width and height
-  const buffer = (
-    await page.pdf({
-      printBackground: true,
-      width: "700px",
-      height: "500px",
-      pageRanges: "1",
-    })
-  ).buffer;
+  const buffer = await page.pdf({
+    printBackground: true,
+    width: "700px",
+    height: "500px",
+    pageRanges: "1",
+  });
 
   // Close the browser
   await browser.close();
