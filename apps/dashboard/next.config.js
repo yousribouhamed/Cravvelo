@@ -10,7 +10,7 @@ module.exports = {
     ],
   },
   experimental: {
-    serverComponentsExternalPackages: ["puppeteer-core"],
+    serverComponentsExternalPackages: ["puppeteer-core", "@sparticuz/chromium"],
   },
 
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {

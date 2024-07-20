@@ -9,12 +9,7 @@ export const generatePdf = async (pdfFileAsString: string) => {
   const html = result;
 
   // Launch Puppeteer with chrome-aws-lambda
-  const browser = await puppeteer.launch({
-    args: chromium.args,
-    executablePath: await chromium.executablePath(),
-    headless: true,
-    defaultViewport: chromium.defaultViewport,
-  });
+  const browser = await puppeteer.launch({ headless: true });
 
   const page = await browser.newPage();
 

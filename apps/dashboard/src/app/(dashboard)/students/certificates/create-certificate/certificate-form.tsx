@@ -35,6 +35,7 @@ import Image from "next/image";
 import SunCertificateViewer from "./sun-certificate-viewer";
 import DeerCertificateViewer from "./deer-certificate-viewer";
 import { Hammer } from "lucide-react";
+import axios from "axios";
 
 const FormSchema = z.object({
   studentName: z.string(),
@@ -251,6 +252,19 @@ function CertificateForm({ students }: CertificateProps) {
                         <Hammer className="text-white w-4 h-4" />
                       )}
                       بناء الشهادة
+                    </Button>
+
+                    <Button
+                      onClick={async () => {
+                        console.log("we are loading");
+                        const url = await axios
+                          .get("/api/puppeteer")
+                          .catch((err) => console.log(err));
+                        console.log("done");
+                        console.log(url);
+                      }}
+                    >
+                      generate certififcate
                     </Button>
                   </div>
                 </form>

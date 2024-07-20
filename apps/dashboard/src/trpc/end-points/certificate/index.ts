@@ -29,6 +29,8 @@ export const cetificate = {
       })
     )
     .mutation(async ({ ctx, input }) => {
+      console.log("we have started the server");
+      console.log({ hu: "" });
       let pdfAsString = "";
 
       if (input.code === "DEAD_DEER") {
@@ -51,7 +53,11 @@ export const cetificate = {
       }
 
       // Generate the PDF buffer
-      const pdfBuffer = await generatePdf(pdfAsString);
+      const pdfBuffer = await generatePdf(pdfAsString).catch((err) => {
+        console.error(err);
+
+        throw new Error("error in create pdf funtion");
+      });
 
       // Convert ArrayBuffer to Buffer
       const buffer = Buffer.from(pdfBuffer);
