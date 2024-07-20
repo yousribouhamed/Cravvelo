@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer-core";
-import chrome from "chrome-aws-lambda";
+import chromium from "@sparticuz/chromium";
 import hb from "handlebars";
 
 export const generatePdf = async (pdfFileAsString: string) => {
@@ -10,9 +10,10 @@ export const generatePdf = async (pdfFileAsString: string) => {
 
   // Launch Puppeteer with chrome-aws-lambda
   const browser = await puppeteer.launch({
-    args: chrome.args,
-    executablePath: await chrome.executablePath,
-    headless: chrome.headless,
+    args: chromium.args,
+    executablePath: await chromium.executablePath(),
+    headless: true,
+    defaultViewport: chromium.defaultViewport,
   });
 
   const page = await browser.newPage();
