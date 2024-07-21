@@ -13,7 +13,7 @@ import MobileNav from "./mobile-nav";
 const links = [
   { name: "الرئيسية", href: "/" },
   { name: "الخدمات", href: "/features" },
-  { name: "معلومات عنا", href: "/about-us" },
+  // { name: "معلومات عنا", href: "/about-us" },
   { name: "تواصل معنا", href: "/contact-us" },
 ];
 
@@ -35,16 +35,22 @@ const NavBar = () => {
     <>
       <div className={`w-full h-[120px] z-[99] fixed top-0`}>
         {!close && (
-          <div className="w-full h-[41px] bg-violet-600  flex justify-center items-center gap-x-2 px-4 md:gap-x-20">
+          <div className="w-full h-[41px] bg-gradient-to-r from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] flex justify-center items-center gap-x-2 px-4 md:gap-x-20">
             <p className="text-white text-xs md:text-base font-bold ">
-              الآن cravvelo في النسخة التجريبية المفتوحة
+              تابعو صفحة cravvelo على instagram{" "}
+              <Link
+                href={"https://www.instagram.com/cravvelo/"}
+                target="_blank"
+              >
+                من هنا
+              </Link>
             </p>
             <Button
               onClick={() => setClose(true)}
               size="icon"
               className="bg-transparent hover:bg-transparent hover:scale-110 transition-all duration-75"
             >
-              <X className="w-4 h-4 text-black" />
+              <X className="w-4 h-4 text-white" />
             </Button>
           </div>
         )}
