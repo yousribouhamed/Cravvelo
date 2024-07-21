@@ -13,8 +13,7 @@ const generatePdf = async (pdfFileAsString: string) => {
 
   const path = await chromium.executablePath("/");
 
-  console.log("this is the executable path");
-  console.log({ path });
+ 
 
   // Launch Puppeteer with chrome-aws-lambda
   const browser = await puppeteer.launch({
