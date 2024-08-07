@@ -19,16 +19,19 @@ export default function RootLayout({
         dir="rtl"
         className={`selection:bg-[#FC6B00] selection:text-white antialiased grainy `}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+
+          <Toaster
+            toastOptions={{
+              unstyled: true,
+              classNames: {
+                toast: " rounded-2xl",
+              },
+            }}
+          />
+        </Providers>
       </body>
-      <Toaster
-        toastOptions={{
-          unstyled: true,
-          classNames: {
-            toast: " rounded-2xl",
-          },
-        }}
-      />
     </html>
   );
 }

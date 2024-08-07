@@ -2,10 +2,11 @@ import { jwtVerify, SignJWT } from "jose";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
 
-export function absoluteUrl(path: string) {
-  if (typeof window !== "undefined") return path;
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}${path}`;
-  return `http://localhost:${process.env.PORT ?? 3000}${path}`;
+export function absoluteUrl(route: string) {
+  if (typeof window !== "undefined") return route;
+  if (process.env.VERCEL_URL)
+    return `https://${process.env.VERCEL_URL}${route}`;
+  return `http://localhost:${process.env.PORT ?? 3001}${route}`;
 }
 
 export function isMacOs() {
@@ -59,7 +60,6 @@ export function getValueFromUrl(
 export function deleteCookie(name) {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
 }
-
 
 // Function to format dates in Arabic
 export function formatDateInArabic(date: Date, formatString: string): string {
