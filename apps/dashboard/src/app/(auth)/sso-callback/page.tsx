@@ -13,7 +13,7 @@ export default function SSOCallbackPage({
   searchParams,
 }: SSOCallbackPageProps) {
   return (
-    <div>
+    <div className="w-full h-screen">
       <SSOCallback searchParams={searchParams} />
     </div>
   );

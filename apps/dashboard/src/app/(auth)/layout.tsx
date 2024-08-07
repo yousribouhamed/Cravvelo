@@ -10,7 +10,7 @@ export default async function AdminLayout({
 }) {
   return (
     <ClerkProvider>
-      <div className="flex w-full min-h-screen gap-x-2 bg-[#FAFAFA] light ">
+      <div className="flex w-full h-screen  bg-[#FAFAFA] light ">
         {children}
       </div>
     </ClerkProvider>
