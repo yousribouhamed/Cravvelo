@@ -31,7 +31,7 @@ const addTextSchema = z.object({
 const selectionButtoms = [
   {
     title: "مسودة",
-    description: "سيتم عرضها لفريقك فقط",
+    description: "سيتم عرضها لك فقط",
     value: "DRAFT",
   },
   {
@@ -39,11 +39,7 @@ const selectionButtoms = [
     description: "سيكون مرئيًا للجميع",
     value: "PUBLISED",
   },
-  {
-    title: "الوصول المبكر",
-    description: "شراء مبكر في الأكاديمية الخاصة بك",
-    value: "EARLY_ACCESS",
-  },
+ 
 ];
 
 interface PublishProductFormProps {

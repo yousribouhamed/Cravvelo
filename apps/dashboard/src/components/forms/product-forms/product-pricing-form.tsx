@@ -31,8 +31,8 @@ import { Product } from "database";
 import { HelpCircle } from "lucide-react";
 
 const PricingFormSchema = z.object({
-  price: z.string(),
-  compareAtPrice: z.string(),
+  price: z.string({ required_error: "يرجى ملئ الحقل" }),
+  compareAtPrice: z.string({ required_error: "يرجى ملئ الحقل" }),
 });
 
 interface ProductPricingFormProps {
@@ -43,7 +43,7 @@ function ProductPricingForm({ product }: ProductPricingFormProps) {
   const router = useRouter();
   const path = usePathname();
   const productId = getValueFromUrl(path, 2);
-  const [isFree, setIsFree] = useState(false);
+  const [isFree, setIsFree] = useState(product?.price === 0 ? true : false);
   const mutation = trpc.priceProduct.useMutation({
     onSuccess: () => {
       maketoast.success();
@@ -58,19 +58,20 @@ function ProductPricingForm({ product }: ProductPricingFormProps) {
   const form = useForm<z.infer<typeof PricingFormSchema>>({
     mode: "onChange",
     resolver: zodResolver(PricingFormSchema),
+
     defaultValues: {
-      price: product?.price ? product?.price?.toString() : "0",
+      price: product?.price ? product?.price?.toString() : "100",
       compareAtPrice: product?.compareAtPrice
         ? product?.compareAtPrice?.toString()
-        : "0",
+        : "1000",
     },
   });
 
   async function onSubmit(values: z.infer<typeof PricingFormSchema>) {
     await mutation.mutateAsync({
       productId,
-      price: Number(values.price),
-      compairAtPrice: Number(values.compareAtPrice),
+      price: isFree ? 0 : Number(values.price),
+      compairAtPrice: isFree ? 0 : Number(values.compareAtPrice),
     });
   }
 
@@ -98,6 +99,16 @@ function ProductPricingForm({ product }: ProductPricingFormProps) {
                       <FormLabel asChild>
                         <div className="w-full h-fit flex gap-x-3 items-center">
                           <span>سعر</span>
+                          <Tooltip delayDuration={0}>
+                            <TooltipTrigger>
+                              <HelpCircle className="text-black w-4 h-4" />
+                            </TooltipTrigger>
+                            <TooltipContent className="max-w-[150px]">
+                              <p>
+                                يجب على سعر المنتج ان يكون اكثر من 100 دينار
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
                         </div>
                       </FormLabel>
                       <FormControl>
@@ -153,7 +164,13 @@ function ProductPricingForm({ product }: ProductPricingFormProps) {
                 <div dir="ltr">
                   <Switch
                     checked={isFree}
-                    onCheckedChange={(val) => setIsFree(val)}
+                    onCheckedChange={(val) => {
+                      setIsFree(val);
+                      if (val === true) {
+                        form.setValue("compareAtPrice", "0");
+                        form.setValue("price", "0");
+                      }
+                    }}
                   />
                 </div>
               </div>

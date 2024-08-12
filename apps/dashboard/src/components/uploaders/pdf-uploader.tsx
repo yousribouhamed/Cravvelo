@@ -161,7 +161,7 @@ export const PdfUploaderS3 = ({
                 case "LOADING":
                   return (
                     <div className="w-full mt-4 flex flex-col mx-auto px-4 gap-y-4">
-                      <p className="text-xl font-bold ">جاري رفع الصورة...</p>
+                      <p className="text-xl font-bold ">جاري رفع الملف...</p>
                       <Progress
                         value={progress}
                         className="h-1 w-full bg-[#EFEFEF]"
@@ -184,19 +184,23 @@ export const PdfUploaderS3 = ({
                       </Button>
                       <div className="w-[140px] h-[140px] relative">
                         {fileUrl && (
-                          <Image fill alt="course image" src={fileUrl} />
+                          <Image
+                            fill
+                            alt="course image"
+                            src={"/pdf-image.png"}
+                          />
                         )}
                       </div>
                       <div className="flex flex-col gap-y-4 items-start">
-                        <span className="text-xl font-bold text-black">
+                        <span className="text-xl  text-black">
                           {acceptedFiles[0]?.name}
                         </span>
 
-                        <span className="text-xl font-bold text-black">
-                          {acceptedFiles[0]?.size}
+                        <span className="text-xl  text-black">
+                          {formatBytes(acceptedFiles[0]?.size)}
                         </span>
 
-                        <span className="text-xl font-bold text-black">
+                        <span className="text-xl  text-black">
                           {acceptedFiles[0]?.type}
                         </span>
                       </div>

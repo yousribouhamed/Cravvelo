@@ -55,6 +55,9 @@ function ProductContentForm({ product }: ProductContentFormProps) {
     mode: "onChange",
     resolver: zodResolver(addProductConentNameSchema),
     defaultValues: {
+      name: product?.title ?? "",
+      fileUrl: product.fileUrl ?? "",
+      imageUrl: product.thumbnailUrl ?? "",
       breifDescription: product?.subDescription ?? "",
       description: product?.description
         ? JSON.parse(product?.description as string)
@@ -124,7 +127,6 @@ function ProductContentForm({ product }: ProductContentFormProps) {
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    {/* in here goes the pdf uploader */}
                     <PdfUploaderS3
                       fileUrl={form.watch("fileUrl")}
                       onChnage={field.onChange}
