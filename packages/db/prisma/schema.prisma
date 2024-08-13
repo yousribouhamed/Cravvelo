@@ -133,6 +133,9 @@ model Website {
   subdomain      String?  @unique
   customDomain   String?  @unique
   suspended      Boolean  @default(false)
+  dCoursesHomeScreen   Boolean  @default(true)
+  dDigitalProductsHomeScreen  Boolean  @default(false)
+  itemsAlignment Boolean  @default(false)
   enableReferral Boolean  @default(false)
   enableSalesBanner Boolean  @default(false)
   privacy_policy Json?

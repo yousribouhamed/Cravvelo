@@ -53,4 +53,34 @@ export const referral = {
       console.error(err);
     }
   }),
+
+  changeLayoutSettings: privateProcedure
+    .input(
+      z.object({
+        dCoursesHomeScreen: z.boolean(),
+        dDigitalProductsHomeScreen: z.boolean(),
+        itemsAlignment: z.boolean(),
+        enableSalesBanner: z.boolean(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const website = await ctx.prisma.website.update({
+          where: {
+            accountId: ctx.account.id,
+          },
+
+          data: {
+            dCoursesHomeScreen: input.dCoursesHomeScreen,
+            dDigitalProductsHomeScreen: input.dDigitalProductsHomeScreen,
+            itemsAlignment: input.itemsAlignment,
+            enableSalesBanner: input.enableSalesBanner,
+          },
+        });
+
+        return website;
+      } catch (err) {
+        console.error(err);
+      }
+    }),
 };

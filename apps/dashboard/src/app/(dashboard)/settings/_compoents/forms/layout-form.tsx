@@ -27,10 +27,76 @@ import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { Textarea } from "@ui/components/ui/textarea";
 import { maketoast } from "@/src/components/toasts";
 
-interface DisableSalesFormProps {}
+interface DisableSalesFormProps {
+  dCoursesHomeScreen: boolean;
+  dDigitalProductsHomeScreen: boolean;
+  itemsAlignment: boolean;
+  enableSalesBanner: boolean;
+}
 
-const LayoutForm: FC = ({}) => {
-  return <div></div>;
+const formSchema = z.object({
+  dCoursesHomeScreen: z.boolean(),
+  dDigitalProductsHomeScreen: z.boolean(),
+  itemsAlignment: z.boolean(),
+  enableSalesBanner: z.boolean(),
+});
+
+const WebsiteLayoutForm: FC<DisableSalesFormProps> = ({
+  dCoursesHomeScreen,
+  dDigitalProductsHomeScreen,
+  enableSalesBanner,
+  itemsAlignment,
+}) => {
+  const mutation = trpc.changeLayoutSettings.useMutation({
+    onSuccess: () => {
+      maketoast.success();
+    },
+    onError: () => {
+      maketoast.error();
+    },
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      dCoursesHomeScreen,
+      dDigitalProductsHomeScreen,
+      enableSalesBanner,
+      itemsAlignment,
+    },
+  });
+
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    await mutation.mutateAsync({
+      dCoursesHomeScreen: data.dCoursesHomeScreen,
+      dDigitalProductsHomeScreen: data.dDigitalProductsHomeScreen,
+      enableSalesBanner: data.enableSalesBanner,
+      itemsAlignment: data.itemsAlignment,
+    });
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <Card className="border rounded-xl shadow-none">
+          <CardHeader>
+            <CardTitle>بعض الإعدادات العامة</CardTitle>
+          </CardHeader>
+          <CardContent></CardContent>
+          <CardFooter>
+            <Button
+              className=" flex items-center gap-x-2"
+              disabled={mutation.isLoading}
+              type="submit"
+            >
+              {mutation.isLoading ? <LoadingSpinner /> : null}
+              تاكيد
+            </Button>
+          </CardFooter>
+        </Card>
+      </form>
+    </Form>
+  );
 };
 
-export default LayoutForm;
+export default WebsiteLayoutForm;

@@ -7,6 +7,7 @@ import { prisma } from "database/src";
 import AddLogoForm from "../../_compoents/forms/add-logo-form";
 import AddFavIconForm from "../../_compoents/forms/add-favicon-form";
 import AddSeoForm from "../../_compoents/forms/add-seo-form";
+import WebsiteLayoutForm from "../../_compoents/forms/layout-form";
 
 const getAllNotifications = async ({ accountId }: { accountId: string }) => {
   const notifications = await prisma.notification.findMany({
@@ -21,7 +22,7 @@ const Page = async ({}) => {
   const user = await useHaveAccess();
 
   const [notifications, website] = await Promise.all([
-    getAllNotifications({ accountId: user.accountId }),
+    getAllNotifications({ accountId: user?.accountId }),
     prisma.website.findFirst({
       where: {
         accountId: user.accountId,
@@ -39,10 +40,19 @@ const Page = async ({}) => {
         />
         <WebsiteSettingsHeader />
         <div className="w-full h-fit grid grid-cols-2  my-8 gap-4">
-          <AddColorFrom color={website.color} />
+          <AddColorFrom color={website?.color} />
           <AddLogoForm logoUrl={website?.logo} />
+          <WebsiteLayoutForm
+            dCoursesHomeScreen={website?.dCoursesHomeScreen}
+            dDigitalProductsHomeScreen={website?.dDigitalProductsHomeScreen}
+            enableSalesBanner={website?.enableSalesBanner}
+            itemsAlignment={website?.itemsAlignment}
+          />
           <AddFavIconForm logoUrl={"/"} />
-          <AddSeoForm description={website.description} title={website.name} />
+          <AddSeoForm
+            description={website?.description}
+            title={website?.name}
+          />
         </div>
       </main>
     </MaxWidthWrapper>

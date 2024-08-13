@@ -5,11 +5,8 @@ import { redirect } from "next/navigation";
 import { prisma } from "database/src";
 import { daysLeftInTrial } from "../lib/utils";
 
-// this sunction should run on the server only
 const useHaveAccess = async () => {
   const user = await currentUser();
-
-  const currentDate = new Date();
 
   if (!user) {
     redirect("/sign-in");
