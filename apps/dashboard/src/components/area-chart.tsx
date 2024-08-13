@@ -74,7 +74,7 @@ interface AreaChartProps {
 
 const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
   const [showCourses, setShowCourses] = useState(true);
-  const [showProducts, setShowProducts] = useState(true);
+  const [showProducts, setShowProducts] = useState(false);
 
   const aggregateSalesByMonth = (sales) => {
     const aggregatedData = {};
@@ -126,7 +126,7 @@ const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
                 <div className="w-3 h-3 rounded-[50%] bg-gray-500" />
               )}
             </button>
-            <button
+            {/* <button
               className="w-[300px] flex items-center gap-x-2 justify-end cursor-pointer"
               onClick={() => setShowProducts(!showProducts)}
             >
@@ -136,7 +136,7 @@ const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
               ) : (
                 <div className="w-3 h-3 rounded-[50%] bg-gray-500" />
               )}
-            </button>
+            </button> */}
           </div>
         </div>
         <div dir="ltr" className="w-full h-[calc(100%-70px)] pr-2 ">
