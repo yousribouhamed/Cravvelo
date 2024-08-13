@@ -32,14 +32,10 @@ export const ImageUploaderS3 = ({
 
   const mutation = trpc.getSignedUrl.useMutation({
     onSuccess: async ({ success }) => {
-      console.log("we have created the sign url ");
-      console.log(success);
       if (!selectedFile) {
-        console.log("there is no selected file");
         setStatus("ERROR");
       }
       if (!success || !success?.url) {
-        console.log("there is no selected file");
         setStatus("ERROR");
       }
       await fetch(success?.url, {
@@ -55,8 +51,7 @@ export const ImageUploaderS3 = ({
       setStatus("COMPLETE");
     },
     onError: (err) => {
-      console.log("there is an error");
-      console.log(err);
+      console.error(err);
       setStatus("ERROR");
     },
   });
@@ -184,10 +179,13 @@ export const ImageUploaderS3 = ({
                       </Button>
                       <div className="w-[250px] h-[150px] border shadow rounded-xl relative">
                         {fileUrl && (
-                          <Image fill alt="course image" src={fileUrl} />
+                          <img
+                            alt="course image"
+                            className="w-full h-full object-cover"
+                            src={fileUrl}
+                          />
                         )}
                       </div>
-                     
                     </div>
                   );
 

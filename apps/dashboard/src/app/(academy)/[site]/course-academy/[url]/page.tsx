@@ -18,36 +18,36 @@ interface PageProps {
   params: { site: string; url: string };
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { site: string; url: string };
-}): Promise<Metadata | null> {
-  const subdomain = getSubDomainValue({ value: params.site });
+// export async function generateMetadata({
+//   params,
+// }: {
+//   params: { site: string; url: string };
+// }): Promise<Metadata | null> {
+//   const subdomain = getSubDomainValue({ value: params.site });
 
-  const [data, course] = await Promise.all([
-    getSiteData({
-      subdomain,
-    }),
-    getCourseByUrlPath({ url: params?.url }),
-  ]);
+//   const [data, course] = await Promise.all([
+//     getSiteData({
+//       subdomain,
+//     }),
+//     getCourseByUrlPath({ url: params?.url }),
+//   ]);
 
-  if (!data) {
-    return null;
-  }
+//   if (!data) {
+//     return null;
+//   }
 
-  return {
-    title: `${course.seoTitle ?? course.title} | ${data.name}`,
-    description: `${course.seoDescription} | ${data.name}`,
-    openGraph: {
-      title: `${course.seoTitle ?? course.title} | ${data.name}`,
-      description: `${course.seoDescription ?? course.courseDescription} | ${
-        data.name
-      }`,
-      images: [course.thumbnailUrl],
-    },
-  };
-}
+//   return {
+//     title: `${course.seoTitle ?? course.title} | ${data.name}`,
+//     description: `${course.seoDescription} | ${data.name}`,
+//     openGraph: {
+//       title: `${course.seoTitle ?? course.title} | ${data.name}`,
+//       description: `${course.seoDescription ?? course.courseDescription} | ${
+//         data.name
+//       }`,
+//       images: [course.thumbnailUrl],
+//     },
+//   };
+// }
 
 const Page = async ({ params }: PageProps) => {
   const subdomain = getSubDomainValue({ value: params.site });
@@ -80,6 +80,7 @@ const Page = async ({ params }: PageProps) => {
         isAuthanticated={student ? true : false}
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
+        displaySalesBanner={website?.enableSalesBanner}
       />
 
       <MaxWidthWrapper className="h-fit mt-[110px] min-h-[calc(100vh-70px)]  ">

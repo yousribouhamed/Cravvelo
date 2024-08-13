@@ -1,4 +1,3 @@
-import CoursesGrid from "../../_components/course-component/courses-grid";
 import { getAllCourses, getSiteData } from "../../_actions";
 import { getSubDomainValue } from "../../lib";
 import { notFound } from "next/navigation";
@@ -7,7 +6,7 @@ import MaxWidthWrapper from "../../_components/max-width-wrapper";
 import { getStudent } from "../../_actions/auth";
 import AcademiaFooter from "../../_components/layout/academy-footer";
 import Suspanded from "../../_components/suspanded";
-import FilterButtonMobile from "../../_components/filter-button";
+
 import CoursesBoard from "./courses-board";
 export const fetchCache = "force-no-store";
 
@@ -42,6 +41,7 @@ const Page = async ({ params }: PageProps) => {
         isAuthanticated={student ? true : false}
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
+        displaySalesBanner={website?.enableSalesBanner}
       />
       <MaxWidthWrapper className="h-fit mt-[110px] min-h-[calc(100vh-70px)] ">
         <div className="  w-full h-fit min-h-screen flex flex-col gap-4 items-start py-4">

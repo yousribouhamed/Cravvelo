@@ -41,11 +41,16 @@ const Page = async ({ params }: PageProps) => {
         isAuthanticated={student ? true : false}
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
+        displaySalesBanner={website?.enableSalesBanner}
       />
-      <MaxWidthWrapper className="h-fit mt-[110px] min-h-[calc(100vh-70px)] ">
+      <MaxWidthWrapper
+        className={` h-fit  min-h-[calc(100vh-70px)] ${
+          website?.enableSalesBanner ? "mt-[110px]" : "mt-[70px]"
+        }`}
+      >
         <main className="w-full h-fit min-h-full flex flex-col items-center justify-center  p-4 sm:p-0s">
           <Banner websiteName={website?.name} color={website?.color} />
-          {courses.length === 0 ? (
+          {courses.length === 0 && website?.dCoursesHomeScreen ? (
             <div className="w-full h-fit min-h-[250px] flex items-center flex-col gap-y-1 justify-center">
               <Image
                 src="/academia/welcome.svg"
@@ -59,7 +64,11 @@ const Page = async ({ params }: PageProps) => {
               </p>
             </div>
           ) : (
-            <CoursesReel color={website?.color} courses={courses} />
+            <CoursesReel
+              inCenter={website?.itemsAlignment}
+              color={website?.color}
+              courses={courses}
+            />
           )}
         </main>
       </MaxWidthWrapper>

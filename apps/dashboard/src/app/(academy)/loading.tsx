@@ -2,7 +2,6 @@ import type { FC } from "react";
 import LoadingCard from "./_components/loading";
 import MaxWidthWrapper from "./_components/max-width-wrapper";
 import AcademiaFooter from "./_components/layout/academy-footer";
-import LiarSales from "./_components/Liar-sales";
 import MobilNavgiationProduction from "./_components/layout/academy-header/mobil-navbar";
 import LinksNavbar from "./_components/layout/academy-header/links-navbar";
 import { Skeleton } from "@ui/components/ui/skeleton";
@@ -12,7 +11,6 @@ const Page: FC = ({}) => {
   return (
     <>
       <div className="w-full h-[110px]   border-b z-[8] fixed top-0 bg-white shadow overflow-y-hidden">
-        <LiarSales />
         <MaxWidthWrapper className="w-full h-[70px] flex items-center justify-between">
           <div className="w-fit h-full flex items-center justify-start md:hidden">
             <MobilNavgiationProduction />

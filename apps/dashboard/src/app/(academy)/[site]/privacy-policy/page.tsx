@@ -38,6 +38,7 @@ const Page = async ({ params }: PageProps) => {
         isAuthanticated={student ? true : false}
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
+        displaySalesBanner={website?.enableSalesBanner}
       />
       <MaxWidthWrapper className="h-fit mt-[110px] min-h-[calc(100vh-110px)] ">
         <main className="w-full h-fit min-h-full flex flex-col items-center justify-center ">

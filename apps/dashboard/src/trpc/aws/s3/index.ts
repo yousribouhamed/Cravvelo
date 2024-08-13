@@ -1,4 +1,4 @@
-import { privateProcedure, publicProcedure } from "../../trpc";
+import { privateProcedure } from "../../trpc";
 import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { z } from "zod";
@@ -8,13 +8,13 @@ import { s3 } from "@/src/lib/s3";
 
 const allowedFileTypes = ["image/jpeg", "image/png", "application/pdf"];
 
-const maxFileSize = 1048576 * 10 * 30; // 1 MB * 30
+const maxFileSize = 1048576 * 10 * 100; // 1 MB * 30
 
 const generateFileName = (bytes = 32) =>
   crypto.randomBytes(bytes).toString("hex");
 
 export const s3_bucket = {
-  getSignedUrl: publicProcedure
+  getSignedUrl: privateProcedure
     .input(
       z.object({
         fileType: z.string(),

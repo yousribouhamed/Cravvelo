@@ -37,6 +37,7 @@ const Page = async ({ params }: PageProps) => {
         isAuthanticated={student ? true : false}
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
+        displaySalesBanner={website?.enableSalesBanner}
       />
       <div className="w-full h-screen mt-[110px]  flex items-center justify-center p-4 ">
         <AcademySignInForm

@@ -15,6 +15,7 @@ interface AcademyHeaderProps {
   logo: string | null;
   color: string;
   referralEnabled: boolean;
+  displaySalesBanner: boolean;
 }
 
 const AcademyHeader: FC<AcademyHeaderProps> = ({
@@ -24,10 +25,16 @@ const AcademyHeader: FC<AcademyHeaderProps> = ({
   logo,
   color,
   referralEnabled,
+  displaySalesBanner,
 }) => {
   return (
-    <div className="w-full h-[110px]   border-b z-[8] fixed top-0 bg-white  ">
-      <LiarSales />
+    <div
+      className={`  w-full   border-b z-[8] fixed top-0 bg-white ${
+        displaySalesBanner ? "h-[110px]" : "h-[70px]"
+      }  `}
+    >
+      {displaySalesBanner && <LiarSales />}
+
       <MaxWidthWrapper className="w-full h-[70px] flex items-center justify-between">
         <div className="w-fit h-full flex items-center justify-start md:hidden">
           <MobilNavgiationProduction />

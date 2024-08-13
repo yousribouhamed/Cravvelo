@@ -40,6 +40,7 @@ const Page = async ({ params }: PageProps) => {
         isAuthanticated={false}
         subdomain={website?.subdomain ?? null}
         logo={website?.logo}
+        displaySalesBanner={website?.enableSalesBanner}
       />
       <div className="w-full h-screen flex flex-col items-center justify-center  p-4">
         <div className="w-full h-[50px] flex items-center justify-start">

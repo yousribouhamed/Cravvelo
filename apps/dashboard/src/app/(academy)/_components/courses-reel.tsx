@@ -23,9 +23,10 @@ import { Play } from "lucide-react";
 interface CoursesReelProps {
   courses: CourseWithEpisode[];
   color: string;
+  inCenter: boolean;
 }
 
-const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
+const CoursesReel: FC<CoursesReelProps> = ({ courses, color, inCenter }) => {
   const router = useRouter();
 
   const handleRouting = ({
@@ -65,7 +66,11 @@ const CoursesReel: FC<CoursesReelProps> = ({ courses, color }) => {
           الدورات
         </h2>
       </div>
-      <div className="w-full min-h-[200px] h-fit flex items-start justify-center gap-8 flex-wrap">
+      <div
+        className={`  w-full min-h-[200px] h-fit flex items-start  gap-8 flex-wrap ${
+          inCenter ? "justify-center" : "justify-start"
+        }`}
+      >
         {Array.isArray(currentItems) &&
           currentItems?.map((item, index) => {
             return (

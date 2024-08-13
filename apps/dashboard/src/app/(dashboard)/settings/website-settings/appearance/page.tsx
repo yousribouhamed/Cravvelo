@@ -40,7 +40,6 @@ const Page = async ({}) => {
         />
         <WebsiteSettingsHeader />
         <div className="w-full h-fit grid grid-cols-1 lg:grid-cols-2   my-8 gap-4">
-          <AddColorFrom color={website?.color} />
           <AddLogoForm logoUrl={website?.logo} />
           <WebsiteLayoutForm
             dCoursesHomeScreen={website?.dCoursesHomeScreen}
@@ -48,11 +47,12 @@ const Page = async ({}) => {
             enableSalesBanner={website?.enableSalesBanner}
             itemsAlignment={website?.itemsAlignment}
           />
-          <AddFavIconForm logoUrl={"/"} />
+          <AddFavIconForm logoUrl={website?.favicon} />
           <AddSeoForm
             description={website?.description}
             title={website?.name}
           />
+          <AddColorFrom color={website?.color} />
         </div>
       </main>
     </MaxWidthWrapper>
