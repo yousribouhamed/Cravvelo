@@ -38,7 +38,7 @@ const Page = async ({}) => {
           title="إعدادات المظهر"
         />
         <WebsiteSettingsHeader />
-        <div className="w-full h-fit flex flex-col my-8 gap-y-4">
+        <div className="w-full h-fit grid grid-cols-2  my-8 gap-4">
           <AddColorFrom color={website.color} />
           <AddLogoForm logoUrl={website?.logo} />
           <AddFavIconForm logoUrl={"/"} />

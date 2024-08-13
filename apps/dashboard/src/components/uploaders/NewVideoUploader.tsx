@@ -213,17 +213,14 @@ export const NewVideoUploader = ({
                       >
                         <X className="w-4 h-4 " />
                       </Button>
-
                       <Image
                         width={100}
                         height={100}
                         alt="video uploder"
                         src={"/video.png"}
                       />
-                      <p>تم تحميل الفيديو الخاص بك</p>
-                      <span className="text-xl font-bold text-blue-500">
-                        {acceptedFiles[0] && acceptedFiles[0]?.name}
-                      </span>
+                      <p className="text-blue-600">تم تحميل الفيديو الخاص بك</p>
+
                       <div>
                         <span className="text-lg text-gray-500">
                           يمكنك معاينة الفيديو من{" "}

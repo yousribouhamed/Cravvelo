@@ -187,19 +187,7 @@ export const ImageUploaderS3 = ({
                           <Image fill alt="course image" src={fileUrl} />
                         )}
                       </div>
-                      <div className="flex flex-col gap-y-4 items-start">
-                        <span className="text-md font-bold text-black">
-                          {acceptedFiles[0]?.name}
-                        </span>
-
-                        <span className="text-md font-bold text-black">
-                          {formatBytes(acceptedFiles[0]?.size)}
-                        </span>
-
-                        <span className="text-md font-bold text-black">
-                          {acceptedFiles[0]?.type}
-                        </span>
-                      </div>
+                     
                     </div>
                   );
 

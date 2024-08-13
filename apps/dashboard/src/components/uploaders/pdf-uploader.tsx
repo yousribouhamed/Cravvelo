@@ -193,15 +193,7 @@ export const PdfUploaderS3 = ({
                       </div>
                       <div className="flex flex-col gap-y-4 items-start">
                         <span className="text-xl  text-black">
-                          {acceptedFiles[0]?.name}
-                        </span>
-
-                        <span className="text-xl  text-black">
-                          {formatBytes(acceptedFiles[0]?.size)}
-                        </span>
-
-                        <span className="text-xl  text-black">
-                          {acceptedFiles[0]?.type}
+                          تم تحميل الملف الخاص بك
                         </span>
                       </div>
                     </div>
