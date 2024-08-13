@@ -8,26 +8,12 @@ import { getSubDomainValue } from "../../../lib";
 import { getSiteData } from "../../../_actions";
 import AcademiaFooter from "../../../_components/layout/academy-footer";
 import { notFound, redirect } from "next/navigation";
-import { Progress } from "@ui/components/ui/progress";
-
-import { BookMarked } from "lucide-react";
 import Link from "next/link";
 import { prisma } from "database/src";
 import Image from "next/image";
 
 interface PageProps {
   params: { site: string };
-}
-
-function calculateProgress(episode: number, videos: number): number {
-  if (episode < 0 || videos < 1 || episode > videos) {
-    throw new Error(
-      "Invalid input: Current video or total videos cannot be less than 1, and current video cannot be greater than total videos."
-    );
-  }
-
-  const progressPercentage = (episode / videos) * 100;
-  return parseFloat(progressPercentage.toFixed(0));
 }
 
 const getStudentCertificates = async ({ studentId }: { studentId: string }) => {
@@ -61,8 +47,6 @@ const Page = async ({ params }: PageProps) => {
 
   const bag = JSON.parse(student.bag as string) as StudentBag;
 
-  console.log(certificates);
-
   return (
     <>
       <AcademyHeader
@@ -85,8 +69,8 @@ const Page = async ({ params }: PageProps) => {
                 <Image
                   src="/academia/notfound-taken.svg"
                   alt="this is the error page"
-                  width={400}
-                  height={400}
+                  width={200}
+                  height={200}
                 />
 
                 <p className="text-xl font-bold">لا يوجد اي كورسات</p>

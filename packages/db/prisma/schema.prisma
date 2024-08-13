@@ -134,6 +134,7 @@ model Website {
   customDomain   String?  @unique
   suspended      Boolean  @default(false)
   enableReferral Boolean  @default(false)
+  enableSalesBanner Boolean  @default(false)
   privacy_policy Json?
   phoneNumber    String?
   supportEmail   String?

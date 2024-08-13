@@ -46,9 +46,6 @@ const Page = async ({ params }: PageProps) => {
     redirect("/");
   }
 
-  console.log("these are all the courses");
-  console.log(courses);
-
   return (
     <>
       <AcademyHeader
@@ -71,8 +68,8 @@ const Page = async ({ params }: PageProps) => {
                 <Image
                   src="/academia/no-video.svg"
                   alt="this is the error page"
-                  width={400}
-                  height={400}
+                  width={200}
+                  height={200}
                 />
 
                 <p className="text-xl font-bold">لا يوجد اي كورسات</p>

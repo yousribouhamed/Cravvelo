@@ -7,7 +7,6 @@ import LinksNavbar from "./links-navbar";
 import StudentNav from "../../auth/student-nav";
 import type { Student } from "database";
 import LiarSales from "../../Liar-sales";
-import StudentNavigation from "./student-nav";
 
 interface AcademyHeaderProps {
   isAuthanticated: boolean;

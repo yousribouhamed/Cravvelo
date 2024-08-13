@@ -1,5 +1,4 @@
 import "@ui/styles/globals.css";
-
 import Script from "next/script";
 
 export const fetchCache = "force-no-store";
