@@ -51,7 +51,7 @@ function LinksNavbar() {
           </button>
         </Link>
       </Ripples>
-      <Ripples>
+      {/* <Ripples>
         <Link href={"/product-academy"} className="text-md ">
           <button
             data-ripple-light="true"
@@ -69,7 +69,7 @@ function LinksNavbar() {
             المنتجات الرقمية
           </button>
         </Link>
-      </Ripples>
+      </Ripples> */}
     </div>
   );
 }

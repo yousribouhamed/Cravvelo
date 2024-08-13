@@ -127,7 +127,7 @@ export default function ShoppingCardProduction({
                                             }}
                                             className=" px-4 py-3  rounded-full flex items-center justify-center "
                                           >
-                                            <p className=" text-white font-bold">
+                                            <p className=" text-white font-bold truncate">
                                               {Number(product.price) === 0
                                                 ? "مجانا"
                                                 : formatDZD(

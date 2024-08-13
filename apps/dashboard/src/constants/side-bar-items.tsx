@@ -23,12 +23,12 @@ export const SIDE_BAR_ITEMS = [
     icon: Youtube,
     subitems: [],
   },
-  {
-    title: "المنتجات الرقمية",
-    slug: "/products",
-    icon: Box,
-    subitems: [],
-  },
+  // {
+  //   title: "المنتجات الرقمية",
+  //   slug: "/products",
+  //   icon: Box,
+  //   subitems: [],
+  // },
 
   {
     title: "المبيعات",
