@@ -53,7 +53,7 @@ const ModulesList: FC<ChapterProps> = ({
 
       console.log(updatedModules);
     },
-    [modules]
+    [modules, chapterID]
   );
 
   if (!isMounted) {

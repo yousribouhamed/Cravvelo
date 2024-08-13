@@ -31,7 +31,7 @@ const Page = async ({}) => {
           title="إعدادات الموقع"
         />
         <WebsiteSettingsHeader />
-        <div className="w-full h-fit flex flex-col my-8 gap-y-4">
+        <div className="w-full h-fit grid grid-cols-2  my-8 gap-4">
           <ChangeSubDomainForm subdomain={user?.subdomain} />
           <AddCusotmDomainForm customDomain={user?.customDomain} />
         </div>

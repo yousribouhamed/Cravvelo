@@ -9,20 +9,4 @@ module.exports = {
       "images.unsplash.com",
     ],
   },
-  experimental: {
-    serverComponentsExternalPackages: ["puppeteer-core", "@sparticuz/chromium"],
-  },
-
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-    config.resolve.alias.canvas = false;
-    config.resolve.alias.encoding = false;
-
-    return config;
-  },
 };
-
-// [
-//   // Exclude Puppeteer’s source maps
-//   /node_modules\/puppeteer-core/,
-//   /node_modules\/@sparticuz\/chromium/,
-// ],

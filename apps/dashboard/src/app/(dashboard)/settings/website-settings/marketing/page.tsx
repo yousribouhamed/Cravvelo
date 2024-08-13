@@ -32,13 +32,9 @@ const Page = async ({}) => {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
-        <Header
-          notifications={notifications}
-          user={user}
-          title="الصلاحيات"
-        />
+        <Header notifications={notifications} user={user} title="الصلاحيات" />
         <WebsiteSettingsHeader />
-        <div className="w-full h-fit flex flex-col my-8 gap-y-4">
+        <div className="w-full h-fit grid grid-cols-2 my-8 gap-4">
           <DisableReferralForm enabled={website.enableReferral} />
         </div>
       </main>

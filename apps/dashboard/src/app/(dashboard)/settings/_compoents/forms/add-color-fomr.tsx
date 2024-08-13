@@ -59,7 +59,7 @@ const AddColorFrom: FC<ChangeDomainFormProps> = ({ color }) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <Card className="border rounded-xl shadow-none">
+        <Card className="border rounded-xl shadow-none w-full h-full">
           <CardHeader>
             <CardTitle>اللون الرئيسي للاكادمية</CardTitle>
           </CardHeader>

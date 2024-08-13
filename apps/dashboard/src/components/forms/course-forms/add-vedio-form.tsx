@@ -50,11 +50,6 @@ function AddVedioForm() {
     },
   });
 
-  React.useEffect(() => {
-    console.log({ chapterID });
-    console.log({ videoSize });
-  }, []);
-
   const form = useForm<z.infer<typeof addVedioSchema>>({
     mode: "onChange",
     resolver: zodResolver(addVedioSchema),
@@ -75,8 +70,6 @@ function AddVedioForm() {
     // video length
     // colect number of modules
     if (!values.fileUrl || values.fileUrl === "") {
-      console.log("here it is the values inside the if");
-      console.log(values);
       return;
     }
 
@@ -88,9 +81,6 @@ function AddVedioForm() {
       title: values.title,
       length: videoSize,
     });
-
-    console.log("here it is the values inside the mutation");
-    console.log(values);
   }
 
   return (
