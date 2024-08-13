@@ -33,6 +33,7 @@ const Page = async ({ params }: PageProps) => {
   return (
     <>
       <AcademyHeader
+        displaySalesBanner={website?.enableSalesBanner}
         referralEnabled={false}
         color={website?.color}
         student={student}
