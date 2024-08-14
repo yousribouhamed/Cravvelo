@@ -6,36 +6,44 @@ import { buttonVariants } from "../../plate-ui/button";
 import { ColumnFiltersState, Table } from "@tanstack/react-table";
 //@ts-ignore
 import { download, generateCsv, mkConfig } from "export-to-csv";
-import { Pencil, ArrowUpCircle } from "lucide-react";
+import {
+  Pencil,
+  ArrowUpCircle,
+  PencilRuler,
+  Check,
+  CandyCane,
+  Ghost,
+  Flame,
+} from "lucide-react";
 import { FacetedFilter } from "@/src/components/data-table/table-helpers/faceted-filter";
 
 export const statuses = [
   {
     value: "DRAFT",
     label: "مسودة",
-    icon: Pencil,
+    icon: PencilRuler,
   },
   {
     value: "PUBLISED",
     label: "منشور",
-    icon: ArrowUpCircle,
+    icon: Check,
   },
 ];
 export const levels = [
   {
     value: "BIGENNER",
     label: "مبتدئ",
-    icon: Pencil,
+    icon: CandyCane,
   },
   {
     value: "INTERMEDIATE",
     label: "متوسط",
-    icon: ArrowUpCircle,
+    icon: Ghost,
   },
   {
     value: "ADVANCED",
     label: "متقدم",
-    icon: ArrowUpCircle,
+    icon: Flame,
   },
 ];
 

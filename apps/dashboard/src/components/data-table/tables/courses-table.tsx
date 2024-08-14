@@ -247,6 +247,18 @@ export function DataTable<TData, TValue>({
           </Button>
         </div>
       </div>
+      {table.getFilteredSelectedRowModel().rows.length > 0 && (
+        <div className="flex-1 w-[400px] h-[50px] mx-auto  text-sm text-muted-foreground absolute bottom-10 right-[40%] bg-primary rounded-2xl shadow flex items-center justify-between px-4">
+          <span className="text-white text-lg  text-start">
+            تم اختيار {table.getFilteredSelectedRowModel().rows.length}
+            صفوف من اصل {table.getFilteredRowModel().rows.length}
+          </span>
+
+          <Button disabled variant="secondary" className="text-black bg-white">
+            حذف الكل
+          </Button>
+        </div>
+      )}
     </>
   );
 }
