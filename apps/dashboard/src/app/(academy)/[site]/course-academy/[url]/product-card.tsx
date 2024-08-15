@@ -175,7 +175,7 @@ export const Product_card = ({
         </button>
       ) : (
         <Link
-          href="/auth-academy"
+          href="/auth-academy/sign-in"
           data-ripple-light="true"
           className="w-full h-12 rounded-lg  text-white flex items-center justify-center border-black disabled:cursor-not-allowed disabled:opacity-[50%]"
           style={{
