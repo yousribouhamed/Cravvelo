@@ -1,13 +1,12 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
-import Header from "@/src/components/layout/header";
 import { Skeleton } from "@ui/components/ui/skeleton";
+import HeaderLoading from "@/src/components/layout/header-loading";
 
 const page = ({}) => {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col overflow-y-hidden h-fit  justify-start">
-        {/* @ts-ignore */}
-        <Header notifications={[]} isLoadingPage user={{}} title="الرئيسية" />
+        <HeaderLoading title="الرئيسية" />
         <div className="w-full h-[30px] flex justify-start items-center mt-10 ">
           <Skeleton className="w-[260px] h-[45px] rounded-xl" />
         </div>

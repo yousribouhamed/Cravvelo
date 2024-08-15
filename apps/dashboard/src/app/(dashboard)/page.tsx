@@ -172,13 +172,13 @@ async function Page({ searchParams }) {
               <div className="grid gap-4 md:grid-cols-3  my-8 h-[450px] w-full ">
                 <AreaChartOverview sales={sales} />
               </div>
-              <div className="grid gap-4 md:grid-cols-2 my-8 min-h-[450px] h-fit w-full mb-10 ">
+              <div className="grid gap-4 md:grid-cols-2 my-8 min-h-[200px] h-fit w-full mb-10 ">
                 <Card className="col-span-1">
                   <CardHeader>
                     <p>الدورات الآكثر مبيعاً</p>
                   </CardHeader>
                   <CardContent className="flex flex-col items-center justify-center overflow-x-auto">
-                    <div className="w-full h-[50px] bg-primary flex items-center justify-between px-4">
+                    <div className="w-full h-[50px] bg-primary flex items-center justify-between px-4 rounded-t-2xl ">
                       <p className="text-white text-md">اسم الدورة </p>
                       <p className="text-white text-md"> عدد الطلاب</p>
                       <p className="text-white text-md">سعر الدورة</p>
@@ -186,8 +186,8 @@ async function Page({ searchParams }) {
                     {courses.length === 0 ? (
                       <NotFoundCard />
                     ) : (
-                      <ScrollArea className="w-full h-[300px]">
-                        <div className="w-full h-fit   flex flex-col ">
+                      <ScrollArea className="w-full h-[150px]">
+                        <div className="w-full h-fit   flex flex-col rounded-b-2xl shadow">
                           {courses.map((item) => (
                             <div
                               key={item.id}
@@ -212,15 +212,15 @@ async function Page({ searchParams }) {
                     <p>الطلبات الجديدة</p>
                   </CardHeader>
                   <CardContent className="flex flex-col items-center justify-center overflow-x-auto">
-                    <div className="w-full h-[50px] bg-primary flex items-center justify-between px-4">
+                    <div className="w-full h-[50px] bg-primary flex items-center justify-between px-4 rounded-t-2xl ">
                       <p className="text-white text-md">نوع الطلبية</p>
                       <p className="text-white text-md">مبلغ الطلبية</p>
                     </div>
                     {sales.length === 0 ? (
                       <NotFoundCard />
                     ) : (
-                      <ScrollArea className="w-full h-[300px]">
-                        <div className="w-full h-fit   flex flex-col ">
+                      <ScrollArea className="w-full h-[150px]">
+                        <div className="w-full h-fit   flex flex-col rounded-b-2xl shadow  ">
                           {sales.map((item) => (
                             <div
                               key={item.id}
