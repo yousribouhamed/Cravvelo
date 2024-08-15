@@ -31,7 +31,7 @@ const CourseContent: FC<CourseContentProps> = ({ chapters }) => {
         <div className="w-full h-[100px] flex items-center justify-start gap-x-4">
           <h3 className="text-xl font-bold">محتوى الدورة</h3>
         </div>
-        <div className="w-full min-h-[200px] h-fit flex flex-col bg-gray-200 gap-y-4 rounded-xl  p-8">
+        <div className="w-full min-h-[200px] h-fit flex flex-col  gap-y-4 rounded-xl  ">
           {Array.isArray(chapters) &&
             chapters?.map((item, index) => {
               const modules = JSON.parse(item?.modules as string) as Module[];

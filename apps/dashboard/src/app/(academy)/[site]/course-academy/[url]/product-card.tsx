@@ -15,6 +15,7 @@ import React from "react";
 import { makePayment } from "../../../_actions/payments";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const formatVideoLength = (totalSeconds) => {
   const hours = Math.floor(totalSeconds / 3600);
@@ -39,11 +40,13 @@ export const Product_card = ({
   comments,
   color,
   subdomain,
+  isSignedIn,
 }: {
   course: Course;
   comments: Comment[];
   color: string;
   subdomain: string;
+  isSignedIn: boolean;
 }) => {
   const { actions, state } = useAcademiaStore();
 
@@ -138,7 +141,7 @@ export const Product_card = ({
         >
           {state.shoppingBag.length > 0 ? "ان السلة ممتلئة" : "اضف الى السلة"}
         </button>
-      ) : (
+      ) : isSignedIn ? (
         <button
           data-ripple-light="true"
           onClick={async () => {
@@ -170,6 +173,17 @@ export const Product_card = ({
         >
           {isLoading ? "جاري المعالجة" : "المطالبة بالدورة"}
         </button>
+      ) : (
+        <Link
+          href="/auth-academy"
+          data-ripple-light="true"
+          className="w-full h-12 rounded-lg  text-white flex items-center justify-center border-black disabled:cursor-not-allowed disabled:opacity-[50%]"
+          style={{
+            background: color ?? "#FC6B00",
+          }}
+        >
+          تسجيل الدخول
+        </Link>
       )}
 
       <div
