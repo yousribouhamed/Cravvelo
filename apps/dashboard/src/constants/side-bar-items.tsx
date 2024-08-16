@@ -155,11 +155,6 @@ export const SIDE_BAR_ITEMS = [
         icon: Icons.Home,
         slug: "/settings/website-settings",
       },
-      {
-        title: "باقة المنصة",
-        icon: Icons.Home,
-        slug: "/pricing",
-      },
     ],
   },
 ];

@@ -19,10 +19,9 @@ const OrdersTableShell: FC<OrdersTableShellProps> = ({ initialData }) => {
   });
 
   if (!isMounted) {
-    return <DataTableLoading columnCount={6} />;
+    return <DataTableLoading hideSearch columnCount={6} />;
   }
 
-  console.log(data);
   return (
     <div className="w-full min-h-[300px] h-fit flex flex-col ">
       <DataTable columns={OrderColumns} data={data} />

@@ -8,7 +8,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@ui/components/ui/accordion";
-import { Menu } from "lucide-react";
 import {
   usePathname,
   useRouter,

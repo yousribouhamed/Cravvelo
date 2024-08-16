@@ -11,14 +11,12 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@ui/components/ui/form";
 import { Button } from "@ui/components/ui/button";
-import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -39,11 +37,10 @@ interface PaymentMethodsConnectorsProps {
 }
 
 const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
-  const router = useRouter();
-
   const mutation = trpc.create_user_chargily.useMutation({
     onSuccess: () => {
-      maketoast.success(), router.back();
+      maketoast.success(),
+        (window.location.href = "/settings/payments-methods");
     },
     onError: () => {
       maketoast.error();
@@ -61,8 +58,6 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
   });
 
   function onSubmit(data: Inputs) {
-    console.log(data);
-    console.log("here it is the data");
     mutation.mutate({
       private_key: data?.chargilyPrivateKey,
       public_key: data?.chargilyPublicKey,
@@ -112,11 +107,11 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
           </CardDescription>
         </CardHeader>
         <CardContent className="w-full h-fit relative ">
-          <div className="w-[50px] h-[50px] rounded-[50%] bg-violet-500 flex items-center justify-center absolute top-1 right-4">
+          <div className="w-[50px] h-[50px] rounded-[50%] bg-primary flex items-center justify-center absolute top-1 right-4">
             <span className="text-white font-bold">1</span>
           </div>
-          <div className="w-2 border-l-4 border-violet-500 h-[330px] absolute  top-2 right-8" />
-          <div className="w-[50px] h-[50px] rounded-[50%] bg-violet-500 flex items-center justify-center absolute top-[300px] right-4">
+          <div className="w-2 border-l-4 border-primary h-[330px] absolute  top-2 right-8" />
+          <div className="w-[50px] h-[50px] rounded-[50%] bg-primary flex items-center justify-center absolute top-[300px] right-4">
             <span className="text-white font-bold">2</span>
           </div>
 
@@ -139,7 +134,10 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
                     <FormItem>
                       <FormLabel> المفتاح العام </FormLabel>
                       <FormControl>
-                        <Input placeholder="ieebr4umff" {...field} />
+                        <Input
+                          placeholder="live_pk_5r7riiKDTrc5rA9wTX1TqjUebLRqOyBK96MSWilR"
+                          {...field}
+                        />
                       </FormControl>
 
                       <FormMessage />
@@ -154,7 +152,10 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
                     <FormItem>
                       <FormLabel>المفتاح الخاص </FormLabel>
                       <FormControl>
-                        <Input placeholder="kwuyydnnn" {...field} />
+                        <Input
+                          placeholder="live_pk_5r7riiKDTrc5rA9wTX1TqjUebLRqOyBK96MSWilR"
+                          {...field}
+                        />
                       </FormControl>
 
                       <FormMessage />
@@ -171,7 +172,7 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
             <Button
               disabled={mutation.isLoading}
               type="submit"
-              className=" flex rounded-xl bg-violet-500 hover:bg-violet-600 items-center gap-x-2 my-4"
+              className=" flex rounded-xl bg-primary hover:bg-primary items-center gap-x-2 my-4"
               size="lg"
               form="chargily-form"
             >

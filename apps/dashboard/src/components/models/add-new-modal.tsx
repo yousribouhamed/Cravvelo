@@ -251,6 +251,7 @@ const AddNew: FC = ({}) => {
                     type="button"
                     onClick={() => setSelectedItem(1)}
                     variant="secondary"
+                    disabled
                     size="lg"
                     className={`bg-white text-lg font-bold border flex items-center gap-x-4 text-black h-16 ${
                       selectedItem === 1 ? "border-[#FC6B00] border-2" : ""

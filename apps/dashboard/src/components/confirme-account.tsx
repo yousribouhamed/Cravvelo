@@ -122,4 +122,5 @@ const ConfirmeAccount: FC = ({}) => {
   );
 };
 
+export { PencilRuler, UserRound };
 export default ConfirmeAccount;
