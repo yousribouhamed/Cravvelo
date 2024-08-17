@@ -6,9 +6,8 @@ import { v4 as uuidv4 } from "uuid";
 import { Progress } from "@ui/components/ui/progress";
 import axios from "axios";
 import { cn } from "@ui/lib/utils";
-import { XCircle } from "lucide-react";
+import { Trash2, XCircle } from "lucide-react";
 import { Button } from "@ui/components/ui/button";
-import { X } from "lucide-react";
 import Image from "next/image";
 
 export const NewVideoUploader = ({
@@ -205,13 +204,13 @@ export const NewVideoUploader = ({
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="absolute top-0 right-0 text-black rounded-[50%] hover:bg-black hover:text-white cursor-pointer "
+                        className="absolute top-0 right-0 text-black rounded-[50%] bg-white shadow border  cursor-pointer "
                         onClick={(e: React.MouseEvent) => {
                           e.stopPropagation();
                           setStatus("WAITING");
                         }}
                       >
-                        <X className="w-4 h-4 " />
+                        <Trash2 className="w-4 h-4 text-black" />
                       </Button>
                       <Image
                         width={100}

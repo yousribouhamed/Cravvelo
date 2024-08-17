@@ -5,11 +5,9 @@ import Dropzone from "react-dropzone";
 import { UploadIcon } from "lucide-react";
 import { Progress } from "@ui/components/ui/progress";
 import { cn, toast } from "@ui/lib/utils";
-import { XCircle } from "lucide-react";
+import { Trash2, XCircle } from "lucide-react";
 import { formatBytes } from "@/src/lib/utils";
 import { Button } from "@ui/components/ui/button";
-import { X } from "lucide-react";
-import Image from "next/image";
 import { computeSHA256 } from "@/src/lib/utils";
 import { trpc } from "@/src/app/_trpc/client";
 
@@ -169,13 +167,13 @@ export const ImageUploaderS3 = ({
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="absolute top-0 right-0 text-black rounded-[50%] hover:bg-black hover:text-white cursor-pointer "
+                        className="absolute top-0 right-0 text-black rounded-[50%] bg-white shadow border  cursor-pointer "
                         onClick={(e: React.MouseEvent) => {
                           e.stopPropagation();
                           setStatus("WAITING");
                         }}
                       >
-                        <X className="w-4 h-4 " />
+                        <Trash2 className="w-4 h-4 text-black" />
                       </Button>
                       <div className="w-[250px] h-[150px] border shadow rounded-xl relative">
                         {fileUrl && (
