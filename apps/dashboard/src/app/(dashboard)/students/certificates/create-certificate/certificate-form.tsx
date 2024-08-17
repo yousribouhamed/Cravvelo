@@ -253,19 +253,6 @@ function CertificateForm({ students }: CertificateProps) {
                       )}
                       بناء الشهادة
                     </Button>
-
-                    <Button
-                      onClick={async () => {
-                        console.log("we are loading");
-                        const url = await axios
-                          .get("/api/puppeteer")
-                          .catch((err) => console.log(err));
-                        console.log("done");
-                        console.log(url);
-                      }}
-                    >
-                      generate certififcate
-                    </Button>
                   </div>
                 </form>
               </Form>

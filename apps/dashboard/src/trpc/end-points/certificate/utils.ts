@@ -6,3 +6,24 @@ export function getCurrentDate(): string {
 
   return `${day}/${month}/${year}`;
 }
+
+export async function sendGenerateRequest(certificate: string) {
+  try {
+    const response = await fetch(
+      "https://cravvelo-puppeteer.onrender.com/scrape",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ certificate }),
+      }
+    );
+
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+}
