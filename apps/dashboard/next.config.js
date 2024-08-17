@@ -9,9 +9,4 @@ module.exports = {
       "images.unsplash.com",
     ],
   },
-
-  metadataBase:
-    process.env.NODE_ENV === "production"
-      ? "https://beta.cravvelo.com"
-      : "http://localhost:3001",
 };
