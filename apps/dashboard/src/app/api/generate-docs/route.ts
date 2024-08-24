@@ -24,7 +24,5 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  return newCertificate;
-
-  // save the data in the database
+  return NextResponse.json(newCertificate);
 }
