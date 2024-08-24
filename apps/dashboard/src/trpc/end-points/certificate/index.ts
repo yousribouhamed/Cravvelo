@@ -6,9 +6,6 @@ import { designO3 } from "./certificate-templates/design-03";
 import { deleteFileFromS3Bucket, getKeyFromUrl } from "../../aws/s3";
 import { sendGenerateRequest } from "./utils";
 
-type API_RESPONSE_TYPE = {
-  url: string;
-};
 
 export const cetificate = {
   getAllCertificates: privateProcedure.query(async ({ ctx }) => {
@@ -54,25 +51,14 @@ export const cetificate = {
         });
       }
 
-      const response: API_RESPONSE_TYPE = await sendGenerateRequest(
+      await sendGenerateRequest(
         pdfAsString
       );
 
-      console.log({ message: "this is what we got from the api" });
-      console.log(response);
-
-      const newCertificate = await ctx.prisma.certificate.create({
-        data: {
-          accountId: ctx.account.id,
-          courseName: input.courseName,
-          name: input.cerrificateName,
-          studentId: input.studentId,
-          studentName: input.studentName,
-          fileUrl: response?.url,
-        },
-      });
-
-      return newCertificate;
+      return {
+        successs : true 
+      }
+  
     }),
 
   deleteCertificate: privateProcedure
