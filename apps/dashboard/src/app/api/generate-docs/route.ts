@@ -10,14 +10,8 @@ type API_RESPONSE_TYPE = {
   studentName: string;
 };
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { slug: string } }
-) {
+export async function POST(req: NextRequest) {
   const data: API_RESPONSE_TYPE = await req.json();
-
-  console.log({ message: "this is what we got from the api" });
-  console.log(data);
 
   const newCertificate = await prisma.certificate.create({
     data: {
