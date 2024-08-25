@@ -1,7 +1,5 @@
-import { TRPCError } from "@trpc/server";
 import { privateProcedure } from "../trpc";
 import { z } from "zod";
-import { WebsiteAssets } from "@/src/types";
 import { increaseVerificationSteps } from "@/src/lib/actions/increase-steps";
 
 export const collector = {
@@ -13,15 +11,12 @@ export const collector = {
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const account = await ctx.prisma.account.findFirst({
-          where: { userId: ctx.user.id },
-        });
         const site = ctx.prisma.website.update({
           data: {
             font: input.font,
           },
           where: {
-            accountId: account.id,
+            accountId: ctx.account.id,
           },
         });
 
@@ -38,15 +33,12 @@ export const collector = {
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const account = await ctx.prisma.account.findFirst({
-          where: { userId: ctx.user.id },
-        });
         const site = ctx.prisma.website.update({
           data: {
             logo: input.logo,
           },
           where: {
-            accountId: account.id,
+            accountId: ctx.account.id,
           },
         });
 
@@ -65,11 +57,8 @@ export const collector = {
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const account = await ctx.prisma.account.findFirst({
-          where: { userId: ctx.user.id },
-        });
         const site = await ctx.prisma.website.findFirst({
-          where: { accountId: account.id },
+          where: { accountId: ctx.account.id },
         });
 
         return site;
@@ -80,14 +69,11 @@ export const collector = {
 
   getWebsiteAssets: privateProcedure.query(async ({ input, ctx }) => {
     try {
-      const account = await ctx.prisma.account.findFirst({
-        where: { userId: ctx.user.id },
-      });
       const site = await ctx.prisma.website.findFirst({
-        where: { accountId: account.id },
+        where: { accountId: ctx.account.id },
       });
 
-      return [];
+      return site;
     } catch (err) {
       console.error(err);
     }
@@ -101,11 +87,8 @@ export const collector = {
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const account = await ctx.prisma.account.findFirst({
-          where: { userId: ctx.user.id },
-        });
         const site = await ctx.prisma.website.update({
-          where: { accountId: account.id },
+          where: { accountId: ctx.account.id },
           data: {
             color: input.color,
           },
@@ -125,17 +108,16 @@ export const collector = {
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const account = await ctx.prisma.account.findFirst({
-          where: { userId: ctx.user.id },
-        });
-        const site = await ctx.prisma.website.update({
-          where: { accountId: account.id },
-          data: {
-            privacy_policy: JSON.stringify(input.policy),
-          },
-        });
+        const [site] = await Promise.all([
+          ctx.prisma.website.update({
+            where: { accountId: ctx.account.id },
+            data: {
+              privacy_policy: JSON.stringify(input.policy),
+            },
+          }),
 
-        await increaseVerificationSteps({ accountId: ctx.account.id });
+          increaseVerificationSteps({ accountId: ctx.account.id }),
+        ]);
 
         return site;
       } catch (err) {
@@ -152,11 +134,8 @@ export const collector = {
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const account = await ctx.prisma.account.findFirst({
-          where: { userId: ctx.user.id },
-        });
         const site = await ctx.prisma.website.update({
-          where: { accountId: account.id },
+          where: { accountId: ctx.account.id },
           data: {
             phoneNumber: input.phoneNumber,
             supportEmail: input.email,
@@ -177,17 +156,35 @@ export const collector = {
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const account = await ctx.prisma.account.findFirst({
-          where: { userId: ctx.user.id },
-        });
         const site = await ctx.prisma.website.update({
-          where: { accountId: account.id },
+          where: { accountId: ctx.account.id },
           data: {
             favicon: input.fav_icon_url,
           },
         });
 
         return site;
+      } catch (err) {
+        console.error(err);
+      }
+    }),
+
+  addStamp: privateProcedure
+    .input(
+      z.object({
+        stempUrl: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const stamp = await ctx.prisma.website.update({
+          where: { accountId: ctx.account.id },
+          data: {
+            stamp: input?.stempUrl,
+          },
+        });
+
+        return stamp;
       } catch (err) {
         console.error(err);
       }
@@ -202,11 +199,8 @@ export const collector = {
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const account = await ctx.prisma.account.findFirst({
-          where: { userId: ctx.user.id },
-        });
         const site = await ctx.prisma.website.update({
-          where: { accountId: account.id },
+          where: { accountId: ctx.account.id },
           data: {
             name: input.title,
             description: input.description,

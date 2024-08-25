@@ -8,6 +8,7 @@ import AddLogoForm from "../../_compoents/forms/add-logo-form";
 import AddFavIconForm from "../../_compoents/forms/add-favicon-form";
 import AddSeoForm from "../../_compoents/forms/add-seo-form";
 import WebsiteLayoutForm from "../../_compoents/forms/layout-form";
+import UploadStampForm from "../../_compoents/forms/upload-stamp-form";
 
 const getAllNotifications = async ({ accountId }: { accountId: string }) => {
   const notifications = await prisma.notification.findMany({
@@ -53,6 +54,7 @@ const Page = async ({}) => {
             title={website?.name}
           />
           <AddColorFrom color={website?.color} />
+          <UploadStampForm stempUrl={website?.stamp} />
         </div>
       </main>
     </MaxWidthWrapper>

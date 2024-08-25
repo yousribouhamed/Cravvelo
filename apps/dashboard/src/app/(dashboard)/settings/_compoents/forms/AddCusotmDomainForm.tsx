@@ -82,7 +82,7 @@ const AddCusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <Card className="border rounded-xl shadow-none">
+        <Card className="border h-full w-full rounded-xl shadow-none">
           <CardHeader>
             <CardTitle>مجال مخصص</CardTitle>
           </CardHeader>
