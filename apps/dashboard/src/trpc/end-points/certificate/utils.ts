@@ -7,7 +7,21 @@ export function getCurrentDate(): string {
   return `${day}/${month}/${year}`;
 }
 
-export async function sendGenerateRequest(certificate: string) {
+export async function sendGenerateRequest({
+  accountId,
+  certificate,
+  courseName,
+  name,
+  studentId,
+  studentName,
+}: {
+  accountId: string;
+  certificate: string;
+  courseName: string;
+  name: string;
+  studentId: string;
+  studentName: string;
+}) {
   try {
     const response = await fetch(
       "https://cravvelo-puppeteer.onrender.com/scrape",
@@ -16,7 +30,14 @@ export async function sendGenerateRequest(certificate: string) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ certificate }),
+        body: JSON.stringify({
+          accountId,
+          certificate,
+          courseName,
+          name,
+          studentId,
+          studentName,
+        }),
       }
     );
 

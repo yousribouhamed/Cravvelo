@@ -6,7 +6,6 @@ import { designO3 } from "./certificate-templates/design-03";
 import { deleteFileFromS3Bucket, getKeyFromUrl } from "../../aws/s3";
 import { sendGenerateRequest } from "./utils";
 
-
 export const cetificate = {
   getAllCertificates: privateProcedure.query(async ({ ctx }) => {
     const allCertificates = await ctx.prisma.certificate.findMany({
@@ -51,14 +50,18 @@ export const cetificate = {
         });
       }
 
-      await sendGenerateRequest(
-        pdfAsString
-      );
+      await sendGenerateRequest({
+        certificate: pdfAsString,
+        accountId: ctx.account.id,
+        courseName: input.courseName,
+        name: input.cerrificateName,
+        studentName: input.studentName,
+        studentId: input.studentId,
+      });
 
       return {
-        successs : true 
-      }
-  
+        successs: true,
+      };
     }),
 
   deleteCertificate: privateProcedure
