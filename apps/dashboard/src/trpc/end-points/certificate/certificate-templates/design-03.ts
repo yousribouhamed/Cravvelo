@@ -1,4 +1,3 @@
-import { splitName } from "@/src/app/(dashboard)/students/certificates/create-certificate/certificate-viewer";
 import { getCurrentDate } from "../utils";
 
 export const designO3 = ({
@@ -10,8 +9,6 @@ export const designO3 = ({
   certificateName: string;
   courseName: string;
 }) => {
-  const { firstName, lastName } = splitName(studentName);
-
   return `
     <!DOCTYPE html>
 <html lang="en">
@@ -70,8 +67,8 @@ export const designO3 = ({
      <div
         class="z-[4] absolute flex top-[9.5rem] right-[19.5rem] mb-1 flex-col items-start gap-y-4"
       >
-        <span class="text-black text-lg font-bold">${firstName} </span>
-        <span class="text-black text-lg font-bold">${lastName}</span>
+        <span class="text-black text-lg font-bold">${studentName} </span>
+      
       </div>
 
 

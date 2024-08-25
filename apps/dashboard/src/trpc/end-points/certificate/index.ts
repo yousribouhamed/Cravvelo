@@ -27,41 +27,48 @@ export const cetificate = {
       })
     )
     .mutation(async ({ ctx, input }) => {
-      console.log("we have started the server");
-      console.log({ hu: "" });
-      let pdfAsString = "";
+      try {
+        console.log("we have started the server");
+        console.log({ hu: "" });
+        let pdfAsString = "";
 
-      if (input.code === "DEAD_DEER") {
-        pdfAsString = await designO1({
-          courseName: input.courseName,
-          studentName: input.studentName,
-        });
-      } else if (input.code === "PARTY_UNDER_SUN") {
-        pdfAsString = await design02({
-          courseName: input.courseName,
-          studentName: input.studentName,
-          certificateName: input.cerrificateName,
-        });
-      } else {
-        pdfAsString = await designO3({
-          courseName: input.courseName,
-          studentName: input.studentName,
-          certificateName: input.cerrificateName,
-        });
+        if (input.code === "DEAD_DEER") {
+          pdfAsString = designO1({
+            courseName: input.courseName,
+            studentName: input.studentName,
+          });
+        } else if (input.code === "PARTY_UNDER_SUN") {
+          pdfAsString = design02({
+            courseName: input.courseName,
+            studentName: input.studentName,
+            certificateName: input.cerrificateName,
+          });
+        } else {
+          pdfAsString = designO3({
+            courseName: input.courseName,
+            studentName: input.studentName,
+            certificateName: input.cerrificateName,
+          });
+        }
+
+        console.log("this is the pdf string ");
+        console.log(pdfAsString);
+
+        // await sendGenerateRequest({
+        //   certificate: pdfAsString,
+        //   accountId: ctx.account.id,
+        //   courseName: input.courseName,
+        //   name: input.cerrificateName,
+        //   studentName: input.studentName,
+        //   studentId: input.studentId,
+        // });
+
+        return {
+          successs: true,
+        };
+      } catch (err) {
+        console.error(err);
       }
-
-      await sendGenerateRequest({
-        certificate: pdfAsString,
-        accountId: ctx.account.id,
-        courseName: input.courseName,
-        name: input.cerrificateName,
-        studentName: input.studentName,
-        studentId: input.studentId,
-      });
-
-      return {
-        successs: true,
-      };
     }),
 
   deleteCertificate: privateProcedure
