@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -56,6 +56,8 @@ function CertificateForm({ students }: CertificateProps) {
   const [isCertificateSeen, setIsCertificateSeen] =
     React.useState<boolean>(false);
 
+  const [isPrinterReady, setIsPrinterReady] = React.useState<boolean>(false);
+
   const [certificateTheme, setCertificateTheme] = React.useState<string | null>(
     CERTIFICATE_VARIANTS[0].code
   );
@@ -70,6 +72,20 @@ function CertificateForm({ students }: CertificateProps) {
       console.error(err);
     },
   });
+
+  useEffect(() => {
+
+    console.log("we are setting up the printer")
+    fetch("https://cravvelo-puppeteer.onrender.com")
+      .then(() => {
+        setIsPrinterReady(true);
+        console.log("here we go ")
+      })
+      .catch((err) => {
+        console.error(err)
+        setIsPrinterReady(false);
+      });
+  }, []);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     mode: "onChange",
@@ -89,6 +105,16 @@ function CertificateForm({ students }: CertificateProps) {
   const studentName = form.watch("studentName");
 
   const courseName = form.watch("courseName");
+
+  if (!isPrinterReady) {
+    return (
+      <div className="w-full min-h-[400px] bg-black flex items-center justify-center">
+        <h1 className="text-3xl font-bold text-white">
+          we are setting up the printer this can take up to 50 seconds
+        </h1>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full min-h-[400px] h-fit grid grid-cols-3 mt-8 py-2   gap-4">
