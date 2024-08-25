@@ -4,7 +4,9 @@ import { designO1 } from "./certificate-templates/design-01";
 import { design02 } from "./certificate-templates/design-02";
 import { designO3 } from "./certificate-templates/design-03";
 import { deleteFileFromS3Bucket, getKeyFromUrl } from "../../aws/s3";
-import { sendGenerateRequest } from "./utils";
+import { generatePdf } from "./generatePDF";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { s3 } from "@/src/lib/s3";
 
 export const cetificate = {
   getAllCertificates: privateProcedure.query(async ({ ctx }) => {
@@ -51,17 +53,33 @@ export const cetificate = {
           });
         }
 
-        console.log("this is the pdf string ");
-        console.log(pdfAsString);
+        const pdfBuffer = await generatePdf(pdfAsString);
 
-        // await sendGenerateRequest({
-        //   certificate: pdfAsString,
-        //   accountId: ctx.account.id,
-        //   courseName: input.courseName,
-        //   name: input.cerrificateName,
-        //   studentName: input.studentName,
-        //   studentId: input.studentId,
-        // });
+        const buffer = Buffer.from(pdfBuffer);
+
+        const bucketName = "cravvel-bucket";
+        const key = `certificates/${Date.now()}.pdf`;
+
+        const s3Params = {
+          Bucket: bucketName,
+          Key: key,
+          Body: buffer,
+          ContentType: "application/pdf",
+        };
+
+        const command = new PutObjectCommand(s3Params);
+        await s3.send(command);
+        const fileUrl = `https://cravvel-bucket.s3.${process.env.AWS_BUCKET_REGION}.amazonaws.com/${key}`;
+        await ctx.prisma.certificate.create({
+          data: {
+            accountId: ctx.account.id,
+            courseName: input.courseName,
+            name: input.cerrificateName,
+            studentId: input.studentId,
+            studentName: input.studentName,
+            fileUrl: fileUrl,
+          },
+        });
 
         return {
           successs: true,
