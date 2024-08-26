@@ -5,6 +5,7 @@ import { cn } from "@ui/lib/utils";
 
 //@ts-ignore
 import { download, generateCsv, mkConfig } from "export-to-csv";
+import { Hammer } from "lucide-react";
 
 interface TableHeaderProps {
   table: any;
@@ -60,6 +61,7 @@ const CertificateTableHeader: FC<TableHeaderProps> = ({
           href={"/students/certificates/create-certificate"}
           className={cn(buttonVariants(), "rounded-xl")}
         >
+          <Hammer className="w-5 h-5 mx-2" />
           تصميم شهادة جديدة
         </Link>
       </div>
