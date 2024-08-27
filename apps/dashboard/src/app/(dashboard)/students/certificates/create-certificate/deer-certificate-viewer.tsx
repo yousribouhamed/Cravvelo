@@ -66,10 +66,12 @@ const DeerCertificateViewer: FC<DeerCertificateViewerProps> = ({
         </span>
       </div>
 
-      <img
-        src={stamp}
-        className="w-[150px] h-[150px] absolute   left-[100px] bottom-[100px] z-[100]"
-      />
+      {stamp && (
+        <img
+          src={stamp}
+          className="w-[150px] h-[150px] absolute   left-[100px] bottom-[100px] z-[100]"
+        />
+      )}
       <img
         src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/Group+(2).png"
         className="w-full h-full absolute top-0 right-0 left-0 bottom-0 z-[1]"

@@ -30,26 +30,34 @@ export const cetificate = {
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        console.log("we have started the server");
-        console.log({ hu: "" });
+        // here we need to get the stamp
+
+        const website = await ctx.prisma.website.findFirst({
+          where: {
+            accountId: ctx.account.id,
+          },
+        });
         let pdfAsString = "";
 
         if (input.code === "DEAD_DEER") {
           pdfAsString = designO1({
             courseName: input.courseName,
             studentName: input.studentName,
+            stamp: website?.stamp,
           });
         } else if (input.code === "PARTY_UNDER_SUN") {
           pdfAsString = design02({
             courseName: input.courseName,
             studentName: input.studentName,
             certificateName: input.cerrificateName,
+            stamp: website?.stamp,
           });
         } else {
           pdfAsString = designO3({
             courseName: input.courseName,
             studentName: input.studentName,
             certificateName: input.cerrificateName,
+            stamp: website?.stamp,
           });
         }
 

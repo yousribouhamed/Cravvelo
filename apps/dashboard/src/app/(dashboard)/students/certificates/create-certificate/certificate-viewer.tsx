@@ -43,10 +43,10 @@ const CertificateViewer: FC<certificateViewerProps> = ({
           />
         </div>
 
-        <img
+       {stamp &&  <img
           src={stamp}
           className="w-[150px] h-[150px] absolute   left-[100px] bottom-[100px] z-[100]"
-        />
+        />}
       </div>
     </div>
   );

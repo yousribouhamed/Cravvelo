@@ -4,10 +4,12 @@ export const designO3 = ({
   certificateName,
   courseName,
   studentName,
+  stamp,
 }: {
   studentName: string;
   certificateName: string;
   courseName: string;
+  stamp: string | null;
 }) => {
   return `
     <!DOCTYPE html>
@@ -109,6 +111,13 @@ export const designO3 = ({
         src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/working_by_crqvvelo.png"
         class="w-[159px] h-[35px] absolute top-5 left-5 z-[5]"
       />
+      
+       ${
+         stamp &&
+         " <img src={" +
+           stamp +
+           "} className=`w-[150px] h-[150px] absolute   left-[100px] bottom-[100px] z-[100]`/>"
+       }
     </main>
   </body>
   <script src="https://cdn.tailwindcss.com"></script>

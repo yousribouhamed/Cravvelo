@@ -5,9 +5,11 @@ export const design02 = ({
   certificateName,
   courseName,
   studentName,
+  stamp,
 }: {
   studentName: string;
   certificateName: string;
+  stamp: string | null;
   courseName: string;
 }) => {
   return `
@@ -97,6 +99,12 @@ export const design02 = ({
         src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/working_by_crqvvelo.png"
         class="w-[159px] h-[35px] absolute left-[180px] bottom-5 z-[5]"
       />
+         ${
+           stamp &&
+           " <img src={" +
+             stamp +
+             "} className=`w-[150px] h-[150px] absolute   left-[100px] bottom-[100px] z-[100]`/>"
+         }
     </main>
   </body>
   <script src="https://cdn.tailwindcss.com"></script>

@@ -3,9 +3,10 @@ import { getCurrentDate } from "../utils";
 export const designO1 = ({
   courseName,
   studentName,
+  stamp,
 }: {
   studentName: string;
-
+  stamp: string | null;
   courseName: string;
 }) => {
   return `
@@ -133,6 +134,12 @@ export const designO1 = ({
         src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/Vector.png"
         class="w-full h-full absolute top-0 right-0 left-0 bottom-0 z-[1]"
       />
+         ${
+           stamp &&
+           " <img src={" +
+             stamp +
+             "} className=`w-[150px] h-[150px] absolute   left-[100px] bottom-[100px] z-[100]`/>"
+         }
     </main>
   </body>
   <script src="https://cdn.tailwindcss.com"></script>
