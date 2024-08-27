@@ -68,7 +68,7 @@ const DeerCertificateViewer: FC<DeerCertificateViewerProps> = ({
 
       <img
         src={stamp}
-        className="w-[100px] h-[100px] absolute   left-[50px] bottom-[50px] z-[100]"
+        className="w-[150px] h-[150px] absolute   left-[100px] bottom-[100px] z-[100]"
       />
       <img
         src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/Group+(2).png"

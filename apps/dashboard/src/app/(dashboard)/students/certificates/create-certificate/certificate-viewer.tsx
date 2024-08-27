@@ -5,13 +5,14 @@ import type { FC } from "react";
 
 interface certificateViewerProps {
   student_name: string;
-
+  stamp: string;
   courseName: string;
 }
 
 const CertificateViewer: FC<certificateViewerProps> = ({
   student_name,
   courseName,
+  stamp,
 }) => {
   const { firstName, lastName } = splitName(student_name);
 
@@ -34,8 +35,18 @@ const CertificateViewer: FC<certificateViewerProps> = ({
           </span>
         </div>
         <div className="w-full h-full relative">
-          <Image alt="ice " fill src="/certificate/design-03/template.png" />
+          <Image
+            loading="eager"
+            alt="ice "
+            fill
+            src="/certificate/design-03/template.png"
+          />
         </div>
+
+        <img
+          src={stamp}
+          className="w-[150px] h-[150px] absolute   left-[100px] bottom-[100px] z-[100]"
+        />
       </div>
     </div>
   );

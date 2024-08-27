@@ -266,6 +266,7 @@ function CertificateForm({ students, stamp }: CertificateProps) {
           <CertificateViewer
             courseName={courseName}
             student_name={studentName}
+            stamp={stamp}
           />
         ) : certificateTheme === "DEAD_DEER" ? (
           <DeerCertificateViewer
@@ -276,6 +277,7 @@ function CertificateForm({ students, stamp }: CertificateProps) {
         ) : (
           <SunCertificateViewer
             courseName={courseName}
+            stamp={stamp}
             student_name={studentName}
           />
         )}

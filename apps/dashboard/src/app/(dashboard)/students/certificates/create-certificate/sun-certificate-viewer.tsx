@@ -4,11 +4,13 @@ import type { FC } from "react";
 interface sunCertificateViewerProps {
   student_name: string;
   courseName: string;
+  stamp: string;
 }
 
 const SunCertificateViewer: FC<sunCertificateViewerProps> = ({
   courseName,
   student_name,
+  stamp,
 }) => {
   return (
     <main className="w-[700px] h-[500px] mx-auto flex flex-col items-center relative justify-start pt-20 gap-y-4 bg-[#FAF5EC]">
@@ -52,6 +54,10 @@ const SunCertificateViewer: FC<sunCertificateViewerProps> = ({
       <img
         src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/working_by_crqvvelo.png"
         className="w-[159px] h-[35px] absolute left-[180px] bottom-5 z-[5]"
+      />
+      <img
+        src={stamp}
+        className="w-[150px] h-[150px] absolute   left-[100px] bottom-[100px] z-[100]"
       />
     </main>
   );

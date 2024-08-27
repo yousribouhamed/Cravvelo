@@ -54,9 +54,6 @@ const Page = async ({}) => {
     getStamp({ accountId: user?.accountId }),
   ]);
 
-  console.log("here it is the stamp");
-
-  console.log(stamp);
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
