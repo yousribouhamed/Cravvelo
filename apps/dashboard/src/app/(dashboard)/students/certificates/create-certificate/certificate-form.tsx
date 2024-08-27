@@ -45,10 +45,11 @@ const FormSchema = z.object({
 });
 
 interface CertificateProps {
+  stamp: string | null;
   students: Student[];
 }
 
-function CertificateForm({ students }: CertificateProps) {
+function CertificateForm({ students, stamp }: CertificateProps) {
   const router = useRouter();
   const path = usePathname();
 
@@ -270,6 +271,7 @@ function CertificateForm({ students }: CertificateProps) {
           <DeerCertificateViewer
             courseName={courseName}
             student_name={studentName}
+            stamp={stamp}
           />
         ) : (
           <SunCertificateViewer

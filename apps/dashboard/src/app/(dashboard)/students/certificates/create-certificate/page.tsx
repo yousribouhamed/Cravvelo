@@ -27,14 +27,36 @@ const getAllNotifications = async ({ accountId }: { accountId: string }) => {
   return notifications;
 };
 
+const getStamp = async ({
+  accountId,
+}: {
+  accountId: string;
+}): Promise<string | null> => {
+  // get it from prisma account
+
+  const website = await prisma.website.findFirst({
+    where: {
+      accountId,
+    },
+  });
+  // return the url of the stamp
+
+  console.log(website);
+  return website.stamp;
+};
+
 const Page = async ({}) => {
   const user = await useHaveAccess();
 
-  const [data, notifications] = await Promise.all([
+  const [data, notifications, stamp] = await Promise.all([
     getData({ accountId: user.accountId }),
     getAllNotifications({ accountId: user.accountId }),
+    getStamp({ accountId: user?.accountId }),
   ]);
 
+  console.log("here it is the stamp");
+
+  console.log(stamp);
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
@@ -45,7 +67,7 @@ const Page = async ({}) => {
           title="باني الشهادة"
         />
 
-        <CertificateForm students={data} />
+        <CertificateForm stamp={stamp} students={data} />
       </main>
     </MaxWidthWrapper>
   );

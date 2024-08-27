@@ -4,11 +4,13 @@ import type { FC } from "react";
 interface DeerCertificateViewerProps {
   student_name: string;
   courseName: string;
+  stamp: string | null;
 }
 
 const DeerCertificateViewer: FC<DeerCertificateViewerProps> = ({
   courseName,
   student_name,
+  stamp,
 }) => {
   return (
     <main className="w-[700px] h-[500px] mx-auto flex flex-col items-center relative justify-start pt-10 gap-y-4 bg-[#FAF5EC]">
@@ -63,6 +65,11 @@ const DeerCertificateViewer: FC<DeerCertificateViewerProps> = ({
           صدرت الشهادة بتاريخ {getCurrentDate()}
         </span>
       </div>
+
+      <img
+        src={stamp}
+        className="w-[100px] h-[100px] absolute   left-[50px] bottom-[50px] z-[100]"
+      />
       <img
         src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/Group+(2).png"
         className="w-full h-full absolute top-0 right-0 left-0 bottom-0 z-[1]"
