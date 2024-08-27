@@ -69,21 +69,13 @@ export function CertificateDataTable<TData, TValue>({
           <input
             className="border-none bg-none  focus:outline-none focus:border-none focus:ring-0  "
             placeholder="البحث عن الشهادات..."
-            value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
             onChange={
               (event) => {
                 const value = event.target.value;
 
                 table.getAllColumns().forEach((column) => {
-                  if (
-                    [
-                      "title",
-                      "description",
-                      "category",
-                      "name",
-                      "email",
-                    ].includes(column.id as string)
-                  ) {
+                  if (["name", "studentName"].includes(column.id as string)) {
                     column.setFilterValue(value); // Adjust this line based on your filtering logic
                   }
                 });

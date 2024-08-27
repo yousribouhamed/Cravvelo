@@ -10,7 +10,7 @@ const StudentTableHeader: FC<StudentsTableHeaderProps> = ({ table, data }) => {
   return (
     <div className="w-full h-[70px] flex items-center justify-between">
       <div className="min-w-[200px] w-fit h-full flex  items-center justify-start gap-x-4">
-        <Button
+        {/* <Button
           disabled
           variant="secondary"
           className="bg-white rounded-xl border flex items-center gap-x-2"
@@ -31,7 +31,7 @@ const StudentTableHeader: FC<StudentsTableHeaderProps> = ({ table, data }) => {
             />
           </svg>
           <span className="hidden md:block"> تصفية</span>
-        </Button>
+        </Button> */}
       </div>
       <div className="min-w-[200px] w-fit h-full flex items-center justify-end gap-x-4"></div>
     </div>

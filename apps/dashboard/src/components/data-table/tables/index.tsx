@@ -73,10 +73,9 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-     
       {/* <SimpleTableHeader data={data} table={table} /> */}
-      <StudentTableHeader data={data} table={table} />
-      <div className="rounded-md border bg-white">
+      {/* <StudentTableHeader data={data} table={table} /> */}
+      <div className="rounded-md border my-4 bg-white">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
