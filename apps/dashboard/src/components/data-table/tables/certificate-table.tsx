@@ -63,28 +63,6 @@ export function CertificateDataTable<TData, TValue>({
 
   return (
     <>
-      <div className="flex items-center py-4   justify-start">
-        <div className="w-full max-w-sm  h-[50px] p-4 rounded-xl bg-white border flex items-center justify-start gap-x-4">
-          <Search className="text-black w-4 h-4" />
-          <input
-            className="border-none bg-none  focus:outline-none focus:border-none focus:ring-0  "
-            placeholder="البحث عن الشهادات..."
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-            onChange={
-              (event) => {
-                const value = event.target.value;
-
-                table.getAllColumns().forEach((column) => {
-                  if (["name", "studentName"].includes(column.id as string)) {
-                    column.setFilterValue(value); // Adjust this line based on your filtering logic
-                  }
-                });
-              }
-              // table.getColumn("title")?.setFilterValue(event.target.value)
-            }
-          />
-        </div>
-      </div>
       <CertificateTableHeader data={data} refetch={refetch} table={table} />
       <div className="rounded-md border bg-white">
         <Table>
