@@ -7,6 +7,7 @@ import { deleteFileFromS3Bucket, getKeyFromUrl } from "../../aws/s3";
 import { generatePdf } from "./generatePDF";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3 } from "@/src/lib/s3";
+import { sendCertififcateEmail } from "@/src/lib/resend";
 
 export const cetificate = {
   getAllCertificates: privateProcedure.query(async ({ ctx }) => {
@@ -30,13 +31,18 @@ export const cetificate = {
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        // here we need to get the stamp
-
-        const website = await ctx.prisma.website.findFirst({
-          where: {
-            accountId: ctx.account.id,
-          },
-        });
+        const [website, student] = await Promise.all([
+          ctx.prisma.website.findFirst({
+            where: {
+              accountId: ctx.account.id,
+            },
+          }),
+          ctx.prisma.student.findFirst({
+            where: {
+              id: input.studentId,
+            },
+          }),
+        ]);
         let pdfAsString = "";
 
         if (input.code === "DEAD_DEER") {
@@ -78,6 +84,11 @@ export const cetificate = {
         const command = new PutObjectCommand(s3Params);
         await s3.send(command);
         const fileUrl = `https://cravvel-bucket.s3.${process.env.AWS_BUCKET_REGION}.amazonaws.com/${key}`;
+
+        await sendCertififcateEmail({
+          email: student.email,
+          url: fileUrl,
+        });
         await ctx.prisma.certificate.create({
           data: {
             accountId: ctx.account.id,
