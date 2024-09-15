@@ -35,7 +35,6 @@ import Image from "next/image";
 import SunCertificateViewer from "./sun-certificate-viewer";
 import DeerCertificateViewer from "./deer-certificate-viewer";
 import { Hammer } from "lucide-react";
-import axios from "axios";
 
 const FormSchema = z.object({
   studentName: z.string(),

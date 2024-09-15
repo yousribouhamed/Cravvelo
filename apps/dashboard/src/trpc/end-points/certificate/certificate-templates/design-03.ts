@@ -112,12 +112,17 @@ export const designO3 = ({
         class="w-[159px] h-[35px] absolute top-5 left-5 z-[5]"
       />
       
-       ${
-         stamp &&
-         " <img src={" +
-           stamp +
-           "} className=`w-[150px] h-[150px] absolute   left-[100px] bottom-[100px] z-[100]`/>"
-       }
+          <img
+           src=${stamp}
+           style="
+           width: 150px;
+           height: 150px;
+           position: absolute;
+           left: 0;
+           bottom: 0;
+           z-index: 900;
+          "
+      /> 
     </main>
   </body>
   <script src="https://cdn.tailwindcss.com"></script>
