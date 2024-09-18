@@ -1,22 +1,23 @@
 {
-  "name": "turborepo-shadcn-ui",
-  "version": "0.1.1",
+  "name": "cravvelo",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "lint": "turbo run lint",
+    "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "ui:add": "pnpm --filter ui ui:add",
-    "email": "email dev --dir src/emails"
+    "email": "email dev --dir src/emails",
+    "prepare": "husky"
   },
   "devDependencies": {
-    "@turbo/gen": "^1.9.7",
     "dotenv-cli": "^7.3.0",
     "eslint": "^7.32.0",
-    "eslint-config-custom": "workspace:*",
+    "@repo/eslint-config": "workspace:*",
+    "husky": "^9.1.6",
     "prettier": "^2.5.1",
-    "turbo": "latest"
+    "turbo": "^2.1.1"
   },
-  "packageManager": "pnpm@7.15.0"
+  "packageManager": "pnpm@9.8.0"
 }

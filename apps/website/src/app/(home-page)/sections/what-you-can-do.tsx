@@ -21,6 +21,7 @@ const PREVIEW_ITEM = [
 
         <div className="  w-[300px] h-[300px] md:w-[492px] md:h-[452px]  relative   z-[10]">
           <img
+            alt="preview"
             src="/preview/firstimage/mac-book.svg"
             className="z-[11] absolute top-3 left-5 md:w-[90px] md:h-[20px] h-[15px] w-[70px]"
           />
@@ -33,6 +34,7 @@ const PREVIEW_ITEM = [
           />
         </div>
         <img
+          alt="preview"
           src="/preview/firstimage/image-03.png"
           className="z-[11] absolute bottom-1 right-4  md:bottom-16 md:right-28 w-[200px] h-[50px]"
         />

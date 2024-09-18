@@ -43,7 +43,7 @@ const MobileNav = ({ isTopAdOpen = true }: MobileNavProps) => {
 
   useEffect(() => {
     if (isOpen) toggleOpen();
-  }, [pathname]);
+  }, [pathname , isOpen]);
 
   const closeOnCurrent = (href: string) => {
     if (pathname === href) {

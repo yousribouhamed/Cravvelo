@@ -66,7 +66,7 @@ export const useAcademiaStore = create<AcademiaState>()(
           if (key in persistedState) {
             //@ts-ignore // TypeScript currently don't recognize that key exists in localState
             const state = persistedState[key];
-            if (!!state) {
+            if (state) {
               resultState = {
                 ...resultState,
                 [key]: { ...defaultState[key], ...state },

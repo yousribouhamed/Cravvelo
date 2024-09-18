@@ -1,7 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
-  "pipeline": {
+  "tasks": {
     "build": {
       "dependsOn": ["^build", "database#db:generate"],
       "outputs": [".next/**", "!.next/cache/**"],
@@ -39,7 +39,9 @@
         "ROOT_ADMIN_PASSWORD"
       ]
     },
-    "lint": {},
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
     "dev": {
       "dependsOn": ["database#db:generate"],
       "cache": false,
