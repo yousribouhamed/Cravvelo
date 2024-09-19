@@ -2,7 +2,7 @@ import Header from "@/src/components/layout/header";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import UpgradeButton from "@/src/app/(dashboard)/pricing/_compoents/upgradeButton";
 import useGetUser from "@/src/hooks/use-get-user";
-import PaymentSettingsHeader from "../settings/_compoents/payment-website-header";
+import PaymentSettingsHeader from "../settings-01/_compoents/payment-website-header";
 import CurrentPlan from "./_compoents/current-plan";
 import { prisma } from "database/src";
 import BlackKing from "./_compoents/black-king";
