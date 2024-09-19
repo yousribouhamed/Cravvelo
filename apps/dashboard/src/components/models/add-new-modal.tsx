@@ -116,7 +116,11 @@ const icons = {
   ),
 };
 
-const AddNew: FC = ({}) => {
+interface AddNewProps {
+  lang: string;
+}
+
+const AddNew: FC<AddNewProps> = ({ lang }) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = React.useState(false);
   const [isLaoding, setIsLoading] = React.useState(false);
@@ -202,7 +206,9 @@ const AddNew: FC = ({}) => {
             />
           </svg>
 
-          <span className="qatar-bold ">إضافة جديد</span>
+          <span className="qatar-bold ">
+            {lang === "en" ? "Add new" : "إضافة جديد"}
+          </span>
         </button>
       </DialogTrigger>
       <DialogContent className="max-w-lg" title="إضافة دورة جديدة">

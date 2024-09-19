@@ -6,7 +6,7 @@ import AddNew from "../models/add-new-modal";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function Sidebar({ className }: SidebarProps) {
+export function Sidebar({ className, lang }: SidebarProps & { lang: string }) {
   return (
     <>
       <div
@@ -18,10 +18,10 @@ export function Sidebar({ className }: SidebarProps) {
         <div className="space-y-4 py-2   ">
           <div className="px-3 pb-2 pt-6">
             <div className="w-full  h-[50px] relative ">
-              <AddNew />
+              <AddNew lang={lang} />
             </div>
             <div className="space-y-2 mt-5">
-              <SideBarMenu />
+              <SideBarMenu lang={lang} />
             </div>
           </div>
         </div>

@@ -1,18 +1,22 @@
 import "@ui/styles/globals.css";
 
 import Providers from "../components/Providers";
-import Script from "next/script";
 import { Toaster } from "@ui/components/ui/sonner";
-
 import { Analytics } from "@vercel/analytics/react";
+import { cookies } from "next/headers";
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const lang = cookies().get("lang")?.value ?? "en";
   return (
-    <html suppressHydrationWarning dir="rtl" lang="ar">
+    <html
+      suppressHydrationWarning
+      dir={lang === "en" ? "ltr" : "rtl"}
+      lang={lang}
+    >
       <head />
       <body
         className={`selection:bg-[#FC6B00] selection:text-white antialiased `}
@@ -28,11 +32,6 @@ export default function RootLayout({
             toast: " rounded-2xl",
           },
         }}
-      />
-
-      <Script
-        src="https://unpkg.com/@material-tailwind/html@latest/scripts/ripple.js"
-        async
       />
     </html>
   );

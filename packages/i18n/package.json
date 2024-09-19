@@ -1,0 +1,17 @@
+{
+  "name": "@cravvelo/i18n",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "i18next": "^21.0.0",
+    "i18next-browser-languagedetector": "^6.1.0",
+    "lucide-react": "^0.441.0",
+    "react-i18next": "^11.18.6"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "abdellah chehri"
+}

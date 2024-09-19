@@ -7,6 +7,7 @@ import { httpBatchLink } from "@trpc/client";
 import { PropsWithChildren, useState } from "react";
 
 const Providers = ({ children }: PropsWithChildren) => {
+  // get the user lang
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     trpc.createClient({

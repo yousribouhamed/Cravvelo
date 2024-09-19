@@ -95,6 +95,7 @@
     "context-menu": "^2.0.0",
     "crisp-sdk-web": "^1.0.22",
     "database": "workspace:*",
+    "@cravvelo/i18n": "workspace:*",
     "embla-carousel-autoplay": "^8.0.1",
     "export-to-csv": "^1.2.4",
     "framer-motion": "^10.18.0",
