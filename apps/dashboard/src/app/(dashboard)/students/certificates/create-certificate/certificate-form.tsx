@@ -26,6 +26,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { maketoast } from "@/src/components/toasts";
 import { Student } from "database";
 import { Input } from "@ui/components/ui/input";
+import { Card } from "@ui/lib/tremor";
+import { CardContent } from "@ui/components/ui/card";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import CertificateViewer from "./certificate-viewer";
 import { CERTIFICATE_VARIANTS } from "@/src/constants/data";

@@ -1,5 +1,5 @@
 import useHaveAccess from "@/src/hooks/use-have-access";
-import ProfileView from "@/src/modules/settings/user-profile/profile-view";
+import ProfileView from "@/src/features/settings/user-profile/profile-view";
 import { prisma } from "database/src";
 
 export default async function Page() {

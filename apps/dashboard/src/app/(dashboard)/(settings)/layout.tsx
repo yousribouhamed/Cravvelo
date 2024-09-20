@@ -2,7 +2,7 @@ import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { buttonVariants } from "@ui/components/ui/button";
 import { X } from "lucide-react";
-import SettingsSidebarView from "@/src/modules/settings/sidebar-view";
+import SettingsSidebarView from "@/src/features/settings/sidebar-view";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
 
 export default async function SettingsLayout({

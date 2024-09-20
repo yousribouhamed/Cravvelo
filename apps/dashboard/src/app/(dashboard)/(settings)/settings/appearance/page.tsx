@@ -1,4 +1,4 @@
-import AppearanceView from "@/src/modules/settings/appearance/appearance-view";
+import AppearanceView from "@/src/features/settings/appearance/appearance-view";
 import type { FC } from "react";
 
 interface PageProps {}
