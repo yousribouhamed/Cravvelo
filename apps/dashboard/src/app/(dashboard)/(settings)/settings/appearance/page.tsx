@@ -1,12 +1,8 @@
 import AppearanceView from "@/src/features/settings/appearance/appearance-view";
-import type { FC } from "react";
+import useHaveAccess from "@/src/hooks/use-have-access";
 
-interface PageProps {}
+export default async function Page({}) {
+  const user = await useHaveAccess();
 
-const Page: FC = ({}) => {
-  // return <AppearanceView />;
-
-  return <div className="w-full h-[100px]"></div>;
-};
-
-export default Page;
+  return <AppearanceView defaultLang={user.lang as "en" | "ar"} />;
+}

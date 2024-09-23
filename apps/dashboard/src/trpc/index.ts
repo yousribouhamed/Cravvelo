@@ -12,11 +12,11 @@ import { cetificate } from "./end-points/certificate";
 import { comments } from "./end-points/comments";
 import { academia } from "./end-points/academia";
 import { coubons } from "./end-points/coupons";
-import { generators } from "./generators";
 import { users } from "./end-points/users";
 import { s3_bucket } from "./aws/s3";
 import { search } from "./end-points/search";
 import { referral } from "./end-points/referral";
+import { appearance } from "./routes/appearance";
 
 export const appRouter = router({
   ...auth,
@@ -36,6 +36,7 @@ export const appRouter = router({
   ...search,
   ...s3_bucket,
   ...referral,
+  ...appearance,
 });
 
 export type AppRouter = typeof appRouter;

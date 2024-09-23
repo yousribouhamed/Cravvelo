@@ -12,7 +12,6 @@ import { Module } from "@/src/types";
 import { useCoursePlayerStore } from "../../../global-state/course-player-store";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
 import { Check } from "lucide-react";
-import Ripples from "react-ripples";
 
 function formatDuration(durationSeconds: number): string {
   const minutes: number = Math.floor(durationSeconds / 60);
@@ -94,7 +93,7 @@ const VideoChain: FC<VideoChainProps> = ({
                         };
 
                         return (
-                          <Ripples
+                          <div
                             key={module?.title + moduleIndex}
                             className="w-full h-[70px]"
                           >
@@ -153,7 +152,7 @@ const VideoChain: FC<VideoChainProps> = ({
                                 </span>
                               </div>
                             </button>
-                          </Ripples>
+                          </div>
                         );
                       })}
                     </AccordionContent>

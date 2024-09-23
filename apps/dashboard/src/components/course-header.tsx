@@ -5,7 +5,6 @@ import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { usePathname } from "next/navigation";
 import { getValueFromUrl } from "../lib/utils";
-import Ripples from "react-ripples";
 
 const getLinks = ({ id }: { id: string }) => {
   const links = [
@@ -55,7 +54,7 @@ function CourseHeader({ className, ...props }: ExamplesNavProps) {
         )}
       >
         {links.map((item, index) => (
-          <Ripples key={item.href} color="#fc69005c" during={1200}>
+          <div key={item.href}>
             <Link
               href={item.href}
               className={cn(
@@ -68,7 +67,7 @@ function CourseHeader({ className, ...props }: ExamplesNavProps) {
             >
               {item.name}
             </Link>
-          </Ripples>
+          </div>
         ))}
       </div>
     </div>

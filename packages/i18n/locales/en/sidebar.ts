@@ -1,5 +1,4 @@
 import {
-  Box,
   Globe,
   LayoutGrid,
   Megaphone,
@@ -136,54 +135,54 @@ export const SIDE_BAR_ITEMS_EN = [
   {
     title: "Settings",
     icon: Settings,
-    slug: "/settings",
-    subitems: [
-      // {
-      //   title: "Academy Settings",
-      //   icon: Icons.Home,
-      //   slug: "/settings",
-      // },
-      {
-        title: "Payment Methods",
-        slug: "/settings/payments-methods",
-      },
-      {
-        title: "Website Settings",
-        slug: "/settings/website-settings",
-      },
-    ],
+    slug: "/settings/profile",
+    // subitems: [
+    //   {
+    //     title: "Academy Settings",
+    //     icon: Icons.Home,
+    //     slug: "/settings",
+    //   },
+    //   {
+    //     title: "Payment Methods",
+    //     slug: "/settings/payments-methods",
+    //   },
+    //   {
+    //     title: "Website Settings",
+    //     slug: "/settings/website-settings",
+    //   },
+    // ],
   },
 ];
 
 export const SETTING_SADEBAR_EN = [
   {
     name: "profile",
-    url: "/profile",
+    url: "/settings/profile",
     icon: UserRoundPen,
   },
   {
     name: "academia",
-    url: "/",
+    url: "/settings/academia",
     icon: Wrench,
   },
   {
     name: "appearance",
-    url: "/appearance",
+    url: "/settings/appearance",
     icon: Palette,
   },
   {
     name: "authorazations",
-    url: "/authorazations",
+    url: "/settings/authorazations",
     icon: Shield,
   },
   {
     name: "domains",
-    url: "/domains",
+    url: "/settings/domains",
     icon: Globe,
   },
   {
     name: "policy",
-    url: "/domains",
+    url: "/settings/policy",
     icon: Globe,
   },
 ];

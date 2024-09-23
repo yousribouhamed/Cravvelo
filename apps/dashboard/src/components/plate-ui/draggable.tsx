@@ -125,6 +125,7 @@ export const Draggable = withRef<"div", DraggableProps>(
                 classNames.blockToolbar
               )}
             >
+              {/* @ts-ignore */}
               <div ref={handleRef} className="h-4 w-4">
                 {isHovered && dragHandle}
               </div>

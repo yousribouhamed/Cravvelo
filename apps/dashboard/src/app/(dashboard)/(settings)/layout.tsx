@@ -11,8 +11,8 @@ export default async function SettingsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="w-full h-screen z-[999999] bg-black/40 fixed inset-0">
-      <div className="w-full flex h-fit flex-col gap-y-4 bg-[#FAFAFA]  fixed bottom-0 left-0 right-0 top-5 rounded-t-2xl shadow border-input">
+    <div className="w-full h-screen  bg-black/40 fixed inset-0">
+      <div className="w-full flex h-fit flex-col gap-y-4  bg-[#F3F3F3]  fixed bottom-0 left-0 right-0 top-5 rounded-t-2xl shadow border-input">
         <ScrollArea className="w-full h-screen flex flex-col relative ">
           <Link
             href={"/"}

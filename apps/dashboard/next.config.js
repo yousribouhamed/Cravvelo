@@ -1,11 +1,8 @@
 /** @type {import('next').NextConfig} */
+
 module.exports = {
-  reactStrictMode: false,
+  reactStrictMode: true,
   images: {
-    domains: [
-      "utfs.io",
-      "cravvel-bucket.s3.eu-west-1.amazonaws.com",
-      "images.unsplash.com",
-    ],
+    domains: ["cravvel-bucket.s3.eu-west-1.amazonaws.com"],
   },
 };
