@@ -1,17 +1,24 @@
 import type { FC } from "react";
 import UserProfileForm from "./profile-form";
 import { Account } from "database";
+import FormView from "../_components/form-view";
 
 interface profilePageProps {
   account: Account;
+  defaultLang: "en" | "ar";
 }
 
-const ProfileView: FC<profilePageProps> = ({ account }) => {
+const ProfileView: FC<profilePageProps> = ({ account, defaultLang }) => {
   return (
-    <div className="w-full min-h-[200px] h-fit flex flex-col gap-y-4  ">
-      <h1 className="text-xl font-bold ">Profile</h1>
-      <UserProfileForm account={account} />
-    </div>
+    <FormView
+      defaultLang={defaultLang}
+      title={{
+        arabic: "حساب تعريفي",
+        english: "Profile",
+      }}
+    >
+      <UserProfileForm lang={defaultLang} account={account} />
+    </FormView>
   );
 };
 

@@ -1,10 +1,14 @@
 import {
-  Box,
+  Globe,
   LayoutGrid,
   Megaphone,
+  Palette,
   PiggyBank,
   Settings,
+  Shield,
+  UserRoundPen,
   Users,
+  Wrench,
   Youtube,
 } from "lucide-react";
 import { BookMarked } from "lucide-react";
@@ -36,24 +40,6 @@ export const SIDE_BAR_ITEMS_AR = [
     subitems: [],
   },
 
-  // {
-  //   title: "تخصيص الأكاديمية",
-  //   slug: "/cutomize",
-  //   icon: Icons.customize,
-  //   subitems: [
-  //     {
-  //       title: "منشئ الموقع",
-  //       icon: Icons.Home,
-  //       slug: "/theme-editor",
-  //     },
-  //     {
-  //       title: "مصمم الشهادة",
-  //       icon: Icons.Home,
-  //       slug: "/products",
-  //     },
-  //   ],
-  // },
-
   {
     title: "التسويق",
     slug: "/marketing",
@@ -61,12 +47,10 @@ export const SIDE_BAR_ITEMS_AR = [
     subitems: [
       {
         title: "صانع القسائم",
-
         slug: "/marketing/coupons",
       },
       {
         title: "التسويق بالعمولة",
-
         slug: "/marketing/affiliate-marketing",
       },
     ],
@@ -93,66 +77,46 @@ export const SIDE_BAR_ITEMS_AR = [
 
         slug: "/students/comments",
       },
-      // {
-      //   title: "الواجبات",
-      //   icon: Icons.Home,
-      //   slug: "/students/homeworks",
-      // },
-      // {
-      //   title: "الاختبارات ",
-      //   icon: Icons.Home,
-      //   slug: "/students/exams",
-      // },
-      // {
-      //   title: "الاشعارات",
-      //   icon: Icons.Home,
-      //   slug: "/students/notifications",
-      // },
     ],
   },
 
-  // {
-  //   title: "التحليلات",
-  //   slug: "/analytics",
-  //   icon: Icons.customize,
-  //   subitems: [
-  //     {
-  //       title: "المنتجات",
-  //       icon: Icons.Home,
-  //       slug: "/analytics/products",
-  //     },
-  //     {
-  //       title: "الارباح",
-  //       icon: Icons.Home,
-  //       slug: "/analytics/profits",
-  //     },
-  //     {
-  //       title: "العملاء",
-  //       icon: Icons.Home,
-  //       slug: "/analytics/customers",
-  //     },
-  //   ],
-  // },
-
   {
     title: "الإعدادات",
+    slug: "/settings/profile",
     icon: Settings,
-    slug: "/settings",
-    subitems: [
-      // {
-      //   title: "إعدادات الاكاديمية",
-      //   icon: Icons.Home,
-      //   slug: "/settings",
-      // },
-      {
-        title: "وسائل الدفع",
+    subitems: [],
+  },
+];
 
-        slug: "/settings/payments-methods",
-      },
-      {
-        title: "إعدادات الموقع",
-        slug: "/settings/website-settings",
-      },
-    ],
+export const SETTING_SADEBAR_AR = [
+  {
+    name: "الملف الشخصي",
+    url: "/settings/profile",
+    icon: UserRoundPen,
+  },
+  {
+    name: "الأكاديمية",
+    url: "/settings/academia",
+    icon: Wrench,
+  },
+  {
+    name: "المظهر",
+    url: "/settings/appearance",
+    icon: Palette,
+  },
+  {
+    name: "التصاريح",
+    url: "/settings/authorazations",
+    icon: Shield,
+  },
+  {
+    name: "النطاقات",
+    url: "/settings/domains",
+    icon: Globe,
+  },
+  {
+    name: "السياسات",
+    url: "/settings/policy",
+    icon: Globe,
   },
 ];

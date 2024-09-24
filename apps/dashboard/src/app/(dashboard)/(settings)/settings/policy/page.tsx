@@ -1,12 +1,12 @@
 import useHaveAccess from "@/src/hooks/use-have-access";
-import ProfileView from "@/src/features/settings/user-profile/profile-view";
 import { prisma } from "database/src";
+import PolicyView from "@/src/features/settings/policy/policy-view";
 
 export default async function Page() {
   const user = await useHaveAccess();
 
-  const [account] = await Promise.all([
-    prisma.account.findFirst({
+  const [website] = await Promise.all([
+    prisma.website.findFirst({
       where: {
         id: user.accountId,
       },
@@ -14,6 +14,9 @@ export default async function Page() {
   ]);
 
   return (
-    <ProfileView defaultLang={user.lang as "en" | "ar"} account={account} />
+    <PolicyView
+      defaultLang={user.lang as "en" | "ar"}
+      policy={website?.privacy_policy}
+    />
   );
 }

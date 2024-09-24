@@ -1,15 +1,23 @@
 import type { FC } from "react";
-import { Account } from "database";
+import FormView from "../_components/form-view";
+import PolicyForm from "../forms/policy";
 
-interface profilePageProps {
-  account: Account;
+interface AppearanceViewProps {
+  defaultLang: "en" | "ar";
+  policy: any;
 }
 
-const PolicyView: FC<profilePageProps> = ({ account }) => {
+const PolicyView: FC<AppearanceViewProps> = ({ defaultLang, policy }) => {
   return (
-    <div className="w-full min-h-[200px] h-fit flex flex-col gap-y-4  ">
-      <h1 className="text-xl font-bold ">Profile</h1>
-    </div>
+    <FormView
+      defaultLang={defaultLang}
+      title={{
+        arabic: "السياسة",
+        english: "Policy",
+      }}
+    >
+      <PolicyForm policy={policy} />
+    </FormView>
   );
 };
 

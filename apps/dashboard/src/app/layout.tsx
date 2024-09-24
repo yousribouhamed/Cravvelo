@@ -3,13 +3,14 @@ import "@ui/styles/globals.css";
 import Providers from "../components/Providers";
 import { Toaster } from "@ui/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/react";
+import { cookies } from "next/headers";
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const lang = "en";
+  const lang = cookies().get("lang")?.value ?? "en";
   return (
     <html
       suppressHydrationWarning

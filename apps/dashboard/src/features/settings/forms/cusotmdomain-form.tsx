@@ -42,7 +42,7 @@ const formSchema = z.object({
   cutomedomain: z.string(),
 });
 
-const AddCusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
+const CusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
   const mutation = trpc.setCustomDomain.useMutation({
     onSuccess: () => {
       maketoast.successWithText({
@@ -134,4 +134,4 @@ const AddCusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
   );
 };
 
-export default AddCusotmDomainForm;
+export default CusotmDomainForm;

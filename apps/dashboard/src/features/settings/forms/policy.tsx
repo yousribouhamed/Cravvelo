@@ -33,7 +33,7 @@ interface AddPrivicyPolicyProps {
   policy: any;
 }
 
-const AddPrivicyPolicy: FC<AddPrivicyPolicyProps> = ({ policy }) => {
+const PolicyForm: FC<AddPrivicyPolicyProps> = ({ policy }) => {
   const mutation = trpc.addPolicy.useMutation({
     onSuccess: () => {
       maketoast.success();
@@ -99,7 +99,7 @@ const AddPrivicyPolicy: FC<AddPrivicyPolicyProps> = ({ policy }) => {
   );
 };
 
-export default AddPrivicyPolicy;
+export default PolicyForm;
 
 const defaultPolicy = [
   {

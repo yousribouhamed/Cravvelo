@@ -40,24 +40,6 @@ export const SIDE_BAR_ITEMS_EN = [
     subitems: [],
   },
 
-  // {
-  //   title: "Customize Academy",
-  //   slug: "/customize",
-  //   icon: Icons.customize,
-  //   subitems: [
-  //     {
-  //       title: "Site Builder",
-  //       icon: Icons.Home,
-  //       slug: "/theme-editor",
-  //     },
-  //     {
-  //       title: "Certificate Designer",
-  //       icon: Icons.Home,
-  //       slug: "/products",
-  //     },
-  //   ],
-  // },
-
   {
     title: "Marketing",
     slug: "/marketing",
@@ -91,66 +73,14 @@ export const SIDE_BAR_ITEMS_EN = [
         title: "Comments",
         slug: "/students/comments",
       },
-      // {
-      //   title: "Homeworks",
-      //   icon: Icons.Home,
-      //   slug: "/students/homeworks",
-      // },
-      // {
-      //   title: "Exams",
-      //   icon: Icons.Home,
-      //   slug: "/students/exams",
-      // },
-      // {
-      //   title: "Notifications",
-      //   icon: Icons.Home,
-      //   slug: "/students/notifications",
-      // },
     ],
   },
 
-  // {
-  //   title: "Analytics",
-  //   slug: "/analytics",
-  //   icon: Icons.customize,
-  //   subitems: [
-  //     {
-  //       title: "Products",
-  //       icon: Icons.Home,
-  //       slug: "/analytics/products",
-  //     },
-  //     {
-  //       title: "Profits",
-  //       icon: Icons.Home,
-  //       slug: "/analytics/profits",
-  //     },
-  //     {
-  //       title: "Customers",
-  //       icon: Icons.Home,
-  //       slug: "/analytics/customers",
-  //     },
-  //   ],
-  // },
-
   {
     title: "Settings",
-    icon: Settings,
     slug: "/settings/profile",
-    // subitems: [
-    //   {
-    //     title: "Academy Settings",
-    //     icon: Icons.Home,
-    //     slug: "/settings",
-    //   },
-    //   {
-    //     title: "Payment Methods",
-    //     slug: "/settings/payments-methods",
-    //   },
-    //   {
-    //     title: "Website Settings",
-    //     slug: "/settings/website-settings",
-    //   },
-    // ],
+    icon: Settings,
+    subitems: [],
   },
 ];
 
@@ -183,6 +113,6 @@ export const SETTING_SADEBAR_EN = [
   {
     name: "policy",
     url: "/settings/policy",
-    icon: Globe,
+    icon: BookMarked,
   },
 ];

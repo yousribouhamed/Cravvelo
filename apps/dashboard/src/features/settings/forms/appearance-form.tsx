@@ -10,6 +10,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@ui/components/ui/form";
 
 import {
@@ -46,17 +47,24 @@ function AppearanceForm({ lang }: { lang: string }) {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log("this form is working as expacted");
     try {
       await mutation.mutateAsync({
         lang: values.lang,
       });
-    } catch (err) {}
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   return (
     <div className="w-full h-fit rounded-2xl shadow border space-y-2 p-4 bg-white ">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 ">
+        <form
+          id="lang-form"
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-4 "
+        >
           <FormField
             control={form.control}
             name="lang"
@@ -77,22 +85,24 @@ function AppearanceForm({ lang }: { lang: string }) {
                     </SelectContent>
                   </Select>
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
+
+          <div className="w-full h-[70px] flex items-center justify-end">
+            <Button
+              size="sm"
+              variant="form"
+              disabled={!form.formState.isDirty || mutation.isLoading}
+              type="submit"
+              className=""
+            >
+              {mutation.isLoading ? "laoding..." : "save"}
+            </Button>
+          </div>
         </form>
       </Form>
-      <div className="w-full h-[70px] flex items-center justify-end">
-        <Button
-          size="sm"
-          variant="form"
-          disabled={!form.formState.isDirty}
-          type="submit"
-          className=""
-        >
-          save
-        </Button>
-      </div>
     </div>
   );
 }

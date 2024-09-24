@@ -32,9 +32,10 @@ const formSchema = z.object({
 
 interface ProfileFormProps {
   account: Account;
+  lang: string;
 }
 
-const UserProfileForm: FC<ProfileFormProps> = ({ account }) => {
+const UserProfileForm: FC<ProfileFormProps> = ({ account, lang }) => {
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
 
@@ -123,7 +124,11 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account }) => {
   return (
     <div className="w-full mx-auto h-fit min-h-[200px] bg-white shadow border rounded-2xl  p-4">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 ">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-4 "
+          // dir={lang === "en" ? "ltr" : "rtl"}
+        >
           <div className="w-full  flex flex-col items-start justify-start p-4 gap-x-4">
             <h2>your profile image</h2>
             <div className="flex items-center gap-x-4 w-full ">

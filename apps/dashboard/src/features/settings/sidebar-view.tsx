@@ -1,13 +1,18 @@
 "use client";
 
-import { SETTING_SADEBAR_EN } from "@cravvelo/i18n";
+import { SETTING_SADEBAR_EN, SETTING_SADEBAR_AR } from "@cravvelo/i18n";
 import { Button } from "@ui/components/ui/button";
 import { cn } from "@ui/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import type { FC } from "react";
 
-const SettingsSidebarView: FC = ({}) => {
-  const SETTING_SADEBAR = SETTING_SADEBAR_EN;
+interface Props {
+  lang: string;
+}
+
+const SettingsSidebarView: FC<Props> = ({ lang }) => {
+  const SETTING_SADEBAR =
+    lang === "en" ? SETTING_SADEBAR_EN : SETTING_SADEBAR_AR;
 
   // get the current page
 
@@ -18,13 +23,27 @@ const SettingsSidebarView: FC = ({}) => {
 
   return (
     <div className="w-60 h-full border shadow rounded-2xl  bg-white flex flex-col gap-y-2  ">
-      <div className="w-full h-[70px]  rounded-t-2xl p-2 flex items-center gap-x-2 ">
-        <div className="w-[40px] h-[40px] rounded-2xl bg-primary "></div>
+      <div
+        className={` w-full h-[70px]  rounded-t-2xl p-2 flex items-center gap-x-2  `}
+      >
+        {lang === "en" ? (
+          <>
+            <div className="w-[40px] h-[40px] rounded-2xl bg-primary "></div>
 
-        <div className="flex flex-col gap-y-2 w-[80%]">
-          <span>Abdellah Chehri</span>
-          <span className="truncate">mahdi.chahri55@gmail.com</span>
-        </div>
+            <div className="flex flex-col gap-y-2 w-[80%]">
+              <span>Abdellah Chehri</span>
+              <span className="truncate">mahdi.chahri55@gmail.com</span>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="flex flex-col gap-y-2 w-[80%]">
+              <span>Abdellah Chehri</span>
+              <span className="truncate">mahdi.chahri55@gmail.com</span>
+            </div>
+            <div className="w-[40px] h-[40px] rounded-2xl bg-primary "></div>
+          </>
+        )}
       </div>
       <div className="w-full h-fit p-4 flex flex-col gap-y-1">
         {SETTING_SADEBAR?.map((item) => {
@@ -33,16 +52,27 @@ const SettingsSidebarView: FC = ({}) => {
               key={item.name}
               variant="ghost"
               className={cn(
-                "w-full flex items-center text-gray-600 justify-start gap-x-2",
+                "w-full flex items-center text-[#303030] justify-start gap-x-2",
                 {
                   "text-black bg-gray-100": isCurretRoute(item.url),
+                  "justify-start": lang === "en",
+                  "justify-end": lang === "ar",
                 }
               )}
               size="sm"
               onClick={() => router.push(item.url)}
             >
-              {<item.icon className="w-4 h-4 " />}
-              {item.name}
+              {lang === "en" ? (
+                <>
+                  {<item.icon className="w-4 h-4 " />}
+                  {item.name}
+                </>
+              ) : (
+                <>
+                  {item.name}
+                  {<item.icon className="w-4 h-4 " />}
+                </>
+              )}
             </Button>
           );
         })}

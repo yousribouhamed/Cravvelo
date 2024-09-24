@@ -49,7 +49,7 @@ interface ChangeDomainFormProps {
   subdomain: string | null;
 }
 
-const ChangeSubDomainForm: FC<ChangeDomainFormProps> = ({ subdomain }) => {
+const SubDomainForm: FC<ChangeDomainFormProps> = ({ subdomain }) => {
   const initialSubdomain = subdomain ? subdomain.split(".")[0] : "";
 
   const mutation = trpc.chnageSubDmain.useMutation({
@@ -120,4 +120,4 @@ const ChangeSubDomainForm: FC<ChangeDomainFormProps> = ({ subdomain }) => {
   );
 };
 
-export default ChangeSubDomainForm;
+export default SubDomainForm;

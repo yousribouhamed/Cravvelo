@@ -1,17 +1,23 @@
 import useHaveAccess from "@/src/hooks/use-have-access";
-import ProfileView from "@/src/features/settings/user-profile/profile-view";
 import { prisma } from "database/src";
+import DomainsView from "@/src/features/settings/domains/domains-views";
 
 export default async function Page() {
   const user = await useHaveAccess();
 
-  const [account] = await Promise.all([
-    prisma.account.findFirst({
+  const [website] = await Promise.all([
+    prisma.website.findFirst({
       where: {
         id: user.accountId,
       },
     }),
   ]);
 
-  return <ProfileView account={account} />;
+  return (
+    <DomainsView
+      customeDomain={website?.customDomain}
+      defaultLang={user.lang as "en" | "ar"}
+      subdomain={website?.subdomain}
+    />
+  );
 }
