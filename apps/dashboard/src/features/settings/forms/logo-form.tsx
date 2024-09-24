@@ -32,9 +32,10 @@ const formSchema = z.object({
 
 interface AddFavIconFormProps {
   logoUrl: string | null;
+  lang: string;
 }
 
-const AddFavIconForm: FC<AddFavIconFormProps> = ({ logoUrl }) => {
+const AddFavIconForm: FC<AddFavIconFormProps> = ({ logoUrl, lang }) => {
   const mutation = trpc.addFavIcon.useMutation({
     onSuccess: () => {
       maketoast.success();
@@ -59,7 +60,7 @@ const AddFavIconForm: FC<AddFavIconFormProps> = ({ logoUrl }) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <Card className="border rounded-xl shadow-none">
+        <Card className="border rounded-2xl ">
           <CardHeader>
             <CardTitle> إضافة أيقونة علامة التبويب إلى الموقع</CardTitle>
           </CardHeader>
@@ -87,14 +88,18 @@ const AddFavIconForm: FC<AddFavIconFormProps> = ({ logoUrl }) => {
               )}
             />
           </CardContent>
-          <CardFooter>
+          <CardFooter
+            className={`w-full h-[70px] flex items-center ${
+              lang === "en" ? "justify-end" : "justify-start"
+            } `}
+          >
             <Button
               className=" flex items-center gap-x-2"
-              disabled={mutation.isLoading}
+              disabled={!form.formState.isDirty || mutation.isLoading}
               type="submit"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              تاكيد
+              {lang === "en" ? "save" : "تاكيد"}
             </Button>
           </CardFooter>
         </Card>

@@ -32,9 +32,10 @@ const formSchema = z.object({
 
 interface UploadStampFormProps {
   stempUrl: string | null;
+  lang: string;
 }
 
-const UploadStampForm: FC<UploadStampFormProps> = ({ stempUrl }) => {
+const UploadStampForm: FC<UploadStampFormProps> = ({ stempUrl, lang }) => {
   const mutation = trpc.addStamp.useMutation({
     onSuccess: () => {
       maketoast.successWithText({
@@ -61,7 +62,7 @@ const UploadStampForm: FC<UploadStampFormProps> = ({ stempUrl }) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <Card className="border rounded-xl shadow-none">
+        <Card className="border rounded-2xl">
           <CardHeader>
             <CardTitle>أضف طابعك إلى شهاداتك</CardTitle>
           </CardHeader>
@@ -88,14 +89,18 @@ const UploadStampForm: FC<UploadStampFormProps> = ({ stempUrl }) => {
               )}
             />
           </CardContent>
-          <CardFooter>
+          <CardFooter
+            className={`w-full h-[70px] flex items-center ${
+              lang === "en" ? "justify-end" : "justify-start"
+            } `}
+          >
             <Button
               className=" flex items-center gap-x-2"
-              disabled={mutation.isLoading}
+              disabled={!form.formState.isDirty || mutation.isLoading}
               type="submit"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              تاكيد
+              {lang === "en" ? "save" : "تاكيد"}
             </Button>
           </CardFooter>
         </Card>

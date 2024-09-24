@@ -22,8 +22,8 @@ const DomainsView: FC<AppearanceViewProps> = ({
         english: "Domains",
       }}
     >
-      <CusotmDomainForm customDomain={customeDomain} />
-      <SubDomainForm subdomain={subdomain} />
+      <CusotmDomainForm lang={defaultLang} customDomain={customeDomain} />
+      <SubDomainForm lang={defaultLang} subdomain={subdomain} />
     </FormView>
   );
 };

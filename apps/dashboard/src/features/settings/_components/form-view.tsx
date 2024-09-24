@@ -15,7 +15,7 @@ const FormView: FC<Props> = ({ defaultLang, children, title }) => {
       dir={defaultLang === "en" ? "ltr" : "rtl"}
       className="w-full min-h-[200px] h-fit flex flex-col gap-y-4  "
     >
-      <h1 className="text-xl font-bold ">
+      <h1 className="text-xl text-[#303030] font-bold ">
         {defaultLang === "en" ? title.english : title.arabic}
       </h1>
 

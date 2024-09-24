@@ -18,6 +18,7 @@ export default async function Page() {
       defaultLang={user.lang as "en" | "ar"}
       color={website?.color}
       logo={website?.logo}
+      stamp={website?.stamp ?? ""}
     />
   );
 }

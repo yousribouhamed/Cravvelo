@@ -19,7 +19,7 @@ const AuthorazationsView: FC<AppearanceViewProps> = ({
         english: "Authorazations",
       }}
     >
-      <ReferralForm enabled={referalEnabled} />
+      <ReferralForm lang={defaultLang} enabled={referalEnabled} />
     </FormView>
   );
 };

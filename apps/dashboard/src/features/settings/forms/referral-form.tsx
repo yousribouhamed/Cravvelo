@@ -17,6 +17,7 @@ import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 import { Switch } from "@ui/components/ui/switch";
+import { AUTHORITIES_AR, AUTHORITIES_EN } from "@cravvelo/i18n";
 
 const formSchema = z.object({
   isEnabled: z.boolean(),
@@ -24,9 +25,14 @@ const formSchema = z.object({
 
 interface DisableReferralFormAbdullahProps {
   enabled: boolean;
+  lang: string;
 }
 
-const ReferralForm: FC<DisableReferralFormAbdullahProps> = ({ enabled }) => {
+const ReferralForm: FC<DisableReferralFormAbdullahProps> = ({
+  enabled,
+  lang,
+}) => {
+  const AUTHORITIES = lang === "en" ? AUTHORITIES_EN : AUTHORITIES_AR;
   const mutation = trpc.enableReferal.useMutation({
     onSuccess: () => {
       maketoast.success();
@@ -56,15 +62,8 @@ const ReferralForm: FC<DisableReferralFormAbdullahProps> = ({ enabled }) => {
           <form
             id="add-text"
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8"
+            className="space-y-4"
           >
-            <FormLabel className="text-xl  block font-bold text-black">
-              الصلاحيات
-            </FormLabel>
-            <FormLabel className="text-md block  text-gray-600">
-              اعطاء صلاحيات معينة للأكاديمية
-            </FormLabel>
-
             <div className="space-y-4">
               <FormField
                 control={form.control}
@@ -72,7 +71,8 @@ const ReferralForm: FC<DisableReferralFormAbdullahProps> = ({ enabled }) => {
                 render={({ field }) => (
                   <FormItem className="flex flex-row bg-white items-center justify-between rounded-lg border p-3 shadow-sm">
                     <div className="space-y-0.5">
-                      <FormLabel>تفعيل نظام التسويق بالعمولة</FormLabel>
+                      {/* @ts-ignore */}
+                      <FormLabel>{AUTHORITIES?.referral}</FormLabel>
                     </div>
                     <FormControl>
                       <div dir="ltr">
@@ -94,13 +94,13 @@ const ReferralForm: FC<DisableReferralFormAbdullahProps> = ({ enabled }) => {
         <Card>
           <CardContent className="w-full h-fit flex flex-col p-6 items-end  space-y-4">
             <Button
-              disabled={mutation.isLoading}
+              disabled={!form.formState.isDirty || mutation.isLoading}
               type="submit"
               form="add-text"
-              className="w-full  rounded-xl flex items-center gap-x-2 max-w-[200px]"
+              className=""
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              حفظ والمتابعة
+              {lang === "en" ? "save" : "حفظ والمتابعة"}
             </Button>
           </CardContent>
         </Card>

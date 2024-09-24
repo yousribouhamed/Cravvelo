@@ -18,7 +18,6 @@ import {
   FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@ui/components/ui/form";
 import { Input } from "@ui/components/ui/input";
@@ -26,15 +25,19 @@ import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 
+import { BRAND_COLOR_EN, BARAND_COLOR_AR } from "@cravvelo/i18n";
+
 const formSchema = z.object({
   color: z.string(),
 });
 
 interface ChangeDomainFormProps {
   color: string | null;
+  lang: string;
 }
 
-const ColorFrom: FC<ChangeDomainFormProps> = ({ color }) => {
+const ColorFrom: FC<ChangeDomainFormProps> = ({ color, lang }) => {
+  const BARAND_COLOR = lang === "en" ? BRAND_COLOR_EN : BARAND_COLOR_AR;
   const mutation = trpc.addWebSiteColor.useMutation({
     onSuccess: () => {
       maketoast.success();
@@ -59,9 +62,9 @@ const ColorFrom: FC<ChangeDomainFormProps> = ({ color }) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <Card className="border rounded-xl shadow-none w-full ">
+        <Card className="border rounded-2xl  w-full ">
           <CardHeader>
-            <CardTitle>اللون الرئيسي للاكادمية</CardTitle>
+            <CardTitle>{BARAND_COLOR.title}</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
@@ -78,22 +81,24 @@ const ColorFrom: FC<ChangeDomainFormProps> = ({ color }) => {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    سيظهر هذا اللون في أكاديميتك
-                  </FormDescription>
+                  <FormDescription>{BARAND_COLOR.desc}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </CardContent>
-          <CardFooter>
+          <CardFooter
+            className={`w-full h-[70px] flex items-center ${
+              lang === "en" ? "justify-end" : "justify-start"
+            } `}
+          >
             <Button
               className=" flex items-center gap-x-2"
-              disabled={mutation.isLoading}
+              disabled={!form.formState.isDirty || mutation.isLoading}
               type="submit"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              تاكيد
+              {lang === "en" ? "save" : "تاكيد"}
             </Button>
           </CardFooter>
         </Card>

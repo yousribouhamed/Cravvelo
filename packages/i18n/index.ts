@@ -31,3 +31,5 @@ export function deleteLangCookie() {
 
 export * from "./locales/ar/sidebar";
 export * from "./locales/en/sidebar";
+export * from "./locales/ar/forms-settings";
+export * from "./locales/en/forms-settings";

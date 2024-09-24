@@ -16,7 +16,7 @@ const PolicyView: FC<AppearanceViewProps> = ({ defaultLang, policy }) => {
         english: "Policy",
       }}
     >
-      <PolicyForm policy={policy} />
+      <PolicyForm lang={defaultLang} policy={policy} />
     </FormView>
   );
 };

@@ -30,6 +30,7 @@ interface DisableSalesFormProps {
   dDigitalProductsHomeScreen: boolean;
   itemsAlignment: boolean;
   enableSalesBanner: boolean;
+  lang: string;
 }
 
 const formSchema = z.object({
@@ -43,6 +44,7 @@ const WebsiteLayoutForm: FC<DisableSalesFormProps> = ({
   dCoursesHomeScreen,
   dDigitalProductsHomeScreen,
   enableSalesBanner,
+  lang,
   itemsAlignment,
 }) => {
   const mutation = trpc.changeLayoutSettings.useMutation({
@@ -76,7 +78,7 @@ const WebsiteLayoutForm: FC<DisableSalesFormProps> = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <Card className="border rounded-xl shadow-none w-full h-full">
+        <Card className="border rounded-2xl  w-full h-full">
           <CardHeader>
             <CardTitle>بعض الإعدادات العامة</CardTitle>
           </CardHeader>
@@ -160,14 +162,18 @@ const WebsiteLayoutForm: FC<DisableSalesFormProps> = ({
               )}
             />
           </CardContent>
-          <CardFooter>
+          <CardFooter
+            className={`w-full h-[70px] flex items-center ${
+              lang === "en" ? "justify-end" : "justify-start"
+            } `}
+          >
             <Button
               className=" flex items-center gap-x-2"
-              disabled={mutation.isLoading}
+              disabled={!form.formState.isDirty || mutation.isLoading}
               type="submit"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              تاكيد
+              {lang === "en" ? "save" : "تاكيد"}
             </Button>
           </CardFooter>
         </Card>

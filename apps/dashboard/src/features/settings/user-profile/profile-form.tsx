@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, useRef, type FC } from "react";
+import React, { ChangeEvent, type FC } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -8,7 +8,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@ui/components/ui/avatar";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -22,6 +21,8 @@ import { computeSHA256 } from "@/src/lib/utils";
 import { maketoast } from "@/src/components/toasts";
 import { Account } from "database";
 import { trpc } from "@/src/app/_trpc/client";
+
+import { PROFILE_FORM_AR, PROFILE_FORM_EN } from "@cravvelo/i18n";
 
 const formSchema = z.object({
   full_name: z.string().min(2).max(50),
@@ -40,6 +41,8 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account, lang }) => {
   const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
 
   const [loading, setLoading] = React.useState<boolean>(false);
+
+  const PROFILE_FORM = lang === "en" ? PROFILE_FORM_EN : PROFILE_FORM_AR;
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -130,7 +133,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account, lang }) => {
           // dir={lang === "en" ? "ltr" : "rtl"}
         >
           <div className="w-full  flex flex-col items-start justify-start p-4 gap-x-4">
-            <h2>your profile image</h2>
+            <h2>{PROFILE_FORM.image}</h2>
             <div className="flex items-center gap-x-4 w-full ">
               <Avatar className="w-12 h-12 ring-primary   rounded-[50%]">
                 <AvatarImage
@@ -147,7 +150,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account, lang }) => {
               <div className="w-fit">
                 <label htmlFor="image-upload" className="cursor-pointer">
                   <div className="border-2 border-gray-300 rounded-md p-2 flex items-center space-x-2">
-                    <span className="text-gray-500">chose an image</span>
+                    <span className="text-gray-500">change</span>
                   </div>
                 </label>
                 <input
@@ -166,11 +169,11 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account, lang }) => {
             name="full_name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>full name</FormLabel>
+                <FormLabel>{PROFILE_FORM.name}</FormLabel>
                 <FormControl>
                   <Input placeholder="like abdullah" {...field} />
                 </FormControl>
-                <FormDescription>this is your display name.</FormDescription>
+
                 <FormMessage />
               </FormItem>
             )}
@@ -181,7 +184,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account, lang }) => {
             name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>phone number</FormLabel>
+                <FormLabel>{PROFILE_FORM.phone_number}</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
@@ -200,7 +203,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account, lang }) => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>your support email</FormLabel>
+                <FormLabel>{PROFILE_FORM.support_email}</FormLabel>
                 <FormControl>
                   <Input placeholder="مثلا : عبدالله" {...field} />
                 </FormControl>
@@ -214,7 +217,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account, lang }) => {
             name="bio"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>bio</FormLabel>
+                <FormLabel>{PROFILE_FORM.bio}</FormLabel>
                 <FormControl>
                   <Textarea
                     className="min-h-[150px] h-fit"
@@ -223,7 +226,6 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account, lang }) => {
                   />
                 </FormControl>
 
-                <FormDescription>tell us more about you</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -234,7 +236,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account, lang }) => {
               className="bg-primary rounded-2xl  "
               type="submit"
             >
-              save
+              {lang === "en" ? "save" : "تاكيد"}
             </LoadingButton>
           </div>
         </form>

@@ -15,7 +15,6 @@ import { Button } from "@ui/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -25,24 +24,21 @@ import { Input } from "@ui/components/ui/input";
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
-import { useDomainStatus } from "@/src/hooks/use-domain-status";
-import {
-  addDomainToVercel,
-  getConfigResponse,
-  getDomainResponse,
-} from "@/src/lib/domains";
 import DomainStatus from "@/src/components/domain-status";
 import DomainConfiguration from "@/src/components/domain-configuration";
+import { CUSTOM_DOMAIN_AR, CUSTOM_DOMAIN_EN } from "@cravvelo/i18n";
 
 interface AddCustomDomain {
   customDomain: string | null;
+  lang: string;
 }
 
 const formSchema = z.object({
   cutomedomain: z.string(),
 });
 
-const CusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
+const CusotmDomainForm: FC<AddCustomDomain> = ({ customDomain, lang }) => {
+  const CUSTOM_DOMAIN = lang === "en" ? CUSTOM_DOMAIN_EN : CUSTOM_DOMAIN_AR;
   const mutation = trpc.setCustomDomain.useMutation({
     onSuccess: () => {
       maketoast.successWithText({
@@ -66,25 +62,15 @@ const CusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
     await mutation.mutateAsync({
       customdomain: data?.cutomedomain,
     });
-    // await useDomainStatus({ domain: data.cutomedomain });
-    // const response = await getDomainResponse("abdullah.com");
-    // console.log(response);
-    // const response = await getConfigResponse("abdullah.com");
-    // console.log(response);
-    // const response = await fetch(`/api/domain/${data.cutomedomain}/verify`);
-    // const values = await response.json();
-    // console.log(values);
-
-    // const ah = await addDomainToVercel(data.cutomedomain);
-
-    // console.log(ah);
   }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <Card className="border h-full w-full rounded-xl shadow-none">
+        <Card className="border h-full w-full rounded-xl">
           <CardHeader>
-            <CardTitle>مجال مخصص</CardTitle>
+            <CardTitle className="text-[#303030]">
+              {CUSTOM_DOMAIN.title}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
@@ -92,7 +78,7 @@ const CusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
               name="cutomedomain"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>النطاق المخصص لموقعك.</FormLabel>
+                  <FormLabel>{CUSTOM_DOMAIN.desc}</FormLabel>
                   <div className="relative flex w-full ">
                     <FormControl>
                       <Input
@@ -118,14 +104,18 @@ const CusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
               </div>
             )}
           </CardContent>
-          <CardFooter>
+          <CardFooter
+            className={`w-full h-[70px] flex items-center ${
+              lang === "en" ? "justify-end" : "justify-start"
+            } `}
+          >
             <Button
               className=" flex items-center gap-x-2"
-              disabled={mutation.isLoading}
+              disabled={!form.formState.isDirty || mutation.isLoading}
               type="submit"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              تاكيد
+              {lang === "en" ? "save" : "تاكيد"}
             </Button>
           </CardFooter>
         </Card>

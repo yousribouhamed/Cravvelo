@@ -14,8 +14,6 @@ const SettingsSidebarView: FC<Props> = ({ lang }) => {
   const SETTING_SADEBAR =
     lang === "en" ? SETTING_SADEBAR_EN : SETTING_SADEBAR_AR;
 
-  // get the current page
-
   const router = useRouter();
   const path = usePathname();
 

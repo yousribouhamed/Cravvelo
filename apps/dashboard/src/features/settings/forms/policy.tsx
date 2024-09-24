@@ -24,6 +24,7 @@ import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 import { PlateEditor } from "@/src/components/reich-text-editor/rich-text-editor";
+import { ACADEMY_POLICY_AR, ACADEMY_POLICY_EN } from "@cravvelo/i18n";
 
 const formSchema = z.object({
   policy: z.any(),
@@ -31,9 +32,12 @@ const formSchema = z.object({
 
 interface AddPrivicyPolicyProps {
   policy: any;
+
+  lang: string;
 }
 
-const PolicyForm: FC<AddPrivicyPolicyProps> = ({ policy }) => {
+const PolicyForm: FC<AddPrivicyPolicyProps> = ({ policy, lang }) => {
+  const ACADEMY_POLICY = lang === "en" ? ACADEMY_POLICY_EN : ACADEMY_POLICY_AR;
   const mutation = trpc.addPolicy.useMutation({
     onSuccess: () => {
       maketoast.success();
@@ -58,9 +62,9 @@ const PolicyForm: FC<AddPrivicyPolicyProps> = ({ policy }) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <Card className="border rounded-xl shadow-none">
+        <Card className="border rounded-2xl">
           <CardHeader>
-            <CardTitle>سياسة الأكاديمية</CardTitle>
+            <CardTitle>{ACADEMY_POLICY.title}</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
@@ -68,10 +72,7 @@ const PolicyForm: FC<AddPrivicyPolicyProps> = ({ policy }) => {
               name="policy"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    اقرأ هذا القالب وانقر فوق &quot;حفظ&quot; لتنقذ نفسك
-                    وعملائك.
-                  </FormLabel>
+                  <FormLabel>{ACADEMY_POLICY.desc}</FormLabel>
                   <FormControl>
                     <PlateEditor
                       value={form.getValues("policy")}
@@ -83,14 +84,18 @@ const PolicyForm: FC<AddPrivicyPolicyProps> = ({ policy }) => {
               )}
             />
           </CardContent>
-          <CardFooter>
+          <CardFooter
+            className={`w-full h-[70px] flex items-center ${
+              lang === "en" ? "justify-end" : "justify-start"
+            } `}
+          >
             <Button
               className=" flex items-center gap-x-2"
-              disabled={mutation.isLoading}
+              disabled={!form.formState.isDirty || mutation.isLoading}
               type="submit"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              تاكيد
+              {lang === "en" ? "save" : "تاكيد"}
             </Button>
           </CardFooter>
         </Card>

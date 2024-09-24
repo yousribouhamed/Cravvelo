@@ -21,13 +21,15 @@ import {
   SelectValue,
 } from "@ui/components/ui/select";
 import { trpc } from "@/src/app/_trpc/client";
-import { setLangCookie } from "@cravvelo/i18n";
+import { setLangCookie, LANGUAGE_AR, LANGUAGE_EN } from "@cravvelo/i18n";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 const formSchema = z.object({
   lang: z.string(),
 });
 
 function AppearanceForm({ lang }: { lang: string }) {
+  const LANGUAGE = lang === "en" ? LANGUAGE_EN : LANGUAGE_AR;
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,7 +49,6 @@ function AppearanceForm({ lang }: { lang: string }) {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("this form is working as expacted");
     try {
       await mutation.mutateAsync({
         lang: values.lang,
@@ -70,7 +71,7 @@ function AppearanceForm({ lang }: { lang: string }) {
             name="lang"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>language</FormLabel>
+                <FormLabel>{LANGUAGE.title}</FormLabel>
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
@@ -90,7 +91,11 @@ function AppearanceForm({ lang }: { lang: string }) {
             )}
           />
 
-          <div className="w-full h-[70px] flex items-center justify-end">
+          <div
+            className={`w-full h-[70px] flex items-center ${
+              lang === "en" ? "justify-end" : "justify-start"
+            } `}
+          >
             <Button
               size="sm"
               variant="form"
@@ -98,7 +103,8 @@ function AppearanceForm({ lang }: { lang: string }) {
               type="submit"
               className=""
             >
-              {mutation.isLoading ? "laoding..." : "save"}
+              {mutation.isLoading ? <LoadingSpinner /> : null}
+              {lang === "en" ? "save" : "تاكيد"}
             </Button>
           </div>
         </form>

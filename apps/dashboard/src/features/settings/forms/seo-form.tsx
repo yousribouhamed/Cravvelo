@@ -35,9 +35,10 @@ const formSchema = z.object({
 interface AddSeoFormProps {
   title: string | null;
   description: string | null;
+  lang: string;
 }
 
-const SeoForm: FC<AddSeoFormProps> = ({ description, title }) => {
+const SeoForm: FC<AddSeoFormProps> = ({ description, title, lang }) => {
   const mutation = trpc.addWebSiteSeo.useMutation({
     onSuccess: () => {
       maketoast.success();
@@ -64,7 +65,7 @@ const SeoForm: FC<AddSeoFormProps> = ({ description, title }) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <Card className="border rounded-xl shadow-none">
+        <Card className="border rounded-2xl">
           <CardHeader>
             <CardTitle> عنوان علامة تبويب المتصفح</CardTitle>
           </CardHeader>
@@ -102,14 +103,18 @@ const SeoForm: FC<AddSeoFormProps> = ({ description, title }) => {
               )}
             />
           </CardContent>
-          <CardFooter>
+          <CardFooter
+            className={`w-full h-[70px] flex items-center ${
+              lang === "en" ? "justify-end" : "justify-start"
+            } `}
+          >
             <Button
               className=" flex items-center gap-x-2"
-              disabled={mutation.isLoading}
+              disabled={!form.formState.isDirty || mutation.isLoading}
               type="submit"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              تاكيد
+              {lang === "en" ? "save" : "تاكيد"}
             </Button>
           </CardFooter>
         </Card>

@@ -25,16 +25,18 @@ import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 import { ImageUploaderS3 } from "@/src/components/uploaders/image-uploader";
-
+import { FAVE_ICON_AR, FAVE_ICON_EN } from "@cravvelo/i18n";
 const formSchema = z.object({
   logoUrl: z.string(),
 });
 
-interface AddFavIconFormProps {
+interface FavIconFormProps {
   logoUrl: string | null;
+  lang: string;
 }
 
-const FavIconForm: FC<AddFavIconFormProps> = ({ logoUrl }) => {
+const FavIconForm: FC<FavIconFormProps> = ({ logoUrl, lang }) => {
+  const FAVE_ICON = lang === "en" ? FAVE_ICON_EN : FAVE_ICON_AR;
   const mutation = trpc.addFavIcon.useMutation({
     onSuccess: () => {
       maketoast.success();
@@ -61,7 +63,7 @@ const FavIconForm: FC<AddFavIconFormProps> = ({ logoUrl }) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card className="border rounded-xl shadow-none">
           <CardHeader>
-            <CardTitle> إضافة أيقونة علامة التبويب إلى الموقع</CardTitle>
+            <CardTitle> {FAVE_ICON.title}</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
@@ -69,32 +71,31 @@ const FavIconForm: FC<AddFavIconFormProps> = ({ logoUrl }) => {
               name="logoUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    قم بإنشاء رمز علامة التبويب المجانية الخاصة بك مجانًا من هذا
-                    الموقع https://favicon.io.
-                  </FormLabel>
+                  <FormLabel>{FAVE_ICON.desc}</FormLabel>
                   <FormControl>
                     <ImageUploaderS3
                       fileUrl={form.watch("logoUrl")}
                       onChnage={field.onChange}
                     />
                   </FormControl>
-                  <FormDescription>
-                    يُسمح فقط باستخدام png وjpg وsvgs
-                  </FormDescription>
+                  <FormDescription>{FAVE_ICON.warn}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </CardContent>
-          <CardFooter>
+          <CardFooter
+            className={`w-full h-[70px] flex items-center ${
+              lang === "en" ? "justify-end" : "justify-start"
+            } `}
+          >
             <Button
               className=" flex items-center gap-x-2"
-              disabled={mutation.isLoading}
+              disabled={!form.formState.isDirty || mutation.isLoading}
               type="submit"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              تاكيد
+              {lang === "en" ? "save" : "تاكيد"}
             </Button>
           </CardFooter>
         </Card>
