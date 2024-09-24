@@ -8,9 +8,10 @@ import type { FC } from "react";
 
 interface Props {
   lang: string;
+  force_display?: boolean;
 }
 
-const SettingsSidebarView: FC<Props> = ({ lang }) => {
+const SettingsSidebarView: FC<Props> = ({ lang, force_display = false }) => {
   const SETTING_SADEBAR =
     lang === "en" ? SETTING_SADEBAR_EN : SETTING_SADEBAR_AR;
 
@@ -20,7 +21,11 @@ const SettingsSidebarView: FC<Props> = ({ lang }) => {
   const isCurretRoute = (url: string) => url === path;
 
   return (
-    <div className="w-60 h-full border shadow rounded-2xl  bg-white flex flex-col gap-y-2  ">
+    <div
+      className={` w-60 h-full border   shadow rounded-2xl  bg-white  flex-col gap-y-2  ${
+        force_display ? "flex" : "hidden md:flex"
+      } `}
+    >
       <div
         className={` w-full h-[70px]  rounded-t-2xl p-2 flex items-center gap-x-2  `}
       >

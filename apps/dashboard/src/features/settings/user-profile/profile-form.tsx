@@ -23,6 +23,8 @@ import { Account } from "database";
 import { trpc } from "@/src/app/_trpc/client";
 
 import { PROFILE_FORM_AR, PROFILE_FORM_EN } from "@cravvelo/i18n";
+import { Button } from "@ui/components/ui/button";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 const formSchema = z.object({
   full_name: z.string().min(2).max(50),
@@ -231,13 +233,14 @@ const UserProfileForm: FC<ProfileFormProps> = ({ account, lang }) => {
             )}
           />
           <div className="w-full flex items-center justify-end">
-            <LoadingButton
-              pending={loading}
-              className="bg-primary rounded-2xl  "
+            <Button
+              className=" flex items-center gap-x-2"
+              disabled={!form.formState.isDirty || mutation.isLoading}
               type="submit"
             >
+              {mutation.isLoading ? <LoadingSpinner /> : null}
               {lang === "en" ? "save" : "تاكيد"}
-            </LoadingButton>
+            </Button>
           </div>
         </form>
       </Form>
