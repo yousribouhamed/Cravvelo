@@ -34,7 +34,7 @@ interface ChangeDomainFormProps {
   color: string | null;
 }
 
-const AddColorFrom: FC<ChangeDomainFormProps> = ({ color }) => {
+const ColorFrom: FC<ChangeDomainFormProps> = ({ color }) => {
   const mutation = trpc.addWebSiteColor.useMutation({
     onSuccess: () => {
       maketoast.success();
@@ -102,4 +102,4 @@ const AddColorFrom: FC<ChangeDomainFormProps> = ({ color }) => {
   );
 };
 
-export default AddColorFrom;
+export default ColorFrom;

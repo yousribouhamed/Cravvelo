@@ -26,9 +26,7 @@ interface DisableReferralFormAbdullahProps {
   enabled: boolean;
 }
 
-const DisableReferralForm: FC<DisableReferralFormAbdullahProps> = ({
-  enabled,
-}) => {
+const ReferralForm: FC<DisableReferralFormAbdullahProps> = ({ enabled }) => {
   const mutation = trpc.enableReferal.useMutation({
     onSuccess: () => {
       maketoast.success();
@@ -111,4 +109,4 @@ const DisableReferralForm: FC<DisableReferralFormAbdullahProps> = ({
   );
 };
 
-export default DisableReferralForm;
+export default ReferralForm;
