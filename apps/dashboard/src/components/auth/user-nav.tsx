@@ -17,12 +17,14 @@ import { Progress } from "@ui/components/ui/progress";
 import Image from "next/image";
 import { UserData } from "@/src/types";
 import { ArrowUpLeft } from "lucide-react";
+import { USER_NAV_AR, USER_NAV_EN } from "@cravvelo/i18n";
 
 interface UserNavProps {
   user: UserData;
 }
 
 export default function UserNav({ user }: UserNavProps) {
+  const USER_NAV = user.lang === "en" ? USER_NAV_EN : USER_NAV_AR;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -38,18 +40,21 @@ export default function UserNav({ user }: UserNavProps) {
             </Avatar>
           </div>
           <div className=" md:w-[80%] w-4 h-full  justify-end items-center flex gap-x-2">
-            <p className="text-md w-fit  hidden md:flex text-black">
+            <p className="text-md w-fit  hidden md:flex text-[#303030]">
               {user?.user_name
                 ? user?.user_name
                 : user?.firstName
                 ? user?.firstName
-                : "مرحباً"}
+                : ""}
             </p>
-            <ChevronDown className="w-4 h-4 text-black hover:text-accent-foreground " />
+            <ChevronDown className="w-4 h-4 text-[#303030] hover:text-accent-foreground " />
           </div>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className=" w-56 ">
+      <DropdownMenuContent
+        align={user.lang === "en" ? "end" : "start"}
+        className=" w-56 "
+      >
         <div
           dir="ltr"
           className="w-full h-[70px]  flex items-center justify-between px-2"
@@ -65,8 +70,9 @@ export default function UserNav({ user }: UserNavProps) {
               <AvatarFallback>AB</AvatarFallback>
             </Avatar>
 
-            <p className="text-md text-black">
-              {user?.firstName ? user?.firstName : "ah"} اكاديمية
+            <p className="text-md text-[#303030]">
+              {user?.firstName ? user?.firstName : "ah"}{" "}
+              {user?.lang === "en" ? "Academia" : "اكاديمية"}
             </p>
           </div>
         </div>
@@ -74,10 +80,18 @@ export default function UserNav({ user }: UserNavProps) {
         <div className="w-full h-[80px] flex flex-col px-2">
           <div className="w-full h-[50px] flex items-center justify-between">
             <ArrowLeft className="w-4 h-4" />
-            <div className="w-[70%] h-full flex items-center justify-end gap-x-2">
-              <p className="text-sm text-black text-start">
+            <div
+              className={`w-[70%] h-full flex items-center  gap-x-2 ${
+                user?.lang === "en" ? "justify-start" : "justify-end"
+              }`}
+            >
+              <p className="text-sm text-[#303030] text-start">
                 {user.verification_steps === 3
-                  ? "تم التوثيق بنجاح"
+                  ? user.lang === "en"
+                    ? "approved account"
+                    : "تم التوثيق بنجاح"
+                  : user.lang === "en"
+                  ? "start approving now"
                   : " ابدأ التوثيق الآن"}
               </p>
               <Image
@@ -114,8 +128,17 @@ export default function UserNav({ user }: UserNavProps) {
               className="w-full  h-full flex justify-between items-center p-2 "
               href={"/profile"}
             >
-              <User className=" h-4 w-4" />
-              <span>الملف الشخصي</span>
+              {user.lang === "en" ? (
+                <>
+                  <span>{USER_NAV.profile}</span>
+                  <User className=" h-4 w-4" />
+                </>
+              ) : (
+                <>
+                  <User className=" h-4 w-4" />
+                  <span>{USER_NAV.profile}</span>
+                </>
+              )}
             </Link>
           </DropdownMenuItem>
 
@@ -124,8 +147,17 @@ export default function UserNav({ user }: UserNavProps) {
               className="w-full  h-full flex justify-between items-center p-2 "
               href={"/pricing"}
             >
-              <Gift className=" h-4 w-4" />
-              <span>باقة الأكاديمية</span>
+              {user.lang === "en" ? (
+                <>
+                  <span>{USER_NAV.plan}</span>
+                  <Gift className=" h-4 w-4" />
+                </>
+              ) : (
+                <>
+                  <Gift className=" h-4 w-4" />
+                  <span>{USER_NAV.plan}</span>
+                </>
+              )}
             </Link>
           </DropdownMenuItem>
 
@@ -135,8 +167,17 @@ export default function UserNav({ user }: UserNavProps) {
               className="w-full  h-full flex justify-between items-center p-2 "
               href={"https://www.instagram.com/mugi.crafts/"}
             >
-              <ArrowUpLeft className=" h-4 w-4" />
-              <span> مركز المساعدة</span>
+              {user.lang === "en" ? (
+                <>
+                  <span>{USER_NAV.helpCenter}</span>
+                  <ArrowUpLeft className=" h-4 w-4" />
+                </>
+              ) : (
+                <>
+                  <ArrowUpLeft className=" h-4 w-4" />
+                  <span>{USER_NAV.helpCenter}</span>
+                </>
+              )}
             </Link>
           </DropdownMenuItem>
 
@@ -149,15 +190,24 @@ export default function UserNav({ user }: UserNavProps) {
               className="w-full  h-full flex justify-between items-center p-2 "
               href={`https://${user?.subdomain}`}
             >
-              <ArrowUpLeft className=" h-4 w-4" />
+              {user.lang === "en" ? (
+                <>
+                  <span>{USER_NAV.roadmap}</span>
+                  <ArrowUpLeft className=" h-4 w-4" />
+                </>
+              ) : (
+                <>
+                  <ArrowUpLeft className=" h-4 w-4" />
 
-              <span>معاينة الأكاديمية</span>
+                  <span>{USER_NAV.roadmap}</span>
+                </>
+              )}
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
 
-        <LogoutButton />
+        <LogoutButton lang={user?.lang} name={USER_NAV.logout} />
       </DropdownMenuContent>
     </DropdownMenu>
   );

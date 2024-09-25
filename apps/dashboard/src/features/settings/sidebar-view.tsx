@@ -9,20 +9,27 @@ import type { FC } from "react";
 interface Props {
   lang: string;
   force_display?: boolean;
+  user: {
+    image: string;
+    name: string;
+    academia_url: string;
+  };
 }
 
-const SettingsSidebarView: FC<Props> = ({ lang, force_display = false }) => {
+const SettingsSidebarView: FC<Props> = ({
+  lang,
+  force_display = false,
+  user,
+}) => {
   const SETTING_SADEBAR =
     lang === "en" ? SETTING_SADEBAR_EN : SETTING_SADEBAR_AR;
-
   const router = useRouter();
   const path = usePathname();
-
   const isCurretRoute = (url: string) => url === path;
 
   return (
     <div
-      className={` w-60 h-full border   shadow rounded-2xl  bg-white  flex-col gap-y-2  ${
+      className={` w-60 h-full border min-w-80   shadow rounded-2xl  bg-white  flex-col gap-y-2  ${
         force_display ? "flex" : "hidden md:flex"
       } `}
     >
@@ -31,20 +38,30 @@ const SettingsSidebarView: FC<Props> = ({ lang, force_display = false }) => {
       >
         {lang === "en" ? (
           <>
-            <div className="w-[40px] h-[40px] rounded-2xl bg-primary "></div>
+            <div className="w-[40px] h-[40px] rounded-2xl bg-gray-100 ">
+              <img
+                src={user?.image}
+                className="w-full h-full object-cover rounded-2xl"
+              />
+            </div>
 
             <div className="flex flex-col gap-y-2 w-[80%]">
-              <span>Abdellah Chehri</span>
-              <span className="truncate">mahdi.chahri55@gmail.com</span>
+              <span>{user.name}</span>
+              <span className="truncate">{user?.academia_url}</span>
             </div>
           </>
         ) : (
           <>
             <div className="flex flex-col gap-y-2 w-[80%]">
-              <span>Abdellah Chehri</span>
-              <span className="truncate">mahdi.chahri55@gmail.com</span>
+              <span>{user.name}</span>
+              <span className="truncate">{user?.academia_url}</span>
             </div>
-            <div className="w-[40px] h-[40px] rounded-2xl bg-primary "></div>
+            <div className="w-[40px] h-[40px] rounded-2xl bg-gray-100 ">
+              <img
+                src={user?.image}
+                className="w-full h-full object-cover rounded-2xl"
+              />
+            </div>
           </>
         )}
       </div>

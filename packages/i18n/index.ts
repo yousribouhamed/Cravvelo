@@ -33,3 +33,5 @@ export * from "./locales/ar/sidebar";
 export * from "./locales/en/sidebar";
 export * from "./locales/ar/forms-settings";
 export * from "./locales/en/forms-settings";
+export * from "./locales/ar/dropdowns";
+export * from "./locales/en/dropdowns";

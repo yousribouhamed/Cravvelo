@@ -2,7 +2,6 @@ import { Sidebar } from "../../components/layout/Sidebar";
 import { ClerkProvider } from "@clerk/nextjs";
 import ConnectionStatusAlert from "@/src/components/connection-status-alert";
 import { constructMetadata } from "@/src/lib/utils";
-
 import { cookies } from "next/headers";
 
 export const metadata = constructMetadata();

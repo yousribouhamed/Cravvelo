@@ -32,6 +32,7 @@ export type UserData = {
   createdAt: Date;
   verified: boolean;
   verification_steps: number;
+  lang: string;
 };
 
 export interface Product {

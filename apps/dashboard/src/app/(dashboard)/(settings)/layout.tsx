@@ -5,6 +5,7 @@ import { X } from "lucide-react";
 import SettingsSidebarView from "@/src/features/settings/sidebar-view";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
 import { cookies } from "next/headers";
+import useHaveAccess from "@/src/hooks/use-have-access";
 
 export default async function SettingsLayout({
   children,
@@ -12,6 +13,8 @@ export default async function SettingsLayout({
   children: React.ReactNode;
 }) {
   const lang = cookies().get("lang")?.value ?? "en";
+
+  const user = await useHaveAccess();
 
   return (
     <div className="w-full h-screen  bg-black/40 fixed inset-0">
@@ -31,13 +34,33 @@ export default async function SettingsLayout({
             <div className="w-full h-fit flex  gap-x-4">
               {lang === "en" ? (
                 <>
-                  <SettingsSidebarView lang={lang} />
+                  <SettingsSidebarView
+                    user={{
+                      academia_url:
+                        user.customDomain ??
+                        user?.subdomain ??
+                        "youracademia.cravvelo.com",
+                      image: user?.avatar,
+                      name: user?.firstName,
+                    }}
+                    lang={lang}
+                  />
                   {children}
                 </>
               ) : (
                 <>
                   {children}
-                  <SettingsSidebarView lang={lang} />
+                  <SettingsSidebarView
+                    user={{
+                      academia_url:
+                        user.customDomain ??
+                        user?.subdomain ??
+                        "youracademia.cravvelo.com",
+                      image: user?.avatar,
+                      name: user?.firstName,
+                    }}
+                    lang={lang}
+                  />
                 </>
               )}
             </div>

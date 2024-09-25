@@ -6,7 +6,15 @@ export default async function Page() {
 
   return (
     <div className="w-full h-fit p-4">
-      <SettingsSidebarView lang={user.lang} force_display />
+      <SettingsSidebarView
+        user={{
+          academia_url: user.customDomain ?? user?.subdomain ?? "not url",
+          image: user?.avatar,
+          name: user?.firstName,
+        }}
+        lang={user.lang}
+        force_display
+      />
     </div>
   );
 }

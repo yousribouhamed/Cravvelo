@@ -28,7 +28,7 @@ const FormView: FC<Props> = ({ defaultLang, children, title }) => {
           href={"/settings"}
           className={cn(
             buttonVariants({ variant: "secondary", size: "icon" }),
-            "bg-white border shadow"
+            "bg-white border shadow md:hidden"
           )}
         >
           {defaultLang === "en" ? <ArrowRight /> : <ArrowLeft />}
