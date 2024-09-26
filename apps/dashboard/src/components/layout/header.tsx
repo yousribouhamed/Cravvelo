@@ -64,7 +64,7 @@ const Header: FC<Props> = ({
             </h1>
           </div>
           <div className="w-[50%] h-[88px] flex items-center justify-center px-4">
-            <SearchInput />
+            <SearchInput lang={user.lang} />
           </div>
 
           <div className=" lg:w-[25%] w-[50%]   h-full flex items-center justify-end gap-x-2">

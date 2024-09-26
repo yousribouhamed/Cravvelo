@@ -188,7 +188,7 @@ export default function UserNav({ user }: UserNavProps) {
             <Link
               target="_blank"
               className="w-full  h-full flex justify-between items-center p-2 "
-              href={`https://${user?.subdomain}`}
+              href={`https://cravvelo.featurebase.app`}
             >
               {user.lang === "en" ? (
                 <>

@@ -29,6 +29,7 @@ import {
   Youtube,
 } from "lucide-react";
 import { OrangeLoadingSpinner } from "@ui/icons/loading-spinner";
+import { SEARCH_MODAL_EN, SEARCH_MODAL_AR } from "@cravvelo/i18n";
 
 interface ProductGroup {
   pages: { name: string; path: string }[];
@@ -36,7 +37,13 @@ interface ProductGroup {
   courses: Course[];
 }
 
-export const SearchInput: FC = ({}) => {
+interface SearchInputProps {
+  lang: string;
+}
+
+export const SearchInput: FC<SearchInputProps> = ({ lang }) => {
+  const SEARCH_MODAL = lang === "en" ? SEARCH_MODAL_EN : SEARCH_MODAL_AR;
+
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [clicked, setClicked] = React.useState(false);
@@ -102,22 +109,62 @@ export const SearchInput: FC = ({}) => {
         className="relative hidden md:flex h-9 w-9 p-0 xl:h-10 md:justify-start md:px-3 md:py-4 md:w-[641px] border rounded-xl bg-white "
         onClick={() => setOpen(true)}
       >
-        <MagnifyingGlassIcon className="h-4 w-4 xl:ml-2" aria-hidden="true" />
-        <span className="hidden xl:inline-flex"> بحث...</span>
-        <span className="sr-only">Search </span>
-        <kbd className="pointer-events-none absolute left-1.5 top-2 hidden h-6 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-xs font-medium opacity-100 xl:flex">
-          K
-          <abbr
-            title={isMacOs() ? "Command" : "Control"}
-            className="no-underline"
-          >
-            {isMacOs() ? "⌘" : "Ctrl"}
-          </abbr>
-        </kbd>
+        {lang === "en" ? (
+          <>
+            <kbd
+              className={`pointer-events-none absolute ${
+                lang === "en" ? "right-1.5" : "left-1.5"
+              }  top-2 hidden h-6 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-xs font-medium opacity-100 xl:flex`}
+            >
+              K
+              <abbr
+                title={isMacOs() ? "Command" : "Control"}
+                className="no-underline"
+              >
+                {isMacOs() ? "⌘" : "Ctrl"}
+              </abbr>
+            </kbd>
+            <MagnifyingGlassIcon
+              className={`h-4 w-4  ${lang === "en" ? "xl:mr-2" : "xl:ml-2"}`}
+              aria-hidden="true"
+            />
+
+            <span className="hidden xl:inline-flex">
+              {" "}
+              {SEARCH_MODAL.search_input}...
+            </span>
+            <span className="sr-only">Search </span>
+          </>
+        ) : (
+          <>
+            <MagnifyingGlassIcon
+              className="h-4 w-4 xl:ml-2"
+              aria-hidden="true"
+            />
+            <span className="hidden xl:inline-flex">
+              {" "}
+              {SEARCH_MODAL.search_input}...
+            </span>
+            <span className="sr-only">Search </span>
+            <kbd className="pointer-events-none absolute left-1.5 top-2 hidden h-6 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-xs font-medium opacity-100 xl:flex">
+              K
+              <abbr
+                title={isMacOs() ? "Command" : "Control"}
+                className="no-underline"
+              >
+                {isMacOs() ? "⌘" : "Ctrl"}
+              </abbr>
+            </kbd>
+          </>
+        )}
       </Button>
-      <CommandDialog open={open} onOpenChange={setOpen}>
+      <CommandDialog
+        title={SEARCH_MODAL.title}
+        open={open}
+        onOpenChange={setOpen}
+      >
         <CommandInput
-          placeholder="يبحث..."
+          placeholder={`${SEARCH_MODAL.search_input}...`}
           value={query}
           onValueChange={setQuery}
         />

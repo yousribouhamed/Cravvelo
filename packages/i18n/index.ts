@@ -35,3 +35,5 @@ export * from "./locales/ar/forms-settings";
 export * from "./locales/en/forms-settings";
 export * from "./locales/ar/dropdowns";
 export * from "./locales/en/dropdowns";
+export * from "./locales/ar/modals";
+export * from "./locales/en/modals";
