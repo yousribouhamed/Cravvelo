@@ -2,7 +2,7 @@ import MaxWidthWrapper from "../../components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
 import { Card, CardContent, CardHeader } from "@ui/components/ui/card";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
-import AreaChartOverview from "@/src/components/area-chart";
+import AreaChartOverview from "@/src/features/dashboard/area-chart";
 import { DatePickerWithRange } from "@/src/components/range-date-picker";
 import { NotFoundCard } from "@/src/components/not-found-card";
 import useHaveAccess from "@/src/hooks/use-have-access";
@@ -24,7 +24,7 @@ import {
   getPreviousPeriodSales,
   getPreviousPeriodStudents,
 } from "./actions";
-import DashboardCards from "@/src/components/dashboard-cards";
+import DashboardCards from "@/src/features/dashboard/dashboard-cards";
 
 const calculatePercentageChange = (current, previous) => {
   if (previous === 0)
@@ -124,7 +124,7 @@ async function Page({ searchParams }) {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col overflow-y-hidden h-fit mb-10 justify-start ">
-        <Header notifications={notifications} user={user} title="الرئيسية" />
+        <Header notifications={notifications} user={user} title="Home" />
         {!user.verified && <ConfirmeAccount />}
         {!user?.subdomain ? (
           <CreateAcademiaSection />
@@ -142,7 +142,7 @@ async function Page({ searchParams }) {
                   )}
                   href={`https://${user?.subdomain}`}
                 >
-                  <span>معاينة الأكاديمية</span>
+                  <span>Academy Preview</span>
 
                   <Eye className=" h-4 w-4" />
                 </Link>
@@ -152,6 +152,7 @@ async function Page({ searchParams }) {
             </div>
             <div className="space-y-4 pt-4">
               <DashboardCards
+                lang={user.lang}
                 percentageChange={{
                   commentsPercentageChange,
                   salesPercentageChange,
@@ -170,18 +171,18 @@ async function Page({ searchParams }) {
                 studentsNumber={students?.length}
               />
               <div className="grid gap-4 md:grid-cols-3  my-8 h-[450px] w-full ">
-                <AreaChartOverview sales={sales} />
+                <AreaChartOverview lang={user.lang} sales={sales} />
               </div>
               <div className="grid gap-4 md:grid-cols-2 my-8 min-h-[200px] h-fit w-full mb-10 ">
                 <Card className="col-span-1">
                   <CardHeader>
-                    <p>الدورات الآكثر مبيعاً</p>
+                    <p>Best Selling Courses</p>
                   </CardHeader>
                   <CardContent className="flex flex-col items-center justify-center overflow-x-auto">
                     <div className="w-full h-[50px] bg-primary flex items-center justify-between px-4 rounded-t-2xl ">
-                      <p className="text-white text-md">اسم الدورة </p>
-                      <p className="text-white text-md"> عدد الطلاب</p>
-                      <p className="text-white text-md">سعر الدورة</p>
+                      <p className="text-white text-md">Course name</p>
+                      <p className="text-white text-md">Number of students</p>
+                      <p className="text-white text-md">Course price</p>
                     </div>
                     {courses.length === 0 ? (
                       <NotFoundCard />
@@ -209,12 +210,12 @@ async function Page({ searchParams }) {
 
                 <Card className="col-span-1">
                   <CardHeader>
-                    <p>الطلبات الجديدة</p>
+                    <p>New Orders</p>
                   </CardHeader>
                   <CardContent className="flex flex-col items-center justify-center overflow-x-auto">
                     <div className="w-full h-[50px] bg-primary flex items-center justify-between px-4 rounded-t-2xl ">
-                      <p className="text-white text-md">نوع الطلبية</p>
-                      <p className="text-white text-md">مبلغ الطلبية</p>
+                      <p className="text-white text-md">Order type</p>
+                      <p className="text-white text-md">Order amount</p>
                     </div>
                     {sales.length === 0 ? (
                       <NotFoundCard />
@@ -229,7 +230,9 @@ async function Page({ searchParams }) {
                               <span> DZD {item.price}</span>
                               <span>
                                 {" "}
-                                {item.itemType === "COURSE" ? "دورة" : "منتج"}
+                                {item.itemType === "COURSE"
+                                  ? "Course"
+                                  : "Product"}
                               </span>
                             </div>
                           ))}

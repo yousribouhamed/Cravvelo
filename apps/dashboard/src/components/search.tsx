@@ -182,10 +182,10 @@ export const SearchInput: FC<SearchInputProps> = ({ lang }) => {
               </div>
               <div className="w-[calc(100%-60px)] h-full flex flex-col items-start justify-center">
                 <span className="text-xl font-bold text-black">
-                  وسائل الدفع
+                  Payment methods
                 </span>
                 <span className="text-gray-600 text-start ">
-                  هناك الكثير من الامور للبحث عنها
+                  There are a lot of things to look for.
                 </span>
               </div>
             </div>
@@ -202,10 +202,10 @@ export const SearchInput: FC<SearchInputProps> = ({ lang }) => {
               </div>
               <div className="w-[calc(100%-60px)] h-full flex flex-col items-start justify-center ">
                 <span className="text-xl font-bold text-black">
-                  تخصيص الاكادمية
+                  Academy Customization
                 </span>
                 <span className="text-gray-600 text-start ">
-                  عدل الالوان و الشعار في الأكاديمية
+                  Edit the colors and logo in the academy
                 </span>
               </div>
             </div>
@@ -222,10 +222,10 @@ export const SearchInput: FC<SearchInputProps> = ({ lang }) => {
               </div>
               <div className="w-[calc(100%-60px)] h-full flex flex-col items-start justify-center">
                 <span className="text-xl font-bold text-black">
-                  اخر المبيعات
+                  Latest sales
                 </span>
                 <span className="text-gray-600 text-start ">
-                  كل عملية شراء في الأكاديمية تعتبر مبيعة
+                  Every purchase in the academy is considered a sale.
                 </span>
               </div>
             </div>
@@ -243,10 +243,10 @@ export const SearchInput: FC<SearchInputProps> = ({ lang }) => {
               <div className="w-[calc(100%-60px)] h-full flex flex-col items-start justify-center">
                 <span className="text-xl font-bold text-black">
                   {" "}
-                  سياسة الاكاديمية
+                  Academy Policy
                 </span>
                 <span className="text-gray-600 text-start ">
-                  احم نفسك و طلابك
+                  Protect yourself and your students
                 </span>
               </div>
             </div>
@@ -300,7 +300,7 @@ export const SearchInput: FC<SearchInputProps> = ({ lang }) => {
               {data && data?.courses?.length > 0 && (
                 <CommandGroup
                   className="capitalize h-[300px]"
-                  heading={"الدورات"}
+                  heading={"Cources"}
                 >
                   {data.courses.map((item) => {
                     return (

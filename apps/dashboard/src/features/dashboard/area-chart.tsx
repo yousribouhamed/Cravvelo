@@ -21,7 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
 import { Button } from "@ui/components/ui/button";
-import CustomTooltip from "./custom-tooltip";
+import CustomTooltip from "../../components/custom-tooltip";
 
 const data = [
   {
@@ -70,6 +70,7 @@ const data = [
 
 interface AreaChartProps {
   sales: Sale[];
+  lang: string;
 }
 
 const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {

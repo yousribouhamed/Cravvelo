@@ -37,3 +37,7 @@ export * from "./locales/ar/dropdowns";
 export * from "./locales/en/dropdowns";
 export * from "./locales/ar/modals";
 export * from "./locales/en/modals";
+export * from "./locales/ar/dashboard";
+export * from "./locales/en/dashboard";
+export * from "./locales/ar/tables";
+export * from "./locales/en/tables";

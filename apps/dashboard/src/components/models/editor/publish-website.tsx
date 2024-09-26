@@ -65,7 +65,7 @@ const PublishWebsite: FC = () => {
       <DialogTrigger asChild>
         <Button
           size="sm"
-          className=" text-white font-bold rounded-xl bg-primary px-4"
+          className=" text-white font-bold rounded-xl bg-[#303030] px-4"
         >
           انشاء الاكاديمية
         </Button>

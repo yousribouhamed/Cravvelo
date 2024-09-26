@@ -10,13 +10,16 @@ import CountUp from "react-countup";
 import { Badge } from "@ui/components/ui/badge";
 import Link from "next/link";
 import type { FC } from "react";
-import { formatDZD } from "../lib/utils";
+import { formatDZD } from "../../lib/utils";
+import { HOME_PAGE_DASHBOARD_AR, HOME_PAGE_DASHBOARD_EN } from "@cravvelo/i18n";
 
 interface DashboardCardsProps {
   salesNumber: number;
   studentsNumber: number;
   profits: number;
   commentsNumber: number;
+
+  lang: string;
 
   percentageChange: {
     salesPercentageChange: {
@@ -44,7 +47,10 @@ const DashboardCards: FC<DashboardCardsProps> = ({
   salesNumber,
   studentsNumber,
   percentageChange,
+  lang,
 }) => {
+  const HOME_PAGE_DASHBOARD =
+    lang === "en" ? HOME_PAGE_DASHBOARD_EN : HOME_PAGE_DASHBOARD_AR;
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <Link href="/orders">
@@ -53,7 +59,9 @@ const DashboardCards: FC<DashboardCardsProps> = ({
           className="flex flex-col justify-between  min-h-[150px]"
         >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-lg font-semibold ">المبيعات </CardTitle>
+            <CardTitle className="text-lg text-[#303030] font-semibold ">
+              {HOME_PAGE_DASHBOARD.cards.sales.title}
+            </CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -62,21 +70,21 @@ const DashboardCards: FC<DashboardCardsProps> = ({
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth="2"
-              className="h-8 w-8 text-[#FC6B00]"
+              className="h-8 w-8 text-[#303030]"
             >
               <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
             </svg>
           </CardHeader>
           <CardFooter className="flex flex-col  items-start justify-center gap-y-1 ">
-            <div className="text-lg  font-bold">
+            <div className="text-lg text-[#303030] font-bold">
               <CountUp preserveValue start={0} end={salesNumber} />
             </div>
             <div className="flex  justify-between items-center gap-x-2">
               <Badge className="bg-[#2ECA8B] text-xs rounded-full text-white">
                 {percentageChange.salesPercentageChange.percentage}%
               </Badge>
-              <span className="text-gray-500 text-xs">
-                أكثر من الشهر الماضي
+              <span className="text-[#303030] text-xs">
+                {HOME_PAGE_DASHBOARD.cards.label}
               </span>
             </div>
           </CardFooter>
@@ -88,7 +96,9 @@ const DashboardCards: FC<DashboardCardsProps> = ({
           className="flex flex-col justify-between  min-h-[150px] "
         >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-lg font-semibold ">الطلاب</CardTitle>
+            <CardTitle className="text-lg text-[#303030] font-semibold ">
+              {HOME_PAGE_DASHBOARD.cards.students.title}
+            </CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -97,7 +107,7 @@ const DashboardCards: FC<DashboardCardsProps> = ({
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth="2"
-              className="h-8 w-8 text-[#FC6B00]"
+              className="h-8 w-8 text-[#303030]"
             >
               <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
               <circle cx="9" cy="7" r="4" />
@@ -105,15 +115,15 @@ const DashboardCards: FC<DashboardCardsProps> = ({
             </svg>
           </CardHeader>
           <CardFooter className="flex flex-col  items-start justify-center gap-y-1 ">
-            <div className="text-lg font-bold ">
+            <div className="text-lg text-[#303030] font-bold ">
               <CountUp preserveValue start={0} end={studentsNumber} />
             </div>
             <div className="flex  justify-between items-center gap-x-2">
               <Badge className="bg-[#2ECA8B] text-xs rounded-full text-white">
                 {percentageChange.studentsPercentageChange.percentage}%
               </Badge>
-              <span className="text-gray-500 text-xs">
-                أكثر من الشهر الماضي
+              <span className="text-[#303030] text-xs">
+                {HOME_PAGE_DASHBOARD.cards.label}
               </span>
             </div>
           </CardFooter>
@@ -125,8 +135,8 @@ const DashboardCards: FC<DashboardCardsProps> = ({
         className="flex flex-col justify-between  min-h-[150px] "
       >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-lg  font-semibold ">
-            صافي الآرباح
+          <CardTitle className="text-lg text-[#303030]  font-semibold ">
+            {HOME_PAGE_DASHBOARD.cards.profit.title}
           </CardTitle>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -136,14 +146,14 @@ const DashboardCards: FC<DashboardCardsProps> = ({
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="2"
-            className="h-8 w-8 text-[#FC6B00]"
+            className="h-8 w-8 text-[#303030]"
           >
             <rect width="20" height="14" x="2" y="5" rx="2" />
             <path d="M2 10h20" />
           </svg>
         </CardHeader>
         <CardFooter className="flex flex-col  items-start justify-center gap-y-1 ">
-          <div className="text-lg  font-bold">
+          <div className="text-lg text-[#303030]  font-bold">
             <CountUp
               preserveValue
               start={0}
@@ -157,7 +167,9 @@ const DashboardCards: FC<DashboardCardsProps> = ({
             <Badge className="bg-[#2ECA8B] text-xs rounded-full text-white">
               {percentageChange.profitsPercentageChange.percentage}%
             </Badge>
-            <span className="text-gray-500 text-xs">أكثر من الشهر الماضي</span>
+            <span className="text-[#303030] text-xs">
+              {HOME_PAGE_DASHBOARD.cards.label}
+            </span>
           </div>
         </CardFooter>
       </Card>
@@ -166,7 +178,9 @@ const DashboardCards: FC<DashboardCardsProps> = ({
         className="flex flex-col justify-between min-h-[150px]"
       >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-lg font-semibold ">التعليقات</CardTitle>
+          <CardTitle className="text-lg font-semibold ">
+            {HOME_PAGE_DASHBOARD.cards.Comments.title}
+          </CardTitle>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -175,13 +189,13 @@ const DashboardCards: FC<DashboardCardsProps> = ({
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="2"
-            className="h-8 w-8 text-[#FC6B00]"
+            className="h-8 w-8 text-[#303030]"
           >
             <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
           </svg>
         </CardHeader>
         <CardFooter className="flex flex-col  items-start justify-center gap-y-1 ">
-          <div className="text-lg  font-bold">
+          <div className="text-lg text-[#303030]  font-bold">
             <CountUp preserveValue start={0} end={commentsNumber} />
           </div>
 
@@ -189,7 +203,9 @@ const DashboardCards: FC<DashboardCardsProps> = ({
             <Badge className="bg-[#2ECA8B] text-xs rounded-full text-white">
               {percentageChange.commentsPercentageChange.percentage}%
             </Badge>
-            <span className="text-gray-500 text-xs">أكثر من الشهر الماضي</span>
+            <span className="text-[#303030] text-xs">
+              {HOME_PAGE_DASHBOARD.cards.label}
+            </span>
           </div>
         </CardFooter>
       </Card>

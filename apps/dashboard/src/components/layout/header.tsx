@@ -85,7 +85,7 @@ const Header: FC<Props> = ({
         </div>
       </TooltipProvider>
 
-      {user?.isFreeTrial && !user?.isSubscribed && !isLoadingPage ? (
+      {/* {user?.isFreeTrial && !user?.isSubscribed && !isLoadingPage ? (
         <div className="w-full h-[70px] flex items-center justify-center bg-gradient-to-r from-primary to-yellow-500">
           <h1 className="text-white font-bold text-xs md:text-lg ">
             لديك {daysLeftInTrial(user.createdAt)} يومًا متبقيًا في النسخة
@@ -98,7 +98,7 @@ const Header: FC<Props> = ({
             انتهت الفترة التجريبية، يجب عليك الاشتراك في أحد الباقات
           </h1>
         </div>
-      ) : null}
+      ) : null} */}
     </>
   );
 };
