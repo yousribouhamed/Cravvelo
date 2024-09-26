@@ -19,7 +19,7 @@ enum PLANS {
 model Account {
   id                 String            @unique @default(cuid())
   userId             String            @unique
-  lang               String            @default("en")
+  lang               String            @default("ar")
   avatarUrl          String?           @db.Text
   user_name          String?           @db.Text
   user_bio           String?           @db.Text

@@ -14,9 +14,7 @@ import {
   getFacetedUniqueValues,
 } from "@tanstack/react-table";
 import { Button } from "@ui/components/ui/button";
-import TableHeader2, {
-  statuses,
-} from "@/src/components/data-table/tables-headers/course-table-header";
+import TableHeader2 from "@/src/components/data-table/tables-headers/course-table-header";
 import React, { ChangeEvent } from "react";
 import {
   Table,
@@ -33,7 +31,6 @@ import {
   Trash2,
 } from "lucide-react";
 import { DataTableFilterableColumn } from "@/src/types";
-import { ArrowLeftIcon } from "lucide-react";
 import { cn } from "@ui/lib/utils";
 import {
   Command,
@@ -57,6 +54,8 @@ import { Pencil, ArrowUpCircle } from "lucide-react";
 import Image from "next/image";
 import { deleteCourseAction } from "@/src/actions/courses.actions";
 import { maketoast } from "../../toasts";
+
+import { getLangCookie } from "@cravvelo/i18n";
 
 export const levels = [
   {
@@ -98,6 +97,10 @@ export function DataTable<TData, TValue>({
 
   academia_url,
 }: DataTableProps<TData, TValue>) {
+  // get the data from the cookie
+
+  const lang = getLangCookie();
+
   const [rowSelection, setRowSelection] = React.useState({});
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -161,11 +164,10 @@ export function DataTable<TData, TValue>({
   return (
     <>
       <div className="flex items-center py-4   justify-start">
-        <div className="w-full max-w-sm  h-[50px] p-4 rounded-xl bg-white border flex items-center justify-start gap-x-4">
-          <Search className="text-black w-4 h-4" />
+        <div className="w-full max-w-sm  h-12 p-4 rounded-xl bg-white border flex items-center justify-start gap-x-4">
+          <Search className="text-[#303030] w-4 h-4" />
           <input
             className="border-none bg-none  focus:outline-none focus:border-none focus:ring-0  "
-            placeholder="البحث عن الدورات..."
             value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
             onChange={
               (event) => {
@@ -248,7 +250,9 @@ export function DataTable<TData, TValue>({
                       width={300}
                       height={300}
                     />
-                    لم يتم العثور على نتائج
+                    {lang === "en"
+                      ? "we can't find anything"
+                      : "     لم يتم العثور على نتائج"}
                   </div>
                 </TableCell>
               </TableRow>
@@ -275,8 +279,18 @@ export function DataTable<TData, TValue>({
             className="bg-white rounded-xl border flex items-center gap-x-2"
             variant="ghost"
           >
-            التالي
-            <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+            {lang === "en" ? (
+              <>
+                <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+                {lang === "en" ? "next" : "التالي"}
+              </>
+            ) : (
+              <>
+                {lang === "en" ? "next" : "التالي"}
+
+                <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+              </>
+            )}
           </Button>
         </div>
       </div>
@@ -328,6 +342,7 @@ export function DataTableFacetedFilter<TData, TValue>({
 }: DataTableFacetedFilter<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues();
   const selectedValues = new Set(column?.getFilterValue() as string[]);
+  const lang = getLangCookie();
 
   return (
     <Popover>
@@ -375,7 +390,11 @@ export function DataTableFacetedFilter<TData, TValue>({
         <Command>
           <CommandInput placeholder={title} />
           <CommandList>
-            <CommandEmpty>لم يتم العثور على نتائج.</CommandEmpty>
+            <CommandEmpty>
+              {lang === "en"
+                ? "we havn't find anything lol"
+                : "      لم يتم العثور على نتائج."}
+            </CommandEmpty>
             <CommandGroup>
               {options.map((option) => {
                 const isSelected = selectedValues.has(option.value);

@@ -22,6 +22,7 @@ import {
 } from "@ui/components/ui/dropdown-menu";
 import { Button } from "@ui/components/ui/button";
 import CustomTooltip from "../../components/custom-tooltip";
+import { HOME_PAGE_DASHBOARD_AR, HOME_PAGE_DASHBOARD_EN } from "@cravvelo/i18n";
 
 const data = [
   {
@@ -73,9 +74,15 @@ interface AreaChartProps {
   lang: string;
 }
 
-const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
+const AreaChartOverview: FC<AreaChartProps> = ({
+  sales,
+  lang,
+}: AreaChartProps) => {
+  const HOME_PAGE_DASHBOARD =
+    lang === "en" ? HOME_PAGE_DASHBOARD_EN : HOME_PAGE_DASHBOARD_AR;
+
   const [showCourses, setShowCourses] = useState(true);
-  const [showProducts, setShowProducts] = useState(false);
+  const [showProducts, setShowProducts] = useState(true);
 
   const aggregateSalesByMonth = (sales) => {
     const aggregatedData = {};
@@ -87,17 +94,20 @@ const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
       if (!aggregatedData[month]) {
         aggregatedData[month] = {
           name: month,
-          "الدورات التدريبية": 0,
-          "المنتجات الرقمية": 0,
+          [HOME_PAGE_DASHBOARD.overview.items.cources]: 0,
+          [HOME_PAGE_DASHBOARD.overview.items.digital_products]: 0,
         };
       }
 
       switch (sale.itemType) {
         case "PRODUCT":
-          aggregatedData[month]["المنتجات الرقمية"] += sale.price;
+          aggregatedData[month][
+            HOME_PAGE_DASHBOARD.overview.items.digital_products
+          ] += sale.price;
           break;
         case "COURSE":
-          aggregatedData[month]["الدورات التدريبية"] += sale.price;
+          aggregatedData[month][HOME_PAGE_DASHBOARD.overview.items.cources] +=
+            sale.price;
           break;
         default:
           break;
@@ -111,15 +121,22 @@ const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
     <Card className="col-span-3  w-full h-full p-0">
       <CardContent className="p-0   w-full h-full">
         <div
-          dir="ltr"
-          className="h-[70px]   w-full flex items-center justify-end px-2"
+          dir={lang === "en" ? "rtl" : "ltr"}
+          className={"h-[70px]   w-full flex items-center justify-end px-2"}
         >
-          <div className="w-[300px] h-full flex  justify-end items-center gap-y-2 px-4">
+          <div
+            className={` w-[300px] h-full flex   items-center gap-y-2 px-4 ${
+              lang === "en" ? "justify-start" : "justify-end"
+            }`}
+          >
             <button
-              className="w-[300px] flex items-center gap-x-2 justify-end cursor-pointer"
+              className={` w-[300px] flex items-center gap-x-2  cursor-pointer  justify-end`}
               onClick={() => setShowCourses(!showCourses)}
             >
-              <span className="text-xs">الدورات التدريبية</span>
+              <span className="text-xs">
+                {" "}
+                {HOME_PAGE_DASHBOARD.overview.items.cources}
+              </span>
 
               {showCourses ? (
                 <div className="w-3 h-3 rounded-[50%] bg-[#008FFB]" />
@@ -127,17 +144,19 @@ const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
                 <div className="w-3 h-3 rounded-[50%] bg-gray-500" />
               )}
             </button>
-            {/* <button
+            <button
               className="w-[300px] flex items-center gap-x-2 justify-end cursor-pointer"
               onClick={() => setShowProducts(!showProducts)}
             >
-              <span className="text-xs">المنتجات الرقمية</span>
+              <span className="text-xs">
+                {HOME_PAGE_DASHBOARD.overview.items.digital_products}
+              </span>
               {showProducts ? (
                 <div className="w-3 h-3 rounded-[50%] bg-[#2ECA8B]" />
               ) : (
                 <div className="w-3 h-3 rounded-[50%] bg-gray-500" />
               )}
-            </button> */}
+            </button>
           </div>
         </div>
         <div dir="ltr" className="w-full h-[calc(100%-70px)] pr-2 ">
@@ -180,7 +199,7 @@ const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
               {showProducts && (
                 <Area
                   type="monotone"
-                  dataKey="المنتجات الرقمية"
+                  dataKey={HOME_PAGE_DASHBOARD.overview.items.digital_products}
                   stroke="#2ECA8B"
                   strokeWidth={2}
                   fillOpacity={1}
@@ -190,7 +209,7 @@ const AreaChartOverview: FC<AreaChartProps> = ({ sales }: AreaChartProps) => {
               {showCourses && (
                 <Area
                   type="monotone"
-                  dataKey="الدورات التدريبية"
+                  dataKey={HOME_PAGE_DASHBOARD.overview.items.cources}
                   stroke="#008FFB"
                   strokeWidth={2}
                   fillOpacity={1}

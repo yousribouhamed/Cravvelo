@@ -8,7 +8,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
 import { ChevronDown, LucideIcon } from "lucide-react";
@@ -21,6 +20,7 @@ interface DataTableFacetedFilter<TData> {
   table: Table<TData>;
   title?: string;
   id: string;
+  lang: string;
   setColumnFilters: React.Dispatch<React.SetStateAction<ColumnFiltersState>>;
   options: {
     label: string;
@@ -35,6 +35,7 @@ export function FacetedFilter<TData>({
   table,
   setColumnFilters,
   id,
+  lang,
 }: DataTableFacetedFilter<TData>) {
   const fliterState = table.getState().columnFilters;
   // get all the selected itema
@@ -66,7 +67,7 @@ export function FacetedFilter<TData>({
           className="bg-white rounded-xl border flex items-center gap-x-2"
         >
           {title}
-          <ChevronDown className="w-4 h-4 text-black" strokeWidth={3} />
+          <ChevronDown className="w-4 h-4 text-[#303030]" strokeWidth={3} />
           {ACTIVE_FILTERS.length !== 0 && (
             <span className="w-5 h-5 text-white rounded-full bg-red-500 flex items-center justify-center">
               {" "}
@@ -75,18 +76,30 @@ export function FacetedFilter<TData>({
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-30">
+      <DropdownMenuContent
+        align={lang === "en" ? "start" : "end"}
+        className="w-30"
+      >
         {options.map((item) => {
           const isActive = ACTIVE_FILTERS.includes(item.value);
           return (
             <DropdownMenuItem
               key={item.value}
               onClick={() => onItemClicked(isActive, item.value)}
-              dir="rtl"
+              dir={lang === "en" ? "ltr" : "rtl"}
               className="w-full h-[40px] flex items-center justify-start gap-x-2"
             >
-              <Checkbox id={item.value} checked={isActive} />{" "}
-              {<item.icon className="w-4 h-4 " />} {item.label}
+              {lang === "en" ? (
+                <>
+                  <Checkbox id={item.value} checked={isActive} />{" "}
+                  {<item.icon className="w-4 h-4 " />} {item.label}
+                </>
+              ) : (
+                <>
+                  <Checkbox id={item.value} checked={isActive} />{" "}
+                  {<item.icon className="w-4 h-4 " />} {item.label}
+                </>
+              )}
             </DropdownMenuItem>
           );
         })}

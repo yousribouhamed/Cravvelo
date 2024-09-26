@@ -62,6 +62,7 @@ const useGetUser = async () => {
     createdAt: account.createdAt,
     verified: account.verified,
     verification_steps: account.verification_steps,
+    lang: account.lang,
   };
 };
 

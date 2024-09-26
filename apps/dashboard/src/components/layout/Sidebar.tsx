@@ -10,10 +10,7 @@ export function Sidebar({ className, lang }: SidebarProps & { lang: string }) {
   return (
     <>
       <div
-        className={cn(
-          "pb-12  bg-[#FC6B00] shadow  h-full rounded-lg  mt-4 hidden   ",
-          className
-        )}
+        className={cn("pb-12  bg-primary   h-full     hidden   ", className)}
       >
         <div className="space-y-4 py-2   ">
           <div className="px-3 pb-2 pt-6">

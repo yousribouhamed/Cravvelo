@@ -6,8 +6,9 @@ import { cn } from "@ui/lib/utils";
 //@ts-ignore
 import { download, generateCsv, mkConfig } from "export-to-csv";
 import { FacetedFilter } from "../table-helpers/faceted-filter";
-import { statuses } from "./course-table-header";
+import { statuses_ar, statuses_en } from "./course-table-header";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { getLangCookie } from "@cravvelo/i18n";
 
 interface TableHeaderProps {
   table: any;
@@ -32,6 +33,10 @@ const ProductsTableHeader: FC<TableHeaderProps> = ({
     download(csvConfig)(csv);
   };
 
+  const lang = getLangCookie();
+
+  const statuses = lang === "en" ? statuses_en : statuses_ar;
+
   return (
     <div className="w-full h-[70px] flex items-center justify-between">
       <div className="min-w-[200px] w-fit h-full flex  items-center justify-start gap-x-4">
@@ -41,6 +46,7 @@ const ProductsTableHeader: FC<TableHeaderProps> = ({
           table={table}
           title="الحالة"
           options={statuses}
+          lang={lang}
         />
       </div>
       <div className="min-w-[200px] w-fit h-full flex items-center justify-end gap-x-4">

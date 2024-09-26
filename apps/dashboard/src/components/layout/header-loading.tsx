@@ -1,8 +1,6 @@
 "use client";
 
 import type { FC } from "react";
-import { SearchInput } from "../search";
-import UserNav from "../auth/user-nav";
 import { Button, buttonVariants } from "@ui/components/ui/button";
 import { useRouter } from "next/navigation";
 import MobildSideBard from "./mobile-sidebar";
@@ -13,23 +11,16 @@ import {
   TooltipTrigger,
 } from "@ui/components/ui/tooltip";
 import { ArrowRight, ChevronDown } from "lucide-react";
-import { UserData } from "@/src/types";
-import { Notification } from "database";
 import { Icons } from "../my-icons";
 
 import { Skeleton } from "@ui/components/ui/skeleton";
 
 interface Props {
   title: string;
-
   goBack?: boolean;
 }
 
-const HeaderLoading: FC<Props> = ({
-  title,
-
-  goBack,
-}) => {
+const HeaderLoading: FC<Props> = ({ title, goBack }) => {
   const router = useRouter();
   return (
     <>
@@ -61,7 +52,7 @@ const HeaderLoading: FC<Props> = ({
             </h1>
           </div>
           <div className="w-[50%] h-[88px] flex items-center justify-center px-4">
-            <SearchInput />
+            <Skeleton className="w-[200px] h-8 rounded-2xl" />
           </div>
 
           <div className=" lg:w-[25%] w-[50%]   h-full flex items-center justify-end gap-x-2">

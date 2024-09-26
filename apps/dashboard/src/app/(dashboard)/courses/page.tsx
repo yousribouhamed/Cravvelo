@@ -4,6 +4,7 @@ import { Course } from "database";
 import { prisma } from "database/src";
 import CoursesTableShell from "./courses-table-shell";
 import useHaveAccess from "@/src/hooks/use-have-access";
+import { PAGES_INFO_AR, PAGES_INFO_EN } from "@cravvelo/i18n";
 
 // react-countup
 
@@ -34,6 +35,8 @@ const getAllNotifications = async ({ accountId }: { accountId: string }) => {
 const Page = async ({}) => {
   const user = await useHaveAccess();
 
+  const PAGES_INFO = user.lang === "en" ? PAGES_INFO_EN : PAGES_INFO_AR;
+
   const [data, notifications] = await Promise.all([
     getData({ accountId: user.accountId }),
     getAllNotifications({ accountId: user.accountId }),
@@ -45,9 +48,13 @@ const Page = async ({}) => {
         <Header
           notifications={notifications}
           user={user}
-          title="الدورات التدريبية"
+          title={PAGES_INFO.cources}
         />
-        <CoursesTableShell academia_url={user.subdomain} initialData={data} />
+        <CoursesTableShell
+          academia_url={user.subdomain}
+          initialData={data}
+          lang={user.lang}
+        />
       </main>
     </MaxWidthWrapper>
   );

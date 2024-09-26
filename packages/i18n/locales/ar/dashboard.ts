@@ -15,4 +15,11 @@ export const HOME_PAGE_DASHBOARD_AR = {
       title: "التعليقات",
     },
   },
+
+  overview: {
+    items: {
+      digital_products: "المنتجات الرقمية",
+      cources: "الدورات التدريبية",
+    },
+  },
 };

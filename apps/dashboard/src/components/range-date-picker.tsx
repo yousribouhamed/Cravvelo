@@ -18,11 +18,16 @@ function formatDayInArabic(day) {
   const formattedDate = format(day, "dd MMMM yyyy", { locale: ar });
   return formattedDate;
 }
+function formatDayInEnglish(day) {
+  const formattedDate = format(day, "dd MMMM yyyy");
+  return formattedDate;
+}
 
 interface DateRangePickerProps extends React.HTMLAttributes<HTMLDivElement> {
   dateRange?: DateRange;
   dayCount?: number;
   align?: "center" | "start" | "end";
+  lang: string;
 }
 
 export function DatePickerWithRange({
@@ -30,6 +35,7 @@ export function DatePickerWithRange({
   dateRange,
   dayCount,
   align = "start",
+  lang,
 
   ...props
 }: DateRangePickerProps) {
@@ -138,14 +144,19 @@ export function DatePickerWithRange({
               {date?.from ? (
                 date.to ? (
                   <>
-                    {formatDayInArabic(date.from)} -{" "}
-                    {formatDayInArabic(date.to)}
+                    {lang === "en"
+                      ? formatDayInEnglish(date.from)
+                      : formatDayInArabic(date.from)}{" "}
+                    -{" "}
+                    {lang === "en"
+                      ? formatDayInEnglish(date.to)
+                      : formatDayInArabic(date.to)}
                   </>
                 ) : (
                   formatDayInArabic(date.from)
                 )
               ) : (
-                <>{" تاريخ التقرير"}</>
+                <>{lang === "en" ? "date range" : " تاريخ التقرير"}</>
               )}
             </span>
           </Button>
@@ -159,7 +170,7 @@ export function DatePickerWithRange({
               selected={date}
               onSelect={setDate}
               numberOfMonths={2}
-              locale={ar} // Set the Arabic locale for the calendar
+              locale={lang === "en" ? null : ar} // Set the Arabic locale for the calendar
             />
           </div>
         </PopoverContent>

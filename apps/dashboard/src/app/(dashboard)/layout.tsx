@@ -23,7 +23,7 @@ export default async function AdminLayout({
           {/* <CrispChat /> */}
           <Sidebar
             className={` lg:block lg:w-[250px] lg:fixed  top-0  bottom-0 ${
-              lang === "en" ? "left-5" : "right-5"
+              lang === "en" ? "left-0" : "right-0"
             } `}
             lang={lang}
           />

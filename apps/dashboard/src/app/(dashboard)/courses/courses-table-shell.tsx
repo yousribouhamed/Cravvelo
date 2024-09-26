@@ -11,6 +11,7 @@ import DeleteCourseModel from "@/src/components/models/delete-course-modal";
 interface CoursesTableShellProps {
   initialData: Course[];
   academia_url: string;
+  lang: string;
 }
 
 const CoursesTableShell: FC<CoursesTableShellProps> = ({

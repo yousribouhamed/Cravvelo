@@ -2,10 +2,8 @@ import {
   ArrowDownIcon,
   ArrowUpIcon,
   CaretSortIcon,
-  EyeNoneIcon,
 } from "@radix-ui/react-icons";
 import { type Column } from "@tanstack/react-table";
-
 import { cn } from "@ui/lib/utils";
 import { Button } from "@ui/components/ui/button";
 import {
@@ -15,6 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
+import { getLangCookie } from "@cravvelo/i18n";
 
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -30,6 +29,8 @@ export function DataTableColumnHeader<TData, TValue>({
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
   }
+
+  const lang = getLangCookie();
 
   return (
     <div className={cn("flex items-center justify-start space-x-2", className)}>
@@ -67,7 +68,7 @@ export function DataTableColumnHeader<TData, TValue>({
             )}
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
+        <DropdownMenuContent align={lang === "en" ? "end" : "start"}>
           <DropdownMenuItem
             aria-label="Sort ascending"
             className="w-full items-center justify-between p-2"
@@ -79,7 +80,8 @@ export function DataTableColumnHeader<TData, TValue>({
                 aria-hidden="true"
               />
             </div>
-            ترتيب تصاعدي
+
+            {lang === "en" ? "Ascending order" : " ترتيب تصاعدي"}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
@@ -93,7 +95,8 @@ export function DataTableColumnHeader<TData, TValue>({
                 aria-hidden="true"
               />
             </div>
-            ترتيب تفصيلي
+
+            {lang === "en" ? "Descending order" : "ترتيب تنازلي"}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

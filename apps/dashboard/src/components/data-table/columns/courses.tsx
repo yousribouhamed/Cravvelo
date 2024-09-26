@@ -21,8 +21,7 @@ import { maketoast } from "../../toasts";
 import { useOpenCourseDeleteAction } from "@/src/lib/zustand/delete-actions";
 import { formatDZD, timeSince } from "@/src/lib/utils";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
+import { getLangCookie } from "@cravvelo/i18n";
 
 export const columns: ColumnDef<Course>[] = [
   {
@@ -53,10 +52,38 @@ export const columns: ColumnDef<Course>[] = [
   {
     id: "title",
     accessorKey: "title",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="عنوان الدورة" />
-    ),
+    header: ({ column }) => {
+      const lang = getLangCookie();
+      return (
+        <DataTableColumnHeader
+          column={column}
+          title={lang === "en" ? "cource title" : "عنوان الدورة"}
+        />
+      );
+    },
     cell: ({ row }) => {
+      const lang = getLangCookie();
+
+      function getLable(key: "DRAFT" | "PUBLIC") {
+        const values = {
+          DRAFT: {
+            ar: "مسودة",
+            en: "draft",
+          },
+          PUBLIC: {
+            ar: "منشور",
+            en: "public",
+          },
+        };
+
+        const value = values[key];
+
+        if (lang === "en") {
+          return value.en;
+        } else {
+          return value.ar;
+        }
+      }
       return (
         <div className="flex flex-col gap-y-2 justify-center items-start ">
           <Link href={`/courses/${row.original.id}/chapters`}>
@@ -67,10 +94,10 @@ export const columns: ColumnDef<Course>[] = [
 
           <Badge className="bg-[#F5F5F5] hover:bg-[#F5F5F5] text-black rounded-md">
             {row.original.status === "DRAFT"
-              ? "مسودة"
+              ? getLable("DRAFT")
               : row.original.status === "PUBLISED"
-              ? "منشور"
-              : "خاص"}
+              ? getLable("PUBLIC")
+              : getLable("DRAFT")}
           </Badge>
         </div>
       );
@@ -80,9 +107,15 @@ export const columns: ColumnDef<Course>[] = [
   {
     id: "price",
     accessorKey: "price",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="السعر" />
-    ),
+    header: ({ column }) => {
+      const lang = getLangCookie();
+      return (
+        <DataTableColumnHeader
+          column={column}
+          title={lang === "en" ? "price" : "السعر"}
+        />
+      );
+    },
     cell: ({ row }) => {
       return formatDZD(row.original.price === null ? 0 : row.original.price);
     },
@@ -91,17 +124,49 @@ export const columns: ColumnDef<Course>[] = [
   {
     id: "level",
     accessorKey: "level",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title=" المستوى" />
-    ),
+    header: ({ column }) => {
+      const lang = getLangCookie();
+      return (
+        <DataTableColumnHeader
+          column={column}
+          title={lang === "en" ? "level" : "المستوى"}
+        />
+      );
+    },
     cell: ({ row }) => {
+      const lang = getLangCookie();
+
+      function getLable(key: "BEGINNER" | "INTERMEDIATE" | "ADVANCED") {
+        const values = {
+          BEGINNER: {
+            ar: "مبتدئ",
+            en: "beginner",
+          },
+          INTERMEDIATE: {
+            ar: "متوسط",
+            en: "intermediate",
+          },
+          ADVANCED: {
+            ar: "صعب",
+            en: "advanced",
+          },
+        };
+
+        const value = values[key];
+
+        if (lang === "en") {
+          return value.en;
+        } else {
+          return value.ar;
+        }
+      }
       return (
         <Badge className="bg-[#2ECA8B]  text-white rounded-md">
           {row.original.level === "BEGINNER"
-            ? "مبتدئ"
+            ? getLable("BEGINNER")
             : row.original.level === "INTERMEDIATE"
-            ? "متوسط"
-            : "صعب"}
+            ? getLable("INTERMEDIATE")
+            : getLable("ADVANCED")}
         </Badge>
       );
     },
@@ -111,25 +176,37 @@ export const columns: ColumnDef<Course>[] = [
   {
     id: "status",
     accessorKey: "status",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="تاريخ الانشاء" />
-    ),
+    header: ({ column }) => {
+      const lang = getLangCookie();
+      return (
+        <DataTableColumnHeader
+          column={column}
+          title={lang === "en" ? "created at" : "تاريخ الانشاء"}
+        />
+      );
+    },
     cell: ({ row }) => {
       return <p>{timeSince(row.original.createdAt)}</p>;
     },
-    filterFn: "includesString", // use built-in filter function
+    filterFn: "includesString",
   },
 
   {
     id: "studenstNbr",
     accessorKey: "studenstNbr",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="عدد الطلاب الملتحقين" />
-    ),
+    header: ({ column }) => {
+      const lang = getLangCookie();
+      return (
+        <DataTableColumnHeader
+          column={column}
+          title={lang === "en" ? "number of students" : "عدد الطلاب الملتحقين"}
+        />
+      );
+    },
     cell: ({ row }) => {
       return (
         <div className="flex items-center gap-x-2">
-          <Users className="w-4 h-4 text-black" />
+          <Users className="w-4 h-4 text-[#303030]" />
           <p>
             {row.original.studentsNbr === null ? 0 : row.original.studentsNbr}
           </p>
@@ -145,6 +222,7 @@ export const columns: ColumnDef<Course>[] = [
       /* eslint-disable */
       const { setId, setIsOpen } = useOpenCourseDeleteAction();
 
+      const lang = getLangCookie();
       return (
         <div className="w-full h-10 flex items-center justify-end gap-x-4">
           <Link
@@ -154,7 +232,7 @@ export const columns: ColumnDef<Course>[] = [
               "bg-white rounded-xl border"
             )}
           >
-            تعديل
+            {lang === "en" ? "edit" : "تعديل"}
           </Link>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -184,7 +262,7 @@ export const columns: ColumnDef<Course>[] = [
                       stroke-linejoin="round"
                     />
                   </svg>
-                  تعديل
+                  {lang === "en" ? "edit" : " تعديل"}
                 </DropdownMenuItem>
               </Link>
 
@@ -211,7 +289,7 @@ export const columns: ColumnDef<Course>[] = [
                     stroke-linejoin="round"
                   />
                 </svg>
-                استنساخ
+                {lang === "en" ? "copy" : " استنساخ"}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
 
@@ -232,7 +310,7 @@ export const columns: ColumnDef<Course>[] = [
                       stroke-linejoin="round"
                     />
                   </svg>
-                  عرض التقييمات
+                  {lang === "en" ? "show reviews" : "   عرض التقييمات"}
                 </DropdownMenuItem>
               </Link>
               <DropdownMenuSeparator />
@@ -258,7 +336,7 @@ export const columns: ColumnDef<Course>[] = [
                     stroke-linejoin="round"
                   />
                 </svg>
-                حذف الدورة
+                {lang === "en" ? "delete cource" : "   حذف الدورة"}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

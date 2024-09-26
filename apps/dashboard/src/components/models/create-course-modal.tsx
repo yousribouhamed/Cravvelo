@@ -29,8 +29,11 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 import { maketoast } from "../toasts";
 import PlanExceededPopup from "./pyment-plan-exceeded";
+import { getLangCookie } from "@cravvelo/i18n";
 
 const AddCourse: FC = ({}) => {
+  const lang = getLangCookie();
+
   const router = useRouter();
   const [isOpen, setIsOpen] = React.useState(false);
   const [isPlanExceededOpen, setIsPlanExceededOpen] = React.useState(false);
@@ -96,10 +99,15 @@ const AddCourse: FC = ({}) => {
                 stroke-linejoin="round"
               />
             </svg>
-            <span className="text-xs md:text-base">أنشئ دورة جديدة</span>
+            <span className="text-xs md:text-base">
+              {lang === "en" ? "create new cource" : " أنشئ دورة جديدة"}
+            </span>
           </Button>
         </DialogTrigger>
-        <DialogContent className="max-w-lg" title="إضافة دورة جديدة">
+        <DialogContent
+          className="max-w-lg"
+          title={lang === "en" ? "Add new cource" : "إضافة دورة جديدة"}
+        >
           <div className="w-full px-4 pb-6">
             <Form {...form}>
               <form
@@ -111,10 +119,16 @@ const AddCourse: FC = ({}) => {
                   name="title"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>عنوان الدورة *</FormLabel>
+                      <FormLabel>
+                        {lang === "en" ? "title" : "  عنوان الدورة*"}
+                      </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم"
+                          placeholder={
+                            lang === "en"
+                              ? "set a title for your cource"
+                              : "أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم"
+                          }
                           {...field}
                         />
                       </FormControl>
@@ -124,14 +138,16 @@ const AddCourse: FC = ({}) => {
                   )}
                 />
                 <DialogFooter className="w-full h-[50px] flex items-center  flex-nowrap justify-end gap-x-1 md:gap-x-4">
-                  <Button variant="ghost">إلغاء</Button>
+                  <Button variant="ghost">
+                    {lang === "en" ? "cancel" : "إلغاء"}
+                  </Button>
                   <Button
                     className=" flex items-center gap-x-2"
                     disabled={isLaoding}
                     type="submit"
                   >
                     {mutation.isLoading ? <LoadingSpinner /> : null}
-                    إضافة جديد
+                    {lang === "en" ? "add new" : "  إضافة جديد"}
                   </Button>
                 </DialogFooter>
               </form>

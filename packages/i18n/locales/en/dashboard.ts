@@ -15,4 +15,11 @@ export const HOME_PAGE_DASHBOARD_EN = {
       title: "Comments",
     },
   },
+
+  overview: {
+    items: {
+      digital_products: "digital products",
+      cources: "cources",
+    },
+  },
 };

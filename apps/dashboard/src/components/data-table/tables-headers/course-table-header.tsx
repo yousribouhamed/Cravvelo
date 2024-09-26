@@ -8,8 +8,9 @@ import { ColumnFiltersState, Table } from "@tanstack/react-table";
 import { download, generateCsv, mkConfig } from "export-to-csv";
 import { PencilRuler, Check, CandyCane, Ghost, Flame } from "lucide-react";
 import { FacetedFilter } from "@/src/components/data-table/table-helpers/faceted-filter";
+import { getLangCookie } from "@cravvelo/i18n";
 
-export const statuses = [
+export const statuses_ar = [
   {
     value: "DRAFT",
     label: "مسودة",
@@ -21,7 +22,7 @@ export const statuses = [
     icon: Check,
   },
 ];
-export const levels = [
+export const levels_ar = [
   {
     value: "BIGENNER",
     label: "مبتدئ",
@@ -35,6 +36,36 @@ export const levels = [
   {
     value: "ADVANCED",
     label: "متقدم",
+    icon: Flame,
+  },
+];
+
+export const statuses_en = [
+  {
+    value: "DRAFT",
+    label: "Draft",
+    icon: PencilRuler,
+  },
+  {
+    value: "PUBLISHED",
+    label: "Published",
+    icon: Check,
+  },
+];
+export const levels_en = [
+  {
+    value: "BEGINNER",
+    label: "Beginner",
+    icon: CandyCane,
+  },
+  {
+    value: "INTERMEDIATE",
+    label: "Intermediate",
+    icon: Ghost,
+  },
+  {
+    value: "ADVANCED",
+    label: "Advanced",
     icon: Flame,
   },
 ];
@@ -95,6 +126,12 @@ export function TableHeader<TData>({
   setColumnFilters,
   data,
 }: TableHeaderProps<TData>) {
+  const lang = getLangCookie();
+
+  const levels = lang === "en" ? levels_en : levels_ar;
+
+  const statuses = lang === "en" ? statuses_en : statuses_ar;
+
   const handleExportCSV = (data: any[]) => {
     const preparedData = prepareDataForCsv(data);
     const csv = generateCsv(csvConfig)(preparedData);
@@ -106,17 +143,19 @@ export function TableHeader<TData>({
     <div className="w-full h-[70px] flex items-center justify-between">
       <div className="min-w-[200px] w-fit h-full flex  items-center justify-start gap-x-4">
         <FacetedFilter
+          lang={lang}
           setColumnFilters={setColumnFilters}
           id={"level"}
           table={table}
-          title="المستوى"
+          title={lang === "en" ? "level" : "المستوى"}
           options={levels}
         />
         <FacetedFilter
+          lang={lang}
           setColumnFilters={setColumnFilters}
           id={"status"}
           table={table}
-          title="الحالة"
+          title={lang === "en" ? "status" : "الحالة"}
           options={statuses}
         />
       </div>
@@ -153,7 +192,9 @@ export function TableHeader<TData>({
               mask="url(#path-1-inside-1_119_3304)"
             />
           </svg>
-          <span className="hidden md:block">تصدير البيانات</span>
+          <span className="hidden md:block">
+            {lang === "en" ? "download data" : "تصدير البيانات"}
+          </span>
         </Button>
 
         <AddCourse />
@@ -165,7 +206,9 @@ export function TableHeader<TData>({
             "bg-white rounded-xl border flex items-center gap-x-2"
           )}
         >
-          <span className="hidden md:block">معاينة كطالب</span>
+          <span className="hidden md:block">
+            {lang === "en" ? "preview" : " معاينة كطالب"}
+          </span>
 
           <svg
             width="16"

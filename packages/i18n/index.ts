@@ -41,3 +41,6 @@ export * from "./locales/ar/dashboard";
 export * from "./locales/en/dashboard";
 export * from "./locales/ar/tables";
 export * from "./locales/en/tables";
+
+export * from "./locales/ar/pages";
+export * from "./locales/en/pages";

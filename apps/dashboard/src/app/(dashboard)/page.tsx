@@ -131,7 +131,7 @@ async function Page({ searchParams }) {
         ) : (
           <>
             <div className="w-full h-[30px] gap-x-4 flex  justify-between items-center mt-10 ">
-              <DatePickerWithRange />
+              <DatePickerWithRange lang={user.lang} />
 
               {user?.subdomain ? (
                 <Link
