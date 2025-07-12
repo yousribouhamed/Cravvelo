@@ -15,7 +15,7 @@ enum PLANS {
 }
 
 model Account {
-  id                 String            @unique @default(cuid())
+  id                 String            @id @unique @default(cuid())
   userId             String            @unique
   avatarUrl          String?           @db.Text
   user_name          String?           @db.Text
@@ -25,6 +25,31 @@ model Account {
   verified           Boolean           @default(false)
   verification_steps Int               @default(0)
   plan               PLANS?
+  
+  // Additional profile fields
+  firstName          String?           @db.Text
+  lastName           String?           @db.Text
+  dateOfBirth        DateTime?
+  gender             String?           // e.g., "MALE", "FEMALE"
+  country            String?
+  city               String?
+  address            String?           @db.Text
+  postalCode         String?
+  website            String?           @db.Text
+  socialMediaLinks   Json?            
+  profession         String?           @db.Text
+  company            String?           @db.Text
+  education          String?           @db.Text
+  skills             String[]          // Array of skills
+  interests          String[]          // Array of interests
+  preferredLanguage  String?           @default("ARABIC")
+  timezone           String?
+  emailNotifications Boolean           @default(true)
+  smsNotifications   Boolean           @default(false)
+  marketingEmails    Boolean           @default(false)
+  profileCompleted   Boolean           @default(false)
+  profileVisibility  String?           @default("PUBLIC") // "PUBLIC", "PRIVATE", "FRIENDS_ONLY"
+  
   createdAt          DateTime          @default(now())
   updatedAt          DateTime          @updatedAt
   Course             Course[]
@@ -40,20 +65,19 @@ model Account {
 }
 
 model PaymentsConnect {
-  id                String   @unique @default(cuid())
+  id                String   @id @unique @default(cuid())
   accountId         String   @unique
   chargilyPublicKey String
   chargilySecretKey String
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
-  Account           Account? @relation(fields: [accountId], references: [id])
+  Account           Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
-  @@index([id])
   @@index([accountId])
 }
 
 model Course {
-  id                     String    @unique @default(cuid())
+  id                     String    @id @unique @default(cuid())
   rating                 Float     @default(0)
   accountId              String
   title                  String
@@ -82,28 +106,31 @@ model Course {
   allowRating            Boolean   @default(true)
   forceWatchAllCourse    Boolean   @default(true)
   certificate            Boolean   @default(false)
-  Account                Account?  @relation(fields: [accountId], references: [id])
+  Account                Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
   Comment                Comment[]
+  Chapter                Chapter[]
 
-  @@index([id])
   @@index([accountId])
 }
 
 model Chapter {
-  id          String   @unique @default(cuid())
-  courseID    String
+  id          String   @id @unique @default(cuid())
+  courseId    String
   title       String
   modules     Json?
   orderNumber Int
   isVisible   Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  Course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
 }
 
 model Product {
-  id                String   @unique @default(cuid())
+  id                String   @id @unique @default(cuid())
   title             String
   price             Float?
   numberOfDownloads Int?
@@ -119,14 +146,13 @@ model Product {
   isVisible         Boolean  @default(true)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
-  Account           Account? @relation(fields: [accountId], references: [id])
+  Account           Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
-  @@index([id])
   @@index([accountId])
 }
 
 model Website {
-  id             String   @unique @default(cuid())
+  id             String   @id @unique @default(cuid())
   accountId      String   @unique
   name           String?
   description    String?  @db.Text
@@ -148,7 +174,7 @@ model Website {
   font           String   @default("font-cal")
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
-  Account        Account? @relation(fields: [accountId], references: [id])
+  Account        Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
 }
 
 enum DiscountType {
@@ -157,7 +183,7 @@ enum DiscountType {
 }
 
 model Coupon {
-  id             String       @unique @default(cuid())
+  id             String       @id @unique @default(cuid())
   accountId      String
   code           String
   description    String?
@@ -171,9 +197,8 @@ model Coupon {
   isActive       Boolean      @default(true)
   isArchive      Boolean      @default(false)
 
-  Account Account? @relation(fields: [accountId], references: [id])
+  Account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
-  @@index([id])
   @@index([accountId])
 }
 
@@ -190,7 +215,7 @@ enum ItemType {
 }
 
 model Sale {
-  id          String     @unique @default(cuid())
+  id          String     @id @unique @default(cuid())
   orderNumber Int        @unique @default(autoincrement())
   accountId   String
   amount      Float
@@ -201,14 +226,15 @@ model Sale {
   studentId   String
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
-  Account     Account?   @relation(fields: [accountId], references: [id])
+  Account     Account    @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  Student     Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
-  @@index([id])
   @@index([accountId])
+  @@index([studentId])
 }
 
 model Comment {
-  id           String   @unique @default(cuid())
+  id           String   @id @unique @default(cuid())
   content      String
   rating       Float
   studentId    String
@@ -220,15 +246,16 @@ model Comment {
   courseId     String
   accountId    String
   status       String   @default("verification_pending")
-  Course       Course?  @relation(fields: [courseId], references: [id])
+  Course       Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  Student      Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
-  @@index([id])
   @@index([courseId])
   @@index([accountId])
+  @@index([studentId])
 }
 
 model Notification {
-  id         String   @unique @default(cuid())
+  id         String   @id @unique @default(cuid())
   content    String
   type       String   @default("WARNNING")
   createdAt  DateTime @default(now())
@@ -236,14 +263,13 @@ model Notification {
   accountId  String
   isRead     Boolean  @default(false)
   isArchived Boolean  @default(false)
-  Account    Account  @relation(fields: [accountId], references: [id])
+  Account    Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
-  @@index([id])
   @@index([accountId])
 }
 
 model Student {
-  id             String    @unique @default(cuid())
+  id             String    @id @unique @default(cuid())
   full_name      String
   photo_url      String?   @db.Text
   bio            String?
@@ -254,16 +280,19 @@ model Student {
   password       String
   confirmedEmail DateTime?
   bag            Json
-  Account        Account   @relation(fields: [accountId], references: [id])
+  Account        Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
+  Sale           Sale[]
+  Comment        Comment[]
+  Certificate    Certificate[]
+  Referral       Referral[]
 
-  @@index([id])
   @@index([accountId])
 }
 
 model Certificate {
-  id          String   @unique @default(cuid())
+  id          String   @id @unique @default(cuid())
   name        String
   description String?
   studentId   String
@@ -273,11 +302,15 @@ model Certificate {
   fileUrl     String   @db.Text
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  Account     Account  @relation(fields: [accountId], references: [id])
+  Account     Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  Student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([accountId])
+  @@index([studentId])
 }
 
 model Payments {
-  id        String @unique @default(cuid())
+  id        String @id @unique @default(cuid())
   accountId String
 
   plan                String
@@ -287,33 +320,28 @@ model Payments {
   status              String
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
-  Account             Account  @relation(fields: [accountId], references: [id])
+  Account             Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
-  @@index([id])
   @@index([accountId])
 }
 
 model Admin {
-  id        String   @unique @default(cuid())
+  id        String   @id @unique @default(cuid())
   name      String?
   email     String?  @unique
   photo_url String?
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@index([id])
 }
 
 model AcademiaMessage {
-  id            String   @unique @default(cuid())
+  id            String   @id @unique @default(cuid())
   senderName    String
   senderEmail   String
   senderMessage String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-
-  @@index([id])
 }
 
 model OtpCode {
@@ -322,8 +350,6 @@ model OtpCode {
   code      String
   type      OtpType
   expiresAt DateTime
-
-  @@index([id])
 }
 
 enum OtpType {
@@ -332,7 +358,7 @@ enum OtpType {
 }
 
 model Referral {
-  id                       String   @unique @default(cuid())
+  id                       String   @id @unique @default(cuid())
   createdAt                DateTime @default(now())
   updatedAt                DateTime @updatedAt
   studentId                String
@@ -341,6 +367,7 @@ model Referral {
   accountId                String
   ccp                      String
   numberOfReferredStudents Int
+  Student                  Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
-  @@index([id])
+  @@index([studentId])
 }
