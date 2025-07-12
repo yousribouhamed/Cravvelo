@@ -3,8 +3,8 @@ import * as z from "zod";
 export const authSchema = z.object({
   email: z
     .string({
-      required_error: "كلمة المرور مطلوبة",
-      invalid_type_error: "يجب أن تكون كلمة المرور نصية",
+      required_error: "البريد الإلكتروني مطلوب",
+      invalid_type_error: "يجب أن يكون البريد الإلكتروني نصياً",
     })
     .email({
       message: "يرجى إدخال عنوان بريد إلكتروني صالح",
@@ -14,23 +14,25 @@ export const authSchema = z.object({
       required_error: "كلمة المرور مطلوبة",
       invalid_type_error: "يجب أن تكون كلمة المرور نصية",
     })
-    .min(7, {
+    .min(8, {
       message: "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
     })
     .max(100, {
       message: "يجب ألا تتجاوز كلمة المرور 100 حرف",
     }),
   firstName: z.string({
-    required_error: "كلمة المرور مطلوبة",
-    invalid_type_error: "يجب أن تكون كلمة المرور نصية",
+    required_error: "الاسم الأول مطلوب",
+    invalid_type_error: "يجب أن يكون الاسم الأول نصياً",
+  }).min(2, {
+    message: "يجب أن يتكون الاسم الأول من حرفين على الأقل",
   }),
 });
 
 export const authSchemaLogin = z.object({
   email: z
     .string({
-      required_error: "كلمة المرور مطلوبة",
-      invalid_type_error: "يجب أن تكون كلمة المرور نصية",
+      required_error: "البريد الإلكتروني مطلوب",
+      invalid_type_error: "يجب أن يكون البريد الإلكتروني نصياً",
     })
     .email({
       message: "يرجى إدخال عنوان بريد إلكتروني صالح",
@@ -51,8 +53,8 @@ export const authSchemaLogin = z.object({
 export const restPasswordStep2 = z.object({
   email: z
     .string({
-      required_error: "كلمة المرور مطلوبة",
-      invalid_type_error: "يجب أن تكون كلمة المرور نصية",
+      required_error: "البريد الإلكتروني مطلوب",
+      invalid_type_error: "يجب أن يكون البريد الإلكتروني نصياً",
     })
     .email({
       message: "يرجى إدخال عنوان بريد إلكتروني صالح",
@@ -62,14 +64,14 @@ export const restPasswordStep2 = z.object({
 export const verifyEmailSchema = z.object({
   code: z
     .string({
-      required_error: "كلمة المرور مطلوبة",
-      invalid_type_error: "يجب أن تكون كلمة المرور نصية",
+      required_error: "رمز التحقق مطلوب",
+      invalid_type_error: "يجب أن يكون رمز التحقق نصياً",
     })
-    .min(6, {
-      message: "يجب أن يتكون رمز التحقق من 6 أحرف",
+    .length(6, {
+      message: "يجب أن يتكون رمز التحقق من 6 أرقام بالضبط",
     })
-    .max(6, {
-      message: "يجب ألا تتجاوز كلمة المرور 6 حرف",
+    .regex(/^\d{6}$/, {
+      message: "رمز التحقق يجب أن يحتوي على أرقام فقط",
     }),
 });
 

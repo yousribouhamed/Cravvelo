@@ -27,11 +27,10 @@ import Link from "next/link";
 import { PasswordInput } from "../password-input";
 import { authSchema } from "@/src/lib/validators/auth";
 import { useRouter } from "next/navigation";
-
-import { Icons } from "../my-icons";
-import { catchClerkError, catchError, getCookie } from "@/src/lib/utils";
-import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { catchClerkError, getCookie } from "@/src/lib/utils";
 import { maketoast } from "../toasts";
+import {  User, Mail, Lock, Shield } from "lucide-react";
+import Image from "next/image";
 
 type Inputs = z.infer<typeof authSchema>;
 
@@ -39,10 +38,13 @@ export function SignUpForm() {
   const { isLoaded, signUp } = useSignUp();
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string>("");
+  const [success, setSuccess] = React.useState<string>("");
 
   const form = useForm<Inputs>({
     resolver: zodResolver(authSchema),
     defaultValues: {
+      firstName: "",
       email: "",
       password: "",
     },
@@ -51,18 +53,20 @@ export function SignUpForm() {
   async function onSubmit(data: z.infer<typeof authSchema>) {
     if (!isLoaded) return;
 
+    setError("");
+    setSuccess("");
+
     try {
       const cookie = getCookie("machine_id");
       if (cookie) {
-        maketoast.errorWithTest({
-          text: "يا اخي انت تملك حساب بالفعل",
-        });
+        setError("يبدو أن لديك حساب بالفعل. يرجى تسجيل الدخول.");
+        return;
       }
+
       setIsLoading(true);
       await signUp.create({
         emailAddress: data.email,
         password: data.password,
-        // firstName: data.firstName,
       });
 
       // Send email verification code
@@ -70,12 +74,18 @@ export function SignUpForm() {
         strategy: "email_code",
       });
 
-      router.push("/sign-up/verify-email");
+      setSuccess("تم إنشاء الحساب بنجاح! سيتم توجيهك لتأكيد البريد الإلكتروني.");
+      
+      // Add delay to show success message
+      setTimeout(() => {
+        router.push("/sign-up/verify-email");
+        maketoast.successWithText({
+          text: "لقد أرسلنا لك رمز التحقق المكون من 6 أرقام",
+        });
+      }, 1500);
 
-      maketoast.successWithText({
-        text: "لقد أرسلنا لك رمز التحقق المكون من 6 أرقام",
-      });
     } catch (err) {
+      setError("حدث خطأ أثناء إنشاء الحساب. يرجى المحاولة مرة أخرى.");
       catchClerkError(err);
       console.log(err);
     } finally {
@@ -84,92 +94,146 @@ export function SignUpForm() {
   }
 
   return (
-    <Card className="w-[480px] pt-4 min-h-[501.39px] h-fit ">
-      <CardHeader>
-        <CardTitle>إنشاء حساب جديد</CardTitle>
-        <CardDescription>
-          إنشاء حساب جديد استمتع بتجربة مجانية لمدة 14 يومًا، بدون بطاقة بنكية
-          أو مصاريف خفية.
-        </CardDescription>
+    <Card className="w-full max-w-lg shadow border ">
+      <CardHeader className="space-y-4 pb-2">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="relative">
+            <Image
+              src="/Cravvelo_Logo-01.svg"
+              alt="Cravvelo Logo"
+              width={180}
+              height={60}
+              className="h-12 w-auto object-contain"
+              priority
+            />
+          </div>
+          <div className="text-center">
+            <CardTitle className="text-2xl font-bold text-gray-900 mb-2">
+              إنشاء حساب جديد
+            </CardTitle>
+            <CardDescription className="text-gray-600 text-sm leading-relaxed">
+              انضم إلينا واستمتع بتجربة مجانية لمدة 14 يومًا، بدون بطاقة بنكية أو مصاريف خفية.
+            </CardDescription>
+          </div>
+        </div>
       </CardHeader>
-      <CardContent>
+
+      <CardContent className="space-y-6">
+      
+
+     
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {/* First Name Field */}
             <FormField
               control={form.control}
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>الاسم</FormLabel>
+                  <FormLabel className="text-gray-700 font-medium flex items-center gap-2">
+                    <User className="w-4 h-4" />
+                    الاسم الأول
+                  </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="أدخِل عنوان البريد الإلكتروني"
+                      placeholder="أدخِل اسمك الأول"
+                      className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-colors"
                       {...field}
                     />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            {/* Email Field */}
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>البريد الإلكتروني</FormLabel>
+                  <FormLabel className="text-gray-700 font-medium flex items-center gap-2">
+                    <Mail className="w-4 h-4" />
+                    البريد الإلكتروني
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="أدخِل عنوان البريد الإلكتروني"
+                      className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-colors"
                       {...field}
                     />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
             />
 
+            {/* Password Field */}
             <FormField
               control={form.control}
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>كلمة المرور</FormLabel>
+                  <FormLabel className="text-gray-700 font-medium flex items-center gap-2">
+                    <Lock className="w-4 h-4" />
+                    كلمة المرور
+                  </FormLabel>
                   <FormControl>
-                    <PasswordInput placeholder="أدخِل كلمة المرور" {...field} />
+                    <PasswordInput
+                      placeholder="أدخِل كلمة المرور"
+                      className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                      {...field}
+                    />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <div className="w-full h-[20px] flex justify-between items-center">
-              <FormDescription>
-                بالضغط على زر “أنشئ حسابك مجانًا” أنت توافق على الشروط والأحكام
-                في مساق.
-              </FormDescription>
+            {/* Terms and Conditions */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <Shield className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                <FormDescription className="text-sm text-blue-800 leading-relaxed">
+                  بالضغط على زر "أنشئ حسابك مجانًا" أنت توافق على{" "}
+                  <Link href="/terms" className="text-blue-600 hover:text-blue-700 font-medium underline">
+                    الشروط والأحكام
+                  </Link>
+                  {" "}و{" "}
+                  <Link href="/privacy" className="text-blue-600 hover:text-blue-700 font-medium underline">
+                    سياسة الخصوصية
+                  </Link>
+                  .
+                </FormDescription>
+              </div>
             </div>
+
+            {/* Submit Button */}
             <Button
-              data-ripple-light="true"
-              type="submit"
-              disabled={isLoading}
-              size="lg"
-              className="w-full text-white font-bold rounded-xl bg-primary flex items-center justify-center gap-x-4"
+            type="submit"
+                disabled={isLoading}
+                className={"w-full h-11"}
+                loading={isLoading}
             >
-              أنشئ حسابك مجانًا
-              {isLoading && <LoadingSpinner />}
+            
+           
+                أنشئ حسابك مجانًا
+              
             </Button>
           </form>
         </Form>
-        <div className="w-full my-4 h-[20px] flex justify-center">
-          <span>
+
+        {/* Sign In Link */}
+        <div className="text-center pt-4 border-t border-gray-100">
+          <p className="text-gray-600 text-sm">
             هل لديك حساب؟{" "}
-            <Link href={"/sign-in"}>
-              <span className="text-primary">سجّل الدخول.</span>
+            <Link 
+              href="/sign-in"
+              className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
+            >
+              سجّل الدخول
             </Link>
-          </span>
+          </p>
         </div>
       </CardContent>
     </Card>

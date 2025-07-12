@@ -4,13 +4,13 @@ import { redirect } from "next/navigation";
 
 const page = async () => {
   const user = await currentUser();
-
+  
   if (user) {
     redirect("/");
   }
-
+  
   return (
-    <div className="w-full h-screen flex items-center bg-[#FAFAFA] justify-center p-4 md:p-0">
+    <div className="w-full h-screen flex items-center justify-center ">
       <SignInForm />
     </div>
   );

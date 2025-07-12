@@ -64,8 +64,8 @@ const PublishWebsite: FC = () => {
     <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
       <DialogTrigger asChild>
         <Button
-          size="sm"
-          className=" text-white font-bold rounded-xl bg-primary px-4"
+       
+      
         >
           انشاء الاكاديمية
         </Button>

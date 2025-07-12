@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { trpc } from "../../_trpc/client";
 import type { FC } from "react";
 import { setCookie } from "@/src/lib/utils";
