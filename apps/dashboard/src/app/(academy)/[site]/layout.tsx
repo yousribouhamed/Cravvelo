@@ -12,9 +12,10 @@ export const fetchCache = "force-no-store";
 export async function generateMetadata({
   params,
 }: {
-  params: { site: string };
+  params: Promise<{ site: string }>;
 }): Promise<Metadata | null> {
-  const subdomain = getSubDomainValue({ value: params.site });
+  const { site } = await params;
+  const subdomain = getSubDomainValue({ value: site });
 
   const data = await getSiteData({ subdomain });
 
@@ -41,7 +42,7 @@ export async function generateMetadata({
     icons: [favicon],
     metadataBase: new URL(`https://${subdomain}`),
     // Optional: Set canonical URL to custom domain if it exists
-    ...(params.site.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) &&
+    ...(site.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) &&
       data.customDomain && {
         alternates: {
           canonical: `https://${data.customDomain}`,

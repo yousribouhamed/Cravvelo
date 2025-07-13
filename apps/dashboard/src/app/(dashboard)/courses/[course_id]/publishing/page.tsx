@@ -9,7 +9,7 @@ import useHaveAccess from "@/src/hooks/use-have-access";
 export const fetchCache = "force-no-store";
 
 interface PageProps {
-  params: { course_id: string };
+  params: Promise<{ course_id: string }>;
 }
 
 const getAllNotifications = async ({ accountId }: { accountId: string }) => {
@@ -30,7 +30,7 @@ const getChapters = async ({ courseId }: { courseId: string }) => {
         },
       ],
       where: {
-        courseID: courseId,
+        courseId: courseId,
       },
     });
 
@@ -42,14 +42,15 @@ const getChapters = async ({ courseId }: { courseId: string }) => {
 };
 
 export default async function Page({ params }: PageProps) {
+  const { course_id } = await params;
   const [user, course, chapters] = await Promise.all([
     useHaveAccess(),
     prisma.course.findUnique({
       where: {
-        id: params.course_id,
+        id: course_id,
       },
     }),
-    getChapters({ courseId: params.course_id }),
+    getChapters({ courseId: course_id }),
   ]);
 
   const notifications = await getAllNotifications({

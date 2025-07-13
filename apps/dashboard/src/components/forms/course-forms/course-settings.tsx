@@ -65,7 +65,36 @@ const formSchema = z.object({
   preview_video: z.string().optional(),
 });
 
+const parseJSONSafely = (jsonString: string | null | undefined) => {
+  if (!jsonString) {
+    return [
+      {
+        id: "1",
+        type: "p",
+        children: [{ text: "" }],
+      },
+    ];
+  }
+
+  try {
+    return JSON.parse(jsonString);
+  } catch (error) {
+    console.error("Failed to parse courseDescription JSON:", error);
+    return [
+      {
+        id: "1",
+        type: "p",
+        children: [{ text: "" }],
+      },
+    ];
+  }
+};
+
 export function CourseSettingsForm({ course }: ComponentProps) {
+  if (!course) {
+    return <div>Course not found</div>;
+  }
+
   const router = useRouter();
 
   const [open, setOpen] = React.useState<boolean>(false);
@@ -77,25 +106,20 @@ export function CourseSettingsForm({ course }: ComponentProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      courseResume: course?.courseResume ?? "",
-      title: course?.title ?? "",
-      thumnailUrl: course?.thumbnailUrl ?? "",
-      youtubeUrl: course?.youtubeUrl ?? "",
-      seoDescription: course?.seoDescription ?? "",
-      seoTitle: course?.seoTitle ?? "",
+      courseResume: course.courseResume ?? "",
+      title: course.title ?? "",
+      thumnailUrl: course.thumbnailUrl ?? "",
+      youtubeUrl: course.youtubeUrl ?? "",
+      seoDescription: course.seoDescription ?? "",
+      seoTitle: course.seoTitle ?? "",
       courseRequirements: course.courseRequirements ?? "",
-      courseWhatYouWillLearn: course?.courseWhatYouWillLearn ?? "",
+      courseWhatYouWillLearn: course.courseWhatYouWillLearn ?? "",
       level: course.level ?? "",
       sound: course.sound ?? "",
-      courseDescription: course?.courseDescription
-        ? JSON.parse(course?.courseDescription as string)
-        : [
-            {
-              id: "1",
-              type: "p",
-              children: [{ text: "" }],
-            },
-          ],
+      courseDescription: parseJSONSafely(
+        course.courseDescription as unknown as string
+      ),
+      preview_video: course.preview_video ?? "",
     },
   });
 
@@ -300,7 +324,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 )}
               />
 
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="courseDescription"
                 render={({ field }) => (
@@ -311,14 +335,20 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                     </FormLabel>
                     <FormControl>
                       <PlateEditor
-                        value={form.getValues("courseDescription")}
+                        value={[
+                          {
+                            id: "1",
+                            type: "p",
+                            children: [{ text: " " }],
+                          },
+                        ]}
                         onChnage={field.onChange}
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
 
               <FormField
                 control={form.control}

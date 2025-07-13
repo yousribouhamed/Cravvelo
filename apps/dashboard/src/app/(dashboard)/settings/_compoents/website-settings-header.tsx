@@ -46,20 +46,19 @@ function WebsiteSettingsHeader({ className, ...props }: ExamplesNavProps) {
         )}
       >
         {links.map((item, index) => (
-          <Ripples key={item.href} color="#fc69005c" during={1200}>
-            <Link
-              href={item.href}
-              className={cn(
-                "flex h-[60px] items-center justify-center border-b px-4 text-center text-sm transition-colors  hover:text-primary",
-                (pathname === item.href && pathname !== "/") ||
-                  (index === 0 && pathname === "/")
-                  ? "border-b-2 border-[#F0B110] text-black font-bold"
-                  : ""
-              )}
-            >
-              {item.name}
-            </Link>
-          </Ripples>
+          <Link
+            key={item.href}
+            href={item.href}
+            className={cn(
+              "flex h-[60px] items-center justify-center border-b px-4 text-center text-sm transition-colors  hover:text-primary",
+              (pathname === item.href && pathname !== "/") ||
+                (index === 0 && pathname === "/")
+                ? "border-b-2 border-[#F0B110] text-black font-bold"
+                : ""
+            )}
+          >
+            {item.name}
+          </Link>
         ))}
       </div>
     </div>

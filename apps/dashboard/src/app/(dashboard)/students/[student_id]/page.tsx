@@ -9,7 +9,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 
 interface PageProps {
-  params: { student_id: string };
+  params: Promise<{ student_id: string }>;
 }
 
 function calculateProgress(episode: number, videos: number): number {
@@ -35,13 +35,14 @@ const getAllNotifications = async ({ accountId }: { accountId: string }) => {
 };
 
 export default async function Page({ params }: PageProps) {
+  const { student_id } = await params;
   const user = await useHaveAccess();
 
   const [notifications, student] = await Promise.all([
     getAllNotifications({ accountId: user.accountId }),
     prisma.student.findUnique({
       where: {
-        id: params.student_id,
+        id: student_id,
       },
     }),
   ]);

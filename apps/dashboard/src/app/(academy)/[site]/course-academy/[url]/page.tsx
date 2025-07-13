@@ -14,18 +14,19 @@ import AcademiaFooter from "../../../_components/layout/academy-footer";
 import Suspanded from "../../../_components/suspanded";
 
 interface PageProps {
-  params: { site: string; url: string };
+  params: Promise<{ site: string; url: string }>;
 }
 
 const Page = async ({ params }: PageProps) => {
-  const subdomain = getSubDomainValue({ value: params.site });
+  const { site, url } = await params;
+  const subdomain = getSubDomainValue({ value: site });
 
   const [student, website, course] = await Promise.all([
     getStudent(),
     getSiteData({
       subdomain,
     }),
-    getCourseByUrlPath({ url: params?.url }),
+    getCourseByUrlPath({ url: url }),
   ]);
 
   const chapters = await get_course_chapters({ courseID: course?.id });

@@ -8,7 +8,7 @@ import { prisma } from "database/src";
 export const fetchCache = "force-no-store";
 
 interface PageProps {
-  params: { course_id: string };
+  params: Promise<{ course_id: string }>;
 }
 
 const getAllNotifications = async ({ accountId }: { accountId: string }) => {
@@ -21,11 +21,12 @@ const getAllNotifications = async ({ accountId }: { accountId: string }) => {
 };
 
 export default async function Home({ params }: PageProps) {
+  const { course_id } = await params;
   const [user, course] = await Promise.all([
     useHaveAccess(),
     prisma.course.findUnique({
       where: {
-        id: params.course_id,
+        id: course_id,
       },
     }),
   ]);

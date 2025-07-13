@@ -14,6 +14,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@ui/components/ui/form";
+
 import { Input } from "@ui/components/ui/input";
 import { FileWithPreview } from "@/src/types";
 import { LoadingButton } from "@/src/components/loading-button";
@@ -43,6 +44,7 @@ interface Profile {
   bio: string;
   image: string;
 }
+
 
 const UserProfileForm: FC<Profile> = ({ bio, full_name, image }) => {
   const fileRef = useRef<HTMLInputElement>(null);

@@ -19,7 +19,7 @@ export const get_course_chapters = async ({
 }) => {
   const chapters = await prisma.chapter.findMany({
     where: {
-      courseID, // Filtering chapters based on the provided course ID
+      courseId: courseID, // Filtering chapters based on the provided course ID
     },
   });
 

@@ -75,7 +75,13 @@ function AddVedioForm() {
 
     await mutation.mutateAsync({
       chapterID: chapterID,
-      content: JSON.stringify(values.content),
+      content: JSON.stringify([
+        {
+          id: "1",
+          type: "p",
+          children: [{ text: "" }],
+        },
+      ]),
       fileType: "VEDIO",
       fileUrl: values.fileUrl,
       title: values.title,
@@ -143,7 +149,7 @@ function AddVedioForm() {
                   </FormItem>
                 )}
               />
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="content"
                 render={({ field }) => (
@@ -158,7 +164,7 @@ function AddVedioForm() {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
               <Card>
                 <CardContent className="w-full h-fit flex justify-end items-center p-6 gap-x-4 ">
                   <Button

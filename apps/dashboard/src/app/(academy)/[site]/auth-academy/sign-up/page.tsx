@@ -6,14 +6,16 @@ import AcademiaFooter from "../../../_components/layout/academy-footer";
 import AcademyHeader from "../../../_components/layout/academy-header";
 
 interface PageProps {
-  params: { site: string };
+  params: Promise<{ site: string }>;
 }
 
 const Page = async ({ params }: PageProps) => {
+  const { site } = await params;
+
   const subdomain_value =
     process.env.NODE_ENV === "development"
       ? "abdullah.cravvelo.com"
-      : decodeURIComponent(params?.site);
+      : decodeURIComponent(site);
 
   const [student, website] = await Promise.all([
     getStudent(),

@@ -30,13 +30,14 @@ const getData = async ({ id }: { id: string }) => {
 };
 
 interface PageProps {
-  params: { product_id: string };
+  params: Promise<{ product_id: string }>;
 }
 
 export default async function Page({ params }: PageProps) {
+  const { product_id } = await params;
   const [user, product] = await Promise.all([
     useHaveAccess(),
-    getData({ id: params.product_id }),
+    getData({ id: product_id }),
   ]);
 
   const notifications = await getAllNotifications({

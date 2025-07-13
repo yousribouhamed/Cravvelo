@@ -34,24 +34,27 @@ const Header: FC<Props> = ({
   notifications,
 }) => {
   const router = useRouter();
+  
   return (
-    <>
+    <div className="w-full ">
       <TooltipProvider>
-        <div className="w-full h-[96px] flex justify-between items-center border-b  ">
-          <div className="lg:w-[25%] w-[50%] h-full flex items-center justify-start gap-x-2">
+        <div className="w-full h-20 flex justify-between items-center px-4 md:px-6">
+          {/* Left Section - Title & Back Button */}
+          <div className="flex items-center gap-3 min-w-0 flex-1 lg:flex-initial lg:w-1/4">
             <div className="lg:hidden">
               <MobildSideBard />
             </div>
+            
             {goBack && (
               <Tooltip delayDuration={0}>
                 <TooltipTrigger asChild>
                   <Button
                     onClick={() => router.back()}
-                    variant="secondary"
+                    variant="outline"
                     size="icon"
-                    className="bg-white rounded-xl border"
+                    className="h-10 w-10 rounded-lg border-gray-300 hover:bg-gray-50 hover:border-gray-400 transition-colors"
                   >
-                    <ArrowRight className="w-4 h-4 text-black" />
+                    <ArrowRight className="w-4 h-4 text-gray-600" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -59,47 +62,63 @@ const Header: FC<Props> = ({
                 </TooltipContent>
               </Tooltip>
             )}
-            <h1 className=" text-sm md:text-xl truncate font-bold text-start">
+            
+            <h1 className="text-lg md:text-2xl font-bold text-gray-900 truncate">
               {title}
             </h1>
           </div>
-          <div className="w-[50%] h-[88px] flex items-center justify-center px-4">
+
+          {/* Center Section - Search */}
+          <div className="hidden md:flex flex-1 max-w-md mx-8">
             <SearchInput />
           </div>
 
-          <div className=" lg:w-[25%] w-[50%]   h-full flex items-center justify-end gap-x-2">
+          {/* Right Section - Notifications & User Nav */}
+          <div className="flex items-center gap-3 lg:w-1/4 justify-end">
             <Notifications
               accountId={user.accountId}
               notifications={notifications}
             />
-
+            
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
                 <UserNav user={user} />
               </TooltipTrigger>
               <TooltipContent>
-                <p> هذه هي قائمة التنقل الخاصة بالمستخدم</p>
+                <p>هذه هي قائمة التنقل الخاصة بالمستخدم</p>
               </TooltipContent>
             </Tooltip>
           </div>
         </div>
+
+        {/* Mobile Search Bar */}
+        <div className="md:hidden px-4 pb-4">
+          <SearchInput />
+        </div>
       </TooltipProvider>
 
-      {user?.isFreeTrial && !user?.isSubscribed && !isLoadingPage ? (
-        <div className="w-full h-[70px] flex items-center justify-center bg-gradient-to-r from-primary to-yellow-500">
-          <h1 className="text-white font-bold text-xs md:text-lg ">
-            لديك {daysLeftInTrial(user.createdAt)} يومًا متبقيًا في النسخة
-            التجريبية المجانية
-          </h1>
+      {/* Trial Status Banner */}
+      {user?.isFreeTrial && !user?.isSubscribed && !isLoadingPage && (
+        <div className="w-full bg-white border border-dashed border-blue-500 rounded-xl px-4 py-3">
+          <div className="flex items-center justify-center">
+            <h1 className="text-gray-800 font-medium text-sm md:text-base text-center">
+              لديك {daysLeftInTrial(user.createdAt)} يومًا متبقيًا في النسخة التجريبية المجانية
+            </h1>
+          </div>
         </div>
-      ) : !user?.isSubscribed && !isLoadingPage ? (
-        <div className="w-full h-[70px] flex items-center justify-center bg-gradient-to-r from-primary to-yellow-500">
-          <h1 className="text-white font-bold text-xs md:text-lg">
-            انتهت الفترة التجريبية، يجب عليك الاشتراك في أحد الباقات
-          </h1>
+      )}
+
+      {/* Expired Trial Banner */}
+      {!user?.isSubscribed && !user?.isFreeTrial && !isLoadingPage && (
+        <div className="w-full bg-white border border-dashed border-blue-500 rounded-xl px-4 py-3">
+          <div className="flex items-center justify-center">
+            <h1 className="text-gray-800 font-medium text-sm md:text-base text-center">
+              انتهت الفترة التجريبية، يجب عليك الاشتراك في أحد الباقات
+            </h1>
+          </div>
         </div>
-      ) : null}
-    </>
+      )}
+    </div>
   );
 };
 

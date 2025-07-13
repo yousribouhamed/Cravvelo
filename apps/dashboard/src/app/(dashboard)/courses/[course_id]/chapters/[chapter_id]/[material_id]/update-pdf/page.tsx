@@ -6,7 +6,11 @@ import { prisma } from "database/src";
 import { Module } from "@/src/types";
 
 interface PageProps {
-  params: { course_id: string; chapter_id: string; material_id: string };
+  params: Promise<{
+    course_id: string;
+    chapter_id: string;
+    material_id: string;
+  }>;
 }
 
 const getMaterial = async ({
@@ -43,7 +47,7 @@ const getAllNotifications = async ({ accountId }: { accountId: string }) => {
 };
 
 export default async function Page({ params }: PageProps) {
-  const { chapter_id, material_id } = params;
+  const { chapter_id, material_id } = await params;
 
   const [user, material] = await Promise.all([
     useHaveAccess(),

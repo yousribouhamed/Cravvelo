@@ -18,12 +18,16 @@ const oauthProviders = [
 
 export function OAuthSignIn() {
   const [isLoading, setIsLoading] = React.useState<OAuthStrategy | null>(null);
+  const [error, setError] = React.useState<string | null>(null);
   const { signIn, isLoaded: signInLoaded } = useSignIn();
 
   async function oauthSignIn(provider: OAuthStrategy) {
-    if (!signInLoaded) return null;
+    if (!signInLoaded) return;
+    
     try {
       setIsLoading(provider);
+      setError(null);
+      
       await signIn.authenticateWithRedirect({
         strategy: provider,
         redirectUrl: "/sso-callback",
@@ -31,55 +35,92 @@ export function OAuthSignIn() {
       });
     } catch (error) {
       setIsLoading(null);
-
-      const unknownError = "Something went wrong, please try again.";
-
-      isClerkAPIResponseError(error)
-        ? toast.error(error.errors[0]?.longMessage ?? unknownError)
-        : toast.error(unknownError);
+      
+      const unknownError = "حدث خطأ، يرجى المحاولة مرة أخرى.";
+      const errorMessage = isClerkAPIResponseError(error)
+        ? error.errors[0]?.longMessage ?? unknownError
+        : unknownError;
+      
+      setError(errorMessage);
+      toast.error(errorMessage);
     }
   }
 
+  // Reset error after 5 seconds
+  React.useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
   return (
-    <div className=" w-full h-[100px] my-4  flex flex-col gap-y-2">
-      <Button
-        size="lg"
-        aria-label={`Sign in with ${oauthProviders[0].name}`}
-        key={oauthProviders[0].strategy}
-        variant="secondary"
-        className="w-full h-14  bg-white rounded-lg flex items-center justify-center gap-x-4 border shadow font-bold "
-        onClick={() => void oauthSignIn(oauthProviders[0].strategy)}
-        disabled={isLoading !== null}
-      >
-        تسجيل الدخول من خلال جوجل
-        {isLoading === oauthProviders[0].strategy ? (
-          <Icons.spinner
-            className="mr-2 h-4 w-4 animate-spin"
-            aria-hidden="true"
-          />
-        ) : (
-          <Icons.google className="mr-2 h-4 w-4" aria-hidden="true" />
-        )}
-      </Button>
-      {/* <Button
-        size="lg"
-        aria-label={`Sign in with ${oauthProviders[1].name}`}
-        key={oauthProviders[1].strategy}
-        variant="secondary"
-        className="w-full h-14 bg-[#1877F2] flex items-center justify-center gap-x-4  rounded-lg font-bold text-white "
-        onClick={() => void oauthSignIn(oauthProviders[1].strategy)}
-        disabled={isLoading !== null}
-      >
-        تسجيل الدخول من خلال فايسبوك
-        {isLoading === oauthProviders[1].strategy ? (
-          <Icons.spinner
-            className="mr-4 h-4 w-4 animate-spin"
-            aria-hidden="true"
-          />
-        ) : (
-          <Icons.facebook className="mr-2 h-4 w-4" aria-hidden="true" />
-        )}
-      </Button> */}
+    <div className="w-full space-y-3">
+      {error && (
+        <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+          <div className="flex items-center space-x-2 space-x-reverse">
+            <span className="text-sm text-red-700">{error}</span>
+          </div>
+        </div>
+      )}
+
+      <div className="space-y-2">
+        {oauthProviders.map((provider) => {
+          const isCurrentLoading = isLoading === provider.strategy;
+          const isAnyLoading = isLoading !== null;
+          
+          // Get the icon component from Icons object
+          const IconComponent = Icons[provider.icon];
+          
+          return (
+            <Button
+              key={provider.strategy}
+              size="lg"
+              variant="secondary"
+              className={`
+                w-full h-12 bg-white rounded-lg flex items-center justify-center gap-x-3 
+                border shadow font-medium transition-all duration-200
+                ${isAnyLoading ? 'opacity-70' : ''}
+                ${isCurrentLoading ? 'ring-2 ring-blue-500 ring-opacity-50' : ''}
+                hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
+                disabled:cursor-not-allowed disabled:opacity-50
+              `}
+              onClick={() => void oauthSignIn(provider.strategy)}
+              disabled={isAnyLoading || !signInLoaded}
+              aria-label={`تسجيل الدخول باستخدام ${provider.name}`}
+            >
+              <span className="text-sm font-medium text-gray-700">
+                {isCurrentLoading 
+                  ? `جاري تسجيل الدخول باستخدام ${provider.name}...`
+                  : `تسجيل الدخول باستخدام ${provider.name}`
+                }
+              </span>
+              
+              {isCurrentLoading ? (
+                <Icons.spinner className="h-4 w-4 animate-spin text-blue-600" />
+              ) : (
+                <IconComponent className="h-4 w-4 text-gray-600" />
+              )}
+            </Button>
+          );
+        })}
+      </div>
+
+      {isLoading && (
+        <div className="text-center">
+          <p className="text-xs text-gray-500">
+            سيتم إعادة توجيهك إلى {oauthProviders.find(p => p.strategy === isLoading)?.name}...
+          </p>
+        </div>
+      )}
+
+      <div className="text-center">
+        <p className="text-xs text-gray-500">
+          بالمتابعة، فإنك توافق على شروط الخدمة وسياسة الخصوصية
+        </p>
+      </div>
     </div>
   );
 }

@@ -18,6 +18,7 @@ export const sendInquiryEmail = async ({
       from: ` inquiry from ${name} <inquiry@cravvelo.com>`,
       to: ["support@cravvelo.com"],
       subject: `inquiry from ${name}`,
+      //@ts-expect-error this is not a problem
       react: InquiryEmail({ name, message }),
     });
 

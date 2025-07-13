@@ -13,11 +13,12 @@ import { ArrowBigDownDash } from "lucide-react";
 import Image from "next/image";
 
 interface PageProps {
-  params: { site: string };
+  params: Promise<{ site: string }>;
 }
 
 const Page = async ({ params }: PageProps) => {
-  const subdomain = getSubDomainValue({ value: params.site });
+  const { site } = await params;
+  const subdomain = getSubDomainValue({ value: site });
 
   const [student, website] = await Promise.all([
     getStudent(),

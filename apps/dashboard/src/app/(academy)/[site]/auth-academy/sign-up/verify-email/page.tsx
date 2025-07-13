@@ -12,11 +12,13 @@ import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 
 interface PageProps {
-  params: { site: string };
+  params: Promise<{ site: string }>;
 }
 
 const Page = async ({ params }: PageProps) => {
-  const subdomain = getSubDomainValue({ value: params.site });
+  const { site } = await params;
+
+  const subdomain = getSubDomainValue({ value: site });
 
   const [student, website] = await Promise.all([
     getStudent(),

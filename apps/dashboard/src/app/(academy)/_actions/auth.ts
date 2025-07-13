@@ -90,7 +90,8 @@ export const create_student = async ({
     code: codeOtp,
   });
 
-  cookies().set({
+  const cookieStore = await cookies();
+  cookieStore.set({
     name: "studentIdVerifyEmail",
     value: student.id,
   });
@@ -154,14 +155,15 @@ export const sign_in_as_student = async ({
       .setExpirationTime("10h")
       .sign(new TextEncoder().encode(getJwtSecritKey()));
 
-    cookies().set({
+    const cookieStore = await cookies();
+    cookieStore.set({
       name: "jwt",
       value: token,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
     });
 
-    cookies().set({
+    cookieStore.set({
       name: "studentId",
       value: student.id,
     });
@@ -216,7 +218,8 @@ export const authorization = async ({
 }: {
   origin?: string | null;
 }): Promise<boolean> => {
-  const token = cookies().get("jwt");
+  const cookieStore = await cookies();
+  const token = cookieStore.get("jwt");
 
   if (!token || !token?.value) {
     if (origin) {
@@ -243,7 +246,8 @@ export const authorization = async ({
  * @returns A Promise that resolves to the retrieved student data or null if not found.
  */
 export const getStudent = async (): Promise<Student | null> => {
-  const studentId = cookies().get("studentId");
+  const cookieStore = await cookies();
+  const studentId = cookieStore.get("studentId");
 
   if (!studentId) {
     return null;
@@ -275,7 +279,8 @@ const verifyJwtAndGetNumericToken = (jwtToken) => {
 export const verifyEmailAction = async ({ code }: { code: string }) => {
   //TODO VIRIFY THE CODE SEND TO THE STUDENT
 
-  const studentId = cookies().get("studentIdVerifyEmail")?.value;
+  const cookieStore = await cookies();
+  const studentId = cookieStore.get("studentIdVerifyEmail")?.value;
 
   const student = await prisma.student.findFirst({
     where: {
@@ -389,7 +394,8 @@ export const changeStudentpassword = async ({
 };
 
 export const applayReferral = async (): Promise<null> => {
-  const referral_code = cookies().get("referral_code");
+  const cookieStore = await cookies();
+  const referral_code = cookieStore.get("referral_code");
 
   if (!referral_code) {
     return null;
