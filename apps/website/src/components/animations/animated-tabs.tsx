@@ -75,10 +75,10 @@ export const Tabs = ({
               <motion.div
                 layoutId="clickedbutton"
                 transition={{ type: "spring", bounce: 0.3, duration: 0.2 }}
-                className={cn(
-                  "absolute inset-0 bg-gray-200  rounded-full ",
-                  activeTabClassName
-                )}
+                // className={cn(
+                //   "absolute inset-0 bg-gray-200  rounded-full ",
+                //   activeTabClassName
+                // )}
               />
             )}
             {tab.value === "YEARLY" && (
@@ -143,7 +143,7 @@ export const FadeInDiv = ({
           animate={{
             y: isActive(tab) ? [0, 40, 0] : 0,
           }}
-          className={cn("w-full h-full absolute top-0 left-0", className)}
+          //   className={cn("w-full h-full absolute top-0 left-0", className)}
         >
           {tab.content}
         </motion.div>

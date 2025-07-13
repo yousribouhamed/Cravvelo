@@ -2,11 +2,15 @@
 
 import * as React from "react";
 import { useClerk } from "@clerk/nextjs";
+import { type HandleOAuthCallbackParams } from "@clerk/types";
 
 import { Icons } from "../my-icons";
-import { type SSOCallbackPageProps } from "@/src/app/(auth)/sso-callback/page";
 
-export default function SSOCallback({ searchParams }: SSOCallbackPageProps) {
+interface SSOCallbackProps {
+  searchParams: HandleOAuthCallbackParams;
+}
+
+export default function SSOCallback({ searchParams }: SSOCallbackProps) {
   const { handleRedirectCallback } = useClerk();
 
   React.useEffect(() => {
@@ -33,20 +37,20 @@ export default function SSOCallback({ searchParams }: SSOCallbackPageProps) {
           fy=".3125"
           gradientTransform="scale(1.5)"
         >
-          <stop offset="0" stop-color="#FC6B00"></stop>
-          <stop offset=".3" stop-color="#FC6B00" stop-opacity=".9"></stop>
-          <stop offset=".6" stop-color="#FC6B00" stop-opacity=".6"></stop>
-          <stop offset=".8" stop-color="#FC6B00" stop-opacity=".3"></stop>
-          <stop offset="1" stop-color="#FC6B00" stop-opacity="0"></stop>
+          <stop offset="0" stopColor="#FC6B00"></stop>
+          <stop offset=".3" stopColor="#FC6B00" stopOpacity=".9"></stop>
+          <stop offset=".6" stopColor="#FC6B00" stopOpacity=".6"></stop>
+          <stop offset=".8" stopColor="#FC6B00" stopOpacity=".3"></stop>
+          <stop offset="1" stopColor="#FC6B00" stopOpacity="0"></stop>
         </radialGradient>
         <circle
-          transform-origin="center"
+          style={{ transformOrigin: "center" }}
           fill="none"
           stroke="url(#a9)"
-          stroke-width="27"
-          stroke-linecap="round"
-          stroke-dasharray="200 1000"
-          stroke-dashoffset="0"
+          strokeWidth="27"
+          strokeLinecap="round"
+          strokeDasharray="200 1000"
+          strokeDashoffset="0"
           cx="100"
           cy="100"
           r="70"
@@ -63,12 +67,12 @@ export default function SSOCallback({ searchParams }: SSOCallbackPageProps) {
           ></animateTransform>
         </circle>
         <circle
-          transform-origin="center"
+          style={{ transformOrigin: "center" }}
           fill="none"
           opacity=".2"
           stroke="#FC6B00"
-          stroke-width="27"
-          stroke-linecap="round"
+          strokeWidth="27"
+          strokeLinecap="round"
           cx="100"
           cy="100"
           r="70"

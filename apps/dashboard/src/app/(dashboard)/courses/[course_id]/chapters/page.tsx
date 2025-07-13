@@ -6,7 +6,7 @@ import useHaveAccess from "@/src/hooks/use-have-access";
 import CourseHeader from "@/src/components/course-header";
 
 interface PageProps {
-  params: { course_id: string };
+  params: Promise<{ course_id: string }>;
 }
 
 const getAllNotifications = async ({ accountId }: { accountId: string }) => {
@@ -27,7 +27,7 @@ const getChapters = async ({ courseId }: { courseId: string }) => {
         },
       ],
       where: {
-        courseID: courseId,
+        courseId: courseId,
       },
     });
 
@@ -39,9 +39,10 @@ const getChapters = async ({ courseId }: { courseId: string }) => {
 };
 
 export default async function Home({ params }: PageProps) {
+  const { course_id } = await params;
   const [user, chapters] = await Promise.all([
     useHaveAccess(),
-    getChapters({ courseId: params.course_id }),
+    getChapters({ courseId: course_id }),
   ]);
 
   const notifications = await getAllNotifications({

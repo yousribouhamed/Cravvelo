@@ -13,7 +13,7 @@ import { prisma } from "database/src";
 import Image from "next/image";
 
 interface PageProps {
-  params: { site: string };
+  params: Promise<{ site: string }>;
 }
 
 const getStudentCertificates = async ({ studentId }: { studentId: string }) => {
@@ -27,7 +27,8 @@ const getStudentCertificates = async ({ studentId }: { studentId: string }) => {
 };
 
 const Page = async ({ params }: PageProps) => {
-  const subdomain = getSubDomainValue({ value: params.site });
+  const { site } = await params;
+  const subdomain = getSubDomainValue({ value: site });
 
   const [student, website] = await Promise.all([
     getStudent(),

@@ -14,18 +14,19 @@ import { Product_card } from "./product-card";
 import ProductContent from "./product-content";
 
 interface PageProps {
-  params: { site: string; url: string };
+  params: Promise<{ site: string; url: string }>;
 }
 
 const Page = async ({ params }: PageProps) => {
-  const subdomain = getSubDomainValue({ value: params.site });
+  const { site, url } = await params;
+  const subdomain = getSubDomainValue({ value: site });
 
   const [student, website, product] = await Promise.all([
     getStudent(),
     getSiteData({
       subdomain,
     }),
-    getProductByUrlPath({ url: params?.url }),
+    getProductByUrlPath({ url: url }),
   ]);
 
   if (!website) {

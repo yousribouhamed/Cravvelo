@@ -225,7 +225,7 @@ export const buyProductWithCoupon = async ({
 
       // Update the student's bag with the purchased course.
       const studentbag = JSON.parse(student.bag as string) as StudentBag;
-      const newBag = addProductToStudentBag({
+      const newBag = await addProductToStudentBag({
         bag: studentbag,
         product,
       });
@@ -328,7 +328,7 @@ export const getFreeProduct = async ({ productId }: { productId: string }) => {
     ]);
 
     const studentbag = JSON.parse(student.bag as string) as StudentBag;
-    const newBag = addProductToStudentBag({
+    const newBag = await addProductToStudentBag({
       bag: studentbag,
       product,
     });
@@ -355,13 +355,13 @@ export const getFreeProduct = async ({ productId }: { productId: string }) => {
  * @param course The course to be added to the bag.
  * @returns The updated student's bag.
  */
-export const addCourseToStudentBag = ({
+export const addCourseToStudentBag = async ({
   bag,
   course,
 }: {
   bag: StudentBag;
   course: Course;
-}): StudentBag => {
+}): Promise<StudentBag> => {
   // Check if the course already exists in the student's bag.
   const theCourseExists =
     bag?.courses && bag?.courses?.find((item) => item.course.id === course.id);
@@ -375,6 +375,7 @@ export const addCourseToStudentBag = ({
 
   const oldData = bag.courses && bag.courses.length > 0 ? [...bag.courses] : [];
   const newStudentBag = {
+    ...bag,
     courses: [
       ...oldData,
       {
@@ -390,26 +391,26 @@ export const addCourseToStudentBag = ({
 /**
  * Adds a product to the student's bag if it doesn't already exist.
  * @param bag The current student's bag containing courses.
- * @param course The course to be added to the bag.
+ * @param product The product to be added to the bag.
  * @returns The updated student's bag.
  */
-export const addProductToStudentBag = ({
+export const addProductToStudentBag = async ({
   bag,
   product,
 }: {
   bag: StudentBag;
   product: Product;
-}): StudentBag => {
-  // Check if the course already exists in the student's bag.
-  const theCourseExists =
+}): Promise<StudentBag> => {
+  // Check if the product already exists in the student's bag.
+  const theProductExists =
     bag?.products && bag?.products?.find((item) => item.id === product.id);
 
-  // If the course already exists, return the current bag without modification.
-  if (theCourseExists) {
+  // If the product already exists, return the current bag without modification.
+  if (theProductExists) {
     return bag;
   }
 
-  // If the course doesn't exist, create a new student bag with the added course.
+  // If the product doesn't exist, create a new student bag with the added product.
   const oldData =
     bag.products && bag.products.length > 0 ? [...bag.products] : [];
 

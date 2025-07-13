@@ -8,12 +8,15 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   _req: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
+  // Await the params object in Next.js 15
+  const resolvedParams = await params;
+
   const domain =
     process.env.NODE_ENV === "production"
-      ? decodeURIComponent(params.slug)
-      : params.slug;
+      ? decodeURIComponent(resolvedParams.slug)
+      : resolvedParams.slug;
 
   console.log(domain);
   let status: DomainVerificationStatusProps = "Valid Configuration";

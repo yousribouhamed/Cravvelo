@@ -76,48 +76,58 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
   }, [path]);
 
   // State to manage which accordion items are open
-  const [openAccordionItems, setOpenAccordionItems] = React.useState<string[]>([]);
+  const [openAccordionItems, setOpenAccordionItems] = React.useState<string[]>(
+    []
+  );
 
   // Memoize the active accordion values - items that should be open based on current path
   const activeAccordionValues = useMemo(() => {
     if (!SIDE_BAR_ITEMS) return [];
-    
-    return SIDE_BAR_ITEMS.filter(item => {
+
+    return SIDE_BAR_ITEMS.filter((item) => {
       if (!item.subitems || item.subitems.length === 0) return false;
-      
+
       // Check if any subitem is active
-      return item.subitems.some(subItem => 
-        path === subItem.slug || 
-        subItem.slug.includes(pathSegments.secondSegment)
+      return item.subitems.some(
+        (subItem) =>
+          path === subItem.slug ||
+          subItem.slug.includes(pathSegments.secondSegment)
       );
-    }).map(item => item.title);
+    }).map((item) => item.title);
   }, [SIDE_BAR_ITEMS, path, pathSegments.secondSegment]);
 
-  // Update open accordion items when active values change
   React.useEffect(() => {
     if (activeAccordionValues.length > 0) {
-      setOpenAccordionItems(prev => {
-        const newItems = [...new Set([...prev, ...activeAccordionValues])];
+      setOpenAccordionItems((prev) => {
+        const newItems = Array.from(
+          new Set([...prev, ...activeAccordionValues])
+        );
         return newItems;
       });
     }
   }, [activeAccordionValues]);
 
   // Helper function to check if an item is active
-  const isItemActive = useCallback((item: any) => {
-    return (
-      (item.slug.includes(pathSegments.firstSegment) && path !== "/") ||
-      path === item.slug
-    );
-  }, [path, pathSegments.firstSegment]);
+  const isItemActive = useCallback(
+    (item: any) => {
+      return (
+        (item.slug.includes(pathSegments.firstSegment) && path !== "/") ||
+        path === item.slug
+      );
+    },
+    [path, pathSegments.firstSegment]
+  );
 
   // Helper function to check if a subitem is active
-  const isSubItemActive = useCallback((subItem: any) => {
-    return (
-      path === subItem.slug ||
-      subItem.slug.includes(pathSegments.secondSegment)
-    );
-  }, [path, pathSegments.secondSegment]);
+  const isSubItemActive = useCallback(
+    (subItem: any) => {
+      return (
+        path === subItem.slug ||
+        subItem.slug.includes(pathSegments.secondSegment)
+      );
+    },
+    [path, pathSegments.secondSegment]
+  );
 
   // Handle accordion value change
   const handleAccordionValueChange = useCallback((value: string[]) => {
@@ -136,8 +146,8 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
   return (
     <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10">
       <div className="w-full">
-        <Accordion 
-          type="multiple" 
+        <Accordion
+          type="multiple"
           className="w-full space-y-2"
           value={openAccordionItems}
           onValueChange={handleAccordionValueChange}
@@ -145,7 +155,7 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
           {SIDE_BAR_ITEMS.map((item, index) => {
             const hasSubitems = item.subitems && item.subitems.length > 0;
             const isActive = isItemActive(item);
-            
+
             return (
               <AccordionItem value={item.title} key={`${item.title}-${index}`}>
                 {!hasSubitems && (
@@ -161,8 +171,8 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
                     onClick={handleDirectLinkClick}
                   >
                     {item.title}
-                    <item.icon 
-                      className="w-5 h-5 text-white" 
+                    <item.icon
+                      className="w-5 h-5 text-white"
                       strokeWidth={3}
                       aria-hidden="true"
                     />
@@ -176,13 +186,14 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
                         buttonVariants({ variant: "ghost" }),
                         "w-full flex items-center justify-end qatar-semibold group text-md gap-x-2 hover:bg-primary !text-white",
                         {
-                          "text-white bg-[#A44600] hover:bg-[#A44600]": isActive,
+                          "text-white bg-[#A44600] hover:bg-[#A44600]":
+                            isActive,
                         }
                       )}
                     >
                       {item.title}
-                      <item.icon 
-                        className="w-5 h-5 text-white" 
+                      <item.icon
+                        className="w-5 h-5 text-white"
                         strokeWidth={3}
                         aria-hidden="true"
                       />

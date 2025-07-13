@@ -7,13 +7,14 @@ import { getSubDomainValue } from "@/src/app/(academy)/lib";
 import PlayerBoard from "./_components/player-board";
 
 interface PageProps {
-  params: { site: string; url: string };
+  params: Promise<{ site: string; url: string }>;
 }
 
 const Page = async ({ params }: PageProps) => {
-  const course = await getCourseByUrlPath({ url: params?.url });
+  const { site, url } = await params;
+  const course = await getCourseByUrlPath({ url: url });
 
-  const subdomain = getSubDomainValue({ value: params.site });
+  const subdomain = getSubDomainValue({ value: site });
 
   const [student, website, chapters] = await Promise.all([
     getStudent(),
@@ -29,7 +30,7 @@ const Page = async ({ params }: PageProps) => {
 
   return (
     <PlayerBoard
-      url={params?.url}
+      url={url}
       chapters={chapters}
       course={course}
       initialStudent={student}

@@ -6,7 +6,7 @@ import { prisma } from "database/src";
 import useHaveAccess from "@/src/hooks/use-have-access";
 
 interface PageProps {
-  params: { course_id: string };
+  params: Promise<{ course_id: string }>;
 }
 
 const getAllNotifications = async ({ accountId }: { accountId: string }) => {
@@ -19,13 +19,14 @@ const getAllNotifications = async ({ accountId }: { accountId: string }) => {
 };
 
 export default async function Page({ params }: PageProps) {
+  const { course_id } = await params;
   const user = await useHaveAccess();
 
   const [notifications, course] = await Promise.all([
     getAllNotifications({ accountId: user.accountId }),
     prisma.course.findUnique({
       where: {
-        id: params.course_id,
+        id: course_id,
       },
     }),
   ]);

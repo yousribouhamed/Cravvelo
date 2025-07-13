@@ -29,7 +29,7 @@ import { authSchema } from "@/src/lib/validators/auth";
 import { useRouter } from "next/navigation";
 import { catchClerkError, getCookie } from "@/src/lib/utils";
 import { maketoast } from "../toasts";
-import {  User, Mail, Lock, Shield } from "lucide-react";
+import { User, Mail, Lock, Shield } from "lucide-react";
 import Image from "next/image";
 
 type Inputs = z.infer<typeof authSchema>;
@@ -74,8 +74,10 @@ export function SignUpForm() {
         strategy: "email_code",
       });
 
-      setSuccess("تم إنشاء الحساب بنجاح! سيتم توجيهك لتأكيد البريد الإلكتروني.");
-      
+      setSuccess(
+        "تم إنشاء الحساب بنجاح! سيتم توجيهك لتأكيد البريد الإلكتروني."
+      );
+
       // Add delay to show success message
       setTimeout(() => {
         router.push("/sign-up/verify-email");
@@ -83,7 +85,6 @@ export function SignUpForm() {
           text: "لقد أرسلنا لك رمز التحقق المكون من 6 أرقام",
         });
       }, 1500);
-
     } catch (err) {
       setError("حدث خطأ أثناء إنشاء الحساب. يرجى المحاولة مرة أخرى.");
       catchClerkError(err);
@@ -112,16 +113,14 @@ export function SignUpForm() {
               إنشاء حساب جديد
             </CardTitle>
             <CardDescription className="text-gray-600 text-sm leading-relaxed">
-              انضم إلينا واستمتع بتجربة مجانية لمدة 14 يومًا، بدون بطاقة بنكية أو مصاريف خفية.
+              انضم إلينا واستمتع بتجربة مجانية لمدة 14 يومًا، بدون بطاقة بنكية
+              أو مصاريف خفية.
             </CardDescription>
           </div>
         </div>
       </CardHeader>
 
       <CardContent className="space-y-6">
-      
-
-     
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {/* First Name Field */}
@@ -195,12 +194,18 @@ export function SignUpForm() {
               <div className="flex items-start gap-3">
                 <Shield className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
                 <FormDescription className="text-sm text-blue-800 leading-relaxed">
-                  بالضغط على زر "أنشئ حسابك مجانًا" أنت توافق على{" "}
-                  <Link href="/terms" className="text-blue-600 hover:text-blue-700 font-medium underline">
+                  بالضغط على زر &ldquo;أنشئ حسابك مجانًا&rdquo; أنت توافق على{" "}
+                  <Link
+                    href="/terms"
+                    className="text-blue-600 hover:text-blue-700 font-medium underline"
+                  >
                     الشروط والأحكام
                   </Link>
-                  {" "}و{" "}
-                  <Link href="/privacy" className="text-blue-600 hover:text-blue-700 font-medium underline">
+                  و
+                  <Link
+                    href="/privacy"
+                    className="text-blue-600 hover:text-blue-700 font-medium underline"
+                  >
                     سياسة الخصوصية
                   </Link>
                   .
@@ -210,15 +215,12 @@ export function SignUpForm() {
 
             {/* Submit Button */}
             <Button
-            type="submit"
-                disabled={isLoading}
-                className={"w-full h-11"}
-                loading={isLoading}
+              type="submit"
+              disabled={isLoading}
+              className={"w-full h-11"}
+              loading={isLoading}
             >
-            
-           
-                أنشئ حسابك مجانًا
-              
+              أنشئ حسابك مجانًا
             </Button>
           </form>
         </Form>
@@ -227,7 +229,7 @@ export function SignUpForm() {
         <div className="text-center pt-4 border-t border-gray-100">
           <p className="text-gray-600 text-sm">
             هل لديك حساب؟{" "}
-            <Link 
+            <Link
               href="/sign-in"
               className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
             >

@@ -33,23 +33,24 @@ const calculatePreviousPeriod = (fromDay?: Date, toDay?: Date) => {
     const currentEnd = new Date();
     const currentStart = new Date();
     currentStart.setDate(currentStart.getDate() - 30);
-    
+
     const previousEnd = new Date(currentStart);
     const previousStart = new Date(currentStart);
     previousStart.setDate(previousStart.getDate() - 30);
-    
+
     return {
       current: { start: currentStart, end: currentEnd },
       previous: { start: previousStart, end: previousEnd },
     };
   }
-  
-  const daysDiff = Math.abs(toDay.getTime() - fromDay.getTime()) / (1000 * 60 * 60 * 24);
+
+  const daysDiff =
+    Math.abs(toDay.getTime() - fromDay.getTime()) / (1000 * 60 * 60 * 24);
   const previousEnd = new Date(fromDay);
   previousEnd.setDate(previousEnd.getDate() - 1);
   const previousStart = new Date(previousEnd);
   previousStart.setDate(previousStart.getDate() - Math.floor(daysDiff));
-  
+
   return {
     current: { start: fromDay, end: toDay },
     previous: { start: previousStart, end: previousEnd },
@@ -59,14 +60,14 @@ const calculatePreviousPeriod = (fromDay?: Date, toDay?: Date) => {
 // Helper function to get top courses by sales
 const getTopCoursesBySales = (sales: any[], courses: any[]) => {
   const courseSales = sales
-    .filter(sale => sale.itemType === 'COURSE')
+    .filter((sale) => sale.itemType === "COURSE")
     .reduce((acc, sale) => {
       acc[sale.itemId] = (acc[sale.itemId] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
   return courses
-    .map(course => ({
+    .map((course) => ({
       ...course,
       actualSales: courseSales[course.id] || 0,
     }))
@@ -75,14 +76,17 @@ const getTopCoursesBySales = (sales: any[], courses: any[]) => {
 };
 
 interface PageProps {
-  searchParams: {
+  searchParams: Promise<{
     from?: string;
     to?: string;
-  };
+  }>;
 }
 
 async function Page({ searchParams }: PageProps) {
-  const { from, to } = dashboardProductsSearchParamsSchema.parse(searchParams);
+  // Await the searchParams
+  const resolvedSearchParams = await searchParams;
+  const { from, to } =
+    dashboardProductsSearchParamsSchema.parse(resolvedSearchParams);
 
   const fromDay = from ? new Date(from) : undefined;
   const toDay = to ? new Date(to) : undefined;
@@ -189,15 +193,10 @@ async function Page({ searchParams }: PageProps) {
     return (
       <MaxWidthWrapper>
         <main className="w-full flex flex-col overflow-y-hidden h-fit mb-10 justify-start">
-          <Header 
-            notifications={notifications} 
-            user={user} 
-            title="الرئيسية"
-           
-          />
-          
+          <Header notifications={notifications} user={user} title="الرئيسية" />
+
           {!user.verified && <ConfirmeAccount />}
-          
+
           {!user?.subdomain ? (
             <CreateAcademiaSection />
           ) : (
@@ -221,7 +220,7 @@ async function Page({ searchParams }: PageProps) {
                   <PublishWebsite />
                 )}
               </div>
-              
+
               <div className="space-y-4 pt-4">
                 <DashboardCards
                   percentageChange={{
@@ -235,11 +234,11 @@ async function Page({ searchParams }: PageProps) {
                   salesNumber={sales?.length || 0}
                   studentsNumber={students?.length || 0}
                 />
-                
+
                 <div className="grid gap-4 md:grid-cols-3 my-8 h-[450px] w-full">
                   <AreaChartOverview sales={sales} />
                 </div>
-                
+
                 <div className="grid gap-4 md:grid-cols-2 my-8 min-h-[200px] h-fit w-full mb-10">
                   {/* Top Selling Courses */}
                   <Card className="col-span-1">
@@ -252,7 +251,7 @@ async function Page({ searchParams }: PageProps) {
                         <p className="text-white text-md">عدد المبيعات</p>
                         <p className="text-white text-md">سعر الدورة</p>
                       </div>
-                      
+
                       {topCourses.length === 0 ? (
                         <NotFoundCard />
                       ) : (
@@ -264,7 +263,7 @@ async function Page({ searchParams }: PageProps) {
                                 className="w-full flex items-center justify-between px-4 border p-4"
                               >
                                 <span className="text-sm">
-                                  DZD {course.price?.toFixed(2) || '0.00'}
+                                  DZD {course.price?.toFixed(2) || "0.00"}
                                 </span>
                                 <span className="font-medium">
                                   {course.actualSales}
@@ -291,7 +290,7 @@ async function Page({ searchParams }: PageProps) {
                         <p className="text-white text-md">مبلغ الطلبية</p>
                         <p className="text-white text-md">الحالة</p>
                       </div>
-                      
+
                       {recentSales.length === 0 ? (
                         <NotFoundCard />
                       ) : (
@@ -303,22 +302,30 @@ async function Page({ searchParams }: PageProps) {
                                 className="w-full flex items-center justify-between px-4 border p-4"
                               >
                                 <span className="text-sm">
-                                  DZD {sale.price?.toFixed(2) || '0.00'}
+                                  DZD {sale.price?.toFixed(2) || "0.00"}
                                 </span>
                                 <span>
                                   {sale.itemType === "COURSE" ? "دورة" : "منتج"}
                                 </span>
-                                <span className={cn(
-                                  "px-2 py-1 rounded-full text-xs",
-                                  sale.status === "COMPLETED" ? "bg-green-100 text-green-800" :
-                                  sale.status === "PROCESSING" ? "bg-yellow-100 text-yellow-800" :
-                                  sale.status === "CANCELLED" ? "bg-red-100 text-red-800" :
-                                  "bg-gray-100 text-gray-800"
-                                )}>
-                                  {sale.status === "COMPLETED" ? "مكتمل" :
-                                   sale.status === "PROCESSING" ? "معالج" :
-                                   sale.status === "CANCELLED" ? "ملغي" :
-                                   "جديد"}
+                                <span
+                                  className={cn(
+                                    "px-2 py-1 rounded-full text-xs",
+                                    sale.status === "COMPLETED"
+                                      ? "bg-green-100 text-green-800"
+                                      : sale.status === "PROCESSING"
+                                      ? "bg-yellow-100 text-yellow-800"
+                                      : sale.status === "CANCELLED"
+                                      ? "bg-red-100 text-red-800"
+                                      : "bg-gray-100 text-gray-800"
+                                  )}
+                                >
+                                  {sale.status === "COMPLETED"
+                                    ? "مكتمل"
+                                    : sale.status === "PROCESSING"
+                                    ? "معالج"
+                                    : sale.status === "CANCELLED"
+                                    ? "ملغي"
+                                    : "جديد"}
                                 </span>
                               </div>
                             ))}
@@ -335,27 +342,25 @@ async function Page({ searchParams }: PageProps) {
       </MaxWidthWrapper>
     );
   } catch (error) {
-    console.error('Dashboard loading error:', error);
-    
+    console.error("Dashboard loading error:", error);
+
     // Return error state
     return (
       <MaxWidthWrapper>
         <main className="w-full flex flex-col overflow-y-hidden h-fit mb-10 justify-start">
-          <Header 
-            notifications={[]} 
-            user={user} 
-            title="الرئيسية"
-        
-          />
-          
+          <Header notifications={[]} user={user} title="الرئيسية" />
+
           <div className="flex items-center justify-center min-h-[400px]">
             <Card className="w-full max-w-md">
               <CardHeader>
-                <p className="text-center text-red-600">خطأ في تحميل البيانات</p>
+                <p className="text-center text-red-600">
+                  خطأ في تحميل البيانات
+                </p>
               </CardHeader>
               <CardContent>
                 <p className="text-center text-gray-600">
-                  حدث خطأ أثناء تحميل بيانات لوحة التحكم. يرجى المحاولة مرة أخرى.
+                  حدث خطأ أثناء تحميل بيانات لوحة التحكم. يرجى المحاولة مرة
+                  أخرى.
                 </p>
               </CardContent>
             </Card>

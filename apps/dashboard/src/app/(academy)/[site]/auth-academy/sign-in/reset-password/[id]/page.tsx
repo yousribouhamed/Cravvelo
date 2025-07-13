@@ -11,11 +11,12 @@ import { buttonVariants } from "@ui/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
 interface PageProps {
-  params: { site: string; id: string };
+  params: Promise<{ site: string; id: string }>;
 }
 
 const Page = async ({ params }: PageProps) => {
-  const subdomain = getSubDomainValue({ value: params.site });
+  const { id, site } = await params;
+  const subdomain = getSubDomainValue({ value: site });
 
   const [website] = await Promise.all([
     getSiteData({
@@ -29,7 +30,7 @@ const Page = async ({ params }: PageProps) => {
 
   console.log("this is the student id");
 
-  console.log({ studentId: params.id });
+  console.log({ studentId: id });
 
   return (
     <>
@@ -58,7 +59,7 @@ const Page = async ({ params }: PageProps) => {
           </MaxWidthWrapper>
         </div>
         <ResetPasswordFormStep2
-          studentId={params.id}
+          studentId={id}
           color={website?.color}
           accountId={website.accountId}
         />

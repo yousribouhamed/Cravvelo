@@ -17,9 +17,9 @@
     "crisp-sdk-web": "^1.0.22",
     "framer-motion": "^10.18.0",
     "lucide-react": "^0.244.0",
-    "next": "14.2.5",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "next": "^15.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-hook-form": "^7.49.2",
     "react-hot-toast": "^2.4.1",
     "react-intersection-observer": "^9.8.1",
@@ -30,14 +30,14 @@
     "zustand": "^4.5.0"
   },
   "devDependencies": {
-    "@types/node": "^17.0.12",
-    "@types/react": "^18.0.22",
-    "@types/react-dom": "^18.0.7",
+    "@types/node": "^20.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "autoprefixer": "^10.4.14",
     "eslint-config-custom": "workspace:*",
     "postcss": "^8.4.24",
     "tailwindcss": "^3.3.2",
     "tsconfig": "workspace:*",
-    "typescript": "^4.5.3"
+    "typescript": "^5.0.0"
   }
 }

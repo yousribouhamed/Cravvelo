@@ -5,7 +5,7 @@ import { prisma } from "database/src";
 import useHaveAccess from "@/src/hooks/use-have-access";
 
 interface PageProps {
-  params: { product_id: string };
+  params: Promise<{ product_id: string }>;
 }
 
 const getAllNotifications = async ({ accountId }: { accountId: string }) => {
@@ -18,12 +18,13 @@ const getAllNotifications = async ({ accountId }: { accountId: string }) => {
 };
 
 export default async function Page({ params }: PageProps) {
+  const { product_id } = await params;
   const user = await useHaveAccess();
 
   const [product, notifications] = await Promise.all([
     prisma.product.findUnique({
       where: {
-        id: params.product_id,
+        id: product_id,
       },
     }),
     getAllNotifications({ accountId: user.accountId }),

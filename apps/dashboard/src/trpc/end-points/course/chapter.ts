@@ -21,7 +21,7 @@ export const chapter = {
         .create({
           data: {
             title: input.title,
-            courseID: input.courseId,
+            courseId: input.courseId,
             orderNumber: input.orderNumber,
           },
         })
@@ -42,7 +42,7 @@ export const chapter = {
     .query(async ({ input, ctx }) => {
       const chapters = await ctx.prisma.chapter.findMany({
         where: {
-          courseID: input.courseId,
+          courseId: input.courseId,
         },
         orderBy: [
           {
@@ -240,13 +240,13 @@ export const chapter = {
 
       const courseOldData = await ctx.prisma.course.findFirst({
         where: {
-          id: chapter.courseID,
+          id: chapter.courseId,
         },
       });
 
       await ctx.prisma.course.update({
         where: {
-          id: chapter.courseID,
+          id: chapter.courseId,
         },
         data: {
           length: videoLength + courseOldData.length,

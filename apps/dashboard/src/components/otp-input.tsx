@@ -45,7 +45,7 @@ export const OTPInput: React.FC<OTPInputProps> = ({
 
   const handleChange = (element: HTMLInputElement, index: number) => {
     const inputValue = element.value;
-    
+
     // Only allow numbers
     if (inputValue && !/^\d$/.test(inputValue)) return;
 
@@ -63,7 +63,10 @@ export const OTPInput: React.FC<OTPInputProps> = ({
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    index: number
+  ) => {
     // Handle backspace
     if (e.key === "Backspace") {
       if (!otp[index] && index > 0) {
@@ -107,17 +110,17 @@ export const OTPInput: React.FC<OTPInputProps> = ({
       .getData("text")
       .replace(/\D/g, "")
       .slice(0, length);
-    
+
     if (pastedData) {
       const newOtp = [...otp];
-      
+
       for (let i = 0; i < pastedData.length && i < length; i++) {
         newOtp[i] = pastedData[i];
       }
-      
+
       setOtp(newOtp);
       onChange(newOtp.join(""));
-      
+
       // Focus the next empty input or the last input
       const nextEmptyIndex = newOtp.findIndex((val) => val === "");
       const focusIndex = nextEmptyIndex === -1 ? length - 1 : nextEmptyIndex;
@@ -137,13 +140,14 @@ export const OTPInput: React.FC<OTPInputProps> = ({
       inputRefs.current[firstEmptyIndex]?.focus();
     }
   };
-
   return (
     <div className={cn("flex justify-center gap-2", className)} dir="ltr">
       {otp.map((digit, index) => (
         <input
           key={index}
-          ref={(el) => (inputRefs.current[index] = el)}
+          ref={(el) => {
+            inputRefs.current[index] = el;
+          }}
           type="text"
           inputMode="numeric"
           pattern="\d*"
