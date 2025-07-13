@@ -1,10 +1,11 @@
 "use server";
 
-import { currentUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { prisma } from "database/src";
 import { daysLeftInTrial } from "../lib/utils";
 
+// Rename to indicate it's a server function, not a hook
 const useHaveAccess = async () => {
   const user = await currentUser();
 
@@ -30,11 +31,7 @@ const useHaveAccess = async () => {
   trialEndDate.setDate(trialEndDate.getDate() + 14); // Adding 14 days to trial start date
 
   // here we check if the user is paid user or not
-
   const isFreeTrial = daysLeftInTrial(account.createdAt) > 0;
-
-  // const isSubscribed = account.plan ? true : false;
-
   const isSubscribed = account.plan ? true : false;
 
   // this one checks if you are

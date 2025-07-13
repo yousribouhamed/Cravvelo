@@ -153,7 +153,7 @@ import { withPlaceholders } from "@/src/components/plate-ui/placeholder";
 import { withDraggables } from "@/src/components/plate-ui/with-draggables";
 import { EmojiCombobox } from "@/src/components/plate-ui/emoji-combobox";
 import { TooltipProvider } from "../plate-ui/tooltip";
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 
 const plugins = createPlugins(
   [
@@ -355,30 +355,53 @@ const plugins = createPlugins(
   }
 );
 
+// Default initial value
+const DEFAULT_INITIAL_VALUE = [
+  {
+    id: "1",
+    type: "p",
+    children: [{ text: " " }],
+  },
+];
+
 export function PlateEditor({
   onChnage,
   value,
 }: {
-  onChnage: (richTeact: any) => void;
+  onChnage: (richText: any) => void;
   value?: any;
 }) {
   const containerRef = useRef(null);
+
+  // Memoize the initial value to prevent unnecessary re-renders
+  const initialValue = useMemo(() => {
+    // Check if value exists and is an array
+    if (value && Array.isArray(value) && value.length > 0) {
+      return value;
+    }
+
+    // If value is a string, try to parse it
+    if (typeof value === "string" && value.trim()) {
+      try {
+        const parsed = JSON.parse(value);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      } catch (error) {
+        console.warn("Failed to parse value as JSON:", error);
+      }
+    }
+
+    // Return default value
+    return DEFAULT_INITIAL_VALUE;
+  }, [value]);
+
   return (
     <TooltipProvider>
       <DndProvider backend={HTML5Backend}>
         <Plate
           plugins={plugins}
-          initialValue={
-            value
-              ? value
-              : [
-                  {
-                    id: "1",
-                    type: "p",
-                    children: [{ text: " " }],
-                  },
-                ]
-          }
+          initialValue={initialValue}
           onChange={(val) => onChnage(val)}
           readOnly={false}
         >
@@ -390,7 +413,7 @@ export function PlateEditor({
             <Editor
               placeholder=""
               readOnly={false}
-              className="min-h-[150px] h-fit  w-full border-none"
+              className="min-h-[150px] h-fit w-full border-none"
             />
 
             <FloatingToolbar>

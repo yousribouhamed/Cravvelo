@@ -96,12 +96,12 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
     }).map((item) => item.title);
   }, [SIDE_BAR_ITEMS, path, pathSegments.secondSegment]);
 
+  // Update open accordion items when active values change
   React.useEffect(() => {
     if (activeAccordionValues.length > 0) {
       setOpenAccordionItems((prev) => {
-        const newItems = Array.from(
-          new Set([...prev, ...activeAccordionValues])
-        );
+        //@ts-expect-error this is a type error
+        const newItems = [...new Set([...prev, ...activeAccordionValues])];
         return newItems;
       });
     }

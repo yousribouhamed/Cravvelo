@@ -24,18 +24,18 @@ const getAllNotifications = async ({ accountId }: { accountId: string }) => {
 export default async function Page({ params }: PageProps) {
   const { course_id } = await params;
 
-  const [user, course] = await Promise.all([
-    useHaveAccess(),
+  const user = await useHaveAccess();
+
+  const [course, notifications] = await Promise.all([
     prisma.course.findUnique({
       where: {
         id: course_id,
       },
     }),
+    getAllNotifications({
+      accountId: user.accountId,
+    }),
   ]);
-
-  const notifications = await getAllNotifications({
-    accountId: user.accountId,
-  });
 
   if (!course) {
     notFound();
@@ -43,7 +43,7 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <MaxWidthWrapper>
-      <main className="w-full flex flex-col min-h-full  h-fit justify-start">
+      <main className="w-full flex flex-col min-h-full h-fit justify-start">
         <Header
           notifications={notifications}
           user={user}

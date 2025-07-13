@@ -16,6 +16,9 @@ interface PageProps {
 
 const Page = async ({ params }: PageProps) => {
   const { site } = await params;
+
+  console.log("this is the site");
+  console.log({ site });
   const subdomain = getSubDomainValue({ value: site });
 
   const [student, website, courses] = await Promise.all([
@@ -25,6 +28,10 @@ const Page = async ({ params }: PageProps) => {
     }),
     getAllCourses({ subdomain }),
   ]);
+
+  console.log("this is the data we are looking for");
+  console.log(subdomain);
+  console.log(website);
 
   if (!website) {
     notFound();
