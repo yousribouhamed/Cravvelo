@@ -1,9 +1,8 @@
 {
   "extends": ["//"],
-  "pipeline": {
+  "tasks": {
     "db:generate": {
-      "outputs": ["../../node_modules/.prisma/**"],
-      "outputMode": "new-only"
+      "outputs": ["../../node_modules/.prisma/**"]
     },
     "db:deploy": {
       "cache": false
