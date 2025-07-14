@@ -46,9 +46,6 @@
     },
     "clean": {
       "cache": false
-    },
-    "db:generate": {
-      "outputs": ["../../node_modules/.prisma/**"]
     }
   }
 }
