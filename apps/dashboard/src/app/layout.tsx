@@ -1,5 +1,4 @@
 import "@ui/styles/globals.css";
-
 import Providers from "../components/Providers";
 import Script from "next/script";
 import { Toaster } from "@ui/components/ui/sonner";
