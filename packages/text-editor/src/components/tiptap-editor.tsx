@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
@@ -9,6 +9,55 @@ import { TiptapEditorProps } from "../types";
 import { MenuBar } from "./menu-bar";
 import "../style/editor.css";
 
+// RTL language detection utility
+const isRtlCharacter = (char: string): boolean => {
+  const code = char.charCodeAt(0);
+
+  // Arabic: 0x0600-0x06FF, 0x0750-0x077F, 0x08A0-0x08FF
+  // Hebrew: 0x0590-0x05FF
+  // Persian/Farsi: 0xFB50-0xFDFF, 0xFE70-0xFEFF
+  // Additional RTL ranges
+  return (
+    (code >= 0x0590 && code <= 0x05ff) || // Hebrew
+    (code >= 0x0600 && code <= 0x06ff) || // Arabic
+    (code >= 0x0750 && code <= 0x077f) || // Arabic Supplement
+    (code >= 0x08a0 && code <= 0x08ff) || // Arabic Extended-A
+    (code >= 0xfb50 && code <= 0xfdff) || // Arabic Presentation Forms-A
+    (code >= 0xfe70 && code <= 0xfeff) || // Arabic Presentation Forms-B
+    (code >= 0x10800 && code <= 0x1083f) || // Cypriot Syllabary
+    (code >= 0x10a00 && code <= 0x10a5f) || // Kharoshthi
+    (code >= 0x1ee00 && code <= 0x1eeff) // Arabic Mathematical Alphabetic Symbols
+  );
+};
+
+const detectTextDirection = (text: string): "ltr" | "rtl" => {
+  // Remove HTML tags and get plain text
+  const plainText = text.replace(/<[^>]*>/g, "");
+
+  // Find the first non-whitespace, non-punctuation character
+  for (let i = 0; i < plainText.length; i++) {
+    const char = plainText[i];
+
+    // Skip whitespace and common punctuation
+    if (/\s|[.,!?;:()[\]{}'"]/g.test(char)) {
+      continue;
+    }
+
+    // Check if it's an RTL character
+    if (isRtlCharacter(char)) {
+      return "rtl";
+    }
+
+    // If we find a clear LTR character (Latin, numbers, etc.), return LTR
+    if (/[a-zA-Z0-9]/.test(char)) {
+      return "ltr";
+    }
+  }
+
+  // Default to LTR if no clear direction is found
+  return "ltr";
+};
+
 export const TiptapEditor: React.FC<TiptapEditorProps> = ({
   value,
   onChange,
@@ -17,6 +66,9 @@ export const TiptapEditor: React.FC<TiptapEditorProps> = ({
   onPreview,
   onClear,
 }) => {
+  const [textDirection, setTextDirection] = useState<"ltr" | "rtl">("ltr");
+  const isRtl = textDirection === "rtl";
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -48,16 +100,44 @@ export const TiptapEditor: React.FC<TiptapEditorProps> = ({
     ],
     content: value,
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+      const newContent = editor.getHTML();
+      onChange(newContent);
+
+      // Detect text direction on content change
+      const direction = detectTextDirection(newContent);
+      setTextDirection(direction);
     },
     editorProps: {
       attributes: {
         class: `tiptap-editor prose prose-sm max-w-none p-6 min-h-[400px] focus:outline-none ${
           isFullscreen ? "min-h-[calc(100vh-200px)]" : ""
         }`,
+        dir: textDirection,
       },
     },
   });
+
+  // Update editor direction when text direction changes
+  useEffect(() => {
+    if (editor) {
+      const editorElement = editor.view.dom as HTMLElement;
+      editorElement.dir = textDirection;
+
+      // Update prose direction classes
+      const proseElement = editorElement.closest(".prose");
+      if (proseElement) {
+        proseElement.classList.toggle("rtl", isRtl);
+      }
+    }
+  }, [textDirection, editor, isRtl]);
+
+  // Initial direction detection
+  useEffect(() => {
+    if (value) {
+      const direction = detectTextDirection(value);
+      setTextDirection(direction);
+    }
+  }, [value]);
 
   // Get active formats and editor state
   const activeFormats = new Set<string>();
@@ -75,11 +155,89 @@ export const TiptapEditor: React.FC<TiptapEditorProps> = ({
     if (editor.isActive("blockquote")) activeFormats.add("blockquote");
   }
 
+  // Enhanced format toggle function with better selection handling
+  const handleFormatToggle = (format: string) => {
+    if (!editor) return;
+
+    // Store current selection
+    const { from, to } = editor.state.selection;
+
+    // If no text is selected, don't apply formatting
+    if (from === to) {
+      // For block-level formats, we can still apply them
+      if (
+        ["h1", "h2", "h3", "ul", "ol", "blockquote", "hr", "br"].includes(
+          format
+        )
+      ) {
+        // Apply block formatting
+      } else {
+        // For inline formats, just focus and return
+        editor.chain().focus().run();
+        return;
+      }
+    }
+
+    // Apply formatting based on type
+    switch (format) {
+      case "h1":
+        editor.chain().focus().toggleHeading({ level: 1 }).run();
+        break;
+      case "h2":
+        editor.chain().focus().toggleHeading({ level: 2 }).run();
+        break;
+      case "h3":
+        editor.chain().focus().toggleHeading({ level: 3 }).run();
+        break;
+      case "bold":
+        if (from !== to) {
+          editor.chain().focus().toggleBold().run();
+        }
+        break;
+      case "italic":
+        if (from !== to) {
+          editor.chain().focus().toggleItalic().run();
+        }
+        break;
+      case "underline":
+        if (from !== to) {
+          editor.chain().focus().toggleUnderline().run();
+        }
+        break;
+      case "strikethrough":
+        if (from !== to) {
+          editor.chain().focus().toggleStrike().run();
+        }
+        break;
+      case "code":
+        if (from !== to) {
+          editor.chain().focus().toggleCode().run();
+        }
+        break;
+      case "ul":
+        editor.chain().focus().toggleBulletList().run();
+        break;
+      case "ol":
+        editor.chain().focus().toggleOrderedList().run();
+        break;
+      case "blockquote":
+        editor.chain().focus().toggleBlockquote().run();
+        break;
+      case "hr":
+        editor.chain().focus().setHorizontalRule().run();
+        break;
+      case "br":
+        editor.chain().focus().setHardBreak().run();
+        break;
+    }
+  };
+
   return (
     <div
       className={`border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm ${
         isFullscreen ? "fixed inset-4 z-50 rounded-lg" : ""
       }`}
+      dir={textDirection}
     >
       <MenuBar
         onPreview={onPreview}
@@ -87,51 +245,8 @@ export const TiptapEditor: React.FC<TiptapEditorProps> = ({
         isFullscreen={isFullscreen}
         onToggleFullscreen={onToggleFullscreen}
         activeFormats={activeFormats}
-        onFormatToggle={(format) => {
-          if (!editor) return;
-
-          switch (format) {
-            case "h1":
-              editor.chain().focus().toggleHeading({ level: 1 }).run();
-              break;
-            case "h2":
-              editor.chain().focus().toggleHeading({ level: 2 }).run();
-              break;
-            case "h3":
-              editor.chain().focus().toggleHeading({ level: 3 }).run();
-              break;
-            case "bold":
-              editor.chain().focus().toggleBold().run();
-              break;
-            case "italic":
-              editor.chain().focus().toggleItalic().run();
-              break;
-            case "underline":
-              editor.chain().focus().toggleUnderline().run();
-              break;
-            case "strikethrough":
-              editor.chain().focus().toggleStrike().run();
-              break;
-            case "code":
-              editor.chain().focus().toggleCode().run();
-              break;
-            case "ul":
-              editor.chain().focus().toggleBulletList().run();
-              break;
-            case "ol":
-              editor.chain().focus().toggleOrderedList().run();
-              break;
-            case "blockquote":
-              editor.chain().focus().toggleBlockquote().run();
-              break;
-            case "hr":
-              editor.chain().focus().setHorizontalRule().run();
-              break;
-            case "br":
-              editor.chain().focus().setHardBreak().run();
-              break;
-          }
-        }}
+        isRtl={isRtl}
+        onFormatToggle={handleFormatToggle}
         canUndo={editor ? editor.can().undo() : false}
         canRedo={editor ? editor.can().redo() : false}
         onUndo={() => editor?.chain().focus().undo().run()}
@@ -139,7 +254,9 @@ export const TiptapEditor: React.FC<TiptapEditorProps> = ({
       />
       <EditorContent
         editor={editor}
-        className="bg-white overflow-y-auto tiptap-content"
+        className={`bg-white overflow-y-auto tiptap-content ${
+          isRtl ? "rtl" : "ltr"
+        }`}
       />
     </div>
   );

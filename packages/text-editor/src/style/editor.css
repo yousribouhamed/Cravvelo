@@ -205,3 +205,151 @@
 .tiptap-list-item > * + * {
   margin-top: 0.25rem;
 }
+
+/* Add these styles to your existing editor.css file */
+
+/* RTL Support for TipTap Editor */
+.tiptap-editor[dir="rtl"] {
+  text-align: right;
+  direction: rtl;
+}
+
+.tiptap-editor[dir="ltr"] {
+  text-align: left;
+  direction: ltr;
+}
+
+/* RTL List Styles */
+.tiptap-editor[dir="rtl"] .tiptap-bullet-list,
+.tiptap-editor[dir="rtl"] .tiptap-ordered-list {
+  padding-right: 1.5rem;
+  padding-left: 0;
+}
+
+.tiptap-editor[dir="ltr"] .tiptap-bullet-list,
+.tiptap-editor[dir="ltr"] .tiptap-ordered-list {
+  padding-left: 1.5rem;
+  padding-right: 0;
+}
+
+/* RTL Blockquote Styles */
+.tiptap-editor[dir="rtl"] blockquote {
+  border-right: 3px solid #e5e7eb;
+  border-left: none;
+  padding-right: 1rem;
+  padding-left: 0;
+  margin-right: 0;
+  margin-left: 1rem;
+}
+
+.tiptap-editor[dir="ltr"] blockquote {
+  border-left: 3px solid #e5e7eb;
+  border-right: none;
+  padding-left: 1rem;
+  padding-right: 0;
+  margin-left: 0;
+  margin-right: 1rem;
+}
+
+/* RTL Code Styles */
+.tiptap-editor[dir="rtl"] code {
+  direction: ltr; /* Keep code LTR for readability */
+  text-align: left;
+  unicode-bidi: embed;
+}
+
+/* RTL Table Styles (if you use tables) */
+.tiptap-editor[dir="rtl"] table {
+  direction: rtl;
+}
+
+.tiptap-editor[dir="rtl"] th,
+.tiptap-editor[dir="rtl"] td {
+  text-align: right;
+}
+
+.tiptap-editor[dir="ltr"] th,
+.tiptap-editor[dir="ltr"] td {
+  text-align: left;
+}
+
+/* Prose RTL Support */
+.prose.rtl {
+  direction: rtl;
+}
+
+.prose.rtl blockquote {
+  border-right: 0.25rem solid #e5e7eb;
+  border-left: none;
+  padding-right: 1rem;
+  padding-left: 0;
+}
+
+.prose.rtl ul,
+.prose.rtl ol {
+  padding-right: 1.625rem;
+  padding-left: 0;
+}
+
+.prose.rtl li {
+  text-align: right;
+}
+
+/* Menu Bar RTL Support */
+.rtl {
+  direction: rtl;
+}
+
+.rtl .flex {
+  flex-direction: row-reverse;
+}
+
+.rtl .flex.flex-wrap {
+  flex-direction: row-reverse;
+}
+
+/* Ensure icons remain properly oriented */
+.rtl svg {
+  transform: none;
+}
+
+/* Special handling for directional icons if needed */
+.rtl .icon-arrow-left {
+  transform: scaleX(-1);
+}
+
+.rtl .icon-arrow-right {
+  transform: scaleX(-1);
+}
+
+/* Smooth transitions for direction changes */
+.tiptap-editor {
+  transition: direction 0.2s ease-in-out;
+}
+
+/* Mixed content support */
+.tiptap-editor .ltr-content {
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: embed;
+}
+
+.tiptap-editor .rtl-content {
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: embed;
+}
+
+/* Ensure proper text selection in RTL */
+.tiptap-editor[dir="rtl"] ::selection {
+  direction: rtl;
+}
+
+/* Placeholder text alignment */
+.tiptap-editor[dir="rtl"] .ProseMirror-placeholder {
+  text-align: right;
+}
+
+.tiptap-editor[dir="ltr"] .ProseMirror-placeholder {
+  text-align: left;
+}

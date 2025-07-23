@@ -153,20 +153,6 @@ const ProfessionalTextEditor: React.FC = () => {
             </div>
           )}
         </div>
-
-        {/* Status Bar */}
-        <div className="bg-white border-t border-gray-200 px-6 py-2">
-          <div className="flex items-center justify-between text-sm text-gray-500">
-            <div className="flex items-center gap-6">
-              <span>Ready</span>
-              <span>Line 1, Column 1</span>
-            </div>
-            <div className="flex items-center gap-6">
-              <span>UTF-8</span>
-              <span>Auto-saved</span>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
