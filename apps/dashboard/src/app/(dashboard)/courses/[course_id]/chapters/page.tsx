@@ -1,9 +1,9 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
 import { prisma } from "database/src";
-import ChaptersBoard from "@/src/components/chapters-board";
+import ChaptersBoard from "@/src/modules/course/components/chapters-board";
 import useHaveAccess from "@/src/hooks/use-have-access";
-import CourseHeader from "@/src/components/course-header";
+import CourseHeader from "@/src/modules/course/components/course-header";
 
 interface PageProps {
   params: Promise<{ course_id: string }>;

@@ -4,12 +4,22 @@ import { type z } from "zod";
 import type { cartLineItemSchema } from "@/src/lib/validators/cart";
 
 export type Module = {
-  length: number;
+  id: string; // Required for React keys and drag-and-drop
+  length: number; // Video duration in seconds
+  duration?: number; // Alternative name for length (for compatibility)
   title: string;
   content: any;
-  orderNumber: number;
+  orderNumber: number; // Legacy position field
+  position?: number; // New position field (same as orderNumber)
   fileUrl: string;
   fileType: string;
+  type?: string; // Alternative name for fileType (for compatibility)
+  isPublished?: boolean; // Module visibility status
+  isFree?: boolean; // Whether the module is free
+  size?: number; // File size in bytes
+  views?: number; // Number of views
+  createdAt?: string; // ISO date string
+  updatedAt?: string; // ISO date string
 };
 
 export type WebsiteAssets = {

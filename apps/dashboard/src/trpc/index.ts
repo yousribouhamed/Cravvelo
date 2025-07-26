@@ -17,6 +17,7 @@ import { users } from "./end-points/users";
 import { s3_bucket } from "./aws/s3";
 import { search } from "./end-points/search";
 import { referral } from "./end-points/referral";
+import { videoMutations } from "./end-points/course/video";
 
 export const appRouter = router({
   ...auth,
@@ -36,6 +37,7 @@ export const appRouter = router({
   ...search,
   ...s3_bucket,
   ...referral,
+  ...videoMutations,
 });
 
 export type AppRouter = typeof appRouter;

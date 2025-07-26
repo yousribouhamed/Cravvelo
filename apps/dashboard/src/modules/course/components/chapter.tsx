@@ -11,10 +11,10 @@ import { Card } from "@ui/lib/tremor";
 import { CardContent } from "@ui/components/ui/card";
 import { Button, buttonVariants } from "@ui/components/ui/button";
 import { useRouter, usePathname } from "next/navigation";
-import { getValueFromUrl } from "../lib/utils";
+import { getValueFromUrl } from "../../../lib/utils";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
-import { Module } from "../types";
+import { Module } from "../../../types";
 import { ChevronDown } from "lucide-react";
 import React from "react";
 

@@ -2,8 +2,6 @@ import { z } from "zod";
 import { privateProcedure } from "../../trpc";
 import { TRPCError } from "@trpc/server";
 import { Module } from "@/src/types";
-import type { Chapter } from "database";
-import axios from "axios";
 import { prisma } from "database/src";
 import { getVideoLength } from "@/src/lib/utils";
 
@@ -53,6 +51,7 @@ export const chapter = {
 
       return chapters;
     }),
+
   deleteChapter: privateProcedure
     .input(
       z.object({
@@ -106,8 +105,8 @@ export const chapter = {
         },
       });
     }),
-  updateChapters: privateProcedure
 
+  updateChapters: privateProcedure
     .input(
       z.object({
         courseID: z.string(),
@@ -122,23 +121,26 @@ export const chapter = {
     .mutation(async ({ input, ctx }) => {
       const bulkUpdateData = input.bulkUpdateData;
 
-      // replace this with promise all later
+      // Use Promise.all for better performance
       try {
-        bulkUpdateData.map(async (item) => {
-          await ctx.prisma.chapter.update({
-            where: {
-              id: item.id,
-            },
-            data: {
-              orderNumber: item.position,
-            },
-          });
-        });
+        await Promise.all(
+          bulkUpdateData.map(async (item) => {
+            await ctx.prisma.chapter.update({
+              where: {
+                id: item.id,
+              },
+              data: {
+                orderNumber: item.position,
+              },
+            });
+          })
+        );
       } catch (err) {
         console.error(
-          "this error is comming from trpc router called update chapters"
+          "this error is coming from trpc router called update chapters"
         );
         console.error(err);
+        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       }
     }),
 
@@ -146,187 +148,107 @@ export const chapter = {
     .input(
       z.object({
         chapterID: z.string(),
-        modules: z.any(),
+        modules: z.array(z.any()),
       })
     )
     .mutation(async ({ input, ctx }) => {
       try {
+        // Generate IDs for modules that don't have them and ensure proper structure
+        const modulesWithIds = input.modules.map((module, index) => ({
+          ...module,
+          id: module.id || `module_${Date.now()}_${index}`,
+          position: index,
+          isPublished: module.isPublished ?? true,
+          createdAt: module.createdAt || new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        }));
+
         await prisma.chapter.update({
           where: {
             id: input.chapterID,
           },
           data: {
-            modules: JSON.stringify(input.modules),
+            modules: JSON.stringify(modulesWithIds),
           },
         });
+
+        return { success: true };
       } catch (err) {
-        console.error(err);
+        console.error("Error updating modules order:", err);
+        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       }
     }),
 
-  createModule: privateProcedure
+  // NEW: Toggle module visibility
+  toggleModuleVisibility: privateProcedure
     .input(
       z.object({
-        chapterID: z.string(),
-        title: z.string(),
-        content: z.any(),
-        length: z.number(),
-        fileUrl: z.string(),
-        fileType: z.string(),
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
-      // const { data } = await axios.get(
-      //   `https://video.bunnycdn.com/library/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/videos/${input.fileUrl}`,
-      //   {
-      //     headers: {
-      //       "Content-Type": "application/octet-stream",
-      //       AccessKey: process.env["NEXT_PUBLIC_BUNNY_API_KEY"],
-      //     },
-      //   }
-      // );
-
-      const videoLength = await getVideoLength(
-        process.env["NEXT_PUBLIC_VIDEO_LIBRARY"],
-        input.fileUrl,
-        process.env["NEXT_PUBLIC_BUNNY_API_KEY"]
-      );
-
-      console.log("this is the input we are passing");
-      console.log({
-        chapterID: input.chapterID,
-        title: input.title,
-        content: input.content,
-        length: input.length,
-      });
-
-      // first we need to get all the modules
-      const chapter = await ctx.prisma.chapter.findFirst({
-        where: { id: input.chapterID },
-      });
-
-      const modules = chapter?.modules
-        ? (JSON.parse(chapter?.modules as string) as Module[])
-        : ([] as Module[]);
-
-      // second we need to update the array
-
-      const newModules = [
-        ...modules,
-        {
-          content: input.content,
-          length: videoLength,
-          fileType: input.fileType,
-          fileUrl: input.fileUrl,
-          orderNumber: modules.length + 1,
-          title: input.title,
-        },
-      ];
-
-      // then store it back in the database
-      const course = await ctx.prisma.chapter
-        .update({
-          data: {
-            modules: JSON.stringify(newModules),
-          },
-          where: {
-            id: input.chapterID,
-          },
-        })
-        .catch((err) => {
-          console.error(err);
-          throw new TRPCError({ code: "NOT_FOUND" });
-        });
-
-      const courseOldData = await ctx.prisma.course.findFirst({
-        where: {
-          id: chapter.courseId,
-        },
-      });
-
-      await ctx.prisma.course.update({
-        where: {
-          id: chapter.courseId,
-        },
-        data: {
-          length: videoLength + courseOldData.length,
-          nbrChapters: 1 + courseOldData.nbrChapters,
-        },
-      });
-
-      return { success: true, courseId: course.id };
-    }),
-
-  updateMaterial: privateProcedure
-    .input(
-      z.object({
-        oldFileUrl: z.string(),
-        chapterID: z.string(),
-        title: z.string(),
-        content: z.any(),
-        fileUrl: z.string(),
+        moduleId: z.string(),
+        isPublished: z.boolean(),
       })
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        // const { data } = await axios.get(
-        //   `https://video.bunnycdn.com/library/${process.env["NEXT_PUBLIC_VIDEO_LIBRARY"]}/videos/${input.fileUrl}`,
-        //   {
-        //     headers: {
-        //       "Content-Type": "application/octet-stream",
-        //       AccessKey: process.env["NEXT_PUBLIC_BUNNY_API_KEY"],
-        //     },
-        //   }
-        // );
-
-        const videoLength = await getVideoLength(
-          process.env["NEXT_PUBLIC_VIDEO_LIBRARY"],
-          input.fileUrl,
-          process.env["NEXT_PUBLIC_BUNNY_API_KEY"]
-        );
-
-        const targetChapter = await ctx.prisma.chapter.findFirst({
+        // Find the chapter containing this module
+        const chapters = await ctx.prisma.chapter.findMany({
           where: {
-            id: input.chapterID,
+            modules: {
+              not: null,
+            },
           },
         });
 
-        const oldMaterials = JSON.parse(
-          targetChapter.modules as string
-        ) as Module[];
+        let targetChapter = null;
+        let modules = [];
 
-        // find the target
-        const targetMaterial = oldMaterials.find(
-          (item) => item.fileUrl === input.oldFileUrl
-        );
+        for (const chapter of chapters) {
+          if (chapter.modules) {
+            const chapterModules = JSON.parse(
+              chapter.modules as string
+            ) as Module[];
+            const moduleExists = chapterModules.some(
+              (m) => m.id === input.moduleId
+            );
+            if (moduleExists) {
+              targetChapter = chapter;
+              modules = chapterModules;
+              break;
+            }
+          }
+        }
 
-        // create new material
+        if (!targetChapter) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Module not found",
+          });
+        }
 
-        const newMaterial = {
-          content: input.content,
-          fileUrl: input.fileUrl,
-          orderNumber: targetMaterial.orderNumber,
-          fileType: targetMaterial.fileType,
-          title: input.title,
-          length: videoLength,
-        } as Module;
+        // Update the specific module's visibility
+        const updatedModules = modules.map((module) => {
+          if (module.id === input.moduleId) {
+            return {
+              ...module,
+              isPublished: input.isPublished,
+              updatedAt: new Date().toISOString(),
+            };
+          }
+          return module;
+        });
 
-        const newMaterials = oldMaterials.filter(
-          (item) => item.fileUrl !== targetMaterial.fileUrl
-        );
-
-        const newChapter = await ctx.prisma.chapter.update({
+        await ctx.prisma.chapter.update({
           where: {
-            id: input.chapterID,
+            id: targetChapter.id,
           },
           data: {
-            modules: JSON.stringify([...newMaterials, newMaterial]),
+            modules: JSON.stringify(updatedModules),
           },
         });
 
-        return newChapter;
+        return { success: true };
       } catch (err) {
-        console.error(err);
+        console.error("Error toggling module visibility:", err);
+        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       }
     }),
 
@@ -339,13 +261,20 @@ export const chapter = {
       })
     )
     .mutation(async ({ input, ctx }) => {
-      console.log("the funtion started...");
+      console.log("the function started...");
       try {
         const targetChapter = await ctx.prisma.chapter.findFirst({
           where: {
             id: input.chapterID,
           },
         });
+
+        if (!targetChapter || !targetChapter.modules) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Chapter or modules not found",
+          });
+        }
 
         console.log("this is the target chapter");
         console.log(targetChapter);
@@ -363,22 +292,20 @@ export const chapter = {
         );
         console.log(newMaterial);
 
-        try {
-          const newChapter = await ctx.prisma.chapter.update({
-            where: {
-              id: input.chapterID,
-            },
-            data: {
-              modules: JSON.stringify(newMaterial),
-            },
-          });
-        } catch (err) {
-          console.error(err);
-        }
+        const newChapter = await ctx.prisma.chapter.update({
+          where: {
+            id: input.chapterID,
+          },
+          data: {
+            modules: JSON.stringify(newMaterial),
+          },
+        });
 
-        console.log(newMaterial);
+        console.log("Material deleted successfully");
+        return { success: true };
       } catch (err) {
-        console.error(err);
+        console.error("Error deleting material:", err);
+        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       }
     }),
 };

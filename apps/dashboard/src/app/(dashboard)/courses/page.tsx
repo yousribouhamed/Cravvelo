@@ -1,11 +1,8 @@
-import Header from "@/src/components/layout/header";
-import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import { Course } from "database";
 import { prisma } from "database/src";
 import CoursesTableShell from "./courses-table-shell";
 import useHaveAccess from "@/src/hooks/use-have-access";
-
-// react-countup
+import AppShell from "@/src/components/app-shell";
 
 export const fetchCache = "force-no-store";
 
@@ -40,16 +37,9 @@ const Page = async ({}) => {
   ]);
 
   return (
-    <MaxWidthWrapper>
-      <main className="w-full flex flex-col justify-start ">
-        <Header
-          notifications={notifications}
-          user={user}
-          title="الدورات التدريبية"
-        />
-        <CoursesTableShell academia_url={user.subdomain} initialData={data} />
-      </main>
-    </MaxWidthWrapper>
+    <AppShell user={user} notifications={notifications}>
+      <CoursesTableShell academia_url={user.subdomain} initialData={data} />
+    </AppShell>
   );
 };
 

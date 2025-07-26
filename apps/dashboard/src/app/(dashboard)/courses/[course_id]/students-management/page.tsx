@@ -1,6 +1,6 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
-import CourseHeader from "@/src/components/course-header";
+import CourseHeader from "@/src/modules/course/components/course-header";
 import StudentEngagment from "@/src/components/forms/course-forms/students-engagment";
 import useHaveAccess from "@/src/hooks/use-have-access";
 import { prisma } from "database/src";

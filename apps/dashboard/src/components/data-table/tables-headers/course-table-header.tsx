@@ -1,8 +1,8 @@
-import { Button } from "@ui/components/ui/button";
+import { Button, buttonVariants } from "@ui/components/ui/button";
 import AddCourse from "../../models/create-course-modal";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
-import { buttonVariants } from "../../plate-ui/button";
+
 import { ColumnFiltersState, Table } from "@tanstack/react-table";
 //@ts-ignore
 import { download, generateCsv, mkConfig } from "export-to-csv";

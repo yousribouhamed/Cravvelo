@@ -13,8 +13,17 @@ const getAllNotifications = async ({ accountId }: { accountId: string }) => {
   return notifications;
 };
 
-export default async function Home() {
+interface PageProps {
+  params: Promise<{
+    course_id: string;
+    chapter_id: string;
+  }>;
+}
+
+export default async function Home({ params }: PageProps) {
   const user = await useHaveAccess();
+
+  const { chapter_id, course_id } = await params;
 
   const notifications = await getAllNotifications({
     accountId: user.accountId,
@@ -30,7 +39,7 @@ export default async function Home() {
           title="اضافة فيديو"
         />
         <div className="w-full pt-8 min-h-[100px] h-fit mb-10 ">
-          <AddVedioForm />
+          <AddVedioForm chapterID={chapter_id} />
         </div>
       </main>
     </MaxWidthWrapper>
