@@ -3,7 +3,6 @@ import { privateProcedure } from "../../trpc";
 import { TRPCError } from "@trpc/server";
 import { Module } from "@/src/types";
 import { prisma } from "database/src";
-import { getVideoLength } from "@/src/lib/utils";
 
 export const chapter = {
   createChapter: privateProcedure
@@ -121,7 +120,6 @@ export const chapter = {
     .mutation(async ({ input, ctx }) => {
       const bulkUpdateData = input.bulkUpdateData;
 
-      // Use Promise.all for better performance
       try {
         await Promise.all(
           bulkUpdateData.map(async (item) => {
@@ -139,6 +137,7 @@ export const chapter = {
         console.error(
           "this error is coming from trpc router called update chapters"
         );
+
         console.error(err);
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       }

@@ -94,8 +94,8 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
     file: File,
     title: string
   ): Promise<string> => {
-    const libraryId = 472497; //  process.env.NEXT_PUBLIC_VIDEO_LIBRARY;
-    const apiKey = "8b4943d6-909d-44c4-98d4cbfc3a8d-7af5-4b8b"; // process.env.NEXT_PUBLIC_BUNNY_API_KEY;
+    const libraryId = process.env.NEXT_PUBLIC_VIDEO_LIBRARY;
+    const apiKey = process.env.NEXT_PUBLIC_BUNNY_API_KEY;
 
     if (!libraryId || !apiKey) {
       throw new Error("Missing Bunny CDN configuration");

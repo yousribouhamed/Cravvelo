@@ -12,7 +12,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-
 import {
   Form,
   FormControl,
@@ -43,7 +42,8 @@ const AddCourse: FC = ({}) => {
       }
       if (success) {
         router.push(`/courses/${courseId}/chapters`);
-        maketoast.successWithText({ text: "تم انشاء الدورة بنجاح" });
+        maketoast.success();
+        setIsOpen(false);
       }
     },
     onError: () => {
@@ -67,10 +67,16 @@ const AddCourse: FC = ({}) => {
         title: data.title,
         accountId: cookie,
       })
+
       .then(() => {
         setIsLoading(false);
       });
   }
+
+  const handleCancel = () => {
+    form.reset();
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -124,7 +130,9 @@ const AddCourse: FC = ({}) => {
                   )}
                 />
                 <DialogFooter className="w-full h-[50px] flex items-center  flex-nowrap justify-end gap-x-1 md:gap-x-4">
-                  <Button variant="ghost">إلغاء</Button>
+                  <Button variant="ghost" type="button" onClick={handleCancel}>
+                    إلغاء
+                  </Button>
                   <Button
                     className=" flex items-center gap-x-2"
                     disabled={isLaoding}

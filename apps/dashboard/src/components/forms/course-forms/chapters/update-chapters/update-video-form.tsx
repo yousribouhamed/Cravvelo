@@ -18,9 +18,7 @@ import { Input } from "@ui/components/ui/input";
 import { Card, CardContent } from "@ui/components/ui/card";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
-
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import { PlateEditor } from "@/src/components/reich-text-editor/rich-text-editor";
 import { maketoast } from "@/src/components/toasts";
 import VideoPlayer from "@/src/components/models/video-player";
 import { Module } from "@/src/types";
@@ -40,21 +38,7 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
   const router = useRouter();
   const path = usePathname();
   const chapterID = getValueFromUrl(path, 4);
-
-  // const fileUrl = getValueFromUrl(path, 5);
-
   const [open, setOpen] = React.useState<boolean>(false);
-
-  const mutation = trpc.updateMaterial.useMutation({
-    onSuccess: () => {
-      maketoast.success();
-      router.back();
-    },
-    onError: (error) => {
-      maketoast.error();
-      console.error(error);
-    },
-  });
 
   const delete_mutation = trpc.deleteMaterial.useMutation({
     onSuccess: () => {
@@ -64,7 +48,6 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
     onError: (error) => {
       maketoast.error();
       console.error(error);
-      console.log("here is an error");
     },
   });
 
@@ -84,16 +67,6 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
       console.log(values);
       return;
     }
-    await mutation.mutateAsync({
-      chapterID,
-      oldFileUrl: material.fileUrl,
-      content: JSON.stringify(values.content),
-      fileUrl: values.fileUrl,
-      title: values.title,
-    });
-
-    console.log("here it is the values inside the mutation");
-    console.log(values);
   }
 
   return (
@@ -165,10 +138,10 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
                       <span className="text-red-600 text-xl">*</span>
                     </FormLabel>
                     <FormControl>
-                      <PlateEditor
+                      {/* <PlateEditor
                         value={form.watch("content")}
                         onChnage={field.onChange}
-                      />
+                      /> */}
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -200,8 +173,6 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
                     chapterID,
                     fileUrl: form.watch("fileUrl"),
                   });
-
-                  console.log("funtion completed");
                 }}
                 type="button"
                 className="w-full flex items-center gap-x-2 bg-red-500 hover:bg-red-900 transition-all duration-300"

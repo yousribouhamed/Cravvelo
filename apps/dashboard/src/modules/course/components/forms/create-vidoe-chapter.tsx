@@ -31,7 +31,7 @@ function AddVoiceForm() {
   const path = usePathname();
   const chapterID = getValueFromUrl(path, 4);
 
-  const mutation = trpc.createModule.useMutation({
+  const mutation = trpc.createModuleWithVideo.useMutation({
     onSuccess: () => {},
     onError: () => {},
   });
@@ -52,7 +52,7 @@ function AddVoiceForm() {
       chapterID: chapterID,
       content: "",
       fileType: "VIDEO",
-      fileUrl: values.fileUrl,
+
       title: values.title,
     });
   }

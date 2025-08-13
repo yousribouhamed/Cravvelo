@@ -11,42 +11,53 @@ export const course = {
         accountId: z.string(),
       })
     )
+
     .mutation(async ({ input, ctx }) => {
-      const courses = await ctx.prisma.course.findMany({
-        where: {
-          accountId: ctx.account.id,
-        },
-      });
-
-      const limits =
-        ctx.account.plan === "BASIC" || ctx.account.plan === null
-          ? 1
-          : ctx.account.plan === "ADVANCED"
-          ? 2
-          : 9999;
-
-      if (courses.length >= limits) {
-        return { success: false, courseId: undefined, planExceeded: true };
-      }
-
-      const course = await ctx.prisma.course
-        .create({
-          data: {
-            status: "DRAFT",
-            title: input.title,
+      try {
+        console.log("this is the account id : ");
+        console.log(ctx.account.id);
+        const courses = await ctx.prisma.course.findMany({
+          where: {
             accountId: ctx.account.id,
           },
-        })
-        .catch((err) => {
-          console.log(err);
-          throw new TRPCError({ code: "NOT_FOUND" });
         });
 
-      return { success: true, courseId: course.id, planExceeded: false };
+        const limits =
+          ctx.account.plan === "BASIC" || ctx.account.plan === null
+            ? 1
+            : ctx.account.plan === "ADVANCED"
+            ? 2
+            : 9999;
+
+        if (courses.length >= limits) {
+          return { success: false, courseId: undefined, planExceeded: true };
+        }
+
+        const course = await ctx.prisma.course
+          .create({
+            data: {
+              status: "DRAFT",
+              title: input.title,
+              accountId: ctx.account.id,
+            },
+          })
+          .catch((err) => {
+            console.log(err);
+            throw new TRPCError({ code: "NOT_FOUND" });
+          });
+
+        return { success: true, courseId: course.id, planExceeded: false };
+      } catch (error) {
+        return { success: false, courseId: undefined, error };
+      }
     }),
 
   getAllCourses: privateProcedure.query(async ({ input, ctx }) => {
-    const courses = await ctx.prisma.course.findMany();
+    const courses = await ctx.prisma.course.findMany({
+      where: {
+        accountId: ctx.account.id,
+      },
+    });
 
     return courses;
   }),
