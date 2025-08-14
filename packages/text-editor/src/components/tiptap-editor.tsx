@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -30,9 +32,22 @@ const isRtlCharacter = (char: string): boolean => {
   );
 };
 
-const detectTextDirection = (text: string): "ltr" | "rtl" => {
+const detectTextDirection = (text: string | any): "ltr" | "rtl" => {
+  // Handle non-string input
+  let textToAnalyze = "";
+
+  if (typeof text === "string") {
+    textToAnalyze = text;
+  } else if (text && typeof text === "object") {
+    // If it's HTML from the editor, convert to string first
+    textToAnalyze = String(text);
+  } else {
+    // Default fallback
+    textToAnalyze = "";
+  }
+
   // Remove HTML tags and get plain text
-  const plainText = text.replace(/<[^>]*>/g, "");
+  const plainText = textToAnalyze.replace(/<[^>]*>/g, "");
 
   // Find the first non-whitespace, non-punctuation character
   for (let i = 0; i < plainText.length; i++) {
@@ -58,13 +73,14 @@ const detectTextDirection = (text: string): "ltr" | "rtl" => {
   return "ltr";
 };
 
-export const TiptapEditor: React.FC<TiptapEditorProps> = ({
+export const CravveloEditor: React.FC<TiptapEditorProps> = ({
   value,
   onChange,
   isFullscreen,
   onToggleFullscreen,
   onPreview,
   onClear,
+  readOnly = false, // Add readOnly prop with default false
 }) => {
   const [textDirection, setTextDirection] = useState<"ltr" | "rtl">("ltr");
   const isRtl = textDirection === "rtl";
@@ -99,9 +115,12 @@ export const TiptapEditor: React.FC<TiptapEditorProps> = ({
       }),
     ],
     content: value,
+    editable: !readOnly, // Set editable based on readOnly prop
     onUpdate: ({ editor }) => {
+      if (readOnly) return; // Don't trigger onChange in read-only mode
+
       const newContent = editor.getHTML();
-      onChange(newContent);
+      onChange?.(newContent); // Use optional chaining since onChange is now optional
 
       // Detect text direction on content change
       const direction = detectTextDirection(newContent);
@@ -111,11 +130,18 @@ export const TiptapEditor: React.FC<TiptapEditorProps> = ({
       attributes: {
         class: `tiptap-editor prose prose-sm max-w-none p-6 min-h-[400px] focus:outline-none ${
           isFullscreen ? "min-h-[calc(100vh-200px)]" : ""
-        }`,
+        } ${readOnly ? "cursor-default" : ""}`, // Add visual indication for read-only
         dir: textDirection,
       },
     },
   });
+
+  // Update editor editability when readOnly prop changes
+  useEffect(() => {
+    if (editor) {
+      editor.setEditable(!readOnly);
+    }
+  }, [readOnly, editor]);
 
   // Update editor direction when text direction changes
   useEffect(() => {
@@ -157,7 +183,7 @@ export const TiptapEditor: React.FC<TiptapEditorProps> = ({
 
   // Enhanced format toggle function with better selection handling
   const handleFormatToggle = (format: string) => {
-    if (!editor) return;
+    if (!editor || readOnly) return; // Prevent formatting in read-only mode
 
     // Store current selection
     const { from, to } = editor.state.selection;
@@ -236,27 +262,29 @@ export const TiptapEditor: React.FC<TiptapEditorProps> = ({
     <div
       className={`border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm ${
         isFullscreen ? "fixed inset-4 z-50 rounded-lg" : ""
-      }`}
+      } ${readOnly ? "bg-gray-50" : ""}`} // Add visual indication for read-only
       dir={textDirection}
     >
-      <MenuBar
-        onPreview={onPreview}
-        onClear={onClear}
-        isFullscreen={isFullscreen}
-        onToggleFullscreen={onToggleFullscreen}
-        activeFormats={activeFormats}
-        isRtl={isRtl}
-        onFormatToggle={handleFormatToggle}
-        canUndo={editor ? editor.can().undo() : false}
-        canRedo={editor ? editor.can().redo() : false}
-        onUndo={() => editor?.chain().focus().undo().run()}
-        onRedo={() => editor?.chain().focus().redo().run()}
-      />
+      {!readOnly && ( // Only show MenuBar when not in read-only mode
+        <MenuBar
+          onPreview={onPreview}
+          onClear={onClear}
+          isFullscreen={isFullscreen}
+          onToggleFullscreen={onToggleFullscreen}
+          activeFormats={activeFormats}
+          isRtl={isRtl}
+          onFormatToggle={handleFormatToggle}
+          canUndo={editor ? editor.can().undo() : false}
+          canRedo={editor ? editor.can().redo() : false}
+          onUndo={() => editor?.chain().focus().undo().run()}
+          onRedo={() => editor?.chain().focus().redo().run()}
+        />
+      )}
       <EditorContent
         editor={editor}
         className={`bg-white overflow-y-auto tiptap-content ${
           isRtl ? "rtl" : "ltr"
-        }`}
+        } ${readOnly ? "bg-gray-50" : ""}`} // Add visual indication for read-only
       />
     </div>
   );

@@ -136,7 +136,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
 
   const mutation = trpc.update_user_profile.useMutation({
     onSuccess: () => {
-      maketoast.successWithText({ text: "تم تحديث ملفك الشخصي بنجاح" });
+      maketoast.success();
       setEditMode(false);
       // Optionally refresh the page or refetch data
       //  window.location.reload();

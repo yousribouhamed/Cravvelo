@@ -1,10 +1,11 @@
 "use client";
 
+import { z } from "@/src/lib/zod-error-map";
 import * as React from "react";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { trpc } from "@/src/app/_trpc/client";
+import { Button } from "@ui/components/ui/button";
 import {
   Form,
   FormControl,
@@ -14,34 +15,39 @@ import {
   FormMessage,
 } from "@ui/components/ui/form";
 import { Input } from "@ui/components/ui/input";
-import { Button } from "@ui/components/ui/button";
 import { Card, CardContent } from "@ui/components/ui/card";
+import { usePathname, useRouter } from "next/navigation";
+import { getValueFromUrl } from "@/src/lib/utils";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { maketoast } from "@/src/components/toasts";
+import { VideoPlayer } from "@/src/components/models/video-player";
+import { Module } from "@/src/types";
 import { EnhancedVideoUploader } from "@/src/modules/course/components/upload/video-uploader";
 import { VideoValidation } from "@/src/modules/course/validation";
 import { useUploadProgress } from "@/src/modules/course/hooks";
 import { useVideoUploadError } from "@/src/modules/course/hooks";
-import { VideoPlayer } from "../../models/video-player";
-import { maketoast } from "../../toasts";
-import { trpc } from "@/src/app/_trpc/client";
 import axios from "axios";
 
-const addVideoSchema = z.object({
-  title: z.string().min(1, "عنوان الفيديو مطلوب"),
-  content: z.any().optional(),
+const updateVedioSchema = z.object({
+  title: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
+  content: z.any(),
+  fileUrl: z.string({ required_error: "يرجى ملئ الحقل" }),
   videoFile: z.any().optional(),
 });
 
-interface AddVideoFormProps {
-  chapterID: string;
+interface UpdateVedioFormProps {
+  material: Module;
 }
 
-function AddVideoForm({ chapterID }: AddVideoFormProps) {
+function UpdateVedioForm({ material }: UpdateVedioFormProps) {
   const router = useRouter();
-  const [open, setOpen] = React.useState(false);
+  const path = usePathname();
+  const chapterID = getValueFromUrl(path, 4);
+  const [open, setOpen] = React.useState<boolean>(false);
   const [selectedVideo, setSelectedVideo] = React.useState<File | null>(null);
   const [videoDuration, setVideoDuration] = React.useState<number>(0);
-  const [videoId, setVideoId] = React.useState<string>("");
+  const [isReplacingVideo, setIsReplacingVideo] =
+    React.useState<boolean>(false);
 
   const { error: uploadError, handleError, clearError } = useVideoUploadError();
   const {
@@ -52,13 +58,42 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
     reset: resetProgress,
   } = useUploadProgress();
 
-  const createModuleMutation = trpc.createModuleWithVideo.useMutation();
+  const delete_mutation = trpc.deleteMaterial.useMutation({
+    onSuccess: () => {
+      maketoast.success("تم حذف المادة بنجاح");
+      router.back();
+    },
+    onError: (error) => {
+      maketoast.error("فشل في حذف المادة");
+      console.error(error);
+    },
+  });
 
-  const form = useForm<z.infer<typeof addVideoSchema>>({
-    resolver: zodResolver(addVideoSchema),
+  // Use the new update mutation
+  const mutation = trpc.updateModuleVideo.useMutation({
+    onSuccess: (data) => {
+      maketoast.success("تم تحديث الفيديو بنجاح");
+      setUploadStatus("completed");
+
+      // Small delay to show completion before redirect
+      setTimeout(() => {
+        router.back();
+      }, 1000);
+    },
+    onError: (error) => {
+      maketoast.error("فشل في تحديث الفيديو");
+      setUploadStatus("error");
+      console.error(error);
+    },
+  });
+
+  const form = useForm<z.infer<typeof updateVedioSchema>>({
+    mode: "onChange",
+    resolver: zodResolver(updateVedioSchema),
     defaultValues: {
-      title: "",
-      content: {},
+      title: material.title,
+      fileUrl: material.fileUrl,
+      content: JSON.parse(material?.content || "{}"),
     },
   });
 
@@ -83,6 +118,7 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
       }
 
       setSelectedVideo(file);
+      setIsReplacingVideo(true);
       form.setValue("videoFile", file);
     } catch (error) {
       handleError(error, "فشل في تحضير الفيديو");
@@ -104,7 +140,7 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
     updateProgress(5);
 
     try {
-      // Step 1: Create video object (same as your legacy createVideo function)
+      // Step 1: Create video object
       console.log("Creating video object...");
 
       const createOptions = {
@@ -115,7 +151,7 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
           "content-type": "application/*+json",
           AccessKey: apiKey,
         },
-        data: JSON.stringify({ title: title }), // Use the actual title instead of hardcoded
+        data: JSON.stringify({ title: title }),
       };
 
       const createResponse = await axios.request(createOptions);
@@ -128,7 +164,7 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
       console.log("Video object created successfully:", videoId);
       updateProgress(10);
 
-      // Step 2: Convert file to ArrayBuffer (same as legacy approach)
+      // Step 2: Convert file to ArrayBuffer
       console.log("Converting file to ArrayBuffer...");
 
       const fileBinaryData = await new Promise<ArrayBuffer>(
@@ -149,7 +185,7 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
 
       updateProgress(15);
 
-      // Step 3: Upload using axios (same as legacy approach)
+      // Step 3: Upload using axios
       console.log("Starting file upload with axios...");
 
       const uploadUrl = `https://video.bunnycdn.com/library/${libraryId}/videos/${videoId}`;
@@ -196,64 +232,54 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
     }
   };
 
-  // Form submission with direct upload
-  async function onSubmit(values: z.infer<typeof addVideoSchema>) {
-    if (!selectedVideo) {
-      maketoast.error("يرجى اختيار ملف فيديو");
+  async function onSubmit(values: z.infer<typeof updateVedioSchema>) {
+    if (!values.fileUrl || values.fileUrl === "") {
+      maketoast.error("يرجى إضافة ملف فيديو");
       return;
     }
 
     try {
       clearError();
-      resetProgress();
-      setUploadStatus("uploading");
 
-      console.log("Starting direct video upload...");
+      let newVideoId = values.fileUrl;
 
-      // Upload video directly to Bunny CDN
-      const uploadedVideoId = await uploadVideoDirectly(
-        selectedVideo,
-        values.title
-      );
+      // If user selected a new video file, upload it first
+      if (selectedVideo && isReplacingVideo) {
+        resetProgress();
+        setUploadStatus("uploading");
+        console.log("Uploading new video...");
 
-      console.log("Video uploaded successfully, creating module...");
-      updateProgress(95);
+        newVideoId = await uploadVideoDirectly(selectedVideo, values.title);
+        console.log("New video uploaded successfully:", newVideoId);
+      }
 
-      // Create module in database
-      await createModuleMutation.mutateAsync({
+      // Update the module with new video
+      console.log("Updating module...");
+      await mutation.mutateAsync({
         chapterID: chapterID,
-        content: JSON.stringify(values.content || {}),
-        fileType: "VIDEO",
-        videoId: uploadedVideoId,
+        moduleId: material.id,
+        newVideoId: newVideoId,
         title: values.title,
-        duration: videoDuration,
+        content: JSON.stringify(values.content),
+        duration: videoDuration || material.duration,
       });
-
-      updateProgress(100);
-      setUploadStatus("completed");
-      maketoast.success("تم رفع الفيديو وإنشاء الوحدة بنجاح");
-
-      // Small delay to show completion before redirect
-      setTimeout(() => {
-        router.back();
-      }, 1000);
     } catch (error) {
-      console.error("Upload error:", error);
+      console.error("Update error:", error);
       setUploadStatus("error");
-      handleError(error, "فشل في رفع الفيديو");
-      maketoast.error("فشل في رفع الفيديو");
+      handleError(error, "فشل في تحديث الفيديو");
+      maketoast.error("فشل في تحديث الفيديو");
     }
   }
 
   // Enhanced disable logic
   const isSubmitDisabled =
-    createModuleMutation.isLoading ||
+    mutation.isLoading ||
     uploadStatus === "uploading" ||
-    !selectedVideo ||
+    (!form.watch("fileUrl") && !selectedVideo) ||
     uploadStatus === "error";
 
-  // Get upload button text
-  const getUploadButtonText = () => {
+  // Get button text
+  const getUpdateButtonText = () => {
     switch (uploadStatus) {
       case "uploading":
         return `جاري الرفع ${uploadProgress}%`;
@@ -261,22 +287,26 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
       case "completed":
         return "تم بنجاح ✓";
       default:
-        if (createModuleMutation.isLoading) {
-          return "جاري إنشاء الوحدة...";
+        if (mutation.isLoading) {
+          return "جاري التحديث...";
         }
-        return "رفع وحفظ";
+        return "حفظ التغييرات";
     }
   };
 
   return (
     <>
-      <VideoPlayer isOpen={open} setIsOpen={setOpen} videoId={videoId} />
+      <VideoPlayer
+        isOpen={open}
+        setIsOpen={setOpen}
+        videoId={form?.watch("fileUrl") ?? ""}
+      />
 
-      <div className="w-full grid grid-cols-3 gap-x-8">
+      <div className="w-full grid grid-cols-3 gap-x-8 mb-8 ">
         <div className="col-span-2 w-full h-full">
           <Form {...form}>
             <form
-              id="add-video"
+              id="update-video"
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-8"
             >
@@ -291,7 +321,7 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="مثال : دورة في التصميم الجرافيكي للمبتدئين"
+                        placeholder="تعلم كل ما يتعلق بتربية الكناري"
                         {...field}
                         disabled={uploadStatus === "uploading"}
                       />
@@ -303,39 +333,64 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
 
               <FormField
                 control={form.control}
-                name="videoFile"
+                name="fileUrl"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      إضافة ملف فيديو{" "}
+                      استبدال ملف الفيديو{" "}
                       <span className="text-red-600 text-xl">*</span>
                     </FormLabel>
                     <FormControl>
-                      <EnhancedVideoUploader
-                        onVideoSelect={handleVideoSelect}
-                        selectedVideo={
-                          selectedVideo
-                            ? {
-                                file: selectedVideo,
-                                videoId: videoId,
-                                uploadUrl: "", // Not needed for direct upload
-                                duration: videoDuration,
-                              }
-                            : null
-                        }
-                        isGeneratingUrl={false} // Not needed for direct upload
-                        onPreview={() => setOpen(true)}
-                        onRemove={() => {
-                          setSelectedVideo(null);
-                          setVideoId("");
-                          setVideoDuration(0);
-                          form.setValue("videoFile", undefined as any);
-                          resetProgress();
-                          clearError();
-                        }}
-                        uploadProgress={uploadProgress}
-                        isUploading={uploadStatus === "uploading"}
-                      />
+                      <div className="space-y-4">
+                        {/* Current video info */}
+                        <div className="p-4 border rounded-lg bg-white">
+                          <p className="text-sm text-gray-600 mb-2">
+                            الفيديو الحالي:
+                          </p>
+                          <div className="flex items-center flex-col justify-center gap-2">
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setOpen(true)}
+                            >
+                              معاينة الفيديو الحالي
+                            </Button>
+                            <span className="text-sm text-gray-500">
+                              المدة: {Math.round(material.duration || 0)} ثانية
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* New video uploader */}
+                        <EnhancedVideoUploader
+                          onVideoSelect={handleVideoSelect}
+                          selectedVideo={
+                            selectedVideo
+                              ? {
+                                  file: selectedVideo,
+                                  videoId: "",
+                                  uploadUrl: "",
+                                  duration: videoDuration,
+                                }
+                              : null
+                          }
+                          isGeneratingUrl={false}
+                          onPreview={() => {
+                            // Preview functionality for new video if needed
+                          }}
+                          onRemove={() => {
+                            setSelectedVideo(null);
+                            setVideoDuration(0);
+                            setIsReplacingVideo(false);
+                            form.setValue("videoFile", undefined as any);
+                            resetProgress();
+                            clearError();
+                          }}
+                          uploadProgress={uploadProgress}
+                          isUploading={uploadStatus === "uploading"}
+                        />
+                      </div>
                     </FormControl>
                     <FormMessage />
                     {uploadError && (
@@ -346,47 +401,47 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
                   </FormItem>
                 )}
               />
-
-              <Card>
-                <CardContent className="w-full h-fit flex justify-end items-center p-6 gap-x-4">
-                  <Button
-                    onClick={() => router.back()}
-                    className="rounded-xl"
-                    variant="secondary"
-                    type="button"
-                    disabled={uploadStatus === "uploading"}
-                  >
-                    إلغاء والعودة
-                  </Button>
-                  <Button
-                    disabled={isSubmitDisabled}
-                    type="submit"
-                    className="flex items-center gap-x-2 rounded-xl"
-                  >
-                    {(createModuleMutation.isLoading ||
-                      uploadStatus === "uploading") && <LoadingSpinner />}
-                    {getUploadButtonText()}
-                  </Button>
-                </CardContent>
-              </Card>
             </form>
           </Form>
         </div>
 
-        <div className="col-span-1 w-full h-full">
+        <div className="col-span-1 w-full h-full ">
           <Card>
-            <CardContent className="w-full h-fit flex flex-col p-6 space-y-4">
+            <CardContent className="w-full h-fit flex flex-col p-6  space-y-4">
               <Button
                 disabled={isSubmitDisabled}
                 type="submit"
-                form="add-video"
+                form="update-video"
                 className="w-full flex items-center gap-x-2"
                 size="lg"
               >
-                {(createModuleMutation.isLoading ||
-                  uploadStatus === "uploading") && <LoadingSpinner />}
-                {getUploadButtonText()}
+                {(mutation.isLoading || uploadStatus === "uploading") && (
+                  <LoadingSpinner />
+                )}
+                {getUpdateButtonText()}
               </Button>
+
+              <Button
+                disabled={
+                  delete_mutation.isLoading || uploadStatus === "uploading"
+                }
+                onClick={async () => {
+                  console.log("here are the params");
+                  console.log(material.fileUrl, chapterID);
+                  await delete_mutation.mutateAsync({
+                    oldFileUrl: material.fileUrl,
+                    chapterID,
+                    fileUrl: form.watch("fileUrl"),
+                  });
+                }}
+                type="button"
+                className="w-full flex items-center gap-x-2 bg-red-500 hover:bg-red-900 transition-all duration-300"
+                size="lg"
+              >
+                {delete_mutation.isLoading ? <LoadingSpinner /> : null}
+                حذف هذه المادة
+              </Button>
+
               <Button
                 onClick={() => router.back()}
                 className="w-full"
@@ -394,7 +449,7 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
                 size="lg"
                 disabled={uploadStatus === "uploading"}
               >
-                إلغاء والعودة
+                العودة الى باني الدورة
               </Button>
             </CardContent>
           </Card>
@@ -404,4 +459,4 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
   );
 }
 
-export default AddVideoForm;
+export default UpdateVedioForm;

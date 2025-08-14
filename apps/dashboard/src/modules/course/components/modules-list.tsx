@@ -104,6 +104,16 @@ const ModulesList: FC<ModulesListProps> = ({
     },
   });
 
+  const deleteModuleMutation = trpc.deleteMaterial.useMutation({
+    onSuccess: () => {
+      maketoast.success("تم تحديث حالة المادة بنجاح");
+    },
+    onError: (error) => {
+      console.error("Failed to toggle module visibility:", error);
+      maketoast.error("فشل في تحديث حالة المادة");
+    },
+  });
+
   // Get module type icon
   const getModuleTypeIcon = useCallback((module: Module) => {
     const fileExtension = module.fileUrl?.split(".").pop()?.toLowerCase();
@@ -251,7 +261,7 @@ const ModulesList: FC<ModulesListProps> = ({
   // Empty state
   if (sortedModules.length === 0) {
     return (
-      <div className="mr-12 min-h-[60px] flex items-center justify-center bg-gray-50 border-2 border-dashed border-gray-200 rounded-lg">
+      <div className="mr-12 min-h-[100px] flex items-center justify-center bg-gray-50 border-2 border-dashed border-gray-200 rounded-lg">
         <p className="text-gray-500 text-sm">لا توجد مواد في هذا الفصل</p>
       </div>
     );
@@ -342,11 +352,6 @@ const ModulesList: FC<ModulesListProps> = ({
                           {/* Module Icon */}
                           <div className="flex-shrink-0">{moduleIcon}</div>
 
-                          {/* Module Number */}
-                          <span className="flex-shrink-0 text-xs text-gray-500 font-medium min-w-[24px]">
-                            #{index + 1}
-                          </span>
-
                           {/* Module Content */}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-x-2 mb-1">
@@ -363,7 +368,6 @@ const ModulesList: FC<ModulesListProps> = ({
                                   <p>{module.title}</p>
                                 </TooltipContent>
                               </Tooltip>
-                              <ExternalLink className="h-3 w-3 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                             </div>
 
                             {/* Module Metadata */}
@@ -392,8 +396,9 @@ const ModulesList: FC<ModulesListProps> = ({
                           {statusBadge}
 
                           {/* Loading Indicator */}
-                          {(updateOrderMutation.isLoading ||
-                            toggleModuleVisibility?.isLoading) && (
+                          {(updateOrderMutation.isPending ||
+                            deleteModuleMutation.isPending ||
+                            toggleModuleVisibility?.isPending) && (
                             <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
                           )}
 
@@ -410,7 +415,10 @@ const ModulesList: FC<ModulesListProps> = ({
                                 <span className="sr-only">فتح القائمة</span>
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-48">
+                            <DropdownMenuContent
+                              align="start"
+                              className="w-48 px-2"
+                            >
                               <DropdownMenuItem asChild>
                                 <Link
                                   href={`/courses/${courseId}/chapters/${chapterID}/${module.fileUrl}/update-video`}
@@ -447,25 +455,16 @@ const ModulesList: FC<ModulesListProps> = ({
                                 </>
                               )}
 
-                              {module.fileUrl && (
-                                <>
-                                  <DropdownMenuSeparator />
-                                  <DropdownMenuItem asChild>
-                                    <a
-                                      href={module.fileUrl}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="flex items-center justify-end gap-x-2"
-                                    >
-                                      <Download className="h-4 w-4" />
-                                      تحميل الملف
-                                    </a>
-                                  </DropdownMenuItem>
-                                </>
-                              )}
-
                               <DropdownMenuSeparator />
-                              <DropdownMenuItem className="text-red-600 hover:bg-red-50 flex items-center justify-end">
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  deleteModuleMutation.mutate({
+                                    chapterID,
+                                    fileUrl: module.fileType,
+                                  })
+                                }
+                                className="text-red-600 hover:bg-red-50 flex items-center justify-end"
+                              >
                                 حذف المادة
                               </DropdownMenuItem>
                             </DropdownMenuContent>

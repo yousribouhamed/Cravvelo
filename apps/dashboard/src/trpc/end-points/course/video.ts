@@ -1,10 +1,8 @@
-// Simplified videoMutations.ts - Direct upload approach without creating video objects
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { privateProcedure } from "@/src/trpc/trpc";
 import axios from "axios";
 
-// Helper function to check if video exists and get its metadata
 async function getVideoInfo(
   libraryId: string,
   videoId: string,
@@ -65,15 +63,19 @@ export const videoMutations = {
         chapterID: z.string(),
         title: z.string().min(1, "العنوان مطلوب"),
         content: z.string(),
-        duration: z.number().min(0), // Client-side calculated duration as fallback
+        duration: z.number().min(0),
         fileType: z.enum(["VIDEO", "DOCUMENT", "QUIZ"]),
-        videoId: z.string(), // Video ID that was used in direct upload
+        videoId: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const libraryId = "8b4943d6-909d-44c4-98d4cbfc3a8d-7af5-4b8b";
-        const apiKey = "472497";
+        const libraryId = process.env.NEXT_PUBLIC_VIDEO_LIBRARY!;
+        const apiKey = process.env.NEXT_PUBLIC_BUNNY_API_KEY!;
+
+        console.log("these are the credantials -> : ");
+        console.log(libraryId);
+        console.log(apiKey);
 
         if (!libraryId || !apiKey) {
           throw new TRPCError({
@@ -184,7 +186,7 @@ export const videoMutations = {
           moduleId: result.moduleId,
           chapterId: result.chapter.id,
           courseId: chapter.courseId,
-          videoLength, // Return the final video length used
+          videoLength,
         };
       } catch (error) {
         console.error("Error creating module:", error);
@@ -279,6 +281,193 @@ export const videoMutations = {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to delete video",
+        });
+      }
+    }),
+
+  updateModuleVideo: privateProcedure
+    .input(
+      z.object({
+        chapterID: z.string(),
+        moduleId: z.string(),
+        newVideoId: z.string(),
+        title: z.string().min(1, "العنوان مطلوب").optional(),
+        content: z.string().optional(),
+        duration: z.number().min(0).optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const libraryId = process.env.NEXT_PUBLIC_VIDEO_LIBRARY!;
+        const apiKey = process.env.NEXT_PUBLIC_BUNNY_API_KEY!;
+
+        if (!libraryId || !apiKey) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Missing Bunny CDN configuration",
+          });
+        }
+
+        // Find the chapter
+        const chapter = await ctx.prisma.chapter.findUnique({
+          where: { id: input.chapterID },
+          include: {
+            Course: true,
+          },
+        });
+
+        if (!chapter) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Chapter not found",
+          });
+        }
+
+        // Parse existing modules
+        const modules = chapter.modules
+          ? (JSON.parse(chapter.modules as string) as any[])
+          : [];
+
+        // Find the module to update
+        const moduleIndex = modules.findIndex(
+          (module) => module.id === input.moduleId
+        );
+
+        if (moduleIndex === -1) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Module not found",
+          });
+        }
+
+        const existingModule = modules[moduleIndex];
+        const oldVideoId = existingModule.fileUrl;
+
+        // Get new video length from Bunny CDN
+        let newVideoLength = input.duration || existingModule.duration || 0;
+
+        try {
+          const cdnLength = await waitForVideoProcessing(
+            libraryId,
+            input.newVideoId,
+            apiKey,
+            3
+          );
+          if (cdnLength > 0) {
+            newVideoLength = cdnLength;
+          }
+        } catch (error) {
+          console.warn(
+            "Could not get new video length from CDN, using provided duration:",
+            error
+          );
+        }
+
+        // Calculate length difference for course statistics
+        const lengthDifference =
+          newVideoLength - (existingModule.duration || 0);
+
+        // Start transaction
+        const result = await ctx.prisma.$transaction(async (tx) => {
+          // Update the module with new video data
+          const updatedModule = {
+            ...existingModule,
+            ...(input.title && { title: input.title }),
+            ...(input.content && { content: input.content }),
+            fileUrl: input.newVideoId, // New video ID
+            length: newVideoLength,
+            duration: newVideoLength,
+            updatedAt: new Date().toISOString(),
+          };
+
+          // Replace the module in the array
+          const updatedModules = [...modules];
+          updatedModules[moduleIndex] = updatedModule;
+
+          // Update chapter with modified modules
+          const updatedChapter = await tx.chapter.update({
+            where: { id: input.chapterID },
+            data: {
+              modules: JSON.stringify(updatedModules),
+              updatedAt: new Date(),
+            },
+          });
+
+          // Update course statistics if length changed
+          if (lengthDifference !== 0) {
+            const currentCourse = await tx.course.findUnique({
+              where: { id: chapter.courseId },
+            });
+
+            if (currentCourse) {
+              await tx.course.update({
+                where: { id: chapter.courseId },
+                data: {
+                  length: Math.max(
+                    0,
+                    (currentCourse.length || 0) + lengthDifference
+                  ),
+                  updatedAt: new Date(),
+                },
+              });
+            }
+          }
+
+          return { chapter: updatedChapter, updatedModule };
+        });
+
+        // After successful database update, delete the old video from Bunny CDN
+        // We do this after the transaction to avoid orphaned videos if DB update fails
+        if (oldVideoId && oldVideoId !== input.newVideoId) {
+          try {
+            await axios.delete(
+              `https://video.bunnycdn.com/library/${libraryId}/videos/${oldVideoId}`,
+              {
+                headers: {
+                  AccessKey: apiKey,
+                },
+              }
+            );
+            console.log(`Successfully deleted old video: ${oldVideoId}`);
+          } catch (deleteError) {
+            // Log the error but don't fail the entire operation
+            // The video might already be deleted or not exist
+            console.warn(
+              `Failed to delete old video ${oldVideoId}:`,
+              deleteError
+            );
+
+            if (
+              axios.isAxiosError(deleteError) &&
+              deleteError.response?.status !== 404
+            ) {
+              // If it's not a 404 (video not found), log as warning
+              // but continue with the operation
+              console.error("Unexpected error deleting video:", deleteError);
+            }
+          }
+        }
+
+        return {
+          success: true,
+          moduleId: input.moduleId,
+          chapterId: result.chapter.id,
+          courseId: chapter.courseId,
+          oldVideoId,
+          newVideoId: input.newVideoId,
+          newVideoLength,
+          lengthDifference,
+        };
+      } catch (error) {
+        console.error("Error updating module video:", error);
+
+        if (error instanceof TRPCError) {
+          throw error;
+        }
+
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to update module video",
         });
       }
     }),

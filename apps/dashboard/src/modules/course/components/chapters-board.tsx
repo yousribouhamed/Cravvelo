@@ -30,12 +30,12 @@ import AddChapter from "../../../components/models/create-chapter-modal";
 import { NotFoundCard } from "../../../components/not-found-card";
 import { cn } from "@ui/lib/utils";
 import { Button } from "@ui/components/ui/button";
-import { MoreHorizontal, ChevronDown, Grip, Loader2 } from "lucide-react";
+import { MoreHorizontal, ChevronDown, Loader2 } from "lucide-react";
 import DeleteChapter from "../../../components/models/delete-chapter-modal";
 import { useMounted } from "../../../hooks/use-mounted";
 import UpdateChapterModel from "../../../components/models/update-chapter-modal";
 import { Badge } from "@ui/components/ui/badge";
-import { AddToChapter } from "./chapter";
+import { AddToChapter } from "./AddToChapter";
 import ModulesList from "./modules-list";
 import { Module } from "@/src/types";
 import { maketoast } from "@/src/components/toasts";
@@ -119,6 +119,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
       // Changed: Auto-open the last chapter accordion using chapter ID
       if (data.length > 0) {
         const lastChapter = [...data].sort(
+          //@ts-expect-error
           (a, b) => (a.position || 0) - (b.position || 0)
         )[data.length - 1];
         setOpenAccordions(new Set([lastChapter.id]));
@@ -128,6 +129,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
 
   // Memoized values for performance
   const sortedSections = useMemo(() => {
+    //@ts-expect-error
     return [...sections].sort((a, b) => (a.position || 0) - (b.position || 0));
   }, [sections]);
 
@@ -325,7 +327,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
               ref={provided.innerRef}
               className={cn(
                 "transition-colors duration-200",
-                snapshot.isDraggingOver && "bg-blue-50 rounded-lg"
+                snapshot.isDraggingOver && "bg-orange-50 rounded-lg"
               )}
             >
               {sortedSections.map((chapter, index) => {
@@ -346,10 +348,10 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                     {(provided, snapshot) => (
                       <div
                         className={cn(
-                          "flex flex-col justify-start gap-y-2 transition-all duration-300 bg-[#FC6B0033] border border-[#FC6B00] my-3 rounded-2xl",
+                          "flex flex-col bg-white justify-start gap-y-2 transition-all duration-300 bg-[#FC6B0033] border my-3 rounded-2xl",
                           chapter.isVisible ? "text-black" : "opacity-75",
                           snapshot.isDragging &&
-                            "bg-white shadow-2xl scale-105 rotate-2 z-50",
+                            " shadow-2xl scale-105 rotate-2 z-50 border-[#FC6B00] ",
                           dragStartIndex === index &&
                             !snapshot.isDragging &&
                             "scale-95",
@@ -368,7 +370,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                         >
                           <AccordionItem
                             value={accordionId}
-                            className="w-full min-h-[60px] h-fit p-4 border-none"
+                            className="w-full min-h-[60px] bg-white rounded-2xl h-fit p-4 border-none"
                           >
                             <AccordionTrigger asChild>
                               <div className="w-full h-[40px] flex items-center cursor-pointer justify-between group">
@@ -376,7 +378,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                                   {/* Drag Handle */}
                                   <div
                                     className={cn(
-                                      "px-2 py-3 transition-colors rounded cursor-grab active:cursor-grabbing",
+                                      "px-2 rounded-lg py-3 transition-colors  cursor-grab active:cursor-grabbing",
                                       "hover:bg-gray-100 group-hover:bg-gray-100",
                                       snapshot.isDragging && "cursor-grabbing"
                                     )}
@@ -409,9 +411,6 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                                   {/* Chapter Info */}
                                   <div className="w-fit flex flex-col h-full mr-4 justify-center gap-y-1">
                                     <div className="flex items-center gap-x-2">
-                                      <span className="text-xs text-gray-500 font-medium">
-                                        #{index + 1}
-                                      </span>
                                       <p className="text-black text-sm font-bold line-clamp-1">
                                         {chapter.title || "فصل بدون عنوان"}
                                       </p>

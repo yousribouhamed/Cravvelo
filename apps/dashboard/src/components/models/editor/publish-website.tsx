@@ -43,7 +43,7 @@ const PublishWebsite: FC = () => {
     onError: (err) => {
       console.log(err);
       setIsOpen(false);
-      maketoast.errorWithTest({
+      maketoast.errorWithText({
         text: "لقد فشلنا في إنشاء موقع الويب الخاص بك",
       });
     },
@@ -63,12 +63,7 @@ const PublishWebsite: FC = () => {
   return (
     <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
       <DialogTrigger asChild>
-        <Button
-       
-      
-        >
-          انشاء الاكاديمية
-        </Button>
+        <Button>انشاء الاكاديمية</Button>
       </DialogTrigger>
       <DialogContent className="max-w-lg " title="إنشاء موقع الويب الخاص بك">
         <Form {...form}>

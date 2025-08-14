@@ -21,8 +21,9 @@ import { EnhancedVideoUploader } from "@/src/modules/course/components/upload/vi
 import { VideoValidation } from "@/src/modules/course/validation";
 import { useUploadProgress } from "@/src/modules/course/hooks";
 import { useVideoUploadError } from "@/src/modules/course/hooks";
-import { VideoPlayer } from "../../models/video-player";
-import { maketoast } from "../../toasts";
+import { VideoPlayer } from "@/src/components/models/video-player";
+
+import { maketoast } from "@/src/components/toasts";
 import { trpc } from "@/src/app/_trpc/client";
 import axios from "axios";
 

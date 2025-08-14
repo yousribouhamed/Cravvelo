@@ -96,12 +96,16 @@ export const MenuBar: React.FC<MenuBarProps> = ({
           isRtl ? "border-l pl-2" : "border-r"
         }`}
       >
-        <MenuButton onClick={onPreview} title="Preview">
-          <Eye className="h-4 w-4" />
-        </MenuButton>
-        <MenuButton onClick={onClear} title="Clear All">
-          <Trash2 className="h-4 w-4" />
-        </MenuButton>
+        {onPreview && (
+          <MenuButton onClick={onPreview} title="Preview">
+            <Eye className="h-4 w-4" />
+          </MenuButton>
+        )}
+        {onClear && (
+          <MenuButton onClick={onClear} title="Clear All">
+            <Trash2 className="h-4 w-4" />
+          </MenuButton>
+        )}
       </div>
 
       {/* History */}
@@ -235,22 +239,23 @@ export const MenuBar: React.FC<MenuBarProps> = ({
           ↵
         </MenuButton>
       </div>
-
       {/* View Options */}
-      <div
-        className={`flex items-center gap-1 ${isRtl ? "mr-auto" : "ml-auto"}`}
-      >
-        <MenuButton
-          onClick={onToggleFullscreen}
-          title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+      {onToggleFullscreen && (
+        <div
+          className={`flex items-center gap-1 ${isRtl ? "mr-auto" : "ml-auto"}`}
         >
-          {isFullscreen ? (
-            <Minimize2 className="h-4 w-4" />
-          ) : (
-            <Maximize2 className="h-4 w-4" />
-          )}
-        </MenuButton>
-      </div>
+          <MenuButton
+            onClick={onToggleFullscreen}
+            title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+          >
+            {isFullscreen ? (
+              <Minimize2 className="h-4 w-4" />
+            ) : (
+              <Maximize2 className="h-4 w-4" />
+            )}
+          </MenuButton>
+        </div>
+      )}
     </div>
   );
 };

@@ -6,11 +6,13 @@ import { maketoast } from "./toasts";
 const ConnectionStatusAlert = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     const handleOnline = () => {
-      maketoast.successWithText({ text: "استعدنا الاتصال بالشبكة" });
+      //    maketoast.successWithText({ text: "استعدنا الاتصال بالشبكة" });
+      maketoast.success();
     };
 
     const handleOffline = () => {
-      maketoast.errorWithTest({ text: "فقدنا الاتصال بالشبكة" });
+      //  maketoast.errorWithTest({ text: "فقدنا الاتصال بالشبكة" });
+      maketoast.success();
     };
 
     window.addEventListener("online", handleOnline);

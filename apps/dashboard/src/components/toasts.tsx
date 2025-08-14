@@ -15,8 +15,34 @@ export const maketoast = {
       icon: <Check className="w-5 h-5" />,
     }),
 
+  successWithText: ({ text }: { text: string }) =>
+    toast.success(text, {
+      style: {
+        background: "#000",
+        color: "#fff",
+        border: "none",
+        borderRadius: "8px",
+        padding: "12px 16px",
+      },
+      position: "top-center",
+      icon: <Check className="w-5 h-5" />,
+    }),
+
   error: (text?: string) =>
     toast.error(text || "خطأ", {
+      style: {
+        background: "#ef4444",
+        color: "#fff",
+        border: "none",
+        borderRadius: "8px",
+        padding: "12px 16px",
+      },
+      position: "top-center",
+      icon: <AlertTriangle className="w-5 h-5" />,
+    }),
+
+  errorWithText: ({ text }: { text: string }) =>
+    toast.error(text, {
       style: {
         background: "#ef4444",
         color: "#fff",

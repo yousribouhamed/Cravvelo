@@ -1,7 +1,7 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
 import useHaveAccess from "@/src/hooks/use-have-access";
-import UpdateVedioForm from "@/src/components/forms/course-forms/chapters/update-chapters/update-video-form";
+import UpdateVedioForm from "@/src/modules/course/components/forms/update-video-form";
 import { prisma } from "database/src";
 import { Module } from "@/src/types";
 

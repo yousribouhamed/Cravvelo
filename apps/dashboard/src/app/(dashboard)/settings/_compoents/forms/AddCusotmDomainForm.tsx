@@ -45,9 +45,7 @@ const formSchema = z.object({
 const AddCusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
   const mutation = trpc.setCustomDomain.useMutation({
     onSuccess: () => {
-      maketoast.successWithText({
-        text: "لقد تم تسجيل النطاق الجديد الخاص بك",
-      });
+      maketoast.success();
     },
     onError: (err) => {
       console.error(err);

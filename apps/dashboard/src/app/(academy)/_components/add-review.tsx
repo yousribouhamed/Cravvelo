@@ -32,9 +32,7 @@ export default function AddReview({
         course,
       });
 
-      maketoast.successWithText({
-        text: "لقد تم إرسال تعليقك للمراجعة، عند الموافقة عليه سيتم عرضه",
-      });
+      maketoast.success();
       // revalidatePath(`/course-academy/${course.id}`);
       window?.location?.reload();
     } catch (err) {

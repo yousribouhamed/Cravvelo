@@ -19,7 +19,7 @@ import { Card, CardContent } from "@ui/components/ui/card";
 import { usePathname, useRouter } from "next/navigation";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { Textarea } from "@ui/components/ui/textarea";
-import { PlateEditor } from "../../reich-text-editor/rich-text-editor";
+import { CravveloEditor } from "@cravvelo/editor";
 import { Product } from "database";
 import { maketoast } from "../../toasts";
 import { PdfUploaderS3 } from "../../uploaders/pdf-uploader";
@@ -186,9 +186,9 @@ function ProductContentForm({ product }: ProductContentFormProps) {
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <PlateEditor
+                    <CravveloEditor
                       value={form.getValues("description")}
-                      onChnage={field.onChange}
+                      onChange={field.onChange}
                     />
                   </FormControl>
                   <FormMessage />

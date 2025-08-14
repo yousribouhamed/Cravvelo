@@ -1,1 +1,1 @@
-export { default as CravveloEditor } from "./src/Editor";
+export * from "./src/components/tiptap-editor";

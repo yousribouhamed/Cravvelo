@@ -9,10 +9,10 @@ export interface MenuButtonProps {
 }
 
 export interface MenuBarProps {
-  onPreview: () => void;
-  onClear: () => void;
-  isFullscreen: boolean;
-  onToggleFullscreen: () => void;
+  onPreview?: () => void;
+  onClear?: () => void;
+  isFullscreen?: boolean;
+  onToggleFullscreen?: () => void;
   activeFormats: Set<string>;
   onFormatToggle: (format: string) => void;
   canUndo: boolean;
@@ -22,14 +22,25 @@ export interface MenuBarProps {
   isRtl?: boolean; // New prop for RTL support
 }
 
-export interface TiptapEditorProps {
-  value: string;
-  onChange: (value: string) => void;
-  isFullscreen: boolean;
-  onToggleFullscreen: () => void;
-  onPreview: () => void;
-  onClear: () => void;
-}
+export type TiptapEditorProps =
+  | {
+      value: string;
+      readOnly: true;
+      onChange?: (value: string) => void; // optional when readOnly is true
+      isFullscreen?: boolean;
+      onToggleFullscreen?: () => void;
+      onPreview?: () => void;
+      onClear?: () => void;
+    }
+  | {
+      value: string;
+      readOnly?: false; // false or undefined
+      onChange: (value: string) => void; // required when not readOnly
+      isFullscreen?: boolean;
+      onToggleFullscreen?: () => void;
+      onPreview?: () => void;
+      onClear?: () => void;
+    };
 
 // Additional utility types for RTL support
 export type TextDirection = "ltr" | "rtl";

@@ -32,16 +32,16 @@ function AddPdfForm() {
   const path = usePathname();
   const chapterID = getValueFromUrl(path, 4);
 
-  const mutation = trpc.createModule.useMutation({
-    onSuccess: () => {
-      maketoast.success();
-      router.back();
-    },
-    onError: (error) => {
-      maketoast.error();
-      console.error(error);
-    },
-  });
+  // const mutation = trpc.createModule.useMutation({
+  //   onSuccess: () => {
+  //     maketoast.success();
+  //     router.back();
+  //   },
+  //   onError: (error) => {
+  //     maketoast.error();
+  //     console.error(error);
+  //   },
+  // });
 
   const form = useForm<z.infer<typeof addPDFSchema>>({
     mode: "onChange",
@@ -55,13 +55,13 @@ function AddPdfForm() {
   async function onSubmit(values: z.infer<typeof addPDFSchema>) {
     console.log("here it is file url");
     console.log(values);
-    await mutation.mutateAsync({
-      chapterID: chapterID,
-      content: "",
-      fileType: "PDF",
-      fileUrl: values.fileUrl,
-      title: values.title,
-    });
+    // await mutation.mutateAsync({
+    //   chapterID: chapterID,
+    //   content: "",
+    //   fileType: "PDF",
+    //   fileUrl: values.fileUrl,
+    //   title: values.title,
+    // });
   }
 
   return (
@@ -116,7 +116,7 @@ function AddPdfForm() {
       </div>
       <div className="col-span-1 w-full h-full ">
         <Card>
-          <CardContent className="w-full h-fit flex flex-col p-6  space-y-4">
+          {/* <CardContent className="w-full h-fit flex flex-col p-6  space-y-4">
             <Button
               disabled={mutation.isLoading}
               type="submit"
@@ -136,7 +136,7 @@ function AddPdfForm() {
               {" "}
               إلغاء والعودة
             </Button>
-          </CardContent>
+          </CardContent> */}
         </Card>
       </div>
     </div>

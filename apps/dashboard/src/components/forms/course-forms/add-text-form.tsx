@@ -3,8 +3,6 @@
 import { z } from "@/src/lib/zod-error-map";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { trpc } from "@/src/app/_trpc/client";
-import { Button } from "@ui/components/ui/button";
 import {
   Form,
   FormControl,
@@ -14,13 +12,9 @@ import {
   FormMessage,
 } from "@ui/components/ui/form";
 import { Input } from "@ui/components/ui/input";
-import { Card, CardContent } from "@ui/components/ui/card";
-import Tiptap from "../../tiptap";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
-import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import { PlateEditor } from "../../reich-text-editor/rich-text-editor";
-import { maketoast } from "../../toasts";
+import { CravveloEditor } from "@cravvelo/editor";
 
 const addTextSchema = z.object({
   title: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
@@ -32,16 +26,16 @@ function AddTextForm() {
   const path = usePathname();
   const chapterID = getValueFromUrl(path, 4);
 
-  const mutation = trpc.createModule.useMutation({
-    onSuccess: () => {
-      maketoast.success();
-      router.back();
-    },
-    onError: (error) => {
-      maketoast.error();
-      console.error(error);
-    },
-  });
+  // const mutation = trpc.createModule.useMutation({
+  //   onSuccess: () => {
+  //     maketoast.success();
+  //     router.back();
+  //   },
+  //   onError: (error) => {
+  //     maketoast.error();
+  //     console.error(error);
+  //   },
+  // });
 
   const form = useForm<z.infer<typeof addTextSchema>>({
     mode: "onChange",
@@ -53,13 +47,13 @@ function AddTextForm() {
   });
 
   async function onSubmit(values: z.infer<typeof addTextSchema>) {
-    await mutation.mutateAsync({
-      chapterID: chapterID,
-      content: values.content,
-      fileType: "TEXT",
-      fileUrl: "",
-      title: values.title,
-    });
+    // await mutation.mutateAsync({
+    //   chapterID: chapterID,
+    //   content: values.content,
+    //   fileType: "TEXT",
+    //   fileUrl: "",
+    //   title: values.title,
+    // });
   }
 
   return (
@@ -96,7 +90,7 @@ function AddTextForm() {
                     محتوى <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <PlateEditor onChnage={field.onChange} />
+                    <CravveloEditor value="" onChange={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -105,7 +99,7 @@ function AddTextForm() {
           </form>
         </Form>
       </div>
-      <div className="col-span-1 w-full h-full ">
+      {/* <div className="col-span-1 w-full h-full ">
         <Card>
           <CardContent className="w-full h-fit flex flex-col p-6  space-y-4">
             <Button
@@ -129,7 +123,7 @@ function AddTextForm() {
             </Button>
           </CardContent>
         </Card>
-      </div>
+      </div> */}
     </div>
   );
 }
