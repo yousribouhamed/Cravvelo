@@ -34,9 +34,10 @@ const addVideoSchema = z.object({
 
 interface AddVideoFormProps {
   chapterID: string;
+  courseId: string;
 }
 
-function AddVideoForm({ chapterID }: AddVideoFormProps) {
+function AddVideoForm({ chapterID, courseId }: AddVideoFormProps) {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [selectedVideo, setSelectedVideo] = React.useState<File | null>(null);
@@ -234,9 +235,7 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
       maketoast.success("تم رفع الفيديو وإنشاء الوحدة بنجاح");
 
       // Small delay to show completion before redirect
-      setTimeout(() => {
-        router.back();
-      }, 1000);
+      router.push(`/courses/${courseId}/chapters`);
     } catch (error) {
       console.error("Upload error:", error);
       setUploadStatus("error");

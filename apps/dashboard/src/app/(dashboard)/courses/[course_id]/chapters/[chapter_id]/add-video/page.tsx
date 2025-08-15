@@ -40,7 +40,7 @@ export default async function Home({ params }: PageProps) {
         />
 
         <div className="w-full pt-8 min-h-[100px] h-fit mb-10 ">
-          <AddVedioForm chapterID={chapter_id} />
+          <AddVedioForm courseId={course_id} chapterID={chapter_id} />
         </div>
       </main>
     </MaxWidthWrapper>
