@@ -81,9 +81,10 @@ export function SignUpForm() {
       // Add delay to show success message
       setTimeout(() => {
         router.push("/sign-up/verify-email");
-        maketoast.successWithText({
-          text: "لقد أرسلنا لك رمز التحقق المكون من 6 أرقام",
-        });
+        // maketoast.successWithText({
+        //   text: "لقد أرسلنا لك رمز التحقق المكون من 6 أرقام",
+        // });
+        maketoast.success();
       }, 1500);
     } catch (err) {
       setError("حدث خطأ أثناء إنشاء الحساب. يرجى المحاولة مرة أخرى.");

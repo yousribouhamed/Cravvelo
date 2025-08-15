@@ -1,4 +1,4 @@
-import { PlateEditorReactOnly } from "@/src/components/reich-text-editor/read-only";
+import { CravveloEditor } from "@cravvelo/editor";
 import type { FC } from "react";
 
 const DisplayPolicy: FC = (props: any) => {
@@ -12,7 +12,7 @@ const DisplayPolicy: FC = (props: any) => {
           {!props?.value ? (
             <p>there is no description </p>
           ) : (
-            <PlateEditorReactOnly value={props?.value} />
+            <CravveloEditor readOnly value={props?.value} />
           )}
         </div>
       </div>

@@ -1,7 +1,6 @@
 import { Product } from "database";
 import type { FC } from "react";
-import CourseDescription from "../../../_components/course-component/course-description";
-import { PlateEditorReactOnly } from "@/src/components/reich-text-editor/read-only";
+import { CravveloEditor } from "@cravvelo/editor";
 
 interface productContentProps {
   product: Product;
@@ -14,7 +13,8 @@ const ProductContent: FC<productContentProps> = ({ product }) => {
         <h3 className="text-xl font-bold">وصف المنتج</h3>
       </div>
       <div className="w-full min-h-[200px] h-fit ">
-        <PlateEditorReactOnly
+        <CravveloEditor
+          readOnly
           value={JSON.parse(product?.description as string)}
         />
       </div>

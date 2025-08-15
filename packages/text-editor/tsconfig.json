@@ -1,0 +1,17 @@
+{
+  "extends": "tsconfig/react-library.json",
+  "include": ["."],
+  "exclude": ["dist", "build", "node_modules"],
+
+  "module": "esnext", // or commonjs if your setup requires it and handles ESM interop
+  "moduleResolution": "bundler",
+  "compilerOptions": {
+    "jsx": "react",
+
+    "baseUrl": ".",
+    "paths": {
+      "@ui/*": ["./*"],
+      "@ui/components/ui*": ["./components/ui*"]
+    }
+  }
+}

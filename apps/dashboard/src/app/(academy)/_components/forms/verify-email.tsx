@@ -117,9 +117,7 @@ export function AcademyVerifyEmailForm({
                 }}
                 onClick={() => {
                   resendEmailAgain(searchParams.get("email")).then(() => {
-                    maketoast.successWithText({
-                      text: "email wa succesfully delived to you",
-                    });
+                    maketoast.success();
                   });
                 }}
               >

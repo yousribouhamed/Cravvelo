@@ -35,9 +35,9 @@ export function catchError(err: unknown) {
     const errors = err.issues.map((issue) => {
       return issue.message;
     });
-    return maketoast.errorWithTest({ text: errors.join("\n") });
+    return maketoast.errorWithText({ text: errors.join("\n") });
   } else if (err instanceof Error) {
-    return maketoast.errorWithTest({ text: err.message });
+    return maketoast.errorWithText({ text: err.message });
   } else {
     return maketoast.error();
   }
@@ -69,18 +69,18 @@ export function catchClerkError(err: unknown) {
     const errors = err.issues.map((issue) => {
       return issue.message;
     });
-    return maketoast.errorWithTest({ text: errors.join("\n") });
+    return maketoast.errorWithText({ text: errors.join("\n") });
   } else if (isClerkAPIResponseError(err)) {
     const clerkErrorMessages = err.errors.map((error) =>
       translateClerkErrorToArabic(error.code)
     );
-    return maketoast.errorWithTest({
+    return maketoast.errorWithText({
       text: clerkErrorMessages.join("\n") || unknownErrArabic,
     });
   } else {
     // Extract the error message from the stack trace
     const errorMessage = extractErrorMessage(err);
-    return maketoast.errorWithTest({
+    return maketoast.errorWithText({
       text: errorMessage,
     });
   }

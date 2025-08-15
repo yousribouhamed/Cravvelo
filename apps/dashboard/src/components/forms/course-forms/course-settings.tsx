@@ -15,15 +15,15 @@ import {
   FormMessage,
 } from "@ui/components/ui/form";
 import { Input } from "@ui/components/ui/input";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Textarea } from "@ui/components/ui/textarea";
 import { trpc } from "@/src/app/_trpc/client";
 import { maketoast } from "../../toasts";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { Course } from "database";
-import { PlateEditor } from "../../reich-text-editor/rich-text-editor";
+import { CravveloEditor } from "@cravvelo/editor";
 import React from "react";
-import VideoPlayer from "../../models/video-player";
+import { VideoPlayer } from "../../models/video-player";
 import {
   Select,
   SelectContent,
@@ -31,7 +31,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ui/components/ui/select";
-import { NewVideoUploader } from "../../uploaders/NewVideoUploader";
 import { ImageUploaderS3 } from "../../uploaders/image-uploader";
 
 const youtubeUrlRegex =
@@ -324,7 +323,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 )}
               />
 
-              {/* <FormField
+              <FormField
                 control={form.control}
                 name="courseDescription"
                 render={({ field }) => (
@@ -334,21 +333,15 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                       <span className="text-red-600 text-xl">*</span>
                     </FormLabel>
                     <FormControl>
-                      <PlateEditor
-                        value={[
-                          {
-                            id: "1",
-                            type: "p",
-                            children: [{ text: " " }],
-                          },
-                        ]}
-                        onChnage={field.onChange}
+                      <CravveloEditor
+                        value={field.value}
+                        onChange={field.onChange}
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
-              /> */}
+              />
 
               <FormField
                 control={form.control}

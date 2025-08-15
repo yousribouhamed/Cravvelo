@@ -176,9 +176,7 @@ export function ResetPasswordStep2Form() {
 
           setTimeout(() => {
             router.push(`${window.location.origin}/`);
-            maketoast.successWithText({
-              text: "تم إعادة تعيين كلمة المرور بنجاح.",
-            });
+            maketoast.success();
           }, 1500);
         } else {
           console.error(attemptFirstFactor);
@@ -210,9 +208,7 @@ export function ResetPasswordStep2Form() {
       });
 
       setSuccess("تم إرسال رمز جديد إلى بريدك الإلكتروني.");
-      maketoast.successWithText({
-        text: "تم إرسال رمز التحقق الجديد بنجاح",
-      });
+      maketoast.success();
     } catch (err) {
       console.log(err);
       setError("فشل في إرسال رمز جديد. يرجى المحاولة مرة أخرى.");

@@ -10,7 +10,11 @@ interface VideoPlayerProps {
   videoId: string;
 }
 
-const VideoPlayer: FC<VideoPlayerProps> = ({ isOpen, setIsOpen, videoId }) => {
+export const VideoPlayer: FC<VideoPlayerProps> = ({
+  isOpen,
+  setIsOpen,
+  videoId,
+}) => {
   return (
     <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
       <DialogContent
@@ -24,5 +28,3 @@ const VideoPlayer: FC<VideoPlayerProps> = ({ isOpen, setIsOpen, videoId }) => {
     </Dialog>
   );
 };
-
-export default VideoPlayer;

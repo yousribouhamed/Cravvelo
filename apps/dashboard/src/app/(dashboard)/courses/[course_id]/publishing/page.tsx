@@ -1,6 +1,6 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
-import CourseHeader from "@/src/components/course-header";
+import CourseHeader from "@/src/modules/course/components/course-header";
 import { notFound } from "next/navigation";
 import { prisma } from "database/src";
 import PublishCourseForm from "@/src/components/forms/course-forms/publish-form";

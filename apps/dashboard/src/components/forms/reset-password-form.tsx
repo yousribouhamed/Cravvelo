@@ -62,16 +62,16 @@ export function ResetPasswordForm() {
 
         if (firstFactor.status === "needs_first_factor") {
           setSuccess("تم إرسال رمز التحقق بنجاح إلى بريدك الإلكتروني.");
-          
+
           setTimeout(() => {
             router.push("/sign-in/reset-password/step2");
-            maketoast.successWithText({
-              text: "لقد أرسلنا لك رمز التحقق المكون من 6 أرقام.",
-            });
+            maketoast.success();
           }, 1500);
         }
       } catch (err) {
-        setError("حدث خطأ أثناء إرسال رمز التحقق. يرجى التأكد من صحة البريد الإلكتروني والمحاولة مرة أخرى.");
+        setError(
+          "حدث خطأ أثناء إرسال رمز التحقق. يرجى التأكد من صحة البريد الإلكتروني والمحاولة مرة أخرى."
+        );
         catchClerkError(err);
       }
     });
@@ -96,7 +96,8 @@ export function ResetPasswordForm() {
               استعادة كلمة المرور
             </CardTitle>
             <CardDescription className="text-gray-600 text-sm leading-relaxed">
-              أدخِل عنوان بريدك الإلكتروني وسنرسل لك رمز التحقق لإعادة تعيين كلمة المرور.
+              أدخِل عنوان بريدك الإلكتروني وسنرسل لك رمز التحقق لإعادة تعيين
+              كلمة المرور.
             </CardDescription>
           </div>
         </div>
@@ -120,9 +121,7 @@ export function ResetPasswordForm() {
           <div className="bg-red-50 border border-red-200 rounded-lg p-4">
             <div className="flex items-start gap-3">
               <Shield className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
-              <p className="text-sm text-red-800 leading-relaxed">
-                {error}
-              </p>
+              <p className="text-sm text-red-800 leading-relaxed">{error}</p>
             </div>
           </div>
         )}
@@ -156,7 +155,8 @@ export function ResetPasswordForm() {
               <div className="flex items-start gap-3">
                 <KeyRound className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
                 <FormDescription className="text-sm text-blue-800 leading-relaxed">
-                  تأكّد من صحة البريد الإلكتروني، إذ سيتم إرسال رمز التحقق المكون من 6 أرقام لإعادة تعيين كلمة المرور.
+                  تأكّد من صحة البريد الإلكتروني، إذ سيتم إرسال رمز التحقق
+                  المكون من 6 أرقام لإعادة تعيين كلمة المرور.
                 </FormDescription>
               </div>
             </div>
@@ -175,7 +175,7 @@ export function ResetPasswordForm() {
 
         {/* Back to Sign In Link */}
         <div className="text-center pt-4 border-t border-gray-100">
-          <Link 
+          <Link
             href="/sign-in"
             className="text-blue-600 hover:text-blue-700 font-medium transition-colors inline-flex items-center gap-2"
           >

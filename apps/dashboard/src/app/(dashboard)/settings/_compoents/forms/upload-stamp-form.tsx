@@ -37,9 +37,7 @@ interface UploadStampFormProps {
 const UploadStampForm: FC<UploadStampFormProps> = ({ stempUrl }) => {
   const mutation = trpc.addStamp.useMutation({
     onSuccess: () => {
-      maketoast.successWithText({
-        text: "تمت الاضافة بنجاح",
-      });
+      maketoast.success();
     },
     onError: () => {
       maketoast.error();
