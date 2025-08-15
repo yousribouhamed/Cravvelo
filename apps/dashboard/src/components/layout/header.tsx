@@ -34,17 +34,19 @@ const Header: FC<Props> = ({
   notifications,
 }) => {
   const router = useRouter();
-  
+
   return (
-    <div className="w-full ">
+    <div className="w-full">
       <TooltipProvider>
-        <div className="w-full h-20 flex justify-between items-center px-4 md:px-6">
-          {/* Left Section - Title & Back Button */}
-          <div className="flex items-center gap-3 min-w-0 flex-1 lg:flex-initial lg:w-1/4">
-            <div className="lg:hidden">
+        <div className="w-full h-16 md:h-20 flex justify-between items-center  border-b border-gray-100">
+          {/* Left Section - Mobile Sidebar & Back Button & Title */}
+          <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
+            {/* Mobile Sidebar - Always first on mobile */}
+            <div className="lg:hidden flex-shrink-0">
               <MobildSideBard />
             </div>
-            
+
+            {/* Back Button */}
             {goBack && (
               <Tooltip delayDuration={0}>
                 <TooltipTrigger asChild>
@@ -52,9 +54,9 @@ const Header: FC<Props> = ({
                     onClick={() => router.back()}
                     variant="outline"
                     size="icon"
-                    className="h-10 w-10 rounded-lg border-gray-300 hover:bg-gray-50 hover:border-gray-400 transition-colors"
+                    className=" flex-shrink-0"
                   >
-                    <ArrowRight className="w-4 h-4 text-gray-600" />
+                    <ArrowRight className="w-4 h-4 " />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -62,27 +64,32 @@ const Header: FC<Props> = ({
                 </TooltipContent>
               </Tooltip>
             )}
-            
-            <h1 className="text-lg md:text-2xl font-bold text-gray-900 truncate">
+
+            {/* Title */}
+            <h1 className="text-base md:text-lg lg:text-2xl font-bold text-gray-900 truncate">
               {title}
             </h1>
           </div>
 
-          {/* Center Section - Search */}
-          <div className="hidden md:flex flex-1 max-w-md mx-8">
+          {/* Center Section - Search (Desktop only) */}
+          <div className="hidden lg:flex flex-1 max-w-md mx-4 xl:mx-8">
             <SearchInput />
           </div>
 
           {/* Right Section - Notifications & User Nav */}
-          <div className="flex items-center gap-3 lg:w-1/4 justify-end">
-            <Notifications
-              accountId={user.accountId}
-              notifications={notifications}
-            />
-            
+          <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
+            <div className="flex-shrink-0">
+              <Notifications
+                accountId={user.accountId}
+                notifications={notifications}
+              />
+            </div>
+
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
-                <UserNav user={user} />
+                <div className="flex-shrink-0">
+                  <UserNav user={user} />
+                </div>
               </TooltipTrigger>
               <TooltipContent>
                 <p>هذه هي قائمة التنقل الخاصة بالمستخدم</p>
@@ -91,18 +98,19 @@ const Header: FC<Props> = ({
           </div>
         </div>
 
-        {/* Mobile Search Bar */}
-        <div className="md:hidden px-4 pb-4">
+        {/* Mobile & Tablet Search Bar */}
+        <div className="lg:hidden px-4 py-3 border-b border-gray-100">
           <SearchInput />
         </div>
       </TooltipProvider>
 
       {/* Trial Status Banner */}
       {user?.isFreeTrial && !user?.isSubscribed && !isLoadingPage && (
-        <div className="w-full bg-white border border-dashed border-blue-500 rounded-xl px-4 py-3">
+        <div className=" mt-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl px-4 py-3 shadow-sm">
           <div className="flex items-center justify-center">
-            <h1 className="text-gray-800 font-medium text-sm md:text-base text-center">
-              لديك {daysLeftInTrial(user.createdAt)} يومًا متبقيًا في النسخة التجريبية المجانية
+            <h1 className="text-blue-800 font-medium text-sm md:text-base text-center leading-relaxed">
+              لديك {daysLeftInTrial(user.createdAt)} يومًا متبقيًا في النسخة
+              التجريبية المجانية
             </h1>
           </div>
         </div>
@@ -110,9 +118,9 @@ const Header: FC<Props> = ({
 
       {/* Expired Trial Banner */}
       {!user?.isSubscribed && !user?.isFreeTrial && !isLoadingPage && (
-        <div className="w-full bg-white border border-dashed border-blue-500 rounded-xl px-4 py-3">
+        <div className="mt-4 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-xl px-4 py-3 shadow-sm">
           <div className="flex items-center justify-center">
-            <h1 className="text-gray-800 font-medium text-sm md:text-base text-center">
+            <h1 className="text-red-800 font-medium text-sm md:text-base text-center leading-relaxed">
               انتهت الفترة التجريبية، يجب عليك الاشتراك في أحد الباقات
             </h1>
           </div>

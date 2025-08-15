@@ -47,7 +47,7 @@ const getAllNotifications = async ({ accountId }: { accountId: string }) => {
 };
 
 export default async function Page({ params }: PageProps) {
-  const { chapter_id, material_id } = await params;
+  const { chapter_id, material_id, course_id } = await params;
 
   const [user, material] = await Promise.all([
     useHaveAccess(),
@@ -68,7 +68,7 @@ export default async function Page({ params }: PageProps) {
           title="تحديث الفيديو"
         />
         <div className="w-full pt-8 min-h-[100px] ">
-          <UpdateVedioForm material={material} />
+          <UpdateVedioForm courseId={course_id} material={material} />
         </div>
       </main>
     </MaxWidthWrapper>

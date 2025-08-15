@@ -1,4 +1,11 @@
-import { ArrowLeft, Gift, User, ChevronDown, Eye, ArrowUpLeft } from "lucide-react";
+import {
+  ArrowLeft,
+  Gift,
+  User,
+  ChevronDown,
+  Eye,
+  ArrowUpLeft,
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@ui/components/ui/avatar";
 import { Button, buttonVariants } from "@ui/components/ui/button";
 import {
@@ -21,11 +28,14 @@ interface UserNavProps {
 
 // Helper function to get display name
 const getDisplayName = (user: UserData): string => {
-  return user?.user_name || user?.firstName || "مرحباً";
+  const name = user?.firstName || user?.user_name || "";
+  return name.trim() === "" ? "مستخدم" : name;
 };
 
 // Helper function to get verification progress
-const getVerificationProgress = (steps: number): number => {
+const getVerificationProgress = (steps: number | undefined): number => {
+  if (typeof steps !== "number") return 0;
+
   switch (steps) {
     case 0:
       return 0;
@@ -40,7 +50,7 @@ const getVerificationProgress = (steps: number): number => {
 };
 
 // Helper function to get verification text
-const getVerificationText = (steps: number): string => {
+const getVerificationText = (steps: number | undefined): string => {
   return steps === 3 ? "تم التوثيق بنجاح" : "ابدأ التوثيق الآن";
 };
 
@@ -68,8 +78,10 @@ const navigationItems = [
 
 export default function UserNav({ user }: UserNavProps) {
   const displayName = getDisplayName(user);
-  const verificationProgress = getVerificationProgress(user.verification_steps);
-  const verificationText = getVerificationText(user.verification_steps);
+  const verificationProgress = getVerificationProgress(
+    user?.verification_steps
+  );
+  const verificationText = getVerificationText(user?.verification_steps);
 
   return (
     <DropdownMenu>
@@ -81,7 +93,7 @@ export default function UserNav({ user }: UserNavProps) {
         >
           <div className="w-[20%] h-full flex items-center justify-start">
             <Avatar className="w-8 h-8 rounded-[50%]">
-              <AvatarImage src={user?.avatar} />
+              <AvatarImage src={user?.avatar || ""} />
               <AvatarFallback>AB</AvatarFallback>
             </Avatar>
           </div>
@@ -96,17 +108,20 @@ export default function UserNav({ user }: UserNavProps) {
 
       <DropdownMenuContent align="start" className="w-56">
         {/* User Profile Header */}
-        <div dir="ltr" className="w-full h-[70px] flex items-center justify-between px-2">
+        <div
+          dir="ltr"
+          className="w-full h-[70px] flex items-center justify-between px-2"
+        >
           <Button size="icon" className="w-6 h-6 p-1" variant="secondary">
             <Eye className="text-gray-700 w-2 h-2" />
           </Button>
           <div className="cursor-pointer flex justify-center items-end gap-y-2 w-full h-full flex-col">
             <Avatar className="w-8 h-8 rounded-md">
-              <AvatarImage src={user?.avatar} />
+              <AvatarImage src={user?.avatar || ""} />
               <AvatarFallback>AB</AvatarFallback>
             </Avatar>
             <p className="text-md text-black">
-              {user?.firstName || "ah"} اكاديمية
+              {user?.firstName || ""} اكاديمية
             </p>
           </div>
         </div>
@@ -129,7 +144,10 @@ export default function UserNav({ user }: UserNavProps) {
               />
             </div>
           </div>
-          <div dir="rtl" className="w-full h-[20px] flex justify-center items-center">
+          <div
+            dir="rtl"
+            className="w-full h-[20px] flex justify-center items-center"
+          >
             <Progress
               value={verificationProgress}
               className="h-1 w-full bg-[#EFEFEF]"
@@ -165,7 +183,7 @@ export default function UserNav({ user }: UserNavProps) {
             <Link
               target="_blank"
               className="w-full h-full flex justify-between items-center p-2"
-              href={`https://${user?.subdomain}`}
+              href={user?.subdomain ? `https://${user.subdomain}` : "#"}
             >
               <ArrowUpLeft className="h-4 w-4" />
               <span>معاينة الأكاديمية</span>
