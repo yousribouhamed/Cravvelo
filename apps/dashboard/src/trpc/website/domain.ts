@@ -58,7 +58,6 @@ export const domain = {
       }
     }),
 
-  // in here we need to set a custom domain fot the user
   setCustomDomain: privateProcedure
     .input(
       z.object({
@@ -78,28 +77,18 @@ export const domain = {
           code: "BAD_REQUEST",
           message: "Cannot use cravvelo.com subdomain as your custom domain",
         });
+      }
 
-        // if the custom domain is valid, we need to add it to Vercel
-      } else if (validDomainRegex.test(input.customdomain)) {
-        const response = await ctx.prisma.website.update({
-          where: {
-            accountId: account.id,
-          },
-          data: {
-            customDomain: input.customdomain,
-          },
-        });
-        await Promise.all([
-          addDomainToVercel(input.customdomain),
-          // Optional: add www subdomain as well and redirect to apex domain
-          // addDomainToVercel(`www.${input.customdomain}`),
-        ]);
+      // Remove old domain from Vercel if it exists and is different
+      if (site.customDomain && site.customDomain !== input.customdomain) {
+        await removeDomainFromVercelProject(site.customDomain);
+      }
 
-        console.log("this is the domains are added to vercel");
+      let updatedSite;
 
-        // empty value means the user wants to remove the custom domain
-      } else if (input.customdomain === "") {
-        const response = await ctx.prisma.website.update({
+      if (input.customdomain === "") {
+        // User wants to remove the custom domain
+        updatedSite = await ctx.prisma.website.update({
           where: {
             accountId: account.id,
           },
@@ -107,47 +96,33 @@ export const domain = {
             customDomain: null,
           },
         });
-      }
-
-      // if the site had a different customDomain before, we need to remove it from Vercel
-      if (site.customDomain && site.customDomain !== input.customdomain) {
-        const response = await removeDomainFromVercelProject(site.customDomain);
-
-        /* Optional: remove domain from Vercel team 
-
-        // first, we need to check if the apex domain is being used by other sites
-        const apexDomain = getApexDomain(`https://${site.customDomain}`);
-        const domainCount = await prisma.site.count({
+      } else if (validDomainRegex.test(input.customdomain)) {
+        // User wants to set a new custom domain
+        updatedSite = await ctx.prisma.website.update({
           where: {
-            OR: [
-              {
-                customDomain: apexDomain,
-              },
-              {
-                customDomain: {
-                  endsWith: `.${apexDomain}`,
-                },
-              },
-            ],
+            accountId: account.id,
+          },
+          data: {
+            customDomain: input.customdomain,
           },
         });
 
-        // if the apex domain is being used by other sites
-        // we should only remove it from our Vercel project
-        if (domainCount >= 1) {
-          await removeDomainFromVercelProject(site.customDomain);
-        } else {
-          // this is the only site using this apex domain
-          // so we can remove it entirely from our Vercel team
-          await removeDomainFromVercelTeam(
-            site.customDomain
-          );
-        }
-        
-        */
+        // Add domain to Vercel
+        await Promise.all([
+          addDomainToVercel(input.customdomain),
+          // Optional: add www subdomain as well and redirect to apex domain
+          // addDomainToVercel(`www.${input.customdomain}`),
+        ]);
 
-        return site;
+        console.log("Domain added to Vercel");
+      } else {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Invalid domain format",
+        });
       }
+
+      return updatedSite;
     }),
 
   getDomainStatus: privateProcedure
