@@ -1,11 +1,11 @@
 interface TenantAboutProps {
-  params: {
+  params: Promise<{
     tenant: string;
-  };
+  }>;
 }
 
-export default function TenantAbout({ params }: TenantAboutProps) {
-  const { tenant } = params;
+export default async function TenantAbout({ params }: TenantAboutProps) {
+  const { tenant } = await params;
 
   return (
     <div className="p-8">

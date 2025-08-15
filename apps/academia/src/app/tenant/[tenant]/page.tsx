@@ -1,11 +1,11 @@
 interface TenantPageProps {
-  params: {
+  params: Promise<{
     tenant: string;
-  };
+  }>;
 }
 
-export default function TenantPage({ params }: TenantPageProps) {
-  const { tenant } = params;
+export default async function TenantPage({ params }: TenantPageProps) {
+  const { tenant } = await params;
 
   return (
     <div className="p-8">
@@ -21,9 +21,10 @@ export default function TenantPage({ params }: TenantPageProps) {
 }
 
 // Optional: Generate metadata for each tenant
-export function generateMetadata({ params }: TenantPageProps) {
+export async function generateMetadata({ params }: TenantPageProps) {
+  const awaitedParams = await params;
   return {
-    title: `${params.tenant} - Multi-tenant App`,
-    description: `Welcome to ${params.tenant}'s space`,
+    title: `${awaitedParams.tenant} - Multi-tenant App`,
+    description: `Welcome to ${awaitedParams.tenant}'s space`,
   };
 }
