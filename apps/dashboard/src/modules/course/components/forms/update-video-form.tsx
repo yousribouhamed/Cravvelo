@@ -37,9 +37,10 @@ const updateVedioSchema = z.object({
 
 interface UpdateVedioFormProps {
   material: Module;
+  courseId: string;
 }
 
-function UpdateVedioForm({ material }: UpdateVedioFormProps) {
+function UpdateVedioForm({ material, courseId }: UpdateVedioFormProps) {
   const router = useRouter();
   const path = usePathname();
   const chapterID = getValueFromUrl(path, 4);
@@ -75,10 +76,7 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
       maketoast.success("تم تحديث الفيديو بنجاح");
       setUploadStatus("completed");
 
-      // Small delay to show completion before redirect
-      setTimeout(() => {
-        router.back();
-      }, 1000);
+      router.push(`/courses/${courseId}/chapters`);
     },
     onError: (error) => {
       maketoast.error("فشل في تحديث الفيديو");
@@ -253,8 +251,6 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
         console.log("New video uploaded successfully:", newVideoId);
       }
 
-      // Update the module with new video
-      console.log("Updating module...");
       await mutation.mutateAsync({
         chapterID: chapterID,
         moduleId: material.id,

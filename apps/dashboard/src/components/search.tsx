@@ -39,7 +39,7 @@ interface ProductGroup {
 }
 
 interface SearchResult {
-  type: 'product' | 'course' | 'page';
+  type: "product" | "course" | "page";
   id: string;
   title: string;
   description: string;
@@ -48,7 +48,6 @@ interface SearchResult {
   color: string;
 }
 
-// Skeleton component for loading states
 const SearchSkeleton = () => (
   <div className="space-y-1 p-2">
     {[...Array(4)].map((_, i) => (
@@ -116,7 +115,6 @@ export const SearchInput: FC = () => {
     },
   });
 
-  // Fetch data when query changes
   React.useEffect(() => {
     if (debouncedQuery.length <= 0) {
       setData(null);
@@ -126,7 +124,7 @@ export const SearchInput: FC = () => {
     }
 
     if (debouncedQuery.length < 2) {
-      return; // Don't search for very short queries
+      return;
     }
 
     setIsSearching(true);
@@ -178,7 +176,7 @@ export const SearchInput: FC = () => {
     // Add products
     data.products.forEach((product) => {
       results.push({
-        type: 'product',
+        type: "product",
         id: product.id,
         title: product.title,
         description: product.SeoDescription || product.subDescription || "",
@@ -191,7 +189,7 @@ export const SearchInput: FC = () => {
     // Add courses
     data.courses.forEach((course) => {
       results.push({
-        type: 'course',
+        type: "course",
         id: course.id,
         title: course.title,
         description: course.courseResume || "",
@@ -206,7 +204,8 @@ export const SearchInput: FC = () => {
 
   const showDefaultPages = !query && !data && !isSearching;
   const showSearchResults = query && (data || isSearching);
-  const showNoResults = query && data && searchResults.length === 0 && !isSearching;
+  const showNoResults =
+    query && data && searchResults.length === 0 && !isSearching;
 
   return (
     <>
@@ -258,7 +257,9 @@ export const SearchInput: FC = () => {
                   className="w-full h-[70px] border-b flex items-center justify-between px-4 cursor-pointer hover:bg-gray-50"
                   onSelect={() => handleSelect(() => router.push(page.path))}
                 >
-                  <div className={`w-[50px] h-[50px] ${page.color} rounded-2xl shadow flex items-center justify-center`}>
+                  <div
+                    className={`w-[50px] h-[50px] ${page.color} rounded-2xl shadow flex items-center justify-center`}
+                  >
                     <page.icon className="w-5 h-5 text-white" strokeWidth={3} />
                   </div>
                   <div className="w-[calc(100%-60px)] h-full flex flex-col items-start justify-center">
@@ -286,7 +287,9 @@ export const SearchInput: FC = () => {
                       value={product.title}
                       className="w-full h-[70px] border-b flex items-center justify-between px-4 cursor-pointer hover:bg-gray-50"
                       onSelect={() =>
-                        handleSelect(() => router.push(`/product/${product.id}`))
+                        handleSelect(() =>
+                          router.push(`/product/${product.id}`)
+                        )
                       }
                     >
                       <div className="w-[50px] h-[50px] bg-green-500 rounded-2xl shadow flex items-center justify-center">
@@ -297,7 +300,9 @@ export const SearchInput: FC = () => {
                           {product.title}
                         </span>
                         <span className="text-gray-600 text-start truncate">
-                          {product.SeoDescription || product.subDescription || ""}
+                          {product.SeoDescription ||
+                            product.subDescription ||
+                            ""}
                         </span>
                       </div>
                     </CommandItem>
@@ -308,7 +313,9 @@ export const SearchInput: FC = () => {
               {/* Courses */}
               {data?.courses && data.courses.length > 0 && (
                 <>
-                  {data.products && data.products.length > 0 && <CommandSeparator />}
+                  {data.products && data.products.length > 0 && (
+                    <CommandSeparator />
+                  )}
                   <CommandGroup heading="الدورات">
                     {data.courses.map((course) => (
                       <CommandItem
@@ -322,7 +329,10 @@ export const SearchInput: FC = () => {
                         }
                       >
                         <div className="w-[50px] h-[50px] bg-violet-500 rounded-2xl shadow flex items-center justify-center">
-                          <Youtube className="w-5 h-5 text-white" strokeWidth={3} />
+                          <Youtube
+                            className="w-5 h-5 text-white"
+                            strokeWidth={3}
+                          />
                         </div>
                         <div className="w-[calc(100%-60px)] h-full flex flex-col items-start justify-center">
                           <span className="text-xl font-bold text-black">
