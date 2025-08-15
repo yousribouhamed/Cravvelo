@@ -14,13 +14,12 @@ export default async function TenantPage({ params }: TenantPageProps) {
       <div className="mt-4 p-4 bg-blue-50 rounded-lg">
         <h2 className="font-semibold">Tenant Information:</h2>
         <p>Tenant ID: {tenant}</p>
-        <p>URL: {tenant}.localhost:3000</p>
+        <p className="text-black">URL: {tenant}.localhost:3000</p>
       </div>
     </div>
   );
 }
 
-// Optional: Generate metadata for each tenant
 export async function generateMetadata({ params }: TenantPageProps) {
   const awaitedParams = await params;
   return {
