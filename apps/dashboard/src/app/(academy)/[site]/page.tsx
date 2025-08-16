@@ -44,7 +44,7 @@ const Page = async ({ params }: PageProps) => {
     <>
       <AcademyHeader
         referralEnabled={website.enableReferral}
-        color={website?.color}
+        color={website?.primaryColor}
         student={student}
         isAuthanticated={student ? true : false}
         subdomain={website?.subdomain ?? null}
@@ -57,7 +57,7 @@ const Page = async ({ params }: PageProps) => {
         }`}
       >
         <main className="w-full h-fit min-h-full flex flex-col items-center justify-center  p-4 sm:p-0s">
-          <Banner websiteName={website?.name} color={website?.color} />
+          <Banner websiteName={website?.name} color={website?.primaryColor} />
           {courses.length === 0 && website?.dCoursesHomeScreen ? (
             <div className="w-full h-fit min-h-[250px] flex items-center flex-col gap-y-1 justify-center">
               <Image
@@ -74,7 +74,7 @@ const Page = async ({ params }: PageProps) => {
           ) : (
             <CoursesReel
               inCenter={website?.itemsAlignment}
-              color={website?.color}
+              color={website?.primaryColor}
               courses={courses}
             />
           )}
