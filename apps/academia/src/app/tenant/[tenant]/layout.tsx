@@ -3,6 +3,9 @@ import { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { getTenantWebsite, validateTenant } from "@/actions/tanant";
 import { TenantProvider } from "@/contexts/tanant";
+import Providers from "@/components/providers";
+import MaxWidthWrapper from "@/components/max-with-wrapper";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface TenantLayoutProps {
   children: ReactNode;
@@ -15,16 +18,16 @@ export default async function TenantLayout({
   children,
   params,
 }: TenantLayoutProps) {
-  const { tenant } = await params;
+  const { tenant: tanantKey } = await params;
 
-  // Validate tenant exists and is active
-  const { isValid, website } = await validateTenant(tenant);
+  const tenant = `${tanantKey}.cravvelo.com`;
+
+  const { isValid } = await validateTenant(tenant);
 
   if (!isValid) {
-    notFound(); // Return 404 if tenant doesn't exist or is suspended
+    notFound();
   }
 
-  // Get the full website data with account info
   const websiteData = await getTenantWebsite(tenant);
 
   if (!websiteData) {
@@ -33,19 +36,22 @@ export default async function TenantLayout({
 
   return (
     <div
-      className="min-h-screen bg-gray-50 dark:bg-zinc-800"
+      className="min-h-screen bg-neutral-50 dark:bg-[#0E0E10] text-neutral-900 dark:text-neutral-200"
       style={
         {
-          // Apply tenant's custom color scheme if available
-          "--primary-color": websiteData.color || "#FC6B00",
+          "--primary-color": websiteData.primaryColor || "#7C3AED",
         } as React.CSSProperties
       }
     >
       <TenantProvider website={websiteData} tenant={tenant}>
-        <Header />
-        <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-          {children}
-        </main>
+        <Providers>
+          <Header />
+          <MaxWidthWrapper className="flex flex-col">
+            <ScrollArea className="flex-1 h-[calc(100vh-theme(spacing.16))]">
+              {children}
+            </ScrollArea>
+          </MaxWidthWrapper>
+        </Providers>
       </TenantProvider>
     </div>
   );

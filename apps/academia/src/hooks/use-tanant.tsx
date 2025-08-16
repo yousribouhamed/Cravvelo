@@ -5,7 +5,8 @@ export function useTenantBranding() {
   const { website } = useTenant();
 
   return {
-    primaryColor: website?.color || "#FC6B00",
+    primaryColor: website?.primaryColor || "#FC6B00",
+    primaryColorDark: website?.primaryColorDark || "#FC6B00",
     logo: website?.logo,
     favicon: website?.favicon,
     name: website?.name || website?.Account.user_name,
