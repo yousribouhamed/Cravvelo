@@ -11,6 +11,8 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
+interface HeaderProps {}
+
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { tenant } = useTenant();
@@ -21,17 +23,13 @@ export default function Header() {
   const navigationLinks = [
     { href: `/`, label: "Home", show: true },
     { href: `/courses`, label: "Courses", show: showCoursesOnHome },
-    {
-      href: `/products`,
-      label: "Products",
-      show: showProductsOnHome,
-    },
+    { href: `/products`, label: "Products", show: showProductsOnHome },
     { href: `/about`, label: "About", show: true },
     { href: `/contact`, label: "Contact", show: true },
   ].filter((link) => link.show);
 
   return (
-    <div className="w-full h-[70px] bg-white border-b dark:bg-zinc-900 sticky top-0 z-50">
+    <div className="w-full h-[70px] bg-white border-b dark:bg-[#0A0A0C] dark:border-[#1F1F23] sticky top-0 z-50">
       <MaxWidthWrapper className="h-full">
         <div className="w-full h-full flex items-center justify-between">
           {/* Logo/Brand Section */}
@@ -67,13 +65,13 @@ export default function Header() {
             )}
 
             <div className="flex flex-col">
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-xl font-bold text-gray-900 dark:text-neutral-100">
                 {name || userName || "Academy"}
               </h1>
               {verified && (
                 <div className="flex items-center gap-x-1">
                   <svg
-                    className="w-4 h-4 text-blue-500"
+                    className="w-4 h-4 text-[#3B82F6]"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -83,7 +81,7 @@ export default function Header() {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <span className="text-xs text-blue-500 font-medium">
+                  <span className="text-xs text-[#3B82F6] font-medium">
                     Verified
                   </span>
                 </div>
@@ -97,7 +95,7 @@ export default function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium"
+                className="text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium"
               >
                 {link.label}
               </Link>
@@ -107,7 +105,7 @@ export default function Header() {
           {/* Desktop Auth Buttons */}
           <div className="hidden md:flex items-center justify-end gap-x-4">
             <Link href={`/${tenant}/auth/signin`}>
-              <button className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
+              <button className="px-4 py-2 text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
                 Sign In
               </button>
             </Link>
@@ -123,7 +121,7 @@ export default function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+            className="md:hidden p-2 text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24">
@@ -148,25 +146,23 @@ export default function Header() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-[70px] left-0 right-0 bg-white dark:bg-zinc-900 border-b shadow-lg">
+          <div className="md:hidden absolute top-[70px] left-0 right-0 bg-white dark:bg-[#0E0E10] dark:border-t dark:border-[#1F1F23] shadow-lg">
             <div className="px-4 py-4 space-y-4">
-              {/* Mobile Navigation Links */}
               {navigationLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="block text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium py-2"
+                  className="block text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium py-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {link.label}
                 </Link>
               ))}
 
-              {/* Mobile Auth Buttons */}
-              <div className="flex flex-col gap-y-2 pt-4 border-t">
+              <div className="flex flex-col gap-y-2 pt-4 border-t dark:border-[#1F1F23]">
                 <Link href={`/${tenant}/auth/signin`}>
                   <button
-                    className="w-full px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium text-left"
+                    className="w-full px-4 py-2 text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium text-left"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Sign In
