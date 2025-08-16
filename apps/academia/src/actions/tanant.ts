@@ -335,8 +335,29 @@ export const validateTenant = cache(async (tenant: string) => {
       },
     });
 
+    const website2 = await prisma.website.findFirst({
+      where: {
+        subdomain: tenant,
+      },
+      select: {
+        id: true,
+        accountId: true,
+        name: true,
+        suspended: true,
+        Account: {
+          select: {
+            id: true,
+            verified: true,
+          },
+        },
+      },
+    });
+
+    console.log(website2);
+    console.log(website);
+
     return {
-      isValid: !!website && !website.suspended && website.Account.verified,
+      isValid: !!website && !website.suspended,
       website,
     };
   } catch (error) {
