@@ -150,31 +150,50 @@ model Product {
 
   @@index([accountId])
 }
-
 model Website {
-  id             String   @id @unique @default(cuid())
-  accountId      String   @unique
-  name           String?
-  description    String?  @db.Text
-  subdomain      String?  @unique
-  customDomain   String?  @unique
-  suspended      Boolean  @default(false)
-  dCoursesHomeScreen   Boolean  @default(true)
-  dDigitalProductsHomeScreen  Boolean  @default(false)
-  itemsAlignment Boolean  @default(false)
-  enableReferral Boolean  @default(false)
-  enableSalesBanner Boolean  @default(false)
-  privacy_policy Json?
-  stamp          String?
-  phoneNumber    String?
-  supportEmail   String?
-  favicon        String?  @default("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT51NSq8RTDzIs7VaAcWWvKkyiagU5dz6hiAA&usqp=CAU") @db.Text
-  color          String?  @default("#FC6B00")
-  logo           String?  @db.VarChar(199)
-  font           String   @default("font-cal")
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  Account        Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  id                              String   @id @unique @default(cuid())
+  accountId                       String   @unique
+  name                            String?
+  description                     String?  @db.Text
+  subdomain                       String?  @unique
+  customDomain                    String?  @unique
+  suspended                       Boolean  @default(false)
+  
+  // Home screen toggles
+  dCoursesHomeScreen              Boolean  @default(true)
+  dDigitalProductsHomeScreen      Boolean  @default(false)
+  
+  // Layout and feature settings
+  itemsAlignment                  Boolean  @default(false)
+  enableReferral                  Boolean  @default(false)
+  enableSalesBanner               Boolean  @default(false)
+  
+  // Legal and contact info
+  privacy_policy                  Json?
+  stamp                           String?
+  phoneNumber                     String?
+  supportEmail                    String?
+  
+  // Branding - Icons and logos
+  favicon                         String?  @default("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT51NSq8RTDzIs7VaAcWWvKkyiagU5dz6hiAA&usqp=CAU") @db.Text
+  logo                            String?  @db.Text
+  logoDark                        String?  @db.Text
+  
+  // Branding - Colors and typography
+  primaryColor                    String?  @default("#FC6B00")
+  primaryColorDark                String?  @default("#E55A00")
+  font                            String   @default("font-cal")
+  
+  // Timestamps
+  createdAt                       DateTime @default(now())
+  updatedAt                       DateTime @updatedAt
+  
+  // Relations
+  Account                         Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  
+  @@index([accountId])
+  @@index([subdomain])
+  @@index([customDomain])
 }
 
 enum DiscountType {
@@ -267,28 +286,48 @@ model Notification {
 
   @@index([accountId])
 }
-
 model Student {
-  id             String    @id @unique @default(cuid())
-  full_name      String
-  photo_url      String?   @db.Text
-  bio            String?
-  otp            Int?
-  email          String
-  phone          String?
-  accountId      String
-  password       String
-  confirmedEmail DateTime?
-  bag            Json
-  Account        Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  Sale           Sale[]
-  Comment        Comment[]
-  Certificate    Certificate[]
-  Referral       Referral[]
-
+  id                        String    @id @unique @default(cuid())
+  full_name                 String
+  photo_url                 String?   @db.Text
+  bio                       String?
+  otp                       Int?
+  email                     String
+  phone                     String?
+  accountId                 String
+  password                  String
+  bag                       Json
+  
+  // Email verification fields
+  emailVerified             Boolean?  @default(false)
+  emailVerifiedAt          DateTime?
+  emailVerificationToken   String?   @unique
+  emailVerificationExpiry  DateTime?
+  
+  // Password reset fields
+  passwordResetToken       String?   @unique
+  passwordResetExpiry      DateTime?
+  
+  // Activity tracking
+  lastVisitedAt            DateTime?
+  
+  // Relations
+  Account                  Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  
+  // Timestamps
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
+  
+  // Existing relations
+  Sale                     Sale[]
+  Comment                  Comment[]
+  Certificate              Certificate[]
+  Referral                 Referral[]
+  
   @@index([accountId])
+  @@index([email, accountId])
+  @@index([emailVerificationToken])
+  @@index([passwordResetToken])
 }
 
 model Certificate {

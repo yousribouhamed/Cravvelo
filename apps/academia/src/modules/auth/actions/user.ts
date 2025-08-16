@@ -6,15 +6,7 @@ import { withTenant } from "@/_internals/with-tenant";
 
 export const createUser = withTenant({
   input: z.object({
-    full_name: z
-      .string()
-      .min(1, "Name is required")
-      .max(100, "Name too long")
-      .trim()
-      .refine(
-        (name) => !/[<>\"'&]/.test(name),
-        "Name contains invalid characters"
-      ),
+    full_name: z.string(),
     email: z
       .string()
       .email("Invalid email format")

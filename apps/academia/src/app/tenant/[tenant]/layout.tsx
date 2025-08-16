@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { getTenantWebsite, validateTenant } from "@/actions/tanant";
 import { TenantProvider } from "@/contexts/tanant";
 import Providers from "@/components/providers";
+import MaxWidthWrapper from "@/components/max-with-wrapper";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface TenantLayoutProps {
   children: ReactNode;
@@ -37,16 +39,18 @@ export default async function TenantLayout({
       className="min-h-screen bg-neutral-50 dark:bg-[#0E0E10] text-neutral-900 dark:text-neutral-200"
       style={
         {
-          "--primary-color": websiteData.color || "#7C3AED",
+          "--primary-color": websiteData.primaryColor || "#7C3AED",
         } as React.CSSProperties
       }
     >
       <TenantProvider website={websiteData} tenant={tenant}>
         <Providers>
           <Header />
-          <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-            {children}
-          </main>
+          <MaxWidthWrapper className="flex flex-col">
+            <ScrollArea className="flex-1 h-[calc(100vh-theme(spacing.16))]">
+              {children}
+            </ScrollArea>
+          </MaxWidthWrapper>
         </Providers>
       </TenantProvider>
     </div>

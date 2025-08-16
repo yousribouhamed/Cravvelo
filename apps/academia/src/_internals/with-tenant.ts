@@ -9,15 +9,34 @@ import {
 
 /**
  * Extract tenant subdomain from request headers
+ * Handles both development (localhost:3000) and production (tenant.cravvelo.com) environments
  */
 async function getTenantFromRequest(): Promise<string | null> {
   try {
     const headersList = await headers();
     const host = headersList.get("host");
 
+    console.log("this is the host");
+    console.log(host);
+
     if (!host) return null;
 
-    // Extract subdomain from host (e.g., "tenant.cravvelo.com" -> "tenant")
+    // Development environment - check for localhost with port
+    if (host.startsWith("localhost:") || host === "abdellah.localhost:3000") {
+      // In development, you might want to:
+      // 1. Use a default tenant for testing
+      // 2. Extract from a query parameter or header
+      // 3. Use environment variable
+
+      // Option 1: Return a default tenant for development
+      return process.env.NODE_ENV === "development" ? "abdellah" : null;
+
+      // Option 2: Extract from a custom header (uncomment if needed)
+      // const devTenant = headersList.get("x-tenant");
+      // return devTenant || "dev-tenant";
+    }
+
+    // Production environment - extract subdomain from host
     const parts = host.split(".");
     if (parts.length >= 3 && parts[1] === "cravvelo" && parts[2] === "com") {
       return parts[0];
@@ -88,6 +107,8 @@ export function withTenant<TInput = void, TOutput = void>(
       // Extract tenant from request
       const tenant = await getTenantFromRequest();
 
+      console.log(tenant);
+
       if (!tenant) {
         throw new TenantError("Could not determine tenant from request");
       }
@@ -95,7 +116,7 @@ export function withTenant<TInput = void, TOutput = void>(
       // Fetch website with account data
       const website = await prisma.website.findUnique({
         where: {
-          subdomain: tenant,
+          subdomain: `${tenant}.cravvelo.com`,
         },
         include: {
           Account: true,
