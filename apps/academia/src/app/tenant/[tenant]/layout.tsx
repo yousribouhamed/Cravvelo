@@ -15,10 +15,15 @@ export default async function TenantLayout({
   children,
   params,
 }: TenantLayoutProps) {
-  const { tenant } = await params;
+  const { tenant: tanantKey } = await params;
+
+  const tenant = `${tanantKey}.cravvelo.com`;
 
   // Validate tenant exists and is active
   const { isValid, website } = await validateTenant(tenant);
+
+  console.log("this is a test to see if valide :");
+  console.log(isValid);
 
   if (!isValid) {
     notFound(); // Return 404 if tenant doesn't exist or is suspended
