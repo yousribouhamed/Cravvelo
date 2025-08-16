@@ -18,9 +18,13 @@ export default async function TenantLayout({
   children,
   params,
 }: TenantLayoutProps) {
-  const { tenant: tanantKey } = await params;
+  const { tenant: tenantKey } = await params;
+  const decodedTenantKey = decodeURIComponent(tenantKey);
+  const tenant = `${decodedTenantKey}.cravvelo.com`;
 
-  const tenant = `${tanantKey}.cravvelo.com`;
+  console.log("here it the tanant and the key : ", tenantKey);
+  console.log("here it the tanant and the deocded : ", decodedTenantKey);
+  console.log("here it the tanant and the tenant : ", tenant);
 
   const { isValid } = await validateTenant(tenant);
 
