@@ -11,15 +11,6 @@ export const collector = {
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        // const site = ctx.prisma.website.update({
-        //   data: {
-        //     font: input.font,
-        //   },
-        //   where: {
-        //     accountId: ctx.account.id,
-        //   },
-        // });
-        // return site;
       } catch (err) {
         console.error(err);
       }
@@ -81,21 +72,11 @@ export const collector = {
   addWebSiteColor: privateProcedure
     .input(
       z.object({
-        primaryColor: z.string(),
-        darkPrimaryColor: z.string(),
+        color: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const site = await ctx.prisma.website.update({
-          where: { accountId: ctx.account.id },
-          data: {
-            primaryColor: input.primaryColor,
-            primaryColorDark: input.darkPrimaryColor,
-          },
-        });
-
-        return site;
       } catch (err) {
         console.error(err);
       }
@@ -109,25 +90,20 @@ export const collector = {
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const PolictAsJson = JSON.stringify(input.policy);
-
-        console.log("this is the policy server");
-        console.log(PolictAsJson);
-
         const [site] = await Promise.all([
           ctx.prisma.website.update({
             where: { accountId: ctx.account.id },
             data: {
-              privacy_policy: PolictAsJson,
+              privacy_policy: JSON.stringify(input.policy),
             },
           }),
+
           increaseVerificationSteps({ accountId: ctx.account.id }),
         ]);
 
         return site;
       } catch (err) {
-        console.error("Error in addPolicy:", err);
-        throw err; // Re-throw the error so tRPC can handle it
+        console.error(err);
       }
     }),
 

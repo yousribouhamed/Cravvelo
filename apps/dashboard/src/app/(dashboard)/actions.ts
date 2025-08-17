@@ -130,7 +130,7 @@ export const getAllStudents = async ({
           email: true,
           photo_url: true,
           createdAt: true,
-
+          // confirmedEmail: true,
           _count: {
             select: {
               Sale: true,

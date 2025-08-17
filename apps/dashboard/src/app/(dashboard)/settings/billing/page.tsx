@@ -1,16 +1,26 @@
 import Header from "@/src/components/layout/header";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
-import PaymentSettingsHeader from "@/src/modules/settings/components/payment-website-header";
-import { getMyUserAction } from "@/src/actions/user.actions";
+import { Subscription } from "database";
+import { prisma } from "database/src";
+import BillingTableShell from "./billing-table-shell";
+import useHaveAccess from "@/src/hooks/use-have-access";
+import PaymentSettingsHeader from "../_compoents/payment-website-header";
+
+async function getData(): Promise<Subscription[]> {
+  const data = await prisma.subscription.findMany();
+  return data;
+}
 
 const Page = async ({}) => {
-  const user = await getMyUserAction();
+  const user = await useHaveAccess();
+  const data = await getData();
 
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
         <Header notifications={[]} user={user} title="الفواتير" />
         <PaymentSettingsHeader />
+        <BillingTableShell initialData={data} />
       </main>
     </MaxWidthWrapper>
   );
