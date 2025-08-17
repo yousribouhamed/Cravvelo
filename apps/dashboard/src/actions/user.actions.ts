@@ -40,16 +40,11 @@ export const getMyUserAction = async () => {
 
   const trialStartDate = account.createdAt;
   const trialEndDate = new Date(trialStartDate);
-  trialEndDate.setDate(trialEndDate.getDate() + 14); // Adding 14 days to trial start date
+  trialEndDate.setDate(trialEndDate.getDate() + 14);
 
   // here we check if the user is paid user or not
   const isFreeTrial = daysLeftInTrial(account.createdAt) > 0;
   const isSubscribed = account.plan ? true : false;
-
-  // this one checks if you are
-  if (!isFreeTrial && !isSubscribed && process.env.NODE_ENV === "production") {
-    redirect("/pricing");
-  }
 
   return {
     userId: user.id,
@@ -61,8 +56,8 @@ export const getMyUserAction = async () => {
     email: user?.primaryEmailAddressId,
     isFreeTrial,
     isSubscribed,
-    subdomain: account.Website[0]?.subdomain,
-    customDomain: account.Website[0]?.customDomain,
+    subdomain: account.Website?.subdomain,
+    customDomain: account.Website?.customDomain,
     createdAt: account.createdAt,
     verified: account.verified,
     verification_steps: account.verification_steps,

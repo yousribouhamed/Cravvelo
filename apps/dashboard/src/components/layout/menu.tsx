@@ -45,7 +45,7 @@ const MobileLink: FC<MobileLinkProps> = ({
       href={href}
       className={cn(
         buttonVariants({ variant: "ghost" }),
-        "w-full flex items-center justify-end text-sm pr-4 relative hover:!bg-transparent !text-white gap-x-2 hover:bg-none"
+        "w-full flex items-center justify-end text-xs pr-4 relative hover:!bg-transparent !text-white gap-x-2 hover:bg-none"
       )}
       onClick={handleClick}
     >
@@ -184,7 +184,7 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
                     <AccordionTrigger
                       className={cn(
                         buttonVariants({ variant: "ghost" }),
-                        "w-full flex items-center justify-end qatar-semibold group text-md gap-x-2 hover:bg-primary !text-white",
+                        "w-full flex items-center justify-end qatar-semibold group text-sm gap-x-2 hover:bg-primary !text-white",
                         {
                           "text-white bg-[#A44600] hover:bg-[#A44600]":
                             isActive,
@@ -207,7 +207,7 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
                             href={subItem.slug}
                             segment={String(segment)}
                             setIsOpen={setIsOpen}
-                            disabled={false} // Removed confusing disabled logic
+                            disabled={false}
                           >
                             {subItem.title}
                           </MobileLink>
