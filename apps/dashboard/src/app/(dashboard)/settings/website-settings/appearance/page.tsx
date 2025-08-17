@@ -1,10 +1,10 @@
-import AddColorFrom from "../../_compoents/forms/add-color-fomr";
+import AddColorFrom from "@/src/modules/settings/components/forms/add-color-fomr";
 import { prisma } from "database/src";
-import AddLogoForm from "../../_compoents/forms/add-logo-form";
-import AddFavIconForm from "../../_compoents/forms/add-favicon-form";
-import AddSeoForm from "../../_compoents/forms/add-seo-form";
-import WebsiteLayoutForm from "../../_compoents/forms/layout-form";
-import UploadStampForm from "../../_compoents/forms/upload-stamp-form";
+import AddLogoForm from "@/src/modules/settings/components/forms/add-logo-form";
+import AddFavIconForm from "@/src/modules/settings/components/forms/add-favicon-form";
+import AddSeoForm from "@/src/modules/settings/components/forms/add-seo-form";
+import WebsiteLayoutForm from "@/src/modules/settings/components/forms/layout-form";
+import UploadStampForm from "@/src/modules/settings/components/forms/upload-stamp-form";
 import { getMyUserAction } from "@/src/actions/user.actions";
 
 const Page = async ({}) => {
@@ -29,7 +29,10 @@ const Page = async ({}) => {
       />
       <AddFavIconForm logoUrl={website?.favicon} />
       <AddSeoForm description={website?.description} title={website?.name} />
-      <AddColorFrom color={website?.primaryColor} />
+      <AddColorFrom
+        darkPrimaryColor={website.primaryColorDark}
+        primaryColor={website?.primaryColor}
+      />
       <UploadStampForm stempUrl={website?.stamp} />
     </div>
   );
