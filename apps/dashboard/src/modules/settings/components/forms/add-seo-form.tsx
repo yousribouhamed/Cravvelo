@@ -21,21 +21,24 @@ import {
   FormLabel,
   FormMessage,
 } from "@ui/components/ui/form";
+import { Input } from "@ui/components/ui/input";
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { Textarea } from "@ui/components/ui/textarea";
 import { maketoast } from "@/src/components/toasts";
-import { ImageUploaderS3 } from "@/src/components/uploaders/image-uploader";
 
 const formSchema = z.object({
-  logoUrl: z.string(),
+  title: z.string(),
+  description: z.string(),
 });
 
-interface AddFavIconFormProps {
-  logoUrl: string | null;
+interface AddSeoFormProps {
+  title: string | null;
+  description: string | null;
 }
 
-const AddFavIconForm: FC<AddFavIconFormProps> = ({ logoUrl }) => {
-  const mutation = trpc.addFavIcon.useMutation({
+const AddSeoForm: FC<AddSeoFormProps> = ({ description, title }) => {
+  const mutation = trpc.addWebSiteSeo.useMutation({
     onSuccess: () => {
       maketoast.success();
     },
@@ -47,13 +50,15 @@ const AddFavIconForm: FC<AddFavIconFormProps> = ({ logoUrl }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      logoUrl: logoUrl ? logoUrl : "",
+      title: title ? title : "",
+      description: description ? description : "",
     },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     await mutation.mutateAsync({
-      fav_icon_url: data.logoUrl,
+      title: data.title,
+      description: data.description,
     });
   }
   return (
@@ -61,26 +66,36 @@ const AddFavIconForm: FC<AddFavIconFormProps> = ({ logoUrl }) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card className="border rounded-xl shadow-none">
           <CardHeader>
-            <CardTitle> إضافة أيقونة علامة التبويب إلى الموقع</CardTitle>
+            <CardTitle> عنوان علامة تبويب المتصفح</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
               control={form.control}
-              name="logoUrl"
+              name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    قم بإنشاء رمز علامة التبويب المجانية الخاصة بك مجانًا من هذا
-                    الموقع https://favicon.io.
-                  </FormLabel>
+                  <FormLabel>سيظهر هذا في محرك البحث.</FormLabel>
                   <FormControl>
-                    <ImageUploaderS3
-                      fileUrl={form.watch("logoUrl")}
-                      onChnage={field.onChange}
-                    />
+                    <Input {...field} />
                   </FormControl>
                   <FormDescription>
-                    يُسمح فقط باستخدام png وjpg وsvgs
+                    استخدم شيئًا سيبحث عنه الناس
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel> هنا حاول أن تصف أكاديميتك .</FormLabel>
+                  <FormControl>
+                    <Textarea {...field} className="min-h-[140px]" />
+                  </FormControl>
+                  <FormDescription>
+                    استخدم شيئًا سيبحث عنه الناس
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -90,10 +105,10 @@ const AddFavIconForm: FC<AddFavIconFormProps> = ({ logoUrl }) => {
           <CardFooter>
             <Button
               className=" flex items-center gap-x-2"
-              disabled={mutation.isLoading}
+              disabled={mutation.isPending}
               type="submit"
             >
-              {mutation.isLoading ? <LoadingSpinner /> : null}
+              {mutation.isPending ? <LoadingSpinner /> : null}
               تاكيد
             </Button>
           </CardFooter>
@@ -103,4 +118,4 @@ const AddFavIconForm: FC<AddFavIconFormProps> = ({ logoUrl }) => {
   );
 };
 
-export default AddFavIconForm;
+export default AddSeoForm;

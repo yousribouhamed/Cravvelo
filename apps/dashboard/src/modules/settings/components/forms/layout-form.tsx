@@ -163,10 +163,10 @@ const WebsiteLayoutForm: FC<DisableSalesFormProps> = ({
           <CardFooter>
             <Button
               className=" flex items-center gap-x-2"
-              disabled={mutation.isLoading}
+              disabled={mutation.isPending}
               type="submit"
             >
-              {mutation.isLoading ? <LoadingSpinner /> : null}
+              {mutation.isPending ? <LoadingSpinner /> : null}
               تاكيد
             </Button>
           </CardFooter>

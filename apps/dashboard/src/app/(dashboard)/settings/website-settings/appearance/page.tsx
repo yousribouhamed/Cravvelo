@@ -1,11 +1,12 @@
-import AddColorFrom from "../../_compoents/forms/add-color-fomr";
+import AddColorFrom from "../../../../../modules/settings/components/forms/add-color-fomr";
 import { prisma } from "database/src";
-import AddLogoForm from "../../_compoents/forms/add-logo-form";
-import AddFavIconForm from "../../_compoents/forms/add-favicon-form";
-import AddSeoForm from "../../_compoents/forms/add-seo-form";
-import WebsiteLayoutForm from "../../_compoents/forms/layout-form";
-import UploadStampForm from "../../_compoents/forms/upload-stamp-form";
+import AddLogoForm from "../../../../../modules/settings/components/forms/add-logo-form";
+import AddFavIconForm from "../../../../../modules/settings/components/forms/add-favicon-form";
+import AddSeoForm from "../../../../../modules/settings/components/forms/add-seo-form";
+import WebsiteLayoutForm from "../../../../../modules/settings/components/forms/layout-form";
+import UploadStampForm from "../../../../../modules/settings/components/forms/upload-stamp-form";
 import { getMyUserAction } from "@/src/actions/user.actions";
+import CreateAcademiaSection from "@/src/modules/analytics/components/create-academia-section";
 
 const Page = async ({}) => {
   const user = await getMyUserAction();
@@ -17,6 +18,10 @@ const Page = async ({}) => {
       },
     }),
   ]);
+
+  if (!user?.subdomain) {
+    return <CreateAcademiaSection />;
+  }
 
   return (
     <div className="w-full h-fit grid grid-cols-1 lg:grid-cols-2   my-8 gap-4">

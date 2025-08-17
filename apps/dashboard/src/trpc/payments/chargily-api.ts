@@ -59,7 +59,9 @@ export const chargily = {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            amount: input.isByMounth ? input.amount : (input.amount  - input.amount * 0.1)* 12,
+            amount: input.isByMounth
+              ? input.amount
+              : (input.amount - input.amount * 0.1) * 12,
             currency: "dzd",
             product_id: product.id,
           }),
@@ -70,10 +72,10 @@ export const chargily = {
         const strategy = input.isByMounth ? "MONTHLY" : "YEARLY";
         const currentDate: Date = new Date();
 
-        const IntentToPay = await prisma.payments.create({
+        const IntentToPay = await prisma.subscription.create({
           data: {
             status: "PENDING",
-            end_of_subscription:
+            endDate:
               strategy === "YEARLY"
                 ? new Date(
                     currentDate.getTime() + 30 * 24 * 60 * 60 * 1000 * 12
@@ -187,10 +189,10 @@ export const chargily = {
         const strategy = input.isByMounth ? "MONTHLY" : "YEARLY";
         const currentDate: Date = new Date();
 
-        const IntentToPay = await prisma.payments.create({
+        const IntentToPay = await prisma.subscription.create({
           data: {
             status: "PENDING",
-            end_of_subscription:
+            endDate:
               strategy === "YEARLY"
                 ? new Date(
                     currentDate.getTime() + 30 * 24 * 60 * 60 * 1000 * 12

@@ -3,35 +3,23 @@
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { usePathname } from "next/navigation";
-import { getValueFromUrl } from "../../../../lib/utils";
+import { getValueFromUrl } from "@/src/lib/utils";
 
-const getLinks = ({ id }: { id: string }) => {
+const getLinks = () => {
   const links = [
     {
       name: "المظهر",
-      href: `/settings/website-settings/appearance`,
-    },
-    {
-      name: "المجال",
-      href: `/settings/website-settings`,
-    },
-    {
-      name: "القوانين",
-      href: `/settings/website-settings/legal`,
-    },
-    {
-      name: "الأذونات",
-      href: `/settings/website-settings/marketing`,
+      href: `/settings/general-settings`,
     },
   ];
 
   return links;
 };
 
-function WebsiteSettingsHeader({ className, ...props }: ExamplesNavProps) {
+function GeneralSettingsHeader({ className, ...props }: ExamplesNavProps) {
   const pathname = usePathname();
   const courseId = getValueFromUrl(pathname, 2);
-  const links = getLinks({ id: courseId });
+  const links = getLinks();
 
   return (
     <div className="relative w-full my-4 h-[60px]">
@@ -61,6 +49,6 @@ function WebsiteSettingsHeader({ className, ...props }: ExamplesNavProps) {
   );
 }
 
-export default WebsiteSettingsHeader;
+export default GeneralSettingsHeader;
 
 interface ExamplesNavProps extends React.HTMLAttributes<HTMLDivElement> {}

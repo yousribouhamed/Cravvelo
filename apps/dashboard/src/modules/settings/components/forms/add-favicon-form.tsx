@@ -21,24 +21,21 @@ import {
   FormLabel,
   FormMessage,
 } from "@ui/components/ui/form";
-import { Input } from "@ui/components/ui/input";
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import { Textarea } from "@ui/components/ui/textarea";
 import { maketoast } from "@/src/components/toasts";
+import { ImageUploaderS3 } from "@/src/components/uploaders/image-uploader";
 
 const formSchema = z.object({
-  title: z.string(),
-  description: z.string(),
+  logoUrl: z.string(),
 });
 
-interface AddSeoFormProps {
-  title: string | null;
-  description: string | null;
+interface AddFavIconFormProps {
+  logoUrl: string | null;
 }
 
-const AddSeoForm: FC<AddSeoFormProps> = ({ description, title }) => {
-  const mutation = trpc.addWebSiteSeo.useMutation({
+const AddFavIconForm: FC<AddFavIconFormProps> = ({ logoUrl }) => {
+  const mutation = trpc.addFavIcon.useMutation({
     onSuccess: () => {
       maketoast.success();
     },
@@ -50,15 +47,13 @@ const AddSeoForm: FC<AddSeoFormProps> = ({ description, title }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: title ? title : "",
-      description: description ? description : "",
+      logoUrl: logoUrl ? logoUrl : "",
     },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     await mutation.mutateAsync({
-      title: data.title,
-      description: data.description,
+      fav_icon_url: data.logoUrl,
     });
   }
   return (
@@ -66,36 +61,26 @@ const AddSeoForm: FC<AddSeoFormProps> = ({ description, title }) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card className="border rounded-xl shadow-none">
           <CardHeader>
-            <CardTitle> عنوان علامة تبويب المتصفح</CardTitle>
+            <CardTitle> إضافة أيقونة علامة التبويب إلى الموقع</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
               control={form.control}
-              name="title"
+              name="logoUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>سيظهر هذا في محرك البحث.</FormLabel>
+                  <FormLabel>
+                    قم بإنشاء رمز علامة التبويب المجانية الخاصة بك مجانًا من هذا
+                    الموقع https://favicon.io.
+                  </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <ImageUploaderS3
+                      fileUrl={form.watch("logoUrl")}
+                      onChnage={field.onChange}
+                    />
                   </FormControl>
                   <FormDescription>
-                    استخدم شيئًا سيبحث عنه الناس
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel> هنا حاول أن تصف أكاديميتك .</FormLabel>
-                  <FormControl>
-                    <Textarea {...field} className="min-h-[140px]" />
-                  </FormControl>
-                  <FormDescription>
-                    استخدم شيئًا سيبحث عنه الناس
+                    يُسمح فقط باستخدام png وjpg وsvgs
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -105,10 +90,10 @@ const AddSeoForm: FC<AddSeoFormProps> = ({ description, title }) => {
           <CardFooter>
             <Button
               className=" flex items-center gap-x-2"
-              disabled={mutation.isLoading}
+              disabled={mutation.isPending}
               type="submit"
             >
-              {mutation.isLoading ? <LoadingSpinner /> : null}
+              {mutation.isPending ? <LoadingSpinner /> : null}
               تاكيد
             </Button>
           </CardFooter>
@@ -118,4 +103,4 @@ const AddSeoForm: FC<AddSeoFormProps> = ({ description, title }) => {
   );
 };
 
-export default AddSeoForm;
+export default AddFavIconForm;

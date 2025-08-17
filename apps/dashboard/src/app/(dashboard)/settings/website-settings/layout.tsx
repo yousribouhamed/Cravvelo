@@ -1,7 +1,7 @@
 import Header from "@/src/components/layout/header";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import React from "react";
-import WebsiteSettingsHeader from "../_compoents/website-settings-header";
+import WebsiteSettingsHeader from "../../../../modules/settings/components/website-settings-header";
 import {
   getAllNotifications,
   getMyUserAction,

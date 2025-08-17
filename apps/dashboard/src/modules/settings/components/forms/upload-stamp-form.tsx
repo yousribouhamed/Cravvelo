@@ -15,6 +15,7 @@ import { Button } from "@ui/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -23,27 +24,22 @@ import {
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
-import { CravveloEditor } from "@cravvelo/editor";
+import { ImageUploaderS3 } from "@/src/components/uploaders/image-uploader";
 
 const formSchema = z.object({
-  policy: z.any(),
+  stempUrl: z.string(),
 });
 
-interface AddPrivicyPolicyProps {
-  policy: any;
+interface UploadStampFormProps {
+  stempUrl: string | null;
 }
 
-const AddPrivicyPolicy: FC<AddPrivicyPolicyProps> = ({ policy }) => {
-  // console.log("this is the polict: -< ");
-  // console.log(policy);
-
-  const mutation = trpc.addPolicy.useMutation({
+const UploadStampForm: FC<UploadStampFormProps> = ({ stempUrl }) => {
+  const mutation = trpc.addStamp.useMutation({
     onSuccess: () => {
-      console.log("Success!"); // Add this for debugging
       maketoast.success();
     },
-    onError: (error) => {
-      console.log("Error:", error); // More detailed error logging
+    onError: () => {
       maketoast.error();
     },
   });
@@ -51,15 +47,13 @@ const AddPrivicyPolicy: FC<AddPrivicyPolicyProps> = ({ policy }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      policy: policy ? JSON.parse(policy as string) : undefined,
+      stempUrl: stempUrl ? stempUrl : "",
     },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log("this is the data we are sending in the polcy");
-    console.log(data);
     await mutation.mutateAsync({
-      policy: data.policy,
+      stempUrl: data.stempUrl,
     });
   }
   return (
@@ -67,24 +61,26 @@ const AddPrivicyPolicy: FC<AddPrivicyPolicyProps> = ({ policy }) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card className="border rounded-xl shadow-none">
           <CardHeader>
-            <CardTitle>سياسة الأكاديمية</CardTitle>
+            <CardTitle>أضف طابعك إلى شهاداتك</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
               control={form.control}
-              name="policy"
+              name="stempUrl"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    اقرأ هذا القالب وانقر فوق &quot;حفظ&quot; لتنقذ نفسك
-                    وعملائك.
+                    سيؤدي هذا إلى زيادة قيمة الشهادات التي تقدمها
                   </FormLabel>
                   <FormControl>
-                    <CravveloEditor
-                      value={form.getValues("policy")}
-                      onChange={field.onChange}
+                    <ImageUploaderS3
+                      fileUrl={form.watch("stempUrl")}
+                      onChnage={field.onChange}
                     />
                   </FormControl>
+                  <FormDescription>
+                    يُسمح فقط باستخدام png وjpg وsvgs
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -93,10 +89,10 @@ const AddPrivicyPolicy: FC<AddPrivicyPolicyProps> = ({ policy }) => {
           <CardFooter>
             <Button
               className=" flex items-center gap-x-2"
-              disabled={mutation.isLoading}
+              disabled={mutation.isPending}
               type="submit"
             >
-              {mutation.isLoading ? <LoadingSpinner /> : null}
+              {mutation.isPending ? <LoadingSpinner /> : null}
               تاكيد
             </Button>
           </CardFooter>
@@ -106,4 +102,4 @@ const AddPrivicyPolicy: FC<AddPrivicyPolicyProps> = ({ policy }) => {
   );
 };
 
-export default AddPrivicyPolicy;
+export default UploadStampForm;

@@ -188,10 +188,10 @@ const AddColorFrom: FC<ChangeDomainFormProps> = ({
           <CardFooter>
             <Button
               className="flex items-center gap-x-2"
-              disabled={mutation.isLoading}
+              disabled={mutation.isPending}
               type="submit"
             >
-              {mutation.isLoading ? <LoadingSpinner /> : null}
+              {mutation.isPending ? <LoadingSpinner /> : null}
               تأكيد
             </Button>
           </CardFooter>

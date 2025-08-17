@@ -122,6 +122,11 @@ export const SIDE_BAR_ITEMS = [
     slug: "/settings",
     subitems: [
       {
+        title: "الاعدادات العامة",
+        icon: Icons.Home,
+        slug: "/settings",
+      },
+      {
         title: "الاشترك ",
         icon: Icons.Home,
         slug: "/pricing",
@@ -133,11 +138,6 @@ export const SIDE_BAR_ITEMS = [
       },
       {
         title: "إعدادات الموقع",
-        icon: Icons.Home,
-        slug: "/settings/website-settings/appearance",
-      },
-      {
-        title: "الاعدادات العامة",
         icon: Icons.Home,
         slug: "/settings/website-settings/appearance",
       },

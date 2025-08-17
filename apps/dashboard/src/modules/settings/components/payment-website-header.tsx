@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { usePathname } from "next/navigation";
-import { getValueFromUrl } from "../../../../lib/utils";
 
 const getLinks = () => {
   const links = [

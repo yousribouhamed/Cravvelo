@@ -1,20 +1,14 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
 import PaymentMethodsConnectors from "@/src/components/payments/payment-methods-connector";
-import useHaveAccess from "@/src/hooks/use-have-access";
 import { prisma } from "database/src";
-
-const getAllNotifications = async ({ accountId }: { accountId: string }) => {
-  const notifications = await prisma.notification.findMany({
-    where: {
-      accountId,
-    },
-  });
-  return notifications;
-};
+import {
+  getAllNotifications,
+  getMyUserAction,
+} from "@/src/actions/user.actions";
 
 const Page = async ({}) => {
-  const user = await useHaveAccess();
+  const user = await getMyUserAction();
 
   const [notifications, paymentsConnector] = await Promise.all([
     getAllNotifications({ accountId: user.accountId }),

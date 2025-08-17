@@ -1,8 +1,13 @@
 import { getMyUserAction } from "@/src/actions/user.actions";
+import CreateAcademiaSection from "@/src/modules/analytics/components/create-academia-section";
 import { DomainSettignsPage } from "@/src/modules/settings/pages/domain.page";
 
 const Page = async ({}) => {
   const user = await getMyUserAction();
+
+  if (!user?.subdomain) {
+    return <CreateAcademiaSection />;
+  }
 
   return (
     <DomainSettignsPage

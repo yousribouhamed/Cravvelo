@@ -11,16 +11,15 @@ export const collector = {
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const site = ctx.prisma.website.update({
-          data: {
-            font: input.font,
-          },
-          where: {
-            accountId: ctx.account.id,
-          },
-        });
-
-        return site;
+        // const site = ctx.prisma.website.update({
+        //   data: {
+        //     font: input.font,
+        //   },
+        //   where: {
+        //     accountId: ctx.account.id,
+        //   },
+        // });
+        // return site;
       } catch (err) {
         console.error(err);
       }
