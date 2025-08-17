@@ -11,22 +11,13 @@ export default authMiddleware({
     "/sign-up(.*)",
     "/signin(.*)",
     "/signup(.*)",
-    "/auth-academy(.*)",
-    "/privacy-policy(.*)",
-    "/terms-of-service(.*)",
+
     "/sso-callback(.*)",
     "/api/uploadthing(.*)",
     "/api/trpc(.*)",
     "/api(.*)",
-    "/cart(.*)",
-    "/editor",
-    "/students(.*)",
-    "/marketing(.*)",
-    "/test",
-    "/student-library(.*)",
-    "/student-profile(.*)",
+
     "/cron(.*)",
-    "/product-academy(.*)",
   ],
 });
 

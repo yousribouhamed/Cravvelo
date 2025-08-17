@@ -13,23 +13,22 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning dir="rtl" lang="ar">
       <head />
-
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
+      <body
+        className={`selection:bg-[#FC6B00] selection:text-white antialiased`}
       >
-        <body
-          className={`selection:bg-[#FC6B00] selection:text-white antialiased `}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
         >
           <Providers>{children}</Providers>
 
           <Analytics />
 
           <Toaster />
-        </body>
-      </ThemeProvider>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
