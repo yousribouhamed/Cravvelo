@@ -2,22 +2,23 @@
 
 import { useState } from "react";
 import MaxWidthWrapper from "../max-with-wrapper";
-import { useTenant } from "@/contexts/tanant";
+import NavigationLink from "../navigation-link";
+import { useTenant } from "@/contexts/tenant";
+
 import {
+  useTenantBranding,
   useTenantSettings,
   useTenantAccount,
-  useTenantBranding,
-} from "@/hooks/use-tanant";
+  useIsAuthenticated,
+} from "@/hooks/use-tenant";
 import Image from "next/image";
 import Link from "next/link";
-
-interface HeaderProps {}
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { tenant } = useTenant();
   const { logo, name, primaryColor } = useTenantBranding();
-  const { userName, verified, avatarUrl } = useTenantAccount();
+  const { userName, avatarUrl } = useTenantAccount();
   const { showCoursesOnHome, showProductsOnHome } = useTenantSettings();
 
   const navigationLinks = [
@@ -28,96 +29,79 @@ export default function Header() {
     { href: `/contact`, label: "Contact", show: true },
   ].filter((link) => link.show);
 
+  const isAuthenticated = useIsAuthenticated();
+
   return (
-    <div className="w-full h-[70px] bg-white border-b dark:bg-[#0A0A0C] dark:border-[#1F1F23] sticky top-0 z-50">
+    <div className="w-full  h-[70px] bg-white border-b dark:bg-[#0A0A0C] dark:border-[#1F1F23] sticky top-0 z-50">
       <MaxWidthWrapper className="h-full">
         <div className="w-full h-full flex items-center justify-between">
-          {/* Logo/Brand Section */}
-          <Link
-            href={`/${tenant}`}
-            className="flex items-center gap-x-3 hover:opacity-80 transition-opacity"
-          >
-            {logo ? (
-              <div className="relative w-10 h-10">
-                <Image
-                  src={logo}
-                  alt={name || "Academy Logo"}
-                  fill
-                  className="object-contain rounded-lg"
-                />
-              </div>
-            ) : avatarUrl ? (
-              <div className="relative w-10 h-10">
-                <Image
-                  src={avatarUrl}
-                  alt={userName || "Academy"}
-                  fill
-                  className="object-cover rounded-full"
-                />
-              </div>
-            ) : (
-              <div
-                className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-lg"
-                style={{ backgroundColor: primaryColor }}
-              >
-                {(name || userName || "A").charAt(0).toUpperCase()}
-              </div>
-            )}
-
-            <div className="flex flex-col">
-              <h1 className="text-xl font-bold text-gray-900 dark:text-neutral-100">
-                {name || userName || "Academy"}
-              </h1>
-              {verified && (
-                <div className="flex items-center gap-x-1">
-                  <svg
-                    className="w-4 h-4 text-[#3B82F6]"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.259.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-xs text-[#3B82F6] font-medium">
-                    Verified
-                  </span>
+          <div className="h-full flex items-center justify-start gap-x-8">
+            {/* Logo/Brand Section */}
+            <Link
+              href={`/`}
+              className="flex items-center gap-x-3 hover:opacity-80 transition-opacity"
+            >
+              {logo ? (
+                <div className="relative w-20 h-10">
+                  <Image
+                    src={logo}
+                    alt={name || "Academy Logo"}
+                    fill
+                    className="object-contain rounded-lg"
+                  />
+                </div>
+              ) : avatarUrl ? (
+                <div className="relative w-10 h-10">
+                  <Image
+                    src={avatarUrl}
+                    alt={userName || "Academy"}
+                    fill
+                    className="object-cover rounded-full"
+                  />
+                </div>
+              ) : (
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-lg"
+                  style={{ backgroundColor: primaryColor }}
+                >
+                  {(name || userName || "A").charAt(0).toUpperCase()}
                 </div>
               )}
-            </div>
-          </Link>
+            </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-x-6">
-            {navigationLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+            {/* Desktop Navigation */}
+            <nav className="hidden  h-full relative md:flex items-start gap-x-6">
+              {navigationLinks.map((link) => (
+                <NavigationLink
+                  key={link.href}
+                  href={link.href}
+                  label={link.label}
+                />
+              ))}
+            </nav>
+          </div>
 
           {/* Desktop Auth Buttons */}
-          <div className="hidden md:flex items-center justify-end gap-x-4">
-            <Link href={`/${tenant}/auth/signin`}>
-              <button className="px-4 py-2 text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
-                Sign In
-              </button>
-            </Link>
-            <Link href={`/${tenant}/auth/signup`}>
-              <button
-                className="px-4 py-2 text-white font-medium rounded-lg hover:opacity-90 transition-opacity"
-                style={{ backgroundColor: primaryColor }}
-              >
-                Sign Up
-              </button>
-            </Link>
-          </div>
+
+          {isAuthenticated ? (
+            <div> hi user </div>
+          ) : (
+            <div className="hidden md:flex items-center justify-end gap-x-4">
+              <Link href={`/login`}>
+                <button className="px-4 py-2 cursor-pointer text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
+                  Sign In
+                </button>
+              </Link>
+              <Link href={`/register`}>
+                <button
+                  className="px-4 py-2 cursor-pointer text-white font-medium rounded-lg hover:opacity-90 transition-opacity"
+                  style={{ backgroundColor: primaryColor }}
+                >
+                  Sign Up
+                </button>
+              </Link>
+            </div>
+          )}
 
           {/* Mobile Menu Button */}
           <button
@@ -149,14 +133,13 @@ export default function Header() {
           <div className="md:hidden absolute top-[70px] left-0 right-0 bg-white dark:bg-[#0E0E10] dark:border-t dark:border-[#1F1F23] shadow-lg">
             <div className="px-4 py-4 space-y-4">
               {navigationLinks.map((link) => (
-                <Link
+                <NavigationLink
                   key={link.href}
                   href={link.href}
-                  className="block text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium py-2"
+                  label={link.label}
+                  className="block py-2"
                   onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
+                />
               ))}
 
               <div className="flex flex-col gap-y-2 pt-4 border-t dark:border-[#1F1F23]">
