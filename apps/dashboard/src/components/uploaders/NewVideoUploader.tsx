@@ -14,7 +14,6 @@ export const NewVideoUploader = ({
   onChange,
   initialVideoId,
   className,
-
   setOpen,
 }: {
   onChange: (onChange: string) => void;

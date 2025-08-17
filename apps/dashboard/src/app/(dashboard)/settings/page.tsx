@@ -1,19 +1,14 @@
+import GeneralSettings from "@/src/modules/settings/pages/general-settings";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
-import useHaveAccess from "@/src/hooks/use-have-access";
-import { prisma } from "database/src";
-
-const getAllNotifications = async ({ accountId }: { accountId: string }) => {
-  const notifications = await prisma.notification.findMany({
-    where: {
-      accountId,
-    },
-  });
-  return notifications;
-};
+import {
+  getAllNotifications,
+  getMyUserAction,
+} from "@/src/actions/user.actions";
+import GeneralSettingsHeader from "@/src/modules/settings/components/general-settings-header";
 
 const Page = async ({}) => {
-  const user = await useHaveAccess();
+  const user = await getMyUserAction();
 
   const notifications = await getAllNotifications({
     accountId: user?.accountId,
@@ -27,6 +22,10 @@ const Page = async ({}) => {
           user={user}
           title="الاعدادات العامة"
         />
+
+        <GeneralSettingsHeader />
+
+        <GeneralSettings />
       </main>
     </MaxWidthWrapper>
   );

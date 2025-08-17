@@ -29,6 +29,7 @@ export const builder = {
         return site;
       } catch (err) {
         console.error(err);
+        throw new Error(err);
       }
     }),
 

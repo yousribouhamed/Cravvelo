@@ -3,6 +3,7 @@ import {
   getDomainResponse,
   verifyDomain,
 } from "@/src/lib/domains";
+
 import { DomainVerificationStatusProps } from "@/src/types/domain-types";
 import { NextResponse } from "next/server";
 
@@ -18,16 +19,12 @@ export async function GET(
       ? decodeURIComponent(resolvedParams.slug)
       : resolvedParams.slug;
 
-  console.log(domain);
   let status: DomainVerificationStatusProps = "Valid Configuration";
 
   const [domainJson, configJson] = await Promise.all([
     getDomainResponse(domain),
     getConfigResponse(domain),
   ]);
-
-  console.log(configJson);
-  console.log(domainJson);
 
   if (domainJson?.error?.code === "not_found") {
     // domain not found on Vercel project

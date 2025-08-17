@@ -31,7 +31,7 @@ export const CodeBlock = ({
   };
 
   return (
-    <div className="relative">
+    <div dir="ltr" className="relative">
       <code
         className={cn(
           "inline-block rounded-md bg-gray-100 px-2 py-1 font-mono text-sm text-gray-800 dark:bg-gray-800 dark:text-gray-200",

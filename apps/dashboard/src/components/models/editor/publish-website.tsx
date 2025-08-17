@@ -116,7 +116,7 @@ const PublishWebsite: FC = () => {
                 <FormItem className="w-full">
                   <FormLabel>حدد اسم المجال الخاص بك</FormLabel>
                   <div className="w-full h-14 border rounded-xl flex items-center p-2">
-                    <div className="w-[150px] h-full flex items-center justify-center bg-gray-50">
+                    <div className="w-[150px] h-full flex items-center justify-center bg-gray-50 dark:bg-primary dark:text-white">
                       <span>carvvelo.com.</span>
                     </div>
                     <Input
@@ -138,10 +138,10 @@ const PublishWebsite: FC = () => {
           <Button
             form="createwebsiteform"
             className=" flex items-center gap-x-2 font-bold rounded-xl"
-            disabled={mutation.isLoading}
+            disabled={mutation.isPending}
             type="submit"
           >
-            {mutation.isLoading ? <LoadingSpinner /> : null}
+            {mutation.isPending ? <LoadingSpinner /> : null}
             إطلاق موقع الويب الخاص بي
           </Button>
         </DialogFooter>

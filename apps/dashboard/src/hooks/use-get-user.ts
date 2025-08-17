@@ -26,7 +26,7 @@ const useGetUser = async () => {
     redirect("/auth-callback");
   }
 
-  const payment = await prisma.payments.findFirst({
+  const payment = await prisma.subscription.findFirst({
     where: {
       accountId: account.id,
     },
@@ -47,7 +47,7 @@ const useGetUser = async () => {
   return {
     userId: user.id,
     strategy: payment?.strategy,
-    endSubscription: payment?.end_of_subscription,
+    endSubscription: payment?.endDate,
     currentPlan: account.plan,
     accountId: account?.id,
     firstName: user?.firstName,

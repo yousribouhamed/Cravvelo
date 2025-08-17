@@ -8,7 +8,6 @@ import {
   Youtube,
 } from "lucide-react";
 import { Icons } from "../components/my-icons";
-import { BookMarked } from "lucide-react";
 
 export const SIDE_BAR_ITEMS = [
   {
@@ -23,12 +22,12 @@ export const SIDE_BAR_ITEMS = [
     icon: Youtube,
     subitems: [],
   },
-  // {
-  //   title: "المنتجات الرقمية",
-  //   slug: "/products",
-  //   icon: Box,
-  //   subitems: [],
-  // },
+  {
+    title: "المنتجات الرقمية",
+    slug: "/products",
+    icon: Box,
+    subitems: [],
+  },
 
   {
     title: "المبيعات",
@@ -36,24 +35,6 @@ export const SIDE_BAR_ITEMS = [
     icon: PiggyBank,
     subitems: [],
   },
-
-  // {
-  //   title: "تخصيص الأكاديمية",
-  //   slug: "/cutomize",
-  //   icon: Icons.customize,
-  //   subitems: [
-  //     {
-  //       title: "منشئ الموقع",
-  //       icon: Icons.Home,
-  //       slug: "/theme-editor",
-  //     },
-  //     {
-  //       title: "مصمم الشهادة",
-  //       icon: Icons.Home,
-  //       slug: "/products",
-  //     },
-  //   ],
-  // },
 
   {
     title: "التسويق",
@@ -140,11 +121,16 @@ export const SIDE_BAR_ITEMS = [
     icon: Settings,
     slug: "/settings",
     subitems: [
-      // {
-      //   title: "إعدادات الاكاديمية",
-      //   icon: Icons.Home,
-      //   slug: "/settings",
-      // },
+      {
+        title: "الاعدادات العامة",
+        icon: Icons.Home,
+        slug: "/settings",
+      },
+      {
+        title: "الاشترك ",
+        icon: Icons.Home,
+        slug: "/pricing",
+      },
       {
         title: "وسائل الدفع",
         icon: Icons.Home,
@@ -153,7 +139,7 @@ export const SIDE_BAR_ITEMS = [
       {
         title: "إعدادات الموقع",
         icon: Icons.Home,
-        slug: "/settings/website-settings",
+        slug: "/settings/website-settings/appearance",
       },
     ],
   },

@@ -25,6 +25,7 @@ export const s3_bucket = {
 
     .mutation(async ({ ctx, input }) => {
       try {
+        const bucketName = process.env.S3_BUCKET_NAME;
         if (!allowedFileTypes.includes(input.fileType)) {
           throw new TRPCError({
             code: "BAD_REQUEST",
@@ -39,13 +40,17 @@ export const s3_bucket = {
           });
         }
 
+        if (!bucketName) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "messing bucke name",
+          });
+        }
+
         const fileName = generateFileName();
 
         const publicObjectCommand = new PutObjectCommand({
-          Bucket:
-            process.env.NODE_ENV === "development"
-              ? "cravvel-bucket"
-              : "cravvel-bucket",
+          Bucket: bucketName,
           Key: fileName,
           ContentLength: input.fileSize,
           ContentType: input.fileType,
@@ -62,6 +67,10 @@ export const s3_bucket = {
         return { success: { url: signedUrl } };
       } catch (err) {
         console.error(err);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Upload failed",
+        });
       }
     }),
 };
@@ -71,8 +80,16 @@ export const deleteFileFromS3Bucket = async ({
 }: {
   fileName: string;
 }) => {
+  const bucketName = process.env.S3_BUCKET_NAME;
+  if (!bucketName) {
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "messing bucke name",
+    });
+  }
+
   const params = {
-    Bucket: "cravvel-bucket",
+    Bucket: bucketName,
     Key: fileName,
   };
 

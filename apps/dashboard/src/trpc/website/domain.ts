@@ -65,80 +65,97 @@ export const domain = {
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const account = await ctx.prisma.account.findFirst({
-        where: { userId: ctx.user.id },
-      });
-      const site = await ctx.prisma.website.findFirst({
-        where: { accountId: account.id },
-      });
+      try {
+        const account = await ctx.prisma.account.findFirst({
+          where: { userId: ctx.user.id },
+        });
+        const site = await ctx.prisma.website.findFirst({
+          where: { accountId: account.id },
+        });
 
-      if (input.customdomain.includes("cravvelo.com")) {
+        if (input.customdomain.includes("cravvelo.com")) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Cannot use cravvelo.com subdomain as your custom domain",
+          });
+        }
+
+        // Remove old domain from Vercel if it exists and is different
+        if (site.customDomain && site.customDomain !== input.customdomain) {
+          await removeDomainFromVercelProject(site.customDomain);
+        }
+
+        let updatedSite;
+
+        if (input.customdomain === "") {
+          // User wants to remove the custom domain
+          updatedSite = await ctx.prisma.website.update({
+            where: {
+              accountId: account.id,
+            },
+            data: {
+              customDomain: null,
+            },
+          });
+        } else if (validDomainRegex.test(input.customdomain)) {
+          // User wants to set a new custom domain
+          updatedSite = await ctx.prisma.website.update({
+            where: {
+              accountId: account.id,
+            },
+            data: {
+              customDomain: input.customdomain,
+            },
+          });
+
+          // Add domain to Vercel
+          await Promise.all([
+            addDomainToVercel(input.customdomain),
+            // Optional: add www subdomain as well and redirect to apex domain
+            // addDomainToVercel(`www.${input.customdomain}`),
+          ]);
+
+          console.log("Domain added to Vercel");
+        } else {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Invalid domain format",
+          });
+        }
+
+        return updatedSite;
+      } catch (error) {
+        // Handle unexpected errors
+        if (error instanceof TRPCError) {
+          throw error; // Re-throw TRPC errors as-is
+        }
+
+        console.error("Unexpected error in setCustomDomain:", error);
         throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Cannot use cravvelo.com subdomain as your custom domain",
+          code: "INTERNAL_SERVER_ERROR",
+          message:
+            "An unexpected error occurred while updating the custom domain",
         });
       }
-
-      // Remove old domain from Vercel if it exists and is different
-      if (site.customDomain && site.customDomain !== input.customdomain) {
-        await removeDomainFromVercelProject(site.customDomain);
-      }
-
-      let updatedSite;
-
-      if (input.customdomain === "") {
-        // User wants to remove the custom domain
-        updatedSite = await ctx.prisma.website.update({
-          where: {
-            accountId: account.id,
-          },
-          data: {
-            customDomain: null,
-          },
-        });
-      } else if (validDomainRegex.test(input.customdomain)) {
-        // User wants to set a new custom domain
-        updatedSite = await ctx.prisma.website.update({
-          where: {
-            accountId: account.id,
-          },
-          data: {
-            customDomain: input.customdomain,
-          },
-        });
-
-        // Add domain to Vercel
-        await Promise.all([
-          addDomainToVercel(input.customdomain),
-          // Optional: add www subdomain as well and redirect to apex domain
-          // addDomainToVercel(`www.${input.customdomain}`),
-        ]);
-
-        console.log("Domain added to Vercel");
-      } else {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Invalid domain format",
-        });
-      }
-
-      return updatedSite;
     }),
 
   getDomainStatus: privateProcedure
     .input(z.object({ domain: z.string() }))
-    .query(async ({ input }) => {
+    .mutation(async ({ input }) => {
       try {
-        const data: Response = (await axios.get(
-          `http://localhost:3001/api/domain/${input.domain}/verify`
-        )) as Response;
+        const URL =
+          process.env.NODE_ENV === "development"
+            ? `http://localhost:3001/api/domain/${input.domain}/verify`
+            : `https://beta.cravvelo.com/api/domain/${input.domain}/verify`;
+        //if we are on prod it willl be beta.cravvelo.com
+        const data: Response = (await axios.get(URL)) as Response;
 
         console.log(data);
         return data;
       } catch (err) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "something went wrong",
+          message: err,
         });
       }
     }),

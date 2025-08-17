@@ -17,7 +17,7 @@ import {
 import { Input } from "@ui/components/ui/input";
 import { FileWithPreview } from "@/src/types";
 import { LoadingButton } from "@/src/components/loading-button";
-import { isArrayOfFile } from "@/src/app/(academy)/lib";
+// import { isArrayOfFile } from "@/src/app/(academy)/lib";
 import { Textarea } from "@ui/components/ui/textarea";
 import { trpc } from "@/src/app/_trpc/client";
 import { maketoast } from "../toasts";
@@ -70,13 +70,13 @@ const UserProfileForm: FC<Profile> = ({ bio, full_name, image }) => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      if (isArrayOfFile(values.images)) {
-        console.log("uploading... ");
-      }
-    } catch (err) {
-      console.error(err);
-    }
+    // try {
+    //   if (isArrayOfFile(values.images)) {
+    //     console.log("uploading... ");
+    //   }
+    // } catch (err) {
+    //   console.error(err);
+    // }
   }
   return (
     <div className="w-full h-fit min-h-[500px] bg-white shadow border rounded-xl  p-8">

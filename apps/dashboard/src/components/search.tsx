@@ -182,7 +182,7 @@ export const SearchInput: FC = () => {
         description: product.SeoDescription || product.subDescription || "",
         path: `/product/${product.id}`,
         icon: Box,
-        color: "bg-green-500",
+        color: "bg-green-500 dark:bg-green-600",
       });
     });
 
@@ -195,7 +195,7 @@ export const SearchInput: FC = () => {
         description: course.courseResume || "",
         path: `/courses/${course.id}/chapters`,
         icon: Youtube,
-        color: "bg-violet-500",
+        color: "bg-violet-500 dark:bg-violet-600",
       });
     });
 
@@ -211,13 +211,18 @@ export const SearchInput: FC = () => {
     <>
       <Button
         variant="ghost"
-        className="relative hidden md:flex h-9 w-9 p-0 xl:h-10 md:justify-start md:px-3 md:py-4 md:w-[641px] border rounded-xl bg-white"
+        className="relative hidden md:flex h-9 w-9 p-0 xl:h-10 md:justify-start md:px-3 md:py-4 md:w-[641px] border rounded-xl bg-white dark:bg-[#0A0A0C] hover:bg-gray-50 "
         onClick={() => setOpen(true)}
       >
-        <MagnifyingGlassIcon className="h-4 w-4 xl:ml-2" aria-hidden="true" />
-        <span className="hidden xl:inline-flex">بحث...</span>
+        <MagnifyingGlassIcon
+          className="h-4 w-4 xl:ml-2 text-gray-600 dark:text-gray-400"
+          aria-hidden="true"
+        />
+        <span className="hidden xl:inline-flex text-gray-600 dark:text-gray-400">
+          بحث...
+        </span>
         <span className="sr-only">Search</span>
-        <kbd className="pointer-events-none absolute left-1.5 top-2 hidden h-6 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-xs font-medium opacity-100 xl:flex">
+        <kbd className="pointer-events-none absolute left-1.5 top-2 hidden h-6 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-xs font-medium opacity-100 xl:flex dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300">
           <abbr
             title={isMacOs() ? "Command" : "Control"}
             className="no-underline"
@@ -238,7 +243,7 @@ export const SearchInput: FC = () => {
         <CommandList>
           {/* Error State */}
           {error && (
-            <div className="flex items-center justify-center p-4 text-red-500">
+            <div className="flex items-center justify-center p-4 text-red-500 dark:text-red-400">
               <AlertCircle className="w-4 h-4 mr-2" />
               <span>{error}</span>
             </div>
@@ -254,7 +259,7 @@ export const SearchInput: FC = () => {
                 <CommandItem
                   key={page.path}
                   value={page.name}
-                  className="w-full h-[70px] border-b flex items-center justify-between px-4 cursor-pointer hover:bg-gray-50"
+                  className="w-full h-[70px] border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
                   onSelect={() => handleSelect(() => router.push(page.path))}
                 >
                   <div
@@ -263,10 +268,10 @@ export const SearchInput: FC = () => {
                     <page.icon className="w-5 h-5 text-white" strokeWidth={3} />
                   </div>
                   <div className="w-[calc(100%-60px)] h-full flex flex-col items-start justify-center">
-                    <span className="text-xl font-bold text-black">
+                    <span className="text-xl font-bold text-black dark:text-white">
                       {page.name}
                     </span>
-                    <span className="text-gray-600 text-start">
+                    <span className="text-gray-600 dark:text-gray-400 text-start">
                       {page.description}
                     </span>
                   </div>
@@ -285,7 +290,7 @@ export const SearchInput: FC = () => {
                     <CommandItem
                       key={product.id}
                       value={product.title}
-                      className="w-full h-[70px] border-b flex items-center justify-between px-4 cursor-pointer hover:bg-gray-50"
+                      className="w-full h-[70px] border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
                       onSelect={() =>
                         handleSelect(() =>
                           router.push(`/product/${product.id}`)
@@ -296,10 +301,10 @@ export const SearchInput: FC = () => {
                         <Box className="w-5 h-5 text-white" strokeWidth={3} />
                       </div>
                       <div className="w-[calc(100%-60px)] h-full flex flex-col items-start justify-center">
-                        <span className="text-xl font-bold text-black">
+                        <span className="text-xl font-bold text-black dark:text-white">
                           {product.title}
                         </span>
-                        <span className="text-gray-600 text-start truncate">
+                        <span className="text-gray-600 dark:text-gray-400 text-start truncate">
                           {product.SeoDescription ||
                             product.subDescription ||
                             ""}
@@ -314,14 +319,14 @@ export const SearchInput: FC = () => {
               {data?.courses && data.courses.length > 0 && (
                 <>
                   {data.products && data.products.length > 0 && (
-                    <CommandSeparator />
+                    <CommandSeparator className="dark:bg-gray-700" />
                   )}
                   <CommandGroup heading="الدورات">
                     {data.courses.map((course) => (
                       <CommandItem
                         key={course.id}
                         value={course.title}
-                        className="w-full h-[70px] border-b flex items-center justify-between px-4 cursor-pointer hover:bg-gray-50"
+                        className="w-full h-[70px] border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
                         onSelect={() =>
                           handleSelect(() =>
                             router.push(`/courses/${course.id}/chapters`)
@@ -335,10 +340,10 @@ export const SearchInput: FC = () => {
                           />
                         </div>
                         <div className="w-[calc(100%-60px)] h-full flex flex-col items-start justify-center">
-                          <span className="text-xl font-bold text-black">
+                          <span className="text-xl font-bold text-black dark:text-white">
                             {course.title}
                           </span>
-                          <span className="text-gray-600 text-start truncate">
+                          <span className="text-gray-600 dark:text-gray-400 text-start truncate">
                             {course.courseResume || ""}
                           </span>
                         </div>
@@ -354,11 +359,11 @@ export const SearchInput: FC = () => {
           {showNoResults && (
             <CommandEmpty>
               <div className="flex flex-col items-center justify-center p-8 text-center">
-                <Ghost className="w-12 h-12 text-gray-400 mb-4" />
-                <h3 className="text-lg font-semibold text-gray-600 mb-2">
+                <Ghost className="w-12 h-12 text-gray-400 dark:text-gray-500 mb-4" />
+                <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2">
                   لا توجد نتائج
                 </h3>
-                <p className="text-gray-500 text-sm">
+                <p className="text-gray-500 dark:text-gray-400 text-sm">
                   جرب البحث بكلمات مختلفة أو تحقق من الإملاء
                 </p>
               </div>
