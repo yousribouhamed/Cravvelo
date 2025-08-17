@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { prisma } from "database/src";
 import { StudentBag } from "@/src/types";
-import { create_product_sale } from "@/src/app/(academy)/_actions/sales";
+// import { create_product_sale } from "@/src/app/(academy)/_actions/sales";
 
 export async function POST(request: NextRequest) {
   const payload = (await request.json()) as Event;
@@ -53,11 +53,11 @@ export async function POST(request: NextRequest) {
           bag: JSON.stringify(newStudentBag),
         },
       });
-      await create_product_sale({
-        accountId: product.accountId,
-        product,
-        studentId: student.id,
-      });
+      // await create_product_sale({
+      //   accountId: product.accountId,
+      //   product,
+      //   studentId: student.id,
+      // });
 
       break;
     case "checkout.failed":

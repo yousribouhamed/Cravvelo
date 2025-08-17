@@ -34,11 +34,16 @@ interface AddPrivicyPolicyProps {
 }
 
 const AddPrivicyPolicy: FC<AddPrivicyPolicyProps> = ({ policy }) => {
+  // console.log("this is the polict: -< ");
+  // console.log(policy);
+
   const mutation = trpc.addPolicy.useMutation({
     onSuccess: () => {
+      console.log("Success!"); // Add this for debugging
       maketoast.success();
     },
-    onError: () => {
+    onError: (error) => {
+      console.log("Error:", error); // More detailed error logging
       maketoast.error();
     },
   });
@@ -51,6 +56,8 @@ const AddPrivicyPolicy: FC<AddPrivicyPolicyProps> = ({ policy }) => {
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    console.log("this is the data we are sending in the polcy");
+    console.log(data);
     await mutation.mutateAsync({
       policy: data.policy,
     });

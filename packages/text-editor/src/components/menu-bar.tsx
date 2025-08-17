@@ -49,9 +49,7 @@ const MenuButton: React.FC<MenuButtonProps> = ({
       disabled={disabled}
       title={title}
       className={`h-8 w-8 p-0 rounded-md border transition-all duration-200 flex items-center justify-center ${
-        isActive
-          ? "bg-blue-600 border-blue-600 text-white shadow-sm"
-          : "bg-white border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300"
+        isActive ? "bg-primary  text-white " : "bg-white border text-black "
       } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
     >
       {children}
@@ -82,7 +80,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({
 
   return (
     <div
-      className={`flex flex-wrap items-center gap-1 p-3 bg-gray-50 border-b border-gray-200 ${
+      className={`flex flex-wrap items-center gap-1 gap-x-4 p-3 bg-gray-50 border-b border-gray-200 ${
         isRtl ? "rtl" : "ltr"
       }`}
       onMouseDown={(e) => {
@@ -93,7 +91,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({
       {/* File Operations */}
       <div
         className={`flex items-center gap-1 pr-2 border-gray-300 ${
-          isRtl ? "border-l pl-2" : "border-r"
+          isRtl ? "border-l pl-2" : "border-r pr-2"
         }`}
       >
         {onPreview && (
@@ -109,11 +107,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({
       </div>
 
       {/* History */}
-      <div
-        className={`flex items-center gap-1 pr-2 border-gray-300 ${
-          isRtl ? "border-l pl-2" : "border-r"
-        }`}
-      >
+      <div className={`flex items-center gap-1 pr-2 border-gray-300 `}>
         <MenuButton onClick={onUndo} disabled={!canUndo} title="Undo">
           <Undo className="h-4 w-4" />
         </MenuButton>
@@ -123,11 +117,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({
       </div>
 
       {/* Headings */}
-      <div
-        className={`flex items-center gap-1 pr-2 border-gray-300 ${
-          isRtl ? "border-l pl-2" : "border-r"
-        }`}
-      >
+      <div className={`flex items-center gap-1 pr-2 border-gray-300 `}>
         <MenuButton
           onClick={() => handleFormatToggle("h1")}
           isActive={activeFormats.has("h1")}
@@ -152,11 +142,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({
       </div>
 
       {/* Text Formatting */}
-      <div
-        className={`flex items-center gap-1 pr-2 border-gray-300 ${
-          isRtl ? "border-l pl-2" : "border-r"
-        }`}
-      >
+      <div className={`flex items-center gap-1 pr-2 border-gray-300 `}>
         <MenuButton
           onClick={() => handleFormatToggle("bold")}
           isActive={activeFormats.has("bold")}
@@ -195,11 +181,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({
       </div>
 
       {/* Lists and Quotes */}
-      <div
-        className={`flex items-center gap-1 pr-2 border-gray-300 ${
-          isRtl ? "border-l pl-2" : "border-r"
-        }`}
-      >
+      <div className={`flex items-center gap-1 pr-2 border-gray-300 `}>
         <MenuButton
           onClick={() => handleFormatToggle("ul")}
           isActive={activeFormats.has("ul")}
@@ -224,11 +206,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({
       </div>
 
       {/* Special Actions */}
-      <div
-        className={`flex items-center gap-1 pr-2 border-gray-300 ${
-          isRtl ? "border-l pl-2" : "border-r"
-        }`}
-      >
+      <div className={`flex items-center gap-1 pr-2 border-gray-300`}>
         <MenuButton
           onClick={() => handleFormatToggle("hr")}
           title="Horizontal Rule"

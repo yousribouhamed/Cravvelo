@@ -61,7 +61,7 @@ const AddLogoForm: FC<AddLogoFormProps> = ({ logoUrl }) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card className="border rounded-xl shadow-none">
           <CardHeader>
-            <CardTitle>النطاق الفرعي</CardTitle>
+            <CardTitle>شعار الاكادمية</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
@@ -87,10 +87,10 @@ const AddLogoForm: FC<AddLogoFormProps> = ({ logoUrl }) => {
           <CardFooter>
             <Button
               className=" flex items-center gap-x-2"
-              disabled={mutation.isLoading}
+              disabled={mutation.isPending}
               type="submit"
             >
-              {mutation.isLoading ? <LoadingSpinner /> : null}
+              {mutation.isPending ? <LoadingSpinner /> : null}
               تاكيد
             </Button>
           </CardFooter>

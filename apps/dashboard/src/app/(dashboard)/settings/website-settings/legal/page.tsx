@@ -13,6 +13,9 @@ const Page = async ({}) => {
     }),
   ]);
 
+  console.log("this is the website policy from sc");
+  console.log(website?.privacy_policy);
+
   return (
     <div className="w-full h-fit flex flex-col my-8 gap-y-4">
       <AddPrivicyPolicy policy={website?.privacy_policy} />

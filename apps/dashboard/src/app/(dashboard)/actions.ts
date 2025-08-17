@@ -16,17 +16,17 @@ interface PaginationParams {
 
 interface SortParams {
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | "desc";
 }
 
 // Helper function to build date filter
 const buildDateFilter = (start_date?: Date, end_date?: Date) => {
   if (!start_date && !end_date) return {};
-  
+
   const filter: any = {};
   if (start_date) filter.gte = start_date;
   if (end_date) filter.lte = end_date;
-  
+
   return filter;
 };
 
@@ -45,10 +45,11 @@ export const getAllSales = async ({
   limit = 50,
   status,
   itemType,
-}: DateRangeParams & PaginationParams & {
-  status?: string;
-  itemType?: string;
-}) => {
+}: DateRangeParams &
+  PaginationParams & {
+    status?: string;
+    itemType?: string;
+  }) => {
   try {
     const whereClause: any = {
       accountId,
@@ -63,7 +64,7 @@ export const getAllSales = async ({
       prisma.sale.findMany({
         where: whereClause,
         ...buildPagination(page, limit),
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
         include: {
           Student: {
             select: {
@@ -87,8 +88,8 @@ export const getAllSales = async ({
       },
     };
   } catch (error) {
-    console.error('Error fetching sales:', error);
-    throw new Error('Failed to fetch sales');
+    console.error("Error fetching sales:", error);
+    throw new Error("Failed to fetch sales");
   }
 };
 
@@ -100,9 +101,10 @@ export const getAllStudents = async ({
   page = 1,
   limit = 50,
   search,
-}: DateRangeParams & PaginationParams & {
-  search?: string;
-}) => {
+}: DateRangeParams &
+  PaginationParams & {
+    search?: string;
+  }) => {
   try {
     const whereClause: any = {
       accountId,
@@ -111,8 +113,8 @@ export const getAllStudents = async ({
       }),
       ...(search && {
         OR: [
-          { full_name: { contains: search, mode: 'insensitive' } },
-          { email: { contains: search, mode: 'insensitive' } },
+          { full_name: { contains: search, mode: "insensitive" } },
+          { email: { contains: search, mode: "insensitive" } },
         ],
       }),
     };
@@ -121,14 +123,14 @@ export const getAllStudents = async ({
       prisma.student.findMany({
         where: whereClause,
         ...buildPagination(page, limit),
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
         select: {
           id: true,
           full_name: true,
           email: true,
           photo_url: true,
           createdAt: true,
-          confirmedEmail: true,
+
           _count: {
             select: {
               Sale: true,
@@ -150,8 +152,8 @@ export const getAllStudents = async ({
       },
     };
   } catch (error) {
-    console.error('Error fetching students:', error);
-    throw new Error('Failed to fetch students');
+    console.error("Error fetching students:", error);
+    throw new Error("Failed to fetch students");
   }
 };
 
@@ -164,10 +166,11 @@ export const getAllComments = async ({
   limit = 50,
   status,
   courseId,
-}: DateRangeParams & PaginationParams & {
-  status?: string;
-  courseId?: string;
-}) => {
+}: DateRangeParams &
+  PaginationParams & {
+    status?: string;
+    courseId?: string;
+  }) => {
   try {
     const whereClause: any = {
       accountId,
@@ -182,7 +185,7 @@ export const getAllComments = async ({
       prisma.comment.findMany({
         where: whereClause,
         ...buildPagination(page, limit),
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
         include: {
           Course: {
             select: {
@@ -213,8 +216,8 @@ export const getAllComments = async ({
       },
     };
   } catch (error) {
-    console.error('Error fetching comments:', error);
-    throw new Error('Failed to fetch comments');
+    console.error("Error fetching comments:", error);
+    throw new Error("Failed to fetch comments");
   }
 };
 
@@ -228,14 +231,14 @@ export const getAllNotifications = async ({
 }: {
   accountId: string;
 } & PaginationParams & {
-  isRead?: boolean;
-  type?: string;
-}) => {
+    isRead?: boolean;
+    type?: string;
+  }) => {
   try {
     const whereClause: any = {
       accountId,
       isArchived: false,
-      ...(typeof isRead === 'boolean' && { isRead }),
+      ...(typeof isRead === "boolean" && { isRead }),
       ...(type && { type }),
     };
 
@@ -243,7 +246,7 @@ export const getAllNotifications = async ({
       prisma.notification.findMany({
         where: whereClause,
         ...buildPagination(page, limit),
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
       }),
       prisma.notification.count({ where: whereClause }),
       prisma.notification.count({
@@ -262,8 +265,8 @@ export const getAllNotifications = async ({
       unreadCount,
     };
   } catch (error) {
-    console.error('Error fetching notifications:', error);
-    throw new Error('Failed to fetch notifications');
+    console.error("Error fetching notifications:", error);
+    throw new Error("Failed to fetch notifications");
   }
 };
 
@@ -277,17 +280,17 @@ export const getAllCourses = async ({
 }: {
   accountId: string;
 } & PaginationParams & {
-  status?: string;
-  search?: string;
-}) => {
+    status?: string;
+    search?: string;
+  }) => {
   try {
     const whereClause: any = {
       accountId,
       ...(status && { status }),
       ...(search && {
         OR: [
-          { title: { contains: search, mode: 'insensitive' } },
-          { seoTitle: { contains: search, mode: 'insensitive' } },
+          { title: { contains: search, mode: "insensitive" } },
+          { seoTitle: { contains: search, mode: "insensitive" } },
         ],
       }),
     };
@@ -296,7 +299,7 @@ export const getAllCourses = async ({
       prisma.course.findMany({
         where: whereClause,
         ...buildPagination(page, limit),
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
         include: {
           _count: {
             select: {
@@ -319,8 +322,8 @@ export const getAllCourses = async ({
       },
     };
   } catch (error) {
-    console.error('Error fetching courses:', error);
-    throw new Error('Failed to fetch courses');
+    console.error("Error fetching courses:", error);
+    throw new Error("Failed to fetch courses");
   }
 };
 
@@ -343,8 +346,9 @@ export const getSalesAnalytics = async ({
       prisma.sale.aggregate({
         where: {
           accountId,
-          status: 'COMPLETED',
-          ...(Object.keys(buildDateFilter(current_start, current_end)).length > 0 && {
+          status: "COMPLETED",
+          ...(Object.keys(buildDateFilter(current_start, current_end)).length >
+            0 && {
             createdAt: buildDateFilter(current_start, current_end),
           }),
         },
@@ -355,8 +359,9 @@ export const getSalesAnalytics = async ({
       prisma.sale.aggregate({
         where: {
           accountId,
-          status: 'COMPLETED',
-          ...(Object.keys(buildDateFilter(previous_start, previous_end)).length > 0 && {
+          status: "COMPLETED",
+          ...(Object.keys(buildDateFilter(previous_start, previous_end))
+            .length > 0 && {
             createdAt: buildDateFilter(previous_start, previous_end),
           }),
         },
@@ -368,15 +373,17 @@ export const getSalesAnalytics = async ({
 
     const currentRevenue = currentPeriod._sum.amount || 0;
     const previousRevenue = previousPeriod._sum.amount || 0;
-    const revenueChange = previousRevenue > 0 
-      ? ((currentRevenue - previousRevenue) / previousRevenue) * 100 
-      : 0;
+    const revenueChange =
+      previousRevenue > 0
+        ? ((currentRevenue - previousRevenue) / previousRevenue) * 100
+        : 0;
 
     const currentSales = currentPeriod._count._all || 0;
     const previousSales = previousPeriod._count._all || 0;
-    const salesChange = previousSales > 0 
-      ? ((currentSales - previousSales) / previousSales) * 100 
-      : 0;
+    const salesChange =
+      previousSales > 0
+        ? ((currentSales - previousSales) / previousSales) * 100
+        : 0;
 
     return {
       current: {
@@ -395,8 +402,8 @@ export const getSalesAnalytics = async ({
       },
     };
   } catch (error) {
-    console.error('Error fetching sales analytics:', error);
-    throw new Error('Failed to fetch sales analytics');
+    console.error("Error fetching sales analytics:", error);
+    throw new Error("Failed to fetch sales analytics");
   }
 };
 
@@ -418,7 +425,8 @@ export const getStudentsAnalytics = async ({
       prisma.student.count({
         where: {
           accountId,
-          ...(Object.keys(buildDateFilter(current_start, current_end)).length > 0 && {
+          ...(Object.keys(buildDateFilter(current_start, current_end)).length >
+            0 && {
             createdAt: buildDateFilter(current_start, current_end),
           }),
         },
@@ -426,16 +434,18 @@ export const getStudentsAnalytics = async ({
       prisma.student.count({
         where: {
           accountId,
-          ...(Object.keys(buildDateFilter(previous_start, previous_end)).length > 0 && {
+          ...(Object.keys(buildDateFilter(previous_start, previous_end))
+            .length > 0 && {
             createdAt: buildDateFilter(previous_start, previous_end),
           }),
         },
       }),
     ]);
 
-    const change = previousCount > 0 
-      ? ((currentCount - previousCount) / previousCount) * 100 
-      : 0;
+    const change =
+      previousCount > 0
+        ? ((currentCount - previousCount) / previousCount) * 100
+        : 0;
 
     return {
       current: currentCount,
@@ -443,8 +453,8 @@ export const getStudentsAnalytics = async ({
       change,
     };
   } catch (error) {
-    console.error('Error fetching students analytics:', error);
-    throw new Error('Failed to fetch students analytics');
+    console.error("Error fetching students analytics:", error);
+    throw new Error("Failed to fetch students analytics");
   }
 };
 
@@ -457,7 +467,7 @@ export const markNotificationsAsRead = async ({
   notificationIds?: string[];
 }) => {
   try {
-    const whereClause = notificationIds?.length 
+    const whereClause = notificationIds?.length
       ? { accountId, id: { in: notificationIds } }
       : { accountId };
 
@@ -468,8 +478,8 @@ export const markNotificationsAsRead = async ({
 
     return { success: true };
   } catch (error) {
-    console.error('Error marking notifications as read:', error);
-    throw new Error('Failed to mark notifications as read');
+    console.error("Error marking notifications as read:", error);
+    throw new Error("Failed to mark notifications as read");
   }
 };
 
@@ -493,7 +503,7 @@ export const getDashboardSummary = async ({
       prisma.sale.aggregate({
         where: {
           accountId,
-          status: 'COMPLETED',
+          status: "COMPLETED",
           ...(hasDateFilter && { createdAt: dateFilter }),
         },
         _sum: { amount: true },
@@ -501,7 +511,7 @@ export const getDashboardSummary = async ({
       prisma.sale.count({
         where: {
           accountId,
-          status: 'COMPLETED',
+          status: "COMPLETED",
           ...(hasDateFilter && { createdAt: dateFilter }),
         },
       }),
@@ -534,7 +544,7 @@ export const getDashboardSummary = async ({
       unreadNotifications,
     };
   } catch (error) {
-    console.error('Error fetching dashboard summary:', error);
-    throw new Error('Failed to fetch dashboard summary');
+    console.error("Error fetching dashboard summary:", error);
+    throw new Error("Failed to fetch dashboard summary");
   }
 };

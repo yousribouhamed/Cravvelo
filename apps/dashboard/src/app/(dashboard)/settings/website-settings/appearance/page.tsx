@@ -29,7 +29,10 @@ const Page = async ({}) => {
       />
       <AddFavIconForm logoUrl={website?.favicon} />
       <AddSeoForm description={website?.description} title={website?.name} />
-      <AddColorFrom color={website?.color} />
+      <AddColorFrom
+        primaryColor={website?.primaryColor}
+        darkPrimaryColor={website?.primaryColorDark ?? ""}
+      />
       <UploadStampForm stempUrl={website?.stamp} />
     </div>
   );
