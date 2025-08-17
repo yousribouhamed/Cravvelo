@@ -199,24 +199,24 @@ const Notifications: FC<NotificationsProps> = ({
         <Button
           size="icon"
           variant="secondary"
-          className="bg-white border rounded-xl w-10 h-10 relative"
+          className="bg-white dark:bg-[#0A0A0C] border rounded-xl w-10 h-10 relative"
           aria-label={`الإشعارات ${
             isNewNotifications > 0 ? `- ${isNewNotifications} جديد` : ""
           }`}
         >
           {isNewNotifications > 0 && (
-            <span className="rounded-[50%] w-5 h-5 text-white flex items-center justify-center bg-red-500 absolute top-0 right-0 font-bold text-xs">
+            <span className="rounded-[50%] w-5 h-5 text-white dark:text-black flex items-center justify-center bg-red-500 absolute top-0 right-0 font-bold text-xs">
               {isNewNotifications > 99 ? "99+" : isNewNotifications}
             </span>
           )}
-          <Icons.bell className="w-4 h-4 text-black" />
+          <Icons.bell className="w-4 h-4 text-black dark:text-white" />
         </Button>
       </PopoverTrigger>
       <PopoverContent
         align="end"
         className="p-0 border-none ring-none shadow-none w-screen h-screen sm:w-[500px] sm:h-[450px]"
       >
-        <div className="shadow bg-white rounded-xl border">
+        <div className="shadow bg-white dark:bg-[#0A0A0C] rounded-xl border">
           <div className="w-full h-[50px] flex items-center justify-start p-4">
             <p className="text-lg font-bold">الإشعارات</p>
           </div>
@@ -241,7 +241,7 @@ const Notifications: FC<NotificationsProps> = ({
                       width={300}
                       height={300}
                     />
-                    <p className="text-md text-center text-gray-500">
+                    <p className="text-md text-center text-gray-500 dark:text-gray-200">
                       لا يوجد إشعارات غير مقروءة بعد
                     </p>
                   </div>

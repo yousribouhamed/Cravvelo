@@ -10,7 +10,10 @@ export function Sidebar({ className }: SidebarProps) {
   return (
     <>
       <div
-        className={cn("pb-12   bg-[#FC6B00]   h-full    hidden   ", className)}
+        className={cn(
+          "pb-12   bg-[#FC6B00] dark:bg-[#0A0A0C]   h-full    hidden   ",
+          className
+        )}
       >
         <div className="space-y-4 py-2   ">
           <div className="px-3 pb-2 pt-6">

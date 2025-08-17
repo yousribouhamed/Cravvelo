@@ -1,22 +1,16 @@
 import ChargilyConnector from "@/src/components/payments/chargily-connector";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
-import useHaveAccess from "@/src/hooks/use-have-access";
 import { prisma } from "database/src";
+import {
+  getAllNotifications,
+  getMyUserAction,
+} from "@/src/actions/user.actions";
 
 interface PageProps {}
 
-const getAllNotifications = async ({ accountId }: { accountId: string }) => {
-  const notifications = await prisma.notification.findMany({
-    where: {
-      accountId,
-    },
-  });
-  return notifications;
-};
-
 const PageProps = async ({}) => {
-  const user = await useHaveAccess();
+  const user = await getMyUserAction();
 
   const [paymentsConnector, notifications] = await Promise.all([
     prisma.paymentsConnect.findFirst({

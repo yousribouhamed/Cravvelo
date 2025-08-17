@@ -14,13 +14,90 @@ enum PLANS {
   BLACK_KING
 }
 
+enum DiscountType {
+  PERCENTAGE
+  FIXED_AMOUNT
+}
+
+enum SaleStatus {
+  CREATED
+  PROCESSING
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+enum ItemType {
+  COURSE
+  PRODUCT
+}
+
+enum PaymentTypes {
+  BUYPRODUCT
+  BUYCOURSE
+  SUBSCRIPTION 
+  REFERAL_WITHDRAWAL
+  REFUND
+}
+
+enum PaymentMethod {
+  CASH
+  CHARGILY
+  BANK_TRANSFER
+  CREDIT_CARD
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum TransactionType {
+  DEBIT
+  CREDIT
+  REFUND
+  WITHDRAWAL
+  COMMISSION
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum OtpType {
+  CONFIRM_ACCOUNT
+  FORGOT_PASSWORD
+  PHONE_VERIFICATION
+}
+
+enum NotificationType {
+  INFO
+  WARNING
+  ERROR
+  SUCCESS
+  PROMOTION
+}
+
+enum CertificateStatus {
+  PENDING
+  ISSUED
+  REVOKED
+}
+
 model Account {
   id                 String            @id @unique @default(cuid())
   userId             String            @unique
   avatarUrl          String?           @db.Text
   user_name          String?           @db.Text
   user_bio           String?           @db.Text
-  phone              Int?
+  phone              String?
   support_email      String?
   verified           Boolean           @default(false)
   verification_steps Int               @default(0)
@@ -30,7 +107,7 @@ model Account {
   firstName          String?           @db.Text
   lastName           String?           @db.Text
   dateOfBirth        DateTime?
-  gender             String?           // e.g., "MALE", "FEMALE"
+  gender             String?           // e.g., "MALE", "FEMALE", "OTHER"
   country            String?
   city               String?
   address            String?           @db.Text
@@ -50,18 +127,27 @@ model Account {
   profileCompleted   Boolean           @default(false)
   profileVisibility  String?           @default("PUBLIC") // "PUBLIC", "PRIVATE", "FRIENDS_ONLY"
   
+  // Account status
+  isActive           Boolean           @default(true)
+  isSuspended        Boolean           @default(false)
+  suspensionReason   String?           @db.Text
+  
   createdAt          DateTime          @default(now())
   updatedAt          DateTime          @updatedAt
+  
+  // Relations
   Course             Course[]
   Product            Product[]
-  Website            Website[]
+  Website            Website?
   Coupon             Coupon[]
   Sale               Sale[]
   Notification       Notification[]
   Student            Student[]
-  PaymentsConnect    PaymentsConnect[]
-  Payments           Payments[]
+  PaymentsConnect    PaymentsConnect?
+  Subscription       Subscription[]
   Certificate        Certificate[]
+  Wallet             Wallet?
+  Payment            Payment[]
 }
 
 model PaymentsConnect {
@@ -69,6 +155,7 @@ model PaymentsConnect {
   accountId         String   @unique
   chargilyPublicKey String
   chargilySecretKey String
+  isActive          Boolean  @default(true)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
   Account           Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
@@ -92,7 +179,7 @@ model Course {
   seoDescription         String?
   price                  Float?
   compareAtPrice         Float?
-  studentsNbr            Int?
+  studentsNbr            Int?      @default(0)
   preview_video          String?   @db.VarChar(199)
   profit                 String?
   length                 Float     @default(0)
@@ -106,13 +193,22 @@ model Course {
   allowRating            Boolean   @default(true)
   forceWatchAllCourse    Boolean   @default(true)
   certificate            Boolean   @default(false)
-  Account                Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  
+  // Course analytics
+  totalViews             Int       @default(0)
+  totalEnrollments       Int       @default(0)
+  
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
+  
+  // Relations
+  Account                Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
   Comment                Comment[]
   Chapter                Chapter[]
+  Sale                   Sale[]
 
   @@index([accountId])
+  @@index([status])
 }
 
 model Chapter {
@@ -122,6 +218,7 @@ model Chapter {
   modules     Json?
   orderNumber Int
   isVisible   Boolean  @default(true)
+  duration    Float?   // Duration in minutes
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   Course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
@@ -133,7 +230,7 @@ model Product {
   id                String   @id @unique @default(cuid())
   title             String
   price             Float?
-  numberOfDownloads Int?
+  numberOfDownloads Int?     @default(0)
   subDescription    String?  @db.VarChar(199)
   SeoTitle          String?
   SeoDescription    String?  @db.VarChar(199)
@@ -144,12 +241,22 @@ model Product {
   compareAtPrice    Float?
   accountId         String
   isVisible         Boolean  @default(true)
+  
+  // Product analytics
+  totalViews        Int      @default(0)
+  totalSales        Int      @default(0)
+  
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+  
+  // Relations
   Account           Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  Sale              Sale[]
 
   @@index([accountId])
+  @@index([status])
 }
+
 model Website {
   id                              String   @id @unique @default(cuid())
   accountId                       String   @unique
@@ -167,12 +274,34 @@ model Website {
   itemsAlignment                  Boolean  @default(false)
   enableReferral                  Boolean  @default(false)
   enableSalesBanner               Boolean  @default(false)
+  enableBlog                      Boolean  @default(false)
+  enableTestimonials              Boolean  @default(true)
+  enableContactForm               Boolean  @default(true)
+  enableNewsletterSignup          Boolean  @default(false)
+  
+  // SEO and Meta settings
+  metaTitle                       String?  @db.Text
+  metaDescription                 String?  @db.Text
+  metaKeywords                    String?  @db.Text
+  googleAnalyticsId               String?
+  facebookPixelId                 String?
   
   // Legal and contact info
   privacy_policy                  Json?
+  terms_of_service                Json?
+  refund_policy                   Json?
   stamp                           String?
   phoneNumber                     String?
   supportEmail                    String?
+  address                         String?  @db.Text
+  businessHours                   Json?
+  
+  // Social media links
+  facebookUrl                     String?
+  twitterUrl                      String?
+  instagramUrl                    String?
+  linkedinUrl                     String?
+  youtubeUrl                      String?
   
   // Branding - Icons and logos
   favicon                         String?  @default("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT51NSq8RTDzIs7VaAcWWvKkyiagU5dz6hiAA&usqp=CAU") @db.Text
@@ -182,124 +311,310 @@ model Website {
   // Branding - Colors and typography
   primaryColor                    String?  @default("#FC6B00")
   primaryColorDark                String?  @default("#E55A00")
-  font                            String   @default("font-cal")
+  secondaryColor                  String?  @default("#FFFFFF")
+  accentColor                     String?  @default("#000000")
+  fontFamily                      String?  @default("Inter")
+  
+  // Layout customization
+  headerStyle                     String?  @default("DEFAULT") // DEFAULT, MINIMAL, CENTERED
+  footerStyle                     String?  @default("DEFAULT") // DEFAULT, MINIMAL, EXTENDED
+  layoutStyle                     String?  @default("DEFAULT") // DEFAULT, BOXED, FULL_WIDTH
+  
+  // Currency and localization
+  currency                        String?  @default("DZD")
+  currencySymbol                  String?  @default("DA")
+  language                        String?  @default("ARABIC")
+  timezone                        String?  @default("Africa/Algiers")
+  
+  // Custom CSS and JavaScript
+  customCSS                       String?  @db.Text
+  customJS                        String?  @db.Text
   
   // Timestamps
   createdAt                       DateTime @default(now())
   updatedAt                       DateTime @updatedAt
   
   // Relations
-  Account                         Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  Account                         Account           @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  WebsiteAnalytics                WebsiteAnalytics[]
   
   @@index([accountId])
   @@index([subdomain])
   @@index([customDomain])
 }
 
-enum DiscountType {
-  PERCENTAGE
-  FIXED_AMOUNT
+model WebsiteAnalytics {
+  id         String   @id @unique @default(cuid())
+  websiteId  String
+  date       DateTime
+  visits     Int      @default(0)
+  pageViews  Int      @default(0)
+  uniqueVisitors Int  @default(0)
+  bounceRate Float?
+  avgSessionDuration Float?
+  topPages   Json?    // Array of page URLs with visit counts
+  referrers  Json?    // Array of referrer URLs with counts
+  devices    Json?    // Device type breakdown
+  browsers   Json?    // Browser breakdown
+  countries  Json?    // Country breakdown
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  Website    Website  @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  
+  @@unique([websiteId, date])
+  @@index([websiteId])
+  @@index([date])
 }
 
 model Coupon {
   id             String       @id @unique @default(cuid())
   accountId      String
-  code           String
+  code           String       @unique
   description    String?
   discountType   DiscountType
   discountAmount Float
+  minimumAmount  Float?       // Minimum purchase amount to use coupon
   expirationDate DateTime
   usageLimit     Int?
   usageCount     Int          @default(0)
-  creationDate   DateTime     @default(now())
-  lastUpdated    DateTime     @updatedAt
   isActive       Boolean      @default(true)
   isArchive      Boolean      @default(false)
+  
+  // Applicable items
+  applicableCourses Json?      // Array of course IDs
+  applicableProducts Json?     // Array of product IDs
+  
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
-  Account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  Account        Account      @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  Sale           Sale[]
 
   @@index([accountId])
-}
-
-enum SaleStatus {
-  CREATED
-  PROCESSING
-  COMPLETED
-  CANCELLED
-}
-
-enum ItemType {
-  COURSE
-  PRODUCT
+  @@index([code])
 }
 
 model Sale {
-  id          String     @id @unique @default(cuid())
-  orderNumber Int        @unique @default(autoincrement())
-  accountId   String
-  amount      Float
-  status      SaleStatus
-  itemType    ItemType
-  itemId      String     @db.Text
-  price       Float
-  studentId   String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  Account     Account    @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  Student     Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  id              String     @id @unique @default(cuid())
+  orderNumber     Int        @unique @default(autoincrement())
+  accountId       String
+  studentId       String
+  amount          Float      // Final amount after discounts
+  originalAmount  Float      // Original amount before discounts
+  discountAmount  Float?     @default(0)
+  taxAmount       Float?     @default(0)
+  status          SaleStatus
+  itemType        ItemType
+  itemId          String     @db.Text
+  price           Float
+  quantity        Int        @default(1)
+  
+  // Optional foreign keys for courses and products
+  courseId        String?    // Only set when itemType is COURSE
+  productId       String?    // Only set when itemType is PRODUCT
+  
+  // Coupon information
+  couponId        String?
+  couponCode      String?
+  
+  // Payment information
+  paymentId       String?
+  paymentMethod   PaymentMethod?
+  paymentStatus   PaymentStatus?
+  
+  // Additional information
+  customerNotes   String?    @db.Text
+  internalNotes   String?    @db.Text
+  
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  
+  // Relations
+  Account         Account    @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  Student         Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  Course          Course?    @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  Product         Product?   @relation(fields: [productId], references: [id], onDelete: SetNull)
+  Coupon          Coupon?    @relation(fields: [couponId], references: [id], onDelete: SetNull)
+  Payment         Payment[]
 
   @@index([accountId])
   @@index([studentId])
+  @@index([status])
+  @@index([itemType, itemId])
+  @@index([courseId])
+  @@index([productId])
+}
+
+model Payment {
+  id                String        @id @unique @default(cuid())
+  type              PaymentTypes
+  method            PaymentMethod
+  amount            Float
+  currency          String        @default("DZD")
+  status            PaymentStatus @default(PENDING)
+  
+  // Related entities
+  studentId         String?
+  accountId         String?
+  saleId            String?
+  
+  // Payment gateway information
+  gatewayId         String?       // Payment gateway transaction ID
+  gatewayResponse   Json?         // Full response from payment gateway
+  
+  // Payment details
+  description       String?       @db.Text
+  metadata          Json?         // Additional payment metadata
+  
+  // Refund information
+  refundAmount      Float?        @default(0)
+  refundReason      String?       @db.Text
+  refundedAt        DateTime?
+  
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  // Relations
+  Account           Account?      @relation(fields: [accountId], references: [id])
+  Student           Student?      @relation(fields: [studentId], references: [id])
+  Sale              Sale?         @relation(fields: [saleId], references: [id])
+  Transaction       Transaction[]
+
+  @@index([accountId])
+  @@index([studentId])
+  @@index([saleId])
+  @@index([status])
+  @@index([type])
+}
+
+model Wallet {
+  id            String        @id @unique @default(cuid())
+  accountId     String        @unique
+  balance       Float         @default(0)
+  currency      String        @default("DZD")
+  
+  // Wallet status
+  isActive      Boolean       @default(true)
+  isFrozen      Boolean       @default(false)
+  frozenReason  String?       @db.Text
+  frozenAt      DateTime?
+  
+  // Limits
+  dailyLimit    Float?
+  monthlyLimit  Float?
+  
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  
+  // Relations
+  Account       Account       @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  Transaction   Transaction[]
+
+  @@index([accountId])
+}
+
+model Transaction {
+  id                String            @id @unique @default(cuid())
+  walletId          String?
+  paymentId         String?
+  type              TransactionType
+  amount            Float
+  currency          String            @default("DZD")
+  status            TransactionStatus @default(PENDING)
+  
+  // Transaction details
+  description       String?           @db.Text
+  reference         String?           @unique // External reference number
+  metadata          Json?             // Additional transaction data
+  
+  // Balance tracking
+  balanceBefore     Float?
+  balanceAfter      Float?
+  
+  // Related information
+  relatedEntityType String?           // SALE, REFUND, COMMISSION, etc.
+  relatedEntityId   String?
+  
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  
+  // Relations
+  Wallet            Wallet?           @relation(fields: [walletId], references: [id])
+  Payment           Payment?          @relation(fields: [paymentId], references: [id])
+
+  @@index([walletId])
+  @@index([paymentId])
+  @@index([type])
+  @@index([status])
+  @@index([reference])
 }
 
 model Comment {
   id           String   @id @unique @default(cuid())
-  content      String
+  content      String   @db.Text
   rating       Float
   studentId    String
   studentName  String
   studentEmail String
-  studentImage String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  studentImage String?
   courseId     String
   accountId    String
   status       String   @default("verification_pending")
+  
+  // Additional fields
+  isApproved   Boolean  @default(false)
+  isPublic     Boolean  @default(true)
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
   Course       Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   Student      Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@index([courseId])
   @@index([accountId])
   @@index([studentId])
+  @@index([status])
 }
 
 model Notification {
-  id         String   @id @unique @default(cuid())
-  content    String
-  type       String   @default("WARNNING")
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id         String           @id @unique @default(cuid())
+  content    String           @db.Text
+  title      String?
+  type       NotificationType @default(INFO)
   accountId  String
-  isRead     Boolean  @default(false)
-  isArchived Boolean  @default(false)
-  Account    Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  isRead     Boolean          @default(false)
+  isArchived Boolean          @default(false)
+  
+  // Additional fields
+  actionUrl  String?          // URL to redirect when notification is clicked
+  metadata   Json?            // Additional notification data
+  
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  
+  Account    Account          @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
   @@index([accountId])
+  @@index([isRead])
+  @@index([type])
 }
+
 model Student {
   id                        String    @id @unique @default(cuid())
   full_name                 String
   photo_url                 String?   @db.Text
-  bio                       String?
+  bio                       String?   @db.Text
   otp                       Int?
   email                     String
   phone                     String?
   accountId                 String
   password                  String
-  bag                       Json
+  bag                       Json      // Shopping cart/wishlist
   
   // Email verification fields
-  emailVerified             Boolean?  @default(false)
+  emailVerified             Boolean   @default(false)
   emailVerifiedAt          DateTime?
   emailVerificationToken   String?   @unique
   emailVerificationExpiry  DateTime?
@@ -310,19 +625,24 @@ model Student {
   
   // Activity tracking
   lastVisitedAt            DateTime?
+  isActive                 Boolean   @default(true)
   
-  // Relations
-  Account                  Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  // Student preferences
+  preferredLanguage        String?   @default("ARABIC")
+  timezone                 String?
+  emailNotifications       Boolean   @default(true)
+  smsNotifications         Boolean   @default(false)
   
-  // Timestamps
   createdAt                DateTime  @default(now())
   updatedAt                DateTime  @updatedAt
   
-  // Existing relations
+  // Relations
+  Account                  Account      @relation(fields: [accountId], references: [id], onDelete: Cascade)
   Sale                     Sale[]
   Comment                  Comment[]
   Certificate              Certificate[]
   Referral                 Referral[]
+  Payment                  Payment[]
   
   @@index([accountId])
   @@index([email, accountId])
@@ -331,36 +651,85 @@ model Student {
 }
 
 model Certificate {
-  id          String   @id @unique @default(cuid())
+  id          String            @id @unique @default(cuid())
   name        String
-  description String?
+  description String?           @db.Text
   studentId   String
   accountId   String
   courseName  String
   studentName String
-  fileUrl     String   @db.Text
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  Account     Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  Student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  fileUrl     String            @db.Text
+  status      CertificateStatus @default(PENDING)
+  
+  // Certificate details
+  issueDate   DateTime?
+  expiryDate  DateTime?
+  
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  
+  Account     Account           @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  Student     Student           @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@index([accountId])
   @@index([studentId])
+  @@index([status])
 }
 
-model Payments {
-  id        String @id @unique @default(cuid())
-  accountId String
-
+model Subscription {
+  id                  String   @id @unique @default(cuid())
+  accountId           String
+  paymentId           String?
   plan                String
-  end_of_subscription DateTime
-  payload             Json
-  strategy            String
   status              String
+  startDate           DateTime @default(now())
+  endDate             DateTime
+  
+  // Subscription details
+  amount              Float?
+  currency            String   @default("DZD")
+  billingCycle        String?  // MONTHLY, YEARLY
+  autoRenew           Boolean  @default(true)
+  
+  // Payment information
+  payload             Json?
+  strategy            String?  // Payment strategy used
+  
+  // Cancellation information
+  cancelledAt         DateTime?
+  cancellationReason  String?  @db.Text
+  
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
+  
   Account             Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
+  @@index([accountId])
+  @@index([status])
+  @@index([endDate])
+}
+
+model Referral {
+  id                       String   @id @unique @default(cuid())
+  studentId                String
+  accountId                String
+  studentName              String
+  studentImage             String?
+  ccp                      String?  // Bank account for payouts
+  numberOfReferredStudents Int      @default(0)
+  totalEarnings            Float    @default(0)
+  
+  // Payout information
+  lastPayoutAt             DateTime?
+  pendingPayout            Float    @default(0)
+  totalPaidOut             Float    @default(0)
+  
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+  
+  Student                  Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
   @@index([accountId])
 }
 
@@ -368,8 +737,14 @@ model Admin {
   id        String   @id @unique @default(cuid())
   name      String?
   email     String?  @unique
-  photo_url String?
+  photo_url String?  @db.Text
   password  String
+  role      String   @default("ADMIN") // SUPER_ADMIN, ADMIN, MODERATOR
+  isActive  Boolean  @default(true)
+  
+  // Admin permissions
+  permissions Json?
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -378,35 +753,28 @@ model AcademiaMessage {
   id            String   @id @unique @default(cuid())
   senderName    String
   senderEmail   String
-  senderMessage String
+  senderMessage String   @db.Text
+  isRead        Boolean  @default(false)
+  isArchived    Boolean  @default(false)
+  
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+
+  @@index([isRead])
+  @@index([senderEmail])
 }
 
 model OtpCode {
-  id        Int      @id @default(autoincrement())
-  userId    Int
+  id        String   @id @unique @default(cuid())
+  userId    String
   code      String
   type      OtpType
   expiresAt DateTime
-}
+  isUsed    Boolean  @default(false)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-enum OtpType {
-  CONFIRM_ACCOUNT
-  FORGOT_PASSWORD
-}
-
-model Referral {
-  id                       String   @id @unique @default(cuid())
-  createdAt                DateTime @default(now())
-  updatedAt                DateTime @updatedAt
-  studentId                String
-  studentName              String
-  studentImage             String
-  accountId                String
-  ccp                      String
-  numberOfReferredStudents Int
-  Student                  Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-
-  @@index([studentId])
+  @@index([userId, type])
+  @@index([code])
 }

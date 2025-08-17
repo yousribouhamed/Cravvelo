@@ -38,27 +38,27 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      await prisma.payments.update({
-        where: {
-          id: paymentId,
-        },
-        data: {
-          status: "SUCCESS",
-        },
-      });
+      // await prisma.payments.update({
+      //   where: {
+      //     id: paymentId,
+      //   },
+      //   data: {
+      //     status: "SUCCESS",
+      //   },
+      // });
 
       //  update the payment in the database
 
       break;
     case "checkout.failed":
-      await prisma.payments.update({
-        where: {
-          id: paymentId,
-        },
-        data: {
-          status: "FAILD",
-        },
-      });
+      // await prisma.payments.update({
+      //   where: {
+      //     id: paymentId,
+      //   },
+      //   data: {
+      //     status: "FAILD",
+      //   },
+      // });
       break;
   }
 }

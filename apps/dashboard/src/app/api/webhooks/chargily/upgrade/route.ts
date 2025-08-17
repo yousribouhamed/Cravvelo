@@ -10,52 +10,53 @@ export async function POST(request: NextRequest) {
 
   const paymentId = payload.data.metadata[0]?.paymentId;
 
-  switch (payload.type) {
-    case "checkout.paid":
-      const payment = await prisma.payments.findFirst({
-        where: {
-          id: paymentId,
-        },
-      });
-      if (payment.status === "PENDING") {
-        // update the account status
-        await prisma.account.update({
-          where: {
-            id: accountId,
-          },
-          data: {
-            plan:
-              plan_code === "ADVANCED"
-                ? "ADVANCED"
-                : plan_code === "PRO"
-                ? "PRO"
-                : "BASIC",
-          },
-        });
+  switch (
+    payload.type
+    // case "checkout.paid":
+    // const payment = await prisma.payments.findFirst({
+    //   where: {
+    //     id: paymentId,
+    //   },
+    // });
+    // if (payment.status === "PENDING") {
+    //   // update the account status
+    //   await prisma.account.update({
+    //     where: {
+    //       id: accountId,
+    //     },
+    //     data: {
+    //       plan:
+    //         plan_code === "ADVANCED"
+    //           ? "ADVANCED"
+    //           : plan_code === "PRO"
+    //           ? "PRO"
+    //           : "BASIC",
+    //     },
+    //   });
 
-        await prisma.payments.update({
-          where: {
-            id: paymentId,
-          },
-          data: {
-            status: "SUCCESS",
-          },
-        });
-      }
-
-      break;
-
-    case "checkout.failed":
-      await prisma.payments.update({
-        where: {
-          id: paymentId,
-        },
-        data: {
-          status: "FAILD",
-        },
-      });
-      break;
+    // await prisma.payments.update({
+    //   where: {
+    //     id: paymentId,
+    //   },
+    //   data: {
+    //     status: "SUCCESS",
+    //   },
+    // });
+  ) {
   }
+
+  // break;
+
+  // case "checkout.failed":
+  // await prisma.payments.update({
+  //   where: {
+  //     id: paymentId,
+  //   },
+  //   data: {
+  //     status: "FAILD",
+  //   },
+  // });
+  // break;
 }
 
 type Metadata = {

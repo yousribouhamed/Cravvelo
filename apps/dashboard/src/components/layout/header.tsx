@@ -38,7 +38,7 @@ const Header: FC<Props> = ({
   return (
     <div className="w-full">
       <TooltipProvider>
-        <div className="w-full h-16 md:h-20 flex justify-between items-center  border-b border-gray-100">
+        <div className="w-full h-16 md:h-20 flex justify-between items-center border-b border-gray-100 dark:border-zinc-800 ">
           {/* Left Section - Mobile Sidebar & Back Button & Title */}
           <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
             {/* Mobile Sidebar - Always first on mobile */}
@@ -54,9 +54,9 @@ const Header: FC<Props> = ({
                     onClick={() => router.back()}
                     variant="outline"
                     size="icon"
-                    className=" flex-shrink-0"
+                    className="flex-shrink-0"
                   >
-                    <ArrowRight className="w-4 h-4 " />
+                    <ArrowRight className="w-4 h-4" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -66,7 +66,7 @@ const Header: FC<Props> = ({
             )}
 
             {/* Title */}
-            <h1 className="text-base md:text-lg lg:text-2xl font-bold text-gray-900 truncate">
+            <h1 className="text-sm md:text-base lg:text-lg font-semibold text-gray-900 dark:text-gray-100 truncate">
               {title}
             </h1>
           </div>
@@ -99,16 +99,16 @@ const Header: FC<Props> = ({
         </div>
 
         {/* Mobile & Tablet Search Bar */}
-        <div className="lg:hidden px-4 py-3 border-b border-gray-100">
+        <div className="lg:hidden px-4 py-3 ">
           <SearchInput />
         </div>
       </TooltipProvider>
 
       {/* Trial Status Banner */}
       {user?.isFreeTrial && !user?.isSubscribed && !isLoadingPage && (
-        <div className=" mt-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl px-4 py-3 shadow-sm">
+        <div className="mt-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 border border-blue-200 dark:border-blue-800 rounded-xl px-4 py-3 shadow-sm">
           <div className="flex items-center justify-center">
-            <h1 className="text-blue-800 font-medium text-sm md:text-base text-center leading-relaxed">
+            <h1 className="text-blue-800 dark:text-blue-200 font-medium text-xs md:text-sm text-center leading-relaxed">
               لديك {daysLeftInTrial(user.createdAt)} يومًا متبقيًا في النسخة
               التجريبية المجانية
             </h1>
@@ -118,9 +118,9 @@ const Header: FC<Props> = ({
 
       {/* Expired Trial Banner */}
       {!user?.isSubscribed && !user?.isFreeTrial && !isLoadingPage && (
-        <div className="mt-4 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-xl px-4 py-3 shadow-sm">
+        <div className="mt-4 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-950/50 dark:to-pink-950/50 border border-red-200 dark:border-red-800 rounded-xl px-4 py-3 shadow-sm">
           <div className="flex items-center justify-center">
-            <h1 className="text-red-800 font-medium text-sm md:text-base text-center leading-relaxed">
+            <h1 className="text-red-800 dark:text-red-200 font-medium text-xs md:text-sm text-center leading-relaxed">
               انتهت الفترة التجريبية، يجب عليك الاشتراك في أحد الباقات
             </h1>
           </div>
