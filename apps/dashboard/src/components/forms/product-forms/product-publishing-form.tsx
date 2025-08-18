@@ -20,7 +20,8 @@ import { maketoast } from "../../toasts";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import { Product } from "database";
+import { Chapter, Course, Product } from "database";
+// import CourseContent from "@/src/app/(academy)/_components/course-component/course-content";
 
 const addTextSchema = z.object({
   title: z.string().min(2).max(50),

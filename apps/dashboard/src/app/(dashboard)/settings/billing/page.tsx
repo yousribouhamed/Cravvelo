@@ -1,10 +1,10 @@
 import Header from "@/src/components/layout/header";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
+import useHaveAccess from "@/src/hooks/use-have-access";
 import PaymentSettingsHeader from "@/src/modules/settings/components/payment-website-header";
-import { getMyUserAction } from "@/src/actions/user.actions";
 
 const Page = async ({}) => {
-  const user = await getMyUserAction();
+  const user = await useHaveAccess();
 
   return (
     <MaxWidthWrapper>

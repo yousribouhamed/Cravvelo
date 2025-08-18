@@ -21,6 +21,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { Chapter, Course } from "database";
+// import CourseContent from "@/src/app/(academy)/_components/course-component/course-content";
 
 const addTextSchema = z.object({
   title: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
@@ -106,6 +107,9 @@ function PublishCourseForm({ course, chapters }: PublishCourseFormProps) {
             />
           </form>
         </Form>
+        {/* <div className="w-full my-4 h-fit min-h-[200px] flex flex-col items-start">
+          <CourseContent chapters={chapters} />
+        </div> */}
       </div>
       <div className="col-span-1 hidden md:block w-full h-full ">
         <Card>

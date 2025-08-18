@@ -20,6 +20,7 @@ export default async function TenantLayout({
   params,
 }: TenantLayoutProps) {
   const { tenant: tenantKey } = await params;
+
   const tenant = `${tenantKey}.cravvelo.com`;
 
   const [{ isValid }, websiteData, user] = await Promise.all([
@@ -27,6 +28,7 @@ export default async function TenantLayout({
     getTenantWebsite(tenant),
     getCurrentUser(),
   ]);
+
 
   console.log("this is the current logged in user:");
   console.log(user);
