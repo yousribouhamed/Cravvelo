@@ -55,7 +55,7 @@ export default function CourseBuyCard({ course }: CourseCardProps) {
   ];
 
   return (
-    <div className="w-full lg:w-[350px] relative min-h-[500px] h-fit rounded-xl border p-4 flex flex-col gap-y-4 bg-white dark:bg-[#0A0A0C] mt-6 sticky top-[120px]">
+    <div className="w-full lg:w-[350px] bg-card text-card-foreground min-h-[500px] h-fit rounded-xl border p-4 flex flex-col gap-y-4  mt-6 sticky top-[120px]">
       {/* Discount Badge */}
       {course?.price && course?.compareAtPrice && Number(course.price) > 0 && (
         <span className="text-xs text-white p-2 rounded-full absolute -top-5 right-0 bg-[#FC6B00]">

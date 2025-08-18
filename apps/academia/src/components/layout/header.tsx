@@ -33,7 +33,7 @@ export default function Header() {
   const isAuthenticated = useIsAuthenticated();
 
   return (
-    <div className="w-full  h-[70px] bg-white border-b dark:bg-[#0A0A0C] dark:border-[#1F1F23] sticky top-0 z-50">
+    <div className="w-full  h-[70px]  border-b bg-card text-card-foreground sticky top-0 z-50">
       <MaxWidthWrapper className="h-full">
         <div className="w-full h-full flex items-center justify-between">
           <div className="h-full flex items-center justify-start gap-x-8">
