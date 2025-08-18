@@ -90,10 +90,10 @@ const AddCustomDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
           <CardFooter>
             <Button
               className="flex items-center gap-x-2"
-              disabled={mutation.isPending}
+              disabled={mutation.isLoading}
               type="submit"
             >
-              {mutation.isPending ? <LoadingSpinner /> : null}
+              {mutation.isLoading ? <LoadingSpinner /> : null}
               تاكيد
             </Button>
           </CardFooter>

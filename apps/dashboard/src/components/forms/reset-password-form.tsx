@@ -36,7 +36,7 @@ type Inputs = z.infer<typeof checkEmailSchema>;
 export function ResetPasswordForm() {
   const router = useRouter();
   const { isLoaded, signIn } = useSignIn();
-  const [isPending, startTransition] = React.useTransition();
+  const [isLoading, startTransition] = React.useTransition();
   const [error, setError] = React.useState<string>("");
   const [success, setSuccess] = React.useState<string>("");
 
@@ -164,9 +164,9 @@ export function ResetPasswordForm() {
             {/* Submit Button */}
             <Button
               type="submit"
-              disabled={isPending}
+              disabled={isLoading}
               className="w-full h-11"
-              loading={isPending}
+              loading={isLoading}
             >
               إرسال رمز التحقق
             </Button>

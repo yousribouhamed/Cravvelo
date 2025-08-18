@@ -396,9 +396,9 @@ const ModulesList: FC<ModulesListProps> = ({
                           {statusBadge}
 
                           {/* Loading Indicator */}
-                          {(updateOrderMutation.isPending ||
-                            deleteModuleMutation.isPending ||
-                            toggleModuleVisibility?.isPending) && (
+                          {(updateOrderMutation.isLoading ||
+                            deleteModuleMutation.isLoading ||
+                            toggleModuleVisibility?.isLoading) && (
                             <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
                           )}
 

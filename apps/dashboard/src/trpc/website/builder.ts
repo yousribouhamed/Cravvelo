@@ -17,6 +17,8 @@ export const builder = {
         const account = await ctx.prisma.account.findFirst({
           where: { userId: ctx.user.id },
         });
+
+        console.log(account.id);
         const site = ctx.prisma.website.create({
           data: {
             accountId: account.id,

@@ -4,8 +4,6 @@ import * as React from "react";
 import { useClerk } from "@clerk/nextjs";
 import { type HandleOAuthCallbackParams } from "@clerk/types";
 
-import { Icons } from "../my-icons";
-
 interface SSOCallbackProps {
   searchParams: HandleOAuthCallbackParams;
 }
