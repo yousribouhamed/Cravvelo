@@ -1,5 +1,3 @@
-"use server";
-
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { prisma } from "database/src";
@@ -45,6 +43,8 @@ export const getMyUserAction = async () => {
   // here we check if the user is paid user or not
   const isFreeTrial = daysLeftInTrial(account.createdAt) > 0;
   const isSubscribed = account.plan ? true : false;
+
+  console.log(account);
 
   return {
     userId: user.id,
