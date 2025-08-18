@@ -9,13 +9,11 @@ import {
   useTenantBranding,
   useTenantSettings,
   useTenantAccount,
-
   useIsAuthenticated,
 } from "@/hooks/use-tenant";
 import Image from "next/image";
 import Link from "next/link";
 import ProfileDropdown from "@/modules/profile/components/user-dropdown";
-
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -38,7 +36,6 @@ export default function Header() {
     <div className="w-full  h-[70px]  border-b bg-card text-card-foreground sticky top-0 z-50">
       <MaxWidthWrapper className="h-full">
         <div className="w-full h-full flex items-center justify-between">
-
           <div className="h-full flex items-center justify-start gap-x-8">
             {/* Logo/Brand Section */}
             <Link
@@ -51,23 +48,19 @@ export default function Header() {
                     src={logo}
                     alt={name || "Academy Logo"}
                     fill
-
                     className="object-contain rounded-lg"
                   />
                 </div>
               ) : avatarUrl ? (
-
                 <div className="relative w-10 h-10">
                   <Image
                     src={avatarUrl}
                     alt={userName || "Academy"}
                     fill
-
                     className="object-cover rounded-full"
                   />
                 </div>
               ) : (
-
                 <div className="relative w-10 h-10">
                   <Image
                     src={"/logo.png"}
@@ -91,66 +84,64 @@ export default function Header() {
             </nav>
           </div>
 
-
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center justify-start gap-x-4">
-              {navigationLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-          {/* Desktop Auth Buttons */}
-
-          {isAuthenticated ? (
-            <ProfileDropdown onLogout={() => console.log("Logout clicked")} />
-          ) : (
-            <div className="hidden md:flex items-center justify-end gap-x-4">
-              <Link href={`/login`}>
-                <button className="px-4 py-2 cursor-pointer text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
-                  Sign In
-                </button>
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center justify-start gap-x-4">
+            {navigationLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium"
+              >
+                {link.label}
               </Link>
-              <Link href={`/register`}>
-                <button
-                  className="px-4 py-2 cursor-pointer text-white font-medium rounded-lg hover:opacity-90 transition-opacity"
-                  style={{ backgroundColor: primaryColor }}
-                >
-                  Sign Up
-                </button>
-              </Link>
-            </div>
-          )}
-
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden p-2 text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24">
-              {isMobileMenuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
+            ))}
+          </nav>
         </div>
+        {/* Desktop Auth Buttons */}
+
+        {isAuthenticated ? (
+          <ProfileDropdown onLogout={() => console.log("Logout clicked")} />
+        ) : (
+          <div className="hidden md:flex items-center justify-end gap-x-4">
+            <Link href={`/login`}>
+              <button className="px-4 py-2 cursor-pointer text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
+                Sign In
+              </button>
+            </Link>
+            <Link href={`/register`}>
+              <button
+                className="px-4 py-2 cursor-pointer text-white font-medium rounded-lg hover:opacity-90 transition-opacity"
+                style={{ backgroundColor: primaryColor }}
+              >
+                Sign Up
+              </button>
+            </Link>
+          </div>
+        )}
+
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden p-2 text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24">
+            {isMobileMenuOpen ? (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            ) : (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            )}
+          </svg>
+        </button>
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
