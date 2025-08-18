@@ -24,3 +24,21 @@ export type StudentProfile = {
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string
 };
+
+export type CertificateStatus = "PENDING" | "APPROVED" | "REJECTED";
+
+export interface Certificate {
+  id: string;
+  name: string;
+  description: string | null;
+  studentId: string;
+  accountId: string;
+  courseName: string;
+  studentName: string;
+  fileUrl: string;
+  status: CertificateStatus;
+  issueDate: Date | null;
+  expiryDate: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+}

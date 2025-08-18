@@ -1,10 +1,33 @@
-/* TipTap Editor Styles */
+/* TipTap Editor Styles with Dark Mode Support */
 .tiptap-editor {
   line-height: 1.6;
   font-family: system-ui, -apple-system, sans-serif;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
-/* Headings */
+/* Color scheme detection */
+@media (prefers-color-scheme: dark) {
+  .tiptap-editor:not([data-theme="light"]) {
+    background-color: #111827;
+    color: #f9fafb;
+  }
+}
+
+/* Explicit dark mode class */
+.tiptap-editor[data-theme="dark"],
+.dark .tiptap-editor {
+  background-color: #0a0a0c;
+  color: #f9fafb;
+}
+
+/* Explicit light mode class */
+.tiptap-editor[data-theme="light"],
+.light .tiptap-editor {
+  background-color: #ffffff;
+  color: #111827;
+}
+
+/* Headings - Light Mode */
 .tiptap-editor h1 {
   font-size: 2rem;
   font-weight: 700;
@@ -59,6 +82,61 @@
   color: #9ca3af;
 }
 
+/* Headings - Dark Mode */
+.tiptap-editor[data-theme="dark"] h1,
+.dark .tiptap-editor h1 {
+  color: #f9fafb;
+}
+
+.tiptap-editor[data-theme="dark"] h2,
+.dark .tiptap-editor h2 {
+  color: #f3f4f6;
+}
+
+.tiptap-editor[data-theme="dark"] h3,
+.dark .tiptap-editor h3 {
+  color: #e5e7eb;
+}
+
+.tiptap-editor[data-theme="dark"] h4,
+.dark .tiptap-editor h4 {
+  color: #d1d5db;
+}
+
+.tiptap-editor[data-theme="dark"] h5,
+.dark .tiptap-editor h5 {
+  color: #d1d5db;
+}
+
+.tiptap-editor[data-theme="dark"] h6,
+.dark .tiptap-editor h6 {
+  color: #9ca3af;
+}
+
+/* Dark Mode with prefers-color-scheme */
+@media (prefers-color-scheme: dark) {
+  .tiptap-editor:not([data-theme="light"]) h1 {
+    color: #f9fafb;
+  }
+
+  .tiptap-editor:not([data-theme="light"]) h2 {
+    color: #f3f4f6;
+  }
+
+  .tiptap-editor:not([data-theme="light"]) h3 {
+    color: #e5e7eb;
+  }
+
+  .tiptap-editor:not([data-theme="light"]) h4,
+  .tiptap-editor:not([data-theme="light"]) h5 {
+    color: #d1d5db;
+  }
+
+  .tiptap-editor:not([data-theme="light"]) h6 {
+    color: #9ca3af;
+  }
+}
+
 /* First heading should not have top margin */
 .tiptap-editor h1:first-child,
 .tiptap-editor h2:first-child,
@@ -106,16 +184,31 @@
   list-style-type: lower-roman;
 }
 
-/* Blockquotes */
+/* Blockquotes - Light Mode */
 .tiptap-editor blockquote {
   border-left: 4px solid #e5e7eb;
   padding-left: 1rem;
   margin: 1rem 0;
   font-style: italic;
   color: #6b7280;
+  transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
-/* Inline code */
+/* Blockquotes - Dark Mode */
+.tiptap-editor[data-theme="dark"] blockquote,
+.dark .tiptap-editor blockquote {
+  border-left-color: #374151;
+  color: #9ca3af;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tiptap-editor:not([data-theme="light"]) blockquote {
+    border-left-color: #374151;
+    color: #9ca3af;
+  }
+}
+
+/* Inline code - Light Mode */
 .tiptap-editor code {
   background-color: #f3f4f6;
   padding: 0.125rem 0.25rem;
@@ -124,13 +217,41 @@
     "Liberation Mono", Menlo, monospace;
   font-size: 0.875em;
   color: #dc2626;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
-/* Horizontal rule */
+/* Inline code - Dark Mode */
+.tiptap-editor[data-theme="dark"] code,
+.dark .tiptap-editor code {
+  background-color: #374151;
+  color: #fca5a5;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tiptap-editor:not([data-theme="light"]) code {
+    background-color: #374151;
+    color: #fca5a5;
+  }
+}
+
+/* Horizontal rule - Light Mode */
 .tiptap-editor hr {
   border: none;
   border-top: 1px solid #e5e7eb;
   margin: 2rem 0;
+  transition: border-color 0.2s ease-in-out;
+}
+
+/* Horizontal rule - Dark Mode */
+.tiptap-editor[data-theme="dark"] hr,
+.dark .tiptap-editor hr {
+  border-top-color: #374151;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tiptap-editor:not([data-theme="light"]) hr {
+    border-top-color: #374151;
+  }
 }
 
 /* Text formatting */
@@ -183,6 +304,24 @@
   outline: none;
 }
 
+/* Selection colors */
+.tiptap-editor::selection {
+  background-color: #bfdbfe;
+}
+
+.tiptap-editor[data-theme="dark"]::selection,
+.dark .tiptap-editor::selection {
+  background-color: #1e40af;
+  color: #f9fafb;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tiptap-editor:not([data-theme="light"])::selection {
+    background-color: #1e40af;
+    color: #f9fafb;
+  }
+}
+
 /* Ensure proper spacing between elements */
 .tiptap-editor > * + * {
   margin-top: 0.75rem;
@@ -205,8 +344,6 @@
 .tiptap-list-item > * + * {
   margin-top: 0.25rem;
 }
-
-/* Add these styles to your existing editor.css file */
 
 /* RTL Support for TipTap Editor */
 .tiptap-editor[dir="rtl"] {
@@ -232,9 +369,9 @@
   padding-right: 0;
 }
 
-/* RTL Blockquote Styles */
+/* RTL Blockquote Styles - Light Mode */
 .tiptap-editor[dir="rtl"] blockquote {
-  border-right: 3px solid #e5e7eb;
+  border-right: 4px solid #e5e7eb;
   border-left: none;
   padding-right: 1rem;
   padding-left: 0;
@@ -243,12 +380,33 @@
 }
 
 .tiptap-editor[dir="ltr"] blockquote {
-  border-left: 3px solid #e5e7eb;
+  border-left: 4px solid #e5e7eb;
   border-right: none;
   padding-left: 1rem;
   padding-right: 0;
   margin-left: 0;
   margin-right: 1rem;
+}
+
+/* RTL Blockquote Styles - Dark Mode */
+.tiptap-editor[dir="rtl"][data-theme="dark"] blockquote,
+.dark .tiptap-editor[dir="rtl"] blockquote {
+  border-right-color: #374151;
+}
+
+.tiptap-editor[dir="ltr"][data-theme="dark"] blockquote,
+.dark .tiptap-editor[dir="ltr"] blockquote {
+  border-left-color: #374151;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tiptap-editor[dir="rtl"]:not([data-theme="light"]) blockquote {
+    border-right-color: #374151;
+  }
+
+  .tiptap-editor[dir="ltr"]:not([data-theme="light"]) blockquote {
+    border-left-color: #374151;
+  }
 }
 
 /* RTL Code Styles */
@@ -273,7 +431,7 @@
   text-align: left;
 }
 
-/* Prose RTL Support */
+/* Prose RTL Support - Light Mode */
 .prose.rtl {
   direction: rtl;
 }
@@ -293,6 +451,18 @@
 
 .prose.rtl li {
   text-align: right;
+}
+
+/* Prose RTL Support - Dark Mode */
+.prose.rtl[data-theme="dark"] blockquote,
+.dark .prose.rtl blockquote {
+  border-right-color: #374151;
+}
+
+@media (prefers-color-scheme: dark) {
+  .prose.rtl:not([data-theme="light"]) blockquote {
+    border-right-color: #374151;
+  }
 }
 
 /* Menu Bar RTL Support */
@@ -324,7 +494,8 @@
 
 /* Smooth transitions for direction changes */
 .tiptap-editor {
-  transition: direction 0.2s ease-in-out;
+  transition: direction 0.2s ease-in-out, background-color 0.2s ease-in-out,
+    color 0.2s ease-in-out;
 }
 
 /* Mixed content support */
@@ -345,11 +516,93 @@
   direction: rtl;
 }
 
-/* Placeholder text alignment */
+/* Placeholder text alignment - Light Mode */
 .tiptap-editor[dir="rtl"] .ProseMirror-placeholder {
   text-align: right;
+  color: #9ca3af;
 }
 
 .tiptap-editor[dir="ltr"] .ProseMirror-placeholder {
   text-align: left;
+  color: #9ca3af;
+}
+
+/* Placeholder text alignment - Dark Mode */
+.tiptap-editor[dir="rtl"][data-theme="dark"] .ProseMirror-placeholder,
+.dark .tiptap-editor[dir="rtl"] .ProseMirror-placeholder {
+  color: #6b7280;
+}
+
+.tiptap-editor[dir="ltr"][data-theme="dark"] .ProseMirror-placeholder,
+.dark .tiptap-editor[dir="ltr"] .ProseMirror-placeholder {
+  color: #6b7280;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tiptap-editor[dir="rtl"]:not([data-theme="light"]) .ProseMirror-placeholder,
+  .tiptap-editor[dir="ltr"]:not([data-theme="light"]) .ProseMirror-placeholder {
+    color: #6b7280;
+  }
+}
+
+/* Dark mode toggle utility classes */
+.theme-toggle {
+  background: none;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.theme-toggle:hover {
+  background-color: #f3f4f6;
+}
+
+.theme-toggle[data-theme="dark"],
+.dark .theme-toggle {
+  border-color: #4b5563;
+  color: #f9fafb;
+}
+
+.theme-toggle[data-theme="dark"]:hover,
+.dark .theme-toggle:hover {
+  background-color: #374151;
+}
+
+@media (prefers-color-scheme: dark) {
+  .theme-toggle:not([data-theme="light"]) {
+    border-color: #4b5563;
+    color: #f9fafb;
+  }
+
+  .theme-toggle:not([data-theme="light"]):hover {
+    background-color: #374151;
+  }
+}
+
+/* Code block styles for dark mode */
+.tiptap-editor pre {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas,
+    "Liberation Mono", Menlo, monospace;
+}
+
+.tiptap-editor[data-theme="dark"] pre,
+.dark .tiptap-editor pre {
+  background-color: #1f2937;
+  border-color: #4b5563;
+  color: #f9fafb;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tiptap-editor:not([data-theme="light"]) pre {
+    background-color: #1f2937;
+    border-color: #4b5563;
+    color: #f9fafb;
+  }
 }

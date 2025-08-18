@@ -41,7 +41,7 @@ async function getCroppedImg(
     crop.height
   );
 
-  return canvas.toDataURL("image/jpeg");
+  return canvas.toDataURL("image/jpeg", 0.8); // Added quality parameter
 }
 
 // Default crop configuration
@@ -57,9 +57,15 @@ interface Props {
   value?: string; // current photo URL
   onChange: (url: string) => void; // callback after save
   name?: string; // fallback initials
+  disabled?: boolean; // disable the input
 }
 
-export default function ProfileImageInput({ value, onChange, name }: Props) {
+export default function ProfileImageInput({
+  value,
+  onChange,
+  name,
+  disabled = false,
+}: Props) {
   const [open, setOpen] = useState(false);
   const [upImg, setUpImg] = useState<string | null>(null);
   const [crop, setCrop] = useState<Crop>(DEFAULT_CROP);
@@ -67,6 +73,8 @@ export default function ProfileImageInput({ value, onChange, name }: Props) {
   const imgRef = useRef<HTMLImageElement>(null);
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (disabled) return;
+
     if (e.target.files && e.target.files.length > 0) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
@@ -104,6 +112,8 @@ export default function ProfileImageInput({ value, onChange, name }: Props) {
   };
 
   const handleCropExisting = () => {
+    if (disabled) return;
+
     if (value) {
       setUpImg(value);
       setCrop(DEFAULT_CROP);
@@ -133,7 +143,7 @@ export default function ProfileImageInput({ value, onChange, name }: Props) {
         </Avatar>
 
         {/* زر قص الصورة إذا موجودة */}
-        {value && (
+        {value && !disabled && (
           <Button
             size="sm"
             variant="secondary"
@@ -145,27 +155,29 @@ export default function ProfileImageInput({ value, onChange, name }: Props) {
         )}
       </div>
 
-      <div className="flex gap-2">
-        {/* رفع صورة */}
-        <Button variant="outline" className="relative">
-          <Upload className="w-4 h-4 mr-2" />
-          {value ? "تغيير الصورة" : "رفع صورة"}
-          <Input
-            type="file"
-            accept="image/*"
-            onChange={onSelectFile}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-          />
-        </Button>
-
-        {/* قص صورة موجودة */}
-        {value && (
-          <Button variant="outline" onClick={handleCropExisting}>
-            <CropIcon className="w-4 h-4 mr-2" />
-            قص الصورة
+      {!disabled && (
+        <div className="flex gap-2">
+          {/* رفع صورة */}
+          <Button variant="outline" className="relative">
+            <Upload className="w-4 h-4 mr-2" />
+            {value ? "تغيير الصورة" : "رفع صورة"}
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={onSelectFile}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            />
           </Button>
-        )}
-      </div>
+
+          {/* قص صورة موجودة */}
+          {value && (
+            <Button variant="outline" onClick={handleCropExisting}>
+              <CropIcon className="w-4 h-4 mr-2" />
+              قص الصورة
+            </Button>
+          )}
+        </div>
+      )}
 
       {/* نافذة القص */}
       <Dialog open={open} onOpenChange={setOpen}>

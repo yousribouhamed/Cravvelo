@@ -138,10 +138,10 @@ const PublishWebsite: FC = () => {
           <Button
             form="createwebsiteform"
             className=" flex items-center gap-x-2 font-bold rounded-xl"
-            disabled={mutation.isPending}
+            disabled={mutation.isLoading}
             type="submit"
           >
-            {mutation.isPending ? <LoadingSpinner /> : null}
+            {mutation.isLoading ? <LoadingSpinner /> : null}
             إطلاق موقع الويب الخاص بي
           </Button>
         </DialogFooter>

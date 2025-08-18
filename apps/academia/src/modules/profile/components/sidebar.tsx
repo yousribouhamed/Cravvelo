@@ -59,7 +59,7 @@ export default function ProfileSidebar({}: SidebarProps) {
   const { primaryColor, primaryColorDark } = useTenantBranding();
 
   return (
-    <div className="w-full bg-card text-card-foreground border rounded-2xl p-6 shadow-sm">
+    <div className="w-full bg-card text-card-foreground border border-gray-200/80 dark:border-[#1A1A1D] rounded-2xl p-6 shadow-sm">
       <div className="mb-6">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
           لوحة التحكم
