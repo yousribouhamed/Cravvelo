@@ -11,68 +11,6 @@ import { TiptapEditorProps } from "../types";
 import { MenuBar } from "./menu-bar";
 import "../style/editor.css";
 
-// RTL language detection utility
-const isRtlCharacter = (char: string): boolean => {
-  const code = char.charCodeAt(0);
-
-  // Arabic: 0x0600-0x06FF, 0x0750-0x077F, 0x08A0-0x08FF
-  // Hebrew: 0x0590-0x05FF
-  // Persian/Farsi: 0xFB50-0xFDFF, 0xFE70-0xFEFF
-  // Additional RTL ranges
-  return (
-    (code >= 0x0590 && code <= 0x05ff) || // Hebrew
-    (code >= 0x0600 && code <= 0x06ff) || // Arabic
-    (code >= 0x0750 && code <= 0x077f) || // Arabic Supplement
-    (code >= 0x08a0 && code <= 0x08ff) || // Arabic Extended-A
-    (code >= 0xfb50 && code <= 0xfdff) || // Arabic Presentation Forms-A
-    (code >= 0xfe70 && code <= 0xfeff) || // Arabic Presentation Forms-B
-    (code >= 0x10800 && code <= 0x1083f) || // Cypriot Syllabary
-    (code >= 0x10a00 && code <= 0x10a5f) || // Kharoshthi
-    (code >= 0x1ee00 && code <= 0x1eeff) // Arabic Mathematical Alphabetic Symbols
-  );
-};
-
-const detectTextDirection = (text: string | any): "ltr" | "rtl" => {
-  // Handle non-string input
-  let textToAnalyze = "";
-
-  if (typeof text === "string") {
-    textToAnalyze = text;
-  } else if (text && typeof text === "object") {
-    // If it's HTML from the editor, convert to string first
-    textToAnalyze = String(text);
-  } else {
-    // Default fallback
-    textToAnalyze = "";
-  }
-
-  // Remove HTML tags and get plain text
-  const plainText = textToAnalyze.replace(/<[^>]*>/g, "");
-
-  // Find the first non-whitespace, non-punctuation character
-  for (let i = 0; i < plainText.length; i++) {
-    const char = plainText[i];
-
-    // Skip whitespace and common punctuation
-    if (/\s|[.,!?;:()[\]{}'"]/g.test(char)) {
-      continue;
-    }
-
-    // Check if it's an RTL character
-    if (isRtlCharacter(char)) {
-      return "rtl";
-    }
-
-    // If we find a clear LTR character (Latin, numbers, etc.), return LTR
-    if (/[a-zA-Z0-9]/.test(char)) {
-      return "ltr";
-    }
-  }
-
-  // Default to LTR if no clear direction is found
-  return "ltr";
-};
-
 export const CravveloEditor: React.FC<TiptapEditorProps> = ({
   value,
   onChange,
@@ -80,10 +18,11 @@ export const CravveloEditor: React.FC<TiptapEditorProps> = ({
   onToggleFullscreen,
   onPreview,
   onClear,
-  readOnly = false, // Add readOnly prop with default false
+  readOnly = false,
 }) => {
-  const [textDirection, setTextDirection] = useState<"ltr" | "rtl">("ltr");
-  const isRtl = textDirection === "rtl";
+  // Force RTL direction (Arabic)
+  const textDirection = "rtl";
+  const isRtl = true;
 
   const editor = useEditor({
     extensions: [
@@ -115,22 +54,18 @@ export const CravveloEditor: React.FC<TiptapEditorProps> = ({
       }),
     ],
     content: value,
-    editable: !readOnly, // Set editable based on readOnly prop
+    editable: !readOnly,
     onUpdate: ({ editor }) => {
-      if (readOnly) return; // Don't trigger onChange in read-only mode
+      if (readOnly) return;
 
       const newContent = editor.getHTML();
-      onChange?.(newContent); // Use optional chaining since onChange is now optional
-
-      // Detect text direction on content change
-      const direction = detectTextDirection(newContent);
-      setTextDirection(direction);
+      onChange?.(newContent);
     },
     editorProps: {
       attributes: {
-        class: `tiptap-editor prose prose-sm max-w-none p-6 min-h-[400px] focus:outline-none ${
+        class: `tiptap-editor prose prose-sm dark:prose-invert max-w-none p-6 min-h-[400px] focus:outline-none bg-transparent ${
           isFullscreen ? "min-h-[calc(100vh-200px)]" : ""
-        } ${readOnly ? "cursor-default" : ""}`, // Add visual indication for read-only
+        } ${readOnly ? "cursor-default" : ""}`,
         dir: textDirection,
       },
     },
@@ -143,27 +78,19 @@ export const CravveloEditor: React.FC<TiptapEditorProps> = ({
     }
   }, [readOnly, editor]);
 
-  // Update editor direction when text direction changes
+  // Set RTL direction on editor mount
   useEffect(() => {
     if (editor) {
       const editorElement = editor.view.dom as HTMLElement;
-      editorElement.dir = textDirection;
+      editorElement.dir = "rtl";
 
       // Update prose direction classes
       const proseElement = editorElement.closest(".prose");
       if (proseElement) {
-        proseElement.classList.toggle("rtl", isRtl);
+        proseElement.classList.add("rtl");
       }
     }
-  }, [textDirection, editor, isRtl]);
-
-  // Initial direction detection
-  useEffect(() => {
-    if (value) {
-      const direction = detectTextDirection(value);
-      setTextDirection(direction);
-    }
-  }, [value]);
+  }, [editor]);
 
   // Get active formats and editor state
   const activeFormats = new Set<string>();
@@ -183,7 +110,7 @@ export const CravveloEditor: React.FC<TiptapEditorProps> = ({
 
   // Enhanced format toggle function with better selection handling
   const handleFormatToggle = (format: string) => {
-    if (!editor || readOnly) return; // Prevent formatting in read-only mode
+    if (!editor || readOnly) return;
 
     // Store current selection
     const { from, to } = editor.state.selection;
@@ -260,12 +187,12 @@ export const CravveloEditor: React.FC<TiptapEditorProps> = ({
 
   return (
     <div
-      className={`border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm ${
+      className={`border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden bg-transparent ${
         isFullscreen ? "fixed inset-4 z-50 rounded-lg" : ""
-      } ${readOnly ? "bg-gray-50" : ""}`} // Add visual indication for read-only
-      dir={textDirection}
+      } ${readOnly ? "bg-gray-50/50 dark:!bg-[#0A0A0C]" : ""}`}
+      dir="rtl"
     >
-      {!readOnly && ( // Only show MenuBar when not in read-only mode
+      {!readOnly && (
         <MenuBar
           onPreview={onPreview}
           onClear={onClear}
@@ -282,9 +209,9 @@ export const CravveloEditor: React.FC<TiptapEditorProps> = ({
       )}
       <EditorContent
         editor={editor}
-        className={`bg-white overflow-y-auto tiptap-content ${
-          isRtl ? "rtl" : "ltr"
-        } ${readOnly ? "bg-gray-50" : ""}`} // Add visual indication for read-only
+        className={`bg-transparent dark:!bg-[#0A0A0C] overflow-y-auto tiptap-content rtl ${
+          readOnly ? "bg-gray-50/50 dark:!bg-[#0A0A0C]" : ""
+        }`}
       />
     </div>
   );

@@ -2,10 +2,11 @@ import Header from "@/components/layout/header";
 import { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { getTenantWebsite, validateTenant } from "@/actions/tanant";
-import { TenantProvider } from "@/contexts/tanant";
+import { TenantProvider } from "@/contexts/tenant";
 import Providers from "@/components/providers";
 import MaxWidthWrapper from "@/components/max-with-wrapper";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { getCurrentUser } from "@/modules/auth/lib/utils";
+import "@smastrom/react-rating/style.css";
 
 interface TenantLayoutProps {
   children: ReactNode;
@@ -19,20 +20,22 @@ export default async function TenantLayout({
   params,
 }: TenantLayoutProps) {
   const { tenant: tenantKey } = await params;
-  const decodedTenantKey = decodeURIComponent(tenantKey);
-  const tenant = `${decodedTenantKey}.cravvelo.com`;
 
-  console.log("here it the tanant and the key : ", tenantKey);
-  console.log("here it the tanant and the deocded : ", decodedTenantKey);
-  console.log("here it the tanant and the tenant : ", tenant);
+  const tenant = `${tenantKey}.cravvelo.com`;
 
-  const { isValid } = await validateTenant(tenant);
+  const [{ isValid }, websiteData, user] = await Promise.all([
+    validateTenant(tenant),
+    getTenantWebsite(tenant),
+    getCurrentUser(),
+  ]);
+
+
+  console.log("this is the current logged in user:");
+  console.log(user);
 
   if (!isValid) {
     notFound();
   }
-
-  const websiteData = await getTenantWebsite(tenant);
 
   if (!websiteData) {
     notFound();
@@ -40,20 +43,19 @@ export default async function TenantLayout({
 
   return (
     <div
-      className="min-h-screen bg-neutral-50 dark:bg-[#0E0E10] text-neutral-900 dark:text-neutral-200"
+      dir={"rtl"}
+      className="min-h-screen h-fit bg-neutral-50 dark:bg-[#0E0E10] text-neutral-900 dark:text-neutral-200"
       style={
         {
           "--primary-color": websiteData.primaryColor || "#7C3AED",
         } as React.CSSProperties
       }
     >
-      <TenantProvider website={websiteData} tenant={tenant}>
+      <TenantProvider website={websiteData} tenant={tenant} user={user}>
         <Providers>
           <Header />
           <MaxWidthWrapper className="flex flex-col">
-            <ScrollArea className="flex-1 h-[calc(100vh-theme(spacing.16))]">
-              {children}
-            </ScrollArea>
+            {children}
           </MaxWidthWrapper>
         </Providers>
       </TenantProvider>

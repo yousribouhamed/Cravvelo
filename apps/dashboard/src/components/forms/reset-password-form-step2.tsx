@@ -135,7 +135,7 @@ const OTPInput = ({
 export function ResetPasswordStep2Form() {
   const router = useRouter();
   const { isLoaded, signIn, setActive } = useSignIn();
-  const [isPending, startTransition] = React.useTransition();
+  const [isLoading, startTransition] = React.useTransition();
   const [error, setError] = React.useState<string>("");
   const [success, setSuccess] = React.useState<string>("");
   const [isResending, setIsResending] = React.useState<boolean>(false);
@@ -282,7 +282,7 @@ export function ResetPasswordStep2Form() {
                     <OTPInput
                       value={field.value}
                       onChange={field.onChange}
-                      disabled={isPending}
+                      disabled={isLoading}
                     />
                   </FormControl>
                   <FormMessage />
@@ -362,9 +362,9 @@ export function ResetPasswordStep2Form() {
             {/* Submit Button */}
             <Button
               type="submit"
-              disabled={isPending}
+              disabled={isLoading}
               className="w-full h-11"
-              loading={isPending}
+              loading={isLoading}
             >
               إعادة تعيين كلمة المرور
             </Button>

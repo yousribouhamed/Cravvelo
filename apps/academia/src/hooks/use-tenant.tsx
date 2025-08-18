@@ -1,6 +1,5 @@
-import { useTenant } from "@/contexts/tanant";
+import { useTenant } from "@/contexts/tenant";
 
-// Hook to get tenant's branding
 export function useTenantBranding() {
   const { website } = useTenant();
 
@@ -11,13 +10,12 @@ export function useTenantBranding() {
     favicon: website?.favicon,
     name: website?.name || website?.Account.user_name,
     description: website?.description || website?.Account.user_bio,
-    font: website?.font || "font-cal",
+
     customDomain: website?.customDomain,
     subdomain: website?.subdomain,
   };
 }
 
-// Hook to get tenant's settings
 export function useTenantSettings() {
   const { website } = useTenant();
 
@@ -34,7 +32,6 @@ export function useTenantSettings() {
   };
 }
 
-// Hook to get account info
 export function useTenantAccount() {
   const { website } = useTenant();
 
@@ -52,4 +49,14 @@ export function useTenantAccount() {
     preferredLanguage: website?.Account.preferredLanguage,
     profileVisibility: website?.Account.profileVisibility,
   };
+}
+
+export function useTenantUser() {
+  const { user } = useTenant();
+  return user;
+}
+
+export function useIsAuthenticated() {
+  const { user } = useTenant();
+  return user !== null;
 }

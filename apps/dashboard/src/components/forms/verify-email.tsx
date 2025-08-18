@@ -40,7 +40,7 @@ import { OTPInput } from "../otp-input";
 export function VerifyEmail() {
   const router = useRouter();
   const { isLoaded, signUp, setActive } = useSignUp();
-  const [isPending, startTransition] = React.useTransition();
+  const [isLoading, startTransition] = React.useTransition();
   const [error, setError] = React.useState<string>("");
   const [success, setSuccess] = React.useState<string>("");
   const [isResending, setIsResending] = React.useState<boolean>(false);
@@ -65,10 +65,10 @@ export function VerifyEmail() {
   // Watch for form changes to auto-submit when complete
   const watchedCode = form.watch("code");
   React.useEffect(() => {
-    if (watchedCode && watchedCode.length === 6 && !isPending) {
+    if (watchedCode && watchedCode.length === 6 && !isLoading) {
       form.handleSubmit(onSubmit)();
     }
-  }, [watchedCode, isPending, form]);
+  }, [watchedCode, isLoading, form]);
 
   // Submit handler
   function onSubmit(data: z.infer<typeof verifyEmailSchema>) {
@@ -214,7 +214,7 @@ export function VerifyEmail() {
                     <OTPInput
                       value={field.value}
                       onChange={field.onChange}
-                      disabled={isPending}
+                      disabled={isLoading}
                       error={!!form.formState.errors.code}
                       className="mt-4"
                     />
@@ -235,11 +235,11 @@ export function VerifyEmail() {
             {(!watchedCode || watchedCode.length < 6) && (
               <Button
                 type="submit"
-                disabled={isPending || !watchedCode || watchedCode.length < 6}
+                disabled={isLoading || !watchedCode || watchedCode.length < 6}
                 className="w-full h-11 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400"
-                loading={isPending}
+                loading={isLoading}
               >
-                {isPending ? "جاري التحقق..." : "تأكيد البريد الإلكتروني"}
+                {isLoading ? "جاري التحقق..." : "تأكيد البريد الإلكتروني"}
               </Button>
             )}
           </form>

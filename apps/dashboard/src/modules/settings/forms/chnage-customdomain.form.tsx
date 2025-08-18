@@ -93,7 +93,7 @@ const AddCustomDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
               disabled={mutation.isLoading}
               type="submit"
             >
-              {mutation.isPending ? <LoadingSpinner /> : null}
+              {mutation.isLoading ? <LoadingSpinner /> : null}
               تاكيد
             </Button>
           </CardFooter>

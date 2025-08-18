@@ -326,7 +326,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
               {...provided.droppableProps}
               ref={provided.innerRef}
               className={cn(
-                "transition-colors duration-200",
+                "transition-colors flex flex-col gap-y-4 duration-200",
                 snapshot.isDraggingOver && "bg-orange-50 rounded-lg"
               )}
             >

@@ -96,12 +96,12 @@ const DisableReferralForm: FC<DisableReferralFormAbdullahProps> = ({
         <Card>
           <CardContent className="w-full h-fit flex flex-col p-6 items-end  space-y-4">
             <Button
-              disabled={mutation.isPending}
+              disabled={mutation.isLoading}
               type="submit"
               form="add-text"
               className="w-full  rounded-xl flex items-center gap-x-2 max-w-[200px]"
             >
-              {mutation.isPending ? <LoadingSpinner /> : null}
+              {mutation.isLoading ? <LoadingSpinner /> : null}
               حفظ والمتابعة
             </Button>
           </CardContent>
