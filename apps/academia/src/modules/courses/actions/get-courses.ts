@@ -2,6 +2,7 @@
 
 import { withTenant } from "@/_internals/with-tenant";
 import z from "zod";
+import { Course } from "../types";
 
 export const getAllCourses = withTenant({
   handler: async ({ db, accountId }) => {
@@ -15,7 +16,7 @@ export const getAllCourses = withTenant({
       console.log(courses);
 
       return {
-        data: courses,
+        data: courses as Course[],
         success: true,
         message: "we got all the courses",
       };
@@ -37,14 +38,14 @@ export const getCourseById = withTenant({
   }),
   handler: async ({ db, accountId, input }) => {
     try {
-      const course = await db.course.deleteMany({
+      const course = await db.course.findFirst({
         where: {
           id: input.courseId,
         },
       });
 
       return {
-        data: course,
+        data: course as Course,
         success: true,
         message: "success",
       };

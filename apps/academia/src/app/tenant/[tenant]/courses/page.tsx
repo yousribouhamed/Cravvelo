@@ -1,4 +1,5 @@
 import { getAllCourses } from "@/modules/courses/actions/get-courses";
+import CourseCard from "@/modules/courses/components/course-card";
 
 export default async function page() {
   const response = await getAllCourses();
@@ -9,7 +10,11 @@ export default async function page() {
     return (
       <div className="p-8">
         <h1 className="text-3xl font-bold mb-4">Courses </h1>
-        <div className="w-full h-fit "></div>
+        <div className="w-full h-fit  ">
+          {response.data?.map((item) => (
+            <CourseCard {...item} />
+          ))}
+        </div>
       </div>
     );
   } else {

@@ -13,6 +13,7 @@ import {
 } from "@/hooks/use-tenant";
 import Image from "next/image";
 import Link from "next/link";
+import ProfileDropdown from "@/modules/profile/components/user-dropdown";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -22,11 +23,11 @@ export default function Header() {
   const { showCoursesOnHome, showProductsOnHome } = useTenantSettings();
 
   const navigationLinks = [
-    { href: `/`, label: "Home", show: true },
-    { href: `/courses`, label: "Courses", show: showCoursesOnHome },
-    { href: `/products`, label: "Products", show: showProductsOnHome },
-    { href: `/about`, label: "About", show: true },
-    { href: `/contact`, label: "Contact", show: true },
+    { href: `/`, label: "الرئيسية", show: true },
+    { href: `/courses`, label: "الدورات", show: showCoursesOnHome },
+    { href: `/products`, label: "المنتجات", show: showProductsOnHome },
+    { href: `/about`, label: "من نحن", show: true },
+    { href: `/contact`, label: "اتصل بنا", show: true },
   ].filter((link) => link.show);
 
   const isAuthenticated = useIsAuthenticated();
@@ -60,11 +61,13 @@ export default function Header() {
                   />
                 </div>
               ) : (
-                <div
-                  className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-lg"
-                  style={{ backgroundColor: primaryColor }}
-                >
-                  {(name || userName || "A").charAt(0).toUpperCase()}
+                <div className="relative w-10 h-10">
+                  <Image
+                    src={"/logo.png"}
+                    alt={userName || "Academy"}
+                    fill
+                    className="object-cover rounded-2xl"
+                  />
                 </div>
               )}
             </Link>
@@ -84,7 +87,7 @@ export default function Header() {
           {/* Desktop Auth Buttons */}
 
           {isAuthenticated ? (
-            <div> hi user </div>
+            <ProfileDropdown onLogout={() => console.log("Logout clicked")} />
           ) : (
             <div className="hidden md:flex items-center justify-end gap-x-4">
               <Link href={`/login`}>

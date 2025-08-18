@@ -5,8 +5,8 @@ import { getTenantWebsite, validateTenant } from "@/actions/tanant";
 import { TenantProvider } from "@/contexts/tenant";
 import Providers from "@/components/providers";
 import MaxWidthWrapper from "@/components/max-with-wrapper";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { getCurrentUser } from "@/modules/auth/lib/utils";
+import "@smastrom/react-rating/style.css";
 
 interface TenantLayoutProps {
   children: ReactNode;
@@ -41,7 +41,8 @@ export default async function TenantLayout({
 
   return (
     <div
-      className="min-h-screen bg-neutral-50 dark:bg-[#0E0E10] text-neutral-900 dark:text-neutral-200"
+      dir={"rtl"}
+      className="min-h-screen h-fit bg-neutral-50 dark:bg-[#0E0E10] text-neutral-900 dark:text-neutral-200"
       style={
         {
           "--primary-color": websiteData.primaryColor || "#7C3AED",
@@ -52,9 +53,7 @@ export default async function TenantLayout({
         <Providers>
           <Header />
           <MaxWidthWrapper className="flex flex-col">
-            <ScrollArea className="flex-1 h-[calc(100vh-theme(spacing.16))]">
-              {children}
-            </ScrollArea>
+            {children}
           </MaxWidthWrapper>
         </Providers>
       </TenantProvider>

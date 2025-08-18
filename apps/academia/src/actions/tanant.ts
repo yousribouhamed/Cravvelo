@@ -402,9 +402,6 @@ export const getTenantActiveCoupons = cache(async (tenant: string) => {
         usageLimit: true,
         usageCount: true,
       },
-      orderBy: {
-        creationDate: "desc",
-      },
     });
 
     return coupons;
