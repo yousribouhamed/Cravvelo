@@ -49,11 +49,11 @@ export default function SSOCallback({ searchParams }: SSOCallbackProps) {
 
       setIsProcessing(false);
 
-      // Force redirect to stay on beta.cravvelo.com
-      const redirectUrl = `${window.location.origin}/auth-callback`;
-      console.log("Redirecting to:", redirectUrl);
+      // Hard-coded redirect to beta.cravvelo.com
+      const redirectUrl = "https://beta.cravvelo.com/auth-callback";
+      console.log("Hard-coded redirecting to:", redirectUrl);
 
-      // Use window.location.href instead of router.push to ensure we stay on the same domain
+      // Use window.location.href to force redirect to beta.cravvelo.com
       window.location.href = redirectUrl;
     }
   }, [isLoaded, isSignedIn, user, isProcessing, router]);
@@ -70,36 +70,8 @@ export default function SSOCallback({ searchParams }: SSOCallbackProps) {
           <div className="space-y-2">
             <button
               onClick={() =>
-                (window.location.href = `${window.location.origin}/sign-in`)
+                (window.location.href = "https://beta.cravvelo.com/sign-in")
               }
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors mr-2"
-            >
-              العودة إلى تسجيل الدخول
-            </button>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-            >
-              إعادة المحاولة
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Handle error state
-  if (error) {
-    return (
-      <div className="w-full h-screen flex flex-col items-center justify-center gap-y-4">
-        <div className="text-center max-w-md">
-          <h1 className="text-xl font-semibold text-red-600 mb-2">
-            خطأ في تسجيل الدخول
-          </h1>
-          <p className="text-gray-600 mb-4">{error}</p>
-          <div className="space-y-2">
-            <button
-              onClick={() => router.push("/sign-in")}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors mr-2"
             >
               العودة إلى تسجيل الدخول
@@ -136,20 +108,19 @@ export default function SSOCallback({ searchParams }: SSOCallbackProps) {
           fy=".3125"
           gradientTransform="scale(1.5)"
         >
-          <stop offset="0" stop-color="#FC6B00"></stop>
-          <stop offset=".3" stop-color="#FC6B00" stop-opacity=".9"></stop>
-          <stop offset=".6" stop-color="#FC6B00" stop-opacity=".6"></stop>
-          <stop offset=".8" stop-color="#FC6B00" stop-opacity=".3"></stop>
-          <stop offset="1" stop-color="#FC6B00" stop-opacity="0"></stop>
+          <stop offset="0" stopColor="#FC6B00"></stop>
+          <stop offset=".3" stopColor="#FC6B00" stopOpacity=".9"></stop>
+          <stop offset=".6" stopColor="#FC6B00" stopOpacity=".6"></stop>
+          <stop offset=".8" stopColor="#FC6B00" stopOpacity=".3"></stop>
+          <stop offset="1" stopColor="#FC6B00" stopOpacity="0"></stop>
         </radialGradient>
         <circle
-          transform-origin="center"
           fill="none"
           stroke="url(#a9)"
-          stroke-width="27"
-          stroke-linecap="round"
-          stroke-dasharray="200 1000"
-          stroke-dashoffset="0"
+          strokeWidth="27"
+          strokeLinecap="round"
+          strokeDasharray="200 1000"
+          strokeDashoffset="0"
           cx="100"
           cy="100"
           r="70"
@@ -166,22 +137,26 @@ export default function SSOCallback({ searchParams }: SSOCallbackProps) {
           ></animateTransform>
         </circle>
         <circle
-          transform-origin="center"
           fill="none"
           opacity=".2"
           stroke="#FC6B00"
-          stroke-width="27"
-          stroke-linecap="round"
+          strokeWidth="27"
+          strokeLinecap="round"
           cx="100"
           cy="100"
           r="70"
         ></circle>
       </svg>
       <span className="text-xl font-bold">مرحبًا بعودتك ...</span>
-      <span className="text-sm text-gray-500  ">
+      <span className="text-sm text-gray-500">
         أول العلم الصمت والثاني حسن الإستماع والثالث حفظه والرابع العمل به
         والخامس نشره
       </span>
+      <div className="mt-4">
+        <span className="text-xs text-gray-400">
+          جاري التحويل إلى beta.cravvelo.com...
+        </span>
+      </div>
     </div>
   );
 }
