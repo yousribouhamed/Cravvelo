@@ -22,11 +22,29 @@ export default function SSOCallback({ searchParams }: SSOCallbackProps) {
         setIsProcessing(true);
         const params = await searchParams;
 
+        console.log("SSO Callback params:", params);
+        console.log("Current URL:", window.location.href);
+
         // Handle the OAuth callback
         await handleRedirectCallback(params);
       } catch (error) {
         console.error("OAuth callback error:", error);
-        setError("حدث خطأ أثناء تسجيل الدخول. يرجى المحاولة مرة أخرى.");
+
+        // More specific error handling
+        if (error instanceof Error) {
+          if (error.message.includes("Invalid redirect URL")) {
+            setError(
+              "خطأ في عنوان إعادة التوجيه. يرجى التواصل مع الدعم الفني."
+            );
+          } else if (error.message.includes("OAuth")) {
+            setError("حدث خطأ في عملية المصادقة. يرجى المحاولة مرة أخرى.");
+          } else {
+            setError("حدث خطأ أثناء تسجيل الدخول. يرجى المحاولة مرة أخرى.");
+          }
+        } else {
+          setError("حدث خطأ أثناء تسجيل الدخول. يرجى المحاولة مرة أخرى.");
+        }
+
         setIsProcessing(false);
       }
     };
@@ -37,10 +55,13 @@ export default function SSOCallback({ searchParams }: SSOCallbackProps) {
   // Handle redirect after successful authentication
   React.useEffect(() => {
     if (isLoaded && isSignedIn && user && isProcessing) {
+      console.log("User authenticated successfully:", user.id);
       setIsProcessing(false);
-      // Redirect to the intended destination
-      // You can customize this based on your app's needs
-      router.push("/dashboard"); // or wherever you want to redirect after sign-in
+
+      // Small delay to ensure everything is properly set
+      setTimeout(() => {
+        router.push("/auth-callback");
+      }, 500);
     }
   }, [isLoaded, isSignedIn, user, router, isProcessing]);
 
@@ -48,90 +69,96 @@ export default function SSOCallback({ searchParams }: SSOCallbackProps) {
   if (error) {
     return (
       <div className="w-full h-screen flex flex-col items-center justify-center gap-y-4">
-        <div className="text-center">
+        <div className="text-center max-w-md">
           <h1 className="text-xl font-semibold text-red-600 mb-2">
             خطأ في تسجيل الدخول
           </h1>
           <p className="text-gray-600 mb-4">{error}</p>
-          <button
-            onClick={() => router.push("/sign-in")}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            العودة إلى تسجيل الدخول
-          </button>
+          <div className="space-y-2">
+            <button
+              onClick={() => router.push("/sign-in")}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors mr-2"
+            >
+              العودة إلى تسجيل الدخول
+            </button>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+            >
+              إعادة المحاولة
+            </button>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div>
-      <div
-        aria-label="Loading"
-        aria-describedby="loading-description"
-        className="w-full h-screen flex flex-col items-center justify-center gap-y-4"
+    <div
+      aria-label="Loading"
+      aria-describedby="loading-description"
+      className="w-full h-screen flex flex-col items-center justify-center gap-y-4"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 200 200"
+        width="150"
+        height="150"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 200 200"
-          width="150"
-          height="150"
+        <radialGradient
+          id="a9"
+          cx=".66"
+          fx=".66"
+          cy=".3125"
+          fy=".3125"
+          gradientTransform="scale(1.5)"
         >
-          <radialGradient
-            id="a9"
-            cx=".66"
-            fx=".66"
-            cy=".3125"
-            fy=".3125"
-            gradientTransform="scale(1.5)"
-          >
-            <stop offset="0" stop-color="#FC6B00"></stop>
-            <stop offset=".3" stop-color="#FC6B00" stop-opacity=".9"></stop>
-            <stop offset=".6" stop-color="#FC6B00" stop-opacity=".6"></stop>
-            <stop offset=".8" stop-color="#FC6B00" stop-opacity=".3"></stop>
-            <stop offset="1" stop-color="#FC6B00" stop-opacity="0"></stop>
-          </radialGradient>
-          <circle
-            transform-origin="center"
-            fill="none"
-            stroke="url(#a9)"
-            stroke-width="27"
-            stroke-linecap="round"
-            stroke-dasharray="200 1000"
-            stroke-dashoffset="0"
-            cx="100"
-            cy="100"
-            r="70"
-          >
-            <animateTransform
-              type="rotate"
-              attributeName="transform"
-              calcMode="spline"
-              dur="1.3"
-              values="360;0"
-              keyTimes="0;1"
-              keySplines="0 0 1 1"
-              repeatCount="indefinite"
-            ></animateTransform>
-          </circle>
-          <circle
-            transform-origin="center"
-            fill="none"
-            opacity=".2"
-            stroke="#FC6B00"
-            stroke-width="27"
-            stroke-linecap="round"
-            cx="100"
-            cy="100"
-            r="70"
-          ></circle>
-        </svg>
-      </div>
-      <h1>مرحبًا بعودتك ...</h1>
-      <p>
+          <stop offset="0" stop-color="#FC6B00"></stop>
+          <stop offset=".3" stop-color="#FC6B00" stop-opacity=".9"></stop>
+          <stop offset=".6" stop-color="#FC6B00" stop-opacity=".6"></stop>
+          <stop offset=".8" stop-color="#FC6B00" stop-opacity=".3"></stop>
+          <stop offset="1" stop-color="#FC6B00" stop-opacity="0"></stop>
+        </radialGradient>
+        <circle
+          transform-origin="center"
+          fill="none"
+          stroke="url(#a9)"
+          stroke-width="27"
+          stroke-linecap="round"
+          stroke-dasharray="200 1000"
+          stroke-dashoffset="0"
+          cx="100"
+          cy="100"
+          r="70"
+        >
+          <animateTransform
+            type="rotate"
+            attributeName="transform"
+            calcMode="spline"
+            dur="1.3"
+            values="360;0"
+            keyTimes="0;1"
+            keySplines="0 0 1 1"
+            repeatCount="indefinite"
+          ></animateTransform>
+        </circle>
+        <circle
+          transform-origin="center"
+          fill="none"
+          opacity=".2"
+          stroke="#FC6B00"
+          stroke-width="27"
+          stroke-linecap="round"
+          cx="100"
+          cy="100"
+          r="70"
+        ></circle>
+      </svg>
+      <span className="text-xl font-bold">مرحبًا بعودتك ...</span>
+      <span className="text-sm text-gray-500  ">
         أول العلم الصمت والثاني حسن الإستماع والثالث حفظه والرابع العمل به
-        والخامس نشر
-      </p>
+        والخامس نشره
+      </span>
     </div>
   );
 }
