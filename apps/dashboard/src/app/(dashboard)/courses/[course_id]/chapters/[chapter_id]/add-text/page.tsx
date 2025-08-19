@@ -2,7 +2,7 @@ import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
 import AddTextForm from "@/src/components/forms/course-forms/add-text-form";
 import PathBuilder from "@/src/components/path-builder";
-import { currentUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import useHaveAccess from "@/src/hooks/use-have-access";
 import { prisma } from "database/src";

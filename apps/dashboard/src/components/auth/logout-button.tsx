@@ -13,6 +13,11 @@ const LogoutButton: FC = ({}) => {
   const router = useRouter();
   const mounted = useMounted();
 
+  const handleSignOut = () => {
+    deleteAllCookies();
+    // The redirect will happen automatically after sign out
+  };
+
   if (!mounted) {
     return (
       <DropdownMenuItem
@@ -26,13 +31,11 @@ const LogoutButton: FC = ({}) => {
   }
 
   return (
-    <SignOutButton
-      signOutCallback={() => {
-        deleteAllCookies();
-        window.location.reload();
-      }}
-    >
-      <DropdownMenuItem className="w-full h-full flex justify-between items-center p-3 ">
+    <SignOutButton redirectUrl="/">
+      <DropdownMenuItem
+        className="w-full h-full flex justify-between items-center p-3"
+        onClick={handleSignOut}
+      >
         <LogOut className=" h-4 w-4 text-red-500" />
         <span className="text-red-500">تسجيل الخروج</span>
       </DropdownMenuItem>

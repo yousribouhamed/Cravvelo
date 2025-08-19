@@ -1,7 +1,7 @@
 import { publicProcedure } from "./trpc";
 import { TRPCError } from "@trpc/server";
 import { prisma } from "database/src";
-import { currentUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import { z } from "zod";
 import crypto from "crypto";
 

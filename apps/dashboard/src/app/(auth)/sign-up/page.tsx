@@ -1,14 +1,14 @@
 import { SignUpForm } from "@/src/components/forms/sign-up-form";
-import { currentUser } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
+// import { currentUser } from "@clerk/nextjs/server";
+// import { redirect } from "next/navigation";
 import SliderShow from "./slider-show";
 
 const page = async ({}) => {
-  const user = await currentUser();
+  // const user = await currentUser();
 
-  if (user) {
-    redirect("/");
-  }
+  // if (user) {
+  //   redirect("/");
+  // }
 
   return (
     <div className="w-full min-h-screen  h-fit grid grid-cols-3  bg-[#FAFAFA] ">

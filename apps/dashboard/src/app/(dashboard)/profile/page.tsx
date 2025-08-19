@@ -1,11 +1,6 @@
-//@ts-nocheck
-
-import Header from "@/src/components/layout/header";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
-import useGetUser from "@/src/hooks/use-get-user";
-import UserProfileForm from "./ProfileForm";
 import { prisma } from "database/src";
-import { currentUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 const getAllNotifications = async ({ accountId }: { accountId: string }) => {
@@ -42,11 +37,20 @@ export default async function ProfilePage() {
     redirect("/sign-in");
   }
 
-  const user = await useGetUser();
+  // Get user data from database using clerkUser.id
+  const user = await prisma.account.findFirst({
+    where: {
+      userId: clerkUser.id,
+    },
+  });
+
+  if (!user) {
+    redirect("/onboarding");
+  }
 
   const [notifications, account] = await Promise.all([
-    getAllNotifications({ accountId: user.accountId }),
-    getAccountWithDetails({ accountId: user.accountId }),
+    getAllNotifications({ accountId: user.id }),
+    getAccountWithDetails({ accountId: user.id }),
   ]);
 
   if (!account) {
@@ -55,68 +59,66 @@ export default async function ProfilePage() {
 
   // Serialize Clerk user data to plain object
   const serializedClerkUser = {
-    id: clerkUser?.id || "",
-    firstName: clerkUser?.firstName || "",
-    lastName: clerkUser?.lastName || "",
-    imageUrl: account?.avatarUrl
-      ? account?.avatarUrl
-      : clerkUser?.imageUrl ?? "",
-    hasImage: clerkUser?.hasImage || false,
-    primaryEmailAddress: clerkUser?.primaryEmailAddressId
+    id: clerkUser.id,
+    firstName: clerkUser.firstName || "",
+    lastName: clerkUser.lastName || "",
+    imageUrl: account?.avatarUrl || clerkUser.imageUrl || "",
+    hasImage: clerkUser.hasImage || false,
+    primaryEmailAddress: clerkUser.primaryEmailAddress
       ? {
-          emailAddress: clerkUser.primaryEmailAddressId.emailAddress,
-          id: clerkUser.primaryEmailAddressId.id,
+          emailAddress: clerkUser.primaryEmailAddress.emailAddress,
+          id: clerkUser.primaryEmailAddress.id,
         }
       : null,
-    primaryPhoneNumber: clerkUser?.primaryPhoneNumberId
+    primaryPhoneNumber: clerkUser.primaryPhoneNumber
       ? {
-          phoneNumber: clerkUser.primaryPhoneNumberId.phoneNumber,
-          id: clerkUser.primaryPhoneNumberId.id,
+          phoneNumber: clerkUser.primaryPhoneNumber.phoneNumber,
+          id: clerkUser.primaryPhoneNumber.id,
         }
       : null,
-    username: clerkUser?.username || "",
-    createdAt: clerkUser?.createdAt
+    username: clerkUser.username || "",
+    createdAt: clerkUser.createdAt
       ? new Date(clerkUser.createdAt).toISOString()
       : new Date().toISOString(),
-    updatedAt: clerkUser?.updatedAt
+    updatedAt: clerkUser.updatedAt
       ? new Date(clerkUser.updatedAt).toISOString()
       : new Date().toISOString(),
-    lastSignInAt: clerkUser?.lastSignInAt
+    lastSignInAt: clerkUser.lastSignInAt
       ? new Date(clerkUser.lastSignInAt).toISOString()
       : null,
-    twoFactorEnabled: clerkUser?.twoFactorEnabled || false,
-    banned: clerkUser?.banned || false,
-    locked: clerkUser?.locked || false,
+    twoFactorEnabled: clerkUser.twoFactorEnabled || false,
+    banned: clerkUser.banned || false,
+    locked: clerkUser.locked || false,
   };
 
   // Enhanced user data combining Clerk and database info
   const enhancedUserData = {
     // Serialized Clerk data
     ...serializedClerkUser,
-    // Database data (serialize account object too)
+    // Database data
     accountId: account?.id || "",
     user_name: account?.user_name || "",
     user_bio: account?.user_bio || "",
     support_email: account?.support_email || "",
     phone: account?.phone || "",
     website: account?.website || "",
-    location: account?.location || "",
-    occupation: account?.occupation || "",
+    location: "",
+    occupation: "",
     avatarUrl: account?.avatarUrl || "",
     // Computed fields
     fullName:
-      `${clerkUser?.firstName || ""} ${clerkUser?.lastName || ""}`.trim() ||
+      `${clerkUser.firstName || ""} ${clerkUser.lastName || ""}`.trim() ||
       account?.user_name ||
       "مستخدم",
     initials:
-      `${clerkUser?.firstName?.[0] || ""}${clerkUser?.lastName?.[0] || ""}` ||
+      `${clerkUser.firstName?.[0] || ""}${clerkUser.lastName?.[0] || ""}` ||
       account?.user_name?.substring(0, 2) ||
       "AB",
   };
 
   return (
     <MaxWidthWrapper>
-      <main className="w-full flex flex-col justify-start">
+      {/* <main className="w-full flex flex-col justify-start">
         <Header
           notifications={notifications}
           user={user}
@@ -125,9 +127,11 @@ export default async function ProfilePage() {
         <div className="py-8 flex justify-center">
           <UserProfileForm enhancedUserData={enhancedUserData} />
         </div>
-      </main>
+      </main> */}
+
+      <div>
+        <p>profile</p>
+      </div>
     </MaxWidthWrapper>
   );
 }
-
-// ProfileForm.tsx - Enhanced version

@@ -1,14 +1,8 @@
 import { SignInForm } from "@/src/components/forms/sign-in-form";
-import { currentUser } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
+// import { currentUser } from "@clerk/nextjs/server";
+// import { redirect } from "next/navigation";
 
 const page = async () => {
-  const user = await currentUser();
-  
-  if (user) {
-    redirect("/");
-  }
-  
   return (
     <div className="w-full h-screen flex items-center justify-center ">
       <SignInForm />

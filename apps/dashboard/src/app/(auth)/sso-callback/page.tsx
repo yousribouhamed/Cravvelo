@@ -3,60 +3,47 @@
 import * as React from "react";
 import { useClerk, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { type HandleOAuthCallbackParams } from "@clerk/types";
 
-interface SSOCallbackProps {
-  searchParams: Promise<HandleOAuthCallbackParams>;
-}
-
-export default function SSOCallback({ searchParams }: SSOCallbackProps) {
+export default function SSOCallback({ searchParams }) {
   const { handleRedirectCallback } = useClerk();
   const { isLoaded, isSignedIn, user } = useUser();
   const router = useRouter();
-  const [error, setError] = React.useState<string | null>(null);
-  const [isProcessing, setIsProcessing] = React.useState(true);
+  const [error, setError] = React.useState(null);
 
   React.useEffect(() => {
     const processCallback = async () => {
       try {
-        setIsProcessing(true);
         const params = await searchParams;
 
-        console.log("SSO Callback - Current URL:", window.location.href);
-        console.log("SSO Callback - Params:", params);
-
         // Handle the OAuth callback
-        const result = await handleRedirectCallback(params);
-        console.log("SSO Callback - Result:", result);
+        await handleRedirectCallback({
+          signInFallbackRedirectUrl: "/auth-callback",
+          signUpFallbackRedirectUrl: "/auth-callback",
+          ...params,
+        });
       } catch (error) {
         console.error("OAuth callback error:", error);
         setError("حدث خطأ أثناء تسجيل الدخول. يرجى المحاولة مرة أخرى.");
-        setIsProcessing(false);
       }
     };
 
-    processCallback();
-  }, [searchParams, handleRedirectCallback]);
+    if (isLoaded) {
+      processCallback();
+    }
+  }, [searchParams, handleRedirectCallback, isLoaded]);
 
   // Handle redirect after successful authentication
   React.useEffect(() => {
-    if (isLoaded && isSignedIn && user && isProcessing) {
+    if (isLoaded && isSignedIn && user) {
       console.log("User authenticated successfully:", {
         userId: user.id,
         currentDomain: window.location.origin,
-        targetDomain: "beta.cravvelo.com",
       });
 
-      setIsProcessing(false);
-
-      // Hard-coded redirect to beta.cravvelo.com
-      const redirectUrl = "https://beta.cravvelo.com/auth-callback";
-      console.log("Hard-coded redirecting to:", redirectUrl);
-
-      // Use window.location.href to force redirect to beta.cravvelo.com
-      window.location.href = redirectUrl;
+      // Redirect to auth-callback page
+      router.push("/auth-callback");
     }
-  }, [isLoaded, isSignedIn, user, isProcessing, router]);
+  }, [isLoaded, isSignedIn, user, router]);
 
   // Handle error state
   if (error) {
@@ -69,9 +56,7 @@ export default function SSOCallback({ searchParams }: SSOCallbackProps) {
           <p className="text-gray-600 mb-4">{error}</p>
           <div className="space-y-2">
             <button
-              onClick={() =>
-                (window.location.href = "https://beta.cravvelo.com/sign-in")
-              }
+              onClick={() => router.push("/sign-in")}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors mr-2"
             >
               العودة إلى تسجيل الدخول
@@ -152,11 +137,6 @@ export default function SSOCallback({ searchParams }: SSOCallbackProps) {
         أول العلم الصمت والثاني حسن الإستماع والثالث حفظه والرابع العمل به
         والخامس نشره
       </span>
-      <div className="mt-4">
-        <span className="text-xs text-gray-400">
-          جاري التحويل إلى beta.cravvelo.com...
-        </span>
-      </div>
     </div>
   );
 }

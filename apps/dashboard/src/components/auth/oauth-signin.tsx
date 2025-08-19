@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { isClerkAPIResponseError, useSignIn } from "@clerk/nextjs";
+import { useSignIn } from "@clerk/nextjs";
+import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { type OAuthStrategy } from "@clerk/types";
 import { toast } from "@ui/lib/utils";
 import { Button } from "@ui/components/ui/button";
@@ -23,11 +24,11 @@ export function OAuthSignIn() {
 
   async function oauthSignIn(provider: OAuthStrategy) {
     if (!signInLoaded) return;
-    
+
     try {
       setIsLoading(provider);
       setError(null);
-      
+
       await signIn.authenticateWithRedirect({
         strategy: provider,
         redirectUrl: "/sso-callback",
@@ -35,12 +36,12 @@ export function OAuthSignIn() {
       });
     } catch (error) {
       setIsLoading(null);
-      
+
       const unknownError = "حدث خطأ، يرجى المحاولة مرة أخرى.";
       const errorMessage = isClerkAPIResponseError(error)
         ? error.errors[0]?.longMessage ?? unknownError
         : unknownError;
-      
+
       setError(errorMessage);
       toast.error(errorMessage);
     }
@@ -70,10 +71,10 @@ export function OAuthSignIn() {
         {oauthProviders.map((provider) => {
           const isCurrentLoading = isLoading === provider.strategy;
           const isAnyLoading = isLoading !== null;
-          
+
           // Get the icon component from Icons object
           const IconComponent = Icons[provider.icon];
-          
+
           return (
             <Button
               key={provider.strategy}
@@ -82,8 +83,10 @@ export function OAuthSignIn() {
               className={`
                 w-full h-12 bg-white rounded-lg flex items-center justify-center gap-x-3 
                 border shadow font-medium transition-all duration-200
-                ${isAnyLoading ? 'opacity-70' : ''}
-                ${isCurrentLoading ? 'ring-2 ring-blue-500 ring-opacity-50' : ''}
+                ${isAnyLoading ? "opacity-70" : ""}
+                ${
+                  isCurrentLoading ? "ring-2 ring-blue-500 ring-opacity-50" : ""
+                }
                 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
                 disabled:cursor-not-allowed disabled:opacity-50
               `}
@@ -92,12 +95,11 @@ export function OAuthSignIn() {
               aria-label={`تسجيل الدخول باستخدام ${provider.name}`}
             >
               <span className="text-sm font-medium text-gray-700">
-                {isCurrentLoading 
+                {isCurrentLoading
                   ? `جاري تسجيل الدخول باستخدام ${provider.name}...`
-                  : `تسجيل الدخول باستخدام ${provider.name}`
-                }
+                  : `تسجيل الدخول باستخدام ${provider.name}`}
               </span>
-              
+
               {isCurrentLoading ? (
                 <Icons.spinner className="h-4 w-4 animate-spin text-blue-600" />
               ) : (
@@ -111,7 +113,8 @@ export function OAuthSignIn() {
       {isLoading && (
         <div className="text-center">
           <p className="text-xs text-gray-500">
-            سيتم إعادة توجيهك إلى {oauthProviders.find(p => p.strategy === isLoading)?.name}...
+            سيتم إعادة توجيهك إلى{" "}
+            {oauthProviders.find((p) => p.strategy === isLoading)?.name}...
           </p>
         </div>
       )}
