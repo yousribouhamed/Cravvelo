@@ -2,7 +2,6 @@ import { publicProcedure } from "./trpc";
 import { TRPCError } from "@trpc/server";
 import { prisma } from "database/src";
 import { currentUser } from "@clerk/nextjs";
-import { cookies } from "next/headers";
 import { z } from "zod";
 import crypto from "crypto";
 
@@ -12,28 +11,6 @@ function generateMachineId(): string {
   const randomBytes = crypto.randomBytes(32).toString("hex");
   const combined = `${timestamp}-${randomBytes}`;
   return Buffer.from(combined).toString("base64url");
-}
-
-// Helper function to get or create machine ID
-async function getOrCreateMachineId(): Promise<string> {
-  const cookieStore = await cookies(); // Await the cookies() call
-  const existingMachineId = cookieStore.get("machine_id")?.value;
-
-  if (existingMachineId) {
-    return existingMachineId;
-  }
-
-  const newMachineId = generateMachineId();
-  cookieStore.set({
-    name: "machine_id",
-    value: newMachineId,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    maxAge: 60 * 60 * 24 * 365, // 1 year
-  });
-
-  return newMachineId;
 }
 
 // Response type for better type safety
@@ -48,9 +25,6 @@ export const auth = {
     .output(AuthCallbackResponse)
     .query(async (): Promise<z.infer<typeof AuthCallbackResponse>> => {
       try {
-        // Set or get machine ID
-        const machineId = await getOrCreateMachineId();
-
         // Get current user from Clerk
         const user = await currentUser();
 
