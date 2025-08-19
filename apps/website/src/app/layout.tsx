@@ -27,7 +27,9 @@ export default function RootLayout({
       <CrispChat />
       <body className={"min-h-screen h-fit  bg-[#FAFAFA] w-full"}>
         <NavBar />
-        <div className="  w-full h-fit min-h-full">{children}</div>
+        <div className="  w-full h-fit min-h-full overflow-x-hidden">
+          {children}
+        </div>
         <Toaster />
         <Analytics />
       </body>

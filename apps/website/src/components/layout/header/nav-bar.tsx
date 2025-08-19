@@ -1,19 +1,20 @@
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
-import { Button, buttonVariants } from "@ui/components/button";
+import { buttonVariants } from "@ui/components/button";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { usePathname } from "next/navigation";
-import { X } from "lucide-react";
 import Image from "next/image";
 import DropDownMenu from "../../drop-down-menu";
 import MobileNav from "./mobile-nav";
+import TopBanner from "../../top-banner";
 
 const links = [
   { name: "الرئيسية", href: "/" },
   { name: "الخدمات", href: "/features" },
-  // { name: "معلومات عنا", href: "/about-us" },
+  { name: "معلومات عنا", href: "/about-us" },
+  { name: "التسعير", href: "/pricing" },
   { name: "تواصل معنا", href: "/contact-us" },
 ];
 
@@ -30,61 +31,43 @@ const NavBar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
-  //bg-gradient-to-r from-[#ffeb38] to-[#fab508]
+
   return (
     <>
       <div className={`w-full h-[120px] z-[99] fixed top-0`}>
-        {!close && (
-          <div className="w-full h-[41px] bg-gradient-to-r from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] flex justify-center items-center gap-x-2 px-4 md:gap-x-20">
-            <p className="text-white text-xs md:text-base font-bold ">
-              تابعو صفحة cravvelo على instagram{" "}
-              <Link
-                href={"https://www.instagram.com/cravvelo/"}
-                target="_blank"
-              >
-                من هنا
-              </Link>
-            </p>
-            <Button
-              onClick={() => setClose(true)}
-              size="icon"
-              className="bg-transparent hover:bg-transparent hover:scale-110 transition-all duration-75"
-            >
-              <X className="w-4 h-4 text-white" />
-            </Button>
-          </div>
-        )}
+        {!close && <TopBanner close={close} setClose={setClose} />}
         <div
           className={cn(
-            "mx-auto w-full px-2.5 md:px-20 transition-all duration-150 relative",
+            "mx-auto w-full px-2.5 sm:px-4 md:px-6 lg:px-8 xl:px-20 transition-all duration-150 relative",
             {
               "shadow-lg border-b bg-white": hasShadow,
             }
           )}
         >
-          <div className="flex items-center mx-auto lg:max-w-screen-2xl 2xl:px-20 px-2.5 justify-between w-full h-[80px]">
-            <div className="w-[20%] hidden md:flex items-center">
-              <Link href="/">
+          <div className="flex items-center mx-auto lg:max-w-screen-2xl 2xl:px-20 px-2.5 justify-between  w-full h-[80px]">
+            {/* Logo Section - Responsive */}
+            <div className="flex items-center flex-shrink-0">
+              <Link href="/" className="block">
                 <Image
                   src="/Cravvelo_Logo-01.svg"
                   alt="logo"
                   width={160}
                   height={60}
+                  className="hidden sm:block w-auto h-[40px] sm:h-[50px] md:h-[60px]"
                 />
-              </Link>
-            </div>
-            <div className="w-[33%] md:hidden flex items-center">
-              <Link href="/">
                 <Image
                   src="/Cravvelo_Logo-01.svg"
                   alt="logo"
-                  width={260}
-                  height={160}
+                  width={140}
+                  height={52}
+                  className="block sm:hidden w-auto h-[36px]"
                 />
               </Link>
             </div>
-            <nav className="w-[60%] hidden xl:flex items-center justify-center">
-              <ul className="flex w-[22rem] flex-wrap items-center justify-center gap-y-1 text-[0.9rem] font-medium text-gray-500 sm:w-auto sm:flex-nowrap sm:gap-5">
+
+            {/* Desktop Navigation */}
+            <nav className="hidden xl:flex items-center justify-center flex-1 max-w-2xl mx-8">
+              <ul className="flex items-center justify-center gap-2 lg:gap-3 xl:gap-5 text-[0.85rem] lg:text-[0.9rem] font-medium text-gray-500">
                 {links.map((item, index) =>
                   index === 1 ? (
                     <DropDownMenu key={index} />
@@ -94,7 +77,7 @@ const NavBar = () => {
                       key={item.name}
                       className={cn(
                         buttonVariants({ variant: "ghost" }),
-                        "font-semibold text-lg  text-black leading-[40px] rounded-full transition-all duration-150",
+                        "font-semibold text-base lg:text-lg text-black leading-[40px] rounded-full transition-all duration-150 px-3 lg:px-4 whitespace-nowrap",
                         {
                           "border-[#FFB700] border-2 font-bold bg-[#FFEEC5]":
                             item.href === path,
@@ -107,29 +90,33 @@ const NavBar = () => {
                 )}
               </ul>
             </nav>
-            <div className="w-[40%] hidden xl:flex items-center justify-end gap-x-4">
+
+            {/* Desktop Auth Buttons */}
+            <div className="hidden xl:flex items-center justify-end gap-x-2 lg:gap-x-4 flex-shrink-0">
               <Link
                 target="_blank"
-                href="https://beta.cravvelo.com/sign-up"
+                href="https://app.cravvelo.com/sign-up"
                 className={cn(
                   buttonVariants(),
-                  "bg-primary border border-primary text-white xl:text-xl text-md py-4 h-12 rounded-2xl font-bold transition-all duration-150"
+                  "bg-primary border border-primary text-white text-sm lg:text-base xl:text-xl py-2 lg:py-4 h-10 lg:h-12 px-3 lg:px-4 rounded-2xl font-bold transition-all duration-150 whitespace-nowrap"
                 )}
               >
                 انشاء حساب
               </Link>
               <Link
                 target="_blank"
-                href="https://beta.cravvelo.com/sign-in"
+                href="https://app.cravvelo.com/sign-in"
                 className={cn(
                   buttonVariants(),
-                  "bg-white border border-primary text-primary xl:text-xl text-md py-4 h-12 rounded-2xl hover:text-white font-bold hover:bg-[#FC6B00] transition-all duration-150"
+                  "bg-white border border-primary text-primary text-sm lg:text-base xl:text-xl py-2 lg:py-4 h-10 lg:h-12 px-3 lg:px-4 rounded-2xl hover:text-white font-bold hover:bg-[#FC6B00] transition-all duration-150 whitespace-nowrap"
                 )}
               >
                 تسجيل الدخول
               </Link>
             </div>
-            <div className="w-fit xl:hidden flex items-center pl-4">
+
+            {/* Mobile Navigation */}
+            <div className="flex xl:hidden items-center">
               <MobileNav isTopAdOpen={!close} />
             </div>
           </div>

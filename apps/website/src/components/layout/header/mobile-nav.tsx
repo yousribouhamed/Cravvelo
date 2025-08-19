@@ -105,7 +105,7 @@ const MobileNav = ({ isTopAdOpen = true }: MobileNavProps) => {
 
               <Link
                 target="_blank"
-                href="https://beta.cravvelo.com/sign-in"
+                href="https://app.cravvelo.com/sign-in"
                 className={cn(
                   buttonVariants({ variant: "outline" }),
                   "w-full h-[40px] flex items-center justify-center mt-4 "
@@ -115,7 +115,7 @@ const MobileNav = ({ isTopAdOpen = true }: MobileNavProps) => {
               </Link>
               <Link
                 target="_blank"
-                href="https://beta.cravvelo.com/sign-up"
+                href="https://app.cravvelo.com/sign-up"
                 className={cn(
                   buttonVariants(),
                   "w-full h-[40px] flex items-center justify-center "

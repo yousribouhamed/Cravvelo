@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@ui/lib/utils";
 
 type Tab = {
@@ -26,128 +25,70 @@ export const Tabs = ({
   setPaymentType: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [active, setActive] = useState<Tab>(propTabs[0]);
-  const [tabs, setTabs] = useState<Tab[]>(propTabs);
 
-  const moveSelectedTabToTop = (idx: number) => {
-    const newTabs = [...propTabs];
-    const selectedTab = newTabs.splice(idx, 1);
-    newTabs.unshift(selectedTab[0]);
-    setTabs(newTabs);
-    setActive(newTabs[0]);
+  const handleTabClick = (tab: Tab, idx: number) => {
+    setActive(tab);
+    if (idx === 0) {
+      setPaymentType(false);
+    } else {
+      setPaymentType(true);
+    }
   };
-
-  const [hovering, setHovering] = useState(false);
 
   return (
     <>
       <div
         className={cn(
-          "flex  items-center justify-center   relative overflow-auto sm:overflow-visible no-visible-scrollbar  rounded-2xl  h-full w-full ",
+          "flex items-center p-2 justify-center relative overflow-auto sm:overflow-visible no-visible-scrollbar rounded-2xl h-full w-full   gap-x-2",
           containerClassName
         )}
       >
         {propTabs.map((tab, idx) => (
           <button
             key={tab.title}
-            onClick={() => {
-              moveSelectedTabToTop(idx);
-              if (idx === 0) {
-                setPaymentType(false);
-              } else {
-                setPaymentType(true);
-              }
-            }}
-            onMouseEnter={() => setHovering(true)}
-            onMouseLeave={() => setHovering(false)}
+            onClick={() => handleTabClick(tab, idx)}
             className={cn(
-              `relative px-6  py-2 rounded-full  ${
+              `relative px-6 py-2 rounded-full transition-all duration-300 ease-in-out ${
                 tab.value === "YEARLY"
                   ? "w-fit flex items-center justify-center gap-x-1"
                   : ""
+              } ${
+                active.value === tab.value
+                  ? "bg-[#FC6B00] text-white transform scale-105"
+                  : "text-black hover:bg-gray-100"
               }`,
               tabClassName
             )}
-            style={{
-              transformStyle: "preserve-3d",
-            }}
           >
-            {active.value === tab.value && (
-              <motion.div
-                layoutId="clickedbutton"
-                transition={{ type: "spring", bounce: 0.3, duration: 0.2 }}
-                // className={cn(
-                //   "absolute inset-0 bg-gray-200  rounded-full ",
-                //   activeTabClassName
-                // )}
-              />
-            )}
             {tab.value === "YEARLY" && (
               <span
-                className={` block z-[99] rounded-xl px-2   ${
+                className={`block z-10 rounded-xl px-2 py-1 text-sm font-semibold transition-all duration-300 ${
                   active.value === tab.value
-                    ? "text-primary bg-white"
-                    : "text-white bg-primary"
+                    ? "text-[#FC6B00] bg-white"
+                    : "text-white bg-[#FC6B00]"
                 }`}
               >
-                {" "}
-                10%{" "}
+                10%
               </span>
             )}
-            <span
-              className={`relative block   ${
-                active.value === tab.value ? "text-white" : "text-black"
-              } `}
-            >
-              {tab.title}
-            </span>
+            <span className="relative block font-medium">{tab.title}</span>
           </button>
         ))}
       </div>
-      <FadeInDiv
-        tabs={tabs}
-        active={active}
-        key={active.value}
-        hovering={hovering}
-        className={cn("mt-32", contentClassName)}
-      />
-    </>
-  );
-};
-
-export const FadeInDiv = ({
-  className,
-  tabs,
-  hovering,
-}: {
-  className?: string;
-  key?: any;
-  tabs: Tab[];
-  active: Tab;
-  hovering?: boolean;
-}) => {
-  const isActive = (tab: Tab) => {
-    return tab.value === tabs[0].value;
-  };
-  return (
-    <div className="relative w-full h-full">
-      {tabs.map((tab, idx) => (
-        <motion.div
+      {propTabs.map((tab) => (
+        <div
           key={tab.value}
-          layoutId={tab.value}
-          style={{
-            scale: 1 - idx * 0.1,
-            top: hovering ? idx * -50 : 0,
-            zIndex: -idx,
-            opacity: idx < 3 ? 1 - idx * 0.1 : 0,
-          }}
-          animate={{
-            y: isActive(tab) ? [0, 40, 0] : 0,
-          }}
-          //   className={cn("w-full h-full absolute top-0 left-0", className)}
+          className={cn(
+            "w-full h-full transition-opacity duration-300 ease-in-out",
+            active.value === tab.value
+              ? "opacity-100"
+              : "opacity-0 absolute pointer-events-none",
+            contentClassName
+          )}
         >
           {tab.content}
-        </motion.div>
+        </div>
       ))}
-    </div>
+    </>
   );
 };

@@ -5,7 +5,6 @@ import MaxWidthWrapper from "../../../components/max-width-wrapper";
 import { what_to_do } from "@/src/constants/data";
 import * as React from "react";
 import Image from "next/image";
-// bg-[#8000FF]
 
 const PREVIEW_ITEM = [
   {
@@ -117,7 +116,7 @@ const WhatYouCanDo: FC = () => {
       <section id="features" className="w-full h-fit p-4 lg:p-0 ">
         <div className="max-w-2xl h-fit md:h-[152px]  my-6 md:mb-6  mb-16 z-20   ">
           <h1 className="text-4xl qatar-bold text-start font-bold tracking-tight text-black ">
-            ما يمكنك فعله باستخدام جدارة؟
+            ما يمكنك فعله باستخدام cravvelo؟
           </h1>
           <p className="mt-6   text-xl font-thin leading-10 text-start text-black">
             حوّل معرفتك وخبرتك إلى عمل ناجح عبر الإنترنت بسهولة وتجربة عربية

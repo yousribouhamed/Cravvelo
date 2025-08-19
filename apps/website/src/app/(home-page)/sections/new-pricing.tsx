@@ -2,7 +2,7 @@
 
 import type { FC } from "react";
 import { PLANS } from "@/src/constants/pricing";
-import { Button, buttonVariants } from "@ui/components/ui/button";
+import { buttonVariants } from "@ui/components/ui/button";
 import * as React from "react";
 import { Tabs } from "@/src/components/animations/animated-tabs";
 import Image from "next/image";
@@ -20,11 +20,10 @@ const NewPricing: FC = ({}) => {
 
   return (
     <div className="w-full min-h-[1080px] h-fit my-10 p-4 md:p-0 ">
-      <div className="w-[250px] h-[50px] bg-white  shadow-2xl rounded-full mx-auto  mt-6 mb-10 md:mb-20">
+      <div className="w-[250px] h-[70px] p-2 my-8 bg-white  shadow-2xl rounded-full mx-auto  mt-6 mb-10 md:mb-20">
         <Tabs
           setPaymentType={setIsPaymentByMonth}
           activeTabClassName={"bg-[#FC6B00] text-white "}
-          // containerClassName={`w-full h-full`}
           tabs={[
             {
               title: "سنوي ",

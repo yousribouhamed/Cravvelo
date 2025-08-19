@@ -2,16 +2,13 @@ import MaxWidthWrapper from "../../components/max-width-wrapper";
 import WhatYouCanDo from "./sections/what-you-can-do";
 import HeroLights from "../../components/svgs/hero-lights";
 import Hero from "./sections/hero";
-// import HowPlatformWorks from "./sections/how-platform-works";
 import CreateLanch from "./sections/create-lanch";
 import EaseSpeed from "./sections/ease-speed";
 import NewExperiance from "./sections/new-experiance";
 import StartNew from "./sections/start-new";
-
 import FadeIn from "@/src/components/animations/fade-in";
 import NewPricing from "./sections/new-pricing";
 import Image from "next/image";
-import Link from "next/link";
 import BestBenefits from "./sections/best-benifits";
 import SecureContent from "./sections/secure-content";
 import Footer from "@/src/components/layout/site-footer";
