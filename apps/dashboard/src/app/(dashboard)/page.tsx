@@ -13,7 +13,7 @@ export default async function Page() {
     accountId: user.accountId,
   });
 
-  if (!user.subdomain) {
+  if (!user?.subdomain) {
     return <CreateAcademiaPage notifications={notifications} user={user} />;
   }
 

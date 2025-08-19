@@ -27,7 +27,7 @@ import Link from "next/link";
 import { PasswordInput } from "../password-input";
 import { authSchema } from "@/src/lib/validators/auth";
 import { useRouter } from "next/navigation";
-import { catchClerkError, getCookie } from "@/src/lib/utils";
+import { catchClerkError } from "@/src/lib/utils";
 import { maketoast } from "../toasts";
 import { User, Mail, Lock, Shield } from "lucide-react";
 import Image from "next/image";
@@ -57,16 +57,11 @@ export function SignUpForm() {
     setSuccess("");
 
     try {
-      const cookie = getCookie("machine_id");
-      if (cookie) {
-        setError("يبدو أن لديك حساب بالفعل. يرجى تسجيل الدخول.");
-        return;
-      }
-
       setIsLoading(true);
       await signUp.create({
         emailAddress: data.email,
         password: data.password,
+        firstName: data.firstName,
       });
 
       // Send email verification code

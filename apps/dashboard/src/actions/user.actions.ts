@@ -44,8 +44,6 @@ export const getMyUserAction = async () => {
   const isFreeTrial = daysLeftInTrial(account.createdAt) > 0;
   const isSubscribed = account.plan ? true : false;
 
-  console.log(account);
-
   return {
     userId: user.id,
     accountId: account?.id,
@@ -56,8 +54,8 @@ export const getMyUserAction = async () => {
     email: user?.primaryEmailAddressId,
     isFreeTrial,
     isSubscribed,
-    subdomain: account.Website?.subdomain,
-    customDomain: account.Website?.customDomain,
+    subdomain: account.Website?.subdomain ?? "",
+    customDomain: account.Website?.customDomain ?? "",
     createdAt: account.createdAt,
     verified: account.verified,
     verification_steps: account.verification_steps,

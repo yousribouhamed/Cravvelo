@@ -6,6 +6,7 @@ import {
   getAllNotifications,
   getMyUserAction,
 } from "@/src/actions/user.actions";
+import CreateAcademiaPage from "@/src/components/pages/create-academia.page";
 
 export default async function WebsiteSettingsLayout({
   children,
@@ -15,6 +16,10 @@ export default async function WebsiteSettingsLayout({
   const notifications = await getAllNotifications({
     accountId: user.accountId,
   });
+
+  if (!user?.subdomain) {
+    return <CreateAcademiaPage notifications={notifications} user={user} />;
+  }
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
