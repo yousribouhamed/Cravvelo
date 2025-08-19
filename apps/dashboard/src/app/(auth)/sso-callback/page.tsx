@@ -22,29 +22,15 @@ export default function SSOCallback({ searchParams }: SSOCallbackProps) {
         setIsProcessing(true);
         const params = await searchParams;
 
-        console.log("SSO Callback params:", params);
-        console.log("Current URL:", window.location.href);
+        console.log("SSO Callback - Current URL:", window.location.href);
+        console.log("SSO Callback - Params:", params);
 
         // Handle the OAuth callback
-        await handleRedirectCallback(params);
+        const result = await handleRedirectCallback(params);
+        console.log("SSO Callback - Result:", result);
       } catch (error) {
         console.error("OAuth callback error:", error);
-
-        // More specific error handling
-        if (error instanceof Error) {
-          if (error.message.includes("Invalid redirect URL")) {
-            setError(
-              "خطأ في عنوان إعادة التوجيه. يرجى التواصل مع الدعم الفني."
-            );
-          } else if (error.message.includes("OAuth")) {
-            setError("حدث خطأ في عملية المصادقة. يرجى المحاولة مرة أخرى.");
-          } else {
-            setError("حدث خطأ أثناء تسجيل الدخول. يرجى المحاولة مرة أخرى.");
-          }
-        } else {
-          setError("حدث خطأ أثناء تسجيل الدخول. يرجى المحاولة مرة أخرى.");
-        }
-
+        setError("حدث خطأ أثناء تسجيل الدخول. يرجى المحاولة مرة أخرى.");
         setIsProcessing(false);
       }
     };
@@ -55,15 +41,52 @@ export default function SSOCallback({ searchParams }: SSOCallbackProps) {
   // Handle redirect after successful authentication
   React.useEffect(() => {
     if (isLoaded && isSignedIn && user && isProcessing) {
-      console.log("User authenticated successfully:", user.id);
+      console.log("User authenticated successfully:", {
+        userId: user.id,
+        currentDomain: window.location.origin,
+        targetDomain: "beta.cravvelo.com",
+      });
+
       setIsProcessing(false);
 
-      // Small delay to ensure everything is properly set
-      setTimeout(() => {
-        router.push("/auth-callback");
-      }, 500);
+      // Force redirect to stay on beta.cravvelo.com
+      const redirectUrl = `${window.location.origin}/auth-callback`;
+      console.log("Redirecting to:", redirectUrl);
+
+      // Use window.location.href instead of router.push to ensure we stay on the same domain
+      window.location.href = redirectUrl;
     }
-  }, [isLoaded, isSignedIn, user, router, isProcessing]);
+  }, [isLoaded, isSignedIn, user, isProcessing, router]);
+
+  // Handle error state
+  if (error) {
+    return (
+      <div className="w-full h-screen flex flex-col items-center justify-center gap-y-4">
+        <div className="text-center max-w-md">
+          <h1 className="text-xl font-semibold text-red-600 mb-2">
+            خطأ في تسجيل الدخول
+          </h1>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <div className="space-y-2">
+            <button
+              onClick={() =>
+                (window.location.href = `${window.location.origin}/sign-in`)
+              }
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors mr-2"
+            >
+              العودة إلى تسجيل الدخول
+            </button>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+            >
+              إعادة المحاولة
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Handle error state
   if (error) {
