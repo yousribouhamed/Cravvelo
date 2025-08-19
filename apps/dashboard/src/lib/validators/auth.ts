@@ -20,12 +20,6 @@ export const authSchema = z.object({
     .max(100, {
       message: "يجب ألا تتجاوز كلمة المرور 100 حرف",
     }),
-  firstName: z.string({
-    required_error: "الاسم الأول مطلوب",
-    invalid_type_error: "يجب أن يكون الاسم الأول نصياً",
-  }).min(2, {
-    message: "يجب أن يتكون الاسم الأول من حرفين على الأقل",
-  }),
 });
 
 export const authSchemaLogin = z.object({

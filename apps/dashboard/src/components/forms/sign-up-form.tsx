@@ -44,7 +44,6 @@ export function SignUpForm() {
   const form = useForm<Inputs>({
     resolver: zodResolver(authSchema),
     defaultValues: {
-      firstName: "",
       email: "",
       password: "",
     },

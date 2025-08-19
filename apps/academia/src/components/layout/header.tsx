@@ -4,7 +4,6 @@ import { useState } from "react";
 import MaxWidthWrapper from "../max-with-wrapper";
 import NavigationLink from "../navigation-link";
 import { useTenant } from "@/contexts/tenant";
-
 import {
   useTenantBranding,
   useTenantSettings,
@@ -84,40 +83,28 @@ export default function Header() {
             </nav>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center justify-start gap-x-4">
-            {navigationLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
-        {/* Desktop Auth Buttons */}
+          {/* Desktop Auth Buttons */}
 
-        {isAuthenticated ? (
-          <ProfileDropdown onLogout={() => console.log("Logout clicked")} />
-        ) : (
-          <div className="hidden md:flex items-center justify-end gap-x-4">
-            <Link href={`/login`}>
-              <button className="px-4 py-2 cursor-pointer text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
-                Sign In
-              </button>
-            </Link>
-            <Link href={`/register`}>
-              <button
-                className="px-4 py-2 cursor-pointer text-white font-medium rounded-lg hover:opacity-90 transition-opacity"
-                style={{ backgroundColor: primaryColor }}
-              >
-                Sign Up
-              </button>
-            </Link>
-          </div>
-        )}
+          {isAuthenticated ? (
+            <ProfileDropdown onLogout={() => console.log("Logout clicked")} />
+          ) : (
+            <div className="hidden md:flex items-center justify-end gap-x-4">
+              <Link href={`/login`}>
+                <button className="px-4 py-2 cursor-pointer text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
+                  Sign In
+                </button>
+              </Link>
+              <Link href={`/register`}>
+                <button
+                  className="px-4 py-2 cursor-pointer text-white font-medium rounded-lg hover:opacity-90 transition-opacity"
+                  style={{ backgroundColor: primaryColor }}
+                >
+                  Sign Up
+                </button>
+              </Link>
+            </div>
+          )}
+        </div>
 
         {/* Mobile Menu Button */}
         <button
