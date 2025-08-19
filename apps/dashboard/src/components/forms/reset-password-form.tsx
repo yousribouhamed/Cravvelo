@@ -64,7 +64,7 @@ export function ResetPasswordForm() {
           setSuccess("تم إرسال رمز التحقق بنجاح إلى بريدك الإلكتروني.");
 
           setTimeout(() => {
-            router.push("/sign-in/reset-password/step2");
+            router.push(`/sign-in/reset-password/step2?email=${data.email}`);
             maketoast.success();
           }, 1500);
         }

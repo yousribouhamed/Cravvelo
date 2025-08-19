@@ -180,7 +180,6 @@ export function VerifyEmail() {
         {success && (
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 animate-in fade-in slide-in-from-top-2 duration-300">
             <div className="flex items-start gap-3">
-              <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
               <p className="text-sm text-green-800 leading-relaxed">
                 {success}
               </p>
@@ -192,7 +191,6 @@ export function VerifyEmail() {
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 animate-in fade-in slide-in-from-top-2 duration-300">
             <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
               <p className="text-sm text-red-800 leading-relaxed">{error}</p>
             </div>
           </div>
@@ -275,8 +273,8 @@ export function VerifyEmail() {
             href="/sign-up"
             className="text-blue-600 hover:text-blue-700 font-medium transition-colors inline-flex items-center gap-2 text-sm"
           >
-            <ArrowLeft className="w-4 h-4" />
             العودة إلى التسجيل
+            <ArrowLeft className="w-4 h-4" />
           </Link>
         </div>
       </CardContent>

@@ -23,7 +23,7 @@ import {
 } from "@ui/components/ui/form";
 import { Input } from "@ui/components/ui/input";
 import { useSignIn } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { resetPasswordSchema } from "@/src/lib/validators/auth";
 import { catchClerkError } from "@/src/lib/utils";
 import { PasswordInput } from "../password-input";
@@ -134,11 +134,20 @@ const OTPInput = ({
 
 export function ResetPasswordStep2Form() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email");
   const { isLoaded, signIn, setActive } = useSignIn();
   const [isLoading, startTransition] = React.useTransition();
   const [error, setError] = React.useState<string>("");
   const [success, setSuccess] = React.useState<string>("");
   const [isResending, setIsResending] = React.useState<boolean>(false);
+
+  // Redirect if no email in search params
+  React.useEffect(() => {
+    if (!email) {
+      router.push("/sign-in/reset-password");
+    }
+  }, [email, router]);
 
   // react-hook-form
   const form = useForm<Inputs>({
@@ -193,9 +202,9 @@ export function ResetPasswordStep2Form() {
     });
   }
 
-  // Handle resend verification code
+  // Handle resend verification code - FIXED
   const handleResendCode = async () => {
-    if (!isLoaded || !signIn) return;
+    if (!isLoaded || !signIn || !email) return;
 
     setIsResending(true);
     setError("");
@@ -204,18 +213,26 @@ export function ResetPasswordStep2Form() {
     try {
       await signIn.create({
         strategy: "reset_password_email_code",
-        identifier: form.getValues("code"),
+        identifier: email, // Use the email from search params, not form.getValues("code")
       });
 
       setSuccess("تم إرسال رمز جديد إلى بريدك الإلكتروني.");
+      // Clear the current OTP input
+      form.setValue("code", "");
       maketoast.success();
     } catch (err) {
       console.log(err);
       setError("فشل في إرسال رمز جديد. يرجى المحاولة مرة أخرى.");
+      catchClerkError(err);
     } finally {
       setIsResending(false);
     }
   };
+
+  // Don't render if no email
+  if (!email) {
+    return null;
+  }
 
   return (
     <Card className="w-full max-w-lg shadow border">
@@ -236,8 +253,9 @@ export function ResetPasswordStep2Form() {
               إعادة تعيين كلمة المرور
             </CardTitle>
             <CardDescription className="text-gray-600 text-sm leading-relaxed">
-              أدخِل رمز التحقق الذي أرسلناه إلى بريدك الإلكتروني، ثم قم بإدخال
-              كلمة المرور الجديدة.
+              أدخِل رمز التحقق الذي أرسلناه إلى{" "}
+              <span className="font-medium text-gray-800">{email}</span>، ثم قم
+              بإدخال كلمة المرور الجديدة.
             </CardDescription>
           </div>
         </div>
@@ -294,13 +312,17 @@ export function ResetPasswordStep2Form() {
             <div className="flex items-center justify-between">
               <p className="text-gray-600 text-sm">لم تستلم الرمز؟</p>
               <Button
+                type="button"
                 variant="ghost"
                 onClick={handleResendCode}
-                disabled={isResending}
-                className="h-auto p-0 text-blue-600 hover:text-blue-700"
-                loading={isResending}
+                disabled={isResending || isLoading}
+                className="h-auto p-2 text-blue-600 hover:text-blue-700 disabled:opacity-50"
               >
-                <RefreshCw className="w-4 h-4 ml-1" />
+                {isResending ? (
+                  <RefreshCw className="w-4 h-4 ml-1 animate-spin" />
+                ) : (
+                  <RefreshCw className="w-4 h-4 ml-1" />
+                )}
                 إرسال رمز جديد
               </Button>
             </div>
@@ -360,13 +382,15 @@ export function ResetPasswordStep2Form() {
             </div>
 
             {/* Submit Button */}
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className="w-full h-11"
-              loading={isLoading}
-            >
-              إعادة تعيين كلمة المرور
+            <Button type="submit" disabled={isLoading} className="w-full h-11">
+              {isLoading ? (
+                <>
+                  <RefreshCw className="w-4 h-4 ml-2 animate-spin" />
+                  جاري المعالجة...
+                </>
+              ) : (
+                "إعادة تعيين كلمة المرور"
+              )}
             </Button>
           </form>
         </Form>

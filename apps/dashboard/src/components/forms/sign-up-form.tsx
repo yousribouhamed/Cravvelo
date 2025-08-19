@@ -58,10 +58,10 @@ export function SignUpForm() {
 
     try {
       setIsLoading(true);
+
       await signUp.create({
         emailAddress: data.email,
         password: data.password,
-        firstName: data.firstName,
       });
 
       // Send email verification code
@@ -119,28 +119,6 @@ export function SignUpForm() {
       <CardContent className="space-y-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {/* First Name Field */}
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-700 font-medium flex items-center gap-2">
-                    <User className="w-4 h-4" />
-                    الاسم الأول
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="أدخِل اسمك الأول"
-                      className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-colors"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             {/* Email Field */}
             <FormField
               control={form.control}

@@ -211,7 +211,7 @@ export const SearchInput: FC = () => {
     <>
       <Button
         variant="ghost"
-        className="relative hidden md:flex h-9 w-9 p-0 xl:h-10 md:justify-start md:px-3 md:py-4 md:w-[641px] border rounded-xl bg-white dark:bg-[#0A0A0C] hover:bg-gray-50 "
+        className="relative hidden md:flex h-9 w-9 p-0 xl:h-10 md:justify-start md:px-3 md:py-4 md:w-[641px] border rounded-xl bg-card hover:bg-gray-50 "
         onClick={() => setOpen(true)}
       >
         <MagnifyingGlassIcon
