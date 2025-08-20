@@ -54,12 +54,7 @@ export const CommentColumns: ColumnDef<Comment>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="w-[40px] h-[40px] flex items-center justify-between ">
-          <Avatar>
-            <AvatarImage src={row.original.studentImage} />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-        </div>
+        <div className="w-[40px] h-[40px] flex items-center justify-between "></div>
       );
     },
   },

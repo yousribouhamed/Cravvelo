@@ -48,7 +48,7 @@ function CourseHeader({ className, ...props }: ExamplesNavProps) {
       <div
         className={cn(
           "mb-4 w-full flex items-center",
-          `bg-white border flex items-center justify-start rounded-lg h-[60px]`
+          `bg-card border flex items-center justify-start rounded-lg h-[60px]`
         )}
       >
         {links.map((item, index) => (
@@ -58,7 +58,7 @@ function CourseHeader({ className, ...props }: ExamplesNavProps) {
             className={cn(
               "flex w-auto h-[60px] items-center justify-center border-b px-3 sm:px-6 text-center text-xs sm:text-sm transition-colors hover:text-primary whitespace-nowrap",
               pathname?.includes(item.href) || (index === 0 && pathname === "/")
-                ? "border-b-2 border-[#F0B110] text-black font-bold"
+                ? "border-b-2 border-[#F0B110] text-black dark:text-white font-bold"
                 : ""
             )}
           >

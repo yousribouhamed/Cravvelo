@@ -28,7 +28,15 @@ import { maketoast } from "../toasts";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import Image from "next/image";
 import { PaymentsConnect } from "database";
-import { getEmbedUrl } from "@/src/lib/utils";
+import {
+  ExternalLink,
+  Key,
+  Shield,
+  CheckCircle2,
+  ArrowLeft,
+  Lightbulb,
+  AlertCircle,
+} from "lucide-react";
 
 type Inputs = z.infer<typeof ChargilyConnectSchema>;
 
@@ -64,125 +72,249 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
     });
   }
 
+  const isConnected = data?.chargilyPublicKey && data?.chargilySecretKey;
+
   return (
-    <>
-      <div className="w-full h-[350px]  mt-4 bg-white shadow border rounded-2xl">
-        <div className=" w-full xl:w-[50%] p-4 2xl:w-[40%] min-h-[350px] rounded-2xl h-fit flex items-center flex-col gap-y-4  justify-start">
-          <div className="h-[20%]  w-full flex items-start justify-start">
-            <h3 className="text-xl font-bold ">
-              استعد لبدء بيع دوراتك ومنتجاتك الرقمية
-            </h3>
+    <div className="w-full min-h-screen   rtl my-8 " dir="rtl">
+      {/* Header Section */}
+      <div className="w-full mx-auto">
+        {/* Status Card */}
+        {isConnected ? (
+          <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-2xl">
+            <div className="flex items-center gap-3">
+              <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" />
+              <div>
+                <p className="font-semibold text-green-800 dark:text-green-200">
+                  تم الربط بنجاح
+                </p>
+                <p className="text-sm text-green-600 dark:text-green-400">
+                  حسابك متصل مع شارجيلي ويمكنك الآن استقبال المدفوعات
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="relative w-full h-[80%] flex items-center justify-center">
-            <iframe
-              width="450"
-              height="270"
-              className="!rounded-2xl"
-              src={getEmbedUrl({
-                url: "https://www.youtube.com/watch?v=qjD22paiilE",
-              })}
-              title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            ></iframe>
+        ) : (
+          <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-2xl">
+            <div className="flex items-center gap-3">
+              <AlertCircle className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              <div>
+                <p className="font-semibold text-blue-800 dark:text-blue-200">
+                  لم يتم الربط بعد
+                </p>
+                <p className="text-sm text-blue-600 dark:text-blue-400">
+                  أكمل الخطوات أدناه لربط حسابك مع شارجيلي
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Main Content */}
+        <div className="grid lg:grid-cols-3 gap-6">
+          {/* Form Panel */}
+          <div className="lg:col-span-2">
+            <Card className="">
+              <CardHeader className="pb-6">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-violet-100 dark:bg-violet-900/30 rounded-xl">
+                    <Shield className="w-6 h-6 text-violet-600 dark:text-violet-400" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-xl text-gray-900 dark:text-gray-100">
+                      إعداد مفاتيح API
+                    </CardTitle>
+                    <CardDescription className="text-gray-600 dark:text-gray-400">
+                      أدخل مفاتيح API الخاصة بك من لوحة تحكم شارجيلي
+                    </CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+
+              <CardContent>
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-6"
+                    id="chargily-form"
+                  >
+                    {/* Public Key Field */}
+                    <div className="space-y-2">
+                      <FormField
+                        control={form.control}
+                        name="chargilyPublicKey"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-gray-900 dark:text-gray-100 font-semibold flex items-center gap-2">
+                              <Key className="w-4 h-4" />
+                              المفتاح العام (Public Key)
+                            </FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <Input
+                                  placeholder="live_pk_..."
+                                  className="pr-12 py-3 bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 focus:border-violet-500 dark:focus:border-violet-400 rounded-xl text-left"
+                                  style={{ direction: "ltr" }}
+                                  {...field}
+                                />
+                                <Key className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                              المفتاح العام آمن للاستخدام في الواجهة الأمامية
+                            </p>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    {/* Private Key Field */}
+                    <div className="space-y-2">
+                      <FormField
+                        control={form.control}
+                        name="chargilyPrivateKey"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-gray-900 dark:text-gray-100 font-semibold flex items-center gap-2">
+                              <Shield className="w-4 h-4" />
+                              المفتاح الخاص (Secret Key)
+                            </FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <Input
+                                  type="password"
+                                  placeholder="live_sk_..."
+                                  className="pr-12 py-3 bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 focus:border-violet-500 dark:focus:border-violet-400 rounded-xl text-left"
+                                  style={{ direction: "ltr" }}
+                                  {...field}
+                                />
+                                <Shield className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                            <div className="flex items-start gap-2 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                              <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
+                              <p className="text-xs text-amber-700 dark:text-amber-300">
+                                <strong>تنبيه:</strong> المفتاح الخاص سري جداً
+                                ولا يجب مشاركته مع أي شخص. يتم تشفيره وحفظه
+                                بأمان.
+                              </p>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    {/* Submit Button */}
+                    <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
+                      <Button
+                        disabled={mutation.isLoading}
+                        type="submit"
+                        size="lg"
+                      >
+                        {mutation.isLoading ? (
+                          <div className="flex items-center gap-2">
+                            <LoadingSpinner />
+                            جاري الحفظ...
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <CheckCircle2 className="w-5 h-5" />
+                            {isConnected ? "تحديث الإعدادات" : "ربط الحساب"}
+                          </div>
+                        )}
+                      </Button>
+                    </div>
+                  </form>
+                </Form>
+              </CardContent>
+            </Card>
+
+            {/* Security Info */}
+            <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-2xl">
+              <div className="flex items-start gap-3">
+                <Shield className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
+                <div>
+                  <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                    معلومات الأمان
+                  </h3>
+                  <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                    <li>• جميع المفاتيح محمية بتشفير AES-256</li>
+                    <li>• المفاتيح محفوظة بشكل آمن في قاعدة البيانات</li>
+                    <li>• اتصال آمن مع خوادم شارجيلي عبر HTTPS</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Steps Panel */}
+          <div className="lg:col-span-1">
+            <Card className="  top-4">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-xl text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                  <Lightbulb className="w-5 h-5 text-amber-500" />
+                  الخطوات
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-violet-500 flex items-center justify-center text-white font-bold text-sm">
+                    1
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
+                      احصل على المفاتيح
+                    </p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                      اذهب إلى لوحة تحكم شارجيلي واحصل على مفاتيح الـ API
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-violet-500 flex items-center justify-center text-white font-bold text-sm">
+                    2
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
+                      أدخل المفاتيح
+                    </p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                      انسخ والصق المفاتيح في الحقول المطلوبة
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-violet-500 flex items-center justify-center text-white font-bold text-sm">
+                    3
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
+                      احفظ الإعدادات
+                    </p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                      اضغط حفظ التغييرات لإكمال عملية الربط
+                    </p>
+                  </div>
+                </div>
+
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    window.open("https://pay.chargily.com/dashboard", "_blank")
+                  }
+                >
+                  <ExternalLink className="w-4 h-4 ml-2" />
+                  فتح لوحة تحكم شارجيلي
+                </Button>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
-
-      <Card className="w-full h-[600px]  my-8 rounded-2xl">
-        <CardHeader>
-          <div className="flex items-center justify-start gap-x-2">
-            <Image
-              src="/chargily.jpg"
-              alt="chargily image"
-              width={50}
-              height={50}
-              className="object-fill rounded-xl"
-            />
-            <CardTitle> الاتصال ب chargily</CardTitle>
-          </div>
-
-          <CardDescription className="my-2">
-            منصة لمعالجة الدفع تمكن الشركات من قبول المدفوعات عبر الإنترنت
-            وإدارة المعاملات المالية بشكل آمن وفعال.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="w-full h-fit relative ">
-          <div className="w-[50px] h-[50px] rounded-[50%] bg-primary flex items-center justify-center absolute top-1 right-4">
-            <span className="text-white font-bold">1</span>
-          </div>
-          <div className="w-2 border-l-4 border-primary h-[330px] absolute  top-2 right-8" />
-          <div className="w-[50px] h-[50px] rounded-[50%] bg-primary flex items-center justify-center absolute top-[300px] right-4">
-            <span className="text-white font-bold">2</span>
-          </div>
-
-          <div className="w-full h-fit mr-[100px]">
-            <h2 className="text-lg font-bold">الخطوة الاولى</h2>
-            <p className="text-md ">
-              انتقل إلى لوحة تحكم chargily حيث يمكنك العثور على مفتاحك العام
-              والخاص، وقم بنسخهما والموضوع السابق هنا
-            </p>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-2 my-4 max-w-sm"
-                id="chargily-form"
-              >
-                <FormField
-                  control={form.control}
-                  name="chargilyPublicKey"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel> المفتاح العام </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="live_pk_5r7riiKDTrc5rA9wTX1TqjUebLRqOyBK96MSWilR"
-                          {...field}
-                        />
-                      </FormControl>
-
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="chargilyPrivateKey"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>المفتاح الخاص </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="live_pk_5r7riiKDTrc5rA9wTX1TqjUebLRqOyBK96MSWilR"
-                          {...field}
-                        />
-                      </FormControl>
-
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </form>
-            </Form>
-
-            <div className="my-4 mt-10">
-              <h2 className="text-lg font-bold">الخطوة الثانية</h2>
-              <p className="text-md ">قم بحفظ التغيرات</p>
-            </div>
-            <Button
-              disabled={mutation.isLoading}
-              type="submit"
-              className=" flex rounded-xl bg-primary hover:bg-primary items-center gap-x-2 my-4"
-              size="lg"
-              form="chargily-form"
-            >
-              {mutation.isLoading ? <LoadingSpinner /> : null}
-              حفظ التغييرات
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </>
+    </div>
   );
 };
 

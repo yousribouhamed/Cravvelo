@@ -6,7 +6,6 @@ import {
   getAllNotifications,
   getMyUserAction,
 } from "@/src/actions/user.actions";
-import CoursesTableShell from "./courses-table-shell";
 import CreateAcademiaPage from "@/src/components/pages/create-academia.page";
 
 export const fetchCache = "force-no-store";
@@ -38,10 +37,7 @@ const Page = async ({}) => {
 
   return (
     <AppShell user={user} notifications={notifications}>
-      <CoursesTableShell
-        academia_url={user?.customDomain ?? user.subdomain}
-        initialData={data}
-      />
+      <CoursesPage courses={data} />
     </AppShell>
   );
 };

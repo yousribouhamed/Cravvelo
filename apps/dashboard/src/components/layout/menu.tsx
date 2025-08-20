@@ -1,7 +1,6 @@
 "use client";
 
 import type { FC } from "react";
-
 import {
   Accordion,
   AccordionContent,
@@ -15,7 +14,6 @@ import {
 } from "next/navigation";
 import React, { useMemo, useCallback } from "react";
 import { buttonVariants } from "@ui/components/ui/button";
-
 import { ScrollArea } from "@ui/components/ui/scroll-area";
 import { cn } from "@ui/lib/utils";
 import Link from "next/link";
@@ -45,7 +43,7 @@ const MobileLink: FC<MobileLinkProps> = ({
       href={href}
       className={cn(
         buttonVariants({ variant: "ghost" }),
-        "w-full flex items-center justify-end text-xs pr-4 relative hover:!bg-transparent !text-white gap-x-2 hover:bg-none"
+        "w-full flex items-center justify-end text-sm pr-4 relative hover:!bg-transparent !text-white gap-x-2 hover:bg-none"
       )}
       onClick={handleClick}
     >
@@ -163,9 +161,10 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
                     href={item.slug}
                     className={cn(
                       buttonVariants({ variant: "ghost" }),
-                      "w-full flex items-center justify-end qatar-semibold text-md gap-x-2 hover:bg-primary !text-white",
+                      "w-full flex items-center justify-end qatar-semibold text-md gap-x-2 hover:bg-primary hover:dark:bg-white/5  !text-white",
                       {
-                        "text-white bg-[#A44600] hover:bg-[#A44600]": isActive,
+                        "text-white bg-[#A44600] hover:dark:bg-white/5":
+                          isActive,
                       }
                     )}
                     onClick={handleDirectLinkClick}
@@ -184,9 +183,9 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
                     <AccordionTrigger
                       className={cn(
                         buttonVariants({ variant: "ghost" }),
-                        "w-full flex items-center justify-end qatar-semibold group text-sm gap-x-2 hover:bg-primary !text-white",
+                        "w-full flex items-center justify-end qatar-semibold group text-sm gap-x-2 hover:dark:bg-white/5 hover:bg-primary !text-white",
                         {
-                          "text-white bg-[#A44600] hover:bg-[#A44600]":
+                          "text-white bg-[#A44600] hover:dark:bg-white/5 dark:bg-white/5":
                             isActive,
                         }
                       )}

@@ -133,8 +133,7 @@ export const getAllStudents = async ({
           // confirmedEmail: true,
           _count: {
             select: {
-              Sale: true,
-              Comment: true,
+              Comments: true,
             },
           },
         },

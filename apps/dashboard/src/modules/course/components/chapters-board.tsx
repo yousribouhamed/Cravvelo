@@ -370,7 +370,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                         >
                           <AccordionItem
                             value={accordionId}
-                            className="w-full min-h-[60px] bg-white rounded-2xl h-fit p-4 border-none"
+                            className="w-full min-h-[60px] bg-card rounded-2xl h-fit p-4 border-none"
                           >
                             <AccordionTrigger asChild>
                               <div className="w-full h-[40px] flex items-center cursor-pointer justify-between group">
@@ -379,7 +379,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                                   <div
                                     className={cn(
                                       "px-2 rounded-lg py-3 transition-colors  cursor-grab active:cursor-grabbing",
-                                      "hover:bg-gray-100 group-hover:bg-gray-100",
+                                      "hover:bg-gray-100 group-hover:bg-gray-100 hover:dark:bg-gray-900 group-hover:bgdark:-gray-900",
                                       snapshot.isDragging && "cursor-grabbing"
                                     )}
                                     {...provided.dragHandleProps}
@@ -411,11 +411,11 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                                   {/* Chapter Info */}
                                   <div className="w-fit flex flex-col h-full mr-4 justify-center gap-y-1">
                                     <div className="flex items-center gap-x-2">
-                                      <p className="text-black text-sm font-bold line-clamp-1">
+                                      <p className="text-black dark:text-white text-sm font-bold line-clamp-1">
                                         {chapter.title || "فصل بدون عنوان"}
                                       </p>
                                     </div>
-                                    <span className="text-gray-600 text-xs text-start">
+                                    <span className="text-gray-600 dark:text-white text-xs text-start">
                                       {materials.length}{" "}
                                       {materials.length === 1 ? "مادة" : "مواد"}
                                     </span>
@@ -448,7 +448,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                                     <DropdownMenuTrigger asChild>
                                       <Button
                                         variant="ghost"
-                                        className="bg-transparent hover:bg-gray-100 h-8 w-8 p-0"
+                                        className="bg-transparent hover:bg-gray-100  h-8 w-8 p-0"
                                         size="sm"
                                         disabled={
                                           updateMutation.isLoading ||

@@ -45,55 +45,61 @@ export function DataTableColumnHeader<TData, TValue>({
             }
             variant="ghost"
             size="lg"
-            className=" h-8 data-[state=open]:bg-accent w-fit  flex items-center justify-start gap-x-2 text-xs font-bold !whitespace-nowrap !px-2 "
+            className="h-8 dark:text-white data-[state=open]:bg-accent w-fit flex items-center justify-start gap-x-2 text-xs font-bold !whitespace-nowrap !px-2"
           >
             <span>{title}</span>
             {column.getIsSorted() === "desc" ? (
-              <div className="w-6 h-6 bg-red-600 flex items-center justify-center rounded-lg  mr-2">
+              <div className="w-6 h-6 bg-red-600 dark:bg-red-500 flex items-center justify-center rounded-lg mr-2">
                 <ArrowDownIcon
-                  className=" h-4 w-4 text-white"
+                  className="h-4 w-4 text-white"
                   aria-hidden="true"
                 />
               </div>
             ) : column.getIsSorted() === "asc" ? (
-              <div className="w-6 h-6 bg-green-600 flex items-center justify-center rounded-lg  mr-2">
+              <div className="w-6 h-6 bg-green-600 dark:bg-green-500 flex items-center justify-center rounded-lg mr-2">
                 <ArrowUpIcon
-                  className=" h-4 w-4 text-white"
+                  className="h-4 w-4 text-white"
                   aria-hidden="true"
                 />
               </div>
             ) : (
-              <CaretSortIcon className="ml-r h-4 w-4" aria-hidden="true" />
+              <CaretSortIcon
+                className="ml-2 h-4 w-4 text-muted-foreground"
+                aria-hidden="true"
+              />
             )}
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
+        <DropdownMenuContent
+          align="start"
+          className="bg-background border-border"
+        >
           <DropdownMenuItem
             aria-label="Sort ascending"
-            className="w-full items-center justify-between p-2"
+            className="w-full items-center justify-between p-2 hover:bg-accent focus:bg-accent"
             onClick={() => column.toggleSorting(false)}
           >
-            <div className="w-6 h-6 bg-green-600 flex items-center justify-center rounded-lg  mr-2">
+            <div className="w-6 h-6 bg-green-600 dark:bg-green-500 flex items-center justify-center rounded-lg mr-2">
               <ArrowUpIcon
-                className=" h-3.5 w-3.5 text-white"
+                className="h-3.5 w-3.5 text-white"
                 aria-hidden="true"
               />
             </div>
             ترتيب تصاعدي
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
+          <DropdownMenuSeparator className="bg-border" />
           <DropdownMenuItem
             aria-label="Sort descending"
-            className="w-full items-center justify-between p-2"
+            className="w-full items-center justify-between p-2 hover:bg-accent focus:bg-accent"
             onClick={() => column.toggleSorting(true)}
           >
-            <div className="w-6 h-6 bg-red-600 flex items-center justify-center rounded-lg  mr-2">
+            <div className="w-6 h-6 bg-red-600 dark:bg-red-500 flex items-center justify-center rounded-lg mr-2">
               <ArrowDownIcon
-                className=" h-3.5 w-3.5 text-white"
+                className="h-3.5 w-3.5 text-white"
                 aria-hidden="true"
               />
             </div>
-            ترتيب تفصيلي
+            ترتيب تنازلي
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
