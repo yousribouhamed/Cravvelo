@@ -91,6 +91,41 @@ enum CertificateStatus {
   REVOKED
 }
 
+enum PaymentProvider {
+  STRIPE
+  CHARGILY
+  P2P
+  BANK_TRANSFER
+  CASH
+  CREDIT_CARD
+}
+
+// New enums for pricing
+enum PricingType {
+  FREE
+  ONE_TIME
+  RECURRING
+}
+
+enum AccessDuration {
+  LIMITED
+  UNLIMITED
+}
+
+enum RecurringInterval {
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
+enum PurchaseStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+  REFUNDED
+}
+
 model Account {
   id                 String            @id @unique @default(cuid())
   userId             String            @unique
@@ -148,6 +183,8 @@ model Account {
   Certificate        Certificate[]
   Wallet             Wallet?
   Payment            Payment[]
+  PaymentMethodConfig PaymentMethodConfig[]
+  PricingPlans       Pricing[]
 }
 
 model PaymentsConnect {
@@ -161,6 +198,124 @@ model PaymentsConnect {
   Account           Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
   @@index([accountId])
+}
+
+// New PricingPlan model
+model Pricing {
+  id                 String            @id @unique @default(cuid())
+  accountId          String
+  name               String            // e.g., "Basic Access", "Premium", "Full Course"
+  description        String?           @db.Text
+  pricingType        PricingType
+  price              Float?            // null for FREE type
+  currency           String            @default("DZD")
+  
+  // One-time payment settings
+  accessDuration     AccessDuration?   // LIMITED or UNLIMITED
+  accessDurationDays Int?              // Only for LIMITED duration
+  
+  // Recurring payment settings
+  recurringInterval  RecurringInterval? // Only for RECURRING type
+  
+  
+  
+  // Plan status
+  isActive           Boolean           @default(true)
+  isDefault          Boolean           @default(false)
+  
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  
+  // Relations
+  Account            Account           @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  CoursePricingPlans CoursePricingPlan[]
+  ProductPricingPlans ProductPricingPlan[]
+  ItemPurchases      ItemPurchase[]
+
+  @@index([accountId])
+  @@index([pricingType])
+}
+
+// Junction table for Course-PricingPlan relationship
+model CoursePricingPlan {
+  id           String      @id @unique @default(cuid())
+  courseId     String
+  pricingPlanId String
+  isDefault    Boolean     @default(false)
+  
+  createdAt    DateTime    @default(now())
+  
+  Course       Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  PricingPlan  Pricing @relation(fields: [pricingPlanId], references: [id], onDelete: Cascade)
+  
+  @@unique([courseId, pricingPlanId])
+  @@index([courseId])
+  @@index([pricingPlanId])
+}
+
+// Junction table for Product-PricingPlan relationship
+model ProductPricingPlan {
+  id           String      @id @unique @default(cuid())
+  productId    String
+  pricingPlanId String
+  isDefault    Boolean     @default(false)
+  
+  createdAt    DateTime    @default(now())
+  
+  Product      Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  PricingPlan  Pricing @relation(fields: [pricingPlanId], references: [id], onDelete: Cascade)
+  
+  @@unique([productId, pricingPlanId])
+  @@index([productId])
+  @@index([pricingPlanId])
+}
+
+// New ItemPurchase model
+model ItemPurchase {
+  id                String         @id @unique @default(cuid())
+  studentId         String
+  accountId         String         // The seller's account
+  pricingPlanId     String
+  
+  // Item information
+  itemType          ItemType       // COURSE or PRODUCT
+  itemId            String         // ID of the course or product
+  
+  // Purchase details
+  purchaseAmount    Float
+  currency          String         @default("DZD")
+  status            PurchaseStatus @default(ACTIVE)
+  
+  // Access control
+  accessStartDate   DateTime       @default(now())
+  accessEndDate     DateTime?      // null for unlimited access
+  
+  // Recurring purchase info
+  nextBillingDate   DateTime?      // Only for recurring purchases
+  lastBillingDate   DateTime?
+  billingAttempts   Int            @default(0)
+  
+  // Cancellation info
+  cancelledAt       DateTime?
+  cancellationReason String?       @db.Text
+  
+  // Purchase metadata
+  purchaseNotes     String?        @db.Text
+  metadata          Json?
+  
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  
+  // Relations
+  Student           Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  PricingPlan       Pricing    @relation(fields: [pricingPlanId], references: [id], onDelete: Restrict)
+  
+  @@index([studentId])
+  @@index([accountId])
+  @@index([itemType, itemId])
+  @@index([status])
+  @@index([accessEndDate])
+  @@index([nextBillingDate])
 }
 
 model Course {
@@ -177,8 +332,8 @@ model Course {
   courseDescription      Json?
   seoTitle               String?
   seoDescription         String?
-  price                  Float?
-  compareAtPrice         Float?
+  price                  Float?    // Keep for backward compatibility
+  compareAtPrice         Float?    // Keep for backward compatibility
   studentsNbr            Int?      @default(0)
   preview_video          String?   @db.VarChar(199)
   profit                 String?
@@ -206,6 +361,7 @@ model Course {
   Comment                Comment[]
   Chapter                Chapter[]
   Sale                   Sale[]
+  CoursePricingPlans     CoursePricingPlan[]
 
   @@index([accountId])
   @@index([status])
@@ -229,7 +385,7 @@ model Chapter {
 model Product {
   id                String   @id @unique @default(cuid())
   title             String
-  price             Float?
+  price             Float?   // Keep for backward compatibility
   numberOfDownloads Int?     @default(0)
   subDescription    String?  @db.VarChar(199)
   SeoTitle          String?
@@ -238,7 +394,7 @@ model Product {
   fileUrl           String?
   description       Json?
   status            String?
-  compareAtPrice    Float?
+  compareAtPrice    Float?   // Keep for backward compatibility
   accountId         String
   isVisible         Boolean  @default(true)
   
@@ -252,6 +408,7 @@ model Product {
   // Relations
   Account           Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
   Sale              Sale[]
+  ProductPricingPlans ProductPricingPlan[]
 
   @@index([accountId])
   @@index([status])
@@ -418,11 +575,6 @@ model Sale {
   couponId        String?
   couponCode      String?
   
-  // Payment information
-  paymentId       String?
-  paymentMethod   PaymentMethod?
-  paymentStatus   PaymentStatus?
-  
   // Additional information
   customerNotes   String?    @db.Text
   internalNotes   String?    @db.Text
@@ -436,7 +588,7 @@ model Sale {
   Course          Course?    @relation(fields: [courseId], references: [id], onDelete: SetNull)
   Product         Product?   @relation(fields: [productId], references: [id], onDelete: SetNull)
   Coupon          Coupon?    @relation(fields: [couponId], references: [id], onDelete: SetNull)
-  Payment         Payment[]
+  Payments        Payment[]  // One sale can have multiple payment attempts
 
   @@index([accountId])
   @@index([studentId])
@@ -446,46 +598,117 @@ model Sale {
   @@index([productId])
 }
 
+model PaymentMethodConfig {
+  id          String           @id @default(cuid())
+  accountId   String
+  provider    PaymentProvider
+  isActive    Boolean          @default(true)
+
+  // Flexible configs (depends on provider)
+  config      Json             // {publicKey, secretKey} for Stripe/Chargily
+                               // {wallet, network} for P2P
+                               // {iban, bankName} for bank transfer
+
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  Account     Account          @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  Payments    Payment[]
+
+  @@index([accountId])
+  @@index([provider])
+}
+
 model Payment {
-  id                String        @id @unique @default(cuid())
+  id                String             @id @default(cuid())
   type              PaymentTypes
-  method            PaymentMethod
   amount            Float
-  currency          String        @default("DZD")
-  status            PaymentStatus @default(PENDING)
-  
-  // Related entities
+  currency          String             @default("DZD")
+  status            PaymentStatus      @default(PENDING)
+  method            PaymentMethod?     // Added payment method here
+
+  // Relations - Fixed to avoid conflicts
   studentId         String?
   accountId         String?
-  saleId            String?
-  
-  // Payment gateway information
-  gatewayId         String?       // Payment gateway transaction ID
-  gatewayResponse   Json?         // Full response from payment gateway
-  
-  // Payment details
-  description       String?       @db.Text
-  metadata          Json?         // Additional payment metadata
-  
-  // Refund information
-  refundAmount      Float?        @default(0)
-  refundReason      String?       @db.Text
+  saleId            String?            // Many payments can belong to one sale
+  subscriptionId    String?
+  methodConfigId    String?            // seller-provided configs (Stripe, P2P, etc.)
+
+  gatewayId         String?            // Payment gateway transaction ID
+  gatewayResponse   Json?
+
+  description       String?            @db.Text
+  metadata          Json?
+
+  // Refund info
+  refundAmount      Float?             @default(0)
+  refundReason      String?            @db.Text
   refundedAt        DateTime?
-  
-  createdAt         DateTime      @default(now())
-  updatedAt         DateTime      @updatedAt
-  
+
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
   // Relations
-  Account           Account?      @relation(fields: [accountId], references: [id])
-  Student           Student?      @relation(fields: [studentId], references: [id])
-  Sale              Sale?         @relation(fields: [saleId], references: [id])
-  Transaction       Transaction[]
+  Account           Account?           @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  Student           Student?           @relation(fields: [studentId], references: [id], onDelete: SetNull)
+  Sale              Sale?              @relation(fields: [saleId], references: [id], onDelete: SetNull)
+  Subscription      Subscription?      @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+  MethodConfig      PaymentMethodConfig? @relation(fields: [methodConfigId], references: [id], onDelete: SetNull)
+  Proofs            PaymentProof[]
+  Transactions      Transaction[]
 
   @@index([accountId])
   @@index([studentId])
   @@index([saleId])
+  @@index([subscriptionId])
   @@index([status])
-  @@index([type])
+  @@index([methodConfigId])
+}
+
+model PaymentProof {
+  id          String   @id @default(cuid())
+  paymentId   String
+  fileUrl     String   @db.Text
+  note        String?  @db.Text
+  verified    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  Payment     Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+
+  @@index([paymentId])
+}
+
+model Subscription {
+  id                  String   @id @unique @default(cuid())
+  accountId           String
+  plan                String
+  status              String
+  startDate           DateTime @default(now())
+  endDate             DateTime
+
+  // Subscription details
+  amount              Float?
+  currency            String   @default("DZD")
+  billingCycle        String?  // MONTHLY, YEARLY
+  autoRenew           Boolean  @default(true)
+
+  // Payment information
+  payload             Json?
+  strategy            String?  // Always CHARGILY in your case
+
+  // Cancellation info
+  cancelledAt         DateTime?
+  cancellationReason  String?  @db.Text
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  Account             Account    @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  Payments            Payment[]  // One subscription can have multiple payments
+
+  @@index([accountId])
+  @@index([status])
+  @@index([endDate])
 }
 
 model Wallet {
@@ -509,7 +732,7 @@ model Wallet {
   
   // Relations
   Account       Account       @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  Transaction   Transaction[]
+  Transactions  Transaction[] // Fixed relation name to be more clear
 
   @@index([accountId])
 }
@@ -540,8 +763,8 @@ model Transaction {
   updatedAt         DateTime          @updatedAt
   
   // Relations
-  Wallet            Wallet?           @relation(fields: [walletId], references: [id])
-  Payment           Payment?          @relation(fields: [paymentId], references: [id])
+  Wallet            Wallet?           @relation(fields: [walletId], references: [id], onDelete: SetNull)
+  Payment           Payment?          @relation(fields: [paymentId], references: [id], onDelete: SetNull)
 
   @@index([walletId])
   @@index([paymentId])
@@ -555,9 +778,7 @@ model Comment {
   content      String   @db.Text
   rating       Float
   studentId    String
-  studentName  String
-  studentEmail String
-  studentImage String?
+
   courseId     String
   accountId    String
   status       String   @default("verification_pending")
@@ -638,11 +859,12 @@ model Student {
   
   // Relations
   Account                  Account      @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  Sale                     Sale[]
-  Comment                  Comment[]
-  Certificate              Certificate[]
-  Referral                 Referral[]
-  Payment                  Payment[]
+  Sales                    Sale[]       // Fixed relation name
+  Comments                 Comment[]    // Fixed relation name
+  Certificates             Certificate[] // Fixed relation name
+  Referrals                Referral[]   // Fixed relation name
+  Payments                 Payment[]    // Fixed relation name
+  ItemPurchases            ItemPurchase[] // New relation
   
   @@index([accountId])
   @@index([email, accountId])
@@ -674,39 +896,6 @@ model Certificate {
   @@index([accountId])
   @@index([studentId])
   @@index([status])
-}
-
-model Subscription {
-  id                  String   @id @unique @default(cuid())
-  accountId           String
-  paymentId           String?
-  plan                String
-  status              String
-  startDate           DateTime @default(now())
-  endDate             DateTime
-  
-  // Subscription details
-  amount              Float?
-  currency            String   @default("DZD")
-  billingCycle        String?  // MONTHLY, YEARLY
-  autoRenew           Boolean  @default(true)
-  
-  // Payment information
-  payload             Json?
-  strategy            String?  // Payment strategy used
-  
-  // Cancellation information
-  cancelledAt         DateTime?
-  cancellationReason  String?  @db.Text
-  
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-  
-  Account             Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
-
-  @@index([accountId])
-  @@index([status])
-  @@index([endDate])
 }
 
 model Referral {
@@ -777,4 +966,36 @@ model OtpCode {
 
   @@index([userId, type])
   @@index([code])
+}
+
+
+model App {
+  id             String   @id @default(cuid())
+  name           String
+  slug           String   @unique
+  shortDesc      String
+  longDesc       Json      // rich text (stored as JSON for flexibility, e.g. Slate.js or TipTap)
+  logoUrl        String?
+  images         String[]  // array of screenshots / preview images
+  category       String?
+  installsCount  Int       @default(0)
+  createdBy      String
+  configSchema   Json      // JSON schema for settings (API keys, options, etc.)
+  uiInjection    Json      // JSON rules for injecting UI (dashboard cards, menu links, custom pages, etc.)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  installations  InstalledApp[]
+}
+
+model InstalledApp {
+  id        String   @id @default(cuid())
+  userId    String   // tenant or account who installed it
+  appId     String
+  config    Json     // actual user-provided config
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  app   App   @relation(fields: [appId], references: [id])
 }
