@@ -11,6 +11,7 @@ import {
   GraduationCap,
 } from "lucide-react";
 import { Course } from "../types";
+import { PaymentButton } from "@/modules/payments/components/payment-sheet";
 
 interface CourseCardProps {
   course: Course;
@@ -92,11 +93,13 @@ export default function CourseBuyCard({ course }: CourseCardProps) {
       )}
 
       {/* Action Button */}
-      <BrandButton>
+      {/* <BrandButton>
         {course?.price && Number(course.price) === 0
           ? "المطالبة بالدورة"
           : "اشتري الآن"}
-      </BrandButton>
+      </BrandButton> */}
+
+      <PaymentButton />
 
       {/* Timer Section (if needed) */}
       <div
