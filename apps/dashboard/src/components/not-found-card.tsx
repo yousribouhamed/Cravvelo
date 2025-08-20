@@ -1,12 +1,5 @@
 import type { FC } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@ui/components/ui/card";
+import { Card, CardContent } from "@ui/components/ui/card";
 import Image from "next/image";
 
 interface NotFoundCardAbdullahProps {
@@ -14,18 +7,19 @@ interface NotFoundCardAbdullahProps {
   src?: string;
 }
 
-export const NotFoundCard: FC<NotFoundCardAbdullahProps> = ({ text, src }) => {
+export const NotFoundCard: FC<NotFoundCardAbdullahProps> = () => {
   return (
-    <Card className="w-full bg-transparent h-full min-h-[200px] min-w-[200px] mt-8 border-none shadow-none">
-      <CardContent className="w-full h-full flex items-center flex-col gap-y-4 justify-center">
+    <Card className="w-full  min-h-[100px] h-fit min-w-[200px] mt-8 bg-transparent border-none shadow-none flex items-center justify-center">
+      <CardContent className="flex flex-col items-center justify-center gap-y-1">
         <Image
-          src={src ? src : "/mintad.svg"}
+          src="/empty-box.svg"
           alt="this is the error page"
           width={150}
           height={150}
+          className="opacity-80 dark:opacity-70"
         />
-        <p className="text-lg text-gray-600  text-center">
-          {text ? text : "لا يوجد أي عناصر"}
+        <p className="text-lg text-gray-600 dark:text-gray-300 text-center">
+          لا يوجد أي عناصر
         </p>
       </CardContent>
     </Card>

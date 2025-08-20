@@ -1,9 +1,13 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
-import useHaveAccess from "@/src/hooks/use-have-access";
 import UpdateVedioForm from "@/src/components/forms/course-forms/chapters/update-chapters/update-video-form";
 import { prisma } from "database/src";
 import { Module } from "@/src/types";
+import {
+  getAllNotifications,
+  getMyUserAction,
+} from "@/src/actions/user.actions";
+import UpdateTextModuleForm from "@/src/components/forms/course-forms/chapters/update-chapters/update-text-form";
 
 interface PageProps {
   params: Promise<{
@@ -37,20 +41,11 @@ const getMaterial = async ({
   }
 };
 
-const getAllNotifications = async ({ accountId }: { accountId: string }) => {
-  const notifications = await prisma.notification.findMany({
-    where: {
-      accountId,
-    },
-  });
-  return notifications;
-};
-
 export default async function Page({ params }: PageProps) {
   const { chapter_id, material_id } = await params;
 
   const [user, material] = await Promise.all([
-    useHaveAccess(),
+    getMyUserAction(),
     getMaterial({ chapter_id, fileUrl: material_id }),
   ]);
 
@@ -65,10 +60,10 @@ export default async function Page({ params }: PageProps) {
           notifications={notifications}
           goBack
           user={user}
-          title="تحديث الفيديو"
+          title="تعديل النص"
         />
         <div className="w-full pt-8 min-h-[100px] ">
-          <UpdateVedioForm material={material} />
+          <UpdateTextModuleForm />
         </div>
       </main>
     </MaxWidthWrapper>

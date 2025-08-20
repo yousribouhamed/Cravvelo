@@ -12,7 +12,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import Ripples from "react-ripples";
 import {
   Form,
   FormControl,
@@ -24,11 +23,8 @@ import {
 import { Input } from "@ui/components/ui/input";
 import { addCourseSchema } from "@/src/lib/validators/course";
 import { trpc } from "@/src/app/_trpc/client";
-import { getCookie } from "@/src/lib/utils";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { Icons } from "../my-icons";
-import { PlusCircle } from "lucide-react";
 import { maketoast } from "../toasts";
 
 const icons = {
@@ -119,18 +115,18 @@ const icons = {
 const AddNew: FC = ({}) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = React.useState(false);
-  const [isLaoding, setIsLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
   const [selectedItem, setSelectedItem] = React.useState<0 | 1>(0);
-  const mutation = trpc.createCourse.useMutation({
+
+  const courseMutation = trpc.createCourse.useMutation({
     onSuccess: ({ courseId }) => {
       router.push(`/courses/${courseId}/chapters`);
       maketoast.successWithText({ text: "تم انشاء الدورة بنجاح" });
-
       setIsOpen(false);
     },
     onError: () => {
       maketoast.error();
-      setIsOpen(false);
+      setIsLoading(false);
     },
   });
 
@@ -142,7 +138,7 @@ const AddNew: FC = ({}) => {
     },
     onError: () => {
       maketoast.error();
-      setIsOpen(false);
+      setIsLoading(false);
     },
   });
 
@@ -153,30 +149,43 @@ const AddNew: FC = ({}) => {
     },
   });
 
-  // 2. Define a submit handler.
+  // Submit handler with proper async/await handling
   async function onSubmit(data: z.infer<typeof addCourseSchema>) {
-    const cookie = getCookie("accountId");
     setIsLoading(true);
-    if (selectedItem === 0) {
-      await mutation
-        .mutateAsync({
+
+    try {
+      if (selectedItem === 0) {
+        // Create course
+        await courseMutation.mutateAsync({
           title: data.title,
-          accountId: cookie,
-        })
-        .then(() => {
-          setIsLoading(false);
         });
-    }
-    if (selectedItem === 1) {
+      } else if (selectedItem === 1) {
+        // Create product
+        await productMutation.mutateAsync({
+          productName: data.title,
+        });
+      }
+    } catch (error) {
+      console.error("Creation failed:", error);
+      setIsLoading(false);
     }
   }
 
+  const handleDialogClose = (val: boolean) => {
+    setIsOpen(val);
+    if (!val) {
+      // Reset form when dialog closes
+      form.reset();
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
+    <Dialog open={isOpen} onOpenChange={handleDialogClose}>
       <DialogTrigger asChild>
         <button
           data-ripple-light="true"
-          className="rounded-xl w-full h-12 px-6   text-primary bg-white  hover:scale-105 transition-all duration-150 font-bold flex gap-x-4 justify-start items-center"
+          className="rounded-xl w-full h-12 px-6 text-primary bg-white hover:scale-105 transition-all duration-150 font-bold flex gap-x-4 justify-start items-center"
         >
           <svg
             width="30"
@@ -190,23 +199,22 @@ const AddNew: FC = ({}) => {
               fill="#FC6B00"
             />
             <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
+              fillRule="evenodd"
+              clipRule="evenodd"
               d="M24.501 16.4453C25.4023 16.4453 26.1329 17.1759 26.1329 18.0772L26.1329 31.9247C26.1329 32.826 25.4023 33.5567 24.501 33.5567C23.5997 33.5567 22.869 32.826 22.869 31.9247L22.869 18.0772C22.869 17.1759 23.5997 16.4453 24.501 16.4453Z"
               fill="#F8FAE5"
             />
             <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
+              fillRule="evenodd"
+              clipRule="evenodd"
               d="M33.0567 25.001C33.0567 25.9023 32.326 26.6329 31.4247 26.6329H17.5772C16.6759 26.6329 15.9453 25.9023 15.9453 25.001C15.9453 24.0997 16.6759 23.369 17.5772 23.369H31.4247C32.326 23.369 33.0567 24.0997 33.0567 25.001Z"
               fill="#F8FAE5"
             />
           </svg>
-
-          <span className="qatar-bold ">إضافة جديد</span>
+          <span className="qatar-bold">إضافة جديد</span>
         </button>
       </DialogTrigger>
-      <DialogContent className="max-w-lg" title="إضافة دورة جديدة">
+      <DialogContent className="max-w-lg" title="إضافة جديد">
         <div className="w-full px-4 pb-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -216,15 +224,18 @@ const AddNew: FC = ({}) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {selectedItem === 0 ? " عنوان الدورة " : "عنوان المنتج"}*
+                      {selectedItem === 0 ? "عنوان الدورة" : "عنوان المنتج"}*
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم"
+                        placeholder={
+                          selectedItem === 0
+                            ? "أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم"
+                            : "أدخل عنوان المنتج الجديد، مثال: كتاب إلكتروني في التسويق الرقمي"
+                        }
                         {...field}
                       />
                     </FormControl>
-
                     <FormMessage />
                   </FormItem>
                 )}
@@ -249,7 +260,6 @@ const AddNew: FC = ({}) => {
                   type="button"
                   onClick={() => setSelectedItem(1)}
                   variant="secondary"
-                  disabled
                   size="lg"
                   className={`bg-white text-lg font-bold border flex items-center gap-x-4 text-black h-16 ${
                     selectedItem === 1 ? "border-[#FC6B00] border-2" : ""
@@ -261,15 +271,16 @@ const AddNew: FC = ({}) => {
                   منتج رقمي
                 </Button>
               </div>
-              <DialogFooter className="w-full h-[50px] flex items-center  justify-center gap-x-4">
+              <DialogFooter className="w-full h-[50px] flex items-center justify-center gap-x-4">
                 <Button
                   data-ripple-light="true"
                   size="lg"
                   type="submit"
+                  disabled={isLoading}
                   className="rounded-xl flex items-center justify-center gap-x-2"
                 >
-                  {isLaoding && <LoadingSpinner />}
-                  اضافة جديد
+                  {isLoading && <LoadingSpinner />}
+                  {selectedItem === 0 ? "إنشاء دورة" : "إنشاء منتج"}
                 </Button>
               </DialogFooter>
             </form>

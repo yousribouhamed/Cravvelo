@@ -1,26 +1,19 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
-import { notFound, redirect } from "next/navigation";
-import { Button } from "@ui/components/ui/button";
+import { notFound } from "next/navigation";
 import { prisma } from "database/src";
-import useHaveAccess from "@/src/hooks/use-have-access";
+import {
+  getAllNotifications,
+  getMyUserAction,
+} from "@/src/actions/user.actions";
 
 interface PageProps {
   params: Promise<{ course_id: string }>;
 }
 
-const getAllNotifications = async ({ accountId }: { accountId: string }) => {
-  const notifications = await prisma.notification.findMany({
-    where: {
-      accountId,
-    },
-  });
-  return notifications;
-};
-
 export default async function Page({ params }: PageProps) {
   const { course_id } = await params;
-  const user = await useHaveAccess();
+  const user = await getMyUserAction();
 
   const [notifications, course] = await Promise.all([
     getAllNotifications({ accountId: user.accountId }),

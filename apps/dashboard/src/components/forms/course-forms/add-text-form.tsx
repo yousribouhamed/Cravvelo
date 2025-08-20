@@ -12,13 +12,19 @@ import {
   FormMessage,
 } from "@ui/components/ui/form";
 import { Input } from "@ui/components/ui/input";
+import { Button } from "@ui/components/ui/button";
+import { Card, CardContent } from "@ui/components/ui/card";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
 import { CravveloEditor } from "@cravvelo/editor";
+import { maketoast } from "../../toasts";
+import { trpc } from "@/src/app/_trpc/client";
+import { LoadingSpinner } from "@ui/icons/loading-spinner";
 
 const addTextSchema = z.object({
   title: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
-  content: z.any(),
+  content: z.string().min(1, "المحتوى مطلوب"),
+  duration: z.number().optional().default(0),
 });
 
 function AddTextForm() {
@@ -26,38 +32,43 @@ function AddTextForm() {
   const path = usePathname();
   const chapterID = getValueFromUrl(path, 4);
 
-  // const mutation = trpc.createModule.useMutation({
-  //   onSuccess: () => {
-  //     maketoast.success();
-  //     router.back();
-  //   },
-  //   onError: (error) => {
-  //     maketoast.error();
-  //     console.error(error);
-  //   },
-  // });
+  const mutation = trpc.createTextModule.useMutation({
+    onSuccess: (data) => {
+      maketoast.success("تم إنشاء الدرس بنجاح");
+      router.back();
+    },
+    onError: (error) => {
+      maketoast.error("فشل في إنشاء الدرس");
+      console.error(error);
+    },
+  });
 
   const form = useForm<z.infer<typeof addTextSchema>>({
     mode: "onChange",
     resolver: zodResolver(addTextSchema),
     defaultValues: {
       title: "",
-      content: JSON.stringify(""),
+      content: "",
+      duration: 0,
     },
   });
 
   async function onSubmit(values: z.infer<typeof addTextSchema>) {
-    // await mutation.mutateAsync({
-    //   chapterID: chapterID,
-    //   content: values.content,
-    //   fileType: "TEXT",
-    //   fileUrl: "",
-    //   title: values.title,
-    // });
+    try {
+      await mutation.mutateAsync({
+        chapterID: chapterID,
+        content: values.content,
+        fileType: "DOCUMENT",
+        title: values.title,
+        duration: values.duration,
+      });
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   }
 
   return (
-    <div className="w-full grid grid-cols-3 gap-x-8 ">
+    <div className="w-full grid grid-cols-3 gap-x-8">
       <div className="col-span-2 w-full h-full">
         <Form {...form}>
           <form
@@ -76,21 +87,51 @@ function AddTextForm() {
                   <FormControl>
                     <Input placeholder="لماذا لون البحر ازرق" {...field} />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="duration"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    مدة القراءة المتوقعة (بالدقائق)
+                    <span className="text-sm text-gray-500 mr-2">
+                      (اختياري - سيتم حسابه تلقائياً)
+                    </span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      min="0"
+                      placeholder="5"
+                      {...field}
+                      onChange={(e) =>
+                        field.onChange(Number(e.target.value) || 0)
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="content"
               render={({ field }) => (
-                <FormItem className="w-full ">
+                <FormItem className="w-full">
                   <FormLabel>
-                    محتوى <span className="text-red-600 text-xl">*</span>
+                    محتوى الدرس <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <CravveloEditor value="" onChange={field.onChange} />
+                    <CravveloEditor
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -99,9 +140,10 @@ function AddTextForm() {
           </form>
         </Form>
       </div>
-      {/* <div className="col-span-1 w-full h-full ">
+
+      <div className="col-span-1 w-full h-full">
         <Card>
-          <CardContent className="w-full h-fit flex flex-col p-6  space-y-4">
+          <CardContent className="w-full h-fit flex flex-col p-6 space-y-4">
             <Button
               disabled={mutation.isLoading}
               type="submit"
@@ -118,12 +160,11 @@ function AddTextForm() {
               variant="secondary"
               size="lg"
             >
-              {" "}
               إلغاء والعودة
             </Button>
           </CardContent>
         </Card>
-      </div> */}
+      </div>
     </div>
   );
 }

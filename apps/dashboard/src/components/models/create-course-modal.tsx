@@ -23,23 +23,17 @@ import {
 import { Input } from "@ui/components/ui/input";
 import { addCourseSchema } from "@/src/lib/validators/course";
 import { trpc } from "@/src/app/_trpc/client";
-import { getCookie } from "@/src/lib/utils";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { maketoast } from "../toasts";
-import PlanExceededPopup from "./pyment-plan-exceeded";
 
 const AddCourse: FC = ({}) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = React.useState(false);
-  const [isPlanExceededOpen, setIsPlanExceededOpen] = React.useState(false);
+
   const [isLaoding, setIsLoading] = React.useState(false);
   const mutation = trpc.createCourse.useMutation({
     onSuccess: ({ courseId, planExceeded, success }) => {
-      if (planExceeded) {
-        setIsPlanExceededOpen(true);
-        return;
-      }
       if (success) {
         router.push(`/courses/${courseId}/chapters`);
         maketoast.success();
@@ -60,12 +54,10 @@ const AddCourse: FC = ({}) => {
   });
 
   async function onSubmit(data: z.infer<typeof addCourseSchema>) {
-    const cookie = getCookie("accountId");
     setIsLoading(true);
     await mutation
       .mutateAsync({
         title: data.title,
-        accountId: cookie,
       })
 
       .then(() => {
@@ -80,10 +72,6 @@ const AddCourse: FC = ({}) => {
 
   return (
     <>
-      <PlanExceededPopup
-        isOpen={isPlanExceededOpen}
-        setIsOpen={setIsPlanExceededOpen}
-      />
       <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
         <DialogTrigger asChild>
           <Button className=" rounded-xl border flex items-center gap-x-2">

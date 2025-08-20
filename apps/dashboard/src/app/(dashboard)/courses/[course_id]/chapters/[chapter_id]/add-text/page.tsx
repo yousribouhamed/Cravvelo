@@ -1,23 +1,13 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
 import AddTextForm from "@/src/components/forms/course-forms/add-text-form";
-import PathBuilder from "@/src/components/path-builder";
-import { currentUser } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
-import useHaveAccess from "@/src/hooks/use-have-access";
-import { prisma } from "database/src";
-
-const getAllNotifications = async ({ accountId }: { accountId: string }) => {
-  const notifications = await prisma.notification.findMany({
-    where: {
-      accountId,
-    },
-  });
-  return notifications;
-};
+import {
+  getAllNotifications,
+  getMyUserAction,
+} from "@/src/actions/user.actions";
 
 export default async function Home() {
-  const user = await useHaveAccess();
+  const user = await getMyUserAction();
 
   const notifications = await getAllNotifications({
     accountId: user.accountId,

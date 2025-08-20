@@ -8,31 +8,11 @@ export const course = {
     .input(
       z.object({
         title: z.string(),
-        accountId: z.string(),
       })
     )
 
     .mutation(async ({ input, ctx }) => {
       try {
-        console.log("this is the account id : ");
-        console.log(ctx.account.id);
-        const courses = await ctx.prisma.course.findMany({
-          where: {
-            accountId: ctx.account.id,
-          },
-        });
-
-        const limits =
-          ctx.account.plan === "BASIC" || ctx.account.plan === null
-            ? 1
-            : ctx.account.plan === "ADVANCED"
-            ? 2
-            : 9999;
-
-        if (courses.length >= limits) {
-          return { success: false, courseId: undefined, planExceeded: true };
-        }
-
         const course = await ctx.prisma.course
           .create({
             data: {

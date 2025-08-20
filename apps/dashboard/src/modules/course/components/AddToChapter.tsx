@@ -1,7 +1,6 @@
 import { Video, FileText, Mic, Calendar, AlignLeft, Plus } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
-import { buttonVariants } from "@ui/components/ui/button";
 
 const getValueFromUrl = (path: string, index: number): string => {
   return path.split("/")[index];
@@ -26,42 +25,42 @@ export const AddToChapter = ({
       color: "text-blue-600",
       bgColor: "bg-blue-50",
     },
-    {
-      name: "ملف PDF",
-      description: "رفع ملف PDF",
-      url: `/courses/${courseId}/chapters/${chapterID}/add-pdf`,
-      icon: FileText,
-      disabled: true,
-      color: "text-red-600",
-      bgColor: "bg-red-50",
-    },
-    {
-      name: "صوت",
-      description: "إضافة ملف صوتي",
-      url: `/courses/${courseId}/chapters/${chapterID}/add-voice`,
-      icon: Mic,
-      disabled: true,
-      color: "text-green-600",
-      bgColor: "bg-green-50",
-    },
-    {
-      name: "فصل افتراضي",
-      description: "جلسة تعليمية مباشرة",
-      url: `/courses/${courseId}/chapters/${chapterID}/add-virtual-class`,
-      icon: Calendar,
-      disabled: true,
-      color: "text-purple-600",
-      bgColor: "bg-purple-50",
-    },
-    {
-      name: "نص",
-      description: "إضافة محتوى نصي",
-      url: `/courses/${courseId}/chapters/${chapterID}/add-text`,
-      icon: AlignLeft,
-      disabled: true,
-      color: "text-orange-600",
-      bgColor: "bg-orange-50",
-    },
+    // {
+    //   name: "ملف PDF",
+    //   description: "رفع ملف PDF",
+    //   url: `/courses/${courseId}/chapters/${chapterID}/add-pdf`,
+    //   icon: FileText,
+    //   disabled: true,
+    //   color: "text-red-600",
+    //   bgColor: "bg-red-50",
+    // },
+    // {
+    //   name: "صوت",
+    //   description: "إضافة ملف صوتي",
+    //   url: `/courses/${courseId}/chapters/${chapterID}/add-voice`,
+    //   icon: Mic,
+    //   disabled: true,
+    //   color: "text-green-600",
+    //   bgColor: "bg-green-50",
+    // },
+    // {
+    //   name: "فصل افتراضي",
+    //   description: "جلسة تعليمية مباشرة",
+    //   url: `/courses/${courseId}/chapters/${chapterID}/add-virtual-class`,
+    //   icon: Calendar,
+    //   disabled: true,
+    //   color: "text-purple-600",
+    //   bgColor: "bg-purple-50",
+    // },
+    // {
+    //   name: "نص",
+    //   description: "إضافة محتوى نصي",
+    //   url: `/courses/${courseId}/chapters/${chapterID}/add-text`,
+    //   icon: AlignLeft,
+    //   disabled: false,
+    //   color: "text-orange-600",
+    //   bgColor: "bg-orange-50",
+    // },
   ];
 
   return (

@@ -2,21 +2,15 @@ import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
 import { prisma } from "database/src";
 import ChaptersBoard from "@/src/modules/course/components/chapters-board";
-import useHaveAccess from "@/src/hooks/use-have-access";
 import CourseHeader from "@/src/modules/course/components/course-header";
+import {
+  getAllNotifications,
+  getMyUserAction,
+} from "@/src/actions/user.actions";
 
 interface PageProps {
   params: Promise<{ course_id: string }>;
 }
-
-const getAllNotifications = async ({ accountId }: { accountId: string }) => {
-  const notifications = await prisma.notification.findMany({
-    where: {
-      accountId,
-    },
-  });
-  return notifications;
-};
 
 const getChapters = async ({ courseId }: { courseId: string }) => {
   try {
@@ -41,7 +35,7 @@ const getChapters = async ({ courseId }: { courseId: string }) => {
 export default async function Home({ params }: PageProps) {
   const { course_id } = await params;
   const [user, chapters] = await Promise.all([
-    useHaveAccess(),
+    getMyUserAction(),
     getChapters({ courseId: course_id }),
   ]);
 
@@ -57,6 +51,7 @@ export default async function Home({ params }: PageProps) {
           title="محتوى الدورة"
           goBack
         />
+
         <CourseHeader />
         <ChaptersBoard initialData={chapters} />
       </main>

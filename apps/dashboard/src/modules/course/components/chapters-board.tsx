@@ -71,14 +71,14 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
     sectionsRef.current = sections;
   }, [sections]);
 
-  // TRPC queries and mutations
   const { data, refetch, isLoading, error } = trpc.getChapters.useQuery(
     { courseId: courseID },
     {
       initialData: initialData || [],
       enabled: !!courseID,
-      staleTime: 5 * 60 * 1000, // 5 minutes
+      staleTime: 0,
       refetchOnWindowFocus: false,
+      refetchOnMount: true,
     }
   );
 

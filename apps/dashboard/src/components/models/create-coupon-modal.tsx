@@ -6,6 +6,8 @@ import {
   DialogContent,
   DialogFooter,
   DialogTrigger,
+  DialogHeader,
+  DialogTitle,
 } from "@ui/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -34,34 +36,91 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ui/components/ui/select";
+import { Card } from "@ui/components/ui/card";
+import { Badge } from "@ui/components/ui/badge";
+import { Separator } from "@ui/components/ui/separator";
+import {
+  Plus,
+  Percent,
+  DollarSign,
+  Calendar,
+  Users,
+  AlertCircle,
+} from "lucide-react";
 
 interface CreateCouponProps {
   refetch: () => Promise<any>;
 }
 
-const FormSchema = z.object({
-  type: z.enum(["PERCENTAGE", "VALUE"], {
-    required_error: "انت تحتاج الى اختيار نمط تخفيض.",
-  }),
-  amount: z.string().regex(/^\d+(\.\d{1,2})?$/, {
-    message: "يجب أن يكون سعر صالح",
-  }),
-  duration: z.string(),
-  months: z.string().regex(/^\d+(\.\d{1,2})?$/, {
-    message: "يجب أن يكون سعر صالح",
-  }),
-  usage_limits: z.string().regex(/^\d+(\.\d{1,2})?$/, {
-    message: "يجب أن يكون سعر صالح",
-  }),
-});
+const FormSchema = z
+  .object({
+    type: z.enum(["PERCENTAGE", "VALUE"], {
+      required_error: "انت تحتاج الى اختيار نمط تخفيض.",
+    }),
+    amount: z
+      .string()
+      .min(1, { message: "المبلغ مطلوب" })
+      .regex(/^\d+(\.\d{1,2})?$/, { message: "يجب أن يكون سعر صالح" })
+      .refine((val) => parseFloat(val) > 0, {
+        message: "المبلغ يجب أن يكون أكبر من صفر",
+      }),
+    duration: z.string().min(1, { message: "مدة الفعالية مطلوبة" }),
+    months: z.string().optional(),
+    usage_limits: z
+      .string()
+      .min(1, { message: "حدود الاستعمال مطلوبة" })
+      .regex(/^\d+$/, { message: "يجب أن يكون رقم صحيح" })
+      .refine((val) => parseInt(val) > 0, {
+        message: "يجب أن يكون أكبر من صفر",
+      }),
+    code: z
+      .string()
+      .min(3, { message: "يجب أن يكون الكود 3 أحرف على الأقل" })
+      .max(20, { message: "يجب أن يكون الكود 20 حرف على الأكثر" })
+      .regex(/^[A-Z0-9]+$/, {
+        message: "يجب أن يحتوي الكود على أحرف إنجليزية كبيرة وأرقام فقط",
+      }),
+  })
+  .refine(
+    (data) => {
+      // Validate percentage doesn't exceed 100%
+      if (data.type === "PERCENTAGE") {
+        const amount = parseFloat(data.amount);
+        return amount <= 100;
+      }
+      return true;
+    },
+    {
+      message: "النسبة المئوية لا يمكن أن تتجاوز 100%",
+      path: ["amount"],
+    }
+  )
+  .refine(
+    (data) => {
+      // If duration is by_month, months field is required
+      if (data.duration === "by_month") {
+        return (
+          data.months && data.months.trim() !== "" && parseInt(data.months) > 0
+        );
+      }
+      return true;
+    },
+    {
+      message: "عدد الأيام مطلوب عندما تكون المدة محدودة",
+      path: ["months"],
+    }
+  );
 
 const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     mode: "onChange",
     defaultValues: {
-      months: "0",
+      months: "",
       type: "PERCENTAGE",
+      amount: "",
+      usage_limits: "",
+      code: "",
     },
   });
 
@@ -70,125 +129,211 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
   const mutation = trpc.createCoupon.useMutation({
     onSuccess: async () => {
       await refetch();
-      maketoast.success();
-    },
-    onError: () => {
-      maketoast.error();
-    },
-    onSettled: () => {
+      maketoast.success("تم إنشاء القسيمة بنجاح!");
       setIsOpen(false);
       form.reset();
     },
+    onError: (error) => {
+      maketoast.error(error.message || "حدث خطأ أثناء إنشاء القسيمة");
+    },
   });
 
-  const reduce_type = form.watch("type");
-
+  const reduceType = form.watch("type");
   const duration = form.watch("duration");
+  const amount = form.watch("amount");
+  const usageLimits = form.watch("usage_limits");
 
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
-    await mutation.mutateAsync({
-      amount: data.amount,
-      duration: data.duration,
-      months: data.months,
-      type: data.type,
-      usage_limits: data.usage_limits,
-    });
-  }
+  // Generate random coupon code
+  const generateCode = () => {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let result = "";
+    for (let i = 0; i < 8; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    form.setValue("code", result);
+  };
+
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    try {
+      await mutation.mutateAsync({
+        amount: data.amount,
+        duration: data.duration,
+        months: data.months || "0",
+        type: data.type,
+        usage_limits: data.usage_limits,
+      });
+    } catch (error) {
+      // Error is handled in mutation onError
+    }
+  };
+
+  const resetForm = () => {
+    form.reset();
+    setIsOpen(false);
+  };
 
   return (
-    <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className=" rounded-xl border flex items-center gap-x-2">
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 18 18"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8.8575 3.61523V14.0404M14.0701 8.82784H3.6449"
-              stroke="white"
-              stroke-width="1.04252"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-          <span>انشاء القسيمة</span>
+        <Button className="rounded-xl border flex items-center gap-x-2 hover:shadow-lg transition-shadow">
+          <Plus size={18} />
+          <span>إنشاء قسيمة</span>
         </Button>
       </DialogTrigger>
-      <DialogContent
-        className="w-[900px] h-[600px]  "
-        title="انشاء قسيمة جديدة"
-      >
-        <div className="w-full grid grid-cols-3 h-[430px]">
-          <div className="col-span-2 w-full h-full flex flex-col ">
+
+      <DialogContent className="w-[1200px] max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-bold text-right">
+            إنشاء قسيمة جديدة
+          </DialogTitle>
+        </DialogHeader>
+
+        <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-[500px]">
+          {/* Form Section */}
+          <div className="col-span-1 lg:col-span-2 w-full">
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="w-full h-fit min-w-full p-4 space-y-2"
+                className="w-full space-y-6"
                 id="coupon_form"
               >
+                {/* Coupon Code Field */}
+                <FormField
+                  control={form.control}
+                  name="code"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-lg font-semibold flex items-center gap-2">
+                        <Badge variant="outline">كود القسيمة</Badge>
+                      </FormLabel>
+                      <div className="flex gap-2">
+                        <FormControl>
+                          <Input
+                            placeholder="SAVE20"
+                            {...field}
+                            className="font-mono uppercase"
+                            onChange={(e) =>
+                              field.onChange(e.target.value.toUpperCase())
+                            }
+                          />
+                        </FormControl>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={generateCode}
+                          className="whitespace-nowrap"
+                        >
+                          إنشاء تلقائي
+                        </Button>
+                      </div>
+                      <FormDescription>
+                        كود فريد للقسيمة (أحرف إنجليزية كبيرة وأرقام فقط)
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Separator />
+
+                {/* Discount Type */}
                 <FormField
                   control={form.control}
                   name="type"
                   render={({ field }) => (
-                    <FormItem className="space-y-3 my-2">
-                      <FormLabel className="text-xl font-bold">
+                    <FormItem>
+                      <FormLabel className="text-lg font-semibold">
                         نمط التخفيض
                       </FormLabel>
                       <FormControl>
                         <RadioGroup
                           onValueChange={field.onChange}
                           defaultValue={field.value}
-                          className="flex flex-col space-y-2 pr-4"
+                          className="flex flex-col space-y-3"
                         >
-                          <FormItem className="flex  justify-end space-x-3 space-y-0">
-                            <FormLabel className="font-normal">
-                              تخفيض بالنسبة
-                            </FormLabel>
-                            <FormControl>
-                              <RadioGroupItem value="PERCENTAGE" />
-                            </FormControl>
-                          </FormItem>
+                          <Card className="p-3 hover:shadow-md transition-shadow">
+                            <FormItem className="flex justify-between items-center space-y-0">
+                              <div className="flex items-center gap-3">
+                                <Percent size={20} className="text-blue-500" />
+                                <div>
+                                  <FormLabel className="font-medium cursor-pointer">
+                                    تخفيض بالنسبة المئوية
+                                  </FormLabel>
+                                  <p className="text-sm text-gray-500">
+                                    خصم نسبة مئوية من السعر
+                                  </p>
+                                </div>
+                              </div>
+                              <FormControl>
+                                <RadioGroupItem value="PERCENTAGE" />
+                              </FormControl>
+                            </FormItem>
+                          </Card>
 
-                          <FormItem className="flex justify-end space-x-3 space-y-0">
-                            <FormLabel className="font-normal">
-                              تخفيض بالقيمة
-                            </FormLabel>
-                            <FormControl>
-                              <RadioGroupItem value="VALUE" />
-                            </FormControl>
-                          </FormItem>
+                          <Card className="p-3 hover:shadow-md transition-shadow">
+                            <FormItem className="flex justify-between items-center space-y-0">
+                              <div className="flex items-center gap-3">
+                                <DollarSign
+                                  size={20}
+                                  className="text-green-500"
+                                />
+                                <div>
+                                  <FormLabel className="font-medium cursor-pointer">
+                                    تخفيض بالقيمة الثابتة
+                                  </FormLabel>
+                                  <p className="text-sm text-gray-500">
+                                    خصم مبلغ ثابت من السعر
+                                  </p>
+                                </div>
+                              </div>
+                              <FormControl>
+                                <RadioGroupItem value="VALUE" />
+                              </FormControl>
+                            </FormItem>
+                          </Card>
                         </RadioGroup>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <div className="w-full flex items-center gap-x-4">
+
+                {/* Amount and Usage Limits */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
                     name="amount"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>
-                          {" "}
-                          {reduce_type === "VALUE"
-                            ? "كمية التخفيض"
-                            : "نسبة التخفيض"}
+                        <FormLabel className="flex items-center gap-2">
+                          {reduceType === "VALUE" ? (
+                            <>
+                              <DollarSign size={16} />
+                              كمية التخفيض (دج)
+                            </>
+                          ) : (
+                            <>
+                              <Percent size={16} />
+                              نسبة التخفيض (%)
+                            </>
+                          )}
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder={`${
-                              reduce_type === "VALUE" ? "0 DZD" : "% 0"
-                            } `}
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            max={
+                              reduceType === "PERCENTAGE" ? "100" : undefined
+                            }
+                            placeholder={reduceType === "VALUE" ? "100" : "20"}
                             {...field}
-                            className="  max-w-[200px]"
                           />
                         </FormControl>
                         <FormDescription>
-                          سيتم تخفيض هذه القيمة من مبلغ الدورة او المنتج
+                          {reduceType === "VALUE"
+                            ? "المبلغ المحدد سيتم خصمه من السعر الإجمالي"
+                            : "النسبة المئوية للخصم (حتى 100%)"}
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -200,19 +345,20 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
                     name="usage_limits"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>حدود الاستعمال</FormLabel>
+                        <FormLabel className="flex items-center gap-2">
+                          <Users size={16} />
+                          حدود الاستعمال
+                        </FormLabel>
                         <FormControl>
                           <Input
                             type="number"
-                            value={Number(field.value)}
-                            onChange={(e) => field.onChange(e.target.value)}
-                            placeholder={`0 `}
-                            className="  max-w-[200px]"
+                            min="1"
+                            placeholder="100"
                             {...field}
                           />
                         </FormControl>
                         <FormDescription>
-                          كم مرة تريد استخدام هذه القسيمة؟
+                          العدد الأقصى للمرات التي يمكن استخدام القسيمة فيها
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -220,43 +366,61 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
                   />
                 </div>
 
+                {/* Duration */}
                 <FormField
                   control={form.control}
                   name="duration"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>مدة الفعالية</FormLabel>
+                      <FormLabel className="flex items-center gap-2">
+                        <Calendar size={16} />
+                        مدة الفعالية
+                      </FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger defaultValue={"forever"}>
-                            <SelectValue placeholder="مرة واحدة" />
+                          <SelectTrigger>
+                            <SelectValue placeholder="اختر مدة الفعالية" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="forever">الى الابد</SelectItem>
-                          <SelectItem value="by_month">محدودة</SelectItem>
+                          <SelectItem value="forever">
+                            صالحة إلى الأبد
+                          </SelectItem>
+                          <SelectItem value="by_month">
+                            محدودة بفترة زمنية
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                       <FormDescription>
-                        يرجى اختيار الاعدادات التي تناسب احتياجاتكم
+                        حدد كم من الوقت ستبقى القسيمة صالحة للاستخدام
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+
+                {/* Months field - only show when duration is by_month */}
                 {duration === "by_month" && (
                   <FormField
                     control={form.control}
                     name="months"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>عدد الايام</FormLabel>
+                        <FormLabel>عدد الأيام</FormLabel>
                         <FormControl>
-                          <Input placeholder="4 اشهر" {...field} />
+                          <Input
+                            type="number"
+                            min="1"
+                            placeholder="30"
+                            {...field}
+                          />
                         </FormControl>
+                        <FormDescription>
+                          عدد الأيام التي ستبقى فيها القسيمة صالحة
+                        </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -265,27 +429,78 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
               </form>
             </Form>
           </div>
-          <div className="col-span-1 w-full h-full flex items-center justify-center ">
-            <Image
-              src="/coupon.png"
-              alt="coupon image"
-              width={200}
-              height={300}
-            />
+
+          {/* Preview Section */}
+          <div className="col-span-1 w-full flex flex-col items-center justify-center space-y-4">
+            <div className="text-center">
+              <Image
+                src="/coupon.png"
+                alt="coupon preview"
+                width={200}
+                height={200}
+                className="mx-auto"
+              />
+            </div>
+
+            {/* Live Preview */}
+            {(amount || usageLimits) && (
+              <Card className="w-full p-4 space-y-2">
+                <h4 className="font-medium text-center">التفاصيل</h4>
+                <Separator />
+                {amount && (
+                  <div className="flex justify-between text-sm">
+                    <span>التخفيض:</span>
+                    <Badge variant="secondary">
+                      {amount} {reduceType === "PERCENTAGE" ? "%" : "دج"}
+                    </Badge>
+                  </div>
+                )}
+                {usageLimits && (
+                  <div className="flex justify-between text-sm">
+                    <span>مرات الاستخدام:</span>
+                    <Badge variant="outline">{usageLimits}</Badge>
+                  </div>
+                )}
+                {duration && (
+                  <div className="flex justify-between text-sm">
+                    <span>الصلاحية:</span>
+                    <Badge variant="outline">
+                      {duration === "forever" ? "دائمة" : "محدودة"}
+                    </Badge>
+                  </div>
+                )}
+              </Card>
+            )}
+
+            {/* Warning for high percentage */}
+            {reduceType === "PERCENTAGE" &&
+              amount &&
+              parseFloat(amount) > 50 && (
+                <div className="flex items-center gap-2 p-2 bg-yellow-50 border border-yellow-200 rounded-md text-yellow-800 text-sm">
+                  <AlertCircle size={16} />
+                  <span>نسبة خصم عالية!</span>
+                </div>
+              )}
           </div>
         </div>
-        <DialogFooter className="w-full h-[50px] flex items-center justify-end gap-x-4 px-4 my-4">
-          <Button onClick={() => setIsOpen(false)} variant="ghost">
+
+        <DialogFooter className="flex items-center justify-end gap-4 pt-4">
+          <Button
+            type="button"
+            onClick={resetForm}
+            variant="outline"
+            disabled={mutation.isLoading}
+          >
             إلغاء
           </Button>
           <Button
+            type="submit"
             form="coupon_form"
-            // onClick={createCoupon}
-            className=" flex items-center gap-x-2 "
-            disabled={mutation.isLoading}
+            className="flex items-center gap-2"
+            disabled={mutation.isLoading || !form.formState.isValid}
           >
-            {mutation.isLoading ? <LoadingSpinner /> : null}
-            انشاء القسيمة
+            {mutation.isLoading && <LoadingSpinner />}
+            إنشاء القسيمة
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -11,7 +11,6 @@ import { Button } from "@ui/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-
 import {
   Form,
   FormControl,
@@ -23,11 +22,11 @@ import {
 import { Input } from "@ui/components/ui/input";
 import { addChapterSchema } from "@/src/lib/validators/course";
 import { trpc } from "@/src/app/_trpc/client";
-import { getCookie, getValueFromUrl } from "@/src/lib/utils";
-import { useRouter, usePathname } from "next/navigation";
+import { getValueFromUrl } from "@/src/lib/utils";
+import { usePathname } from "next/navigation";
 import React from "react";
-import { Icons } from "../my-icons";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { maketoast } from "../toasts";
 
 interface Props {
   refetch: () => Promise<any>;
@@ -35,17 +34,17 @@ interface Props {
 }
 
 const AddChapter: FC<Props> = ({ refetch, chaptersNumber }) => {
-  const router = useRouter();
   const path = usePathname();
   const courseID = getValueFromUrl(path, 2);
   const [isOpen, setIsOpen] = React.useState(false);
-  const [isLaoding, setIsLoading] = React.useState(false);
 
   const mutation = trpc.createChapter.useMutation({
     onSuccess: async ({}) => {
       await refetch();
     },
-    onError: () => {},
+    onError: () => {
+      maketoast.errorWithText({ text: "something went wrong" });
+    },
   });
 
   const form = useForm<z.infer<typeof addChapterSchema>>({
@@ -53,7 +52,6 @@ const AddChapter: FC<Props> = ({ refetch, chaptersNumber }) => {
   });
 
   async function onSubmit(data: z.infer<typeof addChapterSchema>) {
-    setIsLoading(true);
     await mutation
       .mutateAsync({
         title: data.title,
@@ -61,7 +59,6 @@ const AddChapter: FC<Props> = ({ refetch, chaptersNumber }) => {
         orderNumber: chaptersNumber + 1,
       })
       .then(() => {
-        setIsLoading(false);
         setIsOpen(false);
       });
   }
@@ -69,7 +66,7 @@ const AddChapter: FC<Props> = ({ refetch, chaptersNumber }) => {
   return (
     <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
       <DialogTrigger asChild>
-        <Button className="rounded-xl h-12 hover:scale-105 transition-all duration-150 font-bold flex gap-x-4 items-center">
+        <Button>
           <svg
             width="25"
             height="25"
