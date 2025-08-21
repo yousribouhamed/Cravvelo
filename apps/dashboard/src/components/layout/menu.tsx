@@ -43,7 +43,7 @@ const MobileLink: FC<MobileLinkProps> = ({
       href={href}
       className={cn(
         buttonVariants({ variant: "ghost" }),
-        "w-full flex items-center justify-end text-sm pr-4 relative hover:!bg-transparent !text-white gap-x-2 hover:bg-none"
+        "w-full flex items-center justify-end text-sm pr-4 relative hover:!bg-transparent !text-black dark:!text-white gap-x-2 hover:bg-none"
       )}
       onClick={handleClick}
     >
@@ -65,7 +65,6 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
   const router = useRouter();
   const path = usePathname();
 
-  // Memoize the path segments for better performance
   const pathSegments = useMemo(() => {
     return {
       firstSegment: getValueFromUrl(path, 1),
@@ -73,19 +72,15 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
     };
   }, [path]);
 
-  // State to manage which accordion items are open
   const [openAccordionItems, setOpenAccordionItems] = React.useState<string[]>(
     []
   );
 
-  // Memoize the active accordion values - items that should be open based on current path
   const activeAccordionValues = useMemo(() => {
     if (!SIDE_BAR_ITEMS) return [];
 
     return SIDE_BAR_ITEMS.filter((item) => {
       if (!item.subitems || item.subitems.length === 0) return false;
-
-      // Check if any subitem is active
       return item.subitems.some(
         (subItem) =>
           path === subItem.slug ||
@@ -94,7 +89,6 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
     }).map((item) => item.title);
   }, [SIDE_BAR_ITEMS, path, pathSegments.secondSegment]);
 
-  // Update open accordion items when active values change
   React.useEffect(() => {
     if (activeAccordionValues.length > 0) {
       setOpenAccordionItems((prev) => {
@@ -105,7 +99,6 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
     }
   }, [activeAccordionValues]);
 
-  // Helper function to check if an item is active
   const isItemActive = useCallback(
     (item: any) => {
       return (
@@ -116,7 +109,6 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
     [path, pathSegments.firstSegment]
   );
 
-  // Helper function to check if a subitem is active
   const isSubItemActive = useCallback(
     (subItem: any) => {
       return (
@@ -127,12 +119,10 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
     [path, pathSegments.secondSegment]
   );
 
-  // Handle accordion value change
   const handleAccordionValueChange = useCallback((value: string[]) => {
     setOpenAccordionItems(value);
   }, []);
 
-  // Handle direct link click
   const handleDirectLinkClick = useCallback(() => {
     onItemClick?.();
   }, [onItemClick]);
@@ -161,17 +151,16 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
                     href={item.slug}
                     className={cn(
                       buttonVariants({ variant: "ghost" }),
-                      "w-full flex items-center justify-end qatar-semibold text-md gap-x-2  hover:bg-white/5  !text-white",
+                      "w-full flex items-center justify-end qatar-semibold text-md gap-x-2  hover:bg-white/5 !text-black dark:!text-white",
                       {
-                        "text-white bg-white/5": isActive,
+                        "dark:text-white bg-white/5": isActive,
                       }
                     )}
                     onClick={handleDirectLinkClick}
                   >
                     {item.title}
                     <item.icon
-                      className="w-5 h-5 text-white"
-                      strokeWidth={3}
+                      className="w-5 h-5 !text-black dark:!text-white"
                       aria-hidden="true"
                     />
                   </Link>
@@ -182,15 +171,16 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
                     <AccordionTrigger
                       className={cn(
                         buttonVariants({ variant: "ghost" }),
-                        "w-full flex items-center justify-end qatar-semibold group text-sm gap-x-2 hover:bg-white/5  !text-white",
+                        "w-full flex items-center justify-end qatar-semibold group text-sm gap-x-2 hover:bg-white/5 !text-black dark:!text-white",
                         {
-                          "text-white  hover:bg-white/5 bg-white/5": isActive,
+                          "dark:text-white hover:bg-white/5 bg-white/5":
+                            isActive,
                         }
                       )}
                     >
                       {item.title}
                       <item.icon
-                        className="w-5 h-5 text-white"
+                        className="w-5 h-5 !text-black dark:!text-white"
                         strokeWidth={3}
                         aria-hidden="true"
                       />
