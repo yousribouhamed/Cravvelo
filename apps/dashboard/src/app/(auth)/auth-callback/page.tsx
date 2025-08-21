@@ -5,6 +5,7 @@ import { trpc } from "../../_trpc/client";
 import type { FC } from "react";
 import { setCookie } from "@/src/lib/utils";
 import { LoadingScreen } from "@/src/components/loading-screen";
+import { CravveloSpinner } from "@/src/components/cravvelo-spinner";
 
 const AuthCallBack: FC = ({}) => {
   const router = useRouter();
@@ -28,7 +29,11 @@ const AuthCallBack: FC = ({}) => {
     retry: true,
     retryDelay: 500,
   });
-  return <LoadingScreen mode="signin" />;
+  return (
+    <div className="w-full min-h-[400px] h-full flex items-center justify-center">
+      <CravveloSpinner />
+    </div>
+  );
 };
 
 export default AuthCallBack;

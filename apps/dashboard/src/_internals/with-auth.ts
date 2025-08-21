@@ -2,7 +2,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { prisma } from "database/src";
 import { z } from "zod";
 import type { User } from "@clerk/nextjs/server";
-import type { Account, Website } from "@prisma/client";
+import type { Account, PrismaClient, Website } from "@prisma/client";
 
 /**
  * Type representing an Account with its related Website
@@ -41,8 +41,9 @@ export interface HandlerParams<TInput> {
   account: AccountWithWebsite;
   /** Validated input data */
   input: TInput;
+  /** Database client */
+  db: PrismaClient;
 }
-
 /**
  * Configuration options for the withAuth wrapper
  */
@@ -144,6 +145,7 @@ export function withAuth<TInput = void, TOutput = void>(
             }
           : (null as unknown as AccountWithWebsite),
         input: validatedInput,
+        db: prisma,
       });
     } catch (error) {
       // Re-throw known errors

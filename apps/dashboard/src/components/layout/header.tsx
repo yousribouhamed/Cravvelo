@@ -38,7 +38,7 @@ const Header: FC<Props> = ({
   return (
     <div className="w-full">
       <TooltipProvider>
-        <div className="w-full h-16 md:h-20 flex justify-between items-center border-b border-gray-100 dark:border-zinc-800 ">
+        <div className="w-full h-16 md:h-20 flex justify-between items-center  dark:border-zinc-800 ">
           {/* Left Section - Mobile Sidebar & Back Button & Title */}
           <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
             {/* Mobile Sidebar - Always first on mobile */}

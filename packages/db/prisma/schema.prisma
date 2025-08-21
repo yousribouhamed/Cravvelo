@@ -200,7 +200,6 @@ model PaymentsConnect {
   @@index([accountId])
 }
 
-// New PricingPlan model
 model Pricing {
   id                 String            @id @unique @default(cuid())
   accountId          String
@@ -208,6 +207,7 @@ model Pricing {
   description        String?           @db.Text
   pricingType        PricingType
   price              Float?            // null for FREE type
+  compareAtPrice     Float?            // Original/compare price for discounts
   currency           String            @default("DZD")
   
   // One-time payment settings
@@ -215,9 +215,7 @@ model Pricing {
   accessDurationDays Int?              // Only for LIMITED duration
   
   // Recurring payment settings
-  recurringInterval  RecurringInterval? // Only for RECURRING type
-  
-  
+  recurringDays      Int?              // Number of days for recurring billing (replaces recurringInterval)
   
   // Plan status
   isActive           Boolean           @default(true)
@@ -231,7 +229,7 @@ model Pricing {
   CoursePricingPlans CoursePricingPlan[]
   ProductPricingPlans ProductPricingPlan[]
   ItemPurchases      ItemPurchase[]
-
+  
   @@index([accountId])
   @@index([pricingType])
 }
@@ -240,7 +238,7 @@ model Pricing {
 model CoursePricingPlan {
   id           String      @id @unique @default(cuid())
   courseId     String
-  pricingPlanId String
+  pricingPlanId String // this referce to pricing 
   isDefault    Boolean     @default(false)
   
   createdAt    DateTime    @default(now())

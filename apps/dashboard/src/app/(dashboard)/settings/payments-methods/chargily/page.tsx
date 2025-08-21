@@ -1,25 +1,27 @@
-import ChargilyConnector from "@/src/components/payments/chargily-connector";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
-import { prisma } from "database/src";
 import {
   getAllNotifications,
   getMyUserAction,
 } from "@/src/actions/user.actions";
+import { ChargilyConnectPage } from "@/src/modules/payments/pages/chargily.page";
+import { getChargilyConnection } from "@/src/modules/payments/actions/chargily";
 
-interface PageProps {}
-
-const PageProps = async ({}) => {
+const PageProps = async () => {
   const user = await getMyUserAction();
 
-  const [paymentsConnector, notifications] = await Promise.all([
-    prisma.paymentsConnect.findFirst({
-      where: {
-        accountId: user.accountId,
-      },
-    }),
+  const [connection, notifications] = await Promise.all([
+    getChargilyConnection(),
     getAllNotifications({ accountId: user.accountId }),
   ]);
+
+  const config =
+    connection.data === null
+      ? null
+      : {
+          publicKey: connection.data.config.publicKey,
+          secretKey: connection.data.config.secretKey,
+        };
   return (
     <MaxWidthWrapper>
       <main className="w-full min-h-screen h-fit flex flex-col justify-start ">
@@ -27,8 +29,10 @@ const PageProps = async ({}) => {
           notifications={notifications}
           user={user}
           title="بوابات الدفع"
+          goBack
         />
-        <ChargilyConnector data={paymentsConnector} />
+
+        <ChargilyConnectPage config={config} />
       </main>
     </MaxWidthWrapper>
   );

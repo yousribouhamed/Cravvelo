@@ -22,12 +22,9 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { ChargilyConnectSchema } from "@/src/lib/validators/payments";
 import { Input } from "@ui/components/ui/input";
-import { trpc } from "@/src/app/_trpc/client";
 import React from "react";
-import { maketoast } from "../toasts";
+import { maketoast } from "@/src/components/toasts";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import Image from "next/image";
-import { PaymentsConnect } from "database";
 import {
   ExternalLink,
   Key,
@@ -37,18 +34,25 @@ import {
   Lightbulb,
   AlertCircle,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { connectChargily, updateChargily } from "../actions/chargily";
+import { ChargilyConfigType } from "../types";
 
 type Inputs = z.infer<typeof ChargilyConnectSchema>;
 
 interface PaymentMethodsConnectorsProps {
-  data: PaymentsConnect;
+  data: ChargilyConfigType | null;
 }
 
 const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
-  const mutation = trpc.create_user_chargily.useMutation({
+  const router = useRouter();
+
+  const mutation = useMutation({
+    mutationFn: data ? updateChargily : connectChargily,
     onSuccess: () => {
-      maketoast.success(),
-        (window.location.href = "/settings/payments-methods");
+      maketoast.success();
+      router.push(`/settings/payments-methods`);
     },
     onError: () => {
       maketoast.error();
@@ -58,24 +62,24 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
   const form = useForm<Inputs>({
     resolver: zodResolver(ChargilyConnectSchema),
     defaultValues: {
-      chargilyPrivateKey: data?.chargilySecretKey
-        ? data?.chargilySecretKey
-        : "",
-      chargilyPublicKey: data?.chargilyPublicKey ? data?.chargilyPublicKey : "",
+      // Fixed: Correct field mapping
+      chargilyPrivateKey: data?.secretKey || "",
+      chargilyPublicKey: data?.publicKey || "",
     },
   });
 
-  function onSubmit(data: Inputs) {
+  function onSubmit(formData: Inputs) {
+    // Fixed: Correct field mapping
     mutation.mutate({
-      private_key: data?.chargilyPrivateKey,
-      public_key: data?.chargilyPublicKey,
+      secretKey: formData.chargilyPrivateKey,
+      publicKey: formData.chargilyPublicKey,
     });
   }
 
-  const isConnected = data?.chargilyPublicKey && data?.chargilySecretKey;
+  const isConnected = data?.publicKey && data?.secretKey;
 
   return (
-    <div className="w-full min-h-screen   rtl my-8 " dir="rtl">
+    <div className="w-full min-h-screen rtl my-8" dir="rtl">
       {/* Header Section */}
       <div className="w-full mx-auto">
         {/* Status Card */}
@@ -113,7 +117,7 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Form Panel */}
           <div className="lg:col-span-2">
-            <Card className="">
+            <Card>
               <CardHeader className="pb-6">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-violet-100 dark:bg-violet-900/30 rounded-xl">
@@ -150,12 +154,7 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
                             </FormLabel>
                             <FormControl>
                               <div className="relative">
-                                <Input
-                                  placeholder="live_pk_..."
-                                  className="pr-12 py-3 bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 focus:border-violet-500 dark:focus:border-violet-400 rounded-xl text-left"
-                                  style={{ direction: "ltr" }}
-                                  {...field}
-                                />
+                                <Input placeholder="live_pk_..." {...field} />
                                 <Key className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                               </div>
                             </FormControl>
@@ -184,8 +183,6 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
                                 <Input
                                   type="password"
                                   placeholder="live_sk_..."
-                                  className="pr-12 py-3 bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 focus:border-violet-500 dark:focus:border-violet-400 rounded-xl text-left"
-                                  style={{ direction: "ltr" }}
                                   {...field}
                                 />
                                 <Shield className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -250,7 +247,7 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
 
           {/* Steps Panel */}
           <div className="lg:col-span-1">
-            <Card className="  top-4">
+            <Card className="top-4">
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl text-gray-900 dark:text-gray-100 flex items-center gap-2">
                   <Lightbulb className="w-5 h-5 text-amber-500" />

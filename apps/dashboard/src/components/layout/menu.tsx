@@ -161,10 +161,9 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
                     href={item.slug}
                     className={cn(
                       buttonVariants({ variant: "ghost" }),
-                      "w-full flex items-center justify-end qatar-semibold text-md gap-x-2 hover:bg-primary hover:dark:bg-white/5  !text-white",
+                      "w-full flex items-center justify-end qatar-semibold text-md gap-x-2  hover:bg-white/5  !text-white",
                       {
-                        "text-white bg-[#A44600] hover:dark:bg-white/5":
-                          isActive,
+                        "text-white bg-white/5": isActive,
                       }
                     )}
                     onClick={handleDirectLinkClick}
@@ -183,10 +182,9 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
                     <AccordionTrigger
                       className={cn(
                         buttonVariants({ variant: "ghost" }),
-                        "w-full flex items-center justify-end qatar-semibold group text-sm gap-x-2 hover:dark:bg-white/5 hover:bg-primary !text-white",
+                        "w-full flex items-center justify-end qatar-semibold group text-sm gap-x-2 hover:bg-white/5  !text-white",
                         {
-                          "text-white bg-[#A44600] hover:dark:bg-white/5 dark:bg-white/5":
-                            isActive,
+                          "text-white  hover:bg-white/5 bg-white/5": isActive,
                         }
                       )}
                     >

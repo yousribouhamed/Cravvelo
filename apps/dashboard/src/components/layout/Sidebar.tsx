@@ -11,7 +11,7 @@ export function Sidebar({ className }: SidebarProps) {
     <>
       <div
         className={cn(
-          "pb-12   bg-[#FC6B00] dark:bg-card m-2 rounded-2xl    h-[97%]    hidden   ",
+          "pb-12   rounded-lg border bg-card text-card-foreground shadow-sm m-2    h-[98%]    hidden   ",
           className
         )}
       >

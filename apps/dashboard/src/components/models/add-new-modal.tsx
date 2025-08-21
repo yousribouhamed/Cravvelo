@@ -183,10 +183,7 @@ const AddNew: FC = ({}) => {
   return (
     <Dialog open={isOpen} onOpenChange={handleDialogClose}>
       <DialogTrigger asChild>
-        <button
-          data-ripple-light="true"
-          className="rounded-xl w-full h-12 px-6 text-primary bg-white hover:scale-105 transition-all duration-150 font-bold flex gap-x-4 justify-start items-center"
-        >
+        <Button data-ripple-light="true">
           <svg
             width="30"
             height="30"
@@ -196,23 +193,23 @@ const AddNew: FC = ({}) => {
           >
             <path
               d="M12.2962 34.9965C6.77536 28.2564 7.76372 18.3169 14.5038 12.7961C21.2439 7.27514 31.1833 8.26356 36.7042 15.0036C42.2251 21.7438 41.2368 31.6831 34.4966 37.204C27.7566 42.7249 17.8171 41.7366 12.2962 34.9965Z"
-              fill="#FC6B00"
+              fill="#FFFFFF"
             />
             <path
               fillRule="evenodd"
               clipRule="evenodd"
               d="M24.501 16.4453C25.4023 16.4453 26.1329 17.1759 26.1329 18.0772L26.1329 31.9247C26.1329 32.826 25.4023 33.5567 24.501 33.5567C23.5997 33.5567 22.869 32.826 22.869 31.9247L22.869 18.0772C22.869 17.1759 23.5997 16.4453 24.501 16.4453Z"
-              fill="#F8FAE5"
+              fill="#FC6B00"
             />
             <path
               fillRule="evenodd"
               clipRule="evenodd"
               d="M33.0567 25.001C33.0567 25.9023 32.326 26.6329 31.4247 26.6329H17.5772C16.6759 26.6329 15.9453 25.9023 15.9453 25.001C15.9453 24.0997 16.6759 23.369 17.5772 23.369H31.4247C32.326 23.369 33.0567 24.0997 33.0567 25.001Z"
-              fill="#F8FAE5"
+              fill="#FC6B00"
             />
           </svg>
           <span className="qatar-bold">إضافة جديد</span>
-        </button>
+        </Button>
       </DialogTrigger>
       <DialogContent className="max-w-lg" title="إضافة جديد">
         <div className="w-full px-4 pb-6">

@@ -71,7 +71,6 @@ function ProductPricingForm({ product }: ProductPricingFormProps) {
     await mutation.mutateAsync({
       productId,
       price: isFree ? 0 : Number(values.price),
-      compairAtPrice: isFree ? 0 : Number(values.compareAtPrice),
     });
   }
 

@@ -20,6 +20,25 @@ export default async function Page({ params }: PageProps) {
       where: {
         id: course_id,
       },
+      include: {
+        // Include the pricing plans through the junction table
+        CoursePricingPlans: {
+          include: {
+            PricingPlan: true, // This gets the actual Pricing model data
+          },
+          orderBy: {
+            isDefault: "desc", // Show default pricing first
+          },
+        },
+        // You might also want to include the account info
+        Account: {
+          select: {
+            id: true,
+            user_name: true,
+            // Add other account fields you need
+          },
+        },
+      },
     }),
   ]);
 
@@ -27,12 +46,19 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
 
+  // Extract pricing plans for easier access
+  const pricingPlans = course.CoursePricingPlans.map((cpp) => ({
+    ...cpp.PricingPlan,
+    isDefault: cpp.isDefault,
+    junctionId: cpp.id,
+  }));
+
   return (
     <MaxWidthWrapper>
-      <main className="w-full flex flex-col  justify-start">
+      <main className="w-full flex flex-col justify-start">
         <Header notifications={[]} user={user} title="التسعير" goBack />
         <CourseHeader />
-        <AddPricingForm course={course} />
+        <AddPricingForm course={course} pricingPlans={pricingPlans} />
       </main>
     </MaxWidthWrapper>
   );

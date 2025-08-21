@@ -11,12 +11,9 @@ import {
 import { Button } from "@ui/components/ui/button";
 import { Badge } from "@ui/components/ui/badge";
 import { useRouter } from "next/navigation";
-import { PaymentsConnect } from "database";
 import Image from "next/image";
 import {
-  CheckCircle2,
   Clock,
-  ArrowRight,
   ArrowLeft,
   Settings,
   Zap,
@@ -25,17 +22,28 @@ import {
   CreditCard,
 } from "lucide-react";
 
-interface PaymentMethodsConnectorsProps {
-  data: PaymentsConnect;
+interface PaymentConnection {
+  provider: string;
+  isConnected: boolean;
 }
 
-const PaymentMethodsConnectors: FC<PaymentMethodsConnectorsProps> = ({
-  data,
+interface PaymentMethodsConnectorsProps {
+  connections: PaymentConnection[];
+}
+
+const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
+  connections,
 }) => {
   const router = useRouter();
 
-  const isChargilyConnected =
-    data && data?.chargilyPublicKey && data?.chargilySecretKey ? true : false;
+  console.log(connections);
+
+  const getConnectionStatus = (providerId: string): boolean => {
+    const connection = connections?.find(
+      (conn) => conn.provider.toLowerCase() === providerId.toLowerCase()
+    );
+    return connection?.isConnected || false;
+  };
 
   const paymentMethods = [
     {
@@ -46,7 +54,7 @@ const PaymentMethodsConnectors: FC<PaymentMethodsConnectorsProps> = ({
         "المنصة الأولى في الجزائر لاستقبال الأموال عبر الإنترنت دون الحاجة لسجل تجاري",
       shortDesc: "الدفع الرقمي في الجزائر",
       logo: "/chargily.jpg",
-      isConnected: isChargilyConnected,
+      isConnected: getConnectionStatus("chargily"), // Dynamic connection status
       isAvailable: true,
       features: ["دفع فوري", "بدون سجل تجاري", "آمن ومضمون"],
       primaryColor: "from-violet-500 to-purple-600",
@@ -57,25 +65,7 @@ const PaymentMethodsConnectors: FC<PaymentMethodsConnectorsProps> = ({
       badgeColor:
         "bg-violet-100 text-violet-700 dark:bg-violet-900 dark:text-violet-300",
     },
-    {
-      id: "stripe",
-      name: "Stripe",
-      arabicName: "سترايب",
-      description:
-        "منصة مدفوعات عالمية تتيح للشركات قبول المدفوعات وإدارة العمليات المالية بسهولة وأمان",
-      shortDesc: "المدفوعات العالمية",
-      logo: "/stripe-2.svg",
-      isConnected: false,
-      isAvailable: false,
-      features: ["قبول دولي", "أمان متقدم", "تقارير مفصلة"],
-      primaryColor: "from-blue-500 to-indigo-600",
-      accentColor: "bg-blue-500 dark:bg-blue-600",
-      hoverColor: "hover:bg-blue-600 dark:hover:bg-blue-700",
-      route: "/settings/payments-methods/stripe",
-      icon: <Globe className="w-4 h-4" />,
-      badgeColor:
-        "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
-    },
+
     {
       id: "p2p",
       name: "P2P Transfer",
@@ -84,7 +74,7 @@ const PaymentMethodsConnectors: FC<PaymentMethodsConnectorsProps> = ({
         "تحويل مباشر من شخص لشخص عبر المحافظ الرقمية والتطبيقات المصرفية المحلية",
       shortDesc: "التحويل المباشر P2P",
       logo: "/p2p-icon.svg",
-      isConnected: false,
+      isConnected: getConnectionStatus("p2p"), // Dynamic connection status
       isAvailable: true,
       features: ["تحويل سريع", "رسوم منخفضة", "دعم محلي"],
       primaryColor: "from-emerald-500 to-green-600",
@@ -95,12 +85,31 @@ const PaymentMethodsConnectors: FC<PaymentMethodsConnectorsProps> = ({
       badgeColor:
         "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300",
     },
+    {
+      id: "stripe",
+      name: "Stripe",
+      arabicName: "سترايب",
+      description:
+        "منصة مدفوعات عالمية تتيح للشركات قبول المدفوعات وإدارة العمليات المالية بسهولة وأمان",
+      shortDesc: "المدفوعات العالمية",
+      logo: "/stripe-2.svg",
+      isConnected: getConnectionStatus("stripe"), // Dynamic connection status
+      isAvailable: false,
+      features: ["قبول دولي", "أمان متقدم", "تقارير مفصلة"],
+      primaryColor: "from-blue-500 to-indigo-600",
+      accentColor: "bg-blue-500 dark:bg-blue-600",
+      hoverColor: "hover:bg-blue-600 dark:hover:bg-blue-700",
+      route: "/settings/payments-methods/stripe",
+      icon: <Globe className="w-4 h-4" />,
+      badgeColor:
+        "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
+    },
   ];
 
   return (
-    <div className="w-full min-h-[400px] p-4 md:p-8 rtl" dir="rtl">
+    <div className="w-full min-h-[400px] my-4 rtl" dir="rtl">
       <div className="mb-8">
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
           طرق الدفع
         </h2>
         <p className="text-gray-600 dark:text-gray-400">
@@ -108,26 +117,20 @@ const PaymentMethodsConnectors: FC<PaymentMethodsConnectorsProps> = ({
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid p-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {paymentMethods.map((method) => (
           <Card
             key={method.id}
-            className={`relative overflow-hidden border-0 shadow-lg hover:shadow-xl dark:shadow-gray-800/50 dark:hover:shadow-gray-800/70 transition-all duration-300 transform hover:-translate-y-1 bg-white dark:bg-gray-800 ${
+            className={`relative overflow-hidden ${
               method.isConnected
                 ? "ring-2 ring-green-200 dark:ring-green-700"
                 : ""
             }`}
           >
-            {/* Background Gradient */}
-            <div
-              className={`absolute inset-0 bg-gradient-to-br ${method.primaryColor} opacity-5 dark:opacity-10`}
-            />
-
             {/* Connected Badge */}
             {method.isConnected && (
-              <div className="absolute top-4 left-4 z-10">
+              <div className="absolute top-2 left-4 z-10">
                 <Badge className="bg-green-100 text-green-700 border-green-200 dark:bg-green-900 dark:text-green-300 dark:border-green-700">
-                  <CheckCircle2 className="w-3 h-3 ml-1" />
                   متصل
                 </Badge>
               </div>
@@ -147,13 +150,17 @@ const PaymentMethodsConnectors: FC<PaymentMethodsConnectorsProps> = ({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className={`p-2 rounded-xl ${method.badgeColor}`}>
-                    <Image
-                      src={method.logo}
-                      alt={`${method.name} logo`}
-                      width={24}
-                      height={24}
-                      className="object-contain"
-                    />
+                    {method.id === "p2p" ? (
+                      method.icon
+                    ) : (
+                      <Image
+                        src={method.logo}
+                        alt={`${method.name} logo`}
+                        width={24}
+                        height={24}
+                        className="object-contain"
+                      />
+                    )}
                   </div>
                   <div>
                     <CardTitle className="text-lg font-bold text-gray-900 dark:text-gray-100">
@@ -210,21 +217,11 @@ const PaymentMethodsConnectors: FC<PaymentMethodsConnectorsProps> = ({
                       </>
                     ) : (
                       <>
-                        <ArrowLeft className="w-4 h-4 ml-2" />
                         ربط الحساب
+                        <ArrowLeft className="w-4 h-4 ml-2" />
                       </>
                     )}
                   </Button>
-
-                  {method.isConnected && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="border-green-200 text-green-700 hover:bg-green-50 dark:border-green-700 dark:text-green-300 dark:hover:bg-green-900"
-                    >
-                      <CheckCircle2 className="w-4 h-4" />
-                    </Button>
-                  )}
                 </>
               ) : (
                 <Button
@@ -263,8 +260,8 @@ const PaymentMethodsConnectors: FC<PaymentMethodsConnectorsProps> = ({
               size="sm"
               className="text-blue-600 border-blue-200 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-700 dark:hover:bg-blue-900/50"
             >
-              <ArrowLeft className="w-4 h-4 ml-2" />
               تعرف على المزيد
+              <ArrowLeft className="w-4 h-4 ml-2" />
             </Button>
           </div>
         </div>
@@ -273,4 +270,4 @@ const PaymentMethodsConnectors: FC<PaymentMethodsConnectorsProps> = ({
   );
 };
 
-export default PaymentMethodsConnectors;
+export default AvailablePaymentMethods;
