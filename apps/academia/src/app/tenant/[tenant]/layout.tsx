@@ -7,6 +7,7 @@ import Providers from "@/components/providers";
 import MaxWidthWrapper from "@/components/max-with-wrapper";
 import { getCurrentUser } from "@/modules/auth/lib/utils";
 import "@smastrom/react-rating/style.css";
+import { PaymentProvider } from "@/modules/payments/context/payments-provider";
 
 interface TenantLayoutProps {
   children: ReactNode;
@@ -29,10 +30,6 @@ export default async function TenantLayout({
     getCurrentUser(),
   ]);
 
-
-  console.log("this is the current logged in user:");
-  console.log(user);
-
   if (!isValid) {
     notFound();
   }
@@ -53,10 +50,12 @@ export default async function TenantLayout({
     >
       <TenantProvider website={websiteData} tenant={tenant} user={user}>
         <Providers>
-          <Header />
-          <MaxWidthWrapper className="flex flex-col">
-            {children}
-          </MaxWidthWrapper>
+          <PaymentProvider>
+            <Header />
+            <MaxWidthWrapper className="flex flex-col">
+              {children}
+            </MaxWidthWrapper>
+          </PaymentProvider>
         </Providers>
       </TenantProvider>
     </div>

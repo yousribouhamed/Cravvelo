@@ -90,7 +90,6 @@ export async function uploadImageToS3(formData: FormData) {
       return { success: false, error: "Failed to upload file to S3" };
     }
 
-    // ✅ Use the signed URL without query params
     const publicUrl = signedUrl.split("?")[0];
 
     return {

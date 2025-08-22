@@ -16,15 +16,16 @@ export const getTenantPaymentConnections = withTenant({
         },
       });
 
+      console.log(connections);
       return {
-        data: connections,
+        data: connections ?? [],
         success: true,
         message: "we got the connections",
       };
     } catch (error) {
       console.error(error);
       return {
-        data: null,
+        data: [],
         success: false,
         message: error,
       };

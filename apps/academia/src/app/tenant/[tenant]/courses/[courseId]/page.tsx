@@ -3,6 +3,7 @@ import CourseBuyCard from "@/modules/courses/components/course-buycard";
 import Ratings from "@/modules/courses/components/rating";
 import EmbedYouTubeVideo from "@/modules/courses/components/yotube-player";
 import { CravveloEditor } from "@cravvelo/editor";
+import { PaymentSheet } from "@/modules/payments/components/payment-sheet";
 
 interface PageProps {
   params: Promise<{
@@ -21,19 +22,23 @@ export default async function Page({ params }: PageProps) {
 
   if (response.success && course) {
     return (
-      <div className="w-full min-h-screen h-fit grid grid-cols-1 lg:grid-cols-3 gap-4 p-4 my-8">
-        <div className="w-full col-span-1 lg:col-span-2 h-fit min-h-[400px]">
-          <h1 className="text-2xl font-bold">{course?.title}</h1>
-          <div className="my-8 flex flex-col gap-y-4">
-            <EmbedYouTubeVideo url={course.youtubeUrl} />
+      <>
+        <div className="w-full min-h-screen h-fit grid grid-cols-1 lg:grid-cols-3 gap-4 p-4 my-8">
+          <div className="w-full col-span-1 lg:col-span-2 h-fit min-h-[400px]">
+            <h1 className="text-2xl font-bold">{course?.title}</h1>
+            <div className="my-8 flex flex-col gap-y-4">
+              <EmbedYouTubeVideo url={course.youtubeUrl} />
 
-            <CravveloEditor readOnly value={cleanDescription ?? ""} />
-            <Ratings />
+              <CravveloEditor readOnly value={cleanDescription ?? ""} />
+              <Ratings />
+            </div>
           </div>
+
+          <CourseBuyCard course={course} />
         </div>
 
-        <CourseBuyCard course={course} />
-      </div>
+        <PaymentSheet />
+      </>
     );
   }
 

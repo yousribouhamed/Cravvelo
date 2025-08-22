@@ -1,3 +1,5 @@
+"use client";
+
 import BrandButton from "@/components/brand-button";
 import { formatPrice } from "@/lib/price";
 import {
@@ -10,17 +12,13 @@ import {
   Infinity,
   GraduationCap,
 } from "lucide-react";
-import { Course } from "../types";
-import { PaymentButton } from "@/modules/payments/components/payment-sheet";
+import { CourseWithPricing } from "../types";
+import { usePaymentIntent } from "@/modules/payments/hooks/use-paymentIntent";
+import { courseToPaymentProduct } from "@/modules/payments/utils";
 
 interface CourseCardProps {
-  course: Course;
+  course: CourseWithPricing;
 }
-
-const calculateDiscountPercentage = (price: number, compareAtPrice: number) => {
-  if (!compareAtPrice || compareAtPrice <= price) return 0;
-  return Math.round(((compareAtPrice - price) / compareAtPrice) * 100);
-};
 
 const calculatePositiveReviewPercentage = (ratings: number[]) => {
   if (!ratings || ratings.length === 0) return 0;
@@ -46,73 +44,44 @@ const formatVideoLength = (totalSeconds: number) => {
 };
 
 export default function CourseBuyCard({ course }: CourseCardProps) {
-  // Mock data for demonstration - replace with actual data from your course object
-  const mockComments = [
-    { rating: 5 },
-    { rating: 4 },
-    { rating: 5 },
-    { rating: 3 },
-    { rating: 4 },
-  ];
+  const { invokePaymentIntent } = usePaymentIntent(
+    courseToPaymentProduct({
+      course,
+    })
+  );
+
+  // Get the default pricing plan
+  const defaultPricingPlan = course.CoursePricingPlans?.find(
+    (plan) => plan.isDefault
+  )?.PricingPlan;
+
+  // Determine if the course is free
+  const isFree =
+    defaultPricingPlan?.pricingType === "FREE" ||
+    (defaultPricingPlan?.price !== null &&
+      //@ts-expect-error
+      Number(defaultPricingPlan.price) === 0);
+
+  // Get actual ratings from comments
+  const ratings = course.Comment?.map((comment) => comment.rating) || [];
 
   return (
     <div className="w-full lg:w-[350px] bg-card text-card-foreground min-h-[500px] h-fit rounded-xl border p-4 flex flex-col gap-y-4  mt-6 sticky top-[120px]">
-      {/* Discount Badge */}
-      {course?.price && course?.compareAtPrice && Number(course.price) > 0 && (
-        <span className="text-xs text-white p-2 rounded-full absolute -top-5 right-0 bg-[#FC6B00]">
-          تخفيض{" "}
-          {calculateDiscountPercentage(
-            Number(course.price),
-            Number(course.compareAtPrice)
-          )}
-          %
-        </span>
-      )}
-
       {/* Free Badge */}
-      {course?.price && Number(course.price) === 0 && (
+      {isFree && (
         <span className="text-xs text-white p-2 rounded-full absolute -top-5 right-0 bg-[#FC6B00]">
           مجانا
         </span>
       )}
 
       {/* Price Section */}
-      {course?.price && Number(course.price) > 0 && (
-        <>
-          <p className="text-2xl font-bold text-start text-black dark:text-white">
-            {formatPrice(Number(course.price))}
-          </p>
-          {course?.compareAtPrice && (
-            <p>
-              <span className="line-through text-red-500 text-lg">
-                {formatPrice(Number(course.compareAtPrice))}
-              </span>
-            </p>
-          )}
-        </>
+      {!isFree && defaultPricingPlan?.price && (
+        <p className="text-2xl font-bold text-start text-black dark:text-white">
+          {formatPrice(Number(defaultPricingPlan.price))}
+        </p>
       )}
 
-      {/* Action Button */}
-      {/* <BrandButton>
-        {course?.price && Number(course.price) === 0
-          ? "المطالبة بالدورة"
-          : "اشتري الآن"}
-      </BrandButton> */}
-
-      <PaymentButton />
-
-      {/* Timer Section (if needed) */}
-      <div
-        dir="ltr"
-        className="w-full h-[20px] flex items-center justify-end gap-x-2 text-red-500"
-      >
-        <div className="min-w-[10px] w-fit flex items-center justify-start">
-          <span className="text-sm">00</span>:
-          <span className="text-sm">00</span>:
-          <span className="text-sm">00</span>
-        </div>
-        <span className="text-sm">ينتهي هذا العرض عند</span>
-      </div>
+      <BrandButton onClick={invokePaymentIntent}>bug now</BrandButton>
 
       <div className="border-b w-full h-1 my-1 dark:border-gray-700" />
 
@@ -122,10 +91,8 @@ export default function CourseBuyCard({ course }: CourseCardProps) {
         <div className="w-full flex items-center justify-start gap-x-4">
           <Star className="w-5 h-5 text-black dark:text-white" />
           <span className="text-black dark:text-white">
-            {calculatePositiveReviewPercentage(
-              mockComments.map((c) => c.rating)
-            )}
-            % تقييمات إيجابية ({mockComments.length})
+            {calculatePositiveReviewPercentage(ratings)}% تقييمات إيجابية (
+            {ratings.length})
           </span>
         </div>
 
@@ -180,11 +147,22 @@ export default function CourseBuyCard({ course }: CourseCardProps) {
           </span>
         </div>
 
-        {/* Lifetime Access */}
+        {/* Access Type */}
         <div className="w-full flex items-center justify-start gap-x-4">
           <Infinity className="w-5 h-5 text-black dark:text-white" />
           <span className="text-black dark:text-white">
-            وصول غير محدود إلى الأبد
+            {defaultPricingPlan?.pricingType === "FREE"
+              ? "وصول مجاني غير محدود"
+              : defaultPricingPlan?.pricingType === "RECURRING"
+              ? `وصول لمدة ${
+                  defaultPricingPlan?.recurringDays || 30
+                } يوم (متجدد)`
+              : defaultPricingPlan?.accessDuration === "UNLIMITED"
+              ? "وصول غير محدود إلى الأبد"
+              : defaultPricingPlan?.accessDuration === "LIMITED" &&
+                defaultPricingPlan?.accessDurationDays
+              ? `وصول لمدة ${defaultPricingPlan.accessDurationDays} يوم`
+              : "وصول غير محدود إلى الأبد"}
           </span>
         </div>
 

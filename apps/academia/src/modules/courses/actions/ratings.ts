@@ -51,9 +51,7 @@ export const getCourseRatings = withTenant({
           id: true,
           content: true,
           rating: true,
-          studentName: true,
-          studentEmail: true,
-          studentImage: true,
+
           createdAt: true,
           updatedAt: true,
           status: true,
@@ -122,9 +120,7 @@ export const getCourseRatings = withTenant({
         id: rating.id,
         content: rating.content,
         rating: rating.rating,
-        studentName: rating.studentName || rating.Student?.full_name || "مجهول",
-        studentImage: rating.studentImage || rating.Student?.photo_url,
-        studentBio: rating.Student?.bio,
+
         createdAt: rating.createdAt,
         updatedAt: rating.updatedAt,
         status: rating.status,

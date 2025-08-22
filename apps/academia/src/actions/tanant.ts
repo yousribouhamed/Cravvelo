@@ -169,8 +169,7 @@ export const getTenantStats = cache(async (tenant: string) => {
           id: true,
           content: true,
           rating: true,
-          studentName: true,
-          studentImage: true,
+
           createdAt: true,
           Course: {
             select: {
@@ -229,8 +228,7 @@ export const getTenantCourse = cache(
               id: true,
               content: true,
               rating: true,
-              studentName: true,
-              studentImage: true,
+
               createdAt: true,
             },
             orderBy: {

@@ -1,74 +1,105 @@
 "use client";
 
-import BrandButton from "@/components/brand-button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet";
-import { useTenantBranding } from "@/hooks/use-tenant";
-import { useState } from "react";
-import { CreditCard, Smartphone, Lock, Check } from "lucide-react";
-import { createChargilyCheckout } from "../actions/chargily.actions";
-import { getTenantPaymentConnections } from "../actions/connections.actions";
-import { useQuery } from "@tanstack/react-query";
+import { Lock, AlertCircle } from "lucide-react";
 import { PaymentSheetSkeleton } from "./payment-skeleton";
+import { PaymentMethodCards } from "./payment-method-cards";
+import { PaymentForms } from "./payment-forms";
+import { usePaymentContext } from "../context/payments-provider";
+import {
+  PaymentProduct,
+  PaymentPricingOption,
+} from "@/modules/payments/types/index";
+import React from "react";
 
-// Skeleton Loader Component
-
-export function PaymentButton() {
+export function PaymentSheet() {
   const {
-    data: connections,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["tenant-payment-connections"],
-    queryFn: async () => {
-      const result = await getTenantPaymentConnections();
-      if (!result.success) {
-        throw new Error("Failed to fetch payment connections");
-      }
-      return result.data;
-    },
-  });
+    isSheetOpen,
+    setSheetOpen,
+    selectedProduct,
+    connections,
+    activeConnections,
+    isConnectionsLoading,
+  } = usePaymentContext();
 
-  const { primaryColor, primaryColorDark } = useTenantBranding();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [paymentMethod, setPaymentMethod] = useState("chargily");
+  console.log(selectedProduct);
 
-  const handleCheckout = async () => {
-    setLoading(true);
-    try {
-      const price = await createChargilyCheckout();
-      console.log("Checkout completed:", price);
-    } catch (error) {
-      console.error("Checkout error:", error);
-    } finally {
-      setLoading(false);
+  const getCurrentPrice = (product: PaymentProduct | null): number => {
+    if (!product) return 0;
+
+    // If product has pricing options and a selected pricing ID
+    if (product.pricingOptions && product.selectedPricingId) {
+      const selectedPricing = product.pricingOptions.find(
+        (option) => option.id === product.selectedPricingId
+      );
+      return selectedPricing?.price || 0;
     }
+
+    // Fall back to the main price
+    return product.price || 0;
   };
 
-  // Filter active payment methods
-  const activeConnections =
-    connections?.filter((connection) => connection.isActive) || [];
+  // Get selected pricing option details
+  const getSelectedPricingOption = (
+    product: PaymentProduct | null
+  ): PaymentPricingOption | null => {
+    if (!product || !product.pricingOptions || !product.selectedPricingId) {
+      return null;
+    }
+
+    return (
+      product.pricingOptions.find(
+        (option) => option.id === product.selectedPricingId
+      ) || null
+    );
+  };
+
+  const currentPrice = getCurrentPrice(selectedProduct);
+  const selectedPricing = getSelectedPricingOption(selectedProduct);
+
+  // Prevent sheet from opening if no product is selected
+  const handleSheetOpenChange = (open: boolean) => {
+    if (open && !selectedProduct) {
+      console.warn("Cannot open payment sheet: No product selected");
+      return;
+    }
+    setSheetOpen(open);
+  };
+
+  // Close sheet if product becomes null while sheet is open
+  React.useEffect(() => {
+    if (isSheetOpen && !selectedProduct) {
+      setSheetOpen(false);
+    }
+  }, [selectedProduct, isSheetOpen, setSheetOpen]);
 
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <BrandButton variant="outline" className="font-semibold">
-          اشتري الآن
-        </BrandButton>
-      </SheetTrigger>
+    <Sheet open={isSheetOpen} onOpenChange={handleSheetOpenChange}>
       <SheetContent side="left">
-        {isLoading ? (
+        {isConnectionsLoading ? (
           <PaymentSheetSkeleton />
+        ) : !selectedProduct ? (
+          // Show error state if no product selected (fallback)
+          <div className="h-full flex items-center justify-center" dir="rtl">
+            <div className="text-center space-y-4">
+              <AlertCircle className="w-12 h-12 text-muted-foreground mx-auto" />
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-2">
+                  لم يتم اختيار منتج
+                </h3>
+                <p className="text-muted-foreground">
+                  يرجى اختيار منتج قبل المتابعة إلى عملية الدفع
+                </p>
+              </div>
+            </div>
+          </div>
         ) : (
           <div className="h-full flex flex-col" dir="rtl">
             <SheetHeader className="text-right pb-6 flex-shrink-0">
@@ -92,250 +123,177 @@ export function PaymentButton() {
                           <h3 className="text-lg font-semibold text-foreground">
                             ملخص الطلب
                           </h3>
-                          <div className="bg-muted/50 rounded-lg p-4 border">
+                          <div className="bg-muted/50 rounded-lg p-4 border my-4">
                             <div className="flex items-center gap-4">
                               <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <div className="w-8 h-8 bg-white/20 rounded backdrop-blur-sm"></div>
+                                {selectedProduct.image ? (
+                                  <img
+                                    src={selectedProduct.image}
+                                    alt={selectedProduct.name}
+                                    className="w-full h-full object-cover rounded-lg"
+                                  />
+                                ) : (
+                                  <div className="w-8 h-8 bg-white/20 rounded backdrop-blur-sm"></div>
+                                )}
                               </div>
                               <div className="flex-1 min-w-0">
                                 <h4 className="font-semibold text-foreground mb-1">
-                                  دورة البرمجة الشاملة
+                                  {selectedProduct.name}
                                 </h4>
-                                <p className="text-sm text-muted-foreground mb-2">
-                                  دورة متكاملة لتعلم البرمجة من الصفر
-                                </p>
+
+                                {/* Show selected pricing option if available */}
+                                {selectedPricing && (
+                                  <div className="mb-2">
+                                    <span className="text-xs text-muted-foreground">
+                                      {selectedPricing.name}
+                                    </span>
+                                    {selectedPricing.description && (
+                                      <p className="text-xs text-muted-foreground">
+                                        {selectedPricing.description}
+                                      </p>
+                                    )}
+                                  </div>
+                                )}
+
                                 <div className="flex items-center justify-between">
-                                  <span className="text-lg font-bold text-green-600 dark:text-green-400">
-                                    5000 د.ج
-                                  </span>
+                                  {currentPrice > 0 ? (
+                                    <span className="text-lg font-bold text-green-600 dark:text-green-400">
+                                      {currentPrice.toLocaleString()}{" "}
+                                      {selectedProduct.currency}
+                                    </span>
+                                  ) : (
+                                    <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                                      مجاني
+                                    </span>
+                                  )}
                                   <span className="text-sm text-muted-foreground">
                                     1 ×
                                   </span>
                                 </div>
+
+                                {/* Show compare at price if available */}
+                                {selectedPricing?.compareAtPrice &&
+                                  selectedPricing.compareAtPrice >
+                                    currentPrice && (
+                                    <div className="mt-1">
+                                      <span className="text-sm text-muted-foreground line-through">
+                                        {selectedPricing.compareAtPrice.toLocaleString()}{" "}
+                                        {selectedProduct.currency}
+                                      </span>
+                                    </div>
+                                  )}
                               </div>
                             </div>
 
                             <div className="mt-4 pt-4 border-t border-border">
                               <div className="flex justify-between items-center">
-                                <span className="text-xl font-bold text-green-600 dark:text-green-400">
-                                  5000 د.ج
-                                </span>
-                                <span className="text-lg font-bold text-foreground">
+                                <span className="text-sm font-bold text-foreground">
                                   المجموع الكلي
                                 </span>
+                                {currentPrice > 0 ? (
+                                  <span className="text-xl font-bold text-green-600 dark:text-green-400">
+                                    {currentPrice.toLocaleString()}{" "}
+                                    {selectedProduct.currency}
+                                  </span>
+                                ) : (
+                                  <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
+                                    مجاني
+                                  </span>
+                                )}
                               </div>
                             </div>
+
+                            {/* Show access duration info if available */}
+                            {selectedPricing && (
+                              <div className="mt-3 pt-3 border-t border-border">
+                                <div className="text-xs text-muted-foreground text-center">
+                                  {selectedPricing.accessDuration ===
+                                    "UNLIMITED" && "وصول غير محدود"}
+                                  {selectedPricing.accessDuration ===
+                                    "LIMITED" &&
+                                    selectedPricing.accessDurationDays &&
+                                    `وصول لمدة ${selectedPricing.accessDurationDays} يوم`}
+                                  {selectedPricing.pricingType ===
+                                    "RECURRING" &&
+                                    selectedPricing.recurringDays &&
+                                    ` • يتجدد كل ${selectedPricing.recurringDays} يوم`}
+                                </div>
+                              </div>
+                            )}
                           </div>
                         </div>
 
-                        {/* Security Notice */}
-                        <div className="bg-muted/50 rounded-lg p-4 border">
-                          <div className="flex items-start gap-3">
-                            <div className="text-right text-sm text-muted-foreground flex-1">
-                              <div className="font-medium mb-1 text-foreground">
-                                دفع آمن 100%
+                        {/* Security Notice - only show for paid products */}
+                        {currentPrice > 0 && (
+                          <div className="bg-muted/50 rounded-lg p-4 border">
+                            <div className="flex items-start gap-3">
+                              <div className="text-right text-sm text-muted-foreground flex-1">
+                                <div className="font-medium mb-1 text-foreground">
+                                  دفع آمن 100%
+                                </div>
+                                <div>
+                                  جميع المعاملات مشفرة ومحمية. لن نحتفظ بمعلومات
+                                  الدفع الخاصة بك.
+                                </div>
                               </div>
-                              <div>
-                                جميع المعاملات مشفرة ومحمية. لن نحتفظ بمعلومات
-                                الدفع الخاصة بك.
-                              </div>
+                              <Lock className="w-5 h-5 text-muted-foreground mt-0.5 flex-shrink-0" />
                             </div>
-                            <Lock className="w-5 h-5 text-muted-foreground mt-0.5 flex-shrink-0" />
                           </div>
-                        </div>
+                        )}
                       </div>
                     </div>
 
                     {/* Payment Methods & Form */}
                     <div className="space-y-6 col-span-2" dir="rtl">
-                      {/* {error && (
-                        <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-lg p-4">
-                          <div className="text-red-700 dark:text-red-300 text-sm text-center">
-                            حدث خطأ في تحميل طرق الدفع. يرجى المحاولة مرة أخرى.
+                      {/* Debug Info (remove in production) */}
+                      {process.env.NODE_ENV === "development" && (
+                        <div className="bg-yellow-50 dark:bg-yellow-950/30 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
+                          <div className="text-xs text-yellow-700 dark:text-yellow-300">
+                            Debug: {connections?.length || 0} total connections,{" "}
+                            {activeConnections?.length || 0} active | Price:{" "}
+                            {currentPrice} {selectedProduct.currency}
+                            {selectedPricing &&
+                              ` | Pricing: ${selectedPricing.name}`}
                           </div>
                         </div>
-                      )} */}
+                      )}
 
-                      {/* Payment Methods */}
-                      <div className="space-y-4">
-                        <h3 className="text-lg font-semibold text-foreground">
-                          طرق الدفع
-                        </h3>
+                      {/* Only show payment methods for paid products */}
+                      {currentPrice > 0 ? (
+                        <>
+                          {/* Payment Methods */}
+                          <div className="space-y-4">
+                            <h3 className="text-lg font-semibold text-foreground">
+                              طرق الدفع
+                            </h3>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          {/* Show available payment methods based on connections */}
-                          {activeConnections.some(
-                            (conn) => conn.provider === "chargily"
-                          ) && (
-                            <div
-                              className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
-                                paymentMethod === "chargily"
-                                  ? "border-blue-500 bg-blue-50 dark:bg-blue-950/30 dark:border-blue-400"
-                                  : "border-border hover:border-muted-foreground/50 bg-card"
-                              }`}
-                              onClick={() => setPaymentMethod("chargily")}
-                            >
-                              <div className="flex flex-col items-center text-center space-y-3">
-                                <div
-                                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                                    paymentMethod === "chargily"
-                                      ? "border-blue-500 bg-blue-500 dark:border-blue-400 dark:bg-blue-400"
-                                      : "border-muted-foreground/50"
-                                  }`}
-                                >
-                                  {paymentMethod === "chargily" && (
-                                    <Check className="w-3 h-3 text-white" />
-                                  )}
-                                </div>
-                                <CreditCard className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-                                <div className="space-y-1">
-                                  <div className="font-medium text-foreground">
-                                    شارجيلي - Chargily
-                                  </div>
-                                  <div className="text-sm text-muted-foreground">
-                                    دفع آمن بالبطاقة البنكية
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          )}
+                            <PaymentMethodCards />
+                          </div>
 
-                          {/* P2P Option */}
-                          {activeConnections.some(
-                            (conn) => conn.provider === "p2p"
-                          ) && (
-                            <div
-                              className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
-                                paymentMethod === "p2p"
-                                  ? "border-green-500 bg-green-50 dark:bg-green-950/30 dark:border-green-400"
-                                  : "border-border hover:border-muted-foreground/50 bg-card"
-                              }`}
-                              onClick={() => setPaymentMethod("p2p")}
-                            >
-                              <div className="flex flex-col items-center text-center space-y-3">
-                                <div
-                                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                                    paymentMethod === "p2p"
-                                      ? "border-green-500 bg-green-500 dark:border-green-400 dark:bg-green-400"
-                                      : "border-muted-foreground/50"
-                                  }`}
-                                >
-                                  {paymentMethod === "p2p" && (
-                                    <Check className="w-3 h-3 text-white" />
-                                  )}
-                                </div>
-                                <Smartphone className="w-8 h-8 text-green-600 dark:text-green-400" />
-                                <div className="space-y-1">
-                                  <div className="font-medium text-foreground">
-                                    التحويل المباشر - P2P
-                                  </div>
-                                  <div className="text-sm text-muted-foreground">
-                                    تحويل مباشر عبر الهاتف المحمول
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-
-                          {activeConnections.length === 0 && !error && (
-                            <div className="col-span-2 text-center py-8 text-muted-foreground">
-                              لا توجد طرق دفع متاحة حالياً
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Payment Form */}
-                      {activeConnections.length > 0 && (
-                        <div className="space-y-4">
-                          <h3 className="text-lg font-semibold text-foreground">
-                            تفاصيل الدفع
-                          </h3>
-
-                          {paymentMethod === "chargily" && (
-                            <div className="space-y-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
-                              <div className="flex items-center gap-2 text-blue-700 dark:text-blue-300 text-sm justify-end">
-                                <span>دفع آمن ومشفر بواسطة Chargily</span>
-                                <Lock className="w-4 h-4" />
-                              </div>
-
+                          {/* Payment Form */}
+                          {activeConnections &&
+                            activeConnections.length > 0 && (
                               <div className="space-y-4">
-                                <div>
-                                  <Label
-                                    htmlFor="email"
-                                    className="block mb-2 text-right text-foreground"
-                                  >
-                                    البريد الإلكتروني
-                                  </Label>
-                                  <Input
-                                    id="email"
-                                    type="email"
-                                    placeholder="example@email.com"
-                                    className="text-left bg-background"
-                                    dir="ltr"
-                                  />
-                                </div>
+                                <h3 className="text-lg font-semibold text-foreground">
+                                  تفاصيل الدفع
+                                </h3>
 
-                                <div>
-                                  <Label
-                                    htmlFor="phone"
-                                    className="block mb-2 text-right text-foreground"
-                                  >
-                                    رقم الهاتف
-                                  </Label>
-                                  <Input
-                                    id="phone"
-                                    type="tel"
-                                    placeholder="+213 555 123 456"
-                                    className="text-left bg-background"
-                                    dir="ltr"
-                                  />
-                                </div>
+                                <PaymentForms />
                               </div>
-                            </div>
-                          )}
-
-                          {paymentMethod === "p2p" && (
-                            <div className="space-y-4 bg-green-50 dark:bg-green-950/30 rounded-lg p-4 border border-green-200 dark:border-green-800">
-                              <div className="text-sm text-green-700 dark:text-green-300 text-right mb-4">
-                                سيتم توجيهك لإكمال عملية التحويل المباشر
-                              </div>
-
-                              <div className="space-y-4">
-                                <div>
-                                  <Label
-                                    htmlFor="p2p-phone"
-                                    className="block mb-2 text-right text-foreground"
-                                  >
-                                    رقم هاتفك
-                                  </Label>
-                                  <Input
-                                    id="p2p-phone"
-                                    type="tel"
-                                    placeholder="+213 555 123 456"
-                                    className="text-left bg-background"
-                                    dir="ltr"
-                                  />
-                                </div>
-
-                                <div>
-                                  <Label
-                                    htmlFor="p2p-name"
-                                    className="block mb-2 text-right text-foreground"
-                                  >
-                                    الاسم الكامل
-                                  </Label>
-                                  <Input
-                                    id="p2p-name"
-                                    type="text"
-                                    placeholder="أدخل اسمك الكامل"
-                                    className="text-right bg-background"
-                                    dir="rtl"
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          )}
+                            )}
+                        </>
+                      ) : (
+                        /* Free Product Message */
+                        <div className="text-center py-8">
+                          <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
+                            <h3 className="text-lg font-semibold text-blue-700 dark:text-blue-300 mb-2">
+                              منتج مجاني
+                            </h3>
+                            <p className="text-blue-600 dark:text-blue-400">
+                              هذا المنتج متاح مجاناً. يمكنك الوصول إليه مباشرة
+                              دون الحاجة للدفع.
+                            </p>
+                          </div>
                         </div>
                       )}
                     </div>
@@ -343,22 +301,6 @@ export function PaymentButton() {
                 </div>
               </ScrollArea>
             </div>
-
-            <SheetFooter className="pt-6 border-t mt-4 flex-shrink-0">
-              <div className="w-full space-y-3">
-                <BrandButton
-                  onClick={handleCheckout}
-                  className="w-full h-12 text-lg font-semibold"
-                  style={{ backgroundColor: primaryColor }}
-                  disabled={loading || activeConnections.length === 0}
-                >
-                  {loading ? "جارٍ المعالجة..." : "ادفع 5000 د.ج"}
-                </BrandButton>
-                <p className="text-xs text-center text-muted-foreground px-4">
-                  بالنقر على "ادفع"، فإنك توافق على شروط الخدمة وسياسة الخصوصية
-                </p>
-              </div>
-            </SheetFooter>
           </div>
         )}
       </SheetContent>

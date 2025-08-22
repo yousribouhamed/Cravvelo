@@ -3,27 +3,27 @@ export type Course = {
   rating: number;
   accountId: string;
   title: string;
-  courseUrl: string;
+  courseUrl: string | null;
   youtubeUrl: string | null;
   thumbnailUrl: string | null;
-  courseResume: string;
-  courseRequirements: string;
-  courseWhatYouWillLearn: string;
-  courseDescription: string; // HTML string
-  seoTitle: string;
-  seoDescription: string;
-  price: number;
-  compareAtPrice: number | null;
-  studentsNbr: number;
+  courseResume: string | null;
+  courseRequirements: string | null;
+  courseWhatYouWillLearn: string | null;
+  courseDescription: any; // JSON type from Prisma (rich text editor content)
+  seoTitle: string | null;
+  seoDescription: string | null;
+  price: number | null; // Keep for backward compatibility
+  compareAtPrice: number | null; // Keep for backward compatibility
+  studentsNbr: number | null;
   preview_video: string | null;
-  profit: number | null;
+  profit: string | null;
   length: number; // in minutes
   nbrChapters: number;
-  status: "DRAFT" | "PUBLISHED" | "ARCHIVED" | string; // extend if needed
-  trainers: string[] | null; // could be IDs or objects depending on your schema
+  status: "DRAFT" | "PUBLISHED" | "ARCHIVED" | string;
+  trainers: string | null;
   suspended: boolean;
-  level: "BEGINNER" | "INTERMEDIATE" | "ADVANCED" | string;
-  sound: "ARABIC" | "ENGLISH" | "FRENCH" | string;
+  level: "BEGINNER" | "INTERMEDIATE" | "ADVANCED" | string | null;
+  sound: "ARABIC" | "ENGLISH" | "FRENCH" | string | null;
   allowComment: boolean;
   allowRating: boolean;
   forceWatchAllCourse: boolean;
@@ -32,6 +32,107 @@ export type Course = {
   totalEnrollments: number;
   createdAt: Date;
   updatedAt: Date;
+};
+
+// Pricing Plan type
+export type PricingPlan = {
+  id: string;
+  accountId: string;
+  name: string;
+  description: string | null;
+  pricingType: "FREE" | "ONE_TIME" | "RECURRING";
+  price: number | null;
+  compareAtPrice: number | null;
+  currency: string;
+  accessDuration: "LIMITED" | "UNLIMITED" | null;
+  accessDurationDays: number | null;
+  recurringDays: number | null;
+  isActive: boolean;
+  isDefault: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+// Course Pricing Plan junction type
+export type CoursePricingPlan = {
+  id: string;
+  courseId: string;
+  pricingPlanId: string;
+  isDefault: boolean;
+  createdAt: Date;
+  PricingPlan: PricingPlan;
+};
+
+// Use your existing ModuleType and ChapterType
+// (Remove the Chapter type since you already have ChapterType)
+
+// Comment type (for completeness)
+export type Comment = {
+  id: string;
+  content: string;
+  rating: number;
+  studentId: string;
+  courseId: string;
+  accountId: string;
+  status: string;
+  isApproved: boolean;
+  isPublic: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  Student?: {
+    full_name: string;
+    photo_url: string | null;
+  };
+};
+
+// Extended Course type with all relations (what your server actions return)
+export type CourseWithPricing = Course & {
+  CoursePricingPlans: CoursePricingPlan[];
+  Chapter?: ChapterType[]; // Use your existing ChapterType
+  Comment?: Comment[];
+  _count?: {
+    Sale: number;
+    Comment: number;
+  };
+};
+
+export type CourseWithDefaultPricing = Course & {
+  CoursePricingPlans: CoursePricingPlan[];
+  _count?: {
+    Sale: number;
+  };
+};
+
+export type CourseListItem = Pick<
+  Course,
+  | "id"
+  | "title"
+  | "thumbnailUrl"
+  | "rating"
+  | "studentsNbr"
+  | "level"
+  | "length"
+  | "status"
+  | "totalViews"
+  | "totalEnrollments"
+> & {
+  CoursePricingPlans: Pick<CoursePricingPlan, "isDefault" | "PricingPlan">[];
+};
+
+// For course creation/editing forms
+export type CourseFormData = Omit<
+  Course,
+  "id" | "createdAt" | "updatedAt" | "totalViews" | "totalEnrollments"
+> & {
+  pricingPlans?: Omit<
+    PricingPlan,
+    "id" | "accountId" | "createdAt" | "updatedAt"
+  >[];
+};
+
+// Utility type to get the default pricing plan for a course
+export type DefaultPricingPlan = CoursePricingPlan & {
+  isDefault: true;
 };
 
 export type ModuleType = {
