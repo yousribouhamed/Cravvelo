@@ -1,7 +1,7 @@
 "use server";
 
 import { withTenant } from "@/_internals/with-tenant";
-import type { ChargilyApiResponse } from "./types";
+import type { ChargilyApiResponse } from "../types";
 
 const BASE_URL =
   process.env.NODE_ENV === "production"
