@@ -638,6 +638,9 @@ model Payment {
   description       String?            @db.Text
   metadata          Json?
 
+   // New: checkout session or redirect url
+  checkoutUrl       String?            @db.Text
+
   // Refund info
   refundAmount      Float?             @default(0)
   refundReason      String?            @db.Text

@@ -74,6 +74,7 @@ export function courseToPaymentProduct(
     image: course.thumbnailUrl || undefined,
     pricingOptions,
     selectedPricingId: defaultPricing?.id,
+    type: "COURSE",
   };
 }
 

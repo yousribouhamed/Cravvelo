@@ -12,6 +12,7 @@ interface BrandButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   children?: React.ReactNode;
+  loading: boolean;
 }
 
 const BrandButton = forwardRef<HTMLButtonElement, BrandButtonProps>(
@@ -23,6 +24,7 @@ const BrandButton = forwardRef<HTMLButtonElement, BrandButtonProps>(
       size = "default",
       asChild = false,
       style,
+      loading,
       ...props
     },
     ref
@@ -87,6 +89,7 @@ const BrandButton = forwardRef<HTMLButtonElement, BrandButtonProps>(
 
     return (
       <Button
+        loading={loading}
         ref={ref}
         variant={variant}
         className={cn(

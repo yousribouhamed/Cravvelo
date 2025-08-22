@@ -8,7 +8,7 @@ import MaxWidthWrapper from "@/components/max-with-wrapper";
 import { getCurrentUser } from "@/modules/auth/lib/utils";
 import "@smastrom/react-rating/style.css";
 import { PaymentProvider } from "@/modules/payments/context/payments-provider";
-
+import { Toaster } from "@/components/ui/sonner";
 interface TenantLayoutProps {
   children: ReactNode;
   params: Promise<{
@@ -54,6 +54,8 @@ export default async function TenantLayout({
             <Header />
             <MaxWidthWrapper className="flex flex-col">
               {children}
+
+              <Toaster />
             </MaxWidthWrapper>
           </PaymentProvider>
         </Providers>

@@ -1,8 +1,7 @@
-"use client";
-
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
+import { CravveloSpinner } from "../cravvelo-spinner";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
@@ -35,24 +34,71 @@ const buttonVariants = cva(
   }
 );
 
+// Helper function to get spinner color based on variant
+const getSpinnerColor = (variant: string | null | undefined) => {
+  switch (variant) {
+    case "outline":
+    case "ghost":
+      return "currentColor";
+    case "link":
+      return "currentColor";
+    default:
+      return "white";
+  }
+};
+
+// Helper function to get spinner size based on button size
+const getSpinnerSize = (size: string | null | undefined) => {
+  switch (size) {
+    case "sm":
+      return 14;
+    case "lg":
+      return 18;
+    case "icon":
+      return 16;
+    default:
+      return 16;
+  }
+};
+
+interface ButtonProps
+  extends React.ComponentProps<"button">,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+  loading?: boolean;
+}
+
 function Button({
   className,
   variant,
   size,
   asChild = false,
+  loading = false,
+  children,
+  disabled,
   ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
-  }) {
+}: ButtonProps) {
   const Comp = asChild ? Slot : "button";
 
   return (
     <Comp
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
+      disabled={disabled || loading}
       {...props}
-    />
+    >
+      {loading ? (
+        <>
+          <CravveloSpinner
+            size={getSpinnerSize(size)}
+            color={getSpinnerColor(variant)}
+          />
+          <span className="sr-only">Loading...</span>
+        </>
+      ) : (
+        children
+      )}
+    </Comp>
   );
 }
 
