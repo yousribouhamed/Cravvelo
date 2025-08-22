@@ -41,13 +41,8 @@ export default async function Page() {
         <Header notifications={notifications} user={user} title="الرئيسية" />
 
         <div dir={"ltr"} className="my-4 mx-auto space-y-6">
-          <RevenueChartWrapper data={sampleData} currency="DZD" />
-
           {/* Example with data */}
           <RevenueChart initialData={sampleData} currency="DZD" />
-
-          {/* Example with no data */}
-          <RevenueChart initialData={[]} currency="DZD" />
         </div>
       </main>
     </MaxWidthWrapper>

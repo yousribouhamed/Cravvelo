@@ -16,20 +16,19 @@ import { useRouter } from "next/navigation";
 import { useDebounce } from "../hooks/use-debounce";
 import { Button } from "@ui/components/ui/button";
 import { Skeleton } from "@ui/components/ui/skeleton";
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import { isMacOs } from "../lib/utils";
+import { Search, Command } from "lucide-react";
 import { Course, Product } from "database";
 import { trpc } from "../app/_trpc/client";
 import { maketoast } from "./toasts";
 import {
   Box,
-  Gem,
-  Ghost,
-  Palette,
-  PiggyBank,
-  Warehouse,
   Youtube,
   AlertCircle,
+  Sparkles,
+  TrendingUp,
+  Settings,
+  CreditCard,
+  Palette,
 } from "lucide-react";
 
 interface ProductGroup {
@@ -38,24 +37,36 @@ interface ProductGroup {
   courses: Course[];
 }
 
-interface SearchResult {
-  type: "product" | "course" | "page";
-  id: string;
-  title: string;
-  description: string;
-  path: string;
-  icon: React.ComponentType<any>;
-  color: string;
-}
-
 const SearchSkeleton = () => (
-  <div className="space-y-1 p-2">
+  <div className="space-y-3 p-3">
     {[...Array(4)].map((_, i) => (
-      <div key={i} className="flex items-center space-x-4 p-4">
-        <Skeleton className="h-12 w-12 rounded-xl" />
-        <div className="space-y-2 flex-1">
-          <Skeleton className="h-4 w-[250px]" />
-          <Skeleton className="h-4 w-[200px]" />
+      <div key={i} className="flex items-center space-x-3 p-3 rounded-lg">
+        <div className="flex-shrink-0">
+          <Skeleton className="h-10 w-10 rounded-lg" />
+        </div>
+        <div className="flex-1 space-y-2">
+          <Skeleton className="h-4 w-full max-w-[200px]" />
+          <Skeleton className="h-3 w-full max-w-[150px]" />
+        </div>
+        <div className="flex-shrink-0">
+          <Skeleton className="h-4 w-4 rounded" />
+        </div>
+      </div>
+    ))}
+    <div className="px-3 py-2">
+      <Skeleton className="h-px w-full" />
+    </div>
+    {[...Array(2)].map((_, i) => (
+      <div
+        key={`group-${i}`}
+        className="flex items-center space-x-3 p-3 rounded-lg"
+      >
+        <div className="flex-shrink-0">
+          <Skeleton className="h-10 w-10 rounded-lg" />
+        </div>
+        <div className="flex-1 space-y-2">
+          <Skeleton className="h-4 w-full max-w-[180px]" />
+          <Skeleton className="h-3 w-full max-w-[120px]" />
         </div>
       </div>
     ))}
@@ -64,32 +75,28 @@ const SearchSkeleton = () => (
 
 const DEFAULT_PAGES = [
   {
-    name: "وسائل الدفع",
+    name: "طرق الدفع",
     path: "/settings/payments-methods",
-    description: "هناك الكثير من الامور للبحث عنها",
-    icon: PiggyBank,
-    color: "bg-violet-500",
+    description: "إدارة طرق الدفع والفواتير",
+    icon: CreditCard,
   },
   {
-    name: "تخصيص الاكادمية",
+    name: "المظهر",
     path: "/settings/website-settings/appearance",
-    description: "عدل الالوان و الشعار في الأكاديمية",
+    description: "تخصيص الألوان والشعار والقالب",
     icon: Palette,
-    color: "bg-red-500",
   },
   {
-    name: "اخر المبيعات",
+    name: "المبيعات الأخيرة",
     path: "/orders",
-    description: "كل عملية شراء في الأكاديمية تعتبر مبيعة",
-    icon: Gem,
-    color: "bg-blue-500",
+    description: "تتبع المبيعات والطلبات الحديثة",
+    icon: TrendingUp,
   },
   {
-    name: "سياسة الاكاديمية",
+    name: "إعدادات الأكاديمية",
     path: "/settings/website-settings/legal",
-    description: "احم نفسك و طلابك",
-    icon: Warehouse,
-    color: "bg-green-500",
+    description: "إدارة الشروط والأحكام والخصوصية",
+    icon: Settings,
   },
 ];
 
@@ -97,7 +104,7 @@ export const SearchInput: FC = () => {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
-  const debouncedQuery = useDebounce(query, 300);
+  const debouncedQuery = useDebounce(query, 500); // Increased debounce time
   const [data, setData] = React.useState<ProductGroup | null>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [isSearching, setIsSearching] = React.useState(false);
@@ -109,13 +116,16 @@ export const SearchInput: FC = () => {
       setIsSearching(false);
     },
     onError: (error) => {
+      console.error("Search error:", error);
       setError(error.message || "حدث خطأ في البحث");
-      maketoast.error();
+      maketoast.error("فشل في البحث. حاول مرة أخرى.");
       setIsSearching(false);
+      setData(null);
     },
   });
 
   React.useEffect(() => {
+    // Reset states when query is cleared
     if (debouncedQuery.length <= 0) {
       setData(null);
       setError(null);
@@ -123,17 +133,35 @@ export const SearchInput: FC = () => {
       return;
     }
 
+    // Don't search for very short queries
     if (debouncedQuery.length < 2) {
       return;
     }
 
+    // Start searching
     setIsSearching(true);
     setError(null);
+    setData(null); // Clear previous results
 
-    mutation.mutate({
-      query: debouncedQuery,
-    });
-  }, [debouncedQuery]); // Remove mutation from dependencies to prevent infinite loop
+    // Add timeout to handle slow API responses
+    const timeoutId = setTimeout(() => {
+      if (isSearching) {
+        setError("انتهت مهلة البحث. حاول مرة أخرى.");
+        setIsSearching(false);
+      }
+    }, 10000); // 10 second timeout
+
+    mutation.mutate(
+      { query: debouncedQuery },
+      {
+        onSettled: () => {
+          clearTimeout(timeoutId);
+        },
+      }
+    );
+
+    return () => clearTimeout(timeoutId);
+  }, [debouncedQuery]);
 
   // Keyboard shortcut
   React.useEffect(() => {
@@ -152,10 +180,13 @@ export const SearchInput: FC = () => {
   }, []);
 
   // Handle item selection
-  const handleSelect = React.useCallback((callback: () => void) => {
-    setOpen(false);
-    callback();
-  }, []);
+  const handleSelect = React.useCallback(
+    (path: string) => {
+      setOpen(false);
+      router.push(path);
+    },
+    [router]
+  );
 
   // Reset query when dialog closes
   React.useEffect(() => {
@@ -167,209 +198,207 @@ export const SearchInput: FC = () => {
     }
   }, [open]);
 
-  // Transform data into search results
-  const searchResults = React.useMemo((): SearchResult[] => {
-    if (!data) return [];
-
-    const results: SearchResult[] = [];
-
-    // Add products
-    data.products.forEach((product) => {
-      results.push({
-        type: "product",
-        id: product.id,
-        title: product.title,
-        description: product.SeoDescription || product.subDescription || "",
-        path: `/product/${product.id}`,
-        icon: Box,
-        color: "bg-green-500 dark:bg-green-600",
-      });
-    });
-
-    // Add courses
-    data.courses.forEach((course) => {
-      results.push({
-        type: "course",
-        id: course.id,
-        title: course.title,
-        description: course.courseResume || "",
-        path: `/courses/${course.id}/chapters`,
-        icon: Youtube,
-        color: "bg-violet-500 dark:bg-violet-600",
-      });
-    });
-
-    return results;
-  }, [data]);
-
   const showDefaultPages = !query && !data && !isSearching;
-  const showSearchResults = query && (data || isSearching);
+  const showSearchResults = query && data && !isSearching;
   const showNoResults =
-    query && data && searchResults.length === 0 && !isSearching;
+    query &&
+    !isSearching &&
+    data &&
+    (!data.products || data.products.length === 0) &&
+    (!data.courses || data.courses.length === 0) &&
+    (!data.pages || data.pages.length === 0);
+
+  const totalResults = React.useMemo(() => {
+    if (!data) return 0;
+    return (
+      (data.products?.length || 0) +
+      (data.courses?.length || 0) +
+      (data.pages?.length || 0)
+    );
+  }, [data]);
 
   return (
     <>
+      {/* Search Trigger Button */}
       <Button
         variant="ghost"
-        className="relative hidden md:flex h-9 w-9 p-0 xl:h-10 md:justify-start md:px-3 md:py-4 md:w-[641px] border rounded-xl bg-card hover:bg-gray-50 "
+        size="sm"
+        className="h-9 bg-card w-full max-w-sm justify-start px-3 text-right font-normal 
+                   border border-gray-200 dark:border-gray-700 
+                   hover:border-blue-300 dark:hover:border-blue-600
+                   hover:bg-blue-50 dark:hover:bg-blue-950
+                   transition-all duration-200 hover:shadow-sm"
         onClick={() => setOpen(true)}
+        dir="rtl"
       >
-        <MagnifyingGlassIcon
-          className="h-4 w-4 xl:ml-2 text-gray-600 dark:text-gray-400"
-          aria-hidden="true"
-        />
-        <span className="hidden xl:inline-flex text-gray-600 dark:text-gray-400">
-          بحث...
+        <Search className="ml-2 h-4 w-4 text-gray-400" />
+        <span className="flex-1 text-gray-500 text-sm">
+          البحث في الدورات والمنتجات...
         </span>
-        <span className="sr-only">Search</span>
-        <kbd className="pointer-events-none absolute left-1.5 top-2 hidden h-6 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-xs font-medium opacity-100 xl:flex dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300">
-          <abbr
-            title={isMacOs() ? "Command" : "Control"}
-            className="no-underline"
-          >
-            {isMacOs() ? "⌘" : "Ctrl"}
-          </abbr>
-          K
+        <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex">
+          <Command className="h-3 w-3" />K
         </kbd>
       </Button>
 
-      <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput
-          placeholder="ابحث عن الدورات والمنتجات والصفحات..."
-          value={query}
-          onValueChange={setQuery}
-        />
+      {/* Search Dialog */}
+      <CommandDialog open={open} onOpenChange={setOpen} title="البحث">
+        <div dir="rtl">
+          <CommandInput
+            placeholder="ابحث عن أي شيء..."
+            value={query}
+            onValueChange={setQuery}
+            className="text-right"
+          />
 
-        <CommandList>
-          {/* Error State */}
-          {error && (
-            <div className="flex items-center justify-center p-4 text-red-500 dark:text-red-400">
-              <AlertCircle className="w-4 h-4 mr-2" />
-              <span>{error}</span>
-            </div>
-          )}
+          <CommandList>
+            {/* Error State */}
+            {error && (
+              <div
+                className="flex items-center gap-2 p-4 text-red-600 dark:text-red-400"
+                dir="rtl"
+              >
+                <AlertCircle className="h-4 w-4 flex-shrink-0" />
+                <span className="text-sm">{error}</span>
+              </div>
+            )}
 
-          {/* Loading State */}
-          {isSearching && <SearchSkeleton />}
-
-          {/* Default Pages (when no query) */}
-          {showDefaultPages && (
-            <CommandGroup heading="الصفحات الرئيسية">
-              {DEFAULT_PAGES.map((page) => (
-                <CommandItem
-                  key={page.path}
-                  value={page.name}
-                  className="w-full h-[70px] border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
-                  onSelect={() => handleSelect(() => router.push(page.path))}
+            {/* Loading State */}
+            {isSearching && (
+              <div className="p-2">
+                <div
+                  className="flex items-center gap-2 p-3 text-sm text-gray-600 dark:text-gray-400"
+                  dir="rtl"
                 >
-                  <div
-                    className={`w-[50px] h-[50px] ${page.color} rounded-2xl shadow flex items-center justify-center`}
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-600 border-t-transparent"></div>
+                  <span>جاري البحث...</span>
+                </div>
+                <SearchSkeleton />
+              </div>
+            )}
+
+            {/* Default Pages (when no query) */}
+            {showDefaultPages && (
+              <CommandGroup heading="الصفحات المقترحة">
+                {DEFAULT_PAGES.map((page) => (
+                  <CommandItem
+                    key={page.path}
+                    value={page.name}
+                    onSelect={() => handleSelect(page.path)}
+                    className="flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg mx-2"
+                    dir="rtl"
                   >
-                    <page.icon className="w-5 h-5 text-white" strokeWidth={3} />
-                  </div>
-                  <div className="w-[calc(100%-60px)] h-full flex flex-col items-start justify-center">
-                    <span className="text-xl font-bold text-black dark:text-white">
-                      {page.name}
-                    </span>
-                    <span className="text-gray-600 dark:text-gray-400 text-start">
-                      {page.description}
-                    </span>
-                  </div>
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          )}
-
-          {/* Search Results */}
-          {showSearchResults && !isSearching && (
-            <>
-              {/* Products */}
-              {data?.products && data.products.length > 0 && (
-                <CommandGroup heading="المنتجات">
-                  {data.products.map((product) => (
-                    <CommandItem
-                      key={product.id}
-                      value={product.title}
-                      className="w-full h-[70px] border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
-                      onSelect={() =>
-                        handleSelect(() =>
-                          router.push(`/product/${product.id}`)
-                        )
-                      }
-                    >
-                      <div className="w-[50px] h-[50px] bg-green-500 rounded-2xl shadow flex items-center justify-center">
-                        <Box className="w-5 h-5 text-white" strokeWidth={3} />
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900 flex-shrink-0">
+                      <page.icon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-right truncate">
+                        {page.name}
                       </div>
-                      <div className="w-[calc(100%-60px)] h-full flex flex-col items-start justify-center">
-                        <span className="text-xl font-bold text-black dark:text-white">
-                          {product.title}
-                        </span>
-                        <span className="text-gray-600 dark:text-gray-400 text-start truncate">
-                          {product.SeoDescription ||
-                            product.subDescription ||
-                            ""}
-                        </span>
+                      <div className="text-xs text-gray-600 dark:text-gray-400 text-right truncate">
+                        {page.description}
                       </div>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              )}
+                    </div>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
 
-              {/* Courses */}
-              {data?.courses && data.courses.length > 0 && (
-                <>
-                  {data.products && data.products.length > 0 && (
-                    <CommandSeparator className="dark:bg-gray-700" />
-                  )}
-                  <CommandGroup heading="الدورات">
-                    {data.courses.map((course) => (
+            {/* Search Results */}
+            {showSearchResults && (
+              <>
+                {totalResults > 0 && (
+                  <div
+                    className="px-3 py-2 text-xs text-gray-500 dark:text-gray-400"
+                    dir="rtl"
+                  >
+                    تم العثور على {totalResults} نتيجة
+                  </div>
+                )}
+
+                {/* Products */}
+                {data.products && data.products.length > 0 && (
+                  <CommandGroup heading={`المنتجات (${data.products.length})`}>
+                    {data.products.map((product) => (
                       <CommandItem
-                        key={course.id}
-                        value={course.title}
-                        className="w-full h-[70px] border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
-                        onSelect={() =>
-                          handleSelect(() =>
-                            router.push(`/courses/${course.id}/chapters`)
-                          )
-                        }
+                        key={product.id}
+                        value={product.title}
+                        onSelect={() => handleSelect(`/product/${product.id}`)}
+                        className="flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg mx-2"
+                        dir="rtl"
                       >
-                        <div className="w-[50px] h-[50px] bg-violet-500 rounded-2xl shadow flex items-center justify-center">
-                          <Youtube
-                            className="w-5 h-5 text-white"
-                            strokeWidth={3}
-                          />
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900 flex-shrink-0">
+                          <Box className="h-5 w-5 text-green-600 dark:text-green-400" />
                         </div>
-                        <div className="w-[calc(100%-60px)] h-full flex flex-col items-start justify-center">
-                          <span className="text-xl font-bold text-black dark:text-white">
-                            {course.title}
-                          </span>
-                          <span className="text-gray-600 dark:text-gray-400 text-start truncate">
-                            {course.courseResume || ""}
-                          </span>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-medium text-right truncate">
+                            {product.title}
+                          </div>
+                          <div className="text-xs text-gray-600 dark:text-gray-400 text-right truncate">
+                            {product.SeoDescription ||
+                              product.subDescription ||
+                              "منتج رقمي"}
+                          </div>
                         </div>
                       </CommandItem>
                     ))}
                   </CommandGroup>
-                </>
-              )}
-            </>
-          )}
+                )}
 
-          {/* Empty State */}
-          {showNoResults && (
-            <CommandEmpty>
-              <div className="flex flex-col items-center justify-center p-8 text-center">
-                <Ghost className="w-12 h-12 text-gray-400 dark:text-gray-500 mb-4" />
-                <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2">
-                  لا توجد نتائج
-                </h3>
-                <p className="text-gray-500 dark:text-gray-400 text-sm">
-                  جرب البحث بكلمات مختلفة أو تحقق من الإملاء
-                </p>
-              </div>
-            </CommandEmpty>
-          )}
-        </CommandList>
+                {/* Separator */}
+                {data.products &&
+                  data.products.length > 0 &&
+                  data.courses &&
+                  data.courses.length > 0 && <CommandSeparator />}
+
+                {/* Courses */}
+                {data.courses && data.courses.length > 0 && (
+                  <CommandGroup heading={`الدورات (${data.courses.length})`}>
+                    {data.courses.map((course) => (
+                      <CommandItem
+                        key={course.id}
+                        value={course.title}
+                        onSelect={() =>
+                          handleSelect(`/courses/${course.id}/chapters`)
+                        }
+                        className="flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg mx-2"
+                        dir="rtl"
+                      >
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900 flex-shrink-0">
+                          <Youtube className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-medium text-right truncate">
+                            {course.title}
+                          </div>
+                          <div className="text-xs text-gray-600 dark:text-gray-400 text-right truncate">
+                            {course.courseResume || "دورة تعليمية"}
+                          </div>
+                        </div>
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                )}
+              </>
+            )}
+
+            {/* Empty State */}
+            {showNoResults && (
+              <CommandEmpty>
+                <div className="flex flex-col items-center p-6 text-center">
+                  <div className="mb-4 h-12 w-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                    <Search className="h-6 w-6 text-gray-400" />
+                  </div>
+                  <h3 className="font-semibold text-gray-600 dark:text-gray-300 mb-2">
+                    لم يتم العثور على نتائج
+                  </h3>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm max-w-sm">
+                    جرب كلمات مفتاحية مختلفة أو تحقق من الإملاء
+                  </p>
+                </div>
+              </CommandEmpty>
+            )}
+          </CommandList>
+        </div>
       </CommandDialog>
     </>
   );

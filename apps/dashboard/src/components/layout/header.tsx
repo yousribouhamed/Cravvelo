@@ -6,16 +6,9 @@ import UserNav from "../auth/user-nav";
 import { Button } from "@ui/components/ui/button";
 import { useRouter } from "next/navigation";
 import MobildSideBard from "./mobile-sidebar";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@ui/components/ui/tooltip";
 import Notifications from "../real-time/notifications";
 import { ArrowRight } from "lucide-react";
 import { UserData } from "@/src/types";
-import { daysLeftInTrial } from "@/src/lib/utils";
 import { Notification } from "database";
 
 interface Props {
@@ -37,95 +30,56 @@ const Header: FC<Props> = ({
 
   return (
     <div className="w-full">
-      <TooltipProvider>
-        <div className="w-full h-16 md:h-20 flex justify-between items-center  dark:border-zinc-800 ">
-          {/* Left Section - Mobile Sidebar & Back Button & Title */}
-          <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
-            {/* Mobile Sidebar - Always first on mobile */}
-            <div className="lg:hidden flex-shrink-0">
-              <MobildSideBard />
-            </div>
-
-            {/* Back Button */}
-            {goBack && (
-              <Tooltip delayDuration={0}>
-                <TooltipTrigger asChild>
-                  <Button
-                    onClick={() => router.back()}
-                    variant="outline"
-                    size="icon"
-                    className="flex-shrink-0"
-                  >
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>عد للصفحة السابقة</p>
-                </TooltipContent>
-              </Tooltip>
-            )}
-
-            {/* Title */}
-            <h1 className="text-sm md:text-base lg:text-lg font-semibold text-gray-900 dark:text-gray-100 truncate">
-              {title}
-            </h1>
+      <div className="w-full h-16 md:h-20 flex justify-between items-center ">
+        {/* Left Section - Mobile Sidebar & Back Button & Title */}
+        <div className="flex items-center gap-1 sm:gap-2 md:gap-3 min-w-0 flex-1">
+          {/* Mobile Sidebar - Always first on mobile */}
+          <div className="lg:hidden flex-shrink-0">
+            <MobildSideBard />
           </div>
 
-          {/* Center Section - Search (Desktop only) */}
-          <div className="hidden lg:flex flex-1 max-w-md mx-4 xl:mx-8">
-            <SearchInput />
-          </div>
+          {/* Back Button */}
+          {goBack && (
+            <Button
+              onClick={() => router.back()}
+              variant="outline"
+              size="icon"
+              className="flex-shrink-0 h-8 w-8 sm:h-9 sm:w-9"
+            >
+              <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
+            </Button>
+          )}
 
-          {/* Right Section - Notifications & User Nav */}
-          <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
-            <div className="flex-shrink-0">
-              <Notifications
-                accountId={user.accountId}
-                notifications={notifications}
-              />
-            </div>
-
-            <Tooltip delayDuration={0}>
-              <TooltipTrigger asChild>
-                <div className="flex-shrink-0">
-                  <UserNav user={user} />
-                </div>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>هذه هي قائمة التنقل الخاصة بالمستخدم</p>
-              </TooltipContent>
-            </Tooltip>
-          </div>
+          {/* Title */}
+          <h1 className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-gray-900 dark:text-gray-100 truncate min-w-0">
+            {title}
+          </h1>
         </div>
 
-        {/* Mobile & Tablet Search Bar */}
-        <div className="lg:hidden px-4 py-3 ">
+        {/* Center Section - Search (Desktop only) */}
+        <div className="hidden lg:flex flex-1 max-w-sm xl:max-w-md mx-4 xl:mx-8">
           <SearchInput />
         </div>
-      </TooltipProvider>
 
-      {/* Trial Status Banner */}
-      {user?.isFreeTrial && !user?.isSubscribed && !isLoadingPage && (
-        <div className="mt-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 border border-blue-200 dark:border-blue-800 rounded-xl px-4 py-3 shadow-sm">
-          <div className="flex items-center justify-center">
-            <h1 className="text-blue-800 dark:text-blue-200 font-medium text-xs md:text-sm text-center leading-relaxed">
-              لديك {daysLeftInTrial(user.createdAt)} يومًا متبقيًا في النسخة
-              التجريبية المجانية
-            </h1>
+        {/* Right Section - Notifications & User Nav */}
+        <div className="flex items-center gap-1 sm:gap-2 md:gap-3 flex-shrink-0">
+          <div className="flex-shrink-0">
+            <Notifications
+              accountId={user.accountId}
+              notifications={notifications}
+            />
+          </div>
+
+          <div className="flex-shrink-0">
+            <UserNav user={user} />
           </div>
         </div>
-      )}
+      </div>
 
-      {/* Expired Trial Banner */}
-      {!user?.isSubscribed && !user?.isFreeTrial && !isLoadingPage && (
-        <div className="mt-4 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-950/50 dark:to-pink-950/50 border border-red-200 dark:border-red-800 rounded-xl px-4 py-3 shadow-sm">
-          <div className="flex items-center justify-center">
-            <h1 className="text-red-800 dark:text-red-200 font-medium text-xs md:text-sm text-center leading-relaxed">
-              انتهت الفترة التجريبية، يجب عليك الاشتراك في أحد الباقات
-            </h1>
-          </div>
-        </div>
-      )}
+      {/* Mobile & Tablet Search Bar */}
+      <div className="lg:hidden px-2 sm:px-4 pb-3">
+        <SearchInput />
+      </div>
     </div>
   );
 };
