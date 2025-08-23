@@ -923,21 +923,7 @@ model Referral {
   @@index([accountId])
 }
 
-model Admin {
-  id        String   @id @unique @default(cuid())
-  name      String?
-  email     String?  @unique
-  photo_url String?  @db.Text
-  password  String
-  role      String   @default("ADMIN") // SUPER_ADMIN, ADMIN, MODERATOR
-  isActive  Boolean  @default(true)
-  
-  // Admin permissions
-  permissions Json?
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+
 
 model AcademiaMessage {
   id            String   @id @unique @default(cuid())
@@ -999,4 +985,44 @@ model InstalledApp {
   updatedAt DateTime @updatedAt
 
   app   App   @relation(fields: [appId], references: [id])
+}
+
+model Admin {
+  id        String   @id @unique @default(cuid())
+  name      String?
+  email     String?  @unique
+  photo_url String?  @db.Text
+  password  String
+  role      String   @default("ADMIN") // SUPER_ADMIN, ADMIN, MODERATOR
+  isActive  Boolean  @default(true)
+  
+  // Admin permissions
+  permissions Json?
+
+  // Self-relation: who created this admin
+  createdBy   Admin?   @relation("AdminCreatedBy", fields: [createdById], references: [id])
+  createdById String?
+
+  // Self-relation: which admins this one has created
+  createdAdmins Admin[] @relation("AdminCreatedBy")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  AdminActivity AdminActivity[]
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  MODERATOR
+}
+
+model AdminActivity {
+  id        String   @id @default(cuid())
+  action    String
+  meta      Json?
+  createdAt DateTime @default(now())
+  adminId   String
+  admin     Admin    @relation(fields: [adminId], references: [id])
 }

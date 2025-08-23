@@ -2,7 +2,7 @@
 
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { PropsWithChildren, useEffect } from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 import { LoadingScreen } from "../loading-screen";
 
 interface PublicPageRestrictionGuardProps {
@@ -15,21 +15,28 @@ export default function PublicPageRestrictionGuard({
 }: PropsWithChildren<PublicPageRestrictionGuardProps>) {
   const { isSignedIn, isLoaded } = useUser();
   const router = useRouter();
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   useEffect(() => {
     // Only redirect after Clerk has finished loading and user is confirmed signed in
-    if (isLoaded && isSignedIn) {
-      router.push(redirectTo);
+    if (isLoaded && isSignedIn && !isRedirecting) {
+      // Add a small delay to ensure Clerk state is stable
+      const timeoutId = setTimeout(() => {
+        setIsRedirecting(true);
+        router.replace(redirectTo);
+      }, 100);
+
+      return () => clearTimeout(timeoutId);
     }
-  }, [isLoaded, isSignedIn, router, redirectTo]);
+  }, [isLoaded, isSignedIn, router, redirectTo, isRedirecting]);
 
   // Show loading state while Clerk is initializing
   if (!isLoaded) {
     return <LoadingScreen mode="restriction" />;
   }
 
-  // If user is signed in, don't render children (redirect is happening)
-  if (isSignedIn) {
+  // If user is signed in or we're redirecting, show loading
+  if (isSignedIn || isRedirecting) {
     return <LoadingScreen mode="restriction" />;
   }
 

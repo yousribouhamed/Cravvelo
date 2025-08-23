@@ -15,51 +15,51 @@ export const SIDEBAR_ITEMS = [
   {
     name: "Dashboard",
     slug: "/",
-    icon: <LayoutDashboard className="w-6 h-6" />,
+    icon: <LayoutDashboard className="w-5 h-5" />,
   },
   {
     name: "Payments",
     slug: "/payments",
-    icon: <CreditCard className="w-6 h-6" />,
+    icon: <CreditCard className="w-5 h-5" />,
   },
   {
     name: "Apps",
     slug: "/apps",
-    icon: <AppWindow className="w-6 h-6" />,
+    icon: <AppWindow className="w-5 h-5" />,
   },
   {
     name: "Users",
     slug: "/users",
-    icon: <Users className="w-6 h-6" />,
+    icon: <Users className="w-5 h-5" />,
   },
   {
     name: "Admins",
     slug: "/admins",
-    icon: <ShieldCheck className="w-6 h-6" />,
+    icon: <ShieldCheck className="w-5 h-5" />,
   },
   {
     name: "Analytics",
     slug: "/analytics",
-    icon: <BarChart3 className="w-6 h-6" />,
+    icon: <BarChart3 className="w-5 h-5" />,
   },
   {
     name: "Support",
     slug: "/support",
-    icon: <LifeBuoy className="w-6 h-6" />,
+    icon: <LifeBuoy className="w-5 h-5" />,
   },
   {
     name: "Security",
     slug: "/security",
-    icon: <Shield className="w-6 h-6" />,
+    icon: <Shield className="w-5 h-5" />,
   },
   {
     name: "Feature Flags",
     slug: "/flags",
-    icon: <Flag className="w-6 h-6" />,
+    icon: <Flag className="w-5 h-5" />,
   },
   {
     name: "Settings",
     slug: "/settings",
-    icon: <Settings className="w-6 h-6" />,
+    icon: <Settings className="w-5 h-5" />,
   },
 ];

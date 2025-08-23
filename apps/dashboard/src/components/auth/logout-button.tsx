@@ -2,44 +2,47 @@
 
 import type { FC } from "react";
 import * as React from "react";
-import { useRouter } from "next/navigation";
-import { SignOutButton } from "@clerk/nextjs";
+import { SignOutButton, useClerk } from "@clerk/nextjs";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DropdownMenuItem } from "@ui/components/ui/dropdown-menu";
 import { LogOut } from "lucide-react";
-import { deleteAllCookies } from "@/src/lib/utils";
 
-const LogoutButton: FC = ({}) => {
-  const router = useRouter();
+const LogoutButton: FC = () => {
   const mounted = useMounted();
+  const { signOut } = useClerk();
 
-  const handleSignOut = () => {
-    deleteAllCookies();
-    // The redirect will happen automatically after sign out
+  const handleSignOut = async () => {
+    try {
+      await signOut({
+        redirectUrl: "/",
+      });
+    } catch (error) {
+      console.error("Sign out error:", error);
+      // Fallback redirect
+      window.location.href = "/";
+    }
   };
 
   if (!mounted) {
     return (
       <DropdownMenuItem
         disabled
-        className="w-full h-full flex justify-between items-center p-3 "
+        className="w-full h-full flex justify-between items-center p-3"
       >
-        <LogOut className=" h-4 w-4 text-red-500" />
+        <LogOut className="h-4 w-4 text-red-500" />
         <span className="text-red-500">تسجيل الخروج</span>
       </DropdownMenuItem>
     );
   }
 
   return (
-    <SignOutButton redirectUrl="/">
-      <DropdownMenuItem
-        className="w-full h-full flex justify-between items-center p-3"
-        onClick={handleSignOut}
-      >
-        <LogOut className=" h-4 w-4 text-red-500" />
-        <span className="text-red-500">تسجيل الخروج</span>
-      </DropdownMenuItem>
-    </SignOutButton>
+    <DropdownMenuItem
+      className="w-full h-full flex justify-between items-center p-3 cursor-pointer"
+      onClick={handleSignOut}
+    >
+      <LogOut className="h-4 w-4 text-red-500" />
+      <span className="text-red-500">تسجيل الخروج</span>
+    </DropdownMenuItem>
   );
 };
 
