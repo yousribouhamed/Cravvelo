@@ -173,10 +173,12 @@ export function SignInForm() {
             />
           </div>
           <div className="text-center">
-            <CardTitle className="text-2xl font-bold text-gray-900 mb-2">
+            <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
               مرحبًا بعودتك!
             </CardTitle>
-            <p className="text-gray-600 text-sm">سجّل دخولك للوصول إلى حسابك</p>
+            <p className="text-gray-600 dark:text-gray-50 text-sm">
+              سجّل دخولك للوصول إلى حسابك
+            </p>
           </div>
         </div>
       </CardHeader>
@@ -204,10 +206,12 @@ export function SignInForm() {
         {/* Divider */}
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-300"></div>
+            <div className="w-full border-t border"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">أو</span>
+            <span className="px-2 bg-backgound dark:text-gray-50 text-gray-500 ">
+              أو
+            </span>
           </div>
         </div>
 
@@ -222,13 +226,13 @@ export function SignInForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-700 font-medium">
+                  <FormLabel className="text-gray-700 dark:text-gray-50 font-medium">
                     البريد الإلكتروني
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="أدخِل عنوان البريد الإلكتروني"
-                      className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                      className="h-11 border focus:border-blue-500 focus:ring-blue-500 transition-colors"
                       {...field}
                     />
                   </FormControl>
@@ -243,14 +247,14 @@ export function SignInForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-700 font-medium">
+                  <FormLabel className="text-gray-700 dark:text-gray-50 font-medium">
                     كلمة المرور
                   </FormLabel>
                   <FormControl>
                     <div className="relative">
                       <PasswordInput
                         placeholder="أدخِل كلمة المرور"
-                        className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-colors "
+                        className="h-11 border focus:border-blue-500 focus:ring-blue-500 transition-colors "
                         {...field}
                       />
                     </div>
@@ -269,11 +273,11 @@ export function SignInForm() {
                   onCheckedChange={(checked) =>
                     handleRememberMeChange(checked === true)
                   }
-                  className="border-gray-300 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
+                  className="border data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
                 />
                 <label
                   htmlFor="rememberMe"
-                  className="text-sm text-gray-700 cursor-pointer select-none"
+                  className="text-sm text-gray-700 dark:text-gray-50 cursor-pointer select-none"
                 >
                   تذكَّر بياناتي
                 </label>
@@ -299,8 +303,8 @@ export function SignInForm() {
         </Form>
 
         {/* Sign Up Link */}
-        <div className="text-center pt-4 border-t border-gray-100">
-          <p className="text-gray-600 text-sm">
+        <div className="text-center pt-4 border-t border-gray-100 dark:border-gray-900">
+          <p className="text-gray-600 dark:text-gray-100 text-sm">
             ليس لديك حساب؟{" "}
             <Link
               href="/sign-up"

@@ -5,8 +5,8 @@ import PublicPageRestrictionGuard from "@/src/components/guards/page-restriction
 const page = async ({}) => {
   return (
     <PublicPageRestrictionGuard>
-      <div className="w-full min-h-screen  h-fit grid grid-cols-3  bg-[#FAFAFA] ">
-        <div className="bg-white p-4 ot-8 hidden lg:flex">
+      <div className="w-full min-h-screen  h-fit grid grid-cols-3   ">
+        <div className="bg-card p-4 ot-8 hidden lg:flex">
           <SliderShow />
         </div>
         <div className=" col-span-3 lg:col-span-2 flex items-center justify-center p-6 ">

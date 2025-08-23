@@ -29,7 +29,14 @@ import { authSchema } from "@/src/lib/validators/auth";
 import { useRouter } from "next/navigation";
 import { catchClerkError } from "@/src/lib/utils";
 import { maketoast } from "../toasts";
-import { User, Mail, Lock, Shield } from "lucide-react";
+import {
+  User,
+  Mail,
+  Lock,
+  Shield,
+  AlertCircle,
+  CheckCircle2,
+} from "lucide-react";
 import Image from "next/image";
 
 type Inputs = z.infer<typeof authSchema>;
@@ -104,10 +111,10 @@ export function SignUpForm() {
             />
           </div>
           <div className="text-center">
-            <CardTitle className="text-2xl font-bold text-gray-900 mb-2">
+            <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
               إنشاء حساب جديد
             </CardTitle>
-            <CardDescription className="text-gray-600 text-sm leading-relaxed">
+            <CardDescription className="text-gray-600 dark:text-gray-50 text-sm leading-relaxed">
               انضم إلينا واستمتع بتجربة مجانية لمدة 14 يومًا، بدون بطاقة بنكية
               أو مصاريف خفية.
             </CardDescription>
@@ -115,23 +122,39 @@ export function SignUpForm() {
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-2">
+        {/* Error Message */}
+        {error && (
+          <div className="flex items-center space-x-2 space-x-reverse p-3 bg-red-50 border border-red-200 rounded-md">
+            <AlertCircle className="h-4 w-4 text-red-600" />
+            <span className="text-sm text-red-700">{error}</span>
+          </div>
+        )}
+
+        {/* Success Message */}
+        {success && (
+          <div className="flex items-center space-x-2 space-x-reverse p-3 bg-green-50 border border-green-200 rounded-md">
+            <CheckCircle2 className="h-4 w-4 text-green-600" />
+            <span className="text-sm text-green-700">{success}</span>
+          </div>
+        )}
+
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             {/* Email Field */}
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-700 font-medium flex items-center gap-2">
+                  <FormLabel className="text-gray-700 dark:text-gray-50 font-medium flex items-center gap-2">
                     <Mail className="w-4 h-4" />
                     البريد الإلكتروني
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="أدخِل عنوان البريد الإلكتروني"
-                      className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                      className="h-11 border focus:border-blue-500 focus:ring-blue-500 transition-colors"
                       {...field}
                     />
                   </FormControl>
@@ -146,14 +169,14 @@ export function SignUpForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-700 font-medium flex items-center gap-2">
+                  <FormLabel className="text-gray-700 dark:text-gray-50 font-medium flex items-center gap-2">
                     <Lock className="w-4 h-4" />
                     كلمة المرور
                   </FormLabel>
                   <FormControl>
                     <PasswordInput
                       placeholder="أدخِل كلمة المرور"
-                      className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                      className="h-11 border focus:border-blue-500 focus:ring-blue-500 transition-colors"
                       {...field}
                     />
                   </FormControl>
@@ -163,21 +186,21 @@ export function SignUpForm() {
             />
 
             {/* Terms and Conditions */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
               <div className="flex items-start gap-3">
-                <Shield className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                <FormDescription className="text-sm text-blue-800 leading-relaxed">
+                <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                <FormDescription className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
                   بالضغط على زر &ldquo;أنشئ حسابك مجانًا&rdquo; أنت توافق على{" "}
                   <Link
                     href="/terms"
-                    className="text-blue-600 hover:text-blue-700 font-medium underline"
+                    className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium underline"
                   >
                     الشروط والأحكام
                   </Link>
                   و
                   <Link
                     href="/privacy"
-                    className="text-blue-600 hover:text-blue-700 font-medium underline"
+                    className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium underline"
                   >
                     سياسة الخصوصية
                   </Link>
@@ -199,8 +222,8 @@ export function SignUpForm() {
         </Form>
 
         {/* Sign In Link */}
-        <div className="text-center pt-4 border-t border-gray-100">
-          <p className="text-gray-600 text-sm">
+        <div className="text-center pt-4 border-t border-gray-100 dark:border-gray-900">
+          <p className="text-gray-600 dark:text-gray-100 text-sm">
             هل لديك حساب؟{" "}
             <Link
               href="/sign-in"

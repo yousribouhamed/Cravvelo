@@ -21,7 +21,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@ui/components/ui/form";
-import { Input } from "@ui/components/ui/input";
 import { useSignIn } from "@clerk/nextjs";
 import { useRouter, useSearchParams } from "next/navigation";
 import { resetPasswordSchema } from "@/src/lib/validators/auth";
@@ -35,6 +34,8 @@ import {
   KeyRound,
   Lock,
   RefreshCw,
+  AlertCircle,
+  CheckCircle2,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -125,7 +126,7 @@ const OTPInput = ({
           onKeyDown={(e) => handleKeyDown(e, index)}
           onPaste={handlePaste}
           disabled={disabled}
-          className="w-12 h-12 text-center text-xl font-bold border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-12 h-12 text-center text-xl font-bold border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 focus:outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         />
       ))}
     </div>
@@ -249,50 +250,46 @@ export function ResetPasswordStep2Form() {
             />
           </div>
           <div className="text-center">
-            <CardTitle className="text-2xl font-bold text-gray-900 mb-2">
+            <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
               إعادة تعيين كلمة المرور
             </CardTitle>
-            <CardDescription className="text-gray-600 text-sm leading-relaxed">
+            <CardDescription className="text-gray-600 dark:text-gray-50 text-sm leading-relaxed">
               أدخِل رمز التحقق الذي أرسلناه إلى{" "}
-              <span className="font-medium text-gray-800">{email}</span>، ثم قم
-              بإدخال كلمة المرور الجديدة.
+              <span className="font-medium text-gray-800 dark:text-gray-200">
+                {email}
+              </span>
+              ، ثم قم بإدخال كلمة المرور الجديدة.
             </CardDescription>
           </div>
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-6">
-        {/* Success Message */}
-        {success && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-            <div className="flex items-start gap-3">
-              <Shield className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-              <p className="text-sm text-green-800 leading-relaxed">
-                {success}
-              </p>
-            </div>
+      <CardContent className="space-y-2">
+        {/* Error Message */}
+        {error && (
+          <div className="flex items-center space-x-2 space-x-reverse p-3 bg-red-50 border border-red-200 rounded-md">
+            <AlertCircle className="h-4 w-4 text-red-600" />
+            <span className="text-sm text-red-700">{error}</span>
           </div>
         )}
 
-        {/* Error Message */}
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <div className="flex items-start gap-3">
-              <Shield className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
-              <p className="text-sm text-red-800 leading-relaxed">{error}</p>
-            </div>
+        {/* Success Message */}
+        {success && (
+          <div className="flex items-center space-x-2 space-x-reverse p-3 bg-green-50 border border-green-200 rounded-md">
+            <CheckCircle2 className="h-4 w-4 text-green-600" />
+            <span className="text-sm text-green-700">{success}</span>
           </div>
         )}
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             {/* OTP Input Fields */}
             <FormField
               control={form.control}
               name="code"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-700 font-medium flex items-center gap-2">
+                  <FormLabel className="text-gray-700 dark:text-gray-50 font-medium flex items-center gap-2">
                     <Mail className="w-4 h-4" />
                     رمز التحقق
                   </FormLabel>
@@ -310,7 +307,9 @@ export function ResetPasswordStep2Form() {
 
             {/* Resend Code Section */}
             <div className="flex items-center justify-between">
-              <p className="text-gray-600 text-sm">لم تستلم الرمز؟</p>
+              <p className="text-gray-600 dark:text-gray-100 text-sm">
+                لم تستلم الرمز؟
+              </p>
               <Button
                 type="button"
                 variant="ghost"
@@ -333,14 +332,14 @@ export function ResetPasswordStep2Form() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-700 font-medium flex items-center gap-2">
+                  <FormLabel className="text-gray-700 dark:text-gray-50 font-medium flex items-center gap-2">
                     <Lock className="w-4 h-4" />
                     كلمة المرور الجديدة
                   </FormLabel>
                   <FormControl>
                     <PasswordInput
                       placeholder="أدخِل كلمة المرور الجديدة"
-                      className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                      className="h-11 border focus:border-blue-500 focus:ring-blue-500 transition-colors"
                       {...field}
                     />
                   </FormControl>
@@ -354,14 +353,14 @@ export function ResetPasswordStep2Form() {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-700 font-medium flex items-center gap-2">
+                  <FormLabel className="text-gray-700 dark:text-gray-50 font-medium flex items-center gap-2">
                     <Lock className="w-4 h-4" />
                     تأكيد كلمة المرور
                   </FormLabel>
                   <FormControl>
                     <PasswordInput
                       placeholder="أعد إدخال كلمة المرور"
-                      className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                      className="h-11 border focus:border-blue-500 focus:ring-blue-500 transition-colors"
                       {...field}
                     />
                   </FormControl>
@@ -371,10 +370,10 @@ export function ResetPasswordStep2Form() {
             />
 
             {/* Information Box */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
               <div className="flex items-start gap-3">
-                <KeyRound className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                <FormDescription className="text-sm text-blue-800 leading-relaxed">
+                <KeyRound className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                <FormDescription className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
                   تأكد من أن كلمة المرور الجديدة قوية وتحتوي على أحرف كبيرة
                   وصغيرة وأرقام ورموز.
                 </FormDescription>
@@ -396,13 +395,13 @@ export function ResetPasswordStep2Form() {
         </Form>
 
         {/* Back to Sign In Link */}
-        <div className="text-center pt-4 border-t border-gray-100">
+        <div className="text-center pt-4 border-t border-gray-100 dark:border-gray-900">
           <Link
             href="/sign-in"
             className="text-blue-600 hover:text-blue-700 font-medium transition-colors inline-flex items-center gap-2"
           >
-            <ArrowLeft className="w-4 h-4" />
             العودة إلى تسجيل الدخول
+            <ArrowLeft className="w-4 h-4" />
           </Link>
         </div>
       </CardContent>

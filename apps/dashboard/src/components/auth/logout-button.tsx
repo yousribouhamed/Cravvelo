@@ -2,7 +2,7 @@
 
 import type { FC } from "react";
 import * as React from "react";
-import { SignOutButton, useClerk } from "@clerk/nextjs";
+import { useClerk } from "@clerk/nextjs";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DropdownMenuItem } from "@ui/components/ui/dropdown-menu";
 import { LogOut } from "lucide-react";

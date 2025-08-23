@@ -146,7 +146,7 @@ export function VerifyEmail() {
   const userEmail = signUp?.emailAddress;
 
   return (
-    <Card className="w-full max-w-lg  border shadow bg-white">
+    <Card className="w-full max-w-lg  border shadow ">
       <CardHeader className="space-y-4 pb-6">
         <div className="flex flex-col items-center space-y-6">
           <div className="relative">

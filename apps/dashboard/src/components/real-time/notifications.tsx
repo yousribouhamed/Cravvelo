@@ -198,36 +198,43 @@ const Notifications: FC<NotificationsProps> = ({
       <PopoverTrigger asChild>
         <Button
           size="icon"
-          variant="secondary"
-          className="bg-white dark:bg-[#0A0A0C] border rounded-xl w-10 h-10 relative"
+          className=" !bg-card dark:bg-card border border-border rounded-xl w-10 h-10 relative hover:bg-accent transition-colors"
           aria-label={`الإشعارات ${
             isNewNotifications > 0 ? `- ${isNewNotifications} جديد` : ""
           }`}
         >
           {isNewNotifications > 0 && (
-            <span className="rounded-[50%] w-5 h-5 text-white dark:text-black flex items-center justify-center bg-red-500 absolute top-0 right-0 font-bold text-xs">
+            <span className="rounded-full w-5 h-5 text-white flex items-center justify-center bg-red-500 absolute -top-1 -right-1 font-bold text-xs shadow-lg">
               {isNewNotifications > 99 ? "99+" : isNewNotifications}
             </span>
           )}
-          <Icons.bell className="w-4 h-4 text-black dark:text-white" />
+          <Icons.bell className="w-4 h-4 text-foreground" />
         </Button>
       </PopoverTrigger>
       <PopoverContent
         align="end"
         className="p-0 border-none ring-none shadow-none w-screen h-screen sm:w-[500px] sm:h-[450px]"
       >
-        <div className="shadow bg-white dark:bg-[#0A0A0C] rounded-xl border">
-          <div className="w-full h-[50px] flex items-center justify-start p-4">
-            <p className="text-lg font-bold">الإشعارات</p>
+        <div className="shadow-lg bg-popover border border-border rounded-xl">
+          <div className="w-full h-[50px] flex items-center justify-start p-4 border-b border-border">
+            <p className="text-lg font-bold text-foreground">الإشعارات</p>
           </div>
 
           <Tabs defaultValue="all" className="w-full">
-            <TabsList className="w-full flex items-center justify-end h-[50px] border-b">
-              <TabsTrigger value="archived">
+            <TabsList className="w-full flex items-center justify-end h-[50px] border-b border-border bg-muted/30">
+              <TabsTrigger
+                value="archived"
+                className="data-[state=active]:bg-background data-[state=active]:text-foreground"
+              >
                 مؤرشف
                 <Package className="w-4 h-4 ml-2" />
               </TabsTrigger>
-              <TabsTrigger value="all">الكل</TabsTrigger>
+              <TabsTrigger
+                value="all"
+                className="data-[state=active]:bg-background data-[state=active]:text-foreground"
+              >
+                الكل
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="all">
@@ -237,11 +244,12 @@ const Notifications: FC<NotificationsProps> = ({
                     <Image
                       loading="eager"
                       alt="لا توجد إشعارات"
-                      src="/notifications.svg"
-                      width={300}
-                      height={300}
+                      src="/empty-box.svg"
+                      width={150}
+                      height={150}
+                      className="dark:opacity-80"
                     />
-                    <p className="text-md text-center text-gray-500 dark:text-gray-200">
+                    <p className="text-md text-center text-muted-foreground">
                       لا يوجد إشعارات غير مقروءة بعد
                     </p>
                   </div>
@@ -249,8 +257,10 @@ const Notifications: FC<NotificationsProps> = ({
                   unarchivedNotifications.map((item) => (
                     <div
                       key={item.id}
-                      className={`w-full h-[75px] flex items-center justify-between border-b p-4 gap-x-4 ${
-                        !item.isRead ? "bg-primary/5 cursor-pointer" : ""
+                      className={`w-full h-[75px] flex items-center justify-between border-b border-border p-4 gap-x-4 transition-colors ${
+                        !item.isRead
+                          ? "bg-primary/5 hover:bg-primary/10 cursor-pointer"
+                          : "hover:bg-muted/30"
                       }`}
                       onClick={() => {
                         if (!item.isRead) {
@@ -287,8 +297,9 @@ const Notifications: FC<NotificationsProps> = ({
                                   archiveNotification.isLoading
                                 }
                                 aria-label="أرشف هذا الإشعار"
+                                className="hover:bg-accent transition-colors"
                               >
-                                <Archive className="w-4 h-4 text-black" />
+                                <Archive className="w-4 h-4 text-muted-foreground hover:text-foreground transition-colors" />
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent>
@@ -300,18 +311,18 @@ const Notifications: FC<NotificationsProps> = ({
                       <div className="flex items-center justify-end gap-x-3">
                         <div className="flex flex-col h-full w-fit items-start justify-between gap-2">
                           <div className="w-full h-[90%] flex items-start justify-start">
-                            <span className="text-md font-medium text-black">
+                            <span className="text-md font-medium text-foreground">
                               {item.content}
                             </span>
                           </div>
                           <div className="flex w-full h-[10%] items-center justify-end gap-x-3">
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-muted-foreground">
                               {timeSince(item.createdAt)}
                             </span>
                             {!item.isRead && (
                               <Badge
                                 variant="default"
-                                className="bg-[#2ECA8B] text-white"
+                                className="bg-green-500 hover:bg-green-600 text-white"
                               >
                                 جديد
                               </Badge>
@@ -336,11 +347,12 @@ const Notifications: FC<NotificationsProps> = ({
                     <Image
                       loading="eager"
                       alt="لا توجد إشعارات مؤرشفة"
-                      src="/notifications.svg"
-                      width={300}
-                      height={300}
+                      src="/empty-box.svg"
+                      width={150}
+                      height={150}
+                      className="dark:opacity-80"
                     />
-                    <p className="text-md text-center text-gray-500">
+                    <p className="text-md text-center text-muted-foreground">
                       لا يوجد إشعارات مؤرشفة بعد
                     </p>
                   </div>
@@ -348,7 +360,7 @@ const Notifications: FC<NotificationsProps> = ({
                   archivedNotifications.map((item) => (
                     <div
                       key={item.id}
-                      className="w-full h-[75px] flex items-center justify-between border-b p-4 gap-x-4"
+                      className="w-full h-[75px] flex items-center justify-between border-b border-border p-4 gap-x-4 hover:bg-muted/30 transition-colors"
                     >
                       <div className="w-[50px] h-full flex items-center justify-center gap-x-2">
                         <TooltipProvider>
@@ -359,8 +371,9 @@ const Notifications: FC<NotificationsProps> = ({
                                 variant="ghost"
                                 size="icon"
                                 aria-label="هذا الإشعار مؤرشف"
+                                className="opacity-50"
                               >
-                                <Archive className="w-4 h-4 text-black" />
+                                <Archive className="w-4 h-4 text-muted-foreground" />
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent>
@@ -372,19 +385,19 @@ const Notifications: FC<NotificationsProps> = ({
                       <div className="flex items-center justify-end gap-x-3">
                         <div className="flex flex-col h-full w-fit items-start justify-between gap-2">
                           <div className="w-full h-[90%] flex items-start justify-start">
-                            <span className="text-md font-medium text-black">
+                            <span className="text-md font-medium text-muted-foreground">
                               {item.content}
                             </span>
                           </div>
                           <div className="flex w-full h-[10%] items-center justify-end gap-x-3">
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-muted-foreground">
                               {timeSince(item.createdAt)}
                             </span>
                           </div>
                         </div>
 
-                        <div className="bg-primary/20 flex items-center justify-center w-[50px] h-[50px] rounded-xl">
-                          <MailWarning className="w-6 h-6 text-primary" />
+                        <div className="bg-muted/50 flex items-center justify-center w-[50px] h-[50px] rounded-xl">
+                          <MailWarning className="w-6 h-6 text-muted-foreground" />
                         </div>
                       </div>
                     </div>

@@ -5,7 +5,7 @@ import type { FC } from "react";
 const page: FC = () => {
   return (
     <PublicPageRestrictionGuard>
-      <div className="w-full h-screen flex items-center bg-[#FAFAFA] p-4 md:p-0 justify-center">
+      <div className="w-full h-screen flex items-center  p-4 md:p-0 justify-center">
         <ResetPasswordForm />
       </div>
     </PublicPageRestrictionGuard>
