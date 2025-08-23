@@ -1,32 +1,63 @@
+"use client";
+
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
+import { useMutation } from "@tanstack/react-query";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Upload, X } from "lucide-react";
 import BrandButton from "@/components/brand-button";
-import { useForm } from "@/hooks/use-form";
+import { toast } from "sonner";
+import { createP2pPaymentIntent } from "../../actions/p2p.actions";
+import { uploadImageToS3 } from "@/modules/aws/s3";
+import { usePaymentContext } from "../../context/payments-provider";
+
+interface P2PFormData {
+  paymentProof: File | null;
+  notes?: string;
+}
+
+interface PaymentIntentPayload {
+  productId: string;
+  type: "COURSE" | "PRODUCT";
+  proofUrl: string;
+  notes?: string;
+}
 
 interface P2PFormProps {
   isLoading?: boolean;
 }
 
-interface P2PFormData {
-  phone: string;
-  fullName: string;
-  paymentProof: File | null;
-  notes?: string;
-}
-
 export function P2PForm({ isLoading = false }: P2PFormProps) {
+  const { selectedProduct } = usePaymentContext();
   const [formData, setFormData] = useState<P2PFormData>({
-    phone: "",
-    fullName: "",
     paymentProof: null,
     notes: "",
   });
   const [isDragActive, setIsDragActive] = useState(false);
+
+  const createP2pMutation = useMutation({
+    mutationFn: async (payload: PaymentIntentPayload) => {
+      const response = await createP2pPaymentIntent({
+        paymentProof: payload.proofUrl,
+        productId: payload.productId,
+        type: payload.type,
+        notes: payload.notes,
+      });
+      if (!response.success) {
+        throw new Error(response.message || "فشل إنشاء الطلب");
+      }
+      return response;
+    },
+    onSuccess: () => {
+      toast.success("تم إرسال إثبات الدفع بنجاح");
+      setFormData({ paymentProof: null, notes: "" });
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error("حدث خطأ أثناء إرسال إثبات الدفع");
+    },
+  });
 
   const handleChange = (field: keyof P2PFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -67,16 +98,46 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
   };
 
   const isFormValid = () => {
-    return (
-      formData.phone.trim() !== "" &&
-      formData.fullName.trim() !== "" &&
-      formData.paymentProof !== null
-    );
+    return formData.paymentProof !== null && !!selectedProduct;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!selectedProduct) {
+      toast.error("لم يتم اختيار منتج");
+      return;
+    }
+
+    if (!formData.paymentProof) {
+      toast.error("يرجى رفع إثبات الدفع");
+      return;
+    }
+
+    try {
+      // Upload to S3
+      const fd = new FormData();
+      fd.append("file", formData.paymentProof);
+
+      const uploadResult = await uploadImageToS3(fd);
+
+      if (!uploadResult.success || !uploadResult.url) {
+        throw new Error(uploadResult.error || "فشل رفع الملف");
+      }
+
+      createP2pMutation.mutate({
+        productId: selectedProduct.id,
+        type: selectedProduct.type as "COURSE" | "PRODUCT",
+        proofUrl: uploadResult.url,
+        notes: formData.notes,
+      });
+    } catch (err) {
+      console.error(err);
+      toast.error("تعذر رفع الملف");
+    }
   };
+
+  const isSubmitLoading = isLoading || createP2pMutation.isPending;
 
   return (
     <form onSubmit={handleSubmit} className="h-full flex flex-col">
@@ -100,16 +161,14 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
               >
                 {formData.paymentProof ? (
                   <div className="flex items-center justify-between bg-green-100 dark:bg-green-900/30 rounded-md p-3">
-                    <Button
+                    <button
                       type="button"
-                      variant="ghost"
-                      size="sm"
                       onClick={removeFile}
                       disabled={isLoading}
                       className="text-red-600 hover:text-red-700 p-1"
                     >
                       <X className="w-4 h-4" />
-                    </Button>
+                    </button>
                     <div className="text-right">
                       <p className="text-sm font-medium text-green-700 dark:text-green-300">
                         {formData.paymentProof.name}
@@ -147,36 +206,6 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
                 )}
               </div>
             </div>
-            {/* Coupon Code Section */}
-            <div className="space-y-2">
-              <Label
-                htmlFor="coupon"
-                className="block text-right text-foreground"
-              >
-                كود الخصم (اختياري)
-              </Label>
-              <div className="flex gap-2">
-                <Input
-                  id="coupon"
-                  type="text"
-                  value={formData.couponCode}
-                  onChange={(e) => handleChange("couponCode", e.target.value)}
-                  placeholder="أدخل كود الخصم"
-                  className="text-right bg-background flex-1"
-                  dir="rtl"
-                  disabled={isLoading}
-                />
-                <Button
-                  type="button"
-                  onClick={handleCouponApply}
-                  disabled={!formData.couponCode?.trim() || isLoading}
-                  size="sm"
-                  className="px-4 bg-blue-600 hover:bg-blue-700 text-white"
-                >
-                  {couponApplied ? "تم التطبيق" : "تطبيق"}
-                </Button>
-              </div>
-            </div>
 
             {/* Notes Section */}
             <div className="space-y-2">
@@ -207,9 +236,10 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
           size={"lg"}
           type="submit"
           className="w-full h-[40px]"
-          disabled={!isFormValid() || isLoading}
+          disabled={!isFormValid() || isSubmitLoading}
+          loading={isSubmitLoading}
         >
-          {isLoading ? "جاري المعالجة..." : "إتمام الدفع المباشر"}
+          إتمام الدفع المباشر
         </BrandButton>
       </div>
     </form>

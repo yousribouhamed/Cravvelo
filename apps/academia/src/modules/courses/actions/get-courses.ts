@@ -33,7 +33,9 @@ export const getAllCourses = withTenant({
         },
       });
 
-      console.log(courses);
+      const websites = await db.website.findMany();
+
+      console.log(websites);
 
       return {
         data: courses as CourseWithPricing[],

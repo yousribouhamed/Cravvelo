@@ -4,8 +4,6 @@ import CourseCard from "@/modules/courses/components/course-card";
 export default async function page() {
   const response = await getAllCourses();
 
-  console.log(response);
-
   if (response.success) {
     return (
       <div className="p-8">

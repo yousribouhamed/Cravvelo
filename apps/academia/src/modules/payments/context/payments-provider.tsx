@@ -9,7 +9,10 @@ import React, {
 } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getTenantPaymentConnections } from "../actions/connections.actions";
-import { PaymentContextState, PaymentProduct } from "@/modules/payments/types/index";
+import {
+  PaymentContextState,
+  PaymentProduct,
+} from "@/modules/payments/types/index";
 
 const DEFAULT_PRODUCT: PaymentProduct = {
   id: "course-1",
@@ -17,6 +20,7 @@ const DEFAULT_PRODUCT: PaymentProduct = {
   description: "دورة متكاملة لتعلم البرمجة من الصفر",
   price: 5000,
   currency: "د.ج",
+  type: "COURSE",
 };
 
 const PaymentContext = createContext<PaymentContextState | undefined>(
