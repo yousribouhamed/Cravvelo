@@ -14,11 +14,7 @@ const CouponsTableHeader: FC<TableHeaderProps> = ({ table, refetch, data }) => {
   return (
     <div className="w-full h-[70px] flex items-center justify-between">
       <div className="min-w-[200px] w-fit h-full flex  items-center justify-start gap-x-4">
-        <Button
-          disabled
-          variant="secondary"
-          className="bg-white rounded-xl border flex items-center gap-x-2"
-        >
+        <Button disabled variant="secondary">
           <svg
             width="18"
             height="18"

@@ -68,7 +68,7 @@ export function CouponDataTable<TData, TValue>({
         refetch={refetch}
         table={table}
       />
-      <div className="rounded-md border bg-white">
+      <div className="rounded-md border bg-card">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -135,7 +135,7 @@ export function CouponDataTable<TData, TValue>({
             disabled={!table.getCanPreviousPage()}
             aria-label="Go to previous page"
             onClick={() => table.previousPage()}
-            className="bg-white rounded-xl border flex items-center gap-x-2"
+            className="bg-card rounded-xl border flex items-center gap-x-2"
             variant="ghost"
           >
             <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
@@ -146,7 +146,7 @@ export function CouponDataTable<TData, TValue>({
             aria-label="Go to next page"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
-            className="bg-white rounded-xl border flex items-center gap-x-2"
+            className="bg-card rounded-xl border flex items-center gap-x-2"
             variant="ghost"
           >
             التالي

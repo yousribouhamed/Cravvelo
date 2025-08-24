@@ -23,9 +23,11 @@ const Page = async () => {
 
   return (
     <AppShell user={user} notifications={notifications}>
-      <div className="w-full h-[100px] flex items-start justify-center  flex-col gap-y-4">
+      <div className="w-full h-[100px] flex items-start justify-center  flex-col gap-y-8 mb-4">
         <h1>الرصيد</h1>
-        <p>{formatCurrency({ amount: 100, currency: "DZD" })}</p>
+        <p className="font-bold text-2xl">
+          {formatCurrency({ amount: 100, currency: "DZD" })}
+        </p>
       </div>
       <DataTable columns={paymentColumns} data={payments.data || []} />
     </AppShell>

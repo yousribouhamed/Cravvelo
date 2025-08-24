@@ -175,7 +175,7 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="rounded-xl border flex items-center gap-x-2 hover:shadow-lg transition-shadow">
+        <Button>
           <Plus size={18} />
           <span>إنشاء قسيمة</span>
         </Button>
@@ -190,7 +190,7 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
 
         <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-[500px]">
           {/* Form Section */}
-          <div className="col-span-1 lg:col-span-2 w-full">
+          <div className=" w-full">
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -428,59 +428,6 @@ const CreateCoupon: FC<CreateCouponProps> = ({ refetch }) => {
                 )}
               </form>
             </Form>
-          </div>
-
-          {/* Preview Section */}
-          <div className="col-span-1 w-full flex flex-col items-center justify-center space-y-4">
-            <div className="text-center">
-              <Image
-                src="/coupon.png"
-                alt="coupon preview"
-                width={200}
-                height={200}
-                className="mx-auto"
-              />
-            </div>
-
-            {/* Live Preview */}
-            {(amount || usageLimits) && (
-              <Card className="w-full p-4 space-y-2">
-                <h4 className="font-medium text-center">التفاصيل</h4>
-                <Separator />
-                {amount && (
-                  <div className="flex justify-between text-sm">
-                    <span>التخفيض:</span>
-                    <Badge variant="secondary">
-                      {amount} {reduceType === "PERCENTAGE" ? "%" : "دج"}
-                    </Badge>
-                  </div>
-                )}
-                {usageLimits && (
-                  <div className="flex justify-between text-sm">
-                    <span>مرات الاستخدام:</span>
-                    <Badge variant="outline">{usageLimits}</Badge>
-                  </div>
-                )}
-                {duration && (
-                  <div className="flex justify-between text-sm">
-                    <span>الصلاحية:</span>
-                    <Badge variant="outline">
-                      {duration === "forever" ? "دائمة" : "محدودة"}
-                    </Badge>
-                  </div>
-                )}
-              </Card>
-            )}
-
-            {/* Warning for high percentage */}
-            {reduceType === "PERCENTAGE" &&
-              amount &&
-              parseFloat(amount) > 50 && (
-                <div className="flex items-center gap-2 p-2 bg-yellow-50 border border-yellow-200 rounded-md text-yellow-800 text-sm">
-                  <AlertCircle size={16} />
-                  <span>نسبة خصم عالية!</span>
-                </div>
-              )}
           </div>
         </div>
 

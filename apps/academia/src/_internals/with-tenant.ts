@@ -22,14 +22,14 @@ async function getTenantFromRequest(): Promise<string | null> {
     if (!host) return null;
 
     // Development environment - check for localhost with port
-    if (host.startsWith("localhost:") || host === "abdellah.localhost:3000") {
+    if (host.startsWith("localhost:") || host === "twice.localhost:3000") {
       // In development, you might want to:
       // 1. Use a default tenant for testing
       // 2. Extract from a query parameter or header
       // 3. Use environment variable
 
       // Option 1: Return a default tenant for development
-      return process.env.NODE_ENV === "development" ? "abdellah" : null;
+      return process.env.NODE_ENV === "development" ? "twice" : null;
 
       // Option 2: Extract from a custom header (uncomment if needed)
       // const devTenant = headersList.get("x-tenant");
