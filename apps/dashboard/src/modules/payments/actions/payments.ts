@@ -323,23 +323,6 @@ export const approvePayment = withAuth({
           data: { verified: true },
         });
 
-        // Create notification for the student
-        if (payment.Student) {
-          await tx.notification.create({
-            data: {
-              accountId: account.id,
-              title: "Payment Approved",
-              content: `Your payment of ${payment.amount} ${payment.currency} has been approved successfully.`,
-              type: "SUCCESS",
-              metadata: {
-                paymentId: payment.id,
-                studentId: payment.studentId,
-                amount: payment.amount,
-              },
-            },
-          });
-        }
-
         return updatedPayment;
       });
 
@@ -469,28 +452,6 @@ export const rejectPayment = withAuth({
               balanceAfter: wallet.balance,
               relatedEntityType: "PAYMENT",
               relatedEntityId: payment.id,
-            },
-          });
-        }
-
-        // Create notification for the student
-        if (payment.Student) {
-          await tx.notification.create({
-            data: {
-              accountId: account.id,
-              title: "Payment Rejected",
-              content: `Your payment of ${payment.amount} ${
-                payment.currency
-              } has been rejected. ${
-                rejectionReason ? `Reason: ${rejectionReason}` : ""
-              }`,
-              type: "ERROR",
-              metadata: {
-                paymentId: payment.id,
-                studentId: payment.studentId,
-                amount: payment.amount,
-                rejectionReason: rejectionReason,
-              },
             },
           });
         }
