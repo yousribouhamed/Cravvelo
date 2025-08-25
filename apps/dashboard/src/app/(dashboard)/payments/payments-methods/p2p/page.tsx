@@ -41,7 +41,10 @@ const PageProps = async ({}) => {
           goBack
         />
 
-        <P2PConnector data={config} />
+        <P2PConnector
+          isAlreadyActive={connection.data.isActive}
+          data={config}
+        />
       </main>
     </MaxWidthWrapper>
   );

@@ -7,12 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum PLANS {
-  BASIC
-  ADVANCED
-  PRO
-  BLACK_KING
-}
 
 enum DiscountType {
   PERCENTAGE
@@ -136,13 +130,13 @@ model Account {
   support_email      String?
   verified           Boolean           @default(false)
   verification_steps Int               @default(0)
-  plan               PLANS?
+ 
   
   // Additional profile fields
   firstName          String?           @db.Text
   lastName           String?           @db.Text
   dateOfBirth        DateTime?
-  gender             String?           // e.g., "MALE", "FEMALE", "OTHER"
+  gender             String?         
   country            String?
   city               String?
   address            String?           @db.Text
@@ -178,26 +172,11 @@ model Account {
   Sale               Sale[]
   Notification       Notification[]
   Student            Student[]
-  PaymentsConnect    PaymentsConnect?
-  Subscription       Subscription[]
   Certificate        Certificate[]
   Wallet             Wallet?
   Payment            Payment[]
   PaymentMethodConfig PaymentMethodConfig[]
   PricingPlans       Pricing[]
-}
-
-model PaymentsConnect {
-  id                String   @id @unique @default(cuid())
-  accountId         String   @unique
-  chargilyPublicKey String
-  chargilySecretKey String
-  isActive          Boolean  @default(true)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  Account           Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
-
-  @@index([accountId])
 }
 
 model Pricing {
@@ -228,11 +207,13 @@ model Pricing {
   Account            Account           @relation(fields: [accountId], references: [id], onDelete: Cascade)
   CoursePricingPlans CoursePricingPlan[]
   ProductPricingPlans ProductPricingPlan[]
+  AppPricingPlans    AppPricingPlan[]  // New relationship added
   ItemPurchases      ItemPurchase[]
   
   @@index([accountId])
   @@index([pricingType])
 }
+
 
 // Junction table for Course-PricingPlan relationship
 model CoursePricingPlan {
@@ -265,6 +246,22 @@ model ProductPricingPlan {
   
   @@unique([productId, pricingPlanId])
   @@index([productId])
+  @@index([pricingPlanId])
+}
+
+model AppPricingPlan {
+  id           String      @id @unique @default(cuid())
+  appId        String
+  pricingPlanId String
+  isDefault    Boolean     @default(false)
+  
+  createdAt    DateTime    @default(now())
+  
+  App          App         @relation(fields: [appId], references: [id], onDelete: Cascade)
+  PricingPlan  Pricing     @relation(fields: [pricingPlanId], references: [id], onDelete: Cascade)
+  
+  @@unique([appId, pricingPlanId])
+  @@index([appId])
   @@index([pricingPlanId])
 }
 
@@ -653,7 +650,6 @@ model Payment {
   Account           Account?           @relation(fields: [accountId], references: [id], onDelete: SetNull)
   Student           Student?           @relation(fields: [studentId], references: [id], onDelete: SetNull)
   Sale              Sale?              @relation(fields: [saleId], references: [id], onDelete: SetNull)
-  Subscription      Subscription?      @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
   MethodConfig      PaymentMethodConfig? @relation(fields: [methodConfigId], references: [id], onDelete: SetNull)
   Proofs            PaymentProof[]
   Transactions      Transaction[]
@@ -679,38 +675,7 @@ model PaymentProof {
   @@index([paymentId])
 }
 
-model Subscription {
-  id                  String   @id @unique @default(cuid())
-  accountId           String
-  plan                String
-  status              String
-  startDate           DateTime @default(now())
-  endDate             DateTime
 
-  // Subscription details
-  amount              Float?
-  currency            String   @default("DZD")
-  billingCycle        String?  // MONTHLY, YEARLY
-  autoRenew           Boolean  @default(true)
-
-  // Payment information
-  payload             Json?
-  strategy            String?  // Always CHARGILY in your case
-
-  // Cancellation info
-  cancelledAt         DateTime?
-  cancellationReason  String?  @db.Text
-
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-
-  Account             Account    @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  Payments            Payment[]  // One subscription can have multiple payments
-
-  @@index([accountId])
-  @@index([status])
-  @@index([endDate])
-}
 
 model Wallet {
   id            String        @id @unique @default(cuid())
@@ -955,7 +920,6 @@ model OtpCode {
   @@index([code])
 }
 
-
 model App {
   id             String   @id @default(cuid())
   name           String
@@ -973,6 +937,7 @@ model App {
   updatedAt      DateTime  @updatedAt
 
   installations  InstalledApp[]
+  AppPricingPlans AppPricingPlan[]  // New relationship added
 }
 
 model InstalledApp {

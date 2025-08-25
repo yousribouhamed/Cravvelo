@@ -5,7 +5,6 @@ import {
 import Header from "@/src/components/layout/header";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import CreateAcademiaPage from "@/src/components/pages/create-academia.page";
-import RevenueChartWrapper from "@/src/modules/dashboard/components/chart-wrapper";
 import { RevenueChart } from "@/src/modules/dashboard/components/revanew-chart";
 
 export default async function Page() {
@@ -19,7 +18,6 @@ export default async function Page() {
     return <CreateAcademiaPage notifications={notifications} user={user} />;
   }
 
-  const today = new Date();
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
 

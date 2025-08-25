@@ -32,7 +32,10 @@ const PageProps = async () => {
           goBack
         />
 
-        <ChargilyConnectPage config={config} />
+        <ChargilyConnectPage
+          isAlreadyActive={connection.data.isActive}
+          config={config}
+        />
       </main>
     </MaxWidthWrapper>
   );

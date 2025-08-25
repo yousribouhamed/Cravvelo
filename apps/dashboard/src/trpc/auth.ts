@@ -3,15 +3,6 @@ import { TRPCError } from "@trpc/server";
 import { prisma } from "database/src";
 import { currentUser } from "@clerk/nextjs/server";
 import { z } from "zod";
-import crypto from "crypto";
-
-// Helper function to generate a unique machine ID
-function generateMachineId(): string {
-  const timestamp = Date.now().toString();
-  const randomBytes = crypto.randomBytes(32).toString("hex");
-  const combined = `${timestamp}-${randomBytes}`;
-  return Buffer.from(combined).toString("base64url");
-}
 
 // Response type for better type safety
 const AuthCallbackResponse = z.object({
@@ -36,14 +27,29 @@ export const auth = {
           });
         }
 
-        // Check if account exists
-        const existingAccount = await prisma.account.findFirst({
+        // Check if account exists with wallet included
+        const existingAccount = await prisma.account.findUnique({
           where: {
             userId: user.id,
+          },
+          include: {
+            Wallet: true,
           },
         });
 
         if (existingAccount) {
+          // Create wallet if it doesn't exist for existing account
+          if (!existingAccount.Wallet) {
+            await prisma.wallet.create({
+              data: {
+                accountId: existingAccount.id,
+                balance: 0,
+                currency: "DZD",
+                isActive: true,
+              },
+            });
+          }
+
           return {
             success: true,
             accountId: existingAccount.id,
@@ -51,20 +57,37 @@ export const auth = {
           };
         }
 
-        // Create new account
-        const newAccount = await prisma.account.create({
-          data: {
-            userId: user.id,
-            user_name:
-              `${user.firstName} ${user.lastName}` || user.firstName || "User",
-            createdAt: new Date(),
-            updatedAt: new Date(),
-          },
+        // Create new account with wallet in a transaction
+        const result = await prisma.$transaction(async (tx) => {
+          // Create the account
+          const newAccount = await tx.account.create({
+            data: {
+              userId: user.id,
+              user_name: constructUserName(user),
+              // Set default values that aren't handled by schema defaults
+              verified: false,
+              verification_steps: 0,
+              profileCompleted: false,
+              isActive: true,
+            },
+          });
+
+          // Create the wallet
+          await tx.wallet.create({
+            data: {
+              accountId: newAccount.id,
+              balance: 0,
+              currency: "DZD",
+              isActive: true,
+            },
+          });
+
+          return newAccount;
         });
 
         return {
           success: true,
-          accountId: newAccount.id,
+          accountId: result.id,
           isNewUser: true,
         };
       } catch (error) {
@@ -76,7 +99,7 @@ export const auth = {
         }
 
         // Handle database errors
-        if (error.code === "P2002") {
+        if (error?.code === "P2002") {
           throw new TRPCError({
             code: "CONFLICT",
             message: "Account already exists",
@@ -91,3 +114,29 @@ export const auth = {
       }
     }),
 };
+
+// Helper function to construct user name
+function constructUserName(user: any): string {
+  const firstName = user.firstName?.trim() || "";
+  const lastName = user.lastName?.trim() || "";
+
+  if (firstName && lastName) {
+    return `${firstName} ${lastName}`;
+  }
+
+  if (firstName) {
+    return firstName;
+  }
+
+  if (lastName) {
+    return lastName;
+  }
+
+  // Fallback to email username or default
+  const email = user.emailAddresses?.[0]?.emailAddress;
+  if (email) {
+    return email.split("@")[0];
+  }
+
+  return "User";
+}
