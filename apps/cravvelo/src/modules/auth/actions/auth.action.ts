@@ -439,7 +439,6 @@ export const updateAdminAction = async (data: UpdateAdminData) => {
   }
 };
 
-// Get Current Admin (helper function)
 export const getCurrentAdmin = async () => {
   try {
     const cookieStore = await cookies();
@@ -454,7 +453,7 @@ export const getCurrentAdmin = async () => {
       return null;
     }
 
-    // Get fresh admin data
+    // Always get fresh admin data from database
     const admin = await prisma.admin.findUnique({
       where: { id: payload.id as string },
       select: {
@@ -467,6 +466,7 @@ export const getCurrentAdmin = async () => {
       },
     });
 
+    // Critical: Return null if user is inactive
     if (!admin || !admin.isActive) {
       return null;
     }
