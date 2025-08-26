@@ -8,7 +8,7 @@ export default async function Page() {
     return <AppsListingPage data={response.data?.apps ?? []} />;
   } else {
     <div className="w-full h-[40px] bg-card rounded-2xl border p-6">
-      <h1>something went wrong</h1>
+      <h1>something went wrong sorry ry again later</h1>
     </div>;
   }
 }

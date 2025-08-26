@@ -18,7 +18,16 @@ export const AppColumns: ColumnDef<AppType>[] = [
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
-    cell: ({ row }) => <span>{row.getValue("name")}</span>,
+    cell: ({ row }) => (
+      <div className="flex items-center justify-start gap-x-4">
+        <img
+          src={row.original.logoUrl ?? "/default-applogo.png"}
+          alt={row.original.name}
+          className="w-10 h-10 rounded-xl shadow border shrink-0"
+        />
+        <p className="text-gray-500 font-bold">{row.getValue("name")}</p>
+      </div>
+    ),
   },
   {
     accessorKey: "slug",
@@ -72,7 +81,7 @@ export const AppColumns: ColumnDef<AppType>[] = [
       return (
         <Link
           href={`/applications/${row.original.id}`}
-          className="underline text-blue hover:cursor-pointer"
+          className="underline text-blue hover:cursor-pointer text-blue-500"
         >
           view
         </Link>

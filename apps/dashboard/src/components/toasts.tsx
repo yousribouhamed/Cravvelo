@@ -149,7 +149,7 @@ export const maketoast = {
       ),
       {
         duration: 4000,
-        position: "top-left",
+        position: "bottom-right",
       }
     );
   },
@@ -167,7 +167,7 @@ export const maketoast = {
       ),
       {
         duration: 4000,
-        position: "top-left",
+        position: "bottom-right",
       }
     );
   },
@@ -186,7 +186,7 @@ export const maketoast = {
       ),
       {
         duration: 5000,
-        position: "top-left",
+        position: "bottom-right",
       }
     );
   },
@@ -204,7 +204,7 @@ export const maketoast = {
       ),
       {
         duration: 5000,
-        position: "top-left",
+        position: "bottom-right",
       }
     );
   },
@@ -223,7 +223,7 @@ export const maketoast = {
       ),
       {
         duration: 4000,
-        position: "top-left",
+        position: "bottom-right",
       }
     );
   },
@@ -242,7 +242,7 @@ export const maketoast = {
       ),
       {
         duration: 5000,
-        position: "top-left",
+        position: "bottom-right",
       }
     );
   },
@@ -255,7 +255,7 @@ export const maketoast = {
     const message = text || "جاري التحميل...";
     return toast.loading(message, {
       style: getBaseStyle("info"),
-      position: "top-left",
+      position: "bottom-right",
     });
   },
 
@@ -277,7 +277,7 @@ export const maketoast = {
       },
       {
         style: getBaseStyle("info"),
-        position: "top-left",
+        position: "bottom-right",
         success: {
           style: getBaseStyle("success"),
           duration: 4000,

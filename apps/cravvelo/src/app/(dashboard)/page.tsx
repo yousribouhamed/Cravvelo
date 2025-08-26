@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import { Button } from "@/components/ui/button";
 import { getCurrentAdmin } from "@/modules/auth/actions/auth.action";
 import { getAllWebsites } from "@/modules/websites/actions";

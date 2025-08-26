@@ -18,21 +18,6 @@ export default async function Page() {
     return <CreateAcademiaPage notifications={notifications} user={user} />;
   }
 
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-
-  const sampleData = [
-    { time: "2025-08-21T09:00:00", value: 1200 },
-    { time: "2025-08-21T12:00:00", value: 1850 },
-    { time: "2025-08-21T15:00:00", value: 2100 },
-    { time: "2025-08-21T18:00:00", value: 1650 },
-    { time: "2025-08-20T10:00:00", value: 1400 },
-    { time: "2025-08-20T14:00:00", value: 1900 },
-    { time: "2025-08-20T17:00:00", value: 1750 },
-    { time: "2025-08-19T11:00:00", value: 1300 },
-    { time: "2025-08-19T16:00:00", value: 1600 },
-  ];
-
   return (
     <MaxWidthWrapper>
       <main>
@@ -40,7 +25,7 @@ export default async function Page() {
 
         <div dir={"ltr"} className="my-4 mx-auto space-y-6">
           {/* Example with data */}
-          <RevenueChart initialData={sampleData} currency="DZD" />
+          <RevenueChart />
         </div>
       </main>
     </MaxWidthWrapper>

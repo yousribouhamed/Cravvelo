@@ -30,6 +30,9 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import Link from "next/link";
 import { updateApp, getAppById } from "../actions/apps.actions";
 
+// Import the same upload functions from your create form
+import { uploadImageToS3, deleteImageFromS3 } from "@/modules/aws/s3";
+
 const updateAppSchema = z.object({
   id: z.string().min(1, "App ID is required"),
   name: z.string().min(1, "App name is required").max(100, "App name too long"),
@@ -71,9 +74,24 @@ interface UpdateAppProps {
   appId: string;
 }
 
+interface UploadedImage {
+  url: string;
+  fileName: string;
+}
+
 export default function UpdateAppForm({ appId }: UpdateAppProps) {
   const [imageInput, setImageInput] = useState("");
   const [originalSlug, setOriginalSlug] = useState("");
+
+  // File upload states - same as create form
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoUploading, setLogoUploading] = useState(false);
+  const [logoFileName, setLogoFileName] = useState<string>("");
+
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imageUploading, setImageUploading] = useState(false);
+  const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
+
   const queryClient = useQueryClient();
 
   const form = useForm<UpdateAppForm>({
@@ -101,7 +119,6 @@ export default function UpdateAppForm({ appId }: UpdateAppProps) {
     queryKey: ["app", appId],
     queryFn: async () => {
       const { data } = await getAppById({ id: appId });
-
       return data;
     },
     enabled: !!appId,
@@ -127,6 +144,15 @@ export default function UpdateAppForm({ appId }: UpdateAppProps) {
         }
         return JSON.stringify(value, null, 2);
       };
+
+      // Initialize uploaded images state with existing images
+      const existingImages = (app.images || []).map(
+        (url: string, index: number) => ({
+          url,
+          fileName: `existing-image-${index}`, // We don't have the original filename, so we use a placeholder
+        })
+      );
+      setUploadedImages(existingImages);
 
       form.reset({
         id: appId,
@@ -161,23 +187,154 @@ export default function UpdateAppForm({ appId }: UpdateAppProps) {
     }
   };
 
-  // Image management
+  // Logo upload handler - same as create form
+  const handleLogoUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type and size
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    if (!allowedTypes.includes(file.type)) {
+      alert("Please upload JPEG or PNG images only.");
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      alert("File size too large. Maximum size is 10MB.");
+      return;
+    }
+
+    setLogoFile(file);
+    setLogoUploading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const result = await uploadImageToS3(formData);
+
+      if (result.success && result.url && result.fileName) {
+        form.setValue("logoUrl", result.url);
+        setLogoFileName(result.fileName);
+      } else {
+        alert(result.error || "Failed to upload logo");
+      }
+    } catch (error) {
+      console.error("Logo upload error:", error);
+      alert("Failed to upload logo. Please try again.");
+    } finally {
+      setLogoUploading(false);
+    }
+  };
+
+  // Remove logo - same as create form
+  const removeLogo = async () => {
+    if (logoFileName) {
+      try {
+        await deleteImageFromS3(logoFileName);
+      } catch (error) {
+        console.error("Failed to delete logo from S3:", error);
+      }
+    }
+
+    setLogoFile(null);
+    setLogoFileName("");
+    form.setValue("logoUrl", "");
+  };
+
+  // Image upload handler - same as create form
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = Array.from(event.target.files || []);
+    if (files.length === 0) return;
+
+    // Validate each file
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    const invalidFiles = files.filter(
+      (file) =>
+        !allowedTypes.includes(file.type) || file.size > 10 * 1024 * 1024
+    );
+
+    if (invalidFiles.length > 0) {
+      alert(
+        "Some files are invalid. Please upload JPEG or PNG images under 10MB."
+      );
+      return;
+    }
+
+    setImageUploading(true);
+
+    try {
+      const uploadPromises = files.map(async (file) => {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const result = await uploadImageToS3(formData);
+        if (result.success && result.url && result.fileName) {
+          return { url: result.url, fileName: result.fileName };
+        }
+        throw new Error(result.error || "Upload failed");
+      });
+
+      const results = await Promise.all(uploadPromises);
+      const newUploadedImages = [...uploadedImages, ...results];
+      const newImageUrls = newUploadedImages.map((img) => img.url);
+
+      setUploadedImages(newUploadedImages);
+      form.setValue("images", newImageUrls);
+    } catch (error) {
+      console.error("Image upload error:", error);
+      alert("Failed to upload some images. Please try again.");
+    } finally {
+      setImageUploading(false);
+      // Reset file input
+      event.target.value = "";
+    }
+  };
+
+  // Remove image - updated to handle both uploaded and existing images
+  const removeImage = async (index: number) => {
+    const imageToRemove = uploadedImages[index];
+
+    // Only attempt to delete from S3 if it's not an existing image (has a real fileName)
+    if (
+      imageToRemove?.fileName &&
+      !imageToRemove.fileName.startsWith("existing-image-")
+    ) {
+      try {
+        await deleteImageFromS3(imageToRemove.fileName);
+      } catch (error) {
+        console.error("Failed to delete image from S3:", error);
+      }
+    }
+
+    const newUploadedImages = uploadedImages.filter((_, i) => i !== index);
+    const newImageUrls = newUploadedImages.map((img) => img.url);
+
+    setUploadedImages(newUploadedImages);
+    form.setValue("images", newImageUrls);
+  };
+
+  // Legacy image management (URL input) - keeping this for backward compatibility
   const addImage = () => {
     if (imageInput && z.string().url().safeParse(imageInput).success) {
       const currentImages = form.getValues("images");
       if (!currentImages.includes(imageInput)) {
-        form.setValue("images", [...currentImages, imageInput]);
+        const newUploadedImage = {
+          url: imageInput,
+          fileName: `url-input-${Date.now()}`, // Placeholder filename for URL inputs
+        };
+        const newUploadedImages = [...uploadedImages, newUploadedImage];
+        const newImageUrls = [...currentImages, imageInput];
+
+        setUploadedImages(newUploadedImages);
+        form.setValue("images", newImageUrls);
         setImageInput("");
       }
     }
-  };
-
-  const removeImage = (index: number) => {
-    const currentImages = form.getValues("images");
-    form.setValue(
-      "images",
-      currentImages.filter((_, i) => i !== index)
-    );
   };
 
   // Update app mutation
@@ -332,7 +489,7 @@ export default function UpdateAppForm({ appId }: UpdateAppProps) {
               </CardContent>
             </Card>
 
-            {/* Media */}
+            {/* Media - Updated with file upload functionality */}
             <Card>
               <CardHeader>
                 <CardTitle>Media & Assets</CardTitle>
@@ -343,16 +500,60 @@ export default function UpdateAppForm({ appId }: UpdateAppProps) {
                   name="logoUrl"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Logo URL</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="https://example.com/logo.png"
-                          type="url"
-                          {...field}
-                        />
-                      </FormControl>
+                      <FormLabel>Logo Upload</FormLabel>
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-4">
+                          <label className="cursor-pointer">
+                            <input
+                              type="file"
+                              accept="image/jpeg,image/jpg,image/png"
+                              onChange={handleLogoUpload}
+                              disabled={logoUploading}
+                            />
+                          </label>
+
+                          {logoFile && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={removeLogo}
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          )}
+                        </div>
+
+                        {field.value && (
+                          <div className="flex items-center gap-3 p-3 bg-muted rounded">
+                            <img
+                              src={field.value}
+                              alt="Logo preview"
+                              className="w-12 h-12 object-cover rounded"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src =
+                                  "/api/placeholder/48/48";
+                              }}
+                            />
+                            <span className="text-sm text-muted-foreground">
+                              Logo uploaded successfully
+                            </span>
+                          </div>
+                        )}
+
+                        {/* Alternative: Manual URL input */}
+                        <div className="pt-2 border-t">
+                          <Input
+                            placeholder="Or enter logo URL manually: https://example.com/logo.png"
+                            type="url"
+                            value={field.value || ""}
+                            onChange={(e) => field.onChange(e.target.value)}
+                          />
+                        </div>
+                      </div>
                       <FormDescription>
-                        URL to your app's logo image
+                        Upload your app's logo (JPEG/PNG, max 10MB) or enter URL
+                        manually
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -366,9 +567,22 @@ export default function UpdateAppForm({ appId }: UpdateAppProps) {
                     <FormItem>
                       <FormLabel>Screenshots & Images</FormLabel>
                       <div className="space-y-3">
+                        <div className="flex items-center gap-4">
+                          <label className="cursor-pointer">
+                            <input
+                              type="file"
+                              accept="image/jpeg,image/jpg,image/png"
+                              multiple
+                              onChange={handleImageUpload}
+                              disabled={imageUploading}
+                            />
+                          </label>
+                        </div>
+
+                        {/* Alternative: Manual URL input */}
                         <div className="flex gap-2">
                           <Input
-                            placeholder="https://example.com/screenshot.png"
+                            placeholder="Or add image URL: https://example.com/screenshot.png"
                             value={imageInput}
                             onChange={(e) => setImageInput(e.target.value)}
                             onKeyDown={(e) =>
@@ -403,7 +617,7 @@ export default function UpdateAppForm({ appId }: UpdateAppProps) {
                                   }}
                                 />
                                 <span className="flex-1 text-sm truncate">
-                                  {url}
+                                  Image {index + 1}
                                 </span>
                                 <Button
                                   type="button"
@@ -419,7 +633,8 @@ export default function UpdateAppForm({ appId }: UpdateAppProps) {
                         )}
                       </div>
                       <FormDescription>
-                        Add URLs to screenshots or promotional images
+                        Upload screenshots or promotional images (JPEG/PNG, max
+                        10MB each) or add URLs manually
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -558,13 +773,19 @@ export default function UpdateAppForm({ appId }: UpdateAppProps) {
             </Link>
             <Button
               onClick={handleSubmit}
-              disabled={updateAppMutation.isPending}
+              disabled={
+                updateAppMutation.isPending || logoUploading || imageUploading
+              }
               className="min-w-[120px]"
             >
-              {updateAppMutation.isPending && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              {updateAppMutation.isPending ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  Updating...
+                </>
+              ) : (
+                "Update App"
               )}
-              Update App
             </Button>
           </div>
         </div>

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
-import { Plus, X } from "lucide-react";
+import { X, Upload, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -28,6 +28,8 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { createApp } from "../actions/apps.actions";
+
+import { uploadImageToS3, deleteImageFromS3 } from "@/modules/aws/s3";
 
 const createAppSchema = z.object({
   name: z.string(),
@@ -58,8 +60,20 @@ const CATEGORIES = [
 
 interface CreateAppProps {}
 
+interface UploadedImage {
+  url: string;
+  fileName: string;
+}
+
 export default function CreateAppForm({}: CreateAppProps) {
-  const [imageInput, setImageInput] = useState("");
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoUploading, setLogoUploading] = useState(false);
+  const [logoFileName, setLogoFileName] = useState<string>("");
+
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imageUploading, setImageUploading] = useState(false);
+  const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
+
   const queryClient = useQueryClient();
 
   const form = useForm<CreateAppForm>({
@@ -93,23 +107,131 @@ export default function CreateAppForm({}: CreateAppProps) {
     }
   };
 
-  // Image management
-  const addImage = () => {
-    if (imageInput && z.string().url().safeParse(imageInput).success) {
-      const currentImages = form.getValues("images");
-      if (!currentImages.includes(imageInput)) {
-        form.setValue("images", [...currentImages, imageInput]);
-        setImageInput("");
+  // Logo upload handler
+  const handleLogoUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type and size
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    if (!allowedTypes.includes(file.type)) {
+      alert("Please upload JPEG or PNG images only.");
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      alert("File size too large. Maximum size is 10MB.");
+      return;
+    }
+
+    setLogoFile(file);
+    setLogoUploading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const result = await uploadImageToS3(formData);
+
+      if (result.success && result.url && result.fileName) {
+        form.setValue("logoUrl", result.url);
+        setLogoFileName(result.fileName);
+      } else {
+        alert(result.error || "Failed to upload logo");
       }
+    } catch (error) {
+      console.error("Logo upload error:", error);
+      alert("Failed to upload logo. Please try again.");
+    } finally {
+      setLogoUploading(false);
     }
   };
 
-  const removeImage = (index: number) => {
-    const currentImages = form.getValues("images");
-    form.setValue(
-      "images",
-      currentImages.filter((_, i) => i !== index)
+  // Remove logo
+  const removeLogo = async () => {
+    if (logoFileName) {
+      try {
+        await deleteImageFromS3(logoFileName);
+      } catch (error) {
+        console.error("Failed to delete logo from S3:", error);
+      }
+    }
+
+    setLogoFile(null);
+    setLogoFileName("");
+    form.setValue("logoUrl", "");
+  };
+
+  // Image upload handler
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = Array.from(event.target.files || []);
+    if (files.length === 0) return;
+
+    // Validate each file
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    const invalidFiles = files.filter(
+      (file) =>
+        !allowedTypes.includes(file.type) || file.size > 10 * 1024 * 1024
     );
+
+    if (invalidFiles.length > 0) {
+      alert(
+        "Some files are invalid. Please upload JPEG or PNG images under 10MB."
+      );
+      return;
+    }
+
+    setImageUploading(true);
+
+    try {
+      const uploadPromises = files.map(async (file) => {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const result = await uploadImageToS3(formData);
+        if (result.success && result.url && result.fileName) {
+          return { url: result.url, fileName: result.fileName };
+        }
+        throw new Error(result.error || "Upload failed");
+      });
+
+      const results = await Promise.all(uploadPromises);
+      const newUploadedImages = [...uploadedImages, ...results];
+      const newImageUrls = newUploadedImages.map((img) => img.url);
+
+      setUploadedImages(newUploadedImages);
+      form.setValue("images", newImageUrls);
+    } catch (error) {
+      console.error("Image upload error:", error);
+      alert("Failed to upload some images. Please try again.");
+    } finally {
+      setImageUploading(false);
+      // Reset file input
+      event.target.value = "";
+    }
+  };
+
+  // Remove image
+  const removeImage = async (index: number) => {
+    const imageToRemove = uploadedImages[index];
+
+    if (imageToRemove?.fileName) {
+      try {
+        await deleteImageFromS3(imageToRemove.fileName);
+      } catch (error) {
+        console.error("Failed to delete image from S3:", error);
+      }
+    }
+
+    const newUploadedImages = uploadedImages.filter((_, i) => i !== index);
+    const newImageUrls = newUploadedImages.map((img) => img.url);
+
+    setUploadedImages(newUploadedImages);
+    form.setValue("images", newImageUrls);
   };
 
   // Create app mutation
@@ -122,7 +244,7 @@ export default function CreateAppForm({}: CreateAppProps) {
           return JSON.parse(jsonString);
         } catch (error) {
           console.warn("Invalid JSON provided:", error);
-          return null; // or return the string as-is if you prefer
+          return null;
         }
       };
 
@@ -144,8 +266,11 @@ export default function CreateAppForm({}: CreateAppProps) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["apps"] });
-      form.reset();
-      // You might want to redirect or show a success message here
+    },
+
+    onError: (error) => {
+      console.log("something went wrong");
+      console.log(error);
     },
   });
 
@@ -249,16 +374,49 @@ export default function CreateAppForm({}: CreateAppProps) {
                   name="logoUrl"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Logo URL</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="https://example.com/logo.png"
-                          type="url"
-                          {...field}
-                        />
-                      </FormControl>
+                      <FormLabel>Logo Upload</FormLabel>
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-4">
+                          <label className="cursor-pointer">
+                            <input
+                              type="file"
+                              accept="image/jpeg,image/jpg,image/png"
+                              onChange={handleLogoUpload}
+                              disabled={logoUploading}
+                            />
+                          </label>
+
+                          {logoFile && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={removeLogo}
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          )}
+                        </div>
+
+                        {field.value && (
+                          <div className="flex items-center gap-3 p-3 bg-muted rounded">
+                            <img
+                              src={field.value}
+                              alt="Logo preview"
+                              className="w-12 h-12 object-cover rounded"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src =
+                                  "/api/placeholder/48/48";
+                              }}
+                            />
+                            <span className="text-sm text-muted-foreground">
+                              Logo uploaded successfully
+                            </span>
+                          </div>
+                        )}
+                      </div>
                       <FormDescription>
-                        URL to your app's logo image
+                        Upload your app's logo (JPEG/PNG, max 10MB)
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -272,24 +430,16 @@ export default function CreateAppForm({}: CreateAppProps) {
                     <FormItem>
                       <FormLabel>Screenshots & Images</FormLabel>
                       <div className="space-y-3">
-                        <div className="flex gap-2">
-                          <Input
-                            placeholder="https://example.com/screenshot.png"
-                            value={imageInput}
-                            onChange={(e) => setImageInput(e.target.value)}
-                            onKeyDown={(e) =>
-                              e.key === "Enter" &&
-                              (e.preventDefault(), addImage())
-                            }
-                          />
-                          <Button
-                            type="button"
-                            onClick={addImage}
-                            size="icon"
-                            variant="outline"
-                          >
-                            <Plus className="h-4 w-4" />
-                          </Button>
+                        <div className="flex items-center gap-4">
+                          <label className="cursor-pointer">
+                            <input
+                              type="file"
+                              accept="image/jpeg,image/jpg,image/png"
+                              multiple
+                              onChange={handleImageUpload}
+                              disabled={imageUploading}
+                            />
+                          </label>
                         </div>
 
                         {field.value.length > 0 && (
@@ -309,7 +459,7 @@ export default function CreateAppForm({}: CreateAppProps) {
                                   }}
                                 />
                                 <span className="flex-1 text-sm truncate">
-                                  {url}
+                                  Image {index + 1}
                                 </span>
                                 <Button
                                   type="button"
@@ -325,7 +475,8 @@ export default function CreateAppForm({}: CreateAppProps) {
                         )}
                       </div>
                       <FormDescription>
-                        Add URLs to screenshots or promotional images
+                        Upload screenshots or promotional images (JPEG/PNG, max
+                        10MB each)
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -455,11 +606,19 @@ export default function CreateAppForm({}: CreateAppProps) {
             </Button>
             <Button
               onClick={handleSubmit}
-              disabled={createAppMutation.isPending}
+              disabled={
+                createAppMutation.isPending || logoUploading || imageUploading
+              }
               className="min-w-[120px]"
-              loading={createAppMutation.isPending}
             >
-              Create App
+              {createAppMutation.isPending ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  Creating...
+                </>
+              ) : (
+                "Create App"
+              )}
             </Button>
           </div>
         </div>

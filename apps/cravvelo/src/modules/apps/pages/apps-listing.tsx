@@ -8,6 +8,7 @@ import { getAllApps } from "../actions/apps.actions";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { PlusSquare } from "lucide-react";
 
 interface Props {
   data: AppType[];
@@ -62,9 +63,12 @@ export default function AppsListingPage({ data }: Props) {
     <div className="w-full h-screen p-4">
       <div className="w-full h-[100px] flex flex-col items-start justify-start gap-4">
         <div className="flex items-center justify-between w-full">
-          <h1 className="text-2xl font-bold">Applications</h1>
+          <h1 className="text-2xl ">Applications</h1>
           <Link href={"/applications/create"}>
-            <Button>create app</Button>
+            <Button className={"cursor-pointer"}>
+              <PlusSquare />
+              create app
+            </Button>
           </Link>
         </div>
       </div>
