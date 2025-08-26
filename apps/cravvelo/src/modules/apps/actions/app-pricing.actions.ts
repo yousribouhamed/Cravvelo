@@ -1,11 +1,10 @@
 "use server";
 
-import { withSuperAdminAuth } from "@/_internals/with-auth";
+import { withAuth, withSuperAdminAuth } from "@/_internals/with-auth";
 import { z } from "zod";
 
 const setAppPricingSchema = z.object({
   appId: z.string().min(1, "App ID is required"),
-  accountId: z.string().min(1, "Account ID is required"),
   name: z
     .string()
     .min(1, "Pricing plan name is required")
@@ -51,12 +50,11 @@ const removeAppPricingSchema = z.object({
 });
 
 // Set pricing for an app (creates new pricing plan and links it to the app)
-export const setAppPricing = withSuperAdminAuth({
+export const setAppPricing = withAuth({
   input: setAppPricingSchema,
-  handler: async ({ input, db }) => {
+  handler: async ({ input, db, admin }) => {
     const {
       appId,
-      accountId,
       name,
       description,
       price,
@@ -66,73 +64,88 @@ export const setAppPricing = withSuperAdminAuth({
       isDefault,
     } = input;
 
-    // Check if app exists
-    const app = await db.app.findUnique({
-      where: { id: appId },
-    });
+    console.log("function called");
+
+    // Use Promise.all to check app and account existence in parallel
+    const [app, account] = await Promise.all([
+      db.app.findUnique({
+        where: { id: appId },
+        select: { id: true, name: true },
+      }),
+      db.account.findUnique({
+        where: { userId: admin.id },
+        select: { id: true, userId: true, isActive: true },
+      }),
+    ]);
 
     if (!app) {
       throw new Error("App not found");
     }
 
-    // Check if account exists
-    const account = await db.account.findUnique({
-      where: { id: accountId },
-    });
-
     if (!account) {
       throw new Error("Account not found");
     }
 
-    // If this is going to be the default plan, unset other default plans for this app
-    if (isDefault) {
-      await db.appPricingPlan.updateMany({
-        where: { appId },
-        data: { isDefault: false },
-      });
+    if (!account.isActive) {
+      throw new Error("Account is not active");
     }
 
-    // Create the pricing plan
-    const pricingPlan = await db.pricing.create({
-      data: {
-        accountId,
-        name,
-        description,
-        pricingType: "RECURRING", // Apps are always subscription-based
-        price,
-        currency,
-        accessDuration: "UNLIMITED", // Apps typically have unlimited access during subscription
-        recurringDays,
-        isActive: true,
-        isDefault: false, // This is for the pricing table, not the app relationship
-      },
-    });
+    // Verify that the account belongs to the current admin (security check)
+    if (account.userId !== admin.id) {
+      throw new Error("Unauthorized: Account does not belong to current admin");
+    }
 
-    // Create the app-pricing relationship
-    const appPricingPlan = await db.appPricingPlan.create({
-      data: {
-        appId,
-        pricingPlanId: pricingPlan.id,
-        isDefault,
-      },
-    });
+    console.log("validations passed");
 
-    // If free trial is specified, we could store it in metadata or create a separate free plan
-    //@ts-expect-error this is an error
-    if (freeTrialDays > 0) {
-      await db.pricing.update({
-        where: { id: pricingPlan.id },
+    // Use transaction to handle all database operations atomically
+    const result = await db.$transaction(async (tx) => {
+      // If this is going to be the default plan, unset other default plans for this app
+      if (isDefault) {
+        await tx.appPricingPlan.updateMany({
+          where: { appId },
+          data: { isDefault: false },
+        });
+      }
+
+      console.log("default plans updated");
+
+      // Create the pricing plan
+      const pricingPlan = await tx.pricing.create({
         data: {
-          description: description
-            ? `${description} (Includes ${freeTrialDays}-day free trial)`
-            : `${freeTrialDays}-day free trial included`,
+          accountId: account.id,
+          name,
+          description:
+            freeTrialDays && freeTrialDays > 0
+              ? description
+                ? `${description} (Includes ${freeTrialDays}-day free trial)`
+                : `${freeTrialDays}-day free trial included`
+              : description,
+          pricingType: "RECURRING", // Apps are always subscription-based
+          price,
+          currency,
+          accessDuration: "UNLIMITED", // Apps typically have unlimited access during subscription
+          recurringDays,
+          isActive: true,
+          isDefault: false, // This is for the pricing table, not the app relationship
         },
       });
-    }
+
+      // Create the app-pricing relationship
+      const appPricingPlan = await tx.appPricingPlan.create({
+        data: {
+          appId,
+          pricingPlanId: pricingPlan.id,
+          isDefault,
+        },
+      });
+
+      console.log("pricing plan and app relationship created");
+
+      return { pricingPlan, appPricingPlan };
+    });
 
     return {
-      pricingPlan,
-      appPricingPlan,
+      ...result,
       message: "App pricing set successfully",
     };
   },
@@ -154,7 +167,14 @@ export const updateAppPricing = withSuperAdminAuth({
         },
       },
       include: {
-        PricingPlan: true,
+        PricingPlan: {
+          select: {
+            id: true,
+            name: true,
+            price: true,
+            accountId: true,
+          },
+        },
       },
     });
 
@@ -162,33 +182,49 @@ export const updateAppPricing = withSuperAdminAuth({
       throw new Error("App pricing plan not found");
     }
 
-    // If making this the default plan, unset other default plans for this app
-    if (isDefault === true) {
-      await db.appPricingPlan.updateMany({
-        where: {
-          appId,
-          id: { not: appPricingPlan.id },
-        },
-        data: { isDefault: false },
-      });
-    }
+    // Use transaction to handle all updates atomically
+    const result = await db.$transaction(async (tx) => {
+      // If making this the default plan, unset other default plans for this app
+      if (isDefault === true) {
+        await tx.appPricingPlan.updateMany({
+          where: {
+            appId,
+            id: { not: appPricingPlan.id },
+          },
+          data: { isDefault: false },
+        });
+      }
 
-    // Update the pricing plan
-    const updatedPricingPlan = await db.pricing.update({
-      where: { id: pricingPlanId },
-      data: updateData,
+      // Use Promise.all to update both pricing plan and app relationship in parallel
+      const updatePromises = [];
+
+      // Update the pricing plan if there's update data
+      if (Object.keys(updateData).length > 0) {
+        updatePromises.push(
+          tx.pricing.update({
+            where: { id: pricingPlanId },
+            data: updateData,
+          })
+        );
+      }
+
+      // Update the app pricing plan relationship if needed
+      if (isDefault !== undefined) {
+        updatePromises.push(
+          tx.appPricingPlan.update({
+            where: { id: appPricingPlan.id },
+            data: { isDefault },
+          })
+        );
+      }
+
+      const [updatedPricingPlan] = await Promise.all(updatePromises);
+
+      return { updatedPricingPlan };
     });
 
-    // Update the app pricing plan relationship if needed
-    if (isDefault !== undefined) {
-      await db.appPricingPlan.update({
-        where: { id: appPricingPlan.id },
-        data: { isDefault },
-      });
-    }
-
     return {
-      pricingPlan: updatedPricingPlan,
+      pricingPlan: result.updatedPricingPlan,
       message: "App pricing updated successfully",
     };
   },
@@ -215,13 +251,32 @@ export const removeAppPricing = withSuperAdminAuth({
       throw new Error("App pricing plan not found");
     }
 
-    // Check if there are any active purchases for this pricing plan
-    const activePurchases = await db.itemPurchase.count({
-      where: {
-        pricingPlanId,
-        status: "ACTIVE",
-      },
-    });
+    // Use Promise.all to check active purchases and other usage in parallel
+    const [
+      activePurchases,
+      otherAppUsage,
+      coursePricingUsage,
+      productPricingUsage,
+    ] = await Promise.all([
+      db.itemPurchase.count({
+        where: {
+          pricingPlanId,
+          status: "ACTIVE",
+        },
+      }),
+      db.appPricingPlan.count({
+        where: {
+          pricingPlanId,
+          id: { not: appPricingPlan.id }, // Exclude current relationship
+        },
+      }),
+      db.coursePricingPlan.count({
+        where: { pricingPlanId },
+      }),
+      db.productPricingPlan.count({
+        where: { pricingPlanId },
+      }),
+    ]);
 
     if (activePurchases > 0) {
       throw new Error(
@@ -229,30 +284,23 @@ export const removeAppPricing = withSuperAdminAuth({
       );
     }
 
-    // Remove the app pricing plan relationship
-    await db.appPricingPlan.delete({
-      where: { id: appPricingPlan.id },
-    });
-
-    // Optionally, you might want to keep the pricing plan for historical records
-    // Or delete it if it's not used anywhere else
-    const otherAppUsage = await db.appPricingPlan.count({
-      where: { pricingPlanId },
-    });
-
-    const otherUsage = await Promise.all([
-      db.coursePricingPlan.count({ where: { pricingPlanId } }),
-      db.productPricingPlan.count({ where: { pricingPlanId } }),
-    ]);
-
     const totalOtherUsage =
-      otherAppUsage + otherUsage.reduce((sum, count) => sum + count, 0);
+      otherAppUsage + coursePricingUsage + productPricingUsage;
 
-    if (totalOtherUsage === 0) {
-      await db.pricing.delete({
-        where: { id: pricingPlanId },
+    // Use transaction to handle removal atomically
+    await db.$transaction(async (tx) => {
+      // Remove the app pricing plan relationship
+      await tx.appPricingPlan.delete({
+        where: { id: appPricingPlan.id },
       });
-    }
+
+      // Delete pricing plan if it's not used anywhere else
+      if (totalOtherUsage === 0) {
+        await tx.pricing.delete({
+          where: { id: pricingPlanId },
+        });
+      }
+    });
 
     return {
       message: "App pricing removed successfully",
@@ -272,7 +320,19 @@ export const getAppPricing = withSuperAdminAuth({
     const appPricingPlans = await db.appPricingPlan.findMany({
       where: { appId },
       include: {
-        PricingPlan: true,
+        PricingPlan: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            price: true,
+            currency: true,
+            recurringDays: true,
+            isActive: true,
+            createdAt: true,
+            accountId: true,
+          },
+        },
         App: {
           select: {
             id: true,
@@ -286,8 +346,24 @@ export const getAppPricing = withSuperAdminAuth({
       },
     });
 
+    const plans = appPricingPlans.map((item) => ({
+      id: item.id,
+      pricingPlanId: item.PricingPlan.id,
+      appId: item.appId,
+      accountId: item.PricingPlan.accountId,
+      name: item.PricingPlan.name,
+      description: item.PricingPlan.description,
+      price: item.PricingPlan.price,
+      currency: item.PricingPlan.currency,
+      recurringDays: item.PricingPlan.recurringDays,
+      isDefault: item.isDefault,
+      isActive: item.PricingPlan.isActive,
+      createdAt: item.PricingPlan.createdAt,
+      app: item.App,
+    }));
+
     return {
-      appPricingPlans,
+      data: plans,
       message: "App pricing plans retrieved successfully",
     };
   },
@@ -317,16 +393,22 @@ export const setDefaultAppPricing = withSuperAdminAuth({
       throw new Error("App pricing plan not found");
     }
 
-    // Unset all default plans for this app
-    await db.appPricingPlan.updateMany({
-      where: { appId },
-      data: { isDefault: false },
-    });
-
-    // Set the new default
-    await db.appPricingPlan.update({
-      where: { id: appPricingPlan.id },
-      data: { isDefault: true },
+    // Use transaction to handle default setting atomically
+    await db.$transaction(async (tx) => {
+      // Use Promise.all to unset all defaults and set new default in parallel
+      await Promise.all([
+        tx.appPricingPlan.updateMany({
+          where: {
+            appId,
+            id: { not: appPricingPlan.id },
+          },
+          data: { isDefault: false },
+        }),
+        tx.appPricingPlan.update({
+          where: { id: appPricingPlan.id },
+          data: { isDefault: true },
+        }),
+      ]);
     });
 
     return {
@@ -334,4 +416,38 @@ export const setDefaultAppPricing = withSuperAdminAuth({
     };
   },
   action: "SET_DEFAULT_APP_PRICING",
+});
+
+// Helper function to get admin's account ID
+export const getAdminAccountId = withAuth({
+  input: z.object({}),
+  handler: async ({ db, admin }) => {
+    const account = await db.account.findFirst({
+      where: {
+        userId: admin.id,
+        isActive: true,
+      },
+      select: {
+        id: true,
+        company: true,
+        isActive: true,
+        isSuspended: true,
+      },
+    });
+
+    if (!account) {
+      throw new Error("No active account found for current admin");
+    }
+
+    if (account.isSuspended) {
+      throw new Error("Account is suspended");
+    }
+
+    return {
+      accountId: account.id,
+      company: account.company,
+      message: "Account ID retrieved successfully",
+    };
+  },
+  action: "GET_ADMIN_ACCOUNT",
 });

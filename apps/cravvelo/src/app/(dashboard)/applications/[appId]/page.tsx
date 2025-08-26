@@ -1,3 +1,4 @@
+import Header from "@/components/header";
 import UpdateAppForm from "@/modules/apps/pages/update-app";
 
 export default async function EditAppPage({
@@ -9,6 +10,20 @@ export default async function EditAppPage({
 
   return (
     <div>
+      <Header
+        backTo="/applications"
+        title="Update App"
+        navigations={[
+          {
+            href: `/applications/${appId}`,
+            label: "general",
+          },
+          {
+            href: `/applications/${appId}/pricing`,
+            label: "pricing",
+          },
+        ]}
+      />
       <UpdateAppForm appId={appId} />
     </div>
   );

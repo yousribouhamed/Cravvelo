@@ -1,3 +1,4 @@
+import { ConfirmationModal } from "@/components/confirmation-modal";
 import MainSidebar from "@/components/main-sidebar";
 import { getCurrentAdmin } from "@/modules/auth/actions/auth.action";
 import { ReactNode } from "react";
@@ -14,6 +15,8 @@ export default async function DashboardLayout({ children }: LayoutProps) {
       <div className="flex-1 w-full h-[97%] overflow-y-scroll bg-card rounded-2xl m-2 border">
         {children}
       </div>
+
+      <ConfirmationModal />
     </div>
   );
 }

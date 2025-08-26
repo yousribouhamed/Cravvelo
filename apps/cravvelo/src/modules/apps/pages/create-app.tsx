@@ -27,7 +27,6 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import Link from "next/link";
 import { createApp } from "../actions/apps.actions";
 
 const createAppSchema = z.object({
@@ -157,19 +156,6 @@ export default function CreateAppForm({}: CreateAppProps) {
 
   return (
     <div className="w-full mx-auto p-4 space-y-6">
-      <div className="flex items-center justify-start gap-4">
-        <Link href={"/applications"}>
-          <Button variant={"outline"}>back</Button>
-        </Link>
-
-        <div>
-          <h1 className="text-xl font-bold">Create New App</h1>
-          <p className="text-muted-foreground mt-2">
-            Add a new application to the marketplace
-          </p>
-        </div>
-      </div>
-
       <Form {...form}>
         <div onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

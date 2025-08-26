@@ -250,19 +250,6 @@ export default function UpdateAppForm({ appId }: UpdateAppProps) {
 
   return (
     <div className="w-full mx-auto p-4 space-y-6">
-      <div className="flex items-center justify-start gap-4">
-        <Link href={"/applications"}>
-          <Button variant={"outline"}>back</Button>
-        </Link>
-
-        <div>
-          <h1 className="text-xl font-bold">Update App</h1>
-          <p className="text-muted-foreground mt-2">
-            Edit application details and settings
-          </p>
-        </div>
-      </div>
-
       <Form {...form}>
         <div onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
