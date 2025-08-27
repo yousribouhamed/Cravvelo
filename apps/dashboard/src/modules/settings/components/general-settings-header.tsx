@@ -9,7 +9,16 @@ const getLinks = () => {
   const links = [
     {
       name: "المظهر",
-      href: `/settings/general-settings`,
+      href: `/settings`,
+    },
+    {
+      name: "الملف الشخصي",
+      href: `/settings/profile`,
+    },
+
+    {
+      name: "الفواتير",
+      href: `/settings/invoices`,
     },
   ];
 

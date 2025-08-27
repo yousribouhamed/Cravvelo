@@ -177,6 +177,8 @@ model Account {
   Payment            Payment[]
   PaymentMethodConfig PaymentMethodConfig[]
   PricingPlans       Pricing[]
+  Invoices           Invoice[]
+  AppInstall            AppInstall[]
 }
 
 model Pricing {
@@ -192,6 +194,7 @@ model Pricing {
   // One-time payment settings
   accessDuration     AccessDuration?   // LIMITED or UNLIMITED
   accessDurationDays Int?              // Only for LIMITED duration
+  trialDays           Int? 
   
   // Recurring payment settings
   recurringDays      Int?              // Number of days for recurring billing (replaces recurringInterval)
@@ -653,6 +656,8 @@ model Payment {
   MethodConfig      PaymentMethodConfig? @relation(fields: [methodConfigId], references: [id], onDelete: SetNull)
   Proofs            PaymentProof[]
   Transactions      Transaction[]
+  Invoices          Invoice[]
+  AppInstall        AppInstall[]
 
   @@index([accountId])
   @@index([studentId])
@@ -782,7 +787,7 @@ model Notification {
   updatedAt  DateTime         @updatedAt
   
   Account    Account          @relation(fields: [accountId], references: [id], onDelete: Cascade)
-
+  
   @@index([accountId])
   @@index([isRead])
   @@index([type])
@@ -831,6 +836,7 @@ model Student {
   Referrals                Referral[]   // Fixed relation name
   Payments                 Payment[]    // Fixed relation name
   ItemPurchases            ItemPurchase[] // New relation
+  Invoices                 Invoice[]
   
   @@index([accountId])
   @@index([email, accountId])
@@ -936,20 +942,75 @@ model App {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  installations  InstalledApp[]
+  installations  AppInstall[]
   AppPricingPlans AppPricingPlan[]  // New relationship added
 }
 
-model InstalledApp {
-  id        String   @id @default(cuid())
-  userId    String   // tenant or account who installed it
-  appId     String
-  config    Json     // actual user-provided config
-  enabled   Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model AppInstall {
+  id               String      @id @default(cuid())
+  appId            String
+  accountId        String?
+  studentId        String?
 
-  app   App   @relation(fields: [appId], references: [id])
+  paymentId        String
+  payment          Payment     @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+
+  // Snapshot of pricing plan
+  planName         String
+  subscriptionAmount Float
+  currency         String
+  trialDays        Int? 
+  recurringDays    Int?
+  isRecurring      Boolean     @default(false)
+
+  status           PurchaseStatus @default(ACTIVE)
+  installedAt      DateTime    @default(now())
+  uninstalledAt    DateTime?
+
+  App              App         @relation(fields: [appId], references: [id], onDelete: Cascade)
+  Account          Account?    @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  
+  @@index([appId])
+  @@index([accountId])
+  @@index([studentId])
+}
+
+
+
+model Invoice {
+  id           String        @id @default(cuid())
+  paymentId    String
+  accountId    String?
+  studentId    String?
+
+  amount       Float
+  currency     String        @default("DZD")
+  status       PaymentStatus @default(PENDING)
+  description  String?       @db.Text
+  dueDate      DateTime?
+  paidAt       DateTime?
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  // Relations
+  Payment      Payment       @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  Account      Account?      @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  Student      Student?      @relation(fields: [studentId], references: [id], onDelete: SetNull)
+
+  @@index([paymentId])
+  @@index([accountId])
+  @@index([studentId])
+  @@index([status])
+}
+
+
+
+enum InvoiceStatus {
+  PENDING
+  PAID
+  CANCELED
+  OVERDUE
 }
 
 model Admin {

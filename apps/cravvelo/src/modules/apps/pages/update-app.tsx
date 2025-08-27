@@ -36,13 +36,7 @@ import { uploadImageToS3, deleteImageFromS3 } from "@/modules/aws/s3";
 const updateAppSchema = z.object({
   id: z.string().min(1, "App ID is required"),
   name: z.string().min(1, "App name is required").max(100, "App name too long"),
-  slug: z
-    .string()
-    .min(1, "Slug is required")
-    .regex(
-      /^[a-z0-9-]+$/,
-      "Slug must contain only lowercase letters, numbers, and hyphens"
-    ),
+  slug: z.string(),
   shortDesc: z
     .string()
     .min(1, "Short description is required")

@@ -19,6 +19,7 @@ import { cn } from "@ui/lib/utils";
 import Link from "next/link";
 import { SIDE_BAR_ITEMS } from "../../constants/side-bar-items";
 import { getValueFromUrl } from "@/src/lib/utils";
+import InstalledAppsBox from "@/src/modules/apps/components/installed-apps-box";
 
 interface MobileLinkProps extends React.PropsWithChildren {
   href: string;
@@ -208,6 +209,8 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
             );
           })}
         </Accordion>
+
+        <InstalledAppsBox />
       </div>
     </ScrollArea>
   );

@@ -2,9 +2,6 @@ import { prisma } from "database/src";
 import { getCurrentAdmin } from "@/modules/auth/actions/auth.action";
 import type {
   AuthenticatedAdmin,
-  AuthenticationError,
-  AuthorizationError,
-  ValidationError,
   WithAuthOptions,
   RoleRequirement,
 } from "./auth-types";

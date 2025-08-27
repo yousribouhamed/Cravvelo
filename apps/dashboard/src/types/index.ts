@@ -35,8 +35,6 @@ export type UserData = {
   user_name: string;
   avatar: string;
   email: string;
-  isFreeTrial: boolean;
-  isSubscribed: boolean;
   subdomain: string;
   customDomain: string;
   createdAt: Date;

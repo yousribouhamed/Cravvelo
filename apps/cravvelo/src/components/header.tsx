@@ -19,15 +19,17 @@ export default function Header({ backTo, title, navigations }: HeaderProps) {
 
   return (
     <>
-      <div className="w-full bg-white border-b border-gray-100">
-        <h1 className="text-xl font-medium text-gray-900 px-6 py-4">{title}</h1>
+      <div className="w-full bg-card border-b border">
+        <h1 className="text-xl font-medium text-gray-900 dark:text-white px-6 py-4">
+          {title}
+        </h1>
       </div>
 
-      <div className="w-full h-12 flex items-center gap-6 bg-white px-6 border-b border-gray-50">
+      <div className="w-full h-12 flex items-center gap-6 bg-card px-6 border-b border">
         {backTo && (
           <Link
             href={backTo}
-            className="flex items-center text-sm text-gray-500 hover:text-gray-900 transition-colors"
+            className="flex items-center text-sm text-gray-500 hover:text-gray-900 dark:text-gray-50 hover:dark:text-white transition-colors"
           >
             ← Back
           </Link>
@@ -43,8 +45,8 @@ export default function Header({ backTo, title, navigations }: HeaderProps) {
                 href={nav.href}
                 className={`flex items-center gap-2 text-sm font-medium transition-colors relative py-3 ${
                   isActive
-                    ? "text-gray-900"
-                    : "text-gray-500 hover:text-gray-700"
+                    ? "text-gray-900 dark:text-white"
+                    : "text-gray-500 hover:text-gray-700 dark:text-white "
                 }`}
               >
                 {nav.icon}

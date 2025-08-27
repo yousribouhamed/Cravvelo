@@ -25,7 +25,9 @@ export const AppColumns: ColumnDef<AppType>[] = [
           alt={row.original.name}
           className="w-10 h-10 rounded-xl shadow border shrink-0"
         />
-        <p className="text-gray-500 font-bold">{row.getValue("name")}</p>
+        <p className="text-gray-500 dark:text-gray-50 font-bold">
+          {row.getValue("name")}
+        </p>
       </div>
     ),
   },

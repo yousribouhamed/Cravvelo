@@ -8,15 +8,11 @@ const updateAppSchema = z.object({
   id: z.string().min(1, "App ID is required"),
   name: z
     .string()
-    .min(1, "App name is required")
-    .max(100, "App name too long")
+
     .optional(),
   slug: z
     .string()
-    .regex(
-      /^[a-z0-9-]+$/,
-      "Slug must contain only lowercase letters, numbers, and hyphens"
-    )
+
     .optional(),
   shortDesc: z.string().max(200, "Short description too long").optional(),
   longDesc: z.any().optional(),
@@ -116,9 +112,6 @@ export const getAppById = withAuth({
         installations: {
           select: {
             id: true,
-            userId: true,
-            enabled: true,
-            createdAt: true,
           },
         },
         _count: {
@@ -140,21 +133,10 @@ export const getAppById = withAuth({
 });
 export const createApp = withSuperAdminAuth({
   input: z.object({
-    name: z
-      .string()
-      .min(1, "App name is required")
-      .max(100, "App name too long"),
-    slug: z
-      .string()
-      .min(1, "Slug is required")
-      .regex(
-        /^[a-z0-9-]+$/,
-        "Slug must contain only lowercase letters, numbers, and hyphens"
-      ),
-    shortDesc: z
-      .string()
-      .min(1, "Short description is required")
-      .max(200, "Short description too long"),
+    name: z.string(),
+    slug: z.string(),
+
+    shortDesc: z.string(),
     longDesc: z.any().optional(), // Already parsed JSON object or null
     logoUrl: z.string().url().optional(),
     images: z.array(z.string().url()).default([]),
@@ -289,7 +271,7 @@ export const getAppStats = withAuth({
     const [totalApps, totalInstallations, categoriesCount, recentApps] =
       await Promise.all([
         db.app.count(),
-        db.installedApp.count(),
+        db.appInstall.count(),
         db.app.count({
           where: { category: { not: null } },
           //@ts-expect-error
