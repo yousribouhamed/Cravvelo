@@ -7,20 +7,21 @@ interface PaymentConnection {
 }
 
 export function PaymentMethodCards() {
-  // Example: you can initialize these however you like
   const [activeConnections] = useState<PaymentConnection[]>([
     { provider: "CHARGILY", isActive: true },
     // { provider: "P2P", isActive: true },
   ]);
 
-  const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
-
+  // ✅ detect active methods
   const hasChargily = activeConnections.some(
     (conn) => conn.provider === "CHARGILY" && conn.isActive
   );
-
   const hasP2P = activeConnections.some(
     (conn) => conn.provider === "P2P" && conn.isActive
+  );
+
+  const [paymentMethod, setPaymentMethod] = useState<string | null>(
+    hasChargily ? "chargily" : hasP2P ? "p2p" : null
   );
 
   if (activeConnections.length === 0) {
@@ -39,7 +40,7 @@ export function PaymentMethodCards() {
           className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
             paymentMethod === "chargily"
               ? "border-blue-500 bg-blue-50 dark:bg-blue-950/30 dark:border-blue-400"
-              : "border-border hover:border-muted-foreground/50 bg-card"
+              : "border-border hover:border-muted-foreground/50 bg-card dark:bg-muted"
           }`}
           onClick={() => setPaymentMethod("chargily")}
         >
@@ -74,7 +75,7 @@ export function PaymentMethodCards() {
           className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
             paymentMethod === "p2p"
               ? "border-green-500 bg-green-50 dark:bg-green-950/30 dark:border-green-400"
-              : "border-border hover:border-muted-foreground/50 bg-card"
+              : "border-border hover:border-muted-foreground/50 bg-card dark:bg-muted"
           }`}
           onClick={() => setPaymentMethod("p2p")}
         >
@@ -103,7 +104,7 @@ export function PaymentMethodCards() {
         </div>
       )}
 
-      {/* Fallback for no active methods */}
+      {/* Fallback */}
       {!hasChargily && !hasP2P && (
         <div className="col-span-2 text-center py-8">
           <div className="text-muted-foreground">

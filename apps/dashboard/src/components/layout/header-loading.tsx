@@ -26,7 +26,7 @@ const HeaderLoading: FC<HeaderLoadingProps> = ({ withBackButton = false }) => {
       {/* right side */}
       <div className="lg:w-[25%] w-[50%] h-full flex items-center justify-end gap-x-3">
         <Skeleton className="h-10 w-10 rounded-xl" /> {/* bell */}
-        <div className="flex items-center gap-x-3 border rounded-xl px-3 py-2 bg-white">
+        <div className="flex items-center gap-x-3 border rounded-xl px-3 py-2 bg-card">
           <Skeleton className="w-8 h-8 rounded-full" /> {/* avatar */}
           <Skeleton className="w-24 h-4 rounded-md" /> {/* username */}
         </div>

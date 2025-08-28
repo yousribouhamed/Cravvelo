@@ -412,7 +412,7 @@ export default async function CheckoutPage({
 
           {/* Right Side - Payment Form Section */}
           <div className="bg-card   p-6 pt-8">
-            <CheckoutForm />
+            <CheckoutForm paymentId={payment.id} />
           </div>
         </div>
       </div>

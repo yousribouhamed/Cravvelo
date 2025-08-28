@@ -42,13 +42,7 @@ export const getAllPayments = withAuth({
               },
             },
           },
-          Subscription: {
-            select: {
-              id: true,
-              plan: true,
-              status: true,
-            },
-          },
+
           MethodConfig: {
             select: {
               id: true,
@@ -137,17 +131,7 @@ export const getPaymentDetailsById = withAuth({
               },
             },
           },
-          Subscription: {
-            select: {
-              id: true,
-              plan: true,
-              status: true,
-              startDate: true,
-              endDate: true,
-              amount: true,
-              billingCycle: true,
-            },
-          },
+
           MethodConfig: {
             select: {
               id: true,
@@ -227,7 +211,7 @@ export const approvePayment = withAuth({
           },
           include: {
             Sale: true,
-            Subscription: true,
+
             Student: true,
           },
         });
@@ -264,17 +248,6 @@ export const approvePayment = withAuth({
             where: { id: payment.saleId },
             data: {
               status: "COMPLETED",
-              updatedAt: new Date(),
-            },
-          });
-        }
-
-        // Update subscription status if exists
-        if (payment.subscriptionId) {
-          await tx.subscription.update({
-            where: { id: payment.subscriptionId },
-            data: {
-              status: "ACTIVE",
               updatedAt: new Date(),
             },
           });
@@ -371,7 +344,7 @@ export const rejectPayment = withAuth({
           },
           include: {
             Sale: true,
-            Subscription: true,
+
             Student: true,
           },
         });
@@ -413,19 +386,6 @@ export const rejectPayment = withAuth({
             where: { id: payment.saleId },
             data: {
               status: "CANCELLED",
-              updatedAt: new Date(),
-            },
-          });
-        }
-
-        // Update subscription status if exists
-        if (payment.subscriptionId) {
-          await tx.subscription.update({
-            where: { id: payment.subscriptionId },
-            data: {
-              status: "CANCELLED",
-              cancellationReason: rejectionReason || "Payment rejected",
-              cancelledAt: new Date(),
               updatedAt: new Date(),
             },
           });

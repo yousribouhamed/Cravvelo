@@ -32,7 +32,7 @@ const useHaveAccess = async () => {
 
   // here we check if the user is paid user or not
   const isFreeTrial = daysLeftInTrial(account.createdAt) > 0;
-  const isSubscribed = account.plan ? true : false;
+  const isSubscribed = true;
 
   // this one checks if you are
   if (!isFreeTrial && !isSubscribed && process.env.NODE_ENV === "production") {
