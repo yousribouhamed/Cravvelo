@@ -611,15 +611,27 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.3.4
         version: 3.10.0(react-hook-form@7.62.0(react@19.1.0))
+      '@radix-ui/react-dialog':
+        specifier: ^1.1.15
+        version: 1.1.15(@types/react-dom@19.1.7(@types/react@19.1.10))(@types/react@19.1.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@vercel/analytics':
         specifier: ^1.2.2
         version: 1.5.0(next@15.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       animejs:
         specifier: ^3.2.2
         version: 3.2.2
+      class-variance-authority:
+        specifier: ^0.7.1
+        version: 0.7.1
+      clsx:
+        specifier: ^1.2.1
+        version: 1.2.1
       crisp-sdk-web:
         specifier: ^1.0.22
         version: 1.0.25
+      database:
+        specifier: workspace:*
+        version: link:../../packages/db
       framer-motion:
         specifier: ^10.18.0
         version: 10.18.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -650,6 +662,12 @@ importers:
       resend:
         specifier: ^3.2.0
         version: 3.5.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      tailwind-merge:
+        specifier: ^1.13.2
+        version: 1.14.0
+      tailwindcss-animate:
+        specifier: ^1.0.6
+        version: 1.0.7(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.3.101(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)))
       ui:
         specifier: workspace:*
         version: link:../../packages/ui

@@ -25,7 +25,7 @@ export default function RootLayout({
       className="!scroll-smooth"
     >
       <CrispChat />
-      <body className={"min-h-screen h-fit  bg-[#FAFAFA] w-full"}>
+      <body className={"min-h-screen h-fit  bg-white w-full"}>
         <NavBar />
         <div className="  w-full h-fit min-h-full overflow-x-hidden">
           {children}

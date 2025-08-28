@@ -1052,3 +1052,28 @@ model AdminActivity {
   adminId   String
   admin     Admin    @relation(fields: [adminId], references: [id])
 }
+
+
+model WaitingList {
+  id        String   @id @default(cuid())
+  name      String?  
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model SupportTicket {
+  id         String   @id @default(cuid())
+  name       String
+  email      String
+  phone      String?     // اختياري
+  subject    String
+  message    String
+  priority   String      // low | medium | high
+  newsletter Boolean     @default(false)
+  terms      Boolean
+  status     String      @default("open") // open | in_progress | closed
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}

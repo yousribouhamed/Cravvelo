@@ -9,12 +9,12 @@ import Image from "next/image";
 import DropDownMenu from "../../drop-down-menu";
 import MobileNav from "./mobile-nav";
 import TopBanner from "../../top-banner";
-import { WaitingListModal } from "../../waiting-list";
 
 const links = [
   { name: "الرئيسية", href: "/" },
   { name: "الخدمات", href: "/features" },
-
+  { name: "معلومات عنا", href: "/about-us" },
+  { name: "التسعير", href: "/pricing" },
   { name: "تواصل معنا", href: "/contact-us" },
 ];
 
@@ -34,14 +34,14 @@ const NavBar = () => {
 
   return (
     <>
-      <div className={`w-full h-[120px] z-[1] fixed top-0`}>
+      <div className={`w-full h-[120px] z-[99] fixed top-0`}>
         {!close && <TopBanner close={close} setClose={setClose} />}
         <div
           className={cn(
-            "mx-auto w-full border-b bg-white px-2.5 sm:px-4 md:px-6 lg:px-8 xl:px-20 transition-all duration-150 relative"
-            // {
-            //   "shadow-lg ": hasShadow,
-            // }
+            "mx-auto w-full px-2.5 sm:px-4 md:px-6 lg:px-8 xl:px-20 transition-all duration-150 relative",
+            {
+              "shadow-lg border-b bg-white": hasShadow,
+            }
           )}
         >
           <div className="flex items-center mx-auto lg:max-w-screen-2xl 2xl:px-20 px-2.5 justify-between  w-full h-[80px]">
@@ -93,7 +93,26 @@ const NavBar = () => {
 
             {/* Desktop Auth Buttons */}
             <div className="hidden xl:flex items-center justify-end gap-x-2 lg:gap-x-4 flex-shrink-0">
-              <WaitingListModal />
+              <Link
+                target="_blank"
+                href="https://app.cravvelo.com/sign-up"
+                className={cn(
+                  buttonVariants(),
+                  "bg-primary border border-primary text-white text-sm lg:text-base xl:text-xl py-2 lg:py-4 h-10 lg:h-12 px-3 lg:px-4 rounded-2xl font-bold transition-all duration-150 whitespace-nowrap"
+                )}
+              >
+                انشاء حساب
+              </Link>
+              <Link
+                target="_blank"
+                href="https://app.cravvelo.com/sign-in"
+                className={cn(
+                  buttonVariants(),
+                  "bg-white border border-primary text-primary text-sm lg:text-base xl:text-xl py-2 lg:py-4 h-10 lg:h-12 px-3 lg:px-4 rounded-2xl hover:text-white font-bold hover:bg-[#FC6B00] transition-all duration-150 whitespace-nowrap"
+                )}
+              >
+                تسجيل الدخول
+              </Link>
             </div>
 
             {/* Mobile Navigation */}

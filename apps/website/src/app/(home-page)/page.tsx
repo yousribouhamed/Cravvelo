@@ -7,7 +7,7 @@ import EaseSpeed from "./sections/ease-speed";
 import NewExperiance from "./sections/new-experiance";
 import StartNew from "./sections/start-new";
 import FadeIn from "@/src/components/animations/fade-in";
-import NewPricing from "./sections/new-pricing";
+// import NewPricing from "./sections/new-pricing";
 import Image from "next/image";
 import BestBenefits from "./sections/best-benifits";
 import SecureContent from "./sections/secure-content";
@@ -109,11 +109,11 @@ export default function Page() {
             <BestBenefits />
           </MaxWidthWrapper>
         </FadeIn>
-        <FadeIn>
+        {/* <FadeIn>
           <MaxWidthWrapper>
             <NewPricing />
           </MaxWidthWrapper>
-        </FadeIn>
+        </FadeIn> */}
         <StartNew />
       </div>
 
