@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@ui/components/ui/badge";
 import { Button } from "@ui/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@ui/components/ui/avatar";
-import { MoreHorizontal, Eye, Check, X } from "lucide-react";
+import { MoreHorizontal, Check, X, FileImage } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +14,9 @@ import {
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
 import { formatCurrency } from "../../utils";
+import { approvePayment, rejectPayment } from "../../actions/payments";
+import { useConfirmation } from "@/src/hooks/use-confirmation";
+import Link from "next/link";
 
 export type Payment = {
   id: string;
@@ -81,6 +84,60 @@ const formatDate = (date: Date) => {
   }).format(new Date(date));
 };
 
+// Status badge colors
+const getStatusBadgeVariant = (status: string) => {
+  switch (status) {
+    case "COMPLETED":
+      return "bg-green-100 text-green-800 border-green-200 dark:bg-green-900 dark:text-green-100";
+    case "PENDING":
+      return "bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900 dark:text-yellow-100";
+    case "PROCESSING":
+      return "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900 dark:text-blue-100";
+    case "FAILED":
+      return "bg-red-100 text-red-800 border-red-200 dark:bg-red-900 dark:text-red-100";
+    case "CANCELLED":
+      return "bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-900 dark:text-gray-100";
+    case "REFUNDED":
+      return "bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-900 dark:text-purple-100";
+    default:
+      return "bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-900 dark:text-gray-100";
+  }
+};
+
+// Payment method badge colors
+const getMethodBadgeVariant = (method: string) => {
+  switch (method) {
+    case "BANK_TRANSFER":
+      return "bg-indigo-100 text-indigo-800 border-indigo-200 dark:bg-indigo-900 dark:text-indigo-100";
+    case "CASH":
+      return "bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900 dark:text-emerald-100";
+    case "CHARGILY":
+      return "bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900 dark:text-orange-100";
+    case "CREDIT_CARD":
+      return "bg-cyan-100 text-cyan-800 border-cyan-200 dark:bg-cyan-900 dark:text-cyan-100";
+    default:
+      return "bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-900 dark:text-gray-100";
+  }
+};
+
+// Payment type badge colors
+const getTypeBadgeVariant = (type: string) => {
+  switch (type) {
+    case "BUYPRODUCT":
+      return "bg-teal-100 text-teal-800 border-teal-200 dark:bg-teal-900 dark:text-teal-100";
+    case "BUYCOURSE":
+      return "bg-violet-100 text-violet-800 border-violet-200 dark:bg-violet-900 dark:text-violet-100";
+    case "SUBSCRIPTION":
+      return "bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900 dark:text-rose-100";
+    case "REFERAL_WITHDRAWAL":
+      return "bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900 dark:text-amber-100";
+    case "REFUND":
+      return "bg-slate-100 text-slate-800 border-slate-200 dark:bg-slate-900 dark:text-slate-100";
+    default:
+      return "bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-900 dark:text-gray-100";
+  }
+};
+
 // item helper
 const getItemInfo = (payment: Payment) => {
   if (payment.Sale?.Course) {
@@ -103,6 +160,131 @@ const getItemInfo = (payment: Payment) => {
     };
   }
   return null;
+};
+
+// Actions Cell Component
+const ActionsCell = ({ payment }: { payment: Payment }) => {
+  const isBankTransfer = payment.method === "BANK_TRANSFER";
+
+  // Approve payment mutation with confirmation
+  const approvePaymentMutation = useConfirmation(
+    async (paymentId: string) => {
+      return await approvePayment({ paymentId });
+    },
+    {
+      confirmationConfig: {
+        title: "الموافقة على الدفع",
+        description: `هل أنت متأكد من الموافقة على الدفع بمبلغ ${formatCurrency(
+          {
+            amount: payment.amount,
+            currency: payment.currency as "DZD",
+          }
+        )}؟ لن يمكن التراجع عن هذا الإجراء.`,
+        confirmText: "الموافقة",
+        cancelText: "إلغاء",
+        variant: "default",
+      },
+      onSuccess: () => {
+        console.log("Payment approved successfully");
+        // You can add toast notification here
+      },
+      onError: (error) => {
+        console.error("Failed to approve payment:", error);
+        // You can add error toast notification here
+      },
+    }
+  );
+
+  // Reject payment mutation with confirmation
+  const rejectPaymentMutation = useConfirmation(
+    async (paymentId: string) => {
+      return await rejectPayment({ paymentId });
+    },
+    {
+      confirmationConfig: {
+        title: "رفض الدفع",
+        description: `هل أنت متأكد من رفض الدفع بمبلغ ${formatCurrency({
+          amount: payment.amount,
+          currency: payment.currency as "DZD",
+        })}؟ سيتم إلغاء المعاملة نهائياً.`,
+        confirmText: "رفض الدفع",
+        cancelText: "إلغاء",
+        variant: "destructive",
+      },
+      onSuccess: () => {
+        console.log("Payment rejected successfully");
+        // You can add toast notification here
+      },
+      onError: (error) => {
+        console.error("Failed to reject payment:", error);
+        // You can add error toast notification here
+      },
+    }
+  );
+
+  return (
+    <DropdownMenu dir="rtl">
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <span className="sr-only">فتح القائمة</span>
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align="end"
+        className="bg-card text-card-foreground dtext-right"
+      >
+        <DropdownMenuLabel className="text-right">الإجراءات</DropdownMenuLabel>
+        <DropdownMenuItem
+          onClick={() => navigator.clipboard.writeText(payment.id)}
+          className="text-right"
+        >
+          نسخ معرف الدفع
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+
+        {/* Show payment proofs only for bank transfers */}
+        {isBankTransfer && payment.Proofs && payment.Proofs.length > 0 && (
+          <Link href={payment.Proofs[0].fileUrl} target="_blank">
+            <DropdownMenuItem className="text-right">
+              <FileImage className="ml-2 h-4 w-4" />
+              عرض إثباتات الدفع ({payment.Proofs.length})
+            </DropdownMenuItem>
+          </Link>
+        )}
+
+        {/* Show approve/reject actions only for bank transfers */}
+        {isBankTransfer && payment.status === "PENDING" && (
+          <DropdownMenuItem
+            className="text-green-600 dark:text-green-400 text-right"
+            onClick={() =>
+              approvePaymentMutation.mutateWithConfirmation(payment.id)
+            }
+            disabled={approvePaymentMutation.isLoading}
+          >
+            <Check className="ml-2 h-4 w-4" />
+            {approvePaymentMutation.isLoading
+              ? "جاري الموافقة..."
+              : "الموافقة على الدفع"}
+          </DropdownMenuItem>
+        )}
+
+        {isBankTransfer &&
+          (payment.status === "PENDING" || payment.status === "PROCESSING") && (
+            <DropdownMenuItem
+              className="text-red-600 dark:text-red-400 text-right"
+              onClick={() =>
+                rejectPaymentMutation.mutateWithConfirmation(payment.id)
+              }
+              disabled={rejectPaymentMutation.isLoading}
+            >
+              <X className="ml-2 h-4 w-4" />
+              {rejectPaymentMutation.isLoading ? "جاري الرفض..." : "رفض الدفع"}
+            </DropdownMenuItem>
+          )}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 };
 
 export const paymentColumns: ColumnDef<Payment>[] = [
@@ -144,6 +326,7 @@ export const paymentColumns: ColumnDef<Payment>[] = [
       );
     },
   },
+
   {
     id: "item",
     header: "العنصر",
@@ -173,7 +356,6 @@ export const paymentColumns: ColumnDef<Payment>[] = [
       );
     },
   },
-
   {
     accessorKey: "amount",
     header: "المبلغ",
@@ -193,23 +375,27 @@ export const paymentColumns: ColumnDef<Payment>[] = [
     accessorKey: "status",
     header: "الحالة",
     cell: ({ row }) => (
-      <Badge variant="outline">{row.getValue("status") as string}</Badge>
+      <Badge
+        className={getStatusBadgeVariant(row.getValue("status") as string)}
+      >
+        {row.getValue("status") as string}
+      </Badge>
     ),
   },
   {
     id: "paymentMethod",
     header: "طريقة الدفع",
-    cell: ({ row }) => (
-      <Badge variant="outline">
-        {row.original.method || row.original.MethodConfig?.provider || "-"}
-      </Badge>
-    ),
+    cell: ({ row }) => {
+      const method =
+        row.original.method || row.original.MethodConfig?.provider || "-";
+      return <Badge className={getMethodBadgeVariant(method)}>{method}</Badge>;
+    },
   },
   {
     accessorKey: "createdAt",
     header: "تاريخ الإنشاء",
     cell: ({ row }) => (
-      <div className="text-sm text-muted-foreground">
+      <div className="text-sm text-muted-foreground w-fit">
         {formatDate(row.getValue("createdAt") as Date)}
       </div>
     ),
@@ -217,47 +403,6 @@ export const paymentColumns: ColumnDef<Payment>[] = [
   {
     id: "actions",
     header: "الإجراءات",
-    cell: ({ row }) => (
-      <DropdownMenu dir="rtl">
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">فتح القائمة</span>
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent
-          align="end"
-          className="bg-card text-card-foreground dtext-right"
-        >
-          <DropdownMenuLabel className="text-right">
-            الإجراءات
-          </DropdownMenuLabel>
-          <DropdownMenuItem
-            onClick={() => navigator.clipboard.writeText(row.original.id)}
-            className="text-right"
-          >
-            نسخ معرف الدفع
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem className="text-right">
-            <Eye className="ml-2 h-4 w-4" />
-            عرض التفاصيل
-          </DropdownMenuItem>
-          {row.original.status === "PENDING" && (
-            <DropdownMenuItem className="text-green-600 dark:text-green-400 text-right">
-              <Check className="ml-2 h-4 w-4" />
-              الموافقة على الدفع
-            </DropdownMenuItem>
-          )}
-          {(row.original.status === "PENDING" ||
-            row.original.status === "PROCESSING") && (
-            <DropdownMenuItem className="text-red-600 dark:text-red-400 text-right">
-              <X className="ml-2 h-4 w-4" />
-              رفض الدفع
-            </DropdownMenuItem>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ),
+    cell: ({ row }) => <ActionsCell payment={row.original} />,
   },
 ];

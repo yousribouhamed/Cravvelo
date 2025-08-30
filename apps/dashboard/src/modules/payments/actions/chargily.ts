@@ -129,6 +129,7 @@ export const getChargilyConnection = withAuth({
           config: true,
           createdAt: true,
           updatedAt: true,
+          isActive: true,
         },
       });
 

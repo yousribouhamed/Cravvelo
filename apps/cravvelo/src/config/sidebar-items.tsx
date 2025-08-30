@@ -24,7 +24,7 @@ export const SIDEBAR_ITEMS = [
   },
   {
     name: "Apps",
-    slug: "/apps",
+    slug: "/applications",
     icon: <AppWindow className="w-5 h-5" />,
   },
   {

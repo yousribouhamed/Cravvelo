@@ -5,8 +5,9 @@ import { ChargilyConfigType } from "../types";
 
 interface Props {
   config: ChargilyConfigType | null;
+  isAlreadyActive: boolean;
 }
 
-export const ChargilyConnectPage = ({ config }: Props) => {
-  return <ChargilyConnector data={config} />;
+export const ChargilyConnectPage = ({ config, isAlreadyActive }: Props) => {
+  return <ChargilyConnector isAlreadyActive={isAlreadyActive} data={config} />;
 };

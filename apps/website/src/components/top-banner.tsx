@@ -9,7 +9,7 @@ interface TopBannerProps {
 
 export default function TopBanner({ setClose }: TopBannerProps) {
   return (
-    <div className="w-full h-[41px] bg-gradient-to-r from-[#4ade80] via-[#22c55e] to-[#16a34a] flex justify-center items-center gap-x-2 px-4 md:gap-x-20">
+    <div className="w-full h-[41px] bg-gradient-to-r bg-[#1c53d3]  flex justify-center items-center gap-x-2 px-4 md:gap-x-20">
       <p className="text-white text-xs md:text-base font-bold ">
         انضم إلى قائمة الانتظار وكن من أول المستخدمين لـ Cravvelo
       </p>

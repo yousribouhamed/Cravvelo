@@ -42,15 +42,13 @@ const Hero: FC = ({}) => {
                   href={"https://beta.cravvelo.com/sign-up"}
                 >
                   <Button
+                    disabled
                     size="lg"
                     className="bg-[#FC6B00] hover:bg-[#994b13] text-xl py-6 h-14 rounded-2xl text-white qatar-bold hover:scale-105 transition-all duration-150"
                   >
                     ابدء تجربتك المجانية 👋
                   </Button>
                 </Link>
-                <span className="text-xl leading-8 mb-3 block text-black">
-                  14 يومًا تجريبيًّا
-                </span>
               </div>
               {/* <Reviews /> */}
             </div>

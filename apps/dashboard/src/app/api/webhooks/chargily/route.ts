@@ -19,24 +19,24 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      if (account.plan !== null) {
-        return;
-      }
+      // if (account.plan !== null) {
+      //   return;
+      // }
 
       // update the account status
-      await prisma.account.update({
-        where: {
-          id: accountId,
-        },
-        data: {
-          plan:
-            plan_code === "ADVANCED"
-              ? "ADVANCED"
-              : plan_code === "PRO"
-              ? "PRO"
-              : "BASIC",
-        },
-      });
+      // await prisma.account.update({
+      //   where: {
+      //     id: accountId,
+      //   },
+      //   data: {
+      //     plan:
+      //       plan_code === "ADVANCED"
+      //         ? "ADVANCED"
+      //         : plan_code === "PRO"
+      //         ? "PRO"
+      //         : "BASIC",
+      //   },
+      // });
 
       // await prisma.payments.update({
       //   where: {

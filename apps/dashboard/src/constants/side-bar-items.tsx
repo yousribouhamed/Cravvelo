@@ -3,13 +3,11 @@ import {
   CreditCard,
   Settings,
   Users,
-  Receipt,
-  Tag,
-  Share2,
   GraduationCap,
   Puzzle,
   User,
   Palette,
+  Receipt,
 } from "lucide-react";
 
 export const SIDE_BAR_ITEMS = [
@@ -30,16 +28,16 @@ export const SIDE_BAR_ITEMS = [
         icon: Receipt, // Better than Home - represents payment records
         slug: "/payments",
       },
-      {
-        title: "صانع القسائم",
-        icon: Tag, // Perfect for coupons/vouchers
-        slug: "/payments/coupons",
-      },
-      {
-        title: "التسويق بالعمولة",
-        icon: Share2, // Great for affiliate marketing/sharing
-        slug: "/payments/affiliate-marketing",
-      },
+      // {
+      //   title: "صانع القسائم",
+      //   icon: Tag, // Perfect for coupons/vouchers
+      //   slug: "/payments/coupons",
+      // },
+      // {
+      //   title: "التسويق بالعمولة",
+      //   icon: Share2, // Great for affiliate marketing/sharing
+      //   slug: "/payments/affiliate-marketing",
+      // },
     ],
   },
 

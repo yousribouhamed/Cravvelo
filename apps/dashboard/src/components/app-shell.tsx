@@ -6,16 +6,22 @@ interface Props {
   children: ReactNode;
   user: any;
   notifications: any;
+  title?: string;
 }
 
-export default function AppShell({ children, notifications, user }: Props) {
+export default function AppShell({
+  children,
+  notifications,
+  user,
+  title,
+}: Props) {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
         <Header
           notifications={notifications}
           user={user}
-          title="الدورات التدريبية"
+          title={title ?? "no header "}
         />
         {children}
       </main>

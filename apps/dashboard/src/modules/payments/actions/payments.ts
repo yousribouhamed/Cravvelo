@@ -42,13 +42,7 @@ export const getAllPayments = withAuth({
               },
             },
           },
-          Subscription: {
-            select: {
-              id: true,
-              plan: true,
-              status: true,
-            },
-          },
+
           MethodConfig: {
             select: {
               id: true,
@@ -137,17 +131,7 @@ export const getPaymentDetailsById = withAuth({
               },
             },
           },
-          Subscription: {
-            select: {
-              id: true,
-              plan: true,
-              status: true,
-              startDate: true,
-              endDate: true,
-              amount: true,
-              billingCycle: true,
-            },
-          },
+
           MethodConfig: {
             select: {
               id: true,
@@ -227,7 +211,7 @@ export const approvePayment = withAuth({
           },
           include: {
             Sale: true,
-            Subscription: true,
+
             Student: true,
           },
         });
@@ -264,17 +248,6 @@ export const approvePayment = withAuth({
             where: { id: payment.saleId },
             data: {
               status: "COMPLETED",
-              updatedAt: new Date(),
-            },
-          });
-        }
-
-        // Update subscription status if exists
-        if (payment.subscriptionId) {
-          await tx.subscription.update({
-            where: { id: payment.subscriptionId },
-            data: {
-              status: "ACTIVE",
               updatedAt: new Date(),
             },
           });
@@ -322,23 +295,6 @@ export const approvePayment = withAuth({
           where: { paymentId: payment.id },
           data: { verified: true },
         });
-
-        // Create notification for the student
-        if (payment.Student) {
-          await tx.notification.create({
-            data: {
-              accountId: account.id,
-              title: "Payment Approved",
-              content: `Your payment of ${payment.amount} ${payment.currency} has been approved successfully.`,
-              type: "SUCCESS",
-              metadata: {
-                paymentId: payment.id,
-                studentId: payment.studentId,
-                amount: payment.amount,
-              },
-            },
-          });
-        }
 
         return updatedPayment;
       });
@@ -388,7 +344,7 @@ export const rejectPayment = withAuth({
           },
           include: {
             Sale: true,
-            Subscription: true,
+
             Student: true,
           },
         });
@@ -435,19 +391,6 @@ export const rejectPayment = withAuth({
           });
         }
 
-        // Update subscription status if exists
-        if (payment.subscriptionId) {
-          await tx.subscription.update({
-            where: { id: payment.subscriptionId },
-            data: {
-              status: "CANCELLED",
-              cancellationReason: rejectionReason || "Payment rejected",
-              cancelledAt: new Date(),
-              updatedAt: new Date(),
-            },
-          });
-        }
-
         // Create a transaction record for the rejection
         const wallet = await tx.wallet.findUnique({
           where: { accountId: account.id },
@@ -469,28 +412,6 @@ export const rejectPayment = withAuth({
               balanceAfter: wallet.balance,
               relatedEntityType: "PAYMENT",
               relatedEntityId: payment.id,
-            },
-          });
-        }
-
-        // Create notification for the student
-        if (payment.Student) {
-          await tx.notification.create({
-            data: {
-              accountId: account.id,
-              title: "Payment Rejected",
-              content: `Your payment of ${payment.amount} ${
-                payment.currency
-              } has been rejected. ${
-                rejectionReason ? `Reason: ${rejectionReason}` : ""
-              }`,
-              type: "ERROR",
-              metadata: {
-                paymentId: payment.id,
-                studentId: payment.studentId,
-                amount: payment.amount,
-                rejectionReason: rejectionReason,
-              },
             },
           });
         }

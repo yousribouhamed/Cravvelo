@@ -17,8 +17,8 @@ export default function StoreCheckoutError({
   }, [error]);
 
   return (
-    <div className="w-full h-screen flex items-center  flex-col gap-y-8 justify-center pt-12">
-      <div className="w-[400px] h-[350px] flex items-center justify-center">
+    <div className="w-full  h-screen flex items-center  flex-col gap-y-8 justify-center pt-12">
+      <div className="w-[400px] mt-[100px] h-[350px] flex items-center justify-center">
         <Image
           src="/error.svg"
           alt="this is the error page"

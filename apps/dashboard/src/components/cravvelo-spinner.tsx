@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -27,19 +29,11 @@ const CravveloSpinner = React.forwardRef<HTMLSpanElement, SpinnerProps>(
   ({ className, size, loading = true, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "span";
 
-    const [bgColorClass, filteredClassName] = React.useMemo(() => {
-      const bgClass = className?.match(/(?:dark:bg-|bg-)[a-zA-Z0-9-]+/g) || [];
-      const filteredClasses = className
-        ?.replace(/(?:dark:bg-|bg-)[a-zA-Z0-9-]+/g, "")
-        .trim();
-      return [bgClass, filteredClasses];
-    }, [className]);
-
     if (!loading) return null;
 
     return (
       <Comp
-        className={cn(spinnerVariants({ size, className: filteredClassName }))}
+        className={cn(spinnerVariants({ size }), className)}
         ref={ref}
         {...props}
       >
@@ -53,8 +47,12 @@ const CravveloSpinner = React.forwardRef<HTMLSpanElement, SpinnerProps>(
             }}
           >
             <span
-              className={cn("block w-full h-[30%] rounded-full", bgColorClass)}
-            ></span>
+              className={cn(
+                "block w-full h-[30%] rounded-full",
+                // Default colors that support dark mode
+                " dark:bg-gray-200"
+              )}
+            />
           </span>
         ))}
       </Comp>

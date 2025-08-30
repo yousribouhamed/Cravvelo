@@ -6,8 +6,8 @@ import Footer from "@/src/components/layout/site-footer";
 const Page: FC = ({}) => {
   return (
     <>
-      <MaxWidthWrapper>
-        <div className="w-full h-fit min-h-screen mt-[100px] md:mt-[140px] grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+      <MaxWidthWrapper className="bg-white">
+        <div className="w-full  h-fit min-h-screen mt-[100px] md:mt-[140px] grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Left Column - Contact Info */}
           <div className="w-full h-full col-span-1 flex flex-col items-center lg:items-start justify-start gap-y-16 lg:gap-y-20 pt-[60px] lg:pt-[80px] px-4 lg:px-0">
             {/* Header Section */}

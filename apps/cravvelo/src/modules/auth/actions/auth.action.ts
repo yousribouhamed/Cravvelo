@@ -75,44 +75,64 @@ export const createAdminAction = async (data: CreateAdminData) => {
     // Hash the password
     const hashedPassword = await hash(data.password, 12);
 
-    // Create admin
-    const admin = await prisma.admin.create({
-      data: {
-        name: data.name,
-        email: data.email,
-        password: hashedPassword,
-        role: data.role || "ADMIN",
-        permissions: data.permissions || {},
-        createdById: data.createdById || null,
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        isActive: true,
-        createdAt: true,
-      },
-    });
-
-    // Log admin activity
-    if (data.createdById) {
-      await prisma.adminActivity.create({
+    // Use transaction to create admin and account together
+    const result = await prisma.$transaction(async (tx) => {
+      // Create admin
+      const admin = await tx.admin.create({
         data: {
-          adminId: data.createdById,
-          action: "CREATE_ADMIN",
-          meta: {
-            createdAdminId: admin.id,
-            createdAdminEmail: admin.email,
-          },
+          name: data.name,
+          email: data.email,
+          password: hashedPassword,
+          role: data.role || "ADMIN",
+          permissions: data.permissions || {},
+          createdById: data.createdById || null,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          isActive: true,
+          createdAt: true,
         },
       });
-    }
+
+      // Create associated account
+      const account = await tx.account.create({
+        data: {
+          userId: admin.id,
+          company: "cravvelo",
+          address: "cravvelo hub",
+          isActive: true,
+          isSuspended: false,
+          firstName: admin.name,
+          user_name: admin.name,
+          verified: true,
+        },
+      });
+
+      // Log admin activity if created by another admin
+      if (data.createdById) {
+        await tx.adminActivity.create({
+          data: {
+            adminId: data.createdById,
+            action: "CREATE_ADMIN",
+            meta: {
+              createdAdminId: admin.id,
+              createdAdminEmail: admin.email,
+              createdAccountId: account.id,
+            },
+          },
+        });
+      }
+
+      return { admin, account };
+    });
 
     return {
       success: true,
-      data: admin,
-      message: "Admin created successfully",
+      data: result.admin,
+      message: "Admin and account created successfully",
     };
   } catch (error) {
     console.error("Create admin error:", error);
@@ -171,6 +191,42 @@ export const signInAction = async (data: SignInData) => {
       };
     }
 
+    // Check if admin has an associated account, create if not exists
+    const existingAccount = await prisma.account.findUnique({
+      where: { userId: admin.id },
+    });
+
+    if (!existingAccount) {
+      // Use transaction to create account and log activity
+      await prisma.$transaction(async (tx) => {
+        // Create account for admin
+        await tx.account.create({
+          data: {
+            userId: admin.id,
+            company: "cravvelo",
+            address: "cravvelo hub",
+            isActive: true,
+            isSuspended: false,
+            firstName: admin.name,
+            user_name: admin.name,
+            verified: true,
+          },
+        });
+
+        // Log account creation activity
+        await tx.adminActivity.create({
+          data: {
+            adminId: admin.id,
+            action: "AUTO_CREATE_ACCOUNT",
+            meta: {
+              reason: "Account created during sign-in",
+              timestamp: new Date().toISOString(),
+            },
+          },
+        });
+      });
+    }
+
     // Create JWT token
     const tokenPayload = {
       id: admin.id,
@@ -182,7 +238,7 @@ export const signInAction = async (data: SignInData) => {
     const token = await signJWT(tokenPayload);
     await setAuthCookie(token);
 
-    // Log admin activity
+    // Log admin sign-in activity
     await prisma.adminActivity.create({
       data: {
         adminId: admin.id,
@@ -190,6 +246,7 @@ export const signInAction = async (data: SignInData) => {
         meta: {
           timestamp: new Date().toISOString(),
           userAgent: "server-action", // You can enhance this with request headers
+          hasAccount: !!existingAccount,
         },
       },
     });
@@ -391,43 +448,59 @@ export const updateAdminAction = async (data: UpdateAdminData) => {
       updateData.permissions = data.permissions;
     if (data.isActive !== undefined) updateData.isActive = data.isActive;
 
-    // Update admin
-    const updatedAdmin = await prisma.admin.update({
-      where: { id: data.id },
-      data: updateData,
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        isActive: true,
-        permissions: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
+    // Use transaction to update admin and potentially update account
+    const result = await prisma.$transaction(async (tx) => {
+      // Update admin
+      const updatedAdmin = await tx.admin.update({
+        where: { id: data.id },
+        data: updateData,
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          isActive: true,
+          permissions: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
 
-    // Log admin activity
-    await prisma.adminActivity.create({
-      data: {
-        adminId: currentAdmin.id,
-        action: "UPDATE_ADMIN",
-        meta: {
-          updatedAdminId: data.id,
-          changes: updateData,
-          previousData: {
-            name: existingAdmin.name,
-            email: existingAdmin.email,
-            role: existingAdmin.role,
-            isActive: existingAdmin.isActive,
+      // Update associated account if name changed
+      if (data.name !== undefined && data.name !== existingAdmin.name) {
+        await tx.account.updateMany({
+          where: { userId: data.id },
+          data: {
+            firstName: data.name,
+            user_name: data.name,
+          },
+        });
+      }
+
+      // Log admin activity
+      await tx.adminActivity.create({
+        data: {
+          adminId: currentAdmin.id,
+          action: "UPDATE_ADMIN",
+          meta: {
+            updatedAdminId: data.id,
+            changes: updateData,
+            previousData: {
+              name: existingAdmin.name,
+              email: existingAdmin.email,
+              role: existingAdmin.role,
+              isActive: existingAdmin.isActive,
+            },
           },
         },
-      },
+      });
+
+      return updatedAdmin;
     });
 
     return {
       success: true,
-      data: updatedAdmin,
+      data: result,
       message: "Admin updated successfully",
     };
   } catch (error) {
@@ -439,7 +512,6 @@ export const updateAdminAction = async (data: UpdateAdminData) => {
   }
 };
 
-// Get Current Admin (helper function)
 export const getCurrentAdmin = async () => {
   try {
     const cookieStore = await cookies();
@@ -454,7 +526,7 @@ export const getCurrentAdmin = async () => {
       return null;
     }
 
-    // Get fresh admin data
+    // Always get fresh admin data from database
     const admin = await prisma.admin.findUnique({
       where: { id: payload.id as string },
       select: {
@@ -467,6 +539,7 @@ export const getCurrentAdmin = async () => {
       },
     });
 
+    // Critical: Return null if user is inactive
     if (!admin || !admin.isActive) {
       return null;
     }
@@ -516,23 +589,35 @@ export const deleteAdminAction = async (adminId: string) => {
       };
     }
 
-    // Delete admin (soft delete by deactivating)
-    await prisma.admin.update({
-      where: { id: adminId },
-      data: { isActive: false },
-    });
+    // Use transaction to delete admin and deactivate account
+    await prisma.$transaction(async (tx) => {
+      // Delete admin (soft delete by deactivating)
+      await tx.admin.update({
+        where: { id: adminId },
+        data: { isActive: false },
+      });
 
-    // Log admin activity
-    await prisma.adminActivity.create({
-      data: {
-        adminId: currentAdmin.id,
-        action: "DELETE_ADMIN",
-        meta: {
-          deletedAdminId: adminId,
-          deletedAdminEmail: adminToDelete.email,
-          deletedAdminName: adminToDelete.name,
+      // Deactivate associated account
+      await tx.account.updateMany({
+        where: { userId: adminId },
+        data: {
+          isActive: false,
+          isSuspended: true,
         },
-      },
+      });
+
+      // Log admin activity
+      await tx.adminActivity.create({
+        data: {
+          adminId: currentAdmin.id,
+          action: "DELETE_ADMIN",
+          meta: {
+            deletedAdminId: adminId,
+            deletedAdminEmail: adminToDelete.email,
+            deletedAdminName: adminToDelete.name,
+          },
+        },
+      });
     });
 
     return {

@@ -60,7 +60,7 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
       primaryColor: "from-violet-500 to-purple-600",
       accentColor: "bg-violet-500 dark:bg-violet-600",
       hoverColor: "hover:bg-violet-600 dark:hover:bg-violet-700",
-      route: "/settings/payments-methods/chargily",
+      route: "/payments/payments-methods/chargily",
       icon: <Zap className="w-4 h-4" />,
       badgeColor:
         "bg-violet-100 text-violet-700 dark:bg-violet-900 dark:text-violet-300",
@@ -80,7 +80,7 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
       primaryColor: "from-emerald-500 to-green-600",
       accentColor: "bg-emerald-500 dark:bg-emerald-600",
       hoverColor: "hover:bg-emerald-600 dark:hover:bg-emerald-700",
-      route: "/settings/payments-methods/p2p",
+      route: "/payments/payments-methods/p2p",
       icon: <CreditCard className="w-4 h-4" />,
       badgeColor:
         "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300",
@@ -99,7 +99,7 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
       primaryColor: "from-blue-500 to-indigo-600",
       accentColor: "bg-blue-500 dark:bg-blue-600",
       hoverColor: "hover:bg-blue-600 dark:hover:bg-blue-700",
-      route: "/settings/payments-methods/stripe",
+      route: "/payments/payments-methods/stripe",
       icon: <Globe className="w-4 h-4" />,
       badgeColor:
         "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",

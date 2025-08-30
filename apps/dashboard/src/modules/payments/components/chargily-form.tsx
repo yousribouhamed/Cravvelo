@@ -17,12 +17,13 @@ import {
   FormMessage,
 } from "@ui/components/ui/form";
 import { Button } from "@ui/components/ui/button";
+import { Switch } from "@ui/components/ui/switch";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { ChargilyConnectSchema } from "@/src/lib/validators/payments";
 import { Input } from "@ui/components/ui/input";
-import React from "react";
+import React, { useState } from "react";
 import { maketoast } from "@/src/components/toasts";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import {
@@ -33,26 +34,49 @@ import {
   ArrowLeft,
   Lightbulb,
   AlertCircle,
+  Power,
+  PowerOff,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import { connectChargily, updateChargily } from "../actions/chargily";
+import {
+  connectChargily,
+  updateChargily,
+  activateConnectionChargily,
+  disconnectChargily,
+} from "../actions/chargily";
 import { ChargilyConfigType } from "../types";
 
 type Inputs = z.infer<typeof ChargilyConnectSchema>;
 
 interface PaymentMethodsConnectorsProps {
   data: ChargilyConfigType | null;
+  isAlreadyActive: boolean;
 }
 
-const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
+const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
+  data,
+  isAlreadyActive,
+}) => {
   const router = useRouter();
+  const [isActive, setIsActive] = useState(isAlreadyActive ?? false);
 
   const mutation = useMutation({
     mutationFn: data ? updateChargily : connectChargily,
     onSuccess: () => {
       maketoast.success();
-      router.push(`/settings/payments-methods`);
+      router.push(`/payments/payments-methods`);
+    },
+    onError: () => {
+      maketoast.error();
+    },
+  });
+
+  const toggleMutation = useMutation({
+    mutationFn: isActive ? disconnectChargily : activateConnectionChargily,
+    onSuccess: () => {
+      setIsActive(!isActive);
+      maketoast.success();
     },
     onError: () => {
       maketoast.error();
@@ -76,6 +100,12 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
     });
   }
 
+  const handleToggle = () => {
+    if (data?.publicKey && data?.secretKey) {
+      toggleMutation.mutate({});
+    }
+  };
+
   const isConnected = data?.publicKey && data?.secretKey;
 
   return (
@@ -84,16 +114,64 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
       <div className="w-full mx-auto">
         {/* Status Card */}
         {isConnected ? (
-          <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-2xl">
-            <div className="flex items-center gap-3">
-              <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" />
-              <div>
-                <p className="font-semibold text-green-800 dark:text-green-200">
-                  تم الربط بنجاح
-                </p>
-                <p className="text-sm text-green-600 dark:text-green-400">
-                  حسابك متصل مع شارجيلي ويمكنك الآن استقبال المدفوعات
-                </p>
+          <div
+            className={`mb-6 p-4 border rounded-2xl ${
+              isActive
+                ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
+                : "bg-gray-50 dark:bg-gray-900/20 border-gray-200 dark:border-gray-700"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                {isActive ? (
+                  <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" />
+                ) : (
+                  <PowerOff className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+                )}
+                <div>
+                  <p
+                    className={`font-semibold ${
+                      isActive
+                        ? "text-green-800 dark:text-green-200"
+                        : "text-gray-700 dark:text-gray-300"
+                    }`}
+                  >
+                    {isActive ? "مفعل ويعمل" : "متصل ولكن معطل"}
+                  </p>
+                  <p
+                    className={`text-sm ${
+                      isActive
+                        ? "text-green-600 dark:text-green-400"
+                        : "text-gray-500 dark:text-gray-400"
+                    }`}
+                  >
+                    {isActive
+                      ? "حسابك متصل مع شارجيلي ويمكنك الآن استقبال المدفوعات"
+                      : "الحساب متصل ولكن مُعطل مؤقتاً - لن تتم معالجة المدفوعات"}
+                  </p>
+                </div>
+              </div>
+
+              {/* Toggle Switch */}
+              <div className="flex items-center gap-3">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Switch
+                    checked={isActive}
+                    onCheckedChange={handleToggle}
+                    disabled={toggleMutation.isLoading}
+                    className="data-[state=checked]:bg-green-500 dark:data-[state=checked]:bg-green-600"
+                  />
+                  <div className="flex flex-col items-end">
+                    <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                      {isActive ? "مفعل" : "معطل"}
+                    </span>
+                    {toggleMutation.isLoading && (
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        جاري التحديث...
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -119,18 +197,36 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
           <div className="lg:col-span-2">
             <Card>
               <CardHeader className="pb-6">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-violet-100 dark:bg-violet-900/30 rounded-xl">
-                    <Shield className="w-6 h-6 text-violet-600 dark:text-violet-400" />
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-violet-100 dark:bg-violet-900/30 rounded-xl">
+                      <Shield className="w-6 h-6 text-violet-600 dark:text-violet-400" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-xl text-gray-900 dark:text-gray-100">
+                        إعداد مفاتيح API
+                      </CardTitle>
+                      <CardDescription className="text-gray-600 dark:text-gray-400">
+                        أدخل مفاتيح API الخاصة بك من لوحة تحكم شارجيلي
+                      </CardDescription>
+                    </div>
                   </div>
-                  <div>
-                    <CardTitle className="text-xl text-gray-900 dark:text-gray-100">
-                      إعداد مفاتيح API
-                    </CardTitle>
-                    <CardDescription className="text-gray-600 dark:text-gray-400">
-                      أدخل مفاتيح API الخاصة بك من لوحة تحكم شارجيلي
-                    </CardDescription>
-                  </div>
+
+                  {/* Connection Status Indicator */}
+                  {isConnected && (
+                    <div className="flex items-center gap-2">
+                      <div
+                        className={`w-3 h-3 rounded-full ${
+                          isActive
+                            ? "bg-green-500 animate-pulse"
+                            : "bg-gray-400"
+                        }`}
+                      ></div>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                        {isActive ? "نشط" : "معطل"}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </CardHeader>
 
@@ -227,6 +323,57 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
               </CardContent>
             </Card>
 
+            {/* Payment Status Info */}
+            {isConnected && (
+              <div
+                className={`mt-6 p-4 border rounded-2xl ${
+                  isActive
+                    ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
+                    : "bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800"
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  {isActive ? (
+                    <Power className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
+                  ) : (
+                    <PowerOff className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5" />
+                  )}
+                  <div>
+                    <h3
+                      className={`font-semibold mb-2 ${
+                        isActive
+                          ? "text-green-900 dark:text-green-100"
+                          : "text-amber-900 dark:text-amber-100"
+                      }`}
+                    >
+                      {isActive ? "الدفع مُفعل" : "الدفع معطل"}
+                    </h3>
+                    <ul
+                      className={`text-sm space-y-1 ${
+                        isActive
+                          ? "text-green-700 dark:text-green-300"
+                          : "text-amber-700 dark:text-amber-300"
+                      }`}
+                    >
+                      {isActive ? (
+                        <>
+                          <li>• العملاء يمكنهم الدفع عبر شارجيلي</li>
+                          <li>• ستتم معالجة جميع المدفوعات تلقائياً</li>
+                          <li>• ستحصل على إشعارات بالمدفوعات الجديدة</li>
+                        </>
+                      ) : (
+                        <>
+                          <li>• لن يتمكن العملاء من الدفع عبر شارجيلي</li>
+                          <li>• لن تتم معالجة أي مدفوعات</li>
+                          <li>• يمكنك تفعيله مرة أخرى في أي وقت</li>
+                        </>
+                      )}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Security Info */}
             <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-2xl">
               <div className="flex items-start gap-3">
@@ -239,6 +386,7 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
                     <li>• جميع المفاتيح محمية بتشفير AES-256</li>
                     <li>• المفاتيح محفوظة بشكل آمن في قاعدة البيانات</li>
                     <li>• اتصال آمن مع خوادم شارجيلي عبر HTTPS</li>
+                    <li>• يمكنك تعطيل الدفع مؤقتاً دون فقدان الإعدادات</li>
                   </ul>
                 </div>
               </div>
@@ -293,6 +441,20 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({ data }) => {
                     </p>
                     <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
                       اضغط حفظ التغييرات لإكمال عملية الربط
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-violet-500 flex items-center justify-center text-white font-bold text-sm">
+                    4
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
+                      فعّل الدفع
+                    </p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                      استخدم المفتاح لتفعيل أو تعطيل الدفع
                     </p>
                   </div>
                 </div>

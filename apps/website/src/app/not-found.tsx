@@ -4,8 +4,8 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="w-full h-screen flex items-center  flex-col gap-y-8 justify-center pt-12">
-      <div className="w-[400px] h-[350px] flex items-center justify-center">
+    <div className="w-full  h-screen flex items-center  flex-col gap-y-8 justify-center pt-12">
+      <div className="w-[400px] mt-[100px] h-[350px] flex items-center justify-center">
         <Image
           src="/404.svg"
           alt="this is the error page"

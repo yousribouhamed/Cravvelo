@@ -3,6 +3,7 @@
 import { cn } from "@ui/lib/utils";
 import SideBarMenu from "./menu";
 import AddNew from "../models/add-new-modal";
+import InstalledAppsBox from "@/src/modules/apps/components/installed-apps-box";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 

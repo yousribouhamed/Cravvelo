@@ -65,7 +65,9 @@ export const connectP2p = withAuth({
 
 // Update P2P payment method configuration
 export const updateP2p = withAuth({
-  input: p2pConfigSchema,
+  input: p2pConfigSchema.extend({
+    isActive: z.boolean().optional(),
+  }),
   handler: async ({ input, account, db }) => {
     try {
       const config = {
@@ -94,15 +96,22 @@ export const updateP2p = withAuth({
         };
       }
 
+      // Prepare update data
+      const updateData: any = {
+        config: JSON.stringify(config),
+      };
+
+      // Only update isActive if it's provided
+      if (input.isActive !== undefined) {
+        updateData.isActive = input.isActive;
+      }
+
       // Update existing connection
       const updatedConnection = await db.paymentMethodConfig.update({
         where: {
           id: existingP2p.id,
-          isActive: true,
         },
-        data: {
-          config: JSON.stringify(config),
-        },
+        data: updateData,
       });
 
       return {
@@ -125,6 +134,61 @@ export const updateP2p = withAuth({
   },
 });
 
+// Toggle P2P active status
+export const toggleP2pStatus = withAuth({
+  input: z.object({
+    isActive: z.boolean(),
+  }),
+  handler: async ({ input, account, db }) => {
+    try {
+      // Find existing P2P connection
+      const existingP2p = await db.paymentMethodConfig.findFirst({
+        where: {
+          accountId: account.id,
+          provider: "P2P",
+        },
+      });
+
+      if (!existingP2p) {
+        return {
+          data: null,
+          success: false,
+          message: "P2P payment method is not connected",
+        };
+      }
+
+      // Update the active status
+      const updatedConnection = await db.paymentMethodConfig.update({
+        where: {
+          id: existingP2p.id,
+        },
+        data: {
+          isActive: input.isActive,
+        },
+      });
+
+      return {
+        data: updatedConnection,
+        success: true,
+        message: `P2P payment method ${
+          input.isActive ? "activated" : "deactivated"
+        } successfully`,
+      };
+    } catch (error) {
+      console.error("Error toggling P2P status:", error);
+
+      return {
+        data: null,
+        success: false,
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to toggle P2P status",
+      };
+    }
+  },
+});
+
 // Get P2P connection details
 export const getP2pConnection = withAuth({
   handler: async ({ account, db }) => {
@@ -140,6 +204,7 @@ export const getP2pConnection = withAuth({
           config: true,
           createdAt: true,
           updatedAt: true,
+          isActive: true,
         },
       });
 

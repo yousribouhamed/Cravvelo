@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@ui/components/ui/select";
 import { Checkbox } from "@ui/components/ui/checkbox";
+import { createSupportTicket } from "@/src/actions/support.action";
 
 const formSchema = z.object({
   name: z
@@ -79,26 +80,31 @@ const ContactUsForm: FC = () => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsLoading(true);
-      await sendInquiryEmail({
-        email: values.email,
-        message: values.message,
-        name: values.name,
-      });
 
-      toast.success("تم إرسال رسالتك بنجاح! سنرد عليك في أقرب وقت ممكن", {
-        icon: "✅",
-        style: {
-          borderRadius: "10px",
-          background: "#10b981",
-          color: "#fff",
-        },
-        duration: 5000,
-      });
+      const res = await createSupportTicket(values);
 
-      // Reset form after successful submission
-      form.reset();
+      if (res.success) {
+        toast.success("تم إرسال التذكرة بنجاح! سنتواصل معك قريباً", {
+          icon: "✅",
+          style: {
+            borderRadius: "10px",
+            background: "#10b981",
+            color: "#fff",
+          },
+          duration: 5000,
+        });
+
+        form.reset();
+      } else {
+        if (res.errors) {
+          const firstError = Object.values(res.errors).flat()[0];
+          toast.error(firstError || "خطأ في إدخال البيانات");
+        } else {
+          toast.error(res.message || "فشل في إرسال الرسالة");
+        }
+      }
     } catch (err) {
-      toast.error("فشل في إرسال الرسالة. يرجى المحاولة مرة أخرى", {
+      toast.error("حدث خطأ أثناء إرسال التذكرة", {
         icon: "❌",
         style: {
           borderRadius: "10px",

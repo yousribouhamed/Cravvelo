@@ -8,6 +8,7 @@ const JWT_SECRET = new TextEncoder().encode(
 
 // Define public routes that don't require authentication
 const PUBLIC_ROUTES = [
+  "/sign-in",
   "/admin/login",
   "/admin/signup",
   "/admin/forgot-password",
@@ -103,10 +104,12 @@ export async function middleware(request: NextRequest) {
 
   // Handle public routes
   if (isPublicRoute(pathname)) {
-    // If user is already authenticated and tries to access login page, redirect to dashboard
+    // If user is already authenticated and tries to access sign-in page, redirect to dashboard
     if (
       token &&
-      (pathname === "/admin/login" || pathname === "/admin/signup")
+      (pathname === "/sign-in" ||
+        pathname === "/admin/login" ||
+        pathname === "/admin/signup")
     ) {
       const payload = await verifyAuthToken(token);
       if (payload) {
@@ -121,21 +124,21 @@ export async function middleware(request: NextRequest) {
   if (isProtectedRoute(pathname)) {
     // Check if token exists
     if (!token) {
-      console.log("Middleware: No token found, redirecting to login");
-      const loginUrl = new URL("/admin/login", request.url);
-      loginUrl.searchParams.set("redirect", pathname);
-      return NextResponse.redirect(loginUrl);
+      console.log("Middleware: No token found, redirecting to sign-in");
+      const signInUrl = new URL("/sign-in", request.url);
+      signInUrl.searchParams.set("redirect", pathname);
+      return NextResponse.redirect(signInUrl);
     }
 
     // Verify token
     const payload = await verifyAuthToken(token);
     if (!payload) {
-      console.log("Middleware: Invalid token, redirecting to login");
-      const loginUrl = new URL("/admin/login", request.url);
-      loginUrl.searchParams.set("redirect", pathname);
+      console.log("Middleware: Invalid token, redirecting to sign-in");
+      const signInUrl = new URL("/sign-in", request.url);
+      signInUrl.searchParams.set("redirect", pathname);
 
       // Clear invalid token
-      const response = NextResponse.redirect(loginUrl);
+      const response = NextResponse.redirect(signInUrl);
       response.cookies.delete("admin-token");
       return response;
     }

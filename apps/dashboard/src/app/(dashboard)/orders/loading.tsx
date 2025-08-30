@@ -6,7 +6,7 @@ const Loading = async ({}) => {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
-        <HeaderLoading title="المبيعات" />
+        <HeaderLoading />
         <DataTableLoading hideSearch columnCount={6} />
       </main>
     </MaxWidthWrapper>
