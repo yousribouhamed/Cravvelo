@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
 import {
   Card,
   CardContent,
@@ -17,9 +16,6 @@ import {
   Tooltip,
 } from "recharts";
 import { ChartConfig, ChartContainer } from "@ui/components/ui/chart";
-import { getMainRevenueData } from "../../analytics/actions/dashboard";
-import { Loader2 } from "lucide-react";
-import { CravveloSpinner } from "@/src/components/cravvelo-spinner";
 
 const chartConfig = {
   desktop: {
@@ -32,28 +28,9 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export const RevenueChart = () => {
-  // React Query to fetch revenue data
-  const {
-    data: revenueData,
-    isLoading,
-    error,
-    isError,
-  } = useQuery({
-    queryKey: ["revenue-data"],
-    queryFn: async () => {
-      const result = await getMainRevenueData();
-      if (!result.success) {
-        throw new Error(result.error || "Failed to fetch revenue data");
-      }
-      return result.data;
-    },
-    refetchInterval: 30000, // Refetch every 30 seconds
-    staleTime: 10000, // Data considered stale after 10 seconds
-  });
-
+export const RevenueChart = ({ currency = "DZD" }) => {
   // Helper function to format currency
-  const formatCurrency = (amount, currency = "DZD") => {
+  const formatCurrency = (amount) => {
     const currencySymbols = {
       USD: "$",
       EUR: "€",
@@ -69,53 +46,6 @@ export const RevenueChart = () => {
     return isNaN(num) ? 0 : num;
   };
 
-  // Loading state
-  if (isLoading) {
-    return (
-      <Card dir="rtl">
-        <CardHeader className="pb-4 px-4 sm:px-6">
-          <CardTitle className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-            اليوم
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="flex items-center justify-center h-64 px-4 sm:px-6">
-          <div className="flex flex-col items-center space-y-2">
-            <CravveloSpinner />
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  // Error state
-  if (isError) {
-    return (
-      <Card dir="rtl">
-        <CardHeader className="pb-4 px-4 sm:px-6">
-          <CardTitle className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-            اليوم
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="flex items-center justify-center h-64 px-4 sm:px-6">
-          <div className="text-center">
-            <p className="text-sm text-red-600 dark:text-red-400">
-              خطأ في تحميل البيانات
-            </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              {
-                //@ts-expect-error
-                error?.message || "حدث خطأ غير متوقع"
-              }
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  const { chartData, walletBalance, walletCurrency, totalRevenue } =
-    revenueData;
-
   // Get today's date in YYYY-MM-DD format
   const today = new Date().toISOString().split("T")[0];
 
@@ -124,26 +54,14 @@ export const RevenueChart = () => {
   yesterday.setDate(yesterday.getDate() - 1);
   const yesterdayStr = yesterday.toISOString().split("T")[0];
 
-  // Filter and compute values with safe number conversion
-  const todayData = chartData.filter((item) => item.time.startsWith(today));
-  const yesterdayData = chartData.filter((item) =>
-    item.time.startsWith(yesterdayStr)
-  );
+  // Empty data arrays since we removed initialData
+  const todayData = [];
+  const yesterdayData = [];
+  const allChartData = [];
 
-  const grossRevenue = todayData.reduce(
-    (sum, item) => sum + toNumber(item.value),
-    0
-  );
-  const yesterdayRevenue = yesterdayData.reduce(
-    (sum, item) => sum + toNumber(item.value),
-    0
-  );
-
-  // Create comprehensive chart data for line chart
-  const allChartData = [...chartData]
-    .map((item) => ({ ...item, value: toNumber(item.value) }))
-    //@ts-expect-error
-    .sort((a, b) => new Date(a.time) - new Date(b.time));
+  const grossRevenue = 0;
+  const yesterdayRevenue = 0;
+  const balance = 0;
 
   // Get current time for display
   const getCurrentTime = () => {
@@ -167,7 +85,7 @@ export const RevenueChart = () => {
             })}
           </p>
           <p className="text-sm font-semibold text-blue-600 dark:text-blue-400">
-            {formatCurrency(payload[0].value, walletCurrency)}
+            {formatCurrency(payload[0].value)}
           </p>
         </div>
       );
@@ -175,8 +93,8 @@ export const RevenueChart = () => {
     return null;
   };
 
-  // Mini line chart component
-  const MiniLineChart = ({ data, label, showAxes = false }) => {
+  // Mini chart component that shows recent trend
+  const MiniChart = ({ data, label, showAxes = false }) => {
     return (
       <div className="space-y-2">
         <div className="h-20 rounded-lg overflow-hidden">
@@ -205,9 +123,7 @@ export const RevenueChart = () => {
                       axisLine={false}
                       tickLine={false}
                       tick={{ fontSize: 11, fill: "#6b7280" }}
-                      tickFormatter={(value) =>
-                        formatCurrency(value, walletCurrency)
-                      }
+                      tickFormatter={(value) => formatCurrency(value)}
                     />
                   </>
                 )}
@@ -229,12 +145,6 @@ export const RevenueChart = () => {
                     strokeWidth: 2,
                     fill: "#ffffff",
                   }}
-                />
-                <Tooltip
-                  content={
-                    //@ts-expect-error
-                    <CustomTooltip />
-                  }
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -259,14 +169,9 @@ export const RevenueChart = () => {
       {/* Today's metrics card */}
       <Card dir="rtl">
         <CardHeader className="pb-4 px-4 sm:px-6">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-              اليوم
-            </CardTitle>
-            {isLoading && (
-              <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
-            )}
-          </div>
+          <CardTitle className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            اليوم
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6 px-4 sm:px-6">
           {/* Responsive grid */}
@@ -278,16 +183,9 @@ export const RevenueChart = () => {
                   إجمالي الإيرادات
                 </p>
                 <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-                  {grossRevenue > 0
-                    ? formatCurrency(grossRevenue, walletCurrency)
-                    : "--"}
+                  {grossRevenue > 0 ? formatCurrency(grossRevenue) : "--"}
                 </p>
-                <MiniLineChart
-                  data={
-                    todayData.length > 0 ? todayData : allChartData.slice(-5)
-                  }
-                  label="today"
-                />
+                <MiniChart data={todayData} label="today" />
               </div>
 
               <div>
@@ -296,21 +194,14 @@ export const RevenueChart = () => {
                 </p>
                 <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
                   {yesterdayRevenue > 0
-                    ? formatCurrency(yesterdayRevenue, walletCurrency)
+                    ? formatCurrency(yesterdayRevenue)
                     : "--"}
                 </p>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                   {getCurrentTime()}
                 </p>
                 <div className="mt-4">
-                  <MiniLineChart
-                    data={
-                      yesterdayData.length > 0
-                        ? yesterdayData
-                        : allChartData.slice(-3)
-                    }
-                    label="yesterday"
-                  />
+                  <MiniChart data={yesterdayData} label="yesterday" />
                 </div>
               </div>
             </div>
@@ -327,10 +218,10 @@ export const RevenueChart = () => {
                   </button>
                 </div>
                 <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-1">
-                  {formatCurrency(walletBalance, walletCurrency)}
+                  {formatCurrency(balance)}
                 </p>
                 <p className="text-xs text-gray-400 dark:text-gray-500">
-                  {formatCurrency(walletBalance, walletCurrency)} متاح للسحب
+                  {formatCurrency(balance)} متاح للسحب
                 </p>
               </div>
 
@@ -348,6 +239,20 @@ export const RevenueChart = () => {
                 </p>
               </div>
             </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Main comprehensive chart */}
+      <Card dir="rtl">
+        <CardHeader className="pb-4 px-4 sm:px-6">
+          <CardTitle className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            نظرة عامة على الإيرادات
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="px-4 sm:px-6">
+          <div className="h-64 sm:h-80 w-full">
+            <MiniChart data={allChartData} label="overview" showAxes={true} />
           </div>
         </CardContent>
       </Card>

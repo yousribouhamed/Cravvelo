@@ -1,7 +1,6 @@
 import "@ui/styles/globals.css";
 import Providers from "../components/Providers";
 import { Toaster } from "react-hot-toast";
-
 import { Analytics } from "@vercel/analytics/react";
 import { ThemeProvider } from "../components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
