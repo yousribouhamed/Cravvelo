@@ -36,43 +36,54 @@ export async function middleware(request: NextRequest) {
 
   // Extract subdomain
   const subdomain = hostname.split(".")[0];
+  const isLocalhost = hostname.startsWith("localhost:");
 
-  // Skip tenant routing for localhost without subdomain or for specific domains you want to exclude
-  if (hostname === "localhost:3000" || hostname.startsWith("www.")) {
-    // For main domain (no tenant), only apply auth logic to non-public routes
+  let response: NextResponse;
+  let tenant: string | null = null;
+
+  // Handle localhost (development environment)
+  if (isLocalhost) {
+    // Check if there's an explicit subdomain (e.g., "twice.localhost:3001")
+    if (hostname.includes(".") && subdomain !== "localhost") {
+      // Extract tenant from subdomain (e.g., "twice" from "twice.localhost:3001")
+      tenant = subdomain.replace(/[^a-zA-Z0-9]/g, "");
+    } else {
+      // No subdomain: use default tenant for development
+      tenant = process.env.NODE_ENV === "development" ? "twice" : null;
+    }
+
+    if (tenant) {
+      // Rewrite to the tenant-specific path (URL stays the same in browser)
+      const url = request.nextUrl.clone();
+      url.pathname = `/tenant/${tenant}${url.pathname}`;
+      response = NextResponse.rewrite(url);
+    } else {
+      response = NextResponse.next();
+    }
+  } else if (hostname.startsWith("www.")) {
+    // Skip tenant routing for www subdomain
     const isPublicRoute = isRoutePublic(pathname);
     if (!isPublicRoute && !pathname.startsWith("/api")) {
       return handleAuthentication(request);
     }
     return NextResponse.next();
-  }
-
-  // Check if it's a subdomain (tenant)
-  const isSubdomain =
-    subdomain &&
-    subdomain !== "localhost:3000" &&
-    subdomain !== "localhost" &&
-    hostname.includes(".");
-
-  let response: NextResponse;
-  let tenant: string | null = null;
-
-  if (
-    isSubdomain ||
-    (hostname.includes("localhost:3000") && subdomain !== "localhost:3000")
-  ) {
-    // Extract tenant from subdomain
-    tenant =
-      subdomain.replace("localhost:3000", "").replace(/[^a-zA-Z0-9]/g, "") ||
-      subdomain;
-
-    // Rewrite to the tenant-specific path
-    const url = request.nextUrl.clone();
-    url.pathname = `/tenant/${tenant}${url.pathname}`;
-
-    response = NextResponse.rewrite(url);
   } else {
-    response = NextResponse.next();
+    // Production: extract tenant from subdomain (e.g., "tenant.cravvelo.com")
+    const isSubdomain =
+      subdomain &&
+      subdomain !== "localhost" &&
+      hostname.includes(".");
+
+    if (isSubdomain) {
+      tenant = subdomain;
+
+      // Rewrite to the tenant-specific path
+      const url = request.nextUrl.clone();
+      url.pathname = `/tenant/${tenant}${url.pathname}`;
+      response = NextResponse.rewrite(url);
+    } else {
+      response = NextResponse.next();
+    }
   }
 
   // ========================================

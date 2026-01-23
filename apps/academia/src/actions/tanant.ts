@@ -18,7 +18,6 @@ export const getTenantWebsite = cache(async (tenant: string) => {
             user_bio: true,
             avatarUrl: true,
             verified: true,
-            plan: true,
             firstName: true,
             lastName: true,
             profession: true,
