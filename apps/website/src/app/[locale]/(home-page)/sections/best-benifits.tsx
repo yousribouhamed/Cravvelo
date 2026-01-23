@@ -1,15 +1,20 @@
+"use client";
+
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import type { FC } from "react";
 
 interface BestBenifitsAbdullahProps {}
 
 const BestBenefits: FC = ({}) => {
+  const t = useTranslations("landing.bestBenefits");
+  
   return (
     <>
       <div className="w-full min-h-[250px] h-fit  flex flex-col justify-center gap-y-8  ">
-        <h2 className="text-5xl font-bold text-center">أهم المميزات</h2>
+        <h2 className="text-5xl font-bold text-center">{t("title")}</h2>
         <p className="text-center my-4 text-xl">
-          إنشاء وتسويق وبيع الدورات التدريبية عبر الإنترنت، في مكان واحد.
+          {t("description")}
         </p>
       </div>
       <div className="w-full min-h-[150px] h-fit grid grid-cols-1 lg:grid-cols-3 gap-10  ">
@@ -23,12 +28,11 @@ const BestBenefits: FC = ({}) => {
                 height={70}
               />
             </div>
-            <h3 className="text-4xl font-bold  text-start">بيع</h3>
+            <h3 className="text-4xl font-bold  text-start">{t("items.sell.title")}</h3>
           </div>
 
           <p className="text-xl text-gray-700 mt-4 text-start">
-            {" "}
-            نوفر لك مجموعة من الأدوات تمكنك من النمو وبيع خبراتك بسهولة.
+            {t("items.sell.description")}
           </p>
         </div>
 
@@ -42,12 +46,11 @@ const BestBenefits: FC = ({}) => {
                 height={70}
               />
             </div>
-            <h3 className="text-4xl font-bold  text-start">إدارة</h3>
+            <h3 className="text-4xl font-bold  text-start">{t("items.manage.title")}</h3>
           </div>
 
           <p className="text-xl text-gray-700 mt-4 text-start">
-            {" "}
-            لوحة تحكم سهلة، بتجربة مذهلة، تتيح إدارة كل دوراتك.
+            {t("items.manage.description")}
           </p>
         </div>
 
@@ -61,12 +64,11 @@ const BestBenefits: FC = ({}) => {
                 height={70}
               />
             </div>
-            <h3 className="text-4xl font-bold  text-start">تحليل</h3>
+            <h3 className="text-4xl font-bold  text-start">{t("items.analyze.title")}</h3>
           </div>
 
           <p className="text-xl text-gray-700 mt-4 text-start">
-            {" "}
-            تقارير وإحصاءات متقدمة تساعدك في الارتقاء بعملك.
+            {t("items.analyze.description")}
           </p>
         </div>
       </div>

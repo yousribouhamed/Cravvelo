@@ -1,26 +1,29 @@
+"use client";
+
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import { Button } from "@ui/components/ui/button";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/src/lib/i18n/routing";
+import { useTranslations } from "next-intl";
 import type { FC } from "react";
 
 const StartNew: FC = ({}) => {
+  const t = useTranslations("landing.startNew");
+  
   return (
     <MaxWidthWrapper className="my-8 relative  pt-[100px] min-h-[600px] h-fit">
       <div className="w-full mx-auto min-h-[500px]  h-fit bg-[#FC6B00] grid grid-cols-1 lg:grid-cols-2 rounded-3xl">
         <div className="col-span-1 flex flex-col gap-y-12 p-8 justify-center items-center">
-          <h3 className="text-white text-6xl font-bold">هل آنت مستعد؟</h3>
+          <h3 className="text-white text-6xl font-bold">{t("title")}</h3>
           <p className="text-white  text-center text-xl max-w-sm ">
-            اصنع منتجاتك الرقمية ودوراتك التدريبية اليوم وابنِ حولها أعمال
-            تجارية ناجحة. لأنك <br />
-            تستطيع!
+            {t("description")}
           </p>
           <Link target="_blank" href={"https://beta.cravvelo.com/sign-up"}>
             <Button
               size="lg"
               className="w-[350px] h-[60px] bg-[#F8FAE5] rounded-[17px] text-[#FC6B00] hover:bg-[#F8FAE5]  hover:translate-y-[-0.3rem] transition-all duration-150 text-2xl qatar-bold "
             >
-              ابدء تجربتك المجانية
+              {t("cta")}
             </Button>
           </Link>
         </div>

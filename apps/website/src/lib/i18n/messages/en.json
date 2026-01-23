@@ -1,0 +1,319 @@
+{
+    "header": {
+      "brand": "Portfolio.",
+      "navigation": {
+        "home": "Home",
+        "work": "Work",
+        "services": "Services",
+        "about": "About Us",
+        "contact": "Contact Us"
+      },
+      "menu": {
+        "toggle": "Toggle menu",
+        "navigation": "Navigation",
+        "socialMedia": "Social Media"
+      },
+      "social": {
+        "github": "GitHub",
+        "linkedin": "LinkedIn",
+        "visitPlatform": "Visit {platform}"
+      },
+      "language": {
+        "switch": "Switch language",
+        "title": "Language"
+      },
+      "services": {
+        "label": "Services",
+        "items": {
+          "trainingCourses": {
+            "title": "Training Courses",
+            "description": "Transform your expertise into professional courses with ease."
+          },
+          "assignments": {
+            "title": "Assignment System",
+            "description": "Create and manage assignments easily."
+          },
+          "certificates": {
+            "title": "Certificate System",
+            "description": "Design, issue, and manage certificates."
+          },
+          "digitalProducts": {
+            "title": "Digital Products",
+            "description": "Create successful digital products."
+          },
+          "tests": {
+            "title": "Test System",
+            "description": "Create and manage tests easily."
+          },
+          "discountCoupons": {
+            "title": "Discount Coupons",
+            "description": "Boost your sales in the simplest ways."
+          }
+        }
+      },
+      "auth": {
+        "signIn": "Sign In",
+        "signUp": "Create Account"
+      }
+    },
+    "home": {
+      "hero": {
+        "name": "Abdellah Chehri",
+        "title": "Software Engineer",
+        "subtitle": "Building high-quality SaaS & Web Applications",
+        "availability": "Available for freelance or full-time remote opportunities.",
+        "avatarAlt": "Abdellah Chehri"
+      },
+      "about": {
+        "title": "About me",
+        "description1": "I'm a software engineer and web developer based in Algeria. My journey began in 2019 during my first year of college, where I discovered my passion for technology and coding. Since then, I've been building responsive, scalable, and modern web applications, especially in the SaaS space using technologies like Next.js, Supabase, and Stripe.",
+        "description2": "I focus on writing clean, maintainable code and delivering pixel-perfect user experiences.",
+        "buttons": {
+          "projects": "See my Projects",
+          "blogs": "Read Blogs"
+        }
+      },
+      "testimonial": {
+        "title": "Client Testimonial",
+        "quote": "It was great working with him. He knows how to work. Highly recommended.",
+        "rating": "⭐ 5.0 — Figma to Next.js conversion · Oct – Nov 2024"
+      }
+    },
+    "footer": {
+      "builtWith": "built with",
+      "copyright": "© 2024 Cravvelo. All rights reserved",
+      "languages": {
+        "label": "Language",
+        "en": "English",
+        "fr": "Français",
+        "ar": "العربية"
+      },
+      "sections": {
+        "contact": "Contact",
+        "legal": "Legal",
+        "company": "Company"
+      },
+      "links": {
+        "community": "Community",
+        "security": "Security",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service",
+        "acceptableUse": "Acceptable Use Policy",
+        "about": "About",
+        "pricing": "Pricing",
+        "jobs": "Jobs"
+      }
+    },
+    "waitingList": {
+      "banner": "Join the waiting list and be among the first users of Cravvelo",
+      "button": "Join the waiting list",
+      "title": "Join the waiting list",
+      "description": "Be the first to know when we launch our new product. We'll send you an exclusive invitation for early access.",
+      "form": {
+        "name": "Name (optional)",
+        "namePlaceholder": "Enter your name",
+        "email": "Email *",
+        "emailPlaceholder": "Enter your email",
+        "cancel": "Cancel",
+        "close": "Close",
+        "submit": "Join now",
+        "submitting": "Submitting..."
+      },
+      "success": {
+        "title": "Successfully registered!",
+        "description": "Thank you for joining the waiting list. We'll send you an email as soon as we're ready to launch."
+      },
+      "errors": {
+        "emailRequired": "Please enter your email",
+        "inputError": "Input error",
+        "unexpectedError": "An unexpected error occurred",
+        "registrationError": "An error occurred during registration"
+      }
+    },
+    "experience": {
+      "title": "Experience",
+      "current": "Current",
+      "positionsCount": "{count} positions"
+    },
+    "projects": {
+      "title": "Project Showcase",
+      "desc": "A curated collection of digital solutions that blend creativity, functionality, and user-centric design. Each project represents a unique challenge solved through innovative web development."
+    },
+    "contactme": {
+      "title": "📬 Let's Connect",
+      "description": "I'm actively seeking opportunities to leverage my skills and contribute to innovative projects. Whether you're looking to bring a project to life or want to discuss potential collaborations, I'm just a message away.",
+      "connectOn": "Connect on:"
+    },
+    "landing": {
+    "hero": {
+      "title": "Create, Sell, Manage",
+      "titlePart2": "from one place, with great ease",
+      "subtitle": "From building without coding to marketing and selling without experience, cravvelo provides you with all the tools you need to create your educational platform and grow your business online.",
+      "cta": "Start your free trial 👋",
+      "typewriterWords": ["your educational experiences", "your training courses"]
+    },
+    "whatYouCanDo": {
+      "title": "What can you do with cravvelo?",
+      "description": "Transform your knowledge and expertise into a successful online business with ease and an exceptional Arabic experience.",
+      "items": {
+        "create": {
+          "title": "Create Academy",
+          "description": "Transform your knowledge and expertise into a successful online business with ease and an exceptional Arabic experience."
+        },
+        "upload": {
+          "title": "Upload courses and educational videos",
+          "description": "Transform your knowledge and expertise into a successful online business with ease and an exceptional Arabic experience."
+        },
+        "sell": {
+          "title": "Sell courses and earn profits",
+          "description": "Transform your knowledge and expertise into a successful online business with ease and an exceptional Arabic experience."
+        }
+      }
+    },
+    "createLaunch": {
+      "title1": "Create,",
+      "title2": "Launch",
+      "title3": "your training course",
+      "description": "Transform your knowledge and expertise into a successful online business with ease and an exceptional Algerian experience."
+    },
+    "easeSpeed": {
+      "items": {
+        "ease": {
+          "title": "Ease and Speed",
+          "description": "Creating and designing training courses and organizing educational materials with ease and speed."
+        },
+        "integrated": {
+          "title": "Integrated Experience",
+          "description": "Various means to spread, market, and sell your message online with great ease."
+        },
+        "testing": {
+          "title": "Testing and Tracking",
+          "description": "Measure and evaluate your students, track their performance, and communicate with them effectively."
+        }
+      }
+    },
+    "allInOne": {
+      "title": "New capabilities, with an amazing experience, in",
+      "titleHighlight": "one place",
+      "description": "Everything you need to create and build training courses and educational programs, with high customization capabilities, premium educational path management tools, plus a website and private digital community, all in one place."
+    },
+    "newExperience": {
+      "title": "Provide",
+      "titleHighlight": "better experiences",
+      "titlePart2": "for your students",
+      "description": "Providing a professional portal for students to provide a smooth experience and build confidence in your courses and enhance loyalty, in addition to creating a competitive advantage for your digital business. By providing:",
+      "features": {
+        "management": "Student account management and experience enrichment",
+        "watching": "Watching the course",
+        "certificates": "Dedicated space to receive certificates"
+      }
+    },
+    "secureContent": {
+      "title1": "Protect",
+      "title2": "your content.🔒",
+      "description": "Because we believe that your experiences and content are your most valuable knowledge resources, we provide you with tools that allow content protection from illegal uses such as copying and theft.",
+      "features": {
+        "disableCopy": "Disable text copying",
+        "singleDevice": "Restrict login from one device"
+      }
+    },
+    "bestBenefits": {
+      "title": "Key Features",
+      "description": "Create, market, and sell training courses online, all in one place.",
+      "items": {
+        "sell": {
+          "title": "Sell",
+          "description": "We provide you with a set of tools that enable you to grow and sell your expertise with ease."
+        },
+        "manage": {
+          "title": "Manage",
+          "description": "An easy dashboard with an amazing experience that allows you to manage all your courses."
+        },
+        "analyze": {
+          "title": "Analyze",
+          "description": "Advanced reports and statistics that help you elevate your business."
+        }
+      }
+    },
+    "pricing": {
+      "tabs": {
+        "yearly": "Yearly",
+        "monthly": "Monthly"
+      },
+      "badge": "For Content Creators",
+      "cta": "Subscribe Now",
+      "plans": {
+        "basic": {
+          "name": "Basic Plan",
+          "tagline": "Create your educational platform and digital products and sell and market them online.",
+          "features": {
+            "courses": "{count} training courses",
+            "unlimitedStudents": "Unlimited number of students",
+            "digitalProducts": "{count} digital products",
+            "tests": "Tests and assignments",
+            "payment": "Electronic payment gateways",
+            "design": "Beautiful design for your academy",
+            "domain": "Your own domain",
+            "seo": "SEO improvements",
+            "removeBranding": "Remove cravvelo branding"
+          }
+        },
+        "advanced": {
+          "name": "Growth Plan",
+          "tagline": "Elevate your business with features that help you achieve super-fast growth.",
+          "features": {
+            "courses": "{count} training courses",
+            "unlimitedStudents": "Unlimited number of students",
+            "digitalProducts": "{count} digital products",
+            "tests": "Tests and assignments",
+            "payment": "Electronic payment gateways",
+            "design": "Beautiful design for your academy",
+            "domain": "Your own domain",
+            "seo": "SEO improvements",
+            "removeBranding": "Remove cravvelo branding"
+          }
+        },
+        "pro": {
+          "name": "Professional Plan",
+          "tagline": "Unlimited capacity and advanced tools to help you expand your business and products.",
+          "features": {
+            "courses": "{count} training courses",
+            "unlimitedStudents": "Unlimited number of students",
+            "digitalProducts": "Unlimited digital products",
+            "tests": "Tests and assignments",
+            "payment": "Electronic payment gateways",
+            "design": "Beautiful design for your academy",
+            "domain": "Your own domain",
+            "seo": "SEO improvements",
+            "removeBranding": "Remove cravvelo branding"
+          }
+        }
+      }
+    },
+    "startNew": {
+      "title": "Are you ready?",
+      "description": "Create your digital products and training courses today and build successful businesses around them. Because you can!",
+      "cta": "Start your free trial"
+    },
+    "howPlatformWorks": {
+      "title": "How does the platform work?",
+      "steps": {
+        "step1": {
+          "number": "1",
+          "title": "Create Academy",
+          "description": "Transform your knowledge and expertise into a successful online business with ease and an exceptional Arabic experience."
+        },
+        "step2": {
+          "number": "2",
+          "title": "Upload videos",
+          "description": "Transform your knowledge and expertise into a successful online business with ease and an exceptional Arabic experience."
+        },
+        "step3": {
+          "number": "3",
+          "title": "Earn profits from selling the course",
+          "description": "Transform your knowledge and expertise into a successful online business with ease and an exceptional Arabic experience."
+        }
+      }
+    }
+  }
+}

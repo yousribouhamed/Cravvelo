@@ -2,10 +2,14 @@
 
 import type { FC } from "react";
 import { useTypewriter } from "react-simple-typewriter";
+import { useTranslations } from "next-intl";
 
 const TextTyper: FC = ({}) => {
+  const t = useTranslations("landing.hero");
+  const words = t.raw("typewriterWords") as string[];
+  
   const [text] = useTypewriter({
-    words: ["خبراتك التعليمية ", "دوراتك التدريبية "],
+    words: words,
     loop: true,
     delaySpeed: 2000,
   });

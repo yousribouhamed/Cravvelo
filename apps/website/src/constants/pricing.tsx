@@ -1,11 +1,10 @@
 export const PLANS = [
   {
-    plan: "الباقة الآساسية",
     plan_code: "BASIC",
+    planKey: "plans.basic.name",
     price: "1500",
     imageUrl: "/pricing-icons/beginner.png",
-    tagline:
-      "إنشاء منصتك التعليمية ومنتجاتك الرقمية وبيعها وتسويقها عبر الإنترنت.",
+    taglineKey: "plans.basic.tagline",
     quota: 10,
     icon: () => (
       <svg
@@ -22,40 +21,39 @@ export const PLANS = [
       test: "price_1ObeduCxv0KQVM5xHees3z9n",
       production: "",
     },
-
     features: [
       {
-        text: "1 دورات تدريبية",
+        textKey: "plans.basic.features.courses",
+        count: 1,
       },
       {
-        text: "عدد طلاب غير محدود",
+        textKey: "plans.basic.features.unlimitedStudents",
       },
       {
-        text: "1 منتجات رقمية",
+        textKey: "plans.basic.features.digitalProducts",
+        count: 1,
       },
       {
-        text: "اختبارات وواجبات",
-      },
-
-      {
-        text: "بوابات دفع الكتروني",
+        textKey: "plans.basic.features.tests",
       },
       {
-        text: "التصميم الجميل لاكاديميتك",
+        textKey: "plans.basic.features.payment",
       },
       {
-        text: " نطاق خاص بك ",
+        textKey: "plans.basic.features.design",
       },
       {
-        text: "تحسينات تحسين محركات البحث",
+        textKey: "plans.basic.features.domain",
       },
       {
-        text: "إزالة هوية cravvelo",
+        textKey: "plans.basic.features.seo",
+      },
+      {
+        textKey: "plans.basic.features.removeBranding",
         negative: true,
       },
     ],
   },
-
   {
     priceIds: {
       test: "price_1Obef0Cxv0KQVM5xGGVkqWMS",
@@ -63,7 +61,7 @@ export const PLANS = [
     },
     imageUrl: "/pricing-icons/infi.png",
     plan_code: "ADVANCED",
-    plan: "باقة النمو",
+    planKey: "plans.advanced.name",
     price: "2490",
     icon: () => (
       <svg
@@ -76,42 +74,41 @@ export const PLANS = [
         <path d="M0 49.43H49V0.43H0V49.43Z" fill="black" />
       </svg>
     ),
-    tagline:
-      "ارتقِ بمستوى عملك من خلال ميزات تساعدك على تحقيق نمو فائق السرعة.",
+    taglineKey: "plans.advanced.tagline",
     quota: 10,
     features: [
       {
-        text: "2 دورات تدريبية",
+        textKey: "plans.advanced.features.courses",
+        count: 2,
       },
       {
-        text: "عدد طلاب غير محدود",
+        textKey: "plans.advanced.features.unlimitedStudents",
       },
       {
-        text: "2 منتجات رقمية",
+        textKey: "plans.advanced.features.digitalProducts",
+        count: 2,
       },
       {
-        text: "اختبارات وواجبات",
-      },
-
-      {
-        text: "بوابات دفع الكتروني",
+        textKey: "plans.advanced.features.tests",
       },
       {
-        text: "التصميم الجميل لاكاديميتك",
+        textKey: "plans.advanced.features.payment",
       },
       {
-        text: " نطاق خاص بك ",
+        textKey: "plans.advanced.features.design",
       },
       {
-        text: "تحسينات تحسين محركات البحث",
+        textKey: "plans.advanced.features.domain",
       },
       {
-        text: "إزالة هوية cravvelo",
+        textKey: "plans.advanced.features.seo",
+      },
+      {
+        textKey: "plans.advanced.features.removeBranding",
         negative: true,
       },
     ],
   },
-
   {
     priceIds: {
       test: "price_1Obeg9Cxv0KQVM5x3qHaFrbs",
@@ -119,9 +116,9 @@ export const PLANS = [
     },
     imageUrl: "/pricing-icons/pro.png",
     plan_code: "PRO",
-    plan: "الباقة الاحترافية",
+    planKey: "plans.pro.name",
     price: "6990",
-    tagline: "سعة غير محدودة وأدوات متقدمة تساعدك على التوسّع بعملك ومنتجاتك.",
+    taglineKey: "plans.pro.tagline",
     quota: 10,
     icon: () => (
       <svg
@@ -134,35 +131,34 @@ export const PLANS = [
         <path d="M0 49.43H49V0.43H0V49.43Z" fill="black" />
       </svg>
     ),
-
     features: [
       {
-        text: "6 دورات تدريبية",
+        textKey: "plans.pro.features.courses",
+        count: 6,
       },
       {
-        text: "عدد طلاب غير محدود",
+        textKey: "plans.pro.features.unlimitedStudents",
       },
       {
-        text: "منتجات رقمية غير محدودة",
+        textKey: "plans.pro.features.digitalProducts",
       },
       {
-        text: "اختبارات وواجبات",
-      },
-
-      {
-        text: "بوابات دفع الكتروني",
+        textKey: "plans.pro.features.tests",
       },
       {
-        text: "التصميم الجميل لاكاديميتك",
+        textKey: "plans.pro.features.payment",
       },
       {
-        text: " نطاق خاص بك ",
+        textKey: "plans.pro.features.design",
       },
       {
-        text: "تحسينات تحسين محركات البحث",
+        textKey: "plans.pro.features.domain",
       },
       {
-        text: "إزالة هوية cravvelo",
+        textKey: "plans.pro.features.seo",
+      },
+      {
+        textKey: "plans.pro.features.removeBranding",
       },
     ],
   },

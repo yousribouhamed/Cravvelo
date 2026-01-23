@@ -10,38 +10,41 @@ import { ChevronDown } from "lucide-react";
 
 import type { FC } from "react";
 import React from "react";
+import { useTranslations } from "next-intl";
 
 interface MobileDropdownMenuProps {}
 
-const DROP_DOWN_MENU_ITEMS = [
-  {
-    name: "الدورات التدريبية",
-    href: "",
-  },
-  {
-    name: "نظام الواجبات",
-    href: "",
-  },
-  {
-    name: "نظام الشهادات",
-    href: "",
-  },
-  {
-    name: "المنتجات الرقمية",
-    href: "",
-  },
-  {
-    name: "نظام الاختبارات",
-    href: "",
-  },
-  {
-    name: "كوبونات الخصم",
-    href: "",
-  },
-];
-
 const NestedMobileDropdownMenu: FC = ({}) => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  const t = useTranslations("header.services");
+
+  const DROP_DOWN_MENU_ITEMS = [
+    {
+      name: t("items.trainingCourses.title"),
+      href: "",
+    },
+    {
+      name: t("items.assignments.title"),
+      href: "",
+    },
+    {
+      name: t("items.certificates.title"),
+      href: "",
+    },
+    {
+      name: t("items.digitalProducts.title"),
+      href: "",
+    },
+    {
+      name: t("items.tests.title"),
+      href: "",
+    },
+    {
+      name: t("items.discountCoupons.title"),
+      href: "",
+    },
+  ];
+
   return (
     <div
       className={` ${
@@ -52,7 +55,7 @@ const NestedMobileDropdownMenu: FC = ({}) => {
         onClick={() => setIsOpen(!isOpen)}
         className="w-full h-[40px] flex justify-between items-center font-semibold text-gray-600"
       >
-        الخدمات
+        {t("label")}
         <ChevronDown
           className={`${
             isOpen ? "rotate-180" : "rotate-0"

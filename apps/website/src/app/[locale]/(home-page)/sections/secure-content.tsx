@@ -2,21 +2,23 @@
 
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import type { FC } from "react";
 
 const SecureContent: FC = ({}) => {
+  const t = useTranslations("landing.secureContent");
+  
   return (
     <MaxWidthWrapper className="my-8 ">
       <div className="w-full min-h-[250px] h-fit  flex flex-col justify-center  gap-y-8  pt-20 ">
         <div className="w-full h-[100px] relative flex flex-col justify-center items-center">
           <div className="bg-primary rounded-2xl w-[300px] h-[70px] flex items-center justify-center -rotate-12">
             <span className="text-white text-4xl font-bold">
-              {" "}
-              آمان🔒محتواك.
+              {t("title2")}
             </span>
           </div>
           <div className="bg-[#F4EDE5]  flex items-center justify-center border-[2px] border-black rounded-2xl w-[300px] h-[70px] absolute -rotate-12 right-[9%] md:right-[25%] 2xl:-bottom-2 -bottom-16 md:-bottom-4 ">
-            <span className="text-4xl font-bold"> حافظ على</span>
+            <span className="text-4xl font-bold"> {t("title1")}</span>
             <div className="absolute -left-9 top-2">
               <svg
                 width="51"
@@ -35,8 +37,7 @@ const SecureContent: FC = ({}) => {
           </div>
         </div>
         <p className="text-center my-4 text-xl max-w-5xl mt-20 md:mt-8 mx-auto">
-          لأننا نؤمن بأن خبراتك ومحتواك هو أثمن مواردك المعرفية، نوفر لك أدوات
-          تتيح حماية المحتوى من الاستخدامات غير القانونية كالنسخ والسرقة وغيرها.
+          {t("description")}
         </p>
         {/* bg-[#F8FAE5] */}
         <div className="w-full h-[590px] overflow-hidden   flex flex-col items-end justify-start  relative   rounded-2xl">
@@ -64,7 +65,7 @@ const SecureContent: FC = ({}) => {
               height={30}
             />
 
-            <span className="text-lg font-bold">تعطيل نسخ النص</span>
+            <span className="text-lg font-bold">{t("features.disableCopy")}</span>
           </div>
 
           <div className=" min-w-[200px] lg:min-w-[390px]  w-fit mt-[70px] ml-[5px] lg:ml-[200px] min-h-[50px] h-fit bg-white rounded-full shadow-2xl px-4 gap-x-2 flex items-center justify-start z-[80]">
@@ -76,7 +77,7 @@ const SecureContent: FC = ({}) => {
               height={30}
             />
             <span className=" text-lg font-bold ">
-              تقييد تسجيل الدخول من جهاز واحد
+              {t("features.singleDevice")}
             </span>
           </div>
 

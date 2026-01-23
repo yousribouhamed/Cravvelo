@@ -1,8 +1,13 @@
+"use client";
+
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import type { FC } from "react";
 
 const CreateLanch: FC = ({}) => {
+  const t = useTranslations("landing.createLaunch");
+  
   return (
     <MaxWidthWrapper className="my-6   ">
       <section
@@ -27,20 +32,18 @@ const CreateLanch: FC = ({}) => {
             </div>
             <div className=" w-[200px]  md:w-[250px]  lg:w-[270px] h-[70px]  rounded-2xl  bg-primary flex items-center justify-center absolute  -bottom-8 p-2 rotate-6 right-3 md:right-5">
               <p className=" text-xl md:text-3xl font-extrabold text-white">
-                أنشئ، وأطلق
+                {t("title1")}
               </p>
             </div>
             <div className=" w-[150px] md:w-[250px] lg:w-[270px] h-[70px]  rounded-2xl  bg-[#FFC901] flex items-center justify-center p-2 absolute right-[12rem] lg:right-[17.5rem] top-0 -rotate-12 z-10">
               <p className=" text-xl md:text-3xl font-extrabold text-black">
-                {" "}
-                دورتك التدريبية
+                {t("title2")} {t("title3")}
               </p>
             </div>
           </div>
 
           <p className="text-xl text-black text-start mt-[100px]">
-            حوّل معرفتك وخبرتك إلى عمل ناجح عبر الإنترنت بسهولة وتجربة جزائرية
-            استثنائية.
+            {t("description")}
           </p>
         </div>
         <div className=" border h-[400px] shadow-2xl relative rounded-2xl mt-16 p-4 col-span-1">

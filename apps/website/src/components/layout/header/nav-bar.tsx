@@ -10,18 +10,19 @@ import DropDownMenu from "../../drop-down-menu";
 import MobileNav from "./mobile-nav";
 import TopBanner from "../../top-banner";
 import { WaitingListModal } from "../../waiting-list";
-
-const links = [
-  { name: "الرئيسية", href: "/" },
-  { name: "الخدمات", href: "/features" },
-
-  { name: "تواصل معنا", href: "/contact-us" },
-];
+import { useTranslations } from "next-intl";
 
 const NavBar = () => {
   const [hasShadow, setHasShadow] = useState(false);
   const [close, setClose] = useState(false);
   const path = usePathname();
+  const t = useTranslations("header.navigation");
+
+  const links = [
+    { name: t("home"), href: "/" },
+    { name: t("services"), href: "/features" },
+    { name: t("contact"), href: "/contact-us" },
+  ];
 
   const handleScroll = useCallback(() => {
     setHasShadow(window.scrollY > 64);

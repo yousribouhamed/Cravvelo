@@ -1,8 +1,13 @@
+"use client";
+
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import type { FC } from "react";
 
 const NewExperiance: FC = ({}) => {
+  const t = useTranslations("landing.newExperience");
+  
   return (
     <MaxWidthWrapper>
       <div className="w-full h-fit p-4 lg:p-0 ">
@@ -17,7 +22,7 @@ const NewExperiance: FC = ({}) => {
           </div>
           <div className="max-w-2xl h-full flex flex-col gap-y-4 col-span-1 pt-4 z-20 space-y-6  ">
             <h1 className=" text-5xl mb-8  font-bold text-start  tracking-tight leading-[5.5rem] text-black ">
-              وفّر{" "}
+              {t("title")}{" "}
               <span className="text-[#FC6B00] relative inline-block ">
                 <div className="absolute  -bottom-8 md:-bottom-14  right-0 left-0  ">
                   <svg
@@ -33,14 +38,12 @@ const NewExperiance: FC = ({}) => {
                     />
                   </svg>
                 </div>
-                تجارب
+                {t("titleHighlight")}
               </span>{" "}
-              أفضل لطلابك
+              {t("titlePart2")}
             </h1>
             <p className="mt-6  block  text-[20px]  leading-10 text-start ">
-              إتاحة بوابة للطلاب احترافية لتوفير تجربة سلسة وبناء الثقة في
-              دوراتك وتعزيز الولاء، بالإضافة إلى خلق ميزة تنافسية لأعمالك
-              الرقمية. من خلال إتاحة :
+              {t("description")}
             </p>
             <div className="w-full h-fit flex flex-col gap-y-4 ">
               <div className="w-full h-[70px] px-4 gap-x-4  flex items-center justify-start">
@@ -52,7 +55,7 @@ const NewExperiance: FC = ({}) => {
                 />
 
                 <p className="text-black font-semibold text-xl">
-                  إمكانية إدارة الطالب لحسابه وإثراء تجربته
+                  {t("features.management")}
                 </p>
               </div>
               <div className="w-full h-[70px] px-4 gap-x-4 flex items-center justify-start">
@@ -64,7 +67,7 @@ const NewExperiance: FC = ({}) => {
                 />
 
                 <p className="text-black font-semibold text-xl">
-                  مشاهدة الدورة{" "}
+                  {t("features.watching")}
                 </p>
               </div>
               <div className="w-full h-[70px] px-4  gap-x-4  flex items-center justify-start">
@@ -76,7 +79,7 @@ const NewExperiance: FC = ({}) => {
                 />
 
                 <p className="text-black font-semibold text-xl">
-                  مساحة مخصصة لإستلام شهاداته
+                  {t("features.certificates")}
                 </p>
               </div>
             </div>

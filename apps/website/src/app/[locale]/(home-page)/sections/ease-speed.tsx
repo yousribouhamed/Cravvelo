@@ -1,8 +1,13 @@
+"use client";
+
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import type { FC } from "react";
 
 const EaseSpeed: FC = () => {
+  const t = useTranslations("landing.easeSpeed.items");
+  
   return (
     <MaxWidthWrapper className="my-6  w-full p-0">
       <section
@@ -18,11 +23,10 @@ const EaseSpeed: FC = () => {
               height={50}
             />
 
-            <h3 className="text-3xl font-bold  text-start">السهولة والسرعة</h3>
+            <h3 className="text-3xl font-bold  text-start">{t("ease.title")}</h3>
           </div>
           <p className="text-xl text-[#8B8B8B] mt-4 text-start">
-            {" "}
-            إنشاء وتصميم الدورات التدريبية وترتيب المواد التعليمية بسهولة وسرعة.
+            {t("ease.description")}
           </p>
         </div>
 
@@ -35,13 +39,11 @@ const EaseSpeed: FC = () => {
               height={50}
             />
 
-            <h3 className="text-3xl font-bold  text-start">تجربة متكاملة</h3>
+            <h3 className="text-3xl font-bold  text-start">{t("integrated.title")}</h3>
           </div>
 
           <p className="text-xl text-[#8B8B8B] mt-4 text-start">
-            {" "}
-            وسائل مختلفة لنشر رسالتك وتسويقها وبيعها عبر الإنترنت بيسر وسهولة
-            بالغة.
+            {t("integrated.description")}
           </p>
         </div>
 
@@ -54,12 +56,11 @@ const EaseSpeed: FC = () => {
               height={50}
             />
 
-            <h3 className="text-3xl font-bold  text-start">إختبار وتتبع</h3>
+            <h3 className="text-3xl font-bold  text-start">{t("testing.title")}</h3>
           </div>
 
           <p className="text-xl text-[#8B8B8B] mt-4 text-start">
-            {" "}
-            قياس وتقييم طلابك وتتبع أدائهم والتواصل معهم بصورة فعّالة.
+            {t("testing.description")}
           </p>
         </div>
       </section>

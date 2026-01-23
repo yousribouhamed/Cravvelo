@@ -1,11 +1,16 @@
+"use client";
+
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import TextTyper from "@/src/components/text-typer";
 import { Button } from "@ui/components/ui/button";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/src/lib/i18n/routing";
+import { useTranslations } from "next-intl";
 import type { FC } from "react";
 
 const Hero: FC = ({}) => {
+  const t = useTranslations("landing.hero");
+
   return (
     <MaxWidthWrapper className="mt-32">
       <section
@@ -23,18 +28,16 @@ const Hero: FC = ({}) => {
                     className="whitespace-nowrap qatar-bold font-bold"
                     style={{ fontFamily: "Qatar2022 Arabic bold" }}
                   >
-                    إنشاء، بيع، إدارة
+                    {t("title")}
                   </span>
                   <TextTyper />
                 </h1>
                 <h1 className="qatar-bold mt-4 sm:mt-2 text-center sm:text-start font-bold tracking-tight text-black text-3xl 2xl:text-4xl">
-                  من مكان واحد، بسهولة كبيرة
+                  {t("titlePart2")}
                 </h1>
               </div>
               <p className="mt-6 sm:mt-10 text-sm font-thin 2xl:text-lg text-center sm:text-start text-black">
-                من البناء بلا برمجة إلى التسويق والبيع بدون خبرة، cravvelo توفّر
-                لك كل الأدوات التي تحتاجها لإنشاء منصتك التعليمية وتنمية أعمالك
-                عبر الإنترنت.
+                {t("subtitle")}
               </p>
               <div className="w-full my-4 min-h-[60px] flex flex-col sm:flex-row items-center sm:mt-8 mt-16 gap-y-6 sm:items-end justify-center sm:justify-start gap-x-8">
                 <Link
@@ -46,7 +49,7 @@ const Hero: FC = ({}) => {
                     size="lg"
                     className="bg-[#FC6B00] hover:bg-[#994b13] text-xl py-6 h-14 rounded-2xl text-white qatar-bold hover:scale-105 transition-all duration-150"
                   >
-                    ابدء تجربتك المجانية 👋
+                    {t("cta")}
                   </Button>
                 </Link>
               </div>

@@ -1,19 +1,23 @@
-import MaxWidthWrapper from "../../components/max-width-wrapper";
+"use client";
+
+import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import WhatYouCanDo from "./sections/what-you-can-do";
-import HeroLights from "../../components/svgs/hero-lights";
+import HeroLights from "@/src/components/svgs/hero-lights";
 import Hero from "./sections/hero";
 import CreateLanch from "./sections/create-lanch";
 import EaseSpeed from "./sections/ease-speed";
 import NewExperiance from "./sections/new-experiance";
 import StartNew from "./sections/start-new";
 import FadeIn from "@/src/components/animations/fade-in";
-// import NewPricing from "./sections/new-pricing";
 import Image from "next/image";
 import BestBenefits from "./sections/best-benifits";
 import SecureContent from "./sections/secure-content";
 import Footer from "@/src/components/layout/site-footer";
+import NewPricing from "./sections/new-pricing";
+import { useTranslations } from "next-intl";
 
 export default function Page() {
+  const t = useTranslations("landing.allInOne");
   return (
     <>
       <div className="  w-full h-fit min-h-full">
@@ -32,7 +36,7 @@ export default function Page() {
           <MaxWidthWrapper className=" my-8 md:my-[200px] overflow-hidden xl:overflow-visible ">
             <div className="w-full min-h-[250px] h-fit  flex flex-col justify-center gap-y-8 pt-12  ">
               <h2 className="text-5xl font-bold text-center   leading-[4rem] md:leading-10">
-                قدرات جديدة، بتجربة مذهلة، في
+                {t("title")}
                 <span className="text-[#FC6B00] relative block my-12 lg:my-0 lg:inline-block mx-8  ">
                   <div className="absolute -top-20 bottom-0 right-[1.5rem] md:right-32 lg:-right-5 ">
                     <svg
@@ -48,14 +52,11 @@ export default function Page() {
                       />
                     </svg>
                   </div>
-                  مكان واحد
+                  {t("titleHighlight")}
                 </span>
               </h2>
               <p className="text-center my-4 text-xl max-w-5xl mt-8 mx-auto">
-                كل ما تحتاجه لإنشاء وبناء دورات تدريبية وبرامج تعليمية، مع
-                إمكانات تخصيص عالية، وأدوات تسيير المسارات التعليمية فائقة
-                الجودة، بالإضافة إلى موقع إلكتروني ومجتمع رقمي خاص، في مكان
-                واحد.
+                {t("description")}
               </p>
 
               <div className="w-full mt-8 relative h-[800px] rounded-2xl border  border-[#FC6B00] bg-[#F8FAE5]">
@@ -109,11 +110,11 @@ export default function Page() {
             <BestBenefits />
           </MaxWidthWrapper>
         </FadeIn>
-        {/* <FadeIn>
+        <FadeIn>
           <MaxWidthWrapper>
             <NewPricing />
           </MaxWidthWrapper>
-        </FadeIn> */}
+        </FadeIn>
         <StartNew />
       </div>
 

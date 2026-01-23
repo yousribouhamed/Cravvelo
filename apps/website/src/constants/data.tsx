@@ -4,21 +4,18 @@ export const hero = {
 
 export const what_to_do = [
   {
-    title: "إنشاء آكاديمية",
-    description:
-      "حوّل معرفتك وخبرتك إلى عمل ناجح عبر الإنترنت بسهولة وتجربة عربية استثنائية.",
+    titleKey: "items.create.title",
+    descriptionKey: "items.create.description",
     icon_url: "/store.svg",
   },
   {
-    title: "رفع دورات وفيديوهات تعليمية",
-    description:
-      "حوّل معرفتك وخبرتك إلى عمل ناجح عبر الإنترنت بسهولة وتجربة عربية استثنائية.",
+    titleKey: "items.upload.title",
+    descriptionKey: "items.upload.description",
     icon_url: "/upload.svg",
   },
   {
-    title: "بيع دورات وتحقيق آرباح",
-    description:
-      "حوّل معرفتك وخبرتك إلى عمل ناجح عبر الإنترنت بسهولة وتجربة عربية استثنائية.",
+    titleKey: "items.sell.title",
+    descriptionKey: "items.sell.description",
     icon_url: "/money.svg",
   },
 ];

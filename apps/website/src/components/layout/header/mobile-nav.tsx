@@ -7,26 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import NestedMobileDropdownMenu from "./mobile-dropdown-menu";
 import { cn } from "@ui/lib/utils";
-
-const links = [
-  {
-    name: "الرئيسية",
-    href: "/",
-  },
-
-  {
-    name: "الخدمات",
-    href: "/",
-  },
-  {
-    name: "معلومات عنا",
-    href: "/about-us",
-  },
-  {
-    name: "تواصل معنا",
-    href: "/contact-us",
-  },
-];
+import { useTranslations } from "next-intl";
 
 interface MobileNavProps {
   isTopAdOpen: boolean;
@@ -111,7 +92,7 @@ const MobileNav = ({ isTopAdOpen = true }: MobileNavProps) => {
                   "w-full h-[40px] flex items-center justify-center mt-4 "
                 )}
               >
-                تسجيل الدخول
+                {tAuth("signIn")}
               </Link>
               <Link
                 target="_blank"
@@ -121,7 +102,7 @@ const MobileNav = ({ isTopAdOpen = true }: MobileNavProps) => {
                   "w-full h-[40px] flex items-center justify-center "
                 )}
               >
-                انشاء حساب
+                {tAuth("signUp")}
               </Link>
             </>
           </ul>

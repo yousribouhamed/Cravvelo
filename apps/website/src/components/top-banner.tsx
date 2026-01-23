@@ -1,6 +1,9 @@
+"use client";
+
 import { Button } from "@ui/components/ui/button";
 import { X } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
+import { useTranslations } from "next-intl";
 
 interface TopBannerProps {
   close: boolean;
@@ -8,10 +11,12 @@ interface TopBannerProps {
 }
 
 export default function TopBanner({ setClose }: TopBannerProps) {
+  const t = useTranslations("waitingList");
+  
   return (
     <div className="w-full h-[41px] bg-gradient-to-r bg-[#1c53d3]  flex justify-center items-center gap-x-2 px-4 md:gap-x-20">
       <p className="text-white text-xs md:text-base font-bold ">
-        انضم إلى قائمة الانتظار وكن من أول المستخدمين لـ Cravvelo
+        {t("banner")}
       </p>
       <Button
         onClick={() => setClose(true)}

@@ -17,8 +17,10 @@ import { Label } from "@ui/components/ui/label";
 import { Mail, User, CheckCircle } from "lucide-react";
 import { joinWaitingList } from "../actions/waiting.action";
 import toast from "react-hot-toast";
+import { useTranslations } from "next-intl";
 
 export function WaitingListModal() {
+  const t = useTranslations("waitingList");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -30,7 +32,7 @@ export function WaitingListModal() {
     e.preventDefault();
 
     if (!formData.email.trim()) {
-      toast.error("يرجى إدخال البريد الإلكتروني");
+      toast.error(t("errors.emailRequired"));
       return;
     }
 
@@ -39,20 +41,20 @@ export function WaitingListModal() {
       const res = await joinWaitingList(formData);
 
       if (res.success) {
-        toast.success("تم التسجيل بنجاح!");
+        toast.success(t("success.title"));
         setIsSubmitted(true);
       } else {
         if (res.errors) {
           // لو فيه validation errors من Zod
           const firstError = Object.values(res.errors).flat()[0];
-          toast.error(firstError || "خطأ في الإدخال");
+          toast.error(firstError || t("errors.inputError"));
         } else {
-          toast.error(res.message || "حدث خطأ غير متوقع");
+          toast.error(res.message || t("errors.unexpectedError"));
         }
       }
     } catch (err) {
       console.error(err);
-      toast.error("حدث خطأ أثناء التسجيل");
+      toast.error(t("errors.registrationError"));
     } finally {
       setLoading(false);
     }
@@ -70,7 +72,7 @@ export function WaitingListModal() {
       <DialogTrigger asChild>
         <Button variant="outline">
           <Mail className="w-4 h-4 ml-2" />
-          انضم إلى قائمة الانتظار
+          {t("button")}
         </Button>
       </DialogTrigger>
 
@@ -82,11 +84,10 @@ export function WaitingListModal() {
           <>
             <DialogHeader className="text-center">
               <DialogTitle className="text-xl font-bold text-right">
-                انضم إلى قائمة الانتظار
+                {t("title")}
               </DialogTitle>
               <DialogDescription className="text-gray-600 mt-2 text-right">
-                كن أول من يعرف عند إطلاق منتجنا الجديد. سنرسل لك دعوة حصرية
-                للوصول المبكر.
+                {t("description")}
               </DialogDescription>
             </DialogHeader>
 
@@ -97,12 +98,12 @@ export function WaitingListModal() {
                   className="text-sm font-medium text-gray-700 flex items-center gap-2"
                 >
                   <User className="w-4 h-4" />
-                  الاسم (اختياري)
+                  {t("form.name")}
                 </Label>
                 <Input
                   id="name"
                   name="name"
-                  placeholder="أدخل اسمك"
+                  placeholder={t("form.namePlaceholder")}
                   value={formData.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
                 />
@@ -114,13 +115,13 @@ export function WaitingListModal() {
                   className="text-sm font-medium text-gray-700 flex items-center gap-2"
                 >
                   <Mail className="w-4 h-4" />
-                  البريد الإلكتروني *
+                  {t("form.email")}
                 </Label>
                 <Input
                   id="email"
                   name="email"
                   type="email"
-                  placeholder="أدخل بريدك الإلكتروني"
+                  placeholder={t("form.emailPlaceholder")}
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   required
@@ -135,11 +136,11 @@ export function WaitingListModal() {
                     className="flex-1"
                     disabled={loading}
                   >
-                    إلغاء
+                    {t("form.cancel")}
                   </Button>
                 </DialogClose>
                 <Button type="submit" className="flex-1" disabled={loading}>
-                  {loading ? "جارٍ الإرسال..." : "انضم الآن"}
+                  {loading ? t("form.submitting") : t("form.submit")}
                 </Button>
               </DialogFooter>
             </form>
@@ -151,17 +152,16 @@ export function WaitingListModal() {
             </div>
             <DialogHeader>
               <DialogTitle className="text-xl font-bold text-green-600 mb-2 text-right">
-                تم التسجيل بنجاح!
+                {t("success.title")}
               </DialogTitle>
               <DialogDescription className="text-gray-600 text-right">
-                شكراً لانضمامك إلى قائمة الانتظار. سنرسل لك رسالة بريد إلكتروني
-                بمجرد أن نكون جاهزين للإطلاق.
+                {t("success.description")}
               </DialogDescription>
             </DialogHeader>
 
             <div className="mt-6">
               <DialogClose asChild>
-                <Button>إغلاق</Button>
+                <Button>{t("form.close")}</Button>
               </DialogClose>
             </div>
           </div>
