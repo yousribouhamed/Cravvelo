@@ -16,12 +16,19 @@ const PageProps = async ({}) => {
   const user = await getMyUserAction();
 
   const [connection, notifications] = await Promise.all([
-    getP2pConnection(),
+    getP2pConnection().catch((error) => {
+      console.error("Error fetching P2P connection:", error);
+      return {
+        data: null,
+        success: false,
+        message: "Failed to load P2P connection",
+      };
+    }),
     getAllNotifications({ accountId: user.accountId }),
   ]);
 
   const config =
-    connection.data === null
+    connection.data === null || !connection.data.config
       ? null
       : {
           accountHolder: connection.data.config.accountHolder,
@@ -42,7 +49,7 @@ const PageProps = async ({}) => {
         />
 
         <P2PConnector
-          isAlreadyActive={connection.data.isActive}
+          isAlreadyActive={connection.data?.isActive ?? false}
           data={config}
         />
       </main>

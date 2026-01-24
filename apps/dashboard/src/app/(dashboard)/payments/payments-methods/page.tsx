@@ -1,6 +1,5 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
-import { prisma } from "database/src";
 import {
   getAllNotifications,
   getMyUserAction,
@@ -13,7 +12,14 @@ const Page = async ({}) => {
 
   const [notifications, connections] = await Promise.all([
     getAllNotifications({ accountId: user.accountId }),
-    getConnections(),
+    getConnections().catch((error) => {
+      console.error("Error fetching connections:", error);
+      return {
+        success: false,
+        message: "Failed to load payment connections",
+        data: [],
+      };
+    }),
   ]);
 
   return (

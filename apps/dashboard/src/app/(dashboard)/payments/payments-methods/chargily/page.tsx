@@ -11,17 +11,25 @@ const PageProps = async () => {
   const user = await getMyUserAction();
 
   const [connection, notifications] = await Promise.all([
-    getChargilyConnection(),
+    getChargilyConnection().catch((error) => {
+      console.error("Error fetching Chargily connection:", error);
+      return {
+        data: null,
+        success: false,
+        message: "Failed to load Chargily connection",
+      };
+    }),
     getAllNotifications({ accountId: user.accountId }),
   ]);
 
   const config =
-    connection.data === null
+    connection.data === null || !connection.data.config
       ? null
       : {
           publicKey: connection.data.config.publicKey,
           secretKey: connection.data.config.secretKey,
         };
+
   return (
     <MaxWidthWrapper>
       <main className="w-full min-h-screen h-fit flex flex-col justify-start ">
@@ -33,7 +41,7 @@ const PageProps = async () => {
         />
 
         <ChargilyConnectPage
-          isAlreadyActive={connection.data.isActive}
+          isAlreadyActive={connection.data?.isActive ?? false}
           config={config}
         />
       </main>

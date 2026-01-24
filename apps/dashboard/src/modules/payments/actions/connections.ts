@@ -19,15 +19,16 @@ export const getConnections = withAuth({
       });
 
       return {
-        success: false,
-        message: "there is an error",
+        success: true,
+        message: "Connections retrieved successfully",
         data: connections,
       };
     } catch (error) {
+      console.error("Error fetching payment connections:", error);
       return {
         success: false,
-        message: "there is an error",
-        data: null,
+        message: error instanceof Error ? error.message : "Failed to retrieve connections",
+        data: [],
       };
     }
   },
