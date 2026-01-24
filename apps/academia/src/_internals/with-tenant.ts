@@ -152,7 +152,7 @@ export function withTenant<TInput = void, TOutput = void>(
 
       // Execute handler with validated input and tenant data
       return await handler({
-        website: website as WebsiteWithAccount,
+        website: website,
         account: website.Account,
         accountId: website.Account.id,
         tenant,

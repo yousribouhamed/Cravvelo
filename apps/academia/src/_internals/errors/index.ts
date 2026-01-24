@@ -3,10 +3,28 @@ import { z } from "zod";
 import type { Account, Website } from "@prisma/client";
 
 /**
- * Type representing a Website with its related Account
+ * Type representing the selected Account fields used in tenant queries
+ */
+export type SelectedAccount = Pick<
+  Account,
+  | "id"
+  | "user_name"
+  | "user_bio"
+  | "avatarUrl"
+  | "verified"
+  | "firstName"
+  | "lastName"
+  | "profession"
+  | "company"
+  | "preferredLanguage"
+  | "profileVisibility"
+>;
+
+/**
+ * Type representing a Website with its related Account (with selected fields)
  */
 export type WebsiteWithAccount = Website & {
-  Account: Account;
+  Account: SelectedAccount;
 };
 
 /**
@@ -35,8 +53,8 @@ export class ValidationError extends Error {
 export interface TenantHandlerParams<TInput> {
   /** Website data with account information */
   website: WebsiteWithAccount;
-  /** Account data (for convenience) */
-  account: Account;
+  /** Account data (for convenience) - contains selected fields only */
+  account: SelectedAccount;
   /** Account ID (for convenience) */
   accountId: string;
   /** Tenant subdomain */
