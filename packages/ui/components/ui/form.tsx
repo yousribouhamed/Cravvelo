@@ -8,12 +8,17 @@ import {
   FieldValues,
   FormProvider,
   useFormContext,
+  type UseFormReturn,
 } from "react-hook-form"
 
 import { cn } from "@ui/lib/utils"
 import { Label } from "@ui/components/ui/label"
 
-const Form = FormProvider
+// Wrapper component to handle type mismatches between react-hook-form versions
+// This allows the Form component to accept form objects from different react-hook-form versions
+const Form = (props: React.ComponentProps<typeof FormProvider>) => {
+  return <FormProvider {...(props as any)} />
+}
 
 type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
@@ -30,11 +35,12 @@ const FormField = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 >({
+  control,
   ...props
 }: ControllerProps<TFieldValues, TName>) => {
   return (
     <FormFieldContext.Provider value={{ name: props.name }}>
-      <Controller {...props} />
+      <Controller {...props} control={control as any} />
     </FormFieldContext.Provider>
   )
 }
