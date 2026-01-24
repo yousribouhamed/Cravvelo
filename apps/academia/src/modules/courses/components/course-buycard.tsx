@@ -50,16 +50,20 @@ export default function CourseBuyCard({ course }: CourseCardProps) {
     })
   );
 
-  // Get the default pricing plan
-  const defaultPricingPlan = course.CoursePricingPlans?.find(
-    (plan) => plan.isDefault
-  )?.PricingPlan;
+  // Get the default pricing plan, or fallback to first available plan
+  const defaultPricingPlan =
+    course.CoursePricingPlans?.find((plan) => plan.isDefault)
+      ?.PricingPlan ||
+    course.CoursePricingPlans?.find((plan) => plan.PricingPlan != null)
+      ?.PricingPlan ||
+    null;
 
   // Determine if the course is free
   const isFree =
-    defaultPricingPlan?.pricingType === "FREE" ||
-    (defaultPricingPlan?.price !== null &&
-      //@ts-expect-error
+    !defaultPricingPlan ||
+    defaultPricingPlan.pricingType === "FREE" ||
+    (defaultPricingPlan.price !== null &&
+      defaultPricingPlan.price !== undefined &&
       Number(defaultPricingPlan.price) === 0);
 
   // Get actual ratings from comments
@@ -75,11 +79,14 @@ export default function CourseBuyCard({ course }: CourseCardProps) {
       )}
 
       {/* Price Section */}
-      {!isFree && defaultPricingPlan?.price && (
-        <p className="text-2xl font-bold text-start text-black dark:text-white">
-          {formatPrice(Number(defaultPricingPlan.price))}
-        </p>
-      )}
+      {!isFree &&
+        defaultPricingPlan &&
+        defaultPricingPlan.price !== null &&
+        defaultPricingPlan.price !== undefined && (
+          <p className="text-2xl font-bold text-start text-black dark:text-white">
+            {formatPrice(Number(defaultPricingPlan.price))}
+          </p>
+        )}
 
       <BrandButton onClick={invokePaymentIntent}>bug now</BrandButton>
 
@@ -151,16 +158,18 @@ export default function CourseBuyCard({ course }: CourseCardProps) {
         <div className="w-full flex items-center justify-start gap-x-4">
           <Infinity className="w-5 h-5 text-black dark:text-white" />
           <span className="text-black dark:text-white">
-            {defaultPricingPlan?.pricingType === "FREE"
-              ? "وصول مجاني غير محدود"
-              : defaultPricingPlan?.pricingType === "RECURRING"
-              ? `وصول لمدة ${
-                  defaultPricingPlan?.recurringDays || 30
-                } يوم (متجدد)`
-              : defaultPricingPlan?.accessDuration === "UNLIMITED"
+            {!defaultPricingPlan
               ? "وصول غير محدود إلى الأبد"
-              : defaultPricingPlan?.accessDuration === "LIMITED" &&
-                defaultPricingPlan?.accessDurationDays
+              : defaultPricingPlan.pricingType === "FREE"
+              ? "وصول مجاني غير محدود"
+              : defaultPricingPlan.pricingType === "RECURRING"
+              ? `وصول لمدة ${
+                  defaultPricingPlan.recurringDays || 30
+                } يوم (متجدد)`
+              : defaultPricingPlan.accessDuration === "UNLIMITED"
+              ? "وصول غير محدود إلى الأبد"
+              : defaultPricingPlan.accessDuration === "LIMITED" &&
+                defaultPricingPlan.accessDurationDays
               ? `وصول لمدة ${defaultPricingPlan.accessDurationDays} يوم`
               : "وصول غير محدود إلى الأبد"}
           </span>

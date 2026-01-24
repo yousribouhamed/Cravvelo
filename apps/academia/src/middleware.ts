@@ -129,7 +129,13 @@ export async function middleware(request: NextRequest) {
 
   // Redirect authenticated users away from auth routes
   if (isAuthRoute && isAuthenticated) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    // Check if there's a redirect parameter, otherwise go to home
+    const redirectParam = request.nextUrl.searchParams.get("redirect");
+    if (redirectParam) {
+      return NextResponse.redirect(new URL(redirectParam, request.url));
+    }
+    // Default to home page instead of dashboard
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   // Add user info and tenant info to headers for server components
@@ -229,7 +235,13 @@ async function handleAuthentication(
 
   // Redirect authenticated users away from auth routes
   if (isAuthRoute && isAuthenticated) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    // Check if there's a redirect parameter, otherwise go to home
+    const redirectParam = request.nextUrl.searchParams.get("redirect");
+    if (redirectParam) {
+      return NextResponse.redirect(new URL(redirectParam, request.url));
+    }
+    // Default to home page instead of dashboard
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   // Add user info to headers for server components

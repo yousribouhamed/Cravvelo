@@ -32,25 +32,30 @@ export function courseToPaymentProduct(
   const { course } = params;
 
   // Convert pricing plans to payment pricing options
+  // Filter out any plans where PricingPlan is missing
   const pricingOptions: PaymentPricingOption[] =
-    course.CoursePricingPlans?.map((cp) => ({
-      id: cp.PricingPlan.id,
-      name: cp.PricingPlan.name,
-      description: cp.PricingPlan.description || undefined,
-      pricingType: cp.PricingPlan.pricingType,
-      price: cp.PricingPlan.price,
-      compareAtPrice: cp.PricingPlan.compareAtPrice,
-      currency: cp.PricingPlan.currency,
-      accessDuration: cp.PricingPlan.accessDuration || undefined,
-      accessDurationDays: cp.PricingPlan.accessDurationDays,
-      recurringDays: cp.PricingPlan.recurringDays,
-      isDefault: cp.isDefault,
-      isActive: cp.PricingPlan.isActive,
-    })) || [];
+    course.CoursePricingPlans?.filter((cp) => cp.PricingPlan != null)
+      .map((cp) => ({
+        id: cp.PricingPlan.id,
+        name: cp.PricingPlan.name,
+        description: cp.PricingPlan.description || undefined,
+        pricingType: cp.PricingPlan.pricingType,
+        price: cp.PricingPlan.price ?? 0,
+        compareAtPrice: cp.PricingPlan.compareAtPrice ?? undefined,
+        currency: cp.PricingPlan.currency,
+        accessDuration: cp.PricingPlan.accessDuration || undefined,
+        accessDurationDays: cp.PricingPlan.accessDurationDays ?? undefined,
+        recurringDays: cp.PricingPlan.recurringDays ?? undefined,
+        isDefault: cp.isDefault,
+        isActive: cp.PricingPlan.isActive,
+      })) || [];
 
-  // Find default pricing option
-  const defaultPricing = pricingOptions.find((option) => option.isDefault);
-  const mainPrice = defaultPricing?.price || 0;
+  // Find default pricing option, or use first available option
+  const defaultPricing =
+    pricingOptions.find((option) => option.isDefault) ||
+    pricingOptions[0] ||
+    null;
+  const mainPrice = defaultPricing?.price ?? 0;
 
   // Extract description from course description (assuming it's rich text)
   let description = "Course description";
