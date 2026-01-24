@@ -119,7 +119,21 @@ export function withTenant<TInput = void, TOutput = void>(
           subdomain: `${tenant}.cravvelo.com`,
         },
         include: {
-          Account: true,
+          Account: {
+            select: {
+              id: true,
+              user_name: true,
+              user_bio: true,
+              avatarUrl: true,
+              verified: true,
+              firstName: true,
+              lastName: true,
+              profession: true,
+              company: true,
+              preferredLanguage: true,
+              profileVisibility: true,
+            },
+          },
         },
       });
 

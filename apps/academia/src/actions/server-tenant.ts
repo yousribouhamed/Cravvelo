@@ -38,13 +38,27 @@ export async function getTenantData(
   subdomain: string
 ): Promise<TenantData | null> {
   try {
-    const website = await prisma.website.findUnique({
+    const website = await prisma.website.findFirst({
       where: {
         subdomain: subdomain,
         suspended: false,
       },
       include: {
-        Account: true,
+        Account: {
+          select: {
+            id: true,
+            user_name: true,
+            user_bio: true,
+            avatarUrl: true,
+            verified: true,
+            firstName: true,
+            lastName: true,
+            profession: true,
+            company: true,
+            preferredLanguage: true,
+            profileVisibility: true,
+          },
+        },
       },
     });
 
@@ -80,13 +94,27 @@ export async function getTenantDataFromRequest(): Promise<TenantData | null> {
  */
 export async function getTenantAccount(subdomain: string) {
   try {
-    const website = await prisma.website.findUnique({
+    const website = await prisma.website.findFirst({
       where: {
         subdomain: subdomain,
         suspended: false,
       },
-      select: {
-        Account: true,
+      include: {
+        Account: {
+          select: {
+            id: true,
+            user_name: true,
+            user_bio: true,
+            avatarUrl: true,
+            verified: true,
+            firstName: true,
+            lastName: true,
+            profession: true,
+            company: true,
+            preferredLanguage: true,
+            profileVisibility: true,
+          },
+        },
       },
     });
 

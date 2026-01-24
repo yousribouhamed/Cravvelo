@@ -41,7 +41,6 @@ export function useTenantAccount() {
     bio: website?.Account.user_bio,
     avatarUrl: website?.Account.avatarUrl,
     verified: website?.Account.verified,
-    plan: website?.Account.plan,
     firstName: website?.Account.firstName,
     lastName: website?.Account.lastName,
     profession: website?.Account.profession,
