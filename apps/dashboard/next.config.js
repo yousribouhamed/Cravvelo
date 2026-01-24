@@ -9,6 +9,7 @@ module.exports = {
       "images.unsplash.com",
     ],
   },
+  serverExternalPackages: ["handlebars"],
   webpack: (config, { isServer }) => {
     // Only apply fallbacks for client-side bundles
     if (!isServer) {
