@@ -45,7 +45,10 @@ export const users = {
         if (input.avatarUrl !== undefined) updateData.avatarUrl = input.avatarUrl;
         if (input.user_name !== undefined) updateData.user_name = input.user_name;
         if (input.user_bio !== undefined) updateData.user_bio = input.user_bio;
-        if (input.phoneNumber !== undefined) updateData.phone = input.phoneNumber;
+        if (input.phoneNumber !== undefined) {
+          // Convert to string - Prisma expects String type for phone field
+          updateData.phone = String(input.phoneNumber);
+        }
         if (input.support_email !== undefined) updateData.support_email = input.support_email;
         if (input.firstName !== undefined) updateData.firstName = input.firstName;
         if (input.lastName !== undefined) updateData.lastName = input.lastName;

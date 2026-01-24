@@ -55,10 +55,10 @@ function CourseHeader({ className, ...props }: ExamplesNavProps) {
           <Link
             key={item.href}
             href={item.href}
-            className={cn(
-              "flex w-auto h-[60px] items-center justify-center border-b px-3 sm:px-6 text-center text-xs sm:text-sm transition-colors hover:text-primary whitespace-nowrap",
+              className={cn(
+              "flex w-auto h-[60px] items-center justify-center border-b dark:border-gray-700 px-3 sm:px-6 text-center text-xs sm:text-sm transition-colors hover:text-primary whitespace-nowrap text-foreground",
               pathname?.includes(item.href) || (index === 0 && pathname === "/")
-                ? "border-b-2 border-[#F0B110] text-black dark:text-white font-bold"
+                ? "border-b-2 border-[#F0B110] text-foreground font-bold"
                 : ""
             )}
           >

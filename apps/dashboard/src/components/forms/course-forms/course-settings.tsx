@@ -168,10 +168,10 @@ export function CourseSettingsForm({ course }: ComponentProps) {
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-8"
             >
-              <FormLabel className="text-xl  block font-bold text-black">
+              <FormLabel className="text-xl  block font-bold text-foreground">
                 اعدادات عامة
               </FormLabel>
-              <FormLabel className="text-md block  text-gray-600">
+              <FormLabel className="text-md block  text-muted-foreground">
                 ادر اعدادات دورتك التدريبية بما في ذالك عنوانها و رابطها و
                 الخصائص و اسماء المدرين و امكانية الوصول اليها و العديد من
                 المميزات الاخرى{" "}
@@ -448,7 +448,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                       <h1 className="text-indigo-600 text-xl font-bold text-start">
                         دورتك الرائعة عند محرك البحث
                       </h1>
-                      <p className="text-gray-600 text-md text-start">
+                      <p className="text-muted-foreground text-md text-start">
                         كل واحد منا يعيش معتمدًا وملتزمًا بمعرفتنا الفردية
                         ووعينا. كل هذا هو ما نسميه الواقع. ومع ذلك، فإن المعرفة
                         والوعي كلاهما ملتبسان. قد تكون حقيقة شخص ما وهمًا لشخص

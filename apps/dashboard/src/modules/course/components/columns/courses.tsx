@@ -36,7 +36,7 @@ export const CoursesColumns: ColumnDef<Course>[] = [
       return (
         <div className="flex flex-col gap-y-2 justify-center items-start ">
           <Link href={`/courses/${row.original.id}/chapters`}>
-            <p className="font-bold hover:text-blue-500 cursor-pointer text-foreground">
+            <p className="font-bold hover:text-blue-500 dark:hover:text-blue-400 cursor-pointer text-foreground">
               {row.original.title}
             </p>
           </Link>
@@ -129,7 +129,7 @@ export const CoursesColumns: ColumnDef<Course>[] = [
             href={`/courses/${row.original.id}/chapters`}
             className={cn(
               buttonVariants({ variant: "secondary", size: "sm" }),
-              "bg-muted border rounded-xl"
+              "bg-muted border rounded-xl text-foreground dark:border-gray-700 dark:hover:bg-muted/80 dark:bg-muted/50"
             )}
           >
             تعديل
@@ -139,10 +139,10 @@ export const CoursesColumns: ColumnDef<Course>[] = [
               <Button
                 size="sm"
                 variant="secondary"
-                className="w-10 p-0 bg-muted border rounded-xl"
+                className="w-10 p-0 bg-muted border rounded-xl text-foreground dark:border-gray-700 dark:hover:bg-muted/80 dark:bg-muted/50"
               >
                 <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
+                <MoreHorizontal className="h-4 w-4 text-foreground" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">

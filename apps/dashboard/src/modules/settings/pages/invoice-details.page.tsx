@@ -15,6 +15,8 @@ import { Separator } from "@ui/components/ui/separator";
 import { CalendarDays, CreditCard, Package, User, Globe } from "lucide-react";
 import { formatCurrency } from "../../payments/utils";
 import { useRouter } from "next/navigation";
+import { ar } from "date-fns/locale";
+import { format } from "date-fns";
 
 interface PageProps {
   invoiceId: string;
@@ -46,10 +48,10 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
       <div className="w-full h-[400px] flex items-center justify-center">
         <div className="text-center">
           <h3 className="text-lg font-medium text-gray-900">
-            Invoice not found
+            الفاتورة غير موجودة
           </h3>
           <p className="text-sm text-gray-500">
-            The requested invoice could not be loaded.
+            تعذر تحميل الفاتورة المطلوبة.
           </p>
         </div>
       </div>
@@ -80,14 +82,21 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
     }
   };
 
+  const translateStatus = (status: string): string => {
+    const statusMap: Record<string, string> = {
+      PENDING: "قيد الانتظار",
+      PAID: "مدفوع",
+      FAILED: "فشل",
+      CANCELLED: "ملغي",
+      COMPLETED: "مكتمل",
+      PROCESSING: "قيد المعالجة",
+      REFUNDED: "مسترد",
+    };
+    return statusMap[status.toUpperCase()] || status;
+  };
+
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    return format(new Date(dateString), "dd MMMM yyyy, HH:mm", { locale: ar });
   };
 
   return (
@@ -95,8 +104,8 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
       {/* Header with Pay Button */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Invoice Details</h1>
-          <p className="text-sm text-gray-500">Invoice ID: {invoice.id}</p>
+          <h1 className="text-2xl font-bold text-gray-900">تفاصيل الفاتورة</h1>
+          <p className="text-sm text-gray-500">رقم الفاتورة: {invoice.id}</p>
         </div>
         {invoice.status === "PENDING" && (
           <Button
@@ -105,7 +114,7 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
             className="w-full sm:w-auto"
           >
             <CreditCard className="w-4 h-4 mr-2" />
-            Pay Invoice -{" "}
+            دفع الفاتورة -{" "}
             {formatCurrency({
               amount: invoice.amount,
               currency: invoice.currency as "DZD",
@@ -118,9 +127,9 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
-            Invoice Summary
+            ملخص الفاتورة
             <Badge className={getStatusColor(invoice.status)}>
-              {invoice.status}
+              {translateStatus(invoice.status)}
             </Badge>
           </CardTitle>
         </CardHeader>
@@ -129,7 +138,7 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
             <div className="flex items-center space-x-3">
               <CreditCard className="w-5 h-5 text-gray-400" />
               <div>
-                <p className="text-sm font-medium text-gray-500">Amount</p>
+                <p className="text-sm font-medium text-gray-500">المبلغ</p>
                 <p className="text-lg font-semibold">
                   {formatCurrency({
                     amount: invoice.amount,
@@ -141,7 +150,7 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
             <div className="flex items-center space-x-3">
               <CalendarDays className="w-5 h-5 text-gray-400" />
               <div>
-                <p className="text-sm font-medium text-gray-500">Created</p>
+                <p className="text-sm font-medium text-gray-500">تاريخ الإنشاء</p>
                 <p className="text-sm">
                   {formatDate(invoice.createdAt.toISOString())}
                 </p>
@@ -151,7 +160,7 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
               <Package className="w-5 h-5 text-gray-400" />
               <div>
                 <p className="text-sm font-medium text-gray-500">
-                  Payment Type
+                  نوع الدفع
                 </p>
                 <p className="text-sm">{invoice.Payment.type}</p>
               </div>
@@ -160,7 +169,7 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
           {invoice.description && (
             <div>
               <p className="text-sm font-medium text-gray-500 mb-1">
-                Description
+                الوصف
               </p>
               <p className="text-sm">{invoice.description}</p>
             </div>
@@ -212,29 +221,29 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
       {/* Payment History */}
       <Card>
         <CardHeader>
-          <CardTitle>Payment History</CardTitle>
+          <CardTitle>سجل الدفع</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <p className="text-sm font-medium text-gray-500">
-                Total Attempts
+                إجمالي المحاولات
               </p>
               <p className="font-medium">{paymentHistory.totalAttempts}</p>
             </div>
             <div>
               <p className="text-sm font-medium text-gray-500">
-                Payment Method
+                طريقة الدفع
               </p>
               <p className="font-medium">
-                {paymentHistory.method || "Not specified"}
+                {paymentHistory.method || "غير محدد"}
               </p>
             </div>
             {paymentHistory.refundAmount > 0 && (
               <>
                 <div>
                   <p className="text-sm font-medium text-gray-500">
-                    Refund Amount
+                    مبلغ الاسترداد
                   </p>
                   <p className="font-medium">
                     {formatCurrency({
@@ -245,10 +254,10 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-500">
-                    Refund Reason
+                    سبب الاسترداد
                   </p>
                   <p className="font-medium">
-                    {paymentHistory.refundReason || "N/A"}
+                    {paymentHistory.refundReason || "غير متاح"}
                   </p>
                 </div>
               </>
@@ -261,25 +270,25 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
       {invoice.Payment.AppInstall && invoice.Payment.AppInstall.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle>App Installation</CardTitle>
+            <CardTitle>تثبيت التطبيق</CardTitle>
           </CardHeader>
           <CardContent>
             {invoice.Payment.AppInstall.map((install) => (
               <div key={install.id} className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="font-medium">Status</span>
+                  <span className="font-medium">الحالة</span>
                   <Badge className={getStatusColor(install.status)}>
-                    {install.status}
+                    {translateStatus(install.status)}
                   </Badge>
                 </div>
                 <Separator />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="font-medium">Installed At:</span>{" "}
+                    <span className="font-medium">تم التثبيت في:</span>{" "}
                     {formatDate(install.installedAt.toISOString())}
                   </div>
                   <div>
-                    <span className="font-medium">Subscription Amount:</span>{" "}
+                    <span className="font-medium">مبلغ الاشتراك:</span>{" "}
                     {formatCurrency({
                       amount: invoice.amount,
                       currency: invoice.currency as "DZD",

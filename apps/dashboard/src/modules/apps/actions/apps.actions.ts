@@ -65,6 +65,19 @@ export const installApp = withAuth({
     }
 
     return await db.$transaction(async (tx) => {
+      // 0. Check if app is already installed for this account
+      const existingInstall = await tx.appInstall.findFirst({
+        where: {
+          appId: input.appId,
+          accountId: account.id,
+          status: "ACTIVE",
+        },
+      });
+
+      if (existingInstall) {
+        throw new Error("هذا التطبيق مثبت بالفعل على حسابك");
+      }
+
       // 1. Fetch the app & its pricing plans
       const app = await tx.app.findUnique({
         where: { id: input.appId },
@@ -144,8 +157,92 @@ export const installApp = withAuth({
   },
 });
 
-export const unistallApps = withAuth({
-  handler: async () => {},
+export const uninstallApp = withAuth({
+  input: z.object({
+    appId: z.string(),
+  }),
+  handler: async ({ db, input, account }) => {
+    if (!account) {
+      throw new Error("Only accounts can uninstall apps.");
+    }
+
+    try {
+      // Find the active installation for this app and account
+      const appInstall = await db.appInstall.findFirst({
+        where: {
+          appId: input.appId,
+          accountId: account.id,
+          status: "ACTIVE",
+        },
+      });
+
+      if (!appInstall) {
+        throw new Error("App installation not found or already uninstalled");
+      }
+
+      // Update the installation status to CANCELLED and set uninstalledAt
+      const updatedInstall = await db.appInstall.update({
+        where: {
+          id: appInstall.id,
+        },
+        data: {
+          status: "CANCELLED",
+          uninstalledAt: new Date(),
+        },
+      });
+
+      return {
+        success: true,
+        message: "App uninstalled successfully",
+        data: updatedInstall,
+      };
+    } catch (error) {
+      console.error("Error uninstalling app:", error);
+      throw error;
+    }
+  },
+});
+
+export const checkAppInstalled = withAuth({
+  input: z.object({
+    appId: z.string(),
+  }),
+  handler: async ({ db, input, account }) => {
+    if (!account) {
+      return {
+        success: false,
+        message: "Only accounts can check app installation status",
+        data: false,
+      };
+    }
+
+    try {
+      const appInstall = await db.appInstall.findFirst({
+        where: {
+          appId: input.appId,
+          accountId: account.id,
+          status: "ACTIVE",
+        },
+        include: {
+          App: true,
+        },
+      });
+
+      return {
+        success: true,
+        message: "App installation status checked",
+        data: !!appInstall,
+        installation: appInstall || null,
+      };
+    } catch (error) {
+      console.error("Error checking app installation:", error);
+      return {
+        success: false,
+        message: "An error occurred while checking app installation",
+        data: false,
+      };
+    }
+  },
 });
 
 export const getInstalledApps = withAuth({
@@ -163,6 +260,7 @@ export const getInstalledApps = withAuth({
       const installedApps = await db.appInstall.findMany({
         where: {
           accountId: account.id, // Fetch apps installed by this account
+          status: "ACTIVE", // Only show active installations
         },
         include: {
           App: true, // Include app details (name, icon, etc.)

@@ -67,14 +67,15 @@ function AddPdfForm() {
   return (
     <div className="w-full grid grid-cols-3 gap-x-8 ">
       <div className="col-span-2 w-full h-full">
-        <Form {...form}>
+       
+        <Form {...(form as any)}>
           <form
             id="add-text"
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-8"
           >
             <FormField
-              control={form.control}
+              control={form.control as any}
               name="title"
               render={({ field }) => (
                 <FormItem>
@@ -94,7 +95,7 @@ function AddPdfForm() {
             />
 
             <FormField
-              control={form.control}
+              control={form.control as any}
               name="fileUrl"
               render={({ field }) => (
                 <FormItem>

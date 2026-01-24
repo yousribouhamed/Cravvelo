@@ -160,7 +160,8 @@ function AddPricingForm({ course, pricingPlans }: AddPricingFormProps) {
       {/* Form Section */}
       <Card>
         <CardContent className="py-4 space-y-6">
-          <Form {...form}>
+        
+          <Form {...(form as any)}>
             <form
               id="add-pricing"
               onSubmit={form.handleSubmit(onSubmit)}
@@ -168,7 +169,7 @@ function AddPricingForm({ course, pricingPlans }: AddPricingFormProps) {
             >
               {/* Pricing Type Tabs */}
               <FormField
-                control={form.control}
+                control={form.control as any}
                 name="pricingType"
                 render={({ field }) => (
                   <FormItem>
@@ -197,7 +198,7 @@ function AddPricingForm({ course, pricingPlans }: AddPricingFormProps) {
               {pricingType !== "FREE" && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <FormField
-                    control={form.control}
+                    control={form.control as any}
                     name="price"
                     render={({ field }) => (
                       <FormItem>
@@ -210,7 +211,7 @@ function AddPricingForm({ course, pricingPlans }: AddPricingFormProps) {
                     )}
                   />
                   <FormField
-                    control={form.control}
+                    control={form.control as any}
                     name="compareAtPrice"
                     render={({ field }) => (
                       <FormItem>
@@ -229,7 +230,7 @@ function AddPricingForm({ course, pricingPlans }: AddPricingFormProps) {
               {pricingType === "ONE_TIME" && (
                 <div className="space-y-4">
                   <FormField
-                    control={form.control}
+                    control={form.control as any}
                     name="accessDuration"
                     render={({ field }) => (
                       <FormItem>
@@ -256,7 +257,7 @@ function AddPricingForm({ course, pricingPlans }: AddPricingFormProps) {
                   />
                   {accessDuration === "LIMITED" && (
                     <FormField
-                      control={form.control}
+                      control={form.control as any}
                       name="accessDurationDays"
                       render={({ field }) => (
                         <FormItem>
@@ -276,7 +277,7 @@ function AddPricingForm({ course, pricingPlans }: AddPricingFormProps) {
               {pricingType === "RECURRING" && (
                 <div className="space-y-4">
                   <FormField
-                    control={form.control}
+                    control={form.control as any}
                     name="recurringDays"
                     render={({ field }) => (
                       <FormItem>
@@ -309,7 +310,7 @@ function AddPricingForm({ course, pricingPlans }: AddPricingFormProps) {
                   {/* Custom days input */}
                   {recurringDays === "custom" && (
                     <FormField
-                      control={form.control}
+                      control={form.control as any}
                       name="customRecurringDays"
                       render={({ field }) => (
                         <FormItem>

@@ -47,10 +47,23 @@ const getInitials = (name: string) => {
     .slice(0, 2);
 };
 
+// Translate status to Arabic
+const translateStatus = (status: string): string => {
+  const statusMap: Record<string, string> = {
+    PENDING: "قيد الانتظار",
+    PROCESSING: "قيد المعالجة",
+    COMPLETED: "مكتمل",
+    FAILED: "فشل",
+    CANCELLED: "ملغي",
+    REFUNDED: "مسترد",
+  };
+  return statusMap[status.toUpperCase()] || status;
+};
+
 export const createInvoiceColumns = (): ColumnDef<InvoiceWithDetails>[] => [
   {
     accessorKey: "id",
-    header: "Invoice ID",
+    header: "رقم الفاتورة",
     cell: ({ row }) => {
       const id = row.getValue("id") as string;
       return (
@@ -68,7 +81,7 @@ export const createInvoiceColumns = (): ColumnDef<InvoiceWithDetails>[] => [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="h-auto p-0 hover:bg-transparent"
         >
-          Amount
+          المبلغ
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -98,17 +111,17 @@ export const createInvoiceColumns = (): ColumnDef<InvoiceWithDetails>[] => [
   },
   {
     accessorKey: "Payment",
-    header: "Payment Info",
+    header: "معلومات الدفع",
     cell: ({ row }) => {
       const payment = row.original.Payment;
       const appInstall = payment?.AppInstall?.[0];
 
-      let itemInfo = "Unknown Item";
-      let itemType = "Unknown";
+      let itemInfo = "عنصر غير معروف";
+      let itemType = "غير معروف";
 
       if (appInstall) {
         itemInfo = appInstall.App.name;
-        itemType = "App Subscription";
+        itemType = "اشتراك تطبيق";
       }
 
       return (
@@ -122,7 +135,7 @@ export const createInvoiceColumns = (): ColumnDef<InvoiceWithDetails>[] => [
           <span className="text-xs text-muted-foreground">{itemType}</span>
           {payment?.method && (
             <span className="text-xs text-muted-foreground">
-              via {payment.method.toLowerCase().replace("_", " ")}
+              عبر {payment.method.toLowerCase().replace("_", " ")}
             </span>
           )}
         </div>
@@ -159,13 +172,13 @@ export const createInvoiceColumns = (): ColumnDef<InvoiceWithDetails>[] => [
   },
   {
     accessorKey: "dueDate",
-    header: "Due Date",
+    header: "تاريخ الاستحقاق",
     cell: ({ row }) => {
       const dueDate = row.getValue("dueDate") as Date | null;
       const paidAt = row.original.paidAt;
 
       if (!dueDate) {
-        return <span className="text-muted-foreground">No due date</span>;
+        return <span className="text-muted-foreground">لا يوجد تاريخ استحقاق</span>;
       }
 
       const isOverdue = !paidAt && new Date(dueDate) < new Date();
@@ -177,7 +190,7 @@ export const createInvoiceColumns = (): ColumnDef<InvoiceWithDetails>[] => [
           </span>
           {isOverdue && (
             <Badge variant="destructive" className="text-xs w-fit">
-              Overdue
+              متأخر
             </Badge>
           )}
         </div>
@@ -227,18 +240,18 @@ export const invoiceColumns = createInvoiceColumns();
 
 // Helper function to get status options for filtering
 export const getStatusOptions = () => [
-  { label: "Pending", value: "PENDING" },
-  { label: "Processing", value: "PROCESSING" },
-  { label: "Completed", value: "COMPLETED" },
-  { label: "Failed", value: "FAILED" },
-  { label: "Cancelled", value: "CANCELLED" },
-  { label: "Refunded", value: "REFUNDED" },
+  { label: "قيد الانتظار", value: "PENDING" },
+  { label: "قيد المعالجة", value: "PROCESSING" },
+  { label: "مكتمل", value: "COMPLETED" },
+  { label: "فشل", value: "FAILED" },
+  { label: "ملغي", value: "CANCELLED" },
+  { label: "مسترد", value: "REFUNDED" },
 ];
 
 // Helper function to get sortable columns
 export const getSortableColumns = () => [
-  { label: "Created Date", value: "createdAt" },
-  { label: "Amount", value: "amount" },
-  { label: "Due Date", value: "dueDate" },
-  { label: "Paid Date", value: "paidAt" },
+  { label: "تاريخ الإنشاء", value: "createdAt" },
+  { label: "المبلغ", value: "amount" },
+  { label: "تاريخ الاستحقاق", value: "dueDate" },
+  { label: "تاريخ الدفع", value: "paidAt" },
 ];

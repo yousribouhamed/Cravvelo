@@ -8,6 +8,7 @@ import {
   User,
   Palette,
   Receipt,
+  Wallet,
 } from "lucide-react";
 
 export const SIDE_BAR_ITEMS = [
@@ -27,6 +28,11 @@ export const SIDE_BAR_ITEMS = [
         title: "المدفوعات",
         icon: Receipt, // Better than Home - represents payment records
         slug: "/payments",
+      },
+      {
+        title: "طرق الدفع",
+        icon: Wallet, // Perfect for payment methods
+        slug: "/payments/payments-methods",
       },
       // {
       //   title: "صانع القسائم",

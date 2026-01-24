@@ -27,11 +27,11 @@ export default async function CheckoutPage({
 
   if (!checkout.success || !checkout.data) {
     return (
-      <div className="w-full h-screen flex items-center justify-center bg-backgound">
+      <div className="w-full h-screen flex items-center justify-center bg-background">
         <MaxWidthWrapper>
           <div className="text-center" dir="rtl">
-            <h1 className="text-lg font-bold text-red-400">الدفع غير موجود</h1>
-            <p className="text-zinc-400 mt-2">
+            <h1 className="text-lg font-bold text-red-500 dark:text-red-400">الدفع غير موجود</h1>
+            <p className="text-muted-foreground mt-2">
               الدفع الذي تبحث عنه غير موجود أو ليس لديك الصلاحية لعرضه.
             </p>
           </div>
@@ -65,15 +65,15 @@ export default async function CheckoutPage({
                   alt={appInstallation.app.name}
                   width={64}
                   height={64}
-                  className="rounded-lg border border-zinc-600"
+                  className="rounded-lg border"
                 />
               </div>
             )}
             <div className="flex-1">
-              <h1 className="text-lg font-bold text-white">
+              <h1 className="text-lg font-bold text-foreground">
                 {appInstallation.app.name}
               </h1>
-              <p className="text-zinc-400 mt-1">
+              <p className="text-muted-foreground mt-1">
                 {appInstallation.app.shortDesc}
               </p>
               <Badge variant="secondary">اشتراك تطبيق</Badge>
@@ -81,16 +81,16 @@ export default async function CheckoutPage({
           </div>
 
           {/* App Plan Details */}
-          <div className="bg-card rounded-lg p-4 space-y-3">
+          <div className="bg-card rounded-lg p-4 space-y-3 border">
             <div className="flex justify-between items-center">
-              <span className="font-medium text-white">الخطة</span>
-              <span className="text-zinc-300">{appInstallation.planName}</span>
+              <span className="font-medium text-foreground">الخطة</span>
+              <span className="text-muted-foreground">{appInstallation.planName}</span>
             </div>
 
             {appInstallation.trialDays && (
               <div className="flex justify-between items-center">
-                <span className="font-medium text-white">فترة التجربة</span>
-                <span className="text-zinc-300">
+                <span className="font-medium text-foreground">فترة التجربة</span>
+                <span className="text-muted-foreground">
                   {appInstallation.trialDays} يوم
                 </span>
               </div>
@@ -98,8 +98,8 @@ export default async function CheckoutPage({
 
             {appInstallation.isRecurring && (
               <div className="flex justify-between items-center">
-                <span className="font-medium text-white">دورة الفوترة</span>
-                <span className="text-zinc-300">
+                <span className="font-medium text-foreground">دورة الفوترة</span>
+                <span className="text-muted-foreground">
                   كل {appInstallation.recurringDays} يوم
                 </span>
               </div>
@@ -127,12 +127,12 @@ export default async function CheckoutPage({
               </div>
             )}
             <div className="flex-1">
-              <h1 className="text-lg font-bold text-white">
+              <h1 className="text-lg font-bold text-foreground">
                 {item.details.title}
               </h1>
               <Badge
                 variant="secondary"
-                className="mt-2 bg-zinc-700 text-zinc-300"
+                className="mt-2"
               >
                 دورة أونلاين
               </Badge>
@@ -142,13 +142,13 @@ export default async function CheckoutPage({
           {/* Course Features */}
           <div className="grid grid-cols-2 gap-4">
             {item.details.length > 0 && (
-              <div className="flex items-center space-x-2 space-x-reverse text-zinc-400">
+              <div className="flex items-center space-x-2 space-x-reverse text-muted-foreground">
                 <Clock className="h-4 w-4" />
                 <span className="text-sm">{item.details.length} ساعة</span>
               </div>
             )}
 
-            <div className="flex items-center space-x-2 space-x-reverse text-zinc-400">
+            <div className="flex items-center space-x-2 space-x-reverse text-muted-foreground">
               <BookOpen className="h-4 w-4" />
               <span className="text-sm">
                 {item.details.level || "جميع المستويات"}
@@ -156,7 +156,7 @@ export default async function CheckoutPage({
             </div>
 
             {item.details.certificate && (
-              <div className="flex items-center space-x-2 space-x-reverse text-zinc-400">
+              <div className="flex items-center space-x-2 space-x-reverse text-muted-foreground">
                 <Award className="h-4 w-4" />
                 <span className="text-sm">شهادة متضمنة</span>
               </div>
@@ -198,12 +198,12 @@ export default async function CheckoutPage({
               </div>
             )}
             <div className="flex-1">
-              <h1 className="text-lg font-bold text-white">
+              <h1 className="text-lg font-bold text-foreground">
                 {item.details.title}
               </h1>
               <Badge
                 variant="secondary"
-                className="mt-2 bg-zinc-700 text-zinc-300"
+                className="mt-2"
               >
                 منتج رقمي
               </Badge>
@@ -211,7 +211,7 @@ export default async function CheckoutPage({
           </div>
 
           {/* Product Features */}
-          <div className="flex items-center space-x-2 space-x-reverse text-zinc-400">
+          <div className="flex items-center space-x-2 space-x-reverse text-muted-foreground">
             <Download className="h-4 w-4" />
             <span className="text-sm">تحميل فوري بعد الشراء</span>
           </div>
@@ -237,10 +237,10 @@ export default async function CheckoutPage({
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-lg font-bold text-white">
+          <h1 className="text-lg font-bold text-foreground">
             {payment.description || "دفع"}
           </h1>
-          <Badge variant="secondary" className="mt-2 bg-zinc-700 text-zinc-300">
+          <Badge variant="secondary" className="mt-2">
             {payment.type
               .replace("_", " ")
               .toLowerCase()
@@ -252,11 +252,11 @@ export default async function CheckoutPage({
   };
 
   return (
-    <div className="h-screen bg-backgound" dir="rtl">
+    <div className="h-screen bg-background" dir="rtl">
       <div className="w-full h-screen">
-        <div className="grid bg-black h-screen grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid bg-background h-screen grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Side - Item Summary Section */}
-          <div className="  max-w-screen-2xl mr-auto border-left p-6 pt-8">
+          <div className="max-w-screen-2xl mr-auto border-r p-6 pt-8">
             {/* Customer Info Header */}
             {customer && (
               <div className="flex items-center space-x-3 space-x-reverse mb-6">
@@ -274,10 +274,10 @@ export default async function CheckoutPage({
                   </div>
                 )}
                 <div>
-                  <h2 className="text-xl font-semibold text-white">
+                  <h2 className="text-xl font-semibold text-foreground">
                     {customer.full_name}
                   </h2>
-                  <p className="text-zinc-400 text-sm">{customer.email}</p>
+                  <p className="text-muted-foreground text-sm">{customer.email}</p>
                 </div>
               </div>
             )}
@@ -287,8 +287,8 @@ export default async function CheckoutPage({
             {/* Description */}
             {payment.description && (
               <div className="space-y-4">
-                <h3 className="font-semibold text-white">الوصف</h3>
-                <p className="text-zinc-300 text-sm">
+                <h3 className="font-semibold text-foreground">الوصف</h3>
+                <p className="text-muted-foreground text-sm">
                   {payment.description || "اشتري خدمتي هنا"}
                 </p>
               </div>
@@ -297,19 +297,19 @@ export default async function CheckoutPage({
             {/* Pricing Plan Details */}
             {pricingPlan && (
               <div className="space-y-4">
-                <h3 className="font-semibold text-white">
+                <h3 className="font-semibold text-foreground">
                   خطة الأسعار: {pricingPlan.name}
                 </h3>
 
                 {pricingPlan.description && (
-                  <p className="text-zinc-400 text-sm">
+                  <p className="text-muted-foreground text-sm">
                     {pricingPlan.description}
                   </p>
                 )}
 
-                <div className="bg-card rounded-lg p-4 space-y-2">
+                <div className="bg-card rounded-lg p-4 space-y-2 border">
                   <div className="flex justify-between items-center">
-                    <span className="text-zinc-300">النوع</span>
+                    <span className="text-muted-foreground">النوع</span>
                     <Badge variant="outline">
                       {pricingPlan.pricingType.replace("_", " ")}
                     </Badge>
@@ -317,8 +317,8 @@ export default async function CheckoutPage({
 
                   {pricingPlan.accessDuration && (
                     <div className="flex justify-between items-center">
-                      <span className="text-zinc-300">الوصول</span>
-                      <span className="text-white">
+                      <span className="text-muted-foreground">الوصول</span>
+                      <span className="text-foreground">
                         {pricingPlan.accessDuration === "UNLIMITED"
                           ? "مدى الحياة"
                           : `${pricingPlan.accessDurationDays} يوم`}
@@ -328,8 +328,8 @@ export default async function CheckoutPage({
 
                   {pricingPlan.trialDays && (
                     <div className="flex justify-between items-center">
-                      <span className="text-zinc-300">التجربة</span>
-                      <span className="text-white">
+                      <span className="text-muted-foreground">التجربة</span>
+                      <span className="text-foreground">
                         {pricingPlan.trialDays} يوم
                       </span>
                     </div>
@@ -337,8 +337,8 @@ export default async function CheckoutPage({
 
                   {pricingPlan.recurringDays && (
                     <div className="flex justify-between items-center">
-                      <span className="text-zinc-300">الفوترة</span>
-                      <span className="text-white">
+                      <span className="text-muted-foreground">الفوترة</span>
+                      <span className="text-foreground">
                         كل {pricingPlan.recurringDays} يوم
                       </span>
                     </div>
@@ -351,12 +351,12 @@ export default async function CheckoutPage({
 
             {/* Order Summary */}
             <div className="space-y-4">
-              <h3 className="font-semibold text-white">ملخص الطلب</h3>
+              <h3 className="font-semibold text-foreground">ملخص الطلب</h3>
 
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between items-center">
-                  <span className="text-zinc-400">المجموع الفرعي</span>
-                  <span className="text-white">
+                  <span className="text-muted-foreground">المجموع الفرعي</span>
+                  <span className="text-foreground">
                     {formatCurrency({
                       amount: payment.amount,
                       currency: payment.currency as "DZD",
@@ -365,8 +365,8 @@ export default async function CheckoutPage({
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-zinc-400">رسوم التجديد</span>
-                  <span className="text-white">
+                  <span className="text-muted-foreground">رسوم التجديد</span>
+                  <span className="text-foreground">
                     {formatCurrency({
                       amount: payment.amount,
                       currency: payment.currency as "DZD",
@@ -376,14 +376,14 @@ export default async function CheckoutPage({
                 </div>
 
                 {sale?.discountAmount && sale.discountAmount > 0 && (
-                  <div className="flex justify-between items-center text-green-400">
+                  <div className="flex justify-between items-center text-green-600 dark:text-green-400">
                     <div className="flex items-center space-x-1 space-x-reverse">
                       <Tag className="h-4 w-4" />
                       <span>خصم</span>
                       {sale.coupon && (
                         <Badge
                           variant="outline"
-                          className="text-xs border-green-400 text-green-400"
+                          className="text-xs border-green-600 dark:border-green-400 text-green-600 dark:text-green-400"
                         >
                           {sale.coupon.code}
                         </Badge>
@@ -398,8 +398,8 @@ export default async function CheckoutPage({
                 <Separator />
 
                 <div className="flex justify-between items-center text-sm font-semibold">
-                  <span className="text-white">المجموع المستحق اليوم</span>
-                  <span className="text-white">
+                  <span className="text-foreground">المجموع المستحق اليوم</span>
+                  <span className="text-foreground">
                     {formatCurrency({
                       amount: payment.amount,
                       currency: payment.currency as "DZD",
@@ -411,7 +411,7 @@ export default async function CheckoutPage({
           </div>
 
           {/* Right Side - Payment Form Section */}
-          <div className="bg-card   p-6 pt-8">
+          <div className="bg-card p-6 pt-8 border-l">
             <CheckoutForm paymentId={payment.id} />
           </div>
         </div>

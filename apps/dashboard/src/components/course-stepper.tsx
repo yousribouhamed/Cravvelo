@@ -50,7 +50,7 @@ function CourseStepper({ className, ...props }: ExamplesNavProps) {
       <div
         className={cn(
           "mb-4 w-fit flex items-center ",
-          ` w-full  bg-white  border flex items-center justify-center   rounded-lg  h-full p-4 gap-x-4`
+          ` w-full  bg-card dark:bg-gray-800  border dark:border-gray-700 flex items-center justify-center   rounded-lg  h-full p-4 gap-x-4`
         )}
       >
         {links.map((item, index) => {
@@ -67,7 +67,7 @@ function CourseStepper({ className, ...props }: ExamplesNavProps) {
               <Link
                 href={item.href}
                 prefetch={false}
-                className="text-black font-semibold text-sm"
+                className="text-foreground font-semibold text-sm"
               >
                 {item.name}
               </Link>

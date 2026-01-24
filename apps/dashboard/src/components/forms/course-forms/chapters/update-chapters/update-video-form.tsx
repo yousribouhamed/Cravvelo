@@ -185,8 +185,8 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
                     </FormLabel>
                     <FormControl>
                       {/* Placeholder for content editor */}
-                      <div className="min-h-[100px] p-4 border rounded-md bg-gray-50">
-                        <p className="text-sm text-gray-500">
+                      <div className="min-h-[100px] p-4 border dark:border-gray-700 rounded-md bg-muted dark:bg-gray-800">
+                        <p className="text-sm text-muted-foreground dark:text-gray-400">
                           محرر المحتوى سيتم إضافته هنا
                         </p>
                         {/* <PlateEditor

@@ -1,12 +1,38 @@
+"use client";
+
 import { AppType } from "../types";
-import { Card, CardContent, CardFooter } from "@ui/components/ui/card";
+import { Card, CardContent } from "@ui/components/ui/card";
 import InstallAppModal from "./install-app-modal";
+import UninstallAppModal from "./uninstall-app-modal";
+import { useQuery } from "@tanstack/react-query";
+import { getInstalledApps } from "../actions/apps.actions";
+import { Button } from "@ui/components/ui/button";
+import Link from "next/link";
 
 interface Props {
   app: AppType;
 }
 
 export default function AppCard({ app }: Props) {
+  // Fetch installed apps to check if this app is installed
+  const { data: installedApps } = useQuery({
+    queryKey: ["installedApps"],
+    queryFn: async () => {
+      const res = await getInstalledApps();
+      return res.data || [];
+    },
+  });
+
+  // Check if current app is installed (status ACTIVE)
+  const isInstalled = installedApps?.some(
+    (install: any) => install.appId === app.id && install.status === "ACTIVE"
+  );
+
+  // Get the installation to access app slug if needed
+  const installation = installedApps?.find(
+    (install: any) => install.appId === app.id && install.status === "ACTIVE"
+  );
+
   return (
     <Card
       className="w-full h-[200px] rounded-xl shadow border flex flex-col  p-4 gap-3"
@@ -26,7 +52,18 @@ export default function AppCard({ app }: Props) {
             </span>
           </div>
         </div>
-        <InstallAppModal appId={app.id} />
+        <div className="flex gap-2">
+          {isInstalled ? (
+            <>
+              <Link href={app.slug}>
+                <Button size="sm">الذهاب للتطبيق</Button>
+              </Link>
+              <UninstallAppModal appId={app.id} />
+            </>
+          ) : (
+            <InstallAppModal appId={app.id} />
+          )}
+        </div>
       </div>
 
       <CardContent className="p-0 text-lg text-gray-700 dark:text-gray-50">

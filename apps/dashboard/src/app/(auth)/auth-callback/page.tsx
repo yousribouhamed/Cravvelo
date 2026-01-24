@@ -4,8 +4,7 @@ import { useRouter } from "next/navigation";
 import { trpc } from "../../_trpc/client";
 import type { FC } from "react";
 import { setCookie } from "@/src/lib/utils";
-import { LoadingScreen } from "@/src/components/loading-screen";
-import { CravveloSpinner } from "@/src/components/cravvelo-spinner";
+import { Loader } from "@/src/components/loader-icon";
 
 const AuthCallBack: FC = ({}) => {
   const router = useRouter();
@@ -30,8 +29,11 @@ const AuthCallBack: FC = ({}) => {
     retryDelay: 500,
   });
   return (
-    <div className="w-full min-h-[400px] h-full flex items-center justify-center">
-      <CravveloSpinner />
+    <div className="w-full min-h-screen h-full flex flex-col items-center justify-center gap-y-4">
+      <Loader size={48} />
+      <p className="text-gray-600 dark:text-gray-400 text-sm">
+        جاري إعداد حسابك...
+      </p>
     </div>
   );
 };

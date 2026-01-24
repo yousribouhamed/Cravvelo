@@ -93,8 +93,8 @@ export const AddToChapter = ({
                 className={cn(
                   "group relative flex flex-col items-center justify-center p-4 min-w-[140px] h-[120px] rounded-xl border-2 transition-all duration-200 hover:shadow-md",
                   item.disabled
-                    ? "cursor-not-allowed bg-card border-gray-200 dark:border-gray-900"
-                    : `cursor-pointer bg-card border-gray-200 dark:border-gray-500 hover:border-primary  ${item.bgColor}/20 hover:${item.bgColor}/30`
+                    ? "cursor-not-allowed bg-card border-gray-200 dark:border-gray-800"
+                    : `cursor-pointer bg-card border-gray-200 dark:border-gray-700 hover:border-primary  ${item.bgColor}/20 hover:${item.bgColor}/30`
                 )}
                 href={item.disabled ? "#" : item.url}
                 onClick={item.disabled ? (e) => e.preventDefault() : undefined}
@@ -103,7 +103,7 @@ export const AddToChapter = ({
                 <div
                   className={cn(
                     "w-12 h-12 rounded-full flex items-center justify-center mb-3 transition-colors",
-                    item.disabled ? "bg-gray-200" : `${item.bgColor} `
+                    item.disabled ? "bg-gray-200 dark:bg-gray-800" : `${item.bgColor} `
                   )}
                 >
                   <IconComponent
@@ -120,7 +120,7 @@ export const AddToChapter = ({
                   <h4
                     className={cn(
                       "font-semibold text-sm mb-1",
-                      item.disabled ? "text-gray-400" : "text-gray-900"
+                      item.disabled ? "text-gray-400" : "text-foreground"
                     )}
                   >
                     {item.name}
@@ -146,8 +146,8 @@ export const AddToChapter = ({
       </div>
 
       {/* Footer Note */}
-      <div className="mt-4 pt-4 border-t border-gray-100">
-        <p className="text-xs text-gray-400 text-center">
+      <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+        <p className="text-xs text-gray-400 dark:text-gray-500 text-center">
           يمكنك إضافة عدة أنواع من المحتوى لإثراء التجربة التعليمية
         </p>
       </div>

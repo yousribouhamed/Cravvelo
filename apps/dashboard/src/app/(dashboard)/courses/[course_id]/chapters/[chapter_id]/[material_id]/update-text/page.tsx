@@ -8,6 +8,7 @@ import {
   getMyUserAction,
 } from "@/src/actions/user.actions";
 import UpdateTextModuleForm from "@/src/components/forms/course-forms/chapters/update-chapters/update-text-form";
+import { notFound } from "next/navigation";
 
 interface PageProps {
   params: Promise<{
@@ -19,10 +20,10 @@ interface PageProps {
 
 const getMaterial = async ({
   chapter_id,
-  fileUrl,
+  material_id,
 }: {
   chapter_id: string;
-  fileUrl: string;
+  material_id: string;
 }): Promise<Module> => {
   try {
     const chapter = await prisma.chapter.findFirst({
@@ -31,41 +32,58 @@ const getMaterial = async ({
       },
     });
 
+    if (!chapter) {
+      throw new Error("Chapter not found");
+    }
+
     const data = JSON.parse(chapter.modules as string) as Module[];
 
-    const material = data.find((item) => item.fileUrl === fileUrl);
+    const material = data.find((item) => item.id === material_id);
+
+    if (!material) {
+      throw new Error("Material not found");
+    }
 
     return material;
   } catch (err) {
     console.error(err);
+    throw err;
   }
 };
 
 export default async function Page({ params }: PageProps) {
   const { chapter_id, material_id } = await params;
 
-  const [user, material] = await Promise.all([
-    getMyUserAction(),
-    getMaterial({ chapter_id, fileUrl: material_id }),
-  ]);
+  try {
+    const [user, material] = await Promise.all([
+      getMyUserAction(),
+      getMaterial({ chapter_id, material_id }),
+    ]);
 
-  const notifications = await getAllNotifications({
-    accountId: user.accountId,
-  });
+    if (!material) {
+      notFound();
+    }
 
-  return (
-    <MaxWidthWrapper>
-      <main className="w-full flex flex-col  justify-start">
-        <Header
-          notifications={notifications}
-          goBack
-          user={user}
-          title="تعديل النص"
-        />
-        <div className="w-full pt-8 min-h-[100px] ">
-          <UpdateTextModuleForm />
-        </div>
-      </main>
-    </MaxWidthWrapper>
-  );
+    const notifications = await getAllNotifications({
+      accountId: user.accountId,
+    });
+
+    return (
+      <MaxWidthWrapper>
+        <main className="w-full flex flex-col  justify-start">
+          <Header
+            notifications={notifications}
+            goBack
+            user={user}
+            title="تعديل النص"
+          />
+          <div className="w-full pt-8 min-h-[100px] ">
+            <UpdateTextModuleForm />
+          </div>
+        </main>
+      </MaxWidthWrapper>
+    );
+  } catch (error) {
+    notFound();
+  }
 }

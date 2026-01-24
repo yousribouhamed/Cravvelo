@@ -299,15 +299,15 @@ const ModulesList: FC<ModulesListProps> = ({
                     {(provided, snapshot) => (
                       <div
                         className={cn(
-                          "group flex items-center gap-x-3 bg-white border border-gray-200 h-fit min-h-[50px] justify-between rounded-lg my-2 p-3 text-sm transition-all duration-200 hover:shadow-sm",
+                          "group flex items-center gap-x-3 bg-card dark:bg-gray-800 border border-border dark:border-gray-700 h-fit min-h-[50px] justify-between rounded-lg my-2 p-3 text-sm transition-all duration-200 hover:shadow-sm",
                           snapshot.isDragging &&
-                            "shadow-lg scale-105 rotate-1 z-50 bg-white",
+                            "shadow-lg scale-105 rotate-1 z-50 bg-card dark:bg-gray-800",
                           dragStartIndex === index &&
                             !snapshot.isDragging &&
                             "scale-95",
                           !module.isPublished &&
-                            "bg-gray-50 border-gray-300 opacity-75",
-                          isHovered && "border-blue-300 bg-blue-50"
+                            "bg-muted dark:bg-gray-700 border-muted dark:border-gray-600 opacity-75",
+                          isHovered && "border-blue-300 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/20"
                         )}
                         ref={provided.innerRef}
                         {...provided.draggableProps}
@@ -320,7 +320,7 @@ const ModulesList: FC<ModulesListProps> = ({
                           <div
                             className={cn(
                               "flex-shrink-0 p-1 rounded cursor-grab active:cursor-grabbing transition-colors",
-                              "hover:bg-gray-100 group-hover:bg-gray-100",
+                              "hover:bg-gray-100 dark:hover:bg-gray-700 group-hover:bg-gray-100 dark:group-hover:bg-gray-700",
                               snapshot.isDragging && "cursor-grabbing",
                               isDragDisabled && "cursor-not-allowed opacity-50"
                             )}
@@ -358,8 +358,8 @@ const ModulesList: FC<ModulesListProps> = ({
                               <Tooltip>
                                 <TooltipTrigger asChild>
                                   <Link
-                                    href={`/courses/${courseId}/chapters/${chapterID}/${module.fileUrl}/update-video`}
-                                    className="text-gray-900 hover:text-blue-600 transition-colors duration-200 font-medium truncate flex-1"
+                                    href={`/courses/${courseId}/chapters/${chapterID}/${module.id}/update-video`}
+                                    className="text-foreground hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 font-medium truncate flex-1"
                                   >
                                     {module.title || "مادة بدون عنوان"}
                                   </Link>
@@ -421,7 +421,15 @@ const ModulesList: FC<ModulesListProps> = ({
                             >
                               <DropdownMenuItem asChild>
                                 <Link
-                                  href={`/courses/${courseId}/chapters/${chapterID}/${module.fileUrl}/update-video`}
+                                  href={`/courses/${courseId}/chapters/${chapterID}/${module.id}/${
+                                    module.fileType === "VIDEO" || module.type === "VIDEO"
+                                      ? "update-video"
+                                      : module.fileType === "DOCUMENT" || module.type === "DOCUMENT" || module.fileType === "TEXT" || module.type === "TEXT"
+                                      ? "update-text"
+                                      : module.fileType === "PDF" || module.type === "PDF"
+                                      ? "update-pdf"
+                                      : "update-video"
+                                  }`}
                                   className="flex items-center justify-end w-full"
                                 >
                                   تعديل المادة

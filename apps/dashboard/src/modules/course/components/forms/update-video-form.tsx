@@ -339,8 +339,8 @@ function UpdateVedioForm({ material, courseId }: UpdateVedioFormProps) {
                     <FormControl>
                       <div className="space-y-4">
                         {/* Current video info */}
-                        <div className="p-4 border rounded-lg bg-white">
-                          <p className="text-sm text-gray-600 mb-2">
+                        <div className="p-4 border dark:border-gray-700 rounded-lg bg-card dark:bg-gray-800">
+                          <p className="text-sm text-muted-foreground mb-2">
                             الفيديو الحالي:
                           </p>
                           <div className="flex items-center flex-col justify-center gap-2">
@@ -352,7 +352,7 @@ function UpdateVedioForm({ material, courseId }: UpdateVedioFormProps) {
                             >
                               معاينة الفيديو الحالي
                             </Button>
-                            <span className="text-sm text-gray-500">
+                            <span className="text-sm text-muted-foreground dark:text-gray-400">
                               المدة: {Math.round(material.duration || 0)} ثانية
                             </span>
                           </div>

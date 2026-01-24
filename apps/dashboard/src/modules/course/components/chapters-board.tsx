@@ -260,8 +260,8 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
   // Error state
   if (error) {
     return (
-      <div className="mt-8 p-4 bg-red-50 border border-red-200 rounded-lg">
-        <p className="text-red-700">حدث خطأ أثناء تحميل الفصول</p>
+      <div className="mt-8 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+        <p className="text-red-700 dark:text-red-200">حدث خطأ أثناء تحميل الفصول</p>
         <Button
           onClick={() => refetch()}
           variant="outline"
@@ -327,7 +327,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
               ref={provided.innerRef}
               className={cn(
                 "transition-colors flex flex-col gap-y-4 duration-200",
-                snapshot.isDraggingOver && "bg-orange-50 rounded-lg"
+                snapshot.isDraggingOver && "bg-orange-50 dark:bg-orange-900/20 rounded-lg"
               )}
             >
               {sortedSections.map((chapter, index) => {
@@ -348,14 +348,14 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                     {(provided, snapshot) => (
                       <div
                         className={cn(
-                          "flex flex-col bg-white justify-start gap-y-2 transition-all duration-300 bg-[#FC6B0033] border my-3 rounded-2xl",
-                          chapter.isVisible ? "text-black" : "opacity-75",
+                          "flex flex-col bg-card dark:bg-gray-800 justify-start gap-y-2 transition-all duration-300 bg-[#FC6B0033] dark:bg-[#FC6B0020] border dark:border-gray-700 my-3 rounded-2xl",
+                          chapter.isVisible ? "text-foreground" : "opacity-75",
                           snapshot.isDragging &&
                             " shadow-2xl scale-105 rotate-2 z-50 border-[#FC6B00] ",
                           dragStartIndex === index &&
                             !snapshot.isDragging &&
                             "scale-95",
-                          !chapter.isVisible && "bg-gray-100 border-gray-300"
+                          !chapter.isVisible && "bg-muted dark:bg-gray-700 border-muted dark:border-gray-600"
                         )}
                         ref={provided.innerRef}
                         {...provided.draggableProps}
@@ -379,7 +379,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                                   <div
                                     className={cn(
                                       "px-2 rounded-lg py-3 transition-colors  cursor-grab active:cursor-grabbing",
-                                      "hover:bg-gray-100 group-hover:bg-gray-100 hover:dark:bg-gray-900 group-hover:bgdark:-gray-900",
+                                      "hover:bg-gray-100 dark:hover:bg-gray-700 group-hover:bg-gray-100 dark:group-hover:bg-gray-700",
                                       snapshot.isDragging && "cursor-grabbing"
                                     )}
                                     {...provided.dragHandleProps}
@@ -415,7 +415,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                                         {chapter.title || "فصل بدون عنوان"}
                                       </p>
                                     </div>
-                                    <span className="text-gray-600 dark:text-white text-xs text-start">
+                                    <span className="text-muted-foreground text-xs text-start">
                                       {materials.length}{" "}
                                       {materials.length === 1 ? "مادة" : "مواد"}
                                     </span>
@@ -448,7 +448,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                                     <DropdownMenuTrigger asChild>
                                       <Button
                                         variant="ghost"
-                                        className="bg-transparent hover:bg-gray-100  h-8 w-8 p-0"
+                                        className="bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800  h-8 w-8 p-0"
                                         size="sm"
                                         disabled={
                                           updateMutation.isLoading ||
@@ -494,7 +494,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                                       </DropdownMenuItem>
                                       <DropdownMenuSeparator />
                                       <DropdownMenuItem
-                                        className="flex justify-end items-center p-2 text-sm text-red-600 cursor-pointer hover:bg-red-50"
+                                        className="flex justify-end items-center p-2 text-sm text-red-600 dark:text-red-400 cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20"
                                         onClick={(e) => {
                                           e.stopPropagation();
                                           setSelectedChapterId(chapter.id);

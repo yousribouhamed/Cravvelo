@@ -113,7 +113,7 @@ function UpdateTextModuleForm() {
     return (
       <div className="text-center p-8">
         <h2 className="text-xl font-semibold text-red-600">الدرس غير موجود</h2>
-        <p className="text-gray-600 mt-2">لم يتم العثور على الدرس المطلوب</p>
+        <p className="text-muted-foreground mt-2">لم يتم العثور على الدرس المطلوب</p>
         <Button onClick={() => router.back()} className="mt-4">
           العودة
         </Button>
@@ -153,7 +153,7 @@ function UpdateTextModuleForm() {
                 <FormItem>
                   <FormLabel>
                     مدة القراءة المتوقعة (بالدقائق)
-                    <span className="text-sm text-gray-500 mr-2">
+                    <span className="text-sm text-muted-foreground dark:text-gray-400 mr-2">
                       (اختياري - سيتم حسابه تلقائياً إذا تُرك فارغاً)
                     </span>
                   </FormLabel>

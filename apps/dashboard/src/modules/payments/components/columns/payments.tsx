@@ -291,11 +291,19 @@ export const paymentColumns: ColumnDef<Payment>[] = [
   {
     accessorKey: "id",
     header: "المعرف",
-    cell: ({ row }) => (
-      <div className="font-mono text-xs text-muted-foreground">
-        {(row.getValue("id") as string).slice(-8)}
-      </div>
-    ),
+    cell: ({ row }) => {
+      const id = row.getValue("id") as string;
+      if (!id) {
+        return (
+          <span className="text-muted-foreground text-sm">-</span>
+        );
+      }
+      return (
+        <div className="font-mono text-xs text-muted-foreground">
+          {id.slice(-8)}
+        </div>
+      );
+    },
   },
   {
     id: "student",
@@ -320,7 +328,9 @@ export const paymentColumns: ColumnDef<Payment>[] = [
           </Avatar>
           <div className="flex flex-col">
             <span className="text-sm font-medium">{s.full_name}</span>
-            <span className="text-xs text-muted-foreground">{s.email}</span>
+            <span className="text-xs text-muted-foreground">
+              {s.email || "-"}
+            </span>
           </div>
         </div>
       );
@@ -365,7 +375,7 @@ export const paymentColumns: ColumnDef<Payment>[] = [
         <div className="font-semibold">
           {formatCurrency({
             amount: p.amount,
-            currency: p.currency as unknown as "DZD",
+            currency: (p.currency || "DZD") as "DZD",
           })}
         </div>
       );
@@ -374,13 +384,17 @@ export const paymentColumns: ColumnDef<Payment>[] = [
   {
     accessorKey: "status",
     header: "الحالة",
-    cell: ({ row }) => (
-      <Badge
-        className={getStatusBadgeVariant(row.getValue("status") as string)}
-      >
-        {row.getValue("status") as string}
-      </Badge>
-    ),
+    cell: ({ row }) => {
+      const status = row.getValue("status") as string;
+      if (!status) {
+        return <span className="text-muted-foreground text-sm">-</span>;
+      }
+      return (
+        <Badge className={getStatusBadgeVariant(status)}>
+          {status}
+        </Badge>
+      );
+    },
   },
   {
     id: "paymentMethod",
@@ -394,11 +408,17 @@ export const paymentColumns: ColumnDef<Payment>[] = [
   {
     accessorKey: "createdAt",
     header: "تاريخ الإنشاء",
-    cell: ({ row }) => (
-      <div className="text-sm text-muted-foreground w-fit">
-        {formatDate(row.getValue("createdAt") as Date)}
-      </div>
-    ),
+    cell: ({ row }) => {
+      const createdAt = row.getValue("createdAt") as Date;
+      if (!createdAt) {
+        return <span className="text-muted-foreground text-sm">-</span>;
+      }
+      return (
+        <div className="text-sm text-muted-foreground w-fit">
+          {formatDate(createdAt)}
+        </div>
+      );
+    },
   },
   {
     id: "actions",

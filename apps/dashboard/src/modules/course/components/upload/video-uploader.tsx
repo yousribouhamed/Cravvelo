@@ -96,7 +96,7 @@ export const EnhancedVideoUploader: React.FC<EnhancedVideoUploaderProps> = ({
         <div
           {...getRootProps()}
           className={cn(
-            "group relative my-8 grid h-[250px] w-full cursor-pointer place-items-center rounded-lg border-2 border-dashed border-muted-foreground/25 px-5 py-2.5 text-center transition bg-white hover:bg-muted/25",
+            "group relative my-8 grid h-[250px] w-full cursor-pointer place-items-center rounded-lg border-2 border-dashed border-muted-foreground/25 px-5 py-2.5 text-center transition bg-card dark:bg-gray-800 hover:bg-muted/25 dark:hover:bg-muted/50",
             "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all duration-300",
             isDragActive && "border-muted-foreground/50",
             isFocused && "border-primary",
@@ -123,7 +123,7 @@ export const EnhancedVideoUploader: React.FC<EnhancedVideoUploaderProps> = ({
               if (isGeneratingUrl) {
                 return (
                   <div className="flex flex-col items-center justify-center gap-2">
-                    <Upload className="h-8 w-8 text-blue-500 animate-pulse" />
+                    <Upload className="h-8 w-8 text-blue-500 dark:text-blue-400 animate-pulse" />
                     <p className="text-base font-medium text-muted-foreground">
                       جاري تحضير رفع الفيديو...
                     </p>
@@ -141,20 +141,20 @@ export const EnhancedVideoUploader: React.FC<EnhancedVideoUploaderProps> = ({
                       src="/video.png"
                     />
                     <div className="text-center">
-                      <p className="text-lg font-bold">جاري رفع الفيديو...</p>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-lg font-bold text-foreground">جاري رفع الفيديو...</p>
+                      <p className="text-sm text-muted-foreground">
                         {selectedVideo.file.name}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground dark:text-gray-400">
                         {formatFileSize(selectedVideo.file.size)}
                       </p>
                     </div>
                     <div className="w-full">
                       <Progress
                         value={uploadProgress}
-                        className="h-2 w-full bg-gray-200"
+                        className="h-2 w-full bg-gray-200 dark:bg-gray-700"
                       />
-                      <p className="text-center text-sm mt-1">
+                      <p className="text-center text-sm mt-1 text-foreground">
                         {uploadProgress}%
                       </p>
                     </div>
@@ -168,7 +168,7 @@ export const EnhancedVideoUploader: React.FC<EnhancedVideoUploaderProps> = ({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="absolute top-0 right-0 text-black rounded-full bg-white shadow border cursor-pointer hover:bg-red-50"
+                      className="absolute top-0 right-0 text-foreground rounded-full bg-card dark:bg-gray-800 shadow border dark:border-gray-700 cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20"
                       onClick={(e: React.MouseEvent) => {
                         e.stopPropagation();
                         onRemove();
@@ -177,16 +177,16 @@ export const EnhancedVideoUploader: React.FC<EnhancedVideoUploaderProps> = ({
                       <Trash2 className="w-4 h-4 text-red-500" />
                     </Button>
 
-                    <CheckCircle className="w-12 h-12 text-green-500 mb-2" />
-                    <p className="text-green-600 font-semibold">
+                    <CheckCircle className="w-12 h-12 text-green-500 dark:text-green-400 mb-2" />
+                    <p className="text-green-600 dark:text-green-400 font-semibold">
                       تم اختيار الفيديو
                     </p>
 
                     <div className="text-center space-y-1">
-                      <p className="text-sm font-medium text-gray-700">
+                      <p className="text-sm font-medium text-foreground">
                         {selectedVideo.file.name}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground dark:text-gray-400">
                         {formatFileSize(selectedVideo.file.size)}
                         {selectedVideo.duration &&
                           ` • ${formatDuration(selectedVideo.duration)}`}
@@ -220,10 +220,10 @@ export const EnhancedVideoUploader: React.FC<EnhancedVideoUploaderProps> = ({
                   <p className="mt-2 text-base font-medium text-muted-foreground">
                     اسحب و اسقط الملف هنا او اضغط لاختيار الملف
                   </p>
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm text-muted-foreground dark:text-gray-400">
                     يرجى تحميل الملف بحجم أقل من 1GB
                   </p>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-muted-foreground dark:text-gray-500">
                     الصيغ المدعومة: MP4, MOV, AVI
                   </p>
                 </div>

@@ -30,6 +30,16 @@ function GeneralSettingsHeader({ className, ...props }: ExamplesNavProps) {
   const courseId = getValueFromUrl(pathname, 2);
   const links = getLinks();
 
+  const isActive = (href: string) => {
+    // Exact match
+    if (pathname === href) return true;
+    // For invoices, also match invoice detail pages
+    if (href === "/settings/invoices" && pathname.startsWith("/settings/invoices")) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <div className="relative w-full my-4 h-[60px]">
       <div
@@ -45,7 +55,7 @@ function GeneralSettingsHeader({ className, ...props }: ExamplesNavProps) {
             className={cn(
               "flex h-[60px] items-center justify-center px-4 text-center text-sm transition-colors",
               "hover:text-primary",
-              pathname === item.href
+              isActive(item.href)
                 ? "border-b-2 border-[#F0B110] font-semibold text-black dark:text-white"
                 : "text-zinc-600 dark:text-zinc-400"
             )}

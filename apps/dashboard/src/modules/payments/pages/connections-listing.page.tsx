@@ -36,8 +36,6 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
 }) => {
   const router = useRouter();
 
-  console.log(connections);
-
   const getConnectionStatus = (providerId: string): boolean => {
     const connection = connections?.find(
       (conn) => conn.provider.toLowerCase() === providerId.toLowerCase()
@@ -206,7 +204,10 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
               {method.isAvailable ? (
                 <>
                   <Button
-                    onClick={() => router.push(method.route)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      router.push(method.route);
+                    }}
                     className={`flex-1 ${method.accentColor} ${method.hoverColor} text-white font-medium transition-all duration-200`}
                     size="sm"
                   >
@@ -242,7 +243,7 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
       </div>
 
       {/* Help Section */}
-      <div className="mt-12 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-100 dark:border-blue-800">
+      <div className="mt-12 p-6 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700">
         <div className="flex items-start gap-4">
           <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
             <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400" />

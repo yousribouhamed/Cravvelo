@@ -8,8 +8,6 @@ interface CoursesPageProps {
 }
 
 export default function CoursesPage({ courses }: CoursesPageProps) {
-  console.log("here is a course");
-  console.log(courses);
   return (
     <div className="my-8 flex flex-col gap-y-4">
       <div className="w-full h-[40px] flex items-center justify-end">

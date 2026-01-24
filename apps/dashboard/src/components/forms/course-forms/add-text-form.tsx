@@ -70,14 +70,14 @@ function AddTextForm() {
   return (
     <div className="w-full grid grid-cols-3 gap-x-8">
       <div className="col-span-2 w-full h-full">
-        <Form {...form}>
+        <Form {...(form as any)}>
           <form
             id="add-text"
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-8"
           >
             <FormField
-              control={form.control}
+              control={form.control as any}
               name="title"
               render={({ field }) => (
                 <FormItem>
@@ -93,13 +93,13 @@ function AddTextForm() {
             />
 
             <FormField
-              control={form.control}
+              control={form.control as any}
               name="duration"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
                     مدة القراءة المتوقعة (بالدقائق)
-                    <span className="text-sm text-gray-500 mr-2">
+                    <span className="text-sm text-muted-foreground dark:text-gray-400 mr-2">
                       (اختياري - سيتم حسابه تلقائياً)
                     </span>
                   </FormLabel>
@@ -120,7 +120,7 @@ function AddTextForm() {
             />
 
             <FormField
-              control={form.control}
+              control={form.control as any}
               name="content"
               render={({ field }) => (
                 <FormItem className="w-full">

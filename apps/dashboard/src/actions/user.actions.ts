@@ -51,3 +51,97 @@ export const getMyUserAction = async () => {
     verification_steps: account.verification_steps,
   };
 };
+
+export const getUserProfileAction = async () => {
+  const user = await currentUser();
+
+  if (!user) {
+    redirect("/sign-in");
+  }
+
+  const account = await prisma.account.findUnique({
+    where: {
+      userId: user.id,
+    },
+  });
+
+  if (!account) {
+    redirect("/auth-callback");
+  }
+
+  // Get primary email and phone
+  const primaryEmail = user.emailAddresses?.find(
+    (e) => e.id === user.primaryEmailAddressId
+  );
+  const primaryPhone = user.phoneNumbers?.find(
+    (p) => p.id === user.primaryPhoneNumberId
+  );
+
+  // Calculate initials
+  const firstName = user.firstName || "";
+  const lastName = user.lastName || "";
+  const initials =
+    firstName && lastName
+      ? `${firstName[0]}${lastName[0]}`.toUpperCase()
+      : firstName
+        ? firstName[0].toUpperCase()
+        : lastName
+          ? lastName[0].toUpperCase()
+          : "AB";
+
+  // Build full name
+  const fullName =
+    firstName && lastName
+      ? `${firstName} ${lastName}`
+      : firstName || lastName || account.user_name || "";
+
+  // Helper function to safely convert dates to ISO strings
+  const toISOString = (date: Date | number | string | null | undefined): string => {
+    if (!date) return new Date().toISOString();
+    if (date instanceof Date) return date.toISOString();
+    if (typeof date === "number") return new Date(date).toISOString();
+    if (typeof date === "string") {
+      const parsed = new Date(date);
+      return isNaN(parsed.getTime()) ? new Date().toISOString() : parsed.toISOString();
+    }
+    return new Date().toISOString();
+  };
+
+  return {
+    id: user.id,
+    firstName: user.firstName || "",
+    lastName: user.lastName || "",
+    imageUrl: user.imageUrl || "",
+    hasImage: !!user.imageUrl,
+    primaryEmailAddress: primaryEmail
+      ? {
+          emailAddress: primaryEmail.emailAddress,
+          id: primaryEmail.id,
+        }
+      : null,
+    primaryPhoneNumber: primaryPhone
+      ? {
+          phoneNumber: primaryPhone.phoneNumber,
+          id: primaryPhone.id,
+        }
+      : null,
+    username: user.username || "",
+    createdAt: toISOString(user.createdAt),
+    updatedAt: toISOString(user.updatedAt),
+    lastSignInAt: user.lastSignInAt ? toISOString(user.lastSignInAt) : null,
+    twoFactorEnabled: user.twoFactorEnabled || false,
+    banned: false,
+    locked: false,
+    accountId: account.id,
+    user_name: account.user_name || "",
+    user_bio: account.user_bio || "",
+    support_email: account.support_email || "",
+    phone: account.phone?.toString() || "",
+    website: account.website || "",
+    location: account.city || account.country || "",
+    occupation: account.profession || "",
+    avatarUrl: account.avatarUrl || user.imageUrl || "",
+    fullName,
+    initials,
+  };
+};

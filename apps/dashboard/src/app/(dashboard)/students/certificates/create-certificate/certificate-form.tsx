@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -46,7 +46,7 @@ interface CertificateProps {
   students: Student[];
 }
 
-function CertificateForm({ students, stamp }: CertificateProps) {
+export default function CertificateForm({ students, stamp }: CertificateProps) {
   const router = useRouter();
   const path = usePathname();
 
@@ -89,10 +89,10 @@ function CertificateForm({ students, stamp }: CertificateProps) {
   const courseName = form.watch("courseName");
 
   return (
-    <div className="w-full min-h-[400px] h-fit grid grid-cols-3 mt-8 py-2   gap-4">
-      <div className="col-span-1 w-full h-full   ">
-        <div className="w-full h-fir gap-x-8 ">
-          <div className="w-full h-[50px]  border bg-white mb-4">
+    <div className="w-full min-h-[400px] h-fit grid grid-cols-3 mt-8 py-2 gap-4">
+      <div className="col-span-1 w-full h-full">
+        <div className="w-full h-full gap-x-8">
+          <div className="w-full h-[50px] border bg-white mb-4 flex">
             <Button
               onClick={() => setIsCertificateSeen(false)}
               variant="ghost"
@@ -115,39 +115,37 @@ function CertificateForm({ students, stamp }: CertificateProps) {
           <div className="w-full h-full">
             {isCertificateSeen ? (
               <div className="w-full h-full flex flex-wrap gap-4 bg-white ">
-                {CERTIFICATE_VARIANTS.map((item) => {
-                  return (
-                    <div
-                      onClick={() => setCertificateTheme(item.code)}
-                      key={item.code}
-                      className={` flex hover:bg-white hover:shadow cursor-pointer p-2 transition-all duration-300 rounded-xl border w-[150px] h-[150px] flex-col gap-y-2 ${
-                        item.code === certificateTheme
-                          ? "border-2 border-blue-500 "
-                          : ""
-                      } `}
-                    >
-                      <div className="w-full h-[80%] relative  flex items-center justify-center">
-                        <Image src={item.image} fill alt={item.name} />
-                      </div>
-
-                      <div className="w-full h-[20%] flex items-center justify-start border-t ">
-                        <p className="text-sm text-black text-center">
-                          {item.name}
-                        </p>
-                      </div>
+                {CERTIFICATE_VARIANTS.map((item) => (
+                  <div
+                    onClick={() => setCertificateTheme(item.code)}
+                    key={item.code}
+                    className={`flex hover:bg-white hover:shadow cursor-pointer p-2 transition-all duration-300 rounded-xl border w-[150px] h-[150px] flex-col gap-y-2 ${
+                      item.code === certificateTheme
+                        ? "border-2 border-blue-500 "
+                        : ""
+                    }`}
+                  >
+                    <div className="w-full h-[80%] relative flex items-center justify-center">
+                      <Image src={item.image} fill alt={item.name} />
                     </div>
-                  );
-                })}
+                    <div className="w-full h-[20%] flex items-center justify-start border-t">
+                      <p className="text-sm text-black text-center">
+                        {item.name}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : (
-              <Form {...form}>
+              
+              <Form {...(form as any)}>
                 <form
                   id="add-certificate"
                   onSubmit={form.handleSubmit(onSubmit)}
                   className="space-y-8"
                 >
                   <FormField
-                    control={form.control}
+                    control={form.control as any}
                     name="cerrificateName"
                     render={({ field }) => (
                       <FormItem>
@@ -161,14 +159,13 @@ function CertificateForm({ students, stamp }: CertificateProps) {
                             {...field}
                           />
                         </FormControl>
-
                         <FormMessage />
                       </FormItem>
                     )}
                   />
 
                   <FormField
-                    control={form.control}
+                    control={form.control as any}
                     name="courseName"
                     render={({ field }) => (
                       <FormItem>
@@ -182,14 +179,13 @@ function CertificateForm({ students, stamp }: CertificateProps) {
                             {...field}
                           />
                         </FormControl>
-
                         <FormMessage />
                       </FormItem>
                     )}
                   />
 
                   <FormField
-                    control={form.control}
+                    control={form.control as any}
                     name="studentName"
                     render={({ field }) => (
                       <FormItem>
@@ -203,13 +199,12 @@ function CertificateForm({ students, stamp }: CertificateProps) {
                             {...field}
                           />
                         </FormControl>
-
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                   <FormField
-                    control={form.control}
+                    control={form.control as any}
                     name="studentId"
                     render={({ field }) => (
                       <FormItem>
@@ -224,16 +219,13 @@ function CertificateForm({ students, stamp }: CertificateProps) {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {students.map((item) => {
-                              return (
-                                <SelectItem key={item.id} value={item.id}>
-                                  {item.full_name}
-                                </SelectItem>
-                              );
-                            })}
+                            {students.map((item) => (
+                              <SelectItem key={item.id} value={item.id}>
+                                {item.full_name}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
-
                         <FormMessage />
                       </FormItem>
                     )}
@@ -242,7 +234,7 @@ function CertificateForm({ students, stamp }: CertificateProps) {
                     <Button
                       disabled={mutation.isLoading}
                       type="submit"
-                      className=" flex items-center gap-x-2 rounded-xl"
+                      className="flex items-center gap-x-2 rounded-xl"
                     >
                       {mutation.isLoading ? (
                         <LoadingSpinner />
@@ -258,7 +250,7 @@ function CertificateForm({ students, stamp }: CertificateProps) {
           </div>
         </div>
       </div>
-      <div className="col-span-2 w-full h-full  ">
+      <div className="col-span-2 w-full h-full">
         {certificateTheme === "COLD_CERTIFICATE" ? (
           <CertificateViewer
             courseName={courseName}
@@ -283,4 +275,4 @@ function CertificateForm({ students, stamp }: CertificateProps) {
   );
 }
 
-export default CertificateForm;
+

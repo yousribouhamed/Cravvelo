@@ -11,27 +11,27 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@ui/components/ui/dialog";
-import { installApp } from "../actions/apps.actions";
+import { uninstallApp } from "../actions/apps.actions";
 import { useState } from "react";
 import { maketoast } from "@/src/components/toasts";
 
-export default function InstallAppModal({ appId }: { appId: string }) {
+export default function UninstallAppModal({ appId }: { appId: string }) {
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: async () => {
-      return await installApp({ appId });
+      return await uninstallApp({ appId });
     },
     onSuccess: () => {
       setOpen(false);
       // Invalidate installedApps query to update sidebar immediately
       queryClient.invalidateQueries({ queryKey: ["installedApps"] });
-      maketoast.successWithText({ text: "تم تثبيت التطبيق بنجاح" });
+      maketoast.successWithText({ text: "تم إلغاء تثبيت التطبيق بنجاح" });
     },
     onError: (error: any) => {
       maketoast.errorWithText({
-        text: error?.message || "فشل تثبيت التطبيق",
+        text: error?.message || "فشل إلغاء تثبيت التطبيق",
       });
     },
   });
@@ -39,14 +39,16 @@ export default function InstallAppModal({ appId }: { appId: string }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm">إضافة</Button>
+        <Button size="sm" variant="outline">
+          إلغاء التثبيت
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader dir="ltr">
-          <DialogTitle className="text-right">تثبيت التطبيق</DialogTitle>
+          <DialogTitle className="text-right">إلغاء تثبيت التطبيق</DialogTitle>
           <DialogDescription dir="ltr" className="text-right">
-            هل أنت متأكد أنك تريد تثبيت هذا التطبيق؟ سيتم إنشاء فاتورة وربط
-            عملية الدفع الخاصة به بحسابك.
+            هل أنت متأكد أنك تريد إلغاء تثبيت هذا التطبيق؟ سيتم إلغاء الاشتراك
+            وستفقد الوصول إلى جميع ميزات التطبيق.
           </DialogDescription>
         </DialogHeader>
 
@@ -62,8 +64,9 @@ export default function InstallAppModal({ appId }: { appId: string }) {
             onClick={() => mutation.mutate()}
             disabled={mutation.isPending}
             loading={mutation.isPending}
+            variant="destructive"
           >
-            تثبيت
+            إلغاء التثبيت
           </Button>
         </DialogFooter>
       </DialogContent>

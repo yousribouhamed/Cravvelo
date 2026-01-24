@@ -36,7 +36,11 @@ const Page = async ({}) => {
   }
 
   return (
-    <AppShell user={user} notifications={notifications}>
+    <AppShell
+      title="الدورات"
+      user={user}
+      notifications={notifications}
+    >
       <CoursesPage courses={data} />
     </AppShell>
   );

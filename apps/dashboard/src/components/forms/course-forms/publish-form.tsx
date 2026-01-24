@@ -122,14 +122,14 @@ function PublishCourseForm({ course, chapters }: PublishCourseFormProps) {
                 onClick={() => setSelectedItem(item.value)}
                 variant="secondary"
                 size="lg"
-                className={`bg-white flex items-start justify-center flex-col gap-x-4 text-lg border text-black h-16 ${
+                className={`bg-card dark:bg-gray-800 flex items-start justify-center flex-col gap-x-4 text-lg border dark:border-gray-700 text-foreground h-16 ${
                   selectedItem === item.value ? "border-primary border-2" : ""
                 }`}
               >
                 <span className="text-md font-bold text-start">
                   {item.title}
                 </span>
-                <p className="text-gray-500 text-sm text-start my-1">
+                <p className="text-muted-foreground dark:text-gray-400 text-sm text-start my-1">
                   {item.description}
                 </p>
               </Button>

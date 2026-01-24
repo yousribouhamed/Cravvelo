@@ -22,7 +22,7 @@ const Page = async () => {
   }
 
   return (
-    <AppShell user={user} notifications={notifications}>
+    <AppShell title="الدفع" user={user} notifications={notifications}>
       <div className="w-full h-[100px] flex items-start justify-center  flex-col gap-y-8 mb-4">
         <h1>الرصيد</h1>
         <p className="font-bold text-2xl">

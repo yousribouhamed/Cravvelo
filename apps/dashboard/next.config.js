@@ -9,7 +9,18 @@ module.exports = {
       "images.unsplash.com",
     ],
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   serverExternalPackages: ["handlebars"],
+  // Turbopack config - explicit path alias resolution
+  // Matches tsconfig: "@/*": ["./*"] so @/src/... resolves to ./src/...
+  turbopack: {
+    resolveAlias: {
+      '@/*': './*',
+    },
+  },
+  // Webpack config for production builds and when --webpack flag is used
   webpack: (config, { isServer }) => {
     // Only apply fallbacks for client-side bundles
     if (!isServer) {

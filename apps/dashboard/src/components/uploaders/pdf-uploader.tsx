@@ -32,31 +32,54 @@ export const PdfUploaderS3 = ({
 
   const mutation = trpc.getSignedUrl.useMutation({
     onSuccess: async ({ success }) => {
-      console.log("we have created the sign url ");
-      console.log(success);
-      if (!selectedFile) {
-        console.log("there is no selected file");
+      if (!selectedFile || !success?.url) {
+        console.error("Missing file or signed URL");
         setStatus("ERROR");
+        return;
       }
-      if (!success || !success?.url) {
-        console.log("there is no selected file");
-        setStatus("ERROR");
-      }
-      await fetch(success?.url, {
-        method: "put",
-        body: selectedFile,
-        headers: {
-          "content-type": selectedFile.type,
-        },
-      });
-      onChnage(success.url.split("?")[0]);
 
-      setProgress(100);
-      setStatus("COMPLETE");
+      try {
+        // Create AbortController for timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5 * 60 * 1000); // 5 minutes timeout
+
+        const uploadResponse = await fetch(success.url, {
+          method: "PUT",
+          body: selectedFile,
+          headers: {
+            "Content-Type": selectedFile.type,
+          },
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!uploadResponse.ok) {
+          const errorText = await uploadResponse.text().catch(() => "Unknown error");
+          console.error("S3 upload failed:", uploadResponse.status, errorText);
+          setStatus("ERROR");
+          return;
+        }
+
+        // Extract public URL using proper URL parsing
+        const signedUrlObj = new URL(success.url);
+        const publicUrl = `${signedUrlObj.origin}${signedUrlObj.pathname}`;
+
+        onChnage(publicUrl);
+        setProgress(100);
+        setStatus("COMPLETE");
+      } catch (error: any) {
+        console.error("Upload error:", error);
+        
+        if (error.name === 'AbortError') {
+          console.error("Upload timeout");
+        }
+        
+        setStatus("ERROR");
+      }
     },
     onError: (err) => {
-      console.log("there is an error");
-      console.log(err);
+      console.error("Failed to get signed URL:", err);
       setStatus("ERROR");
     },
   });

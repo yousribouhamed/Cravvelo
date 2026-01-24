@@ -74,23 +74,23 @@ const AddCourse: FC = ({}) => {
     <>
       <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
         <DialogTrigger asChild>
-          <Button className=" rounded-xl border flex items-center gap-x-2">
+          <Button className="rounded-xl border flex items-center gap-x-2 dark:border-gray-700 dark:hover:bg-gray-800">
             <svg
               width="20"
               height="20"
               viewBox="0 0 20 20"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              className="stroke-current"
             >
               <path
                 d="M8.8575 3.61523V14.0404M14.0701 8.82784H3.6449"
-                stroke="white"
-                stroke-width="1.04252"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.04252"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
-            <span className="text-xs md:text-base">أنشئ دورة جديدة</span>
+            <span className="text-xs md:text-base text-foreground">أنشئ دورة جديدة</span>
           </Button>
         </DialogTrigger>
         <DialogContent className="max-w-lg" title="إضافة دورة جديدة">

@@ -375,7 +375,7 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
             )}
 
             {/* Security Info */}
-            <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-2xl">
+            <div className="mt-6 p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl">
               <div className="flex items-start gap-3">
                 <Shield className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
                 <div>

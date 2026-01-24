@@ -2,6 +2,8 @@ import { Sidebar } from "../../components/layout/Sidebar";
 import ConnectionStatusAlert from "@/src/components/connection-status-alert";
 import { constructMetadata } from "@/src/lib/utils";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 export const metadata = constructMetadata();
 
@@ -10,6 +12,13 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // Additional server-side protection layer (middleware already protects at edge)
+  // This provides defense in depth - check user exists even if middleware passes
+  const user = await currentUser();
+  if (!user) {
+    redirect("/sign-in");
+  }
+  
   return (
     <ConnectionStatusAlert>
       <div className="flex w-full min-h-screen gap-x-2 bg-[#FAFAFA] dark:bg-black ">

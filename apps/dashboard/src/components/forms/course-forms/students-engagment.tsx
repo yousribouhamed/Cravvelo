@@ -74,10 +74,10 @@ function StudentEngagment({ course }: StudentEngagmentProps) {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-8"
           >
-            <FormLabel className="text-xl  block font-bold text-black">
+            <FormLabel className="text-xl  block font-bold text-foreground">
               الشهادات
             </FormLabel>
-            <FormLabel className="text-md block  text-gray-600">
+            <FormLabel className="text-md block  text-muted-foreground">
               حدد اعدادات الشهادة في دورتك و متى يحق لطالب الحصول عليها
             </FormLabel>
 
@@ -87,7 +87,7 @@ function StudentEngagment({ course }: StudentEngagmentProps) {
                   control={form.control}
                   name="cerrificate"
                   render={({ field }) => (
-                    <FormItem className="flex flex-row bg-white items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <FormItem className="flex flex-row bg-card dark:bg-gray-800 items-center justify-between rounded-lg border dark:border-gray-700 p-3 shadow-sm">
                       <div className="space-y-0.5">
                         <FormLabel>تفعيل شهادة على الدورة</FormLabel>
                       </div>
@@ -103,17 +103,17 @@ function StudentEngagment({ course }: StudentEngagmentProps) {
                   )}
                 />
 
-                <FormLabel className="text-xl  block font-bold text-black">
+                <FormLabel className="text-xl  block font-bold text-foreground">
                   التفاعل مع المحتوى
                 </FormLabel>
-                <FormLabel className="text-md block  text-gray-600">
+                <FormLabel className="text-md block  text-muted-foreground">
                   حدد ما يمكن للطالب القيام به اثناء الدورة
                 </FormLabel>
                 <FormField
                   control={form.control}
                   name="allowComments"
                   render={({ field }) => (
-                    <FormItem className="flex flex-row bg-white items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <FormItem className="flex flex-row bg-card dark:bg-gray-800 items-center justify-between rounded-lg border dark:border-gray-700 p-3 shadow-sm">
                       <div className="space-y-0.5">
                         <FormLabel>السماح بالتعليقات على هذه الدورة</FormLabel>
                       </div>
