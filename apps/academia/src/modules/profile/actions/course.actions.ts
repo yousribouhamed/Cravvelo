@@ -17,6 +17,17 @@ export const getCourseWithChapters = withTenant({
         },
         include: {
           Chapter: {
+            select: {
+              id: true,
+              courseId: true,
+              title: true,
+              modules: true, // Ensure modules field is included
+              orderNumber: true,
+              isVisible: true,
+              duration: true,
+              createdAt: true,
+              updatedAt: true,
+            },
             orderBy: {
               orderNumber: "asc", // Order chapters by their order number
             },

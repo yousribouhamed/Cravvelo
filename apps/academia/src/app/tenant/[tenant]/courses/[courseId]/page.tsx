@@ -4,6 +4,7 @@ import Ratings from "@/modules/courses/components/rating";
 import EmbedYouTubeVideo from "@/modules/courses/components/yotube-player";
 import { CravveloEditor } from "@cravvelo/editor";
 import { PaymentSheet } from "@/modules/payments/components/payment-sheet";
+import { checkCourseOwnership } from "@/modules/courses/actions/check-ownership";
 
 interface PageProps {
   params: Promise<{
@@ -15,8 +16,12 @@ interface PageProps {
 export default async function Page({ params }: PageProps) {
   const { courseId } = await params;
 
-  const response = await getCourseById({ courseId });
+  const [response, ownershipResponse] = await Promise.all([
+    getCourseById({ courseId }),
+    checkCourseOwnership({ courseId }),
+  ]);
   const { data: course } = response;
+  const isOwned = ownershipResponse.data || false;
 
   // Safe description cleaning - check if courseDescription exists and is a string
   const cleanDescription =
@@ -54,7 +59,7 @@ export default async function Page({ params }: PageProps) {
             </div>
           </div>
 
-          <CourseBuyCard course={course} />
+          <CourseBuyCard course={course} isOwned={isOwned} courseId={courseId} />
         </div>
 
         <PaymentSheet />

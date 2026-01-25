@@ -5,7 +5,9 @@ import {
   PaymentStatus,
   TransactionType,
   TransactionStatus,
+  PurchaseStatus,
 } from "@prisma/client";
+import { StudentBag } from "@/src/types";
 import z from "zod";
 
 export const getAllPayments = withAuth({
@@ -210,8 +212,28 @@ export const approvePayment = withAuth({
             accountId: account.id,
           },
           include: {
-            Sale: true,
-
+            Sale: {
+              include: {
+                Course: {
+                  include: {
+                    CoursePricingPlans: {
+                      include: {
+                        PricingPlan: true,
+                      },
+                    },
+                  },
+                },
+                Product: {
+                  include: {
+                    ProductPricingPlans: {
+                      include: {
+                        PricingPlan: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
             Student: true,
           },
         });
@@ -295,6 +317,128 @@ export const approvePayment = withAuth({
           where: { paymentId: payment.id },
           data: { verified: true },
         });
+
+        // Create ItemPurchase and add to student bag if Sale exists
+        if (payment.Sale && payment.Student) {
+          const sale = payment.Sale;
+          let item: any = null;
+          let pricingPlan: any = null;
+
+          // Get the item (Course or Product) and its pricing plan
+          if (sale.itemType === "COURSE" && sale.Course) {
+            item = sale.Course;
+            pricingPlan =
+              item.CoursePricingPlans?.find(
+                (p: { isDefault: boolean }) => p.isDefault
+              ) ?? item.CoursePricingPlans?.[0];
+          } else if (sale.itemType === "PRODUCT" && sale.Product) {
+            item = sale.Product;
+            pricingPlan =
+              item.ProductPricingPlans?.find(
+                (p: { isDefault: boolean }) => p.isDefault
+              ) ?? item.ProductPricingPlans?.[0];
+          }
+
+          if (item && pricingPlan?.PricingPlan) {
+            const plan = pricingPlan.PricingPlan;
+            const accessStartDate = new Date();
+            let accessEndDate: Date | null = null;
+
+            // Calculate accessEndDate based on pricing plan type
+            if (plan.pricingType === "RECURRING" && plan.recurringDays) {
+              accessEndDate = new Date(accessStartDate);
+              accessEndDate.setDate(
+                accessEndDate.getDate() + plan.recurringDays
+              );
+            } else if (
+              plan.pricingType === "ONE_TIME" &&
+              plan.accessDuration === "LIMITED" &&
+              plan.accessDurationDays
+            ) {
+              accessEndDate = new Date(accessStartDate);
+              accessEndDate.setDate(
+                accessEndDate.getDate() + plan.accessDurationDays
+              );
+            }
+            // For FREE or UNLIMITED, accessEndDate remains null
+
+            // Check if ItemPurchase already exists to avoid duplicates
+            const existingPurchase = await tx.itemPurchase.findFirst({
+              where: {
+                studentId: payment.Student.id,
+                itemType: sale.itemType,
+                itemId: sale.itemId,
+                status: PurchaseStatus.ACTIVE,
+              },
+            });
+
+            if (!existingPurchase) {
+              // Create ItemPurchase record
+              await tx.itemPurchase.create({
+                data: {
+                  studentId: payment.Student.id,
+                  accountId: account.id,
+                  pricingPlanId: plan.id,
+                  itemType: sale.itemType,
+                  itemId: sale.itemId,
+                  purchaseAmount: payment.amount,
+                  currency: payment.currency || "DZD",
+                  status: PurchaseStatus.ACTIVE,
+                  accessStartDate,
+                  accessEndDate,
+                  nextBillingDate:
+                    plan.pricingType === "RECURRING" && plan.recurringDays
+                      ? (() => {
+                          const next = new Date(accessStartDate);
+                          next.setDate(next.getDate() + plan.recurringDays);
+                          return next;
+                        })()
+                      : null,
+                },
+              });
+            }
+
+            // Add course to student bag if it's a course purchase
+            if (sale.itemType === "COURSE" && item) {
+              const student = payment.Student;
+              const studentBag: StudentBag = student.bag
+                ? (JSON.parse(student.bag as string) as StudentBag)
+                : { courses: [], products: [], certificates: [] };
+
+              // Check if course already exists in bag
+              const courseExists =
+                studentBag.courses &&
+                studentBag.courses.find(
+                  (bagItem) => bagItem.course.id === item.id
+                );
+
+              if (!courseExists) {
+                const oldCourses =
+                  studentBag.courses && studentBag.courses.length > 0
+                    ? [...studentBag.courses]
+                    : [];
+
+                const newStudentBag: StudentBag = {
+                  ...studentBag,
+                  courses: [
+                    ...oldCourses,
+                    {
+                      course: item,
+                      currentEpisode: 0,
+                    },
+                  ],
+                };
+
+                await tx.student.update({
+                  where: { id: student.id },
+                  data: {
+                    bag: JSON.stringify(newStudentBag),
+                  },
+                });
+              }
+            }
+          }
+        }
 
         return updatedPayment;
       });

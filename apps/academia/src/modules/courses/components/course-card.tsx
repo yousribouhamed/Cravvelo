@@ -9,9 +9,13 @@ import { Badge } from "@/components/ui/badge";
 
 interface CourseCardProps {
   course: CourseWithPricing;
+  isOwned?: boolean;
 }
 
-export default function CourseCard({ course }: CourseCardProps) {
+export default function CourseCard({
+  course,
+  isOwned = false,
+}: CourseCardProps) {
   const {
     id,
     thumbnailUrl,
@@ -97,7 +101,10 @@ export default function CourseCard({ course }: CourseCardProps) {
   const salesCount = _count?.Sale ?? 0;
 
   return (
-    <Link href={`/courses/${id}`} className="block">
+    <Link
+      href={isOwned ? `/courses/${id}/watch` : `/courses/${id}`}
+      className="block"
+    >
       <div className="group w-full bg-white dark:bg-[#0A0A0C] rounded-xl border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-200 hover:shadow-lg overflow-hidden">
         {/* Thumbnail Section */}
         <div className="relative overflow-hidden">
@@ -177,41 +184,51 @@ export default function CourseCard({ course }: CourseCardProps) {
 
           {/* Price Section */}
           <div className="flex items-center justify-between pt-2">
-            <div className="flex flex-col">
-              {/* Main Price */}
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-bold text-gray-900 dark:text-white">
-                  {pricingDisplay.main}
-                </span>
-                {/* Original Price (if discounted) */}
-                {hasDiscount && (
-                  <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
-                    {formatPrice(originalPrice!)}
-                  </span>
-                )}
+            {isOwned ? (
+              <div className="flex items-center gap-2 w-full">
+                <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/30">
+                  الوصول إلى الكورس
+                </Badge>
               </div>
+            ) : (
+              <>
+                <div className="flex flex-col">
+                  {/* Main Price */}
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg font-bold text-gray-900 dark:text-white">
+                      {pricingDisplay.main}
+                    </span>
+                    {/* Original Price (if discounted) */}
+                    {hasDiscount && (
+                      <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
+                        {formatPrice(originalPrice!)}
+                      </span>
+                    )}
+                  </div>
 
-              {/* Subscription Info */}
-              {pricingDisplay.subtitle && (
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  {pricingDisplay.subtitle}
-                </span>
-              )}
-            </div>
+                  {/* Subscription Info */}
+                  {pricingDisplay.subtitle && (
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      {pricingDisplay.subtitle}
+                    </span>
+                  )}
+                </div>
 
-            {/* Pricing Badge */}
-            <Badge
-              variant={pricingDisplay.badgeVariant}
-              className={
-                pricingDisplay.badgeVariant === "success"
-                  ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/30"
-                  : pricingDisplay.badgeVariant === "outline"
-                  ? "border-blue-200 text-blue-700 dark:border-blue-800 dark:text-blue-300"
-                  : ""
-              }
-            >
-              {pricingDisplay.badge}
-            </Badge>
+                {/* Pricing Badge */}
+                <Badge
+                  variant={pricingDisplay.badgeVariant}
+                  className={
+                    pricingDisplay.badgeVariant === "success"
+                      ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/30"
+                      : pricingDisplay.badgeVariant === "outline"
+                      ? "border-blue-200 text-blue-700 dark:border-blue-800 dark:text-blue-300"
+                      : ""
+                  }
+                >
+                  {pricingDisplay.badge}
+                </Badge>
+              </>
+            )}
           </div>
 
           {/* Multiple Pricing Options Indicator */}

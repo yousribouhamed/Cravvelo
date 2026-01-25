@@ -15,9 +15,12 @@ import {
 import { CourseWithPricing } from "../types";
 import { usePaymentIntent } from "@/modules/payments/hooks/use-paymentIntent";
 import { courseToPaymentProduct } from "@/modules/payments/utils";
+import Link from "next/link";
 
 interface CourseCardProps {
   course: CourseWithPricing;
+  isOwned?: boolean;
+  courseId: string;
 }
 
 const calculatePositiveReviewPercentage = (ratings: number[]) => {
@@ -43,7 +46,11 @@ const formatVideoLength = (totalSeconds: number) => {
   return formattedTime.trim();
 };
 
-export default function CourseBuyCard({ course }: CourseCardProps) {
+export default function CourseBuyCard({
+  course,
+  isOwned = false,
+  courseId,
+}: CourseCardProps) {
   const { invokePaymentIntent } = usePaymentIntent(
     courseToPaymentProduct({
       course,
@@ -80,6 +87,7 @@ export default function CourseBuyCard({ course }: CourseCardProps) {
 
       {/* Price Section */}
       {!isFree &&
+        !isOwned &&
         defaultPricingPlan &&
         defaultPricingPlan.price !== null &&
         defaultPricingPlan.price !== undefined && (
@@ -88,7 +96,13 @@ export default function CourseBuyCard({ course }: CourseCardProps) {
           </p>
         )}
 
-      <BrandButton onClick={invokePaymentIntent}>bug now</BrandButton>
+      {isOwned ? (
+        <Link href={`/courses/${courseId}/watch`}>
+          <BrandButton className="w-full">الوصول إلى الكورس</BrandButton>
+        </Link>
+      ) : (
+        <BrandButton onClick={invokePaymentIntent}>شراء الآن</BrandButton>
+      )}
 
       <div className="border-b w-full h-1 my-1 dark:border-gray-700" />
 

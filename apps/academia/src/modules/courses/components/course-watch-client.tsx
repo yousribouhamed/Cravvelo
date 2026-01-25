@@ -25,19 +25,28 @@ export const CourseWatchClient: React.FC<CourseWatchClientProps> = ({
   const chapters: ChapterType[] = course.Chapter.map((chapter: any) => ({
     ...chapter,
     modules:
-      typeof chapter.modules === "string"
+      chapter.modules === null || chapter.modules === undefined
+        ? []
+        : typeof chapter.modules === "string"
         ? JSON.parse(chapter.modules)
-        : chapter.modules,
+        : Array.isArray(chapter.modules)
+        ? chapter.modules
+        : [],
   }));
 
   // Auto-select first module if none selected
   useEffect(() => {
     if (!currentChapterId || !currentModuleId) {
       const firstChapter = chapters.find((c) => c.isVisible);
-      if (firstChapter && firstChapter.modules.length > 0) {
-        const firstModule = firstChapter.modules.sort(
-          (a, b) => a.orderNumber - b.orderNumber
-        )[0];
+      if (
+        firstChapter &&
+        firstChapter.modules &&
+        Array.isArray(firstChapter.modules) &&
+        firstChapter.modules.length > 0
+      ) {
+        const firstModule = firstChapter.modules
+          .filter((m) => m != null) // Filter out any null/undefined modules
+          .sort((a, b) => (a.orderNumber || 0) - (b.orderNumber || 0))[0];
         if (firstModule) {
           const params = new URLSearchParams();
           params.set("chapter", firstChapter.id);
@@ -53,9 +62,10 @@ export const CourseWatchClient: React.FC<CourseWatchClientProps> = ({
     if (!currentChapterId || !currentModuleId) return null;
 
     const chapter = chapters.find((c) => c.id === currentChapterId);
-    if (!chapter) return null;
+    if (!chapter || !chapter.modules || !Array.isArray(chapter.modules))
+      return null;
 
-    const module = chapter.modules.find((m) => m.id === currentModuleId);
+    const module = chapter.modules.find((m) => m && m.id === currentModuleId);
     return module || null;
   };
 
