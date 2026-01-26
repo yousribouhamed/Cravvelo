@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Loader } from "@/components/loader-icon";
 
 interface MainSidebarProps {
   admin?: any; // Replace with your admin type
@@ -19,6 +20,7 @@ interface MainSidebarProps {
 export default function MainSidebar({ admin }: MainSidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [iconsLoading, setIconsLoading] = useState(true);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -29,6 +31,15 @@ export default function MainSidebar({ admin }: MainSidebarProps) {
     window.addEventListener("resize", checkScreenSize);
 
     return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  useEffect(() => {
+    // Simulate icon loading - in a real app, you might check if icons are actually loaded
+    const timer = setTimeout(() => {
+      setIconsLoading(false);
+    }, 100);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const sidebarWidth = isCollapsed ? "w-[80px]" : "w-[280px]";
@@ -84,49 +95,90 @@ export default function MainSidebar({ admin }: MainSidebarProps) {
         <nav className="flex-1 p-4">
           <div className="space-y-2">
             {SIDEBAR_ITEMS.map((item) => {
+              const isEnabled = item.enabled ?? true;
+              const disabledStyles = isEnabled
+                ? ""
+                : "opacity-50 cursor-not-allowed pointer-events-none";
+
               if (isCollapsed) {
+                const content = (
+                  <div
+                    className={cn(
+                      "flex items-center justify-center rounded-xl transition-all duration-200 group",
+                      iconSize,
+                      "p-3",
+                      isEnabled
+                        ? "hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                        : disabledStyles
+                    )}
+                  >
+                    <span className="flex-shrink-0">
+                      {iconsLoading ? (
+                        <Loader size={20} />
+                      ) : (
+                        item.icon
+                      )}
+                    </span>
+                  </div>
+                );
+
                 return (
                   <Tooltip key={item.slug} delayDuration={300}>
-                    <TooltipTrigger asChild>
-                      <Link
-                        href={item.slug}
-                        className={cn(
-                          "flex items-center justify-center rounded-xl transition-all duration-200 group",
-                          "hover:bg-accent hover:text-accent-foreground",
-                          "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
-                          iconSize,
-                          "p-3"
-                        )}
-                      >
-                        <span className="flex-shrink-0">{item.icon}</span>
-                      </Link>
-                    </TooltipTrigger>
+                    {isEnabled ? (
+                      <TooltipTrigger asChild>
+                        <Link href={item.slug}>{content}</Link>
+                      </TooltipTrigger>
+                    ) : (
+                      <TooltipTrigger asChild>
+                        <div>{content}</div>
+                      </TooltipTrigger>
+                    )}
                     <TooltipContent
                       side="right"
                       sideOffset={12}
                       className="bg-popover text-popover-foreground border border-border p-3 rounded-lg shadow-lg font-medium text-sm"
                     >
                       <p>{item.name}</p>
+                      {!isEnabled && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Coming soon
+                        </p>
+                      )}
                     </TooltipContent>
                   </Tooltip>
                 );
               }
 
-              return (
-                <Link
-                  key={item.slug}
-                  href={item.slug}
+              const content = (
+                <div
                   className={cn(
                     "flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group",
-                    "hover:bg-accent hover:text-accent-foreground",
-                    "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                    isEnabled
+                      ? "hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                      : disabledStyles
                   )}
                 >
-                  <span className="flex-shrink-0">{item.icon}</span>
+                  <span className="flex-shrink-0">
+                    {iconsLoading ? (
+                      <Loader size={20} />
+                    ) : (
+                      item.icon
+                    )}
+                  </span>
                   <span className="font-medium text-sm truncate">
                     {item.name}
                   </span>
-                </Link>
+                </div>
+              );
+
+              return (
+                <div key={item.slug}>
+                  {isEnabled ? (
+                    <Link href={item.slug}>{content}</Link>
+                  ) : (
+                    content
+                  )}
+                </div>
               );
             })}
           </div>
