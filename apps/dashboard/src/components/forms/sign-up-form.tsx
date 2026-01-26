@@ -38,12 +38,15 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { OAuthAuth } from "../auth/oauth-auth";
 
 type Inputs = z.infer<typeof authSchema>;
 
 export function SignUpForm() {
   const { isLoaded, signUp } = useSignUp();
   const router = useRouter();
+  const t = useTranslations("auth.signUp");
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string>("");
   const [success, setSuccess] = React.useState<string>("");
@@ -75,9 +78,7 @@ export function SignUpForm() {
         strategy: "email_code",
       });
 
-      setSuccess(
-        "تم إنشاء الحساب بنجاح! سيتم توجيهك لتأكيد البريد الإلكتروني."
-      );
+      setSuccess(t("success"));
 
       // Add delay to show success message
       setTimeout(() => {
@@ -88,7 +89,7 @@ export function SignUpForm() {
         maketoast.success();
       }, 1500);
     } catch (err) {
-      setError("حدث خطأ أثناء إنشاء الحساب. يرجى المحاولة مرة أخرى.");
+      setError(t("error"));
       catchClerkError(err);
       console.log(err);
     } finally {
@@ -112,11 +113,10 @@ export function SignUpForm() {
           </div>
           <div className="text-center">
             <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              إنشاء حساب جديد
+              {t("title")}
             </CardTitle>
             <CardDescription className="text-gray-600 dark:text-gray-50 text-sm leading-relaxed">
-              انضم إلينا واستمتع بتجربة مجانية لمدة 14 يومًا، بدون بطاقة بنكية
-              أو مصاريف خفية.
+              {t("subtitle")}
             </CardDescription>
           </div>
         </div>
@@ -139,6 +139,21 @@ export function SignUpForm() {
           </div>
         )}
 
+        {/* OAuth Sign Up */}
+        <OAuthAuth mode="signUp" />
+
+        {/* Divider */}
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border"></div>
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-2 bg-backgound dark:text-gray-50 text-gray-500 ">
+              {t("or")}
+            </span>
+          </div>
+        </div>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             {/* Email Field */}
@@ -149,11 +164,11 @@ export function SignUpForm() {
                 <FormItem>
                   <FormLabel className="text-gray-700 dark:text-gray-50 font-medium flex items-center gap-2">
                     <Mail className="w-4 h-4" />
-                    البريد الإلكتروني
+                    {t("emailLabel")}
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="أدخِل عنوان البريد الإلكتروني"
+                      placeholder={t("emailPlaceholder")}
                       className="h-11 border focus:border-blue-500 focus:ring-blue-500 transition-colors"
                       {...field}
                     />
@@ -171,11 +186,11 @@ export function SignUpForm() {
                 <FormItem>
                   <FormLabel className="text-gray-700 dark:text-gray-50 font-medium flex items-center gap-2">
                     <Lock className="w-4 h-4" />
-                    كلمة المرور
+                    {t("passwordLabel")}
                   </FormLabel>
                   <FormControl>
                     <PasswordInput
-                      placeholder="أدخِل كلمة المرور"
+                      placeholder={t("passwordPlaceholder")}
                       className="h-11 border focus:border-blue-500 focus:ring-blue-500 transition-colors"
                       {...field}
                     />
@@ -190,21 +205,21 @@ export function SignUpForm() {
               <div className="flex items-start gap-3">
                 <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                 <FormDescription className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
-                  بالضغط على زر &ldquo;أنشئ حسابك مجانًا&rdquo; أنت توافق على{" "}
+                  {t("termsText")}{" "}
                   <Link
                     href="/terms"
                     className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium underline"
                   >
-                    الشروط والأحكام
-                  </Link>
-                  و
+                    {t("termsLink")}
+                  </Link>{" "}
+                  {t("and")}{" "}
                   <Link
                     href="/privacy"
                     className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium underline"
                   >
-                    سياسة الخصوصية
+                    {t("privacyLink")}
                   </Link>
-                  .
+                  {t("period")}
                 </FormDescription>
               </div>
             </div>
@@ -216,7 +231,7 @@ export function SignUpForm() {
               className={"w-full h-11"}
               loading={isLoading}
             >
-              أنشئ حسابك مجانًا
+              {t("submitButton")}
             </Button>
           </form>
         </Form>
@@ -224,12 +239,12 @@ export function SignUpForm() {
         {/* Sign In Link */}
         <div className="text-center pt-4 border-t border-gray-100 dark:border-gray-900">
           <p className="text-gray-600 dark:text-gray-100 text-sm">
-            هل لديك حساب؟{" "}
+            {t("hasAccount")}{" "}
             <Link
               href="/sign-in"
               className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
             >
-              سجّل الدخول
+              {t("signIn")}
             </Link>
           </p>
         </div>

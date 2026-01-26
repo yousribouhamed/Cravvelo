@@ -36,10 +36,12 @@ import {
 import Image from "next/image";
 import { maketoast } from "../toasts";
 import { OTPInput } from "../otp-input";
+import { useTranslations } from "next-intl";
 
 export function VerifyEmail() {
   const router = useRouter();
   const { isLoaded, signUp, setActive } = useSignUp();
+  const t = useTranslations("auth.verifyEmail");
   const [isLoading, startTransition] = React.useTransition();
   const [error, setError] = React.useState<string>("");
   const [success, setSuccess] = React.useState<string>("");
@@ -85,16 +87,14 @@ export function VerifyEmail() {
 
         if (completeSignUp.status !== "complete") {
           console.log(JSON.stringify(completeSignUp, null, 2));
-          setError(
-            "الرمز غير صحيح. يرجى التحقق من البريد الإلكتروني والمحاولة مرة أخرى."
-          );
+          setError(t("invalidCode"));
           form.setValue("code", ""); // Clear the form
           return;
         }
 
         if (completeSignUp.status === "complete") {
           await setActive({ session: completeSignUp.createdSessionId });
-          setSuccess("تم تأكيد البريد الإلكتروني بنجاح! سيتم توجيهك الآن...");
+          setSuccess(t("success"));
 
           // maketoast.successWithText({
           //   text: "تم تأكيد البريد الإلكتروني بنجاح",
@@ -107,7 +107,7 @@ export function VerifyEmail() {
         }
       } catch (err) {
         console.log(err);
-        setError("حدث خطأ أثناء التحقق. يرجى المحاولة مرة أخرى.");
+        setError(t("error"));
         form.setValue("code", ""); // Clear the form
       }
     });
@@ -126,7 +126,7 @@ export function VerifyEmail() {
         strategy: "email_code",
       });
 
-      setSuccess("تم إرسال رمز جديد إلى بريدك الإلكتروني.");
+      setSuccess(t("resendSuccess"));
       setTimeLeft(60); // 60 seconds cooldown
 
       // maketoast.successWithText({
@@ -136,7 +136,7 @@ export function VerifyEmail() {
       maketoast.success();
     } catch (err) {
       console.log(err);
-      setError("فشل في إرسال رمز جديد. يرجى المحاولة مرة أخرى.");
+      setError(t("error"));
     } finally {
       setIsResending(false);
     }
@@ -160,13 +160,13 @@ export function VerifyEmail() {
             />
           </div>
           <div className="text-center space-y-2">
-            <CardTitle className="text-2xl font-bold text-gray-900">
-              تأكيد البريد الإلكتروني
+            <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">
+              {t("title")}
             </CardTitle>
-            <CardDescription className="text-gray-600 text-sm leading-relaxed">
-              لقد أرسلنا رمز التحقق المكون من 6 أرقام إلى
+            <CardDescription className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+              {t("subtitle")}
               {userEmail && (
-                <span className="block font-medium text-gray-900 mt-1">
+                <span className="block font-medium text-gray-900 dark:text-white mt-1">
                   {userEmail}
                 </span>
               )}
@@ -178,9 +178,9 @@ export function VerifyEmail() {
       <CardContent className="space-y-6">
         {/* Success Message */}
         {success && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4 animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 animate-in fade-in slide-in-from-top-2 duration-300">
             <div className="flex items-start gap-3">
-              <p className="text-sm text-green-800 leading-relaxed">
+              <p className="text-sm text-green-800 dark:text-green-300 leading-relaxed">
                 {success}
               </p>
             </div>
@@ -189,9 +189,9 @@ export function VerifyEmail() {
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 animate-in fade-in slide-in-from-top-2 duration-300">
             <div className="flex items-start gap-3">
-              <p className="text-sm text-red-800 leading-relaxed">{error}</p>
+              <p className="text-sm text-red-800 dark:text-red-300 leading-relaxed">{error}</p>
             </div>
           </div>
         )}
@@ -204,9 +204,9 @@ export function VerifyEmail() {
               name="code"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-700 font-medium flex items-center gap-2 justify-center">
+                  <FormLabel className="text-gray-700 dark:text-gray-200 font-medium flex items-center gap-2 justify-center">
                     <Mail className="w-4 h-4" />
-                    رمز التحقق
+                    {t("codeLabel")}
                   </FormLabel>
                   <FormControl>
                     <OTPInput
@@ -224,8 +224,8 @@ export function VerifyEmail() {
 
             {/* Auto-submit message */}
             {watchedCode && watchedCode.length < 6 && (
-              <p className="text-xs text-gray-500 text-center">
-                سيتم التحقق من الرمز تلقائياً عند إكمال الإدخال
+              <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+                {t("autoVerifyMessage")}
               </p>
             )}
 
@@ -234,23 +234,23 @@ export function VerifyEmail() {
               <Button
                 type="submit"
                 disabled={isLoading || !watchedCode || watchedCode.length < 6}
-                className="w-full h-11 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400"
+                className="w-full h-11 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 disabled:bg-gray-400 dark:disabled:bg-gray-600"
                 loading={isLoading}
               >
-                {isLoading ? "جاري التحقق..." : "تأكيد البريد الإلكتروني"}
+                {isLoading ? t("verifying") : t("submitButton")}
               </Button>
             )}
           </form>
         </Form>
 
         {/* Resend Code Section */}
-        <div className="flex flex-col items-center space-y-3 pt-4 border-t border-gray-100">
-          <p className="text-gray-600 text-sm text-center">لم تستلم الرمز؟</p>
+        <div className="flex flex-col items-center space-y-3 pt-4 border-t border-gray-100 dark:border-gray-800">
+          <p className="text-gray-600 dark:text-gray-300 text-sm text-center">{t("didntReceiveCode")}</p>
           <Button
             variant="ghost"
             onClick={handleResendCode}
             disabled={isResending || timeLeft > 0}
-            className="h-auto p-2 text-blue-600 hover:text-blue-700 disabled:text-gray-400"
+            className="h-auto p-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 disabled:text-gray-400 dark:disabled:text-gray-500"
           >
             {isResending ? (
               <RefreshCw className="w-4 h-4 ml-1 animate-spin" />
@@ -260,10 +260,10 @@ export function VerifyEmail() {
               <RefreshCw className="w-4 h-4 ml-1" />
             )}
             {timeLeft > 0
-              ? `إعادة الإرسال خلال ${timeLeft}s`
+              ? t("resendIn", { seconds: timeLeft })
               : isResending
-              ? "جاري الإرسال..."
-              : "إرسال رمز جديد"}
+              ? t("resending")
+              : t("resendCode")}
           </Button>
         </div>
 
@@ -271,9 +271,9 @@ export function VerifyEmail() {
         <div className="text-center pt-2">
           <Link
             href="/sign-up"
-            className="text-blue-600 hover:text-blue-700 font-medium transition-colors inline-flex items-center gap-2 text-sm"
+            className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors inline-flex items-center gap-2 text-sm"
           >
-            العودة إلى التسجيل
+            {t("backToSignUp")}
             <ArrowLeft className="w-4 h-4" />
           </Link>
         </div>

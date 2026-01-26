@@ -19,7 +19,9 @@
     "next": "Next",
     "previous": "Previous",
     "submit": "Submit",
-    "close": "Close"
+    "close": "Close",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
   },
   "settings": {
     "title": "General Settings",
@@ -108,7 +110,109 @@
     "academy": "Academy"
   },
   "auth": {
-    "logout": "Logout"
+    "logout": "Logout",
+    "signIn": {
+      "title": "Welcome back!",
+      "subtitle": "Sign in to access your account",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email address",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "submitButton": "Sign In",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create account now",
+      "or": "or",
+      "success": "Signed in successfully!",
+      "error": "Failed to sign in. Please try again.",
+      "genericError": "An error occurred during sign in. Please check your credentials."
+    },
+    "signUp": {
+      "title": "Create New Account",
+      "subtitle": "Join us and enjoy a 14-day free trial, no credit card or hidden fees.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email address",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "submitButton": "Create Your Free Account",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign In",
+      "or": "or",
+      "success": "Account created successfully! You will be redirected to verify your email.",
+      "error": "An error occurred while creating the account. Please try again.",
+      "termsText": "By clicking the \"Create Your Free Account\" button, you agree to the",
+      "termsLink": "Terms and Conditions",
+      "and": "and",
+      "privacyLink": "Privacy Policy",
+      "period": "."
+    },
+    "resetPassword": {
+      "title": "Reset Password",
+      "subtitle": "Enter your email address and we'll send you a verification code to reset your password.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email address",
+      "submitButton": "Send Verification Code",
+      "backToSignIn": "Back to Sign In",
+      "success": "Verification code sent successfully to your email.",
+      "error": "An error occurred while sending the verification code. Please verify your email address and try again.",
+      "infoText": "Make sure your email is correct, as a 6-digit verification code will be sent to reset your password."
+    },
+    "resetPasswordStep2": {
+      "title": "Reset Password",
+      "subtitle": "Enter the verification code we sent to {email}, then enter your new password.",
+      "codeLabel": "Verification Code",
+      "newPasswordLabel": "New Password",
+      "newPasswordPlaceholder": "Enter your new password",
+      "confirmPasswordLabel": "Confirm Password",
+      "confirmPasswordPlaceholder": "Re-enter your password",
+      "submitButton": "Reset Password",
+      "processing": "Processing...",
+      "resendCode": "Send New Code",
+      "didntReceiveCode": "Didn't receive the code?",
+      "backToSignIn": "Back to Sign In",
+      "success": "Password reset successfully! You will be redirected now...",
+      "error": "An error occurred while resetting your password. Please try again.",
+      "invalidCode": "The code is incorrect or expired. Please verify and try again.",
+      "requires2FA": "This account requires additional verification. Please try again.",
+      "resendSuccess": "A new code has been sent to your email.",
+      "resendError": "Failed to send a new code. Please try again.",
+      "infoText": "Make sure your new password is strong and contains uppercase and lowercase letters, numbers, and symbols."
+    },
+    "verifyEmail": {
+      "title": "Verify Email",
+      "subtitle": "We've sent a 6-digit verification code to",
+      "codeLabel": "Verification Code",
+      "submitButton": "Verify Email",
+      "verifying": "Verifying...",
+      "backToSignUp": "Back to Sign Up",
+      "didntReceiveCode": "Didn't receive the code?",
+      "resendCode": "Send New Code",
+      "resending": "Sending...",
+      "resendIn": "Resend in {seconds}s",
+      "autoVerifyMessage": "The code will be verified automatically when input is complete",
+      "success": "Email verified successfully! You will be redirected now...",
+      "error": "An error occurred during verification. Please try again.",
+      "invalidCode": "The code is incorrect. Please check your email and try again.",
+      "resendSuccess": "A new code has been sent to your email."
+    },
+    "oauth": {
+      "signInWith": "Sign in with {provider}",
+      "signingInWith": "Signing in with {provider}...",
+      "signUpWith": "Sign up with {provider}",
+      "signingUpWith": "Signing up with {provider}...",
+      "redirectingTo": "You will be redirected to {provider}...",
+      "error": "An error occurred, please try again.",
+      "termsText": "By continuing, you agree to the Terms of Service and Privacy Policy"
+    },
+    "sliderShow": {
+      "items": [
+        "Give your students a better experience through tests",
+        "Create your academy online and upload your training course",
+        "Protect your courses and content from theft and sell easily",
+        "Protect your courses and content from theft and sell easily"
+      ]
+    }
   },
   "sidebar": {
     "home": "Home",

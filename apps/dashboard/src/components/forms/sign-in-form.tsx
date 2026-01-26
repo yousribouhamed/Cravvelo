@@ -27,9 +27,10 @@ import { useRouter } from "next/navigation";
 import { useSignIn } from "@clerk/nextjs";
 import { authSchemaLogin } from "@/src/lib/validators/auth";
 import { catchClerkError } from "@/src/lib/utils";
-import { OAuthSignIn } from "../auth/oauth-signin";
+import { OAuthAuth } from "../auth/oauth-auth";
 import Image from "next/image";
 import { AlertCircle, CheckCircle2, Eye, EyeOff } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type Inputs = z.infer<typeof authSchemaLogin>;
 
@@ -42,6 +43,7 @@ const STORAGE_KEYS = {
 export function SignInForm() {
   const router = useRouter();
   const { isLoaded, signIn, setActive } = useSignIn();
+  const t = useTranslations("auth.signIn");
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [rememberMe, setRememberMe] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string>("");
@@ -123,19 +125,19 @@ export function SignInForm() {
         // Save or clear credentials based on remember me checkbox
         handleCredentialStorage(data.email, data.password, rememberMe);
 
-        setSuccess("تم تسجيل الدخول بنجاح!");
+        setSuccess(t("success"));
 
         // Add a slight delay to show success message
         setTimeout(() => {
           router.push(`/auth-callback`);
         }, 1000);
       } else {
-        setError("فشل في تسجيل الدخول. يرجى المحاولة مرة أخرى.");
+        setError(t("error"));
         console.log(result);
       }
     } catch (err) {
       console.log(err);
-      setError("حدث خطأ أثناء تسجيل الدخول. يرجى التحقق من بياناتك.");
+      setError(t("genericError"));
       catchClerkError(err);
     } finally {
       setIsLoading(false);
@@ -174,10 +176,10 @@ export function SignInForm() {
           </div>
           <div className="text-center">
             <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              مرحبًا بعودتك!
+              {t("title")}
             </CardTitle>
             <p className="text-gray-600 dark:text-gray-50 text-sm">
-              سجّل دخولك للوصول إلى حسابك
+              {t("subtitle")}
             </p>
           </div>
         </div>
@@ -201,7 +203,7 @@ export function SignInForm() {
         )}
 
         {/* OAuth Sign In */}
-        <OAuthSignIn />
+        <OAuthAuth mode="signIn" />
 
         {/* Divider */}
         <div className="relative">
@@ -210,7 +212,7 @@ export function SignInForm() {
           </div>
           <div className="relative flex justify-center text-sm">
             <span className="px-2 bg-backgound dark:text-gray-50 text-gray-500 ">
-              أو
+              {t("or")}
             </span>
           </div>
         </div>
@@ -227,11 +229,11 @@ export function SignInForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-gray-700 dark:text-gray-50 font-medium">
-                    البريد الإلكتروني
+                    {t("emailLabel")}
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="أدخِل عنوان البريد الإلكتروني"
+                      placeholder={t("emailPlaceholder")}
                       className="h-11 border focus:border-blue-500 focus:ring-blue-500 transition-colors"
                       {...field}
                     />
@@ -248,12 +250,12 @@ export function SignInForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-gray-700 dark:text-gray-50 font-medium">
-                    كلمة المرور
+                    {t("passwordLabel")}
                   </FormLabel>
                   <FormControl>
                     <div className="relative">
                       <PasswordInput
-                        placeholder="أدخِل كلمة المرور"
+                        placeholder={t("passwordPlaceholder")}
                         className="h-11 border focus:border-blue-500 focus:ring-blue-500 transition-colors "
                         {...field}
                       />
@@ -279,14 +281,14 @@ export function SignInForm() {
                   htmlFor="rememberMe"
                   className="text-sm text-gray-700 dark:text-gray-50 cursor-pointer select-none"
                 >
-                  تذكَّر بياناتي
+                  {t("rememberMe")}
                 </label>
               </div>
               <Link
                 href="/sign-in/reset-password"
                 className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
               >
-                نسيت كلمة المرور؟
+                {t("forgotPassword")}
               </Link>
             </div>
 
@@ -297,7 +299,7 @@ export function SignInForm() {
               className={"w-full h-11"}
               loading={isLoading}
             >
-              تسجيل الدخول
+              {t("submitButton")}
             </Button>
           </form>
         </Form>
@@ -305,12 +307,12 @@ export function SignInForm() {
         {/* Sign Up Link */}
         <div className="text-center pt-4 border-t border-gray-100 dark:border-gray-900">
           <p className="text-gray-600 dark:text-gray-100 text-sm">
-            ليس لديك حساب؟{" "}
+            {t("noAccount")}{" "}
             <Link
               href="/sign-up"
               className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
             >
-              أنشئ حساب الآن
+              {t("createAccount")}
             </Link>
           </p>
         </div>

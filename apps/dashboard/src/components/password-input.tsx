@@ -6,6 +6,7 @@ import { EyeNoneIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { cn } from "@ui/lib/utils";
 import { Input } from "@ui/components/ui/input";
 import { Button } from "@ui/components/ui/button";
+import { useTranslations } from "next-intl";
 
 export interface PasswordInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
@@ -13,6 +14,7 @@ export interface PasswordInputProps
 const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
   ({ className, ...props }, ref) => {
     const [showPassword, setShowPassword] = React.useState(false);
+    const t = useTranslations("common");
 
     return (
       <div className="relative w-full">
@@ -35,7 +37,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
             <EyeOpenIcon className="h-5 w-5" aria-hidden="true" />
           )}
           <span className="sr-only">
-            {showPassword ? "Hide password" : "Show password"}
+            {showPassword ? t("hidePassword") : t("showPassword")}
           </span>
         </Button>
         <Input

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useSignIn } from "@clerk/nextjs";
+import { useSignIn, useSignUp } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { type OAuthStrategy } from "@clerk/types";
 import { toast } from "@ui/lib/utils";
@@ -18,24 +18,39 @@ const oauthProviders = [
   strategy: OAuthStrategy;
 }[];
 
-export function OAuthSignIn() {
+interface OAuthAuthProps {
+  mode: "signIn" | "signUp";
+}
+
+export function OAuthAuth({ mode }: OAuthAuthProps) {
   const [isLoading, setIsLoading] = React.useState<OAuthStrategy | null>(null);
   const [error, setError] = React.useState<string | null>(null);
   const { signIn, isLoaded: signInLoaded } = useSignIn();
+  const { signUp, isLoaded: signUpLoaded } = useSignUp();
   const t = useTranslations("auth.oauth");
 
-  async function oauthSignIn(provider: OAuthStrategy) {
-    if (!signInLoaded) return;
+  const isLoaded = mode === "signIn" ? signInLoaded : signUpLoaded;
+
+  async function oauthAuth(provider: OAuthStrategy) {
+    if (!isLoaded) return;
 
     try {
       setIsLoading(provider);
       setError(null);
 
-      await signIn.authenticateWithRedirect({
-        strategy: provider,
-        redirectUrl: "/sso-callback",
-        redirectUrlComplete: "/auth-callback",
-      });
+      if (mode === "signIn") {
+        await signIn.authenticateWithRedirect({
+          strategy: provider,
+          redirectUrl: "/sso-callback",
+          redirectUrlComplete: "/auth-callback",
+        });
+      } else {
+        await signUp.authenticateWithRedirect({
+          strategy: provider,
+          redirectUrl: "/sso-callback",
+          redirectUrlComplete: "/auth-callback",
+        });
+      }
     } catch (error) {
       setIsLoading(null);
 
@@ -58,6 +73,23 @@ export function OAuthSignIn() {
       return () => clearTimeout(timer);
     }
   }, [error]);
+
+  const getButtonText = (providerName: string) => {
+    if (isLoading === oauthProviders.find((p) => p.name === providerName)?.strategy) {
+      return mode === "signIn"
+        ? t("signingInWith", { provider: providerName })
+        : t("signingUpWith", { provider: providerName });
+    }
+    return mode === "signIn"
+      ? t("signInWith", { provider: providerName })
+      : t("signUpWith", { provider: providerName });
+  };
+
+  const getAriaLabel = (providerName: string) => {
+    return mode === "signIn"
+      ? t("signInWith", { provider: providerName })
+      : t("signUpWith", { provider: providerName });
+  };
 
   return (
     <div className="w-full space-y-3">
@@ -92,14 +124,12 @@ export function OAuthSignIn() {
                 hover:bg-gray-50 dark:hover:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
                 disabled:cursor-not-allowed disabled:opacity-50
               `}
-              onClick={() => void oauthSignIn(provider.strategy)}
-              disabled={isAnyLoading || !signInLoaded}
-              aria-label={t("signInWith", { provider: provider.name })}
+              onClick={() => void oauthAuth(provider.strategy)}
+              disabled={isAnyLoading || !isLoaded}
+              aria-label={getAriaLabel(provider.name)}
             >
               <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
-                {isCurrentLoading
-                  ? t("signingInWith", { provider: provider.name })
-                  : t("signInWith", { provider: provider.name })}
+                {getButtonText(provider.name)}
               </span>
 
               {isCurrentLoading ? (

@@ -10,28 +10,30 @@ import {
 } from "@ui/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
-
-const Items = [
-  {
-    title: "إعطي تجربة أفضل لطلابك من خلال إختبارات",
-    image: "/roupes/groupe-2.png",
-  },
-  {
-    title: "أنشئ أكادميتك اونلاين وأرفع دورتك التدريبية",
-    image: "/roupes/groupe-1.png",
-  },
-
-  {
-    title: "إحمي دوراتك ومحتواك من السرقة وبع بكل سهولة",
-    image: "/roupes/groupe-3.png",
-  },
-  {
-    title: "إحمي دوراتك ومحتواك من السرقة وبع بكل سهولة",
-    image: "/roupes/groupe-4.png",
-  },
-];
+import { useTranslations } from "next-intl";
 
 const SliderShow: FC = ({}) => {
+  const t = useTranslations("auth.sliderShow");
+  const items = t.raw("items") as string[];
+
+  const Items = [
+    {
+      title: items[0] || "",
+      image: "/roupes/groupe-2.png",
+    },
+    {
+      title: items[1] || "",
+      image: "/roupes/groupe-1.png",
+    },
+    {
+      title: items[2] || "",
+      image: "/roupes/groupe-3.png",
+    },
+    {
+      title: items[3] || "",
+      image: "/roupes/groupe-4.png",
+    },
+  ];
   return (
     <>
       <Carousel

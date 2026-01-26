@@ -39,6 +39,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 type Inputs = z.infer<typeof resetPasswordSchema>;
 
@@ -138,6 +139,7 @@ export function ResetPasswordStep2Form() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
   const { isLoaded, signIn, setActive } = useSignIn();
+  const t = useTranslations("auth.resetPasswordStep2");
   const [isLoading, startTransition] = React.useTransition();
   const [error, setError] = React.useState<string>("");
   const [success, setSuccess] = React.useState<string>("");
@@ -176,13 +178,13 @@ export function ResetPasswordStep2Form() {
 
         if (attemptFirstFactor.status === "needs_second_factor") {
           // TODO: implement 2FA (requires clerk pro plan)
-          setError("يتطلب هذا الحساب تحقق إضافي. يرجى المحاولة مرة أخرى.");
+          setError(t("requires2FA"));
         } else if (attemptFirstFactor.status === "complete") {
           await setActive({
             session: attemptFirstFactor.createdSessionId,
           });
 
-          setSuccess("تم إعادة تعيين كلمة المرور بنجاح! سيتم توجيهك الآن...");
+          setSuccess(t("success"));
 
           setTimeout(() => {
             router.push(`${window.location.origin}/`);
@@ -190,14 +192,10 @@ export function ResetPasswordStep2Form() {
           }, 1500);
         } else {
           console.error(attemptFirstFactor);
-          setError(
-            "حدث خطأ أثناء إعادة تعيين كلمة المرور. يرجى المحاولة مرة أخرى."
-          );
+          setError(t("error"));
         }
       } catch (err) {
-        setError(
-          "الرمز غير صحيح أو منتهي الصلاحية. يرجى التحقق والمحاولة مرة أخرى."
-        );
+        setError(t("invalidCode"));
         catchClerkError(err);
       }
     });
@@ -217,13 +215,13 @@ export function ResetPasswordStep2Form() {
         identifier: email, // Use the email from search params, not form.getValues("code")
       });
 
-      setSuccess("تم إرسال رمز جديد إلى بريدك الإلكتروني.");
+      setSuccess(t("resendSuccess"));
       // Clear the current OTP input
       form.setValue("code", "");
       maketoast.success();
     } catch (err) {
       console.log(err);
-      setError("فشل في إرسال رمز جديد. يرجى المحاولة مرة أخرى.");
+      setError(t("resendError"));
       catchClerkError(err);
     } finally {
       setIsResending(false);
@@ -251,14 +249,10 @@ export function ResetPasswordStep2Form() {
           </div>
           <div className="text-center">
             <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              إعادة تعيين كلمة المرور
+              {t("title")}
             </CardTitle>
             <CardDescription className="text-gray-600 dark:text-gray-50 text-sm leading-relaxed">
-              أدخِل رمز التحقق الذي أرسلناه إلى{" "}
-              <span className="font-medium text-gray-800 dark:text-gray-200">
-                {email}
-              </span>
-              ، ثم قم بإدخال كلمة المرور الجديدة.
+              {t("subtitle", { email: email || "" })}
             </CardDescription>
           </div>
         </div>
@@ -291,7 +285,7 @@ export function ResetPasswordStep2Form() {
                 <FormItem>
                   <FormLabel className="text-gray-700 dark:text-gray-50 font-medium flex items-center gap-2">
                     <Mail className="w-4 h-4" />
-                    رمز التحقق
+                    {t("codeLabel")}
                   </FormLabel>
                   <FormControl>
                     <OTPInput
@@ -308,7 +302,7 @@ export function ResetPasswordStep2Form() {
             {/* Resend Code Section */}
             <div className="flex items-center justify-between">
               <p className="text-gray-600 dark:text-gray-100 text-sm">
-                لم تستلم الرمز؟
+                {t("didntReceiveCode")}
               </p>
               <Button
                 type="button"
@@ -322,7 +316,7 @@ export function ResetPasswordStep2Form() {
                 ) : (
                   <RefreshCw className="w-4 h-4 ml-1" />
                 )}
-                إرسال رمز جديد
+                {t("resendCode")}
               </Button>
             </div>
 
@@ -334,11 +328,11 @@ export function ResetPasswordStep2Form() {
                 <FormItem>
                   <FormLabel className="text-gray-700 dark:text-gray-50 font-medium flex items-center gap-2">
                     <Lock className="w-4 h-4" />
-                    كلمة المرور الجديدة
+                    {t("newPasswordLabel")}
                   </FormLabel>
                   <FormControl>
                     <PasswordInput
-                      placeholder="أدخِل كلمة المرور الجديدة"
+                      placeholder={t("newPasswordPlaceholder")}
                       className="h-11 border focus:border-blue-500 focus:ring-blue-500 transition-colors"
                       {...field}
                     />
@@ -355,11 +349,11 @@ export function ResetPasswordStep2Form() {
                 <FormItem>
                   <FormLabel className="text-gray-700 dark:text-gray-50 font-medium flex items-center gap-2">
                     <Lock className="w-4 h-4" />
-                    تأكيد كلمة المرور
+                    {t("confirmPasswordLabel")}
                   </FormLabel>
                   <FormControl>
                     <PasswordInput
-                      placeholder="أعد إدخال كلمة المرور"
+                      placeholder={t("confirmPasswordPlaceholder")}
                       className="h-11 border focus:border-blue-500 focus:ring-blue-500 transition-colors"
                       {...field}
                     />
@@ -374,8 +368,7 @@ export function ResetPasswordStep2Form() {
               <div className="flex items-start gap-3">
                 <KeyRound className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                 <FormDescription className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
-                  تأكد من أن كلمة المرور الجديدة قوية وتحتوي على أحرف كبيرة
-                  وصغيرة وأرقام ورموز.
+                  {t("infoText")}
                 </FormDescription>
               </div>
             </div>
@@ -385,10 +378,10 @@ export function ResetPasswordStep2Form() {
               {isLoading ? (
                 <>
                   <RefreshCw className="w-4 h-4 ml-2 animate-spin" />
-                  جاري المعالجة...
+                  {t("processing")}
                 </>
               ) : (
-                "إعادة تعيين كلمة المرور"
+                t("submitButton")
               )}
             </Button>
           </form>
@@ -400,7 +393,7 @@ export function ResetPasswordStep2Form() {
             href="/sign-in"
             className="text-blue-600 hover:text-blue-700 font-medium transition-colors inline-flex items-center gap-2"
           >
-            العودة إلى تسجيل الدخول
+            {t("backToSignIn")}
             <ArrowLeft className="w-4 h-4" />
           </Link>
         </div>

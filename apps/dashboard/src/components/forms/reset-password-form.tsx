@@ -37,12 +37,14 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 type Inputs = z.infer<typeof checkEmailSchema>;
 
 export function ResetPasswordForm() {
   const router = useRouter();
   const { isLoaded, signIn } = useSignIn();
+  const t = useTranslations("auth.resetPassword");
   const [isLoading, startTransition] = React.useTransition();
   const [error, setError] = React.useState<string>("");
   const [success, setSuccess] = React.useState<string>("");
@@ -68,7 +70,7 @@ export function ResetPasswordForm() {
         });
 
         if (firstFactor.status === "needs_first_factor") {
-          setSuccess("تم إرسال رمز التحقق بنجاح إلى بريدك الإلكتروني.");
+          setSuccess(t("success"));
 
           setTimeout(() => {
             router.push(`/sign-in/reset-password/step2?email=${data.email}`);
@@ -76,9 +78,7 @@ export function ResetPasswordForm() {
           }, 1500);
         }
       } catch (err) {
-        setError(
-          "حدث خطأ أثناء إرسال رمز التحقق. يرجى التأكد من صحة البريد الإلكتروني والمحاولة مرة أخرى."
-        );
+        setError(t("error"));
         catchClerkError(err);
       }
     });
@@ -100,11 +100,10 @@ export function ResetPasswordForm() {
           </div>
           <div className="text-center">
             <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              استعادة كلمة المرور
+              {t("title")}
             </CardTitle>
             <CardDescription className="text-gray-600 dark:text-gray-50 text-sm leading-relaxed">
-              أدخِل عنوان بريدك الإلكتروني وسنرسل لك رمز التحقق لإعادة تعيين
-              كلمة المرور.
+              {t("subtitle")}
             </CardDescription>
           </div>
         </div>
@@ -137,11 +136,11 @@ export function ResetPasswordForm() {
                 <FormItem>
                   <FormLabel className="text-gray-700 dark:text-gray-50 font-medium flex items-center gap-2">
                     <Mail className="w-4 h-4" />
-                    البريد الإلكتروني
+                    {t("emailLabel")}
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="أدخِل عنوان البريد الإلكتروني"
+                      placeholder={t("emailPlaceholder")}
                       className="h-11 border focus:border-blue-500 focus:ring-blue-500 transition-colors"
                       {...field}
                     />
@@ -156,8 +155,7 @@ export function ResetPasswordForm() {
               <div className="flex items-start gap-3">
                 <KeyRound className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                 <FormDescription className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
-                  تأكّد من صحة البريد الإلكتروني، إذ سيتم إرسال رمز التحقق
-                  المكون من 6 أرقام لإعادة تعيين كلمة المرور.
+                  {t("infoText")}
                 </FormDescription>
               </div>
             </div>
@@ -169,7 +167,7 @@ export function ResetPasswordForm() {
               className="w-full h-11"
               loading={isLoading}
             >
-              إرسال رمز التحقق
+              {t("submitButton")}
             </Button>
           </form>
         </Form>
@@ -180,7 +178,7 @@ export function ResetPasswordForm() {
             href="/sign-in"
             className="text-blue-600 hover:text-blue-700 font-medium transition-colors inline-flex items-center gap-2"
           >
-            العودة إلى تسجيل الدخول
+            {t("backToSignIn")}
             <ArrowLeft className="w-4 h-4" />
           </Link>
         </div>

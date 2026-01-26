@@ -2,7 +2,7 @@ import { ResetPasswordStep2Form } from "@/src/components/forms/reset-password-fo
 import PublicPageRestrictionGuard from "@/src/components/guards/page-restriction";
 import type { FC } from "react";
 
-interface pageAbdullahProps {}
+
 
 const page: FC = ({}) => {
   return (
