@@ -199,7 +199,23 @@ export function formatBytes(
 
 export const computeSHA256 = async (file: File) => {
   const buffer = await file.arrayBuffer();
-  const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
+  
+  // Get crypto API - prefer window.crypto in browser, fallback to global crypto
+  let cryptoApi: Crypto;
+  if (typeof window !== "undefined" && window.crypto) {
+    cryptoApi = window.crypto;
+  } else if (typeof crypto !== "undefined" && crypto) {
+    cryptoApi = crypto;
+  } else {
+    throw new Error("Web Crypto API is not available. Please use a secure context (HTTPS).");
+  }
+  
+  // Check if subtle API is available
+  if (!cryptoApi.subtle) {
+    throw new Error("Web Crypto Subtle API is not available. Please use a secure context (HTTPS).");
+  }
+  
+  const hashBuffer = await cryptoApi.subtle.digest("SHA-256", buffer);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   const hashHex = hashArray
     .map((b) => b.toString(16).padStart(2, "0"))

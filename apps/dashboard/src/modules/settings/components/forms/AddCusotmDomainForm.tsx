@@ -33,6 +33,8 @@ import {
 } from "@/src/lib/domains";
 import DomainStatus from "@/src/components/domain-status";
 import DomainConfiguration from "@/src/components/domain-configuration";
+import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
 
 interface AddCustomDomain {
   customDomain: string | null;
@@ -43,6 +45,10 @@ const formSchema = z.object({
 });
 
 const AddCusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
+  const t = useTranslations("websiteSettings.forms.customDomain");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
+
   const mutation = trpc.setCustomDomain.useMutation({
     onSuccess: () => {
       maketoast.success();
@@ -82,7 +88,7 @@ const AddCusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card className="border h-full w-full rounded-xl shadow-none">
           <CardHeader>
-            <CardTitle>مجال مخصص</CardTitle>
+            <CardTitle dir={isRTL ? "rtl" : "ltr"}>{t("title")}</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
@@ -90,7 +96,7 @@ const AddCusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
               name="cutomedomain"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>النطاق المخصص لموقعك.</FormLabel>
+                  <FormLabel dir={isRTL ? "rtl" : "ltr"}>{t("label")}</FormLabel>
                   <div className="relative flex w-full ">
                     <FormControl>
                       <Input
@@ -123,7 +129,7 @@ const AddCusotmDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
               type="submit"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              تاكيد
+              {t("confirm")}
             </Button>
           </CardFooter>
         </Card>

@@ -1,0 +1,814 @@
+{
+  "common": {
+    "language": "Language",
+    "darkMode": "Dark Mode",
+    "settings": "Settings",
+    "general": "General",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "update": "Update",
+    "search": "Search",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "close": "Close"
+  },
+  "settings": {
+    "title": "General Settings",
+    "language": {
+      "label": "Language",
+      "description": "Select your preferred language"
+    },
+    "theme": {
+      "label": "Dark Mode",
+      "description": "Toggle dark mode"
+    }
+  },
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "payments": "Payments",
+    "paymentMethods": "Payment Methods",
+    "students": "Students",
+    "courses": "Courses",
+    "applications": "Applications",
+    "settings": "Settings",
+    "profile": "Profile",
+    "billing": "Billing",
+    "invoices": "Invoices"
+  },
+  "messages": {
+    "error": {
+      "generic": "An error occurred. Please try again.",
+      "notFound": "The requested resource was not found.",
+      "unauthorized": "You are not authorized to perform this action.",
+      "serverError": "A server error occurred. Please try again later."
+    },
+    "success": {
+      "saved": "Changes saved successfully.",
+      "deleted": "Item deleted successfully.",
+      "created": "Item created successfully.",
+      "updated": "Item updated successfully."
+    }
+  },
+  "forms": {
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "invalidUrl": "Please enter a valid URL",
+    "minLength": "This field must be at least {min} characters",
+    "maxLength": "This field must be at most {max} characters"
+  },
+  "dataTable": {
+    "noResults": "No results found",
+    "page": "Page",
+    "of": "of",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "search": {
+    "placeholder": "Search courses and products...",
+    "dialogTitle": "Search",
+    "searchPlaceholder": "Search for anything...",
+    "searching": "Searching...",
+    "suggestedPages": "Suggested Pages",
+    "resultsFound": "Found {count} results",
+    "products": "Products",
+    "courses": "Courses",
+    "digitalProduct": "Digital Product",
+    "searchError": "Search error occurred",
+    "searchFailed": "Search failed. Please try again.",
+    "searchTimeout": "Search timeout. Please try again.",
+    "noResults": "No results found",
+    "noResultsDescription": "Try different keywords or check spelling",
+    "defaultPages": {
+      "paymentMethods": "Payment Methods",
+      "paymentMethodsDesc": "Manage payment methods and invoices",
+      "appearance": "Appearance",
+      "appearanceDesc": "Customize colors, logo, and template",
+      "recentSales": "Recent Sales",
+      "recentSalesDesc": "Track sales and recent orders",
+      "academySettings": "Academy Settings",
+      "academySettingsDesc": "Manage terms, conditions, and privacy"
+    }
+  },
+  "userNav": {
+    "defaultUser": "User",
+    "verificationComplete": "Verification completed successfully",
+    "startVerification": "Start verification now",
+    "profile": "Profile",
+    "academyPreview": "Academy Preview",
+    "academy": "Academy"
+  },
+  "auth": {
+    "logout": "Logout"
+  },
+  "sidebar": {
+    "home": "Home",
+    "payments": "Payments",
+    "paymentRecords": "Payment Records",
+    "paymentMethods": "Payment Methods",
+    "customers": "Customers",
+    "students": "Students",
+    "applications": "Applications",
+    "settings": "Settings",
+    "account": "Account",
+    "websiteSettings": "Website Settings"
+  },
+  "pages": {
+    "dashboard": "Dashboard",
+    "home": "Home",
+    "payments": "Payments",
+    "students": "Students",
+    "courses": "Courses",
+    "products": "Products",
+    "digitalProducts": "Digital Products",
+    "applications": "Applications",
+    "appStore": "App Store",
+    "productContent": "Product Content",
+    "profile": "Profile",
+    "billing": "Billing",
+    "invoices": "Invoices",
+    "websiteSettings": "Website Settings",
+    "appearance": "Appearance",
+    "marketing": "Marketing",
+    "legal": "Legal",
+    "domain": "Domain",
+    "balance": "Balance"
+  },
+  "addNew": {
+    "button": "Add New",
+    "dialogTitle": "Add New",
+    "courseTitle": "Course Title",
+    "productTitle": "Product Title",
+    "courseTitlePlaceholder": "Enter new course title, e.g.: UX Design Course",
+    "productTitlePlaceholder": "Enter new product title, e.g.: Digital Marketing E-book",
+    "contentType": "Content Type",
+    "trainingCourse": "Training Course",
+    "trainingCourseDescription": "Create a training course with chapters and lectures",
+    "digitalProduct": "Digital Product",
+    "digitalProductDescription": "Create a digital product like a book or downloadable file",
+    "createCourse": "Create Course",
+    "createProduct": "Create Product",
+    "courseCreated": "Course created successfully",
+    "productCreated": "Product created successfully"
+  },
+  "apps": {
+    "addAppsToStore": "Add apps to your store",
+    "installs": "installs",
+    "goToApp": "Go to App",
+    "noAppsToInstall": "No apps available to install",
+    "install": "Install",
+    "uninstall": "Uninstall",
+    "installApp": "Install App",
+    "uninstallApp": "Uninstall App",
+    "installAppDescription": "Are you sure you want to install this app? An invoice will be created and the payment process will be linked to your account.",
+    "uninstallAppDescription": "Are you sure you want to uninstall this app? The subscription will be cancelled and you will lose access to all app features.",
+    "appInstalled": "App installed successfully",
+    "appUninstalled": "App uninstalled successfully",
+    "installFailed": "Failed to install app",
+    "uninstallFailed": "Failed to uninstall app"
+  },
+  "courseForms": {
+    "textTitle": "Text Title",
+    "textTitlePlaceholder": "Why is the sea blue",
+    "readingDuration": "Expected Reading Duration (in minutes)",
+    "readingDurationOptional": "(Optional - will be calculated automatically)",
+    "lessonContent": "Lesson Content",
+    "saveAndContinue": "Save and Continue",
+    "cancelAndGoBack": "Cancel and Go Back",
+    "lessonCreated": "Lesson created successfully",
+    "lessonUpdated": "Lesson updated successfully",
+    "lessonCreateFailed": "Failed to create lesson",
+    "lessonUpdateFailed": "Failed to update lesson",
+    "loadingLessonData": "Loading lesson data...",
+    "lessonNotFound": "Lesson not found",
+    "lessonNotFoundDescription": "The requested lesson was not found",
+    "fileTitle": "File Title",
+    "fileTitlePlaceholder": "Where does the sun go when night falls",
+    "addPdfFile": "Add PDF file",
+    "planType": "Plan Type",
+    "free": "Free",
+    "oneTime": "One Time Payment",
+    "recurring": "Recurring Subscription",
+    "price": "Price",
+    "compareAtPrice": "Compare at Price",
+    "accessDuration": "Access Duration",
+    "selectDuration": "Select Duration",
+    "limited": "Limited",
+    "unlimited": "Unlimited",
+    "numberOfDays": "Number of Days",
+    "renewalPeriod": "Renewal Period",
+    "selectRenewalPeriod": "Select Renewal Period",
+    "customDays": "Custom Number of Days",
+    "enterDays": "Enter number of days",
+    "weekly": "Weekly (7 days)",
+    "monthly": "Monthly (30 days)",
+    "quarterly": "Quarterly (90 days)",
+    "yearly": "Yearly (365 days)",
+    "custom": "Custom",
+    "requiredField": "Please fill in the field",
+    "contentRequired": "Content is required"
+  },
+  "modals": {
+    "deleteCourse": "Delete Course",
+    "deleteCourseConfirm": "Are you absolutely sure you want to delete this course?",
+    "deleteCourseDescription": "This action cannot be undone. This will permanently delete your course and remove all data from our servers.",
+    "deleteProduct": "Delete Product",
+    "deleteProductConfirm": "Are you absolutely sure you want to delete this product?",
+    "deleteProductDescription": "This action cannot be undone. This will permanently delete your product and remove all data from our servers.",
+    "deleteChapter": "Delete Chapter",
+    "deleteChapterConfirm": "Are you absolutely sure you want to delete this chapter?",
+    "deleteChapterDescription": "This action cannot be undone. This will permanently delete your chapter and remove all data from our servers.",
+    "courseDeleted": "Course deleted successfully",
+    "productDeleted": "Product deleted successfully",
+    "chapterDeleted": "Chapter deleted successfully",
+    "deleteError": "An error occurred while deleting"
+  },
+  "websiteSettings": {
+    "forms": {
+      "privacyPolicy": {
+        "title": "Academy Policy",
+        "label": "Read this template and click \"Save\" to save yourself and your clients.",
+        "confirm": "Confirm"
+      },
+      "logo": {
+        "title": "Academy Logo",
+        "label": "Add logo to your website.",
+        "description": "Only png, jpg and svgs are allowed",
+        "confirm": "Confirm"
+      },
+      "favicon": {
+        "title": "Add Tab Icon to Website",
+        "label": "Create your free tab icon for free from this website https://favicon.io.",
+        "description": "Only png, jpg and svgs are allowed",
+        "confirm": "Confirm"
+      },
+      "seo": {
+        "title": "Browser Tab Title",
+        "titleLabel": "This will appear in search engine.",
+        "titleDescription": "Use something people will search for",
+        "descriptionLabel": "Here try to describe your academy.",
+        "descriptionDescription": "Use something people will search for",
+        "confirm": "Confirm"
+      },
+      "layout": {
+        "title": "Some General Settings",
+        "showCourses": "Show courses on home page",
+        "showProducts": "Show digital products on home page",
+        "showSalesBanner": "Show sales banner",
+        "centerLayout": "Center course layout",
+        "confirm": "Confirm"
+      },
+      "stamp": {
+        "title": "Add your stamp to certificates",
+        "label": "This will increase the value of certificates you offer",
+        "description": "Only png, jpg and svgs are allowed",
+        "confirm": "Confirm"
+      },
+      "referral": {
+        "permissions": "Permissions",
+        "permissionsDescription": "Give certain permissions to academy",
+        "enableAffiliate": "Enable affiliate marketing system",
+        "saveAndContinue": "Save and Continue"
+      },
+      "colors": {
+        "title": "Academy Colors",
+        "primaryColor": "Primary Color (Normal Mode)",
+        "primaryColorDescription": "This color will appear in normal mode for your academy",
+        "darkPrimaryColor": "Primary Color (Dark Mode)",
+        "darkPrimaryColorDescription": "This color will appear in dark mode for your academy",
+        "colorPreview": "Color Preview",
+        "previewTitle": "Color Preview",
+        "normalMode": "Normal Mode",
+        "darkMode": "Dark Mode",
+        "sampleText": "Sample Text",
+        "primaryColorRequired": "Primary color is required",
+        "darkPrimaryColorRequired": "Primary color for dark mode is required",
+        "confirm": "Confirm"
+      },
+      "subdomain": {
+        "title": "Subdomain",
+        "label": "Subdomain for your website.",
+        "placeholder": "Choose your domain name",
+        "description": "Please use maximum 32 characters",
+        "confirm": "Confirm"
+      },
+      "customDomain": {
+        "title": "Custom Domain",
+        "label": "Custom domain for your website.",
+        "confirm": "Confirm"
+      }
+    }
+  },
+  "dashboard": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "totalRevenue": "Total Revenue",
+    "balance": "Balance",
+    "view": "View",
+    "availableForWithdrawal": "Available for withdrawal",
+    "payouts": "Payouts",
+    "revenueOverview": "Revenue Overview",
+    "noDataAvailable": "No data available",
+    "loading": "Loading...",
+    "dateRange": "Report Date",
+    "currency": {
+      "USD": "$",
+      "EUR": "€",
+      "DZD": "DZD"
+    }
+  },
+  "payments": {
+    "columns": {
+      "id": "ID",
+      "student": "Student",
+      "item": "Item",
+      "amount": "Amount",
+      "status": "Status",
+      "paymentMethod": "Payment Method",
+      "createdAt": "Created At",
+      "actions": "Actions"
+    },
+    "status": {
+      "PENDING": "Pending",
+      "PROCESSING": "Processing",
+      "COMPLETED": "Completed",
+      "FAILED": "Failed",
+      "CANCELLED": "Cancelled",
+      "REFUNDED": "Refunded"
+    },
+    "types": {
+      "BUYPRODUCT": "Buy Product",
+      "BUYCOURSE": "Buy Course",
+      "SUBSCRIPTION": "Subscription",
+      "course": "Course",
+      "product": "Product",
+      "subscription": "Subscription"
+    },
+    "methods": {
+      "CASH": "Cash",
+      "CHARGILY": "Chargily",
+      "BANK_TRANSFER": "Bank Transfer",
+      "CREDIT_CARD": "Credit Card"
+    },
+    "actions": {
+      "openMenu": "Open menu",
+      "copyPaymentId": "Copy payment ID",
+      "viewProofs": "View payment proofs",
+      "approvePayment": "Approve payment",
+      "rejectPayment": "Reject payment",
+      "approving": "Approving...",
+      "rejecting": "Rejecting..."
+    },
+    "confirmations": {
+      "approveTitle": "Approve Payment",
+      "approveDescription": "Are you sure you want to approve the payment of {amount}? This action cannot be undone.",
+      "approveConfirm": "Approve",
+      "rejectTitle": "Reject Payment",
+      "rejectDescription": "Are you sure you want to reject the payment of {amount}? The transaction will be permanently cancelled.",
+      "rejectConfirm": "Reject Payment"
+    },
+    "emptyStates": {
+      "noStudent": "No student",
+      "noItem": "-",
+      "noMethod": "-"
+    },
+    "analytics": {
+      "totalRevenue": "Total Revenue",
+      "totalRevenueDescription": "Total completed payments",
+      "pendingPayments": "Pending Payments",
+      "pendingPaymentsDescription": "Awaiting approval",
+      "completedPayments": "Completed Payments",
+      "completedPaymentsDescription": "Successfully processed",
+      "totalPayments": "Total Payments",
+      "totalPaymentsDescription": "All payment transactions",
+      "payments": "payments"
+    },
+    "proofModal": {
+      "title": "Payment Proof",
+      "imageAlt": "Payment proof image",
+      "note": "Note",
+      "verified": "Verified",
+      "notVerified": "Not verified",
+      "pdfErrorTitle": "Error loading PDF",
+      "pdfErrorDescription": "Please try again later",
+      "unsupportedFormat": "Unsupported file format",
+      "openInNewTab": "Open in new tab",
+      "openInNewTabDescription": "This file format cannot be displayed in the preview. Click to open in a new tab.",
+      "previous": "Previous",
+      "next": "Next",
+      "image": "Image",
+      "pdf": "PDF",
+      "unknown": "Unknown"
+    },
+    "messages": {
+      "approveSuccess": "Payment approved successfully",
+      "rejectSuccess": "Payment rejected successfully",
+      "copied": "Payment ID copied to clipboard"
+    },
+    "errors": {
+      "approveFailed": "Failed to approve payment",
+      "rejectFailed": "Failed to reject payment",
+      "copyFailed": "Failed to copy payment ID"
+    }
+  },
+  "paymentMethods": {
+    "title": "Payment Gateways",
+    "pageTitle": "Payment Methods",
+    "pageDescription": "Connect your account with different payment platforms to start receiving money",
+    "chargily": {
+      "name": "Chargily",
+      "description": "The leading platform in Algeria for receiving money online without needing a business license",
+      "shortDesc": "Digital payments in Algeria",
+      "features": ["Instant payment", "No business license required", "Secure and guaranteed"]
+    },
+    "p2p": {
+      "name": "P2P Transfer",
+      "description": "Direct transfer from person to person via digital wallets and local banking apps",
+      "shortDesc": "Direct P2P Transfer",
+      "features": ["Fast transfer", "Low fees", "Local support"]
+    },
+    "stripe": {
+      "name": "Stripe",
+      "description": "Global payment platform that enables businesses to accept payments and manage financial operations easily and securely",
+      "shortDesc": "Global Payments",
+      "features": ["International acceptance", "Advanced security", "Detailed reports"]
+    },
+    "connected": "Connected",
+    "comingSoon": "Coming Soon",
+    "features": "Features",
+    "manageAccount": "Manage Account",
+    "connectAccount": "Connect Account",
+    "security": {
+      "title": "Payment Security",
+      "description": "All available payment methods use the latest security and encryption technologies to protect your financial data",
+      "learnMore": "Learn More"
+    },
+    "validation": {
+      "bankDetailsRequired": "Please enter bank details",
+      "accountHolderRequired": "Please enter account holder name",
+      "bankNameRequired": "Please enter bank name",
+      "accountNumberRequired": "Please enter account number"
+    },
+    "chargilyPage": {
+      "title": "Chargily Configuration",
+      "status": {
+        "active": "Active and working",
+        "activeDescription": "Your account is connected to Chargily and you can now receive payments",
+        "inactive": "Connected but disabled",
+        "inactiveDescription": "Account is connected but temporarily disabled - payments will not be processed",
+        "notConnected": "Not connected yet",
+        "notConnectedDescription": "Complete the steps below to connect your account with Chargily"
+      },
+      "toggle": {
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "updating": "Updating..."
+      },
+      "form": {
+        "title": "API Keys Setup",
+        "description": "Enter your API keys from Chargily dashboard",
+        "publicKey": "Public Key",
+        "publicKeyPlaceholder": "live_pk_...",
+        "publicKeyHint": "Public key is safe to use in frontend",
+        "secretKey": "Secret Key",
+        "secretKeyPlaceholder": "live_sk_...",
+        "secretKeyWarning": "Warning: Secret key is very sensitive and should not be shared with anyone. It is encrypted and stored securely.",
+        "saveButton": "Saving...",
+        "updateButton": "Update Settings",
+        "connectButton": "Connect Account",
+        "activeStatus": "Active",
+        "inactiveStatus": "Disabled"
+      },
+      "paymentStatus": {
+        "active": "Payment Enabled",
+        "inactive": "Payment Disabled",
+        "activeItems": [
+          "Customers can pay via Chargily",
+          "All payments will be processed automatically",
+          "You will receive notifications for new payments"
+        ],
+        "inactiveItems": [
+          "Customers will not be able to pay via Chargily",
+          "No payments will be processed",
+          "You can enable it again at any time"
+        ]
+      },
+      "security": {
+        "title": "Security Information",
+        "items": [
+          "All keys are protected with AES-256 encryption",
+          "Keys are securely stored in the database",
+          "Secure connection with Chargily servers via HTTPS",
+          "You can temporarily disable payment without losing settings"
+        ]
+      },
+      "steps": {
+        "title": "Steps",
+        "step1": "Get Keys",
+        "step1Description": "Go to Chargily dashboard and get API keys",
+        "step2": "Enter Keys",
+        "step2Description": "Copy and paste keys in required fields",
+        "step3": "Save Settings",
+        "step3Description": "Click save changes to complete connection",
+        "step4": "Enable Payment",
+        "step4Description": "Use switch to enable or disable payment",
+        "openDashboard": "Open Chargily Dashboard"
+      }
+    },
+    "p2pPage": {
+      "title": "P2P Transfer Configuration",
+      "status": {
+        "active": "P2P Active and working",
+        "activeDescription": "Customers can now make P2P bank transfers",
+        "inactive": "P2P Connected but disabled",
+        "inactiveDescription": "Bank account is connected but temporarily disabled - transfers will not be processed",
+        "notConnected": "Not connected yet",
+        "notConnectedDescription": "Enter your bank account details to set up P2P transfers"
+      },
+      "toggle": {
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "updating": "Updating..."
+      },
+      "form": {
+        "title": "Bank Transfer Setup (P2P)",
+        "description": "Enter your bank account details to receive money",
+        "activeStatus": "Active",
+        "inactiveStatus": "Disabled",
+        "accountHolder": "Account Holder Name",
+        "accountHolderPlaceholder": "Full name",
+        "bankName": "Bank Name",
+        "bankNamePlaceholder": "Example: Bank of Algeria",
+        "accountNumber": "Account Number",
+        "accountNumberPlaceholder": "Bank account number",
+        "routingNumber": "Routing Number (Optional)",
+        "routingNumberHint": "Required for international transfers or some local banks",
+        "bankDetails": "Additional Details",
+        "bankDetailsPlaceholder": "Write additional bank details (e.g., Swift, IBAN)",
+        "notes": "Notes",
+        "notesPlaceholder": "Additional notes for customers about how to make transfer",
+        "saveButton": "Saving...",
+        "updateButton": "Update Settings",
+        "connectButton": "Connect Account"
+      },
+      "paymentStatus": {
+        "active": "Bank Transfer Enabled",
+        "inactive": "Bank Transfer Disabled",
+        "activeItems": [
+          "Customers can see bank account details",
+          "Transfer instructions will be displayed to customers",
+          "You will need to manually confirm receipt of transfers"
+        ],
+        "inactiveItems": [
+          "Customers will not be able to see account details",
+          "Bank transfer option will not be displayed",
+          "You can enable it again at any time"
+        ]
+      },
+      "security": {
+        "title": "Security and Privacy Information",
+        "items": [
+          "Bank account details are securely stored and encrypted",
+          "Information will not be shared with third parties",
+          "Verify data accuracy before saving",
+          "You can temporarily disable payment without losing settings"
+        ]
+      },
+      "steps": {
+        "title": "Steps",
+        "step1": "Enter Account Details",
+        "step1Description": "Account holder name, bank, and account number",
+        "step2": "Add Details",
+        "step2Description": "Additional details and notes for customers",
+        "step3": "Save Settings",
+        "step3Description": "Click save to complete connection",
+        "step4": "Enable Transfer",
+        "step4Description": "Use switch to enable or disable bank transfer",
+        "importantNote": "Important Note: P2P bank transfers require manual confirmation from you when receiving funds."
+      }
+    }
+  },
+  "students": {
+    "columns": {
+      "student": "Student",
+      "fullName": "Full Name",
+      "email": "Email",
+      "phone": "Phone Number",
+      "notAvailable": "Not available",
+      "createdAt": "Joined",
+      "status": "Status",
+      "purchases": "Purchases",
+      "certificates": "Certificates",
+      "emailVerified": "Email Verified",
+      "lastVisited": "Last Visited"
+    },
+    "actions": {
+      "openMenu": "Open menu",
+      "copyEmail": "Copy Email",
+      "moreInfo": "More Information"
+    },
+    "detail": {
+      "personalInfo": "Personal Information",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "bio": "Bio",
+      "trainingCourses": "Training Courses",
+      "accountStatus": "Account Status",
+      "activityTracking": "Activity & Preferences",
+      "purchases": "Purchases",
+      "certificates": "Certificates",
+      "comments": "Comments",
+      "referrals": "Referrals",
+      "payments": "Payments",
+      "invoices": "Invoices",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "emailVerified": "Email Verified",
+      "emailVerifiedAt": "Email Verified At",
+      "lastVisited": "Last Visited",
+      "joinedDate": "Joined Date",
+      "updatedAt": "Last Updated",
+      "preferredLanguage": "Preferred Language",
+      "timezone": "Timezone",
+      "emailNotifications": "Email Notifications",
+      "smsNotifications": "SMS Notifications",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "course": "Course",
+      "product": "Product",
+      "amount": "Amount",
+      "date": "Date",
+      "issuedDate": "Issued Date",
+      "emptyStates": {
+        "noPurchases": "No purchases found",
+        "noCertificates": "No certificates found",
+        "noComments": "No comments found",
+        "noReferrals": "No referrals found",
+        "noPayments": "No payments found",
+        "noInvoices": "No invoices found",
+        "notAvailable": "Not available"
+      }
+    },
+    "analytics": {
+      "totalStudents": "Total Students",
+      "activeStudents": "Active Students",
+      "newStudentsThisMonth": "New Students This Month",
+      "totalPurchases": "Total Purchases",
+      "totalStudentsDescription": "All registered students",
+      "activeStudentsDescription": "Currently active students",
+      "newStudentsThisMonthDescription": "New registrations this month",
+      "totalPurchasesDescription": "Total student purchases"
+    },
+    "filters": {
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "emailVerified": "Email Verified",
+      "verified": "Verified",
+      "notVerified": "Not Verified"
+    },
+    "search": {
+      "placeholder": "Search students..."
+    }
+  },
+  "invoices": {
+    "columns": {
+      "invoiceNumber": "Invoice Number",
+      "amount": "Amount",
+      "status": "Status",
+      "paymentInfo": "Payment Info",
+      "created": "Created",
+      "dueDate": "Due Date",
+      "paidDate": "Paid Date",
+      "actions": "Actions"
+    },
+    "status": {
+      "pending": "Pending",
+      "processing": "Processing",
+      "completed": "Completed",
+      "failed": "Failed",
+      "cancelled": "Cancelled",
+      "refunded": "Refunded",
+      "paid": "Paid"
+    },
+    "payment": {
+      "unknownItem": "Unknown item",
+      "unknownType": "Unknown",
+      "appSubscription": "App Subscription",
+      "via": "via",
+      "noDueDate": "No due date",
+      "overdue": "Overdue",
+      "notPaid": "Not paid"
+    },
+    "details": {
+      "title": "Invoice Details",
+      "invoiceNumber": "Invoice Number",
+      "payInvoice": "Pay Invoice",
+      "summary": "Summary",
+      "amount": "Amount",
+      "createdAt": "Created At",
+      "paymentType": "Payment Type",
+      "description": "Description",
+      "purchasedItem": "Purchased Item",
+      "plan": "Plan",
+      "category": "Category",
+      "recurringSubscription": "Recurring Subscription",
+      "paymentHistory": "Payment History",
+      "totalAttempts": "Total Attempts",
+      "paymentMethod": "Payment Method",
+      "notSpecified": "Not specified",
+      "refundAmount": "Refund Amount",
+      "refundReason": "Refund Reason",
+      "notAvailable": "Not available",
+      "appInstallation": "App Installation",
+      "status": "Status",
+      "installedAt": "Installed At",
+      "subscriptionAmount": "Subscription Amount",
+      "notFound": "Invoice not found",
+      "notFoundDescription": "Unable to load the requested invoice."
+    }
+  },
+  "profile": {
+    "header": {
+      "noBio": "No bio",
+      "joinedOn": "Joined on",
+      "lastSignIn": "Last sign in",
+      "editProfile": "Edit Profile",
+      "cancel": "Cancel",
+      "user": "User"
+    },
+    "security": {
+      "title": "Security Status",
+      "twoFactor": "Two-Factor Authentication",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "accountStatus": "Account Status",
+      "active": "Active",
+      "banned": "Banned",
+      "accessStatus": "Access Status",
+      "unlocked": "Unlocked",
+      "locked": "Locked"
+    },
+    "personalInfo": {
+      "title": "Personal Information",
+      "description": "Update your personal information and profile settings. You can edit one or more fields.",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "fullNameDescription": "Your name as it will appear to other users",
+      "username": "Username",
+      "usernamePlaceholder": "Unique username",
+      "usernameDescription": "Your unique username",
+      "email": "Email",
+      "emailPlaceholder": "example@email.com",
+      "emailDescription": "Email for communication and notifications",
+      "phone": "Phone Number",
+      "phonePlaceholder": "+966 50 123 4567",
+      "phoneDescription": "Phone number for emergency contact",
+      "occupation": "Occupation",
+      "occupationPlaceholder": "Software Developer, Designer, Teacher...",
+      "occupationDescription": "Your profession or field of work",
+      "location": "Location",
+      "locationPlaceholder": "Riyadh, Saudi Arabia",
+      "locationDescription": "Your geographical location",
+      "website": "Website",
+      "websitePlaceholder": "https://yourwebsite.com",
+      "websiteDescription": "Your personal or professional website",
+      "bio": "Bio",
+      "bioPlaceholder": "Write a short bio about yourself...",
+      "bioDescription": "Brief description about yourself and your interests (max 500 characters)",
+      "saveChanges": "Save Changes",
+      "saving": "Saving...",
+      "cancel": "Cancel"
+    },
+    "accountDetails": {
+      "title": "Account Details",
+      "userId": "User ID",
+      "notAvailable": "Not available",
+      "createdAt": "Created At",
+      "updatedAt": "Last Updated",
+      "lastSignIn": "Last Sign In"
+    },
+    "messages": {
+      "fileTooLarge": "File size is too large. Maximum 5MB",
+      "unsupportedFileType": "Unsupported file type. Please select an image",
+      "loadingUser": "Loading user data...",
+      "noChanges": "No changes made",
+      "uploadFailed": "Failed to get upload URL",
+      "updateSuccess": "Profile updated successfully",
+      "updateFailed": "Failed to update profile",
+      "clerkUpdateFailed": "Failed to update Clerk data, account data will be updated only",
+      "updateError": "An error occurred while updating profile"
+    }
+  }
+}

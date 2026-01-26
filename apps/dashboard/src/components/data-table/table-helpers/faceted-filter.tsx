@@ -43,13 +43,18 @@ export function FacetedFilter<TData>({
     .map((item) => item.value);
 
   const onItemClicked = (isActive: boolean, value: string) => {
+    const currentFilters = fliterState.filter((item) => item.id === id);
+    const otherFilters = fliterState.filter((item) => item.id !== id);
+
     if (isActive) {
-      const filteredFilter = fliterState.filter((item) => item.value !== value);
-      setColumnFilters(filteredFilter);
-    }
-    if (!isActive) {
+      // Remove this value from filters
+      const updatedFilters = currentFilters.filter((item) => item.value !== value);
+      setColumnFilters([...otherFilters, ...updatedFilters]);
+    } else {
+      // Add this value to filters
       setColumnFilters([
-        ...fliterState,
+        ...otherFilters,
+        ...currentFilters,
         {
           id,
           value,
@@ -61,19 +66,17 @@ export function FacetedFilter<TData>({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="secondary"
-          className="bg-white rounded-xl border flex items-center gap-x-2"
+        <button
+          className="bg-card text-card-foreground rounded-xl border flex items-center gap-x-2 h-[50px] px-4 hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
         >
           {title}
-          <ChevronDown className="w-4 h-4 text-black" strokeWidth={3} />
+          <ChevronDown className="w-4 h-4 text-muted-foreground" strokeWidth={3} />
           {ACTIVE_FILTERS.length !== 0 && (
-            <span className="w-5 h-5 text-white rounded-full bg-red-500 flex items-center justify-center">
-              {" "}
-              {ACTIVE_FILTERS.length}{" "}
+            <span className="w-5 h-5 text-white rounded-full bg-red-500 flex items-center justify-center text-xs">
+              {ACTIVE_FILTERS.length}
             </span>
           )}
-        </Button>
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-30">
         {options.map((item) => {

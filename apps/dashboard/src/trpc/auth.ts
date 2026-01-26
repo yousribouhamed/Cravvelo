@@ -1,7 +1,7 @@
 import { publicProcedure } from "./trpc";
 import { TRPCError } from "@trpc/server";
 import { prisma } from "database/src";
-import { currentUser } from "@clerk/nextjs/server";
+import { getCurrentUserSafe } from "@/src/lib/clerk-utils";
 import { z } from "zod";
 
 // Response type for better type safety
@@ -17,7 +17,7 @@ export const auth = {
     .query(async (): Promise<z.infer<typeof AuthCallbackResponse>> => {
       try {
         // Get current user from Clerk
-        const user = await currentUser();
+        const user = await getCurrentUserSafe();
 
         // Validate user data
         if (!user?.id || !user?.emailAddresses?.[0]) {

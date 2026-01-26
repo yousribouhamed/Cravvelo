@@ -6,8 +6,10 @@ import { useClerk } from "@clerk/nextjs";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DropdownMenuItem } from "@ui/components/ui/dropdown-menu";
 import { LogOut } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const LogoutButton: FC = () => {
+  const t = useTranslations("auth");
   const mounted = useMounted();
   const { signOut } = useClerk();
 
@@ -30,7 +32,7 @@ const LogoutButton: FC = () => {
         className="w-full h-full flex justify-between items-center p-3"
       >
         <LogOut className="h-4 w-4 text-red-500" />
-        <span className="text-red-500">تسجيل الخروج</span>
+        <span className="text-red-500">{t("logout")}</span>
       </DropdownMenuItem>
     );
   }
@@ -41,7 +43,7 @@ const LogoutButton: FC = () => {
       onClick={handleSignOut}
     >
       <LogOut className="h-4 w-4 text-red-500" />
-      <span className="text-red-500">تسجيل الخروج</span>
+      <span className="text-red-500">{t("logout")}</span>
     </DropdownMenuItem>
   );
 };

@@ -43,6 +43,7 @@ import {
 } from "lucide-react";
 import { formSchema } from "./validators";
 import { ProfileFormProps } from "./types";
+import { useTranslations } from "next-intl";
 
 // Animated Status Indicator Component
 const StatusIndicator: FC<{
@@ -76,6 +77,7 @@ const StatusIndicator: FC<{
 );
 
 const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
+  const t = useTranslations("profile");
   const { user: clerkUser, isLoaded: isClerkLoaded } = useUser();
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
@@ -89,13 +91,13 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
 
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        maketoast.error("حجم الملف كبير جداً. الحد الأقصى 5 ميجابايت");
+        maketoast.error(t("messages.fileTooLarge"));
         return;
       }
 
       // Validate file type
       if (!file.type.startsWith("image/")) {
-        maketoast.error("نوع الملف غير مدعوم. يرجى اختيار صورة");
+        maketoast.error(t("messages.unsupportedFileType"));
         return;
       }
 
@@ -134,14 +136,14 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
 
   const accountMutation = trpc.update_user_profile.useMutation({
     onSuccess: () => {
-      maketoast.success("تم تحديث الملف الشخصي بنجاح");
+      maketoast.success(t("messages.updateSuccess"));
       setEditMode(false);
       // Refresh the page to show updated data
       window.location.reload();
     },
     onError: (error) => {
       console.error("Account update error:", error);
-      maketoast.error("فشل في تحديث الملف الشخصي");
+      maketoast.error(t("messages.updateFailed"));
     },
   });
 
@@ -161,7 +163,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!isClerkLoaded || !clerkUser) {
-      maketoast.error("جاري تحميل بيانات المستخدم...");
+      maketoast.error(t("messages.loadingUser"));
       return;
     }
 
@@ -173,7 +175,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
 
       // Check if there's at least one field to update
       if (Object.keys(filteredValues).length === 0 && !selectedFile) {
-        maketoast.error("لم يتم إجراء أي تغييرات");
+        maketoast.error(t("messages.noChanges"));
         setLoading(false);
         return;
       }
@@ -182,6 +184,11 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
 
       // Handle avatar upload
       if (selectedFile) {
+        // Validate file object
+        if (!(selectedFile instanceof File)) {
+          throw new Error(t("messages.unsupportedFileType"));
+        }
+        
         const checksum = await computeSHA256(selectedFile);
         const result = await signedUrlMutation.mutateAsync({
           checksum,
@@ -190,18 +197,33 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
         });
 
         if (!result?.success?.url) {
-          throw new Error("فشل في الحصول على رابط التحميل");
+          throw new Error(t("messages.uploadFailed"));
         }
 
-        await fetch(result.success.url, {
+        // Create AbortController for timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5 * 60 * 1000); // 5 minutes
+
+        const uploadResponse = await fetch(result.success.url, {
           method: "PUT",
           body: selectedFile,
           headers: {
             "Content-Type": selectedFile.type,
           },
+          signal: controller.signal,
         });
 
-        avatarUrl = result.success.url.split("?")[0];
+        clearTimeout(timeoutId);
+
+        if (!uploadResponse.ok) {
+          const errorText = await uploadResponse.text().catch(() => "Unknown error");
+          console.error("S3 upload failed:", uploadResponse.status, errorText);
+          throw new Error(t("messages.uploadFailed"));
+        }
+
+        // Extract public URL using proper URL parsing
+        const signedUrlObj = new URL(result.success.url);
+        avatarUrl = `${signedUrlObj.origin}${signedUrlObj.pathname}`;
       }
 
       // Prepare Clerk updates - only update firstName and username
@@ -238,7 +260,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
             console.error("Clerk error details:", clerkError.errors);
           }
           // Continue with account update even if Clerk update fails
-          maketoast.error("فشل في تحديث بيانات Clerk، سيتم تحديث بيانات الحساب فقط");
+          maketoast.error(t("messages.clerkUpdateFailed"));
         }
       }
 
@@ -300,15 +322,15 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
         await accountMutation.mutateAsync(updateData);
       } else if (Object.keys(clerkUpdates).length > 0) {
         // If only Clerk updates were made, show success
-        maketoast.success("تم تحديث الملف الشخصي بنجاح");
+        maketoast.success(t("messages.updateSuccess"));
         setEditMode(false);
         window.location.reload();
       } else {
-        maketoast.error("لم يتم إجراء أي تغييرات");
+        maketoast.error(t("messages.noChanges"));
       }
     } catch (err) {
       console.error("Profile update error:", err);
-      maketoast.error("حدث خطأ أثناء تحديث الملف الشخصي");
+      maketoast.error(t("messages.updateError"));
     } finally {
       setLoading(false);
     }
@@ -355,16 +377,16 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
             </div>
             <div className="flex-1">
               <h1 className="text-3xl font-bold mb-2">
-                {enhancedUserData?.fullName || "مستخدم"}
+                {enhancedUserData?.fullName || t("header.user")}
               </h1>
               <p className="text-white/80 mb-2">
-                {enhancedUserData?.user_bio || "لا توجد سيرة ذاتية"}
+                {enhancedUserData?.user_bio || t("header.noBio")}
               </p>
               <div className="flex items-center gap-4 text-sm text-white/70">
                 <div className="flex items-center gap-1">
                   <Calendar className="w-4 h-4" />
                   <span>
-                    انضم في{" "}
+                    {t("header.joinedOn")}{" "}
                     {format(
                       new Date(enhancedUserData?.createdAt || new Date()),
                       "PPP",
@@ -376,7 +398,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
                   <div className="flex items-center gap-1">
                     <Clock className="w-4 h-4" />
                     <span>
-                      آخر دخول{" "}
+                      {t("header.lastSignIn")}{" "}
                       {format(
                         new Date(enhancedUserData.lastSignInAt),
                         "PPP",
@@ -397,7 +419,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
                   className="bg-white/10 border-white/20 text-white hover:bg-white/20"
                 >
                   <Edit className="w-4 h-4 mr-2" />
-                  تعديل الملف الشخصي
+                  {t("header.editProfile")}
                 </Button>
               ) : (
                 <Button
@@ -406,7 +428,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
                   className="bg-white/10 border-white/20 text-white hover:bg-white/20"
                 >
                   <X className="w-4 h-4 mr-2" />
-                  إلغاء
+                  {t("header.cancel")}
                 </Button>
               )}
             </div>
@@ -419,7 +441,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Shield className="w-5 h-5" />
-            حالة الأمان
+            {t("security.title")}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -427,19 +449,19 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
             <StatusIndicator
               active={enhancedUserData?.twoFactorEnabled}
               label={
-                enhancedUserData?.twoFactorEnabled ? "مفعل" : "غير مفعل"
+                enhancedUserData?.twoFactorEnabled ? t("security.enabled") : t("security.disabled")
               }
-              description="المصادقة الثنائية"
+              description={t("security.twoFactor")}
             />
             <StatusIndicator
               active={!enhancedUserData?.banned}
-              label={enhancedUserData?.banned ? "محظور" : "نشط"}
-              description="حالة الحساب"
+              label={enhancedUserData?.banned ? t("security.banned") : t("security.active")}
+              description={t("security.accountStatus")}
             />
             <StatusIndicator
               active={!enhancedUserData?.locked}
-              label={enhancedUserData?.locked ? "مقفل" : "مفتوح"}
-              description="حالة الوصول"
+              label={enhancedUserData?.locked ? t("security.locked") : t("security.unlocked")}
+              description={t("security.accessStatus")}
             />
           </div>
         </CardContent>
@@ -448,10 +470,9 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
       {/* Profile Form */}
       <Card>
         <CardHeader>
-          <CardTitle>المعلومات الشخصية</CardTitle>
+          <CardTitle>{t("personalInfo.title")}</CardTitle>
           <CardDescription>
-            قم بتحديث معلوماتك الشخصية وإعدادات الملف الشخصي. يمكنك تعديل حقل
-            واحد أو أكثر.
+            {t("personalInfo.description")}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -475,16 +496,16 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
                   name="full_name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>الاسم الكامل</FormLabel>
+                      <FormLabel>{t("personalInfo.fullName")}</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="أدخل اسمك الكامل"
+                          placeholder={t("personalInfo.fullNamePlaceholder")}
                           {...field}
                           disabled={!editMode}
                         />
                       </FormControl>
                       <FormDescription>
-                        اسمك كما سيظهر للمستخدمين الآخرين
+                        {t("personalInfo.fullNameDescription")}
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -496,16 +517,16 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
                   name="username"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>اسم المستخدم</FormLabel>
+                      <FormLabel>{t("personalInfo.username")}</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="اسم المستخدم الفريد"
+                          placeholder={t("personalInfo.usernamePlaceholder")}
                           {...field}
                           disabled={!editMode}
                         />
                       </FormControl>
                       <FormDescription>
-                        اسم المستخدم الفريد الخاص بك
+                        {t("personalInfo.usernameDescription")}
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -522,18 +543,18 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
                     <FormItem>
                       <FormLabel className="flex items-center gap-2">
                         <Mail className="w-4 h-4" />
-                        البريد الإلكتروني
+                        {t("personalInfo.email")}
                       </FormLabel>
                       <FormControl>
                         <Input
                           type="email"
-                          placeholder="example@email.com"
+                          placeholder={t("personalInfo.emailPlaceholder")}
                           {...field}
                           disabled={!editMode}
                         />
                       </FormControl>
                       <FormDescription>
-                        البريد الإلكتروني للتواصل والإشعارات
+                        {t("personalInfo.emailDescription")}
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -547,18 +568,18 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
                     <FormItem>
                       <FormLabel className="flex items-center gap-2">
                         <Phone className="w-4 h-4" />
-                        رقم الهاتف
+                        {t("personalInfo.phone")}
                       </FormLabel>
                       <FormControl>
                         <Input
                           type="tel"
-                          placeholder="+966 50 123 4567"
+                          placeholder={t("personalInfo.phonePlaceholder")}
                           {...field}
                           disabled={!editMode}
                         />
                       </FormControl>
                       <FormDescription>
-                        رقم الهاتف للتواصل الطارئ
+                        {t("personalInfo.phoneDescription")}
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -612,17 +633,17 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
                 name="website"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>الموقع الإلكتروني</FormLabel>
+                    <FormLabel>{t("personalInfo.website")}</FormLabel>
                     <FormControl>
                       <Input
                         type="url"
-                        placeholder="https://yourwebsite.com"
+                        placeholder={t("personalInfo.websitePlaceholder")}
                         {...field}
                         disabled={!editMode}
                       />
                     </FormControl>
                     <FormDescription>
-                      موقعك الإلكتروني الشخصي أو المهني
+                      {t("personalInfo.websiteDescription")}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -634,17 +655,17 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
                 name="bio"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>السيرة الذاتية</FormLabel>
+                    <FormLabel>{t("personalInfo.bio")}</FormLabel>
                     <FormControl>
                       <Textarea
                         className="min-h-[120px] resize-none"
-                        placeholder="اكتب نبذة قصيرة عن نفسك..."
+                        placeholder={t("personalInfo.bioPlaceholder")}
                         {...field}
                         disabled={!editMode}
                       />
                     </FormControl>
                     <FormDescription>
-                      نبذة موجزة عن شخصيتك واهتماماتك (الحد الأقصى 500 حرف)
+                      {t("personalInfo.bioDescription")}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -688,18 +709,18 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
       {/* Account Details */}
       <Card>
         <CardHeader>
-          <CardTitle>تفاصيل الحساب</CardTitle>
+          <CardTitle>{t("accountDetails.title")}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h4 className="font-semibold mb-2">معرف المستخدم</h4>
+              <h4 className="font-semibold mb-2">{t("accountDetails.userId")}</h4>
               <p className="text-sm text-gray-600 bg-gray-50 p-2 rounded font-mono">
-                {enhancedUserData?.id || "غير متوفر"}
+                {enhancedUserData?.id || t("accountDetails.notAvailable")}
               </p>
             </div>
             <div>
-              <h4 className="font-semibold mb-2">تاريخ الإنشاء</h4>
+              <h4 className="font-semibold mb-2">{t("accountDetails.createdAt")}</h4>
               <p className="text-sm text-gray-600">
                 {enhancedUserData?.createdAt
                   ? format(
@@ -709,11 +730,11 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
                         locale: ar,
                       }
                     )
-                  : "غير متوفر"}
+                  : t("accountDetails.notAvailable")}
               </p>
             </div>
             <div>
-              <h4 className="font-semibold mb-2">آخر تحديث</h4>
+              <h4 className="font-semibold mb-2">{t("accountDetails.updatedAt")}</h4>
               <p className="text-sm text-gray-600">
                 {enhancedUserData?.updatedAt
                   ? format(
@@ -723,12 +744,12 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
                         locale: ar,
                       }
                     )
-                  : "غير متوفر"}
+                  : t("accountDetails.notAvailable")}
               </p>
             </div>
             {enhancedUserData?.lastSignInAt && (
               <div>
-                <h4 className="font-semibold mb-2">آخر دخول</h4>
+                <h4 className="font-semibold mb-2">{t("accountDetails.lastSignIn")}</h4>
                 <p className="text-sm text-gray-600">
                   {format(new Date(enhancedUserData.lastSignInAt), "PPP", {
                     locale: ar,

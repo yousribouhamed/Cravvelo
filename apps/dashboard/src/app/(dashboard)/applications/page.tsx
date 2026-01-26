@@ -6,11 +6,13 @@ import {
 import CreateAcademiaPage from "@/src/components/pages/create-academia.page";
 import ApplicationsBoard from "@/src/modules/apps/components/applications-board";
 import { getAllApps } from "@/src/modules/apps/actions/apps.actions";
+import { getServerTranslations } from "@/src/lib/i18n/utils";
 
 export const fetchCache = "force-no-store";
 
 const Page = async ({}) => {
   const user = await getMyUserAction();
+  const t = await getServerTranslations("pages");
 
   const [notifications, appsData] = await Promise.all([
     getAllNotifications({ accountId: user.accountId }),
@@ -24,7 +26,7 @@ const Page = async ({}) => {
 
   return (
     <AppShell
-      title={"متجر التطبيقات"}
+      title={t("appStore")}
       user={user}
       notifications={notifications}
     >

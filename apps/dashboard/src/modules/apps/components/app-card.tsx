@@ -8,12 +8,17 @@ import { useQuery } from "@tanstack/react-query";
 import { getInstalledApps } from "../actions/apps.actions";
 import { Button } from "@ui/components/ui/button";
 import Link from "next/link";
+import { useTranslations, useLocale } from "next-intl";
 
 interface Props {
   app: AppType;
 }
 
 export default function AppCard({ app }: Props) {
+  const t = useTranslations("apps");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
+
   // Fetch installed apps to check if this app is installed
   const { data: installedApps } = useQuery({
     queryKey: ["installedApps"],
@@ -36,7 +41,7 @@ export default function AppCard({ app }: Props) {
   return (
     <Card
       className="w-full h-[200px] rounded-xl shadow border flex flex-col  p-4 gap-3"
-      dir="rtl"
+      dir={isRTL ? "rtl" : "ltr"}
     >
       <div className="flex items-between w-full justify-between gap-3">
         <div className="flex items-start gap-x-2">
@@ -48,7 +53,7 @@ export default function AppCard({ app }: Props) {
           <div className="flex flex-col">
             <h2 className="text-lg font-semibold">{app.name}</h2>
             <span className="text-xs text-gray-500">
-              {app.installsCount.toLocaleString()} تثبيت
+              {app.installsCount.toLocaleString()} {t("installs")}
             </span>
           </div>
         </div>
@@ -56,7 +61,7 @@ export default function AppCard({ app }: Props) {
           {isInstalled ? (
             <>
               <Link href={app.slug}>
-                <Button size="sm">الذهاب للتطبيق</Button>
+                <Button size="sm">{t("goToApp")}</Button>
               </Link>
               <UninstallAppModal appId={app.id} />
             </>

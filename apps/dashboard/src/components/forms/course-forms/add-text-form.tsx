@@ -20,25 +20,27 @@ import { CravveloEditor } from "@cravvelo/editor";
 import { maketoast } from "../../toasts";
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-
-const addTextSchema = z.object({
-  title: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
-  content: z.string().min(1, "المحتوى مطلوب"),
-  duration: z.number().optional().default(0),
-});
+import { useTranslations } from "next-intl";
 
 function AddTextForm() {
+  const t = useTranslations("courseForms");
   const router = useRouter();
   const path = usePathname();
   const chapterID = getValueFromUrl(path, 4);
 
+  const addTextSchema = z.object({
+    title: z.string({ required_error: t("requiredField") }).min(2).max(50),
+    content: z.string().min(1, t("contentRequired")),
+    duration: z.number().optional().default(0),
+  });
+
   const mutation = trpc.createTextModule.useMutation({
     onSuccess: (data) => {
-      maketoast.success("تم إنشاء الدرس بنجاح");
+      maketoast.success(t("lessonCreated"));
       router.back();
     },
     onError: (error) => {
-      maketoast.error("فشل في إنشاء الدرس");
+      maketoast.error(t("lessonCreateFailed"));
       console.error(error);
     },
   });
@@ -82,10 +84,10 @@ function AddTextForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    عنوان النص <span className="text-red-600 text-xl">*</span>
+                    {t("textTitle")} <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="لماذا لون البحر ازرق" {...field} />
+                    <Input placeholder={t("textTitlePlaceholder")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -98,9 +100,9 @@ function AddTextForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    مدة القراءة المتوقعة (بالدقائق)
+                    {t("readingDuration")}
                     <span className="text-sm text-muted-foreground dark:text-gray-400 mr-2">
-                      (اختياري - سيتم حسابه تلقائياً)
+                      {t("readingDurationOptional")}
                     </span>
                   </FormLabel>
                   <FormControl>
@@ -125,7 +127,7 @@ function AddTextForm() {
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>
-                    محتوى الدرس <span className="text-red-600 text-xl">*</span>
+                    {t("lessonContent")} <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
                     <CravveloEditor
@@ -152,7 +154,7 @@ function AddTextForm() {
               size="lg"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              حفظ والمتابعة
+              {t("saveAndContinue")}
             </Button>
             <Button
               onClick={() => router.back()}
@@ -160,7 +162,7 @@ function AddTextForm() {
               variant="secondary"
               size="lg"
             >
-              إلغاء والعودة
+              {t("cancelAndGoBack")}
             </Button>
           </CardContent>
         </Card>

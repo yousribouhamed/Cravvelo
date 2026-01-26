@@ -1,4 +1,4 @@
-import { currentUser } from "@clerk/nextjs/server";
+import { getCurrentUserSafe } from "@/src/lib/clerk-utils";
 import { prisma } from "database/src";
 import { z } from "zod";
 import type { User } from "@clerk/nextjs/server";
@@ -112,7 +112,7 @@ export function withAuth<TInput = void, TOutput = void>(
       }
 
       // Authenticate user
-      const user = await currentUser();
+      const user = await getCurrentUserSafe();
 
       if (!user) {
         throw new AuthenticationError("User not authenticated");

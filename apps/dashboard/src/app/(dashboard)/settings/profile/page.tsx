@@ -7,9 +7,11 @@ import {
 } from "@/src/actions/user.actions";
 import GeneralSettingsHeader from "@/src/modules/settings/components/general-settings-header";
 import ProfileForm from "@/src/app/(dashboard)/profile/ProfileForm";
+import { getServerTranslations } from "@/src/lib/i18n/utils";
 
 const Page = async ({}) => {
   const user = await getMyUserAction();
+  const t = await getServerTranslations("pages");
 
   const notifications = await getAllNotifications({
     accountId: user?.accountId,
@@ -23,7 +25,7 @@ const Page = async ({}) => {
         <Header
           notifications={notifications}
           user={user}
-          title="ملف شخصي"
+          title={t("profile")}
         />
 
         <GeneralSettingsHeader />

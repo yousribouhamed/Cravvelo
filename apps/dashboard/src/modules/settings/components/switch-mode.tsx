@@ -5,10 +5,12 @@ import { useEffect, useState } from "react";
 import { Switch } from "@ui/components/ui/switch";
 import { Card, CardContent } from "@ui/components/ui/card";
 import { Moon, Sun } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function SwitchMode() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const t = useTranslations("settings.theme");
 
   // Ensure component is mounted to prevent hydration mismatch
   useEffect(() => {
@@ -23,7 +25,7 @@ export default function SwitchMode() {
           <div className="flex items-center gap-3">
             <div className="w-5 h-5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
             <p className="text-gray-900 dark:text-white font-medium">
-              الوضع الداكن
+              {t("label")}
             </p>
           </div>
           <div className="w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
@@ -53,7 +55,7 @@ export default function SwitchMode() {
 
           {/* Label */}
           <p className="text-gray-900 dark:text-white font-medium text-base">
-            الوضع الداكن
+            {t("label")}
           </p>
         </div>
 
@@ -62,7 +64,7 @@ export default function SwitchMode() {
           <Switch
             checked={isDark}
             onCheckedChange={handleThemeChange}
-            aria-label="تبديل الوضع الداكن"
+            aria-label={t("description")}
           />
         </div>
       </CardContent>

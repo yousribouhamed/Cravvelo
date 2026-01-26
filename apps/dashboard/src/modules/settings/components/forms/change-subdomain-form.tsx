@@ -24,6 +24,8 @@ import {
 import { Input } from "@ui/components/ui/input";
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
+import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
 
 // List of restricted words
 const restrictedWords = ["admin", "app", "badword1", "badword2"]; // Add more words as needed
@@ -75,7 +77,7 @@ const ChangeSubDomainForm: FC<ChangeDomainFormProps> = ({ subdomain }) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card className="border rounded-xl shadow-none">
           <CardHeader>
-            <CardTitle>النطاق الفرعي</CardTitle>
+            <CardTitle dir={isRTL ? "rtl" : "ltr"}>{t("title")}</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
@@ -83,7 +85,7 @@ const ChangeSubDomainForm: FC<ChangeDomainFormProps> = ({ subdomain }) => {
               name="subdomain"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>النطاق الفرعي لموقعك.</FormLabel>
+                  <FormLabel dir={isRTL ? "rtl" : "ltr"}>{t("label")}</FormLabel>
                   <FormControl>
                     <div className="w-full h-14 border rounded-xl flex items-center p-2">
                       <div className="w-[150px] h-full flex items-center justify-center bg-primary text-white">
@@ -91,13 +93,14 @@ const ChangeSubDomainForm: FC<ChangeDomainFormProps> = ({ subdomain }) => {
                       </div>
                       <Input
                         className="border-none "
-                        placeholder="  حدد اسم المجال الخاص بك"
+                        placeholder={t("placeholder")}
                         {...field}
+                        dir={isRTL ? "rtl" : "ltr"}
                       />
                     </div>
                   </FormControl>
-                  <FormDescription>
-                    يرجى استخدام 32 حرفًا كحد أقصى.
+                  <FormDescription dir={isRTL ? "rtl" : "ltr"}>
+                    {t("description")}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -111,7 +114,7 @@ const ChangeSubDomainForm: FC<ChangeDomainFormProps> = ({ subdomain }) => {
               type="submit"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              تاكيد
+              {t("confirm")}
             </Button>
           </CardFooter>
         </Card>

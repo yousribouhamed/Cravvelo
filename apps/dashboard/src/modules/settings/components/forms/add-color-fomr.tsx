@@ -25,11 +25,8 @@ import { Input } from "@ui/components/ui/input";
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
-
-const formSchema = z.object({
-  primaryColor: z.string().min(1, "اللون الرئيسي مطلوب"),
-  darkPrimaryColor: z.string().min(1, "اللون الرئيسي للوضع المظلم مطلوب"),
-});
+import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
 
 interface ChangeDomainFormProps {
   primaryColor: string | null;
@@ -40,6 +37,15 @@ const AddColorFrom: FC<ChangeDomainFormProps> = ({
   primaryColor,
   darkPrimaryColor,
 }) => {
+  const t = useTranslations("websiteSettings.forms.colors");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
+
+  const formSchema = z.object({
+    primaryColor: z.string().min(1, t("primaryColorRequired")),
+    darkPrimaryColor: z.string().min(1, t("darkPrimaryColorRequired")),
+  });
+
   const mutation = trpc.addWebSiteColor.useMutation({
     onSuccess: () => {
       maketoast.success();
@@ -70,7 +76,7 @@ const AddColorFrom: FC<ChangeDomainFormProps> = ({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card className="border rounded-xl shadow-none w-full">
           <CardHeader>
-            <CardTitle>ألوان الأكاديمية</CardTitle>
+            <CardTitle dir={isRTL ? "rtl" : "ltr"}>{t("title")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Primary Color Field */}
@@ -79,8 +85,8 @@ const AddColorFrom: FC<ChangeDomainFormProps> = ({
               name="primaryColor"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">
-                    اللون الرئيسي (الوضع العادي)
+                  <FormLabel className={cn("text-sm font-medium", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
+                    {t("primaryColor")}
                   </FormLabel>
                   <div className="flex items-center gap-4">
                     <FormControl>
@@ -104,11 +110,11 @@ const AddColorFrom: FC<ChangeDomainFormProps> = ({
                     <div
                       className="w-10 h-10 rounded-lg border-2 border-gray-300 shadow-sm"
                       style={{ backgroundColor: field.value }}
-                      title="معاينة اللون"
+                      title={t("colorPreview")}
                     />
                   </div>
-                  <FormDescription>
-                    سيظهر هذا اللون في الوضع العادي لأكاديميتك
+                  <FormDescription dir={isRTL ? "rtl" : "ltr"}>
+                    {t("primaryColorDescription")}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -121,8 +127,8 @@ const AddColorFrom: FC<ChangeDomainFormProps> = ({
               name="darkPrimaryColor"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">
-                    اللون الرئيسي (الوضع المظلم)
+                  <FormLabel className={cn("text-sm font-medium", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
+                    {t("darkPrimaryColor")}
                   </FormLabel>
                   <div className="flex items-center gap-4">
                     <FormControl>
@@ -146,11 +152,11 @@ const AddColorFrom: FC<ChangeDomainFormProps> = ({
                     <div
                       className="w-10 h-10 rounded-lg border-2 border-gray-300 shadow-sm"
                       style={{ backgroundColor: field.value }}
-                      title="معاينة اللون"
+                      title={t("colorPreview")}
                     />
                   </div>
-                  <FormDescription>
-                    سيظهر هذا اللون في الوضع المظلم لأكاديميتك
+                  <FormDescription dir={isRTL ? "rtl" : "ltr"}>
+                    {t("darkPrimaryColorDescription")}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -159,19 +165,19 @@ const AddColorFrom: FC<ChangeDomainFormProps> = ({
 
             {/* Preview Section */}
             <div className="pt-4 border-t">
-              <h4 className="text-sm font-medium mb-3">معاينة الألوان</h4>
+              <h4 className={cn("text-sm font-medium mb-3", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>{t("previewTitle")}</h4>
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center">
-                  <div className="text-xs text-gray-500 mb-2">الوضع العادي</div>
+                  <div className={cn("text-xs text-gray-500 mb-2", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>{t("normalMode")}</div>
                   <div
                     className="w-full h-20 rounded-lg border-2 border-gray-200 flex items-center justify-center text-white font-medium shadow-sm"
                     style={{ backgroundColor: form.watch("primaryColor") }}
                   >
-                    عينة النص
+                    {t("sampleText")}
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-xs text-gray-500 mb-2">الوضع المظلم</div>
+                  <div className={cn("text-xs text-gray-500 mb-2", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>{t("darkMode")}</div>
                   <div
                     className="w-full h-20 rounded-lg border-2 border-gray-600 bg-gray-900 flex items-center justify-center text-white font-medium shadow-sm"
                     style={{
@@ -179,7 +185,7 @@ const AddColorFrom: FC<ChangeDomainFormProps> = ({
                       border: `2px solid ${form.watch("darkPrimaryColor")}40`,
                     }}
                   >
-                    عينة النص
+                    {t("sampleText")}
                   </div>
                 </div>
               </div>
@@ -192,7 +198,7 @@ const AddColorFrom: FC<ChangeDomainFormProps> = ({
               type="submit"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              تأكيد
+              {t("confirm")}
             </Button>
           </CardFooter>
         </Card>

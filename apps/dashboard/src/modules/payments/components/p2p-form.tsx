@@ -45,18 +45,17 @@ import {
 } from "../actions/p2p";
 import { Input } from "@ui/components/ui/input";
 import { Textarea } from "@ui/components/ui/textarea";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
+import { useTranslations, useLocale } from "next-intl";
 
-const P2PConnectSchema = z.object({
-  bankDetails: z.string().min(2, "الرجاء إدخال تفاصيل البنك"),
-  accountHolder: z.string().min(2, "الرجاء إدخال اسم صاحب الحساب"),
-  bankName: z.string().min(2, "الرجاء إدخال اسم البنك"),
-  accountNumber: z.string().min(4, "الرجاء إدخال رقم الحساب"),
-  routingNumber: z.string().optional(),
-  notes: z.string().optional(),
-});
-
-type Inputs = z.infer<typeof P2PConnectSchema>;
+type Inputs = {
+  bankDetails: string;
+  accountHolder: string;
+  bankName: string;
+  accountNumber: string;
+  routingNumber?: string;
+  notes?: string;
+};
 
 interface P2PConfigType extends Inputs {
   isActive?: boolean;
@@ -69,13 +68,27 @@ interface P2PConnectorProps {
 
 const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
   const router = useRouter();
+  const t = useTranslations("paymentMethods.p2pPage");
+  const tValidation = useTranslations("paymentMethods.validation");
+  const locale = useLocale();
+  const dir = locale === "ar" ? "rtl" : "ltr";
   const [isActive, setIsActive] = useState(isAlreadyActive ?? false);
+
+  const P2PConnectSchema = useMemo(() => z.object({
+    bankDetails: z.string().min(2, tValidation("bankDetailsRequired")),
+    accountHolder: z.string().min(2, tValidation("accountHolderRequired")),
+    bankName: z.string().min(2, tValidation("bankNameRequired")),
+    accountNumber: z.string().min(4, tValidation("accountNumberRequired")),
+    routingNumber: z.string().optional(),
+    notes: z.string().optional(),
+  }), [tValidation]);
 
   const mutation = useMutation({
     mutationFn: data ? updateP2p : connectP2p,
     onSuccess: () => {
       maketoast.success();
-      router.push(`/settings/payments-methods`);
+      router.refresh();
+      router.push(`/payments/payments-methods`);
     },
     onError: () => {
       maketoast.error();
@@ -118,7 +131,7 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
   const isConnected = !!data;
 
   return (
-    <div className="w-full min-h-screen rtl my-8" dir="rtl">
+    <div className={`w-full min-h-screen my-8 ${dir === "rtl" ? "rtl" : ""}`} dir={dir}>
       <div className="w-full mx-auto">
         {/* Status Card */}
         {isConnected ? (
@@ -144,7 +157,7 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                         : "text-gray-700 dark:text-gray-300"
                     }`}
                   >
-                    {isActive ? "P2P مفعل ويعمل" : "P2P متصل ولكن معطل"}
+                    {isActive ? t("status.active") : t("status.inactive")}
                   </p>
                   <p
                     className={`text-sm ${
@@ -154,8 +167,8 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                     }`}
                   >
                     {isActive
-                      ? "يمكن للعملاء الآن إجراء تحويلات بنكية P2P"
-                      : "الحساب البنكي متصل ولكن مُعطل مؤقتاً - لن تتم معالجة التحويلات"}
+                      ? t("status.activeDescription")
+                      : t("status.inactiveDescription")}
                   </p>
                 </div>
               </div>
@@ -171,11 +184,11 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                   />
                   <div className="flex flex-col items-end">
                     <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                      {isActive ? "مفعل" : "معطل"}
+                      {isActive ? t("toggle.enabled") : t("toggle.disabled")}
                     </span>
                     {toggleMutation.isLoading && (
                       <span className="text-xs text-gray-500 dark:text-gray-400">
-                        جاري التحديث...
+                        {t("toggle.updating")}
                       </span>
                     )}
                   </div>
@@ -189,10 +202,10 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
               <AlertCircle className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               <div>
                 <p className="font-semibold text-blue-800 dark:text-blue-200">
-                  لم يتم الربط بعد
+                  {t("status.notConnected")}
                 </p>
                 <p className="text-sm text-blue-600 dark:text-blue-400">
-                  أدخل بيانات حسابك البنكي لإعداد التحويلات P2P
+                  {t("status.notConnectedDescription")}
                 </p>
               </div>
             </div>
@@ -211,10 +224,10 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                     </div>
                     <div>
                       <CardTitle className="text-xl text-gray-900 dark:text-gray-100">
-                        إعداد التحويل البنكي (P2P)
+                        {t("form.title")}
                       </CardTitle>
                       <CardDescription className="text-gray-600 dark:text-gray-400">
-                        أدخل بيانات حسابك البنكي لاستقبال الأموال
+                        {t("form.description")}
                       </CardDescription>
                     </div>
                   </div>
@@ -230,7 +243,7 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                         }`}
                       ></div>
                       <span className="text-sm text-gray-600 dark:text-gray-400">
-                        {isActive ? "نشط" : "معطل"}
+                        {isActive ? t("form.activeStatus") : t("form.inactiveStatus")}
                       </span>
                     </div>
                   )}
@@ -252,12 +265,12 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                         <FormItem>
                           <FormLabel className="text-gray-900 dark:text-gray-100 font-semibold flex items-center gap-2">
                             <User className="w-4 h-4" />
-                            اسم صاحب الحساب
+                            {t("form.accountHolder")}
                           </FormLabel>
                           <FormControl>
                             <div className="relative">
-                              <Input placeholder="الاسم الكامل" {...field} />
-                              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                              <Input placeholder={t("form.accountHolderPlaceholder")} {...field} />
+                              <User className={`absolute ${dir === "rtl" ? "left-3" : "right-3"} top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4`} />
                             </div>
                           </FormControl>
                           <FormMessage />
@@ -273,15 +286,15 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                         <FormItem>
                           <FormLabel className="text-gray-900 dark:text-gray-100 font-semibold flex items-center gap-2">
                             <Building className="w-4 h-4" />
-                            اسم البنك
+                            {t("form.bankName")}
                           </FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Input
-                                placeholder="مثال: بنك الجزائر"
+                                placeholder={t("form.bankNamePlaceholder")}
                                 {...field}
                               />
-                              <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                              <Building className={`absolute ${dir === "rtl" ? "left-3" : "right-3"} top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4`} />
                             </div>
                           </FormControl>
                           <FormMessage />
@@ -297,15 +310,15 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                         <FormItem>
                           <FormLabel className="text-gray-900 dark:text-gray-100 font-semibold flex items-center gap-2">
                             <Hash className="w-4 h-4" />
-                            رقم الحساب
+                            {t("form.accountNumber")}
                           </FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Input
-                                placeholder="رقم الحساب البنكي"
+                                placeholder={t("form.accountNumberPlaceholder")}
                                 {...field}
                               />
-                              <Hash className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                              <Hash className={`absolute ${dir === "rtl" ? "left-3" : "right-3"} top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4`} />
                             </div>
                           </FormControl>
                           <FormMessage />
@@ -320,14 +333,14 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-900 dark:text-gray-100 font-semibold">
-                            رقم التوجيه (اختياري)
+                            {t("form.routingNumber")}
                           </FormLabel>
                           <FormControl>
                             <Input placeholder="Routing Number" {...field} />
                           </FormControl>
                           <FormMessage />
                           <p className="text-xs text-gray-500 dark:text-gray-400">
-                            مطلوب للتحويلات الدولية أو بعض البنوك المحلية
+                            {t("form.routingNumberHint")}
                           </p>
                         </FormItem>
                       )}
@@ -340,11 +353,11 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-900 dark:text-gray-100 font-semibold">
-                            تفاصيل إضافية
+                            {t("form.bankDetails")}
                           </FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="اكتب تفاصيل إضافية عن البنك (مثل Swift, IBAN)"
+                              placeholder={t("form.bankDetailsPlaceholder")}
                               className="min-h-[100px]"
                               {...field}
                             />
@@ -361,11 +374,11 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-900 dark:text-gray-100 font-semibold">
-                            ملاحظات
+                            {t("form.notes")}
                           </FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="ملاحظات إضافية للعملاء حول كيفية إجراء التحويل"
+                              placeholder={t("form.notesPlaceholder")}
                               className="min-h-[80px]"
                               {...field}
                             />
@@ -385,12 +398,12 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                         {mutation.isLoading ? (
                           <div className="flex items-center gap-2">
                             <LoadingSpinner />
-                            جاري الحفظ...
+                            {t("form.saveButton")}
                           </div>
                         ) : (
                           <div className="flex items-center gap-2">
                             <CheckCircle2 className="w-5 h-5" />
-                            {isConnected ? "تحديث الإعدادات" : "ربط الحساب"}
+                            {isConnected ? t("form.updateButton") : t("form.connectButton")}
                           </div>
                         )}
                       </Button>
@@ -424,8 +437,8 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                       }`}
                     >
                       {isActive
-                        ? "التحويل البنكي مُفعل"
-                        : "التحويل البنكي معطل"}
+                        ? t("paymentStatus.active")
+                        : t("paymentStatus.inactive")}
                     </h3>
                     <ul
                       className={`text-sm space-y-1 ${
@@ -434,19 +447,9 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                           : "text-amber-700 dark:text-amber-300"
                       }`}
                     >
-                      {isActive ? (
-                        <>
-                          <li>• العملاء يمكنهم رؤية بيانات الحساب البنكي</li>
-                          <li>• سيتم عرض تعليمات التحويل للعملاء</li>
-                          <li>• ستحتاج لتأكيد استلام التحويلات يدوياً</li>
-                        </>
-                      ) : (
-                        <>
-                          <li>• لن يتمكن العملاء من رؤية بيانات الحساب</li>
-                          <li>• لن يتم عرض خيار التحويل البنكي</li>
-                          <li>• يمكنك تفعيله مرة أخرى في أي وقت</li>
-                        </>
-                      )}
+                      {((isActive ? t.raw("paymentStatus.activeItems") : t.raw("paymentStatus.inactiveItems")) as string[]).map((item, index) => (
+                        <li key={index}>• {item}</li>
+                      ))}
                     </ul>
                   </div>
                 </div>
@@ -459,13 +462,12 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                 <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                    معلومات الأمان والخصوصية
+                    {t("security.title")}
                   </h3>
                   <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                    <li>• بيانات الحساب البنكي محفوظة بشكل آمن ومشفر</li>
-                    <li>• لن يتم مشاركة المعلومات مع جهات خارجية</li>
-                    <li>• تحقق من صحة البيانات قبل الحفظ</li>
-                    <li>• يمكنك تعطيل الدفع مؤقتاً دون فقدان الإعدادات</li>
+                    {(t.raw("security.items") as string[]).map((item, index) => (
+                      <li key={index}>• {item}</li>
+                    ))}
                   </ul>
                 </div>
               </div>
@@ -478,7 +480,7 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl text-gray-900 dark:text-gray-100 flex items-center gap-2">
                   <Lightbulb className="w-5 h-5 text-amber-500" />
-                  الخطوات
+                  {t("steps.title")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -488,10 +490,10 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                   </div>
                   <div>
                     <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
-                      أدخل بيانات الحساب
+                      {t("steps.step1")}
                     </p>
                     <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                      اسم صاحب الحساب، البنك، ورقم الحساب
+                      {t("steps.step1Description")}
                     </p>
                   </div>
                 </div>
@@ -502,10 +504,10 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                   </div>
                   <div>
                     <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
-                      أضف التفاصيل
+                      {t("steps.step2")}
                     </p>
                     <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                      تفاصيل إضافية وملاحظات للعملاء
+                      {t("steps.step2Description")}
                     </p>
                   </div>
                 </div>
@@ -516,10 +518,10 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                   </div>
                   <div>
                     <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
-                      احفظ الإعدادات
+                      {t("steps.step3")}
                     </p>
                     <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                      اضغط حفظ لإكمال عملية الربط
+                      {t("steps.step3Description")}
                     </p>
                   </div>
                 </div>
@@ -530,10 +532,10 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                   </div>
                   <div>
                     <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
-                      فعّل التحويل
+                      {t("steps.step4")}
                     </p>
                     <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                      استخدم المفتاح لتفعيل أو تعطيل التحويل البنكي
+                      {t("steps.step4Description")}
                     </p>
                   </div>
                 </div>
@@ -541,8 +543,7 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                 {/* Important Note */}
                 <div className="mt-6 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
                   <p className="text-xs text-gray-700 dark:text-gray-300">
-                    <strong>ملاحظة مهمة:</strong> التحويلات البنكية P2P تتطلب
-                    تأكيد يدوي من طرفك عند استلام الأموال.
+                    {t("steps.importantNote")}
                   </p>
                 </div>
               </CardContent>

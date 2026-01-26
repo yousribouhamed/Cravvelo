@@ -6,9 +6,11 @@ import {
 } from "@/src/actions/user.actions";
 import GeneralSettingsHeader from "@/src/modules/settings/components/general-settings-header";
 import InvoicesPage from "@/src/modules/settings/pages/invoices.page";
+import { getServerTranslations } from "@/src/lib/i18n/utils";
 
 const Page = async ({}) => {
   const user = await getMyUserAction();
+  const t = await getServerTranslations("pages");
 
   const notifications = await getAllNotifications({
     accountId: user?.accountId,
@@ -17,7 +19,7 @@ const Page = async ({}) => {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
-        <Header notifications={notifications} user={user} title="الفواتير" />
+        <Header notifications={notifications} user={user} title={t("invoices")} />
 
         <GeneralSettingsHeader />
 

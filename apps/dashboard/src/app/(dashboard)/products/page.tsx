@@ -4,6 +4,7 @@ import { prisma } from "database/src";
 import ProductsTableShell from "./products-table-shell";
 import { getMyUserAction } from "@/src/actions/user.actions";
 import CreateAcademiaPage from "@/src/components/pages/create-academia.page";
+import { getServerTranslations } from "@/src/lib/i18n/utils";
 
 const getData = async ({ accountId }: { accountId: string }) => {
   if (!accountId) {
@@ -28,6 +29,7 @@ const getAllNotifications = async ({ accountId }: { accountId: string }) => {
 
 const Page = async ({}) => {
   const user = await getMyUserAction();
+  const t = await getServerTranslations("pages");
 
   const [data, notifications] = await Promise.all([
     getData({ accountId: user.accountId }),
@@ -44,7 +46,7 @@ const Page = async ({}) => {
         <Header
           notifications={notifications}
           user={user}
-          title="المنتجات الرقمية"
+          title={t("digitalProducts")}
         />
 
         <ProductsTableShell initialData={data} />

@@ -1,4 +1,4 @@
-import { currentUser } from "@clerk/nextjs/server";
+import { getCurrentUserSafe } from "@/src/lib/clerk-utils";
 import { redirect } from "next/navigation";
 import { prisma } from "database/src";
 
@@ -16,7 +16,7 @@ export const getAllNotifications = async ({
 };
 
 export const getMyUserAction = async () => {
-  const user = await currentUser();
+  const user = await getCurrentUserSafe();
 
   if (!user) {
     redirect("/sign-in");
@@ -53,7 +53,7 @@ export const getMyUserAction = async () => {
 };
 
 export const getUserProfileAction = async () => {
-  const user = await currentUser();
+  const user = await getCurrentUserSafe();
 
   if (!user) {
     redirect("/sign-in");

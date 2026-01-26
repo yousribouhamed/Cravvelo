@@ -6,9 +6,11 @@ import {
 } from "@/src/actions/user.actions";
 import { ChargilyConnectPage } from "@/src/modules/payments/pages/chargily.page";
 import { getChargilyConnection } from "@/src/modules/payments/actions/chargily";
+import { getServerTranslations } from "@/src/lib/i18n/utils";
 
 const PageProps = async () => {
   const user = await getMyUserAction();
+  const t = await getServerTranslations("paymentMethods.chargilyPage");
 
   const [connection, notifications] = await Promise.all([
     getChargilyConnection().catch((error) => {
@@ -36,7 +38,7 @@ const PageProps = async () => {
         <Header
           notifications={notifications}
           user={user}
-          title="بوابات الدفع"
+          title={t("title")}
           goBack
         />
 

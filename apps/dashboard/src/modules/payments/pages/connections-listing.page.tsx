@@ -21,6 +21,7 @@ import {
   Globe,
   CreditCard,
 } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
 
 interface PaymentConnection {
   provider: string;
@@ -35,6 +36,9 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
   connections,
 }) => {
   const router = useRouter();
+  const t = useTranslations("paymentMethods");
+  const locale = useLocale();
+  const dir = locale === "ar" ? "rtl" : "ltr";
 
   const getConnectionStatus = (providerId: string): boolean => {
     const connection = connections?.find(
@@ -46,15 +50,13 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
   const paymentMethods = [
     {
       id: "chargily",
-      name: "Chargily",
-      arabicName: "شارجيلي",
-      description:
-        "المنصة الأولى في الجزائر لاستقبال الأموال عبر الإنترنت دون الحاجة لسجل تجاري",
-      shortDesc: "الدفع الرقمي في الجزائر",
+      name: t("chargily.name"),
+      description: t("chargily.description"),
+      shortDesc: t("chargily.shortDesc"),
       logo: "/chargily.jpg",
-      isConnected: getConnectionStatus("chargily"), // Dynamic connection status
+      isConnected: getConnectionStatus("chargily"),
       isAvailable: true,
-      features: ["دفع فوري", "بدون سجل تجاري", "آمن ومضمون"],
+      features: t.raw("chargily.features") as string[],
       primaryColor: "from-violet-500 to-purple-600",
       accentColor: "bg-violet-500 dark:bg-violet-600",
       hoverColor: "hover:bg-violet-600 dark:hover:bg-violet-700",
@@ -63,18 +65,15 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
       badgeColor:
         "bg-violet-100 text-violet-700 dark:bg-violet-900 dark:text-violet-300",
     },
-
     {
       id: "p2p",
-      name: "P2P Transfer",
-      arabicName: "التحويل المباشر",
-      description:
-        "تحويل مباشر من شخص لشخص عبر المحافظ الرقمية والتطبيقات المصرفية المحلية",
-      shortDesc: "التحويل المباشر P2P",
+      name: t("p2p.name"),
+      description: t("p2p.description"),
+      shortDesc: t("p2p.shortDesc"),
       logo: "/p2p-icon.svg",
-      isConnected: getConnectionStatus("p2p"), // Dynamic connection status
+      isConnected: getConnectionStatus("p2p"),
       isAvailable: true,
-      features: ["تحويل سريع", "رسوم منخفضة", "دعم محلي"],
+      features: t.raw("p2p.features") as string[],
       primaryColor: "from-emerald-500 to-green-600",
       accentColor: "bg-emerald-500 dark:bg-emerald-600",
       hoverColor: "hover:bg-emerald-600 dark:hover:bg-emerald-700",
@@ -85,15 +84,13 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
     },
     {
       id: "stripe",
-      name: "Stripe",
-      arabicName: "سترايب",
-      description:
-        "منصة مدفوعات عالمية تتيح للشركات قبول المدفوعات وإدارة العمليات المالية بسهولة وأمان",
-      shortDesc: "المدفوعات العالمية",
+      name: t("stripe.name"),
+      description: t("stripe.description"),
+      shortDesc: t("stripe.shortDesc"),
       logo: "/stripe-2.svg",
-      isConnected: getConnectionStatus("stripe"), // Dynamic connection status
+      isConnected: getConnectionStatus("stripe"),
       isAvailable: false,
-      features: ["قبول دولي", "أمان متقدم", "تقارير مفصلة"],
+      features: t.raw("stripe.features") as string[],
       primaryColor: "from-blue-500 to-indigo-600",
       accentColor: "bg-blue-500 dark:bg-blue-600",
       hoverColor: "hover:bg-blue-600 dark:hover:bg-blue-700",
@@ -105,13 +102,13 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
   ];
 
   return (
-    <div className="w-full min-h-[400px] my-4 rtl" dir="rtl">
+    <div className={`w-full min-h-[400px] my-4 ${dir === "rtl" ? "rtl" : ""}`} dir={dir}>
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-          طرق الدفع
+          {t("pageTitle")}
         </h2>
         <p className="text-gray-600 dark:text-gray-400">
-          اربط حسابك مع منصات الدفع المختلفة لبدء استقبال الأموال
+          {t("pageDescription")}
         </p>
       </div>
 
@@ -127,19 +124,19 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
           >
             {/* Connected Badge */}
             {method.isConnected && (
-              <div className="absolute top-2 left-4 z-10">
+              <div className={`absolute top-2 z-10 ${dir === "rtl" ? "left-4" : "right-4"}`}>
                 <Badge className="bg-green-100 text-green-700 border-green-200 dark:bg-green-900 dark:text-green-300 dark:border-green-700">
-                  متصل
+                  {t("connected")}
                 </Badge>
               </div>
             )}
 
             {/* Coming Soon Badge */}
             {!method.isAvailable && (
-              <div className="absolute top-4 left-4 z-10">
+              <div className={`absolute top-4 z-10 ${dir === "rtl" ? "left-4" : "right-4"}`}>
                 <Badge className="bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:border-gray-600">
-                  <Clock className="w-3 h-3 ml-1" />
-                  قريباً
+                  <Clock className={`w-3 h-3 ${dir === "rtl" ? "ml-1" : "mr-1"}`} />
+                  {t("comingSoon")}
                 </Badge>
               </div>
             )}
@@ -162,7 +159,7 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
                   </div>
                   <div>
                     <CardTitle className="text-lg font-bold text-gray-900 dark:text-gray-100">
-                      {method.arabicName}
+                      {method.name}
                     </CardTitle>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
                       {method.shortDesc}
@@ -184,7 +181,7 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
               <div className="space-y-2">
                 <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                   <Shield className="w-4 h-4" />
-                  المميزات
+                  {t("features")}
                 </h4>
                 <div className="flex flex-wrap gap-1">
                   {method.features.map((feature, index) => (
@@ -208,18 +205,18 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
                       e.stopPropagation();
                       router.push(method.route);
                     }}
-                    className={`flex-1 ${method.accentColor} ${method.hoverColor} text-white font-medium transition-all duration-200`}
+                    className={`flex-1 ${method.accentColor} ${method.hoverColor} dark:text-white text-black font-medium transition-all duration-200 flex items-center justify-center gap-2`}
                     size="sm"
                   >
                     {method.isConnected ? (
                       <>
-                        <Settings className="w-4 h-4 ml-2" />
-                        إدارة الحساب
+                        <Settings className="w-4 h-4" />
+                        {t("manageAccount")}
                       </>
                     ) : (
                       <>
-                        ربط الحساب
-                        <ArrowLeft className="w-4 h-4 ml-2" />
+                        <ArrowLeft className="w-4 h-4" />
+                        {t("connectAccount")}
                       </>
                     )}
                   </Button>
@@ -230,8 +227,8 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
                   className="flex-1 bg-gray-200 text-gray-500 cursor-not-allowed dark:bg-gray-700 dark:text-gray-400"
                   size="sm"
                 >
-                  <Clock className="w-4 h-4 ml-2" />
-                  قريباً
+                  <Clock className={`w-4 h-4 ${dir === "rtl" ? "ml-2" : "mr-2"}`} />
+                  {t("comingSoon")}
                 </Button>
               )}
             </CardFooter>
@@ -245,24 +242,23 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
       {/* Help Section */}
       <div className="mt-12 p-6 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700">
         <div className="flex items-start gap-4">
-          <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
+          <div className="p-2 bg-blue-100 dark:bg-gray-700 rounded-lg">
             <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400" />
           </div>
           <div className="flex-1">
             <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
-              أمان المدفوعات
+              {t("security.title")}
             </h3>
             <p className="text-gray-700 dark:text-gray-300 text-sm mb-3">
-              جميع طرق الدفع المتوفرة تستخدم أحدث تقنيات الأمان والتشفير لحماية
-              بياناتك المالية
+              {t("security.description")}
             </p>
             <Button
               variant="outline"
               size="sm"
               className="text-blue-600 border-blue-200 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-700 dark:hover:bg-blue-900/50"
             >
-              تعرف على المزيد
-              <ArrowLeft className="w-4 h-4 ml-2" />
+              {t("security.learnMore")}
+              <ArrowLeft className={`w-4 h-4 ${dir === "rtl" ? "ml-2" : "mr-2"}`} />
             </Button>
           </div>
         </div>

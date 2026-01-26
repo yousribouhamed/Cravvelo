@@ -7,6 +7,7 @@ import {
   getMyUserAction,
 } from "@/src/actions/user.actions";
 import CreateAcademiaPage from "@/src/components/pages/create-academia.page";
+import { getServerTranslations } from "@/src/lib/i18n/utils";
 
 export const fetchCache = "force-no-store";
 
@@ -25,6 +26,7 @@ async function getData({
 
 const Page = async ({}) => {
   const user = await getMyUserAction();
+  const t = await getServerTranslations("pages");
 
   const [data, notifications] = await Promise.all([
     getData({ accountId: user.accountId }),
@@ -37,7 +39,7 @@ const Page = async ({}) => {
 
   return (
     <AppShell
-      title="الدورات"
+      title={t("courses")}
       user={user}
       notifications={notifications}
     >

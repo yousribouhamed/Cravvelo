@@ -24,6 +24,8 @@ import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 import { CravveloEditor } from "@cravvelo/editor";
+import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
 
 const formSchema = z.object({
   policy: z.any(),
@@ -34,8 +36,9 @@ interface AddPrivicyPolicyProps {
 }
 
 const AddPrivicyPolicy: FC<AddPrivicyPolicyProps> = ({ policy }) => {
-  // console.log("this is the polict: -< ");
-  // console.log(policy);
+  const t = useTranslations("websiteSettings.forms.privacyPolicy");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
 
   const mutation = trpc.addPolicy.useMutation({
     onSuccess: () => {
@@ -67,7 +70,7 @@ const AddPrivicyPolicy: FC<AddPrivicyPolicyProps> = ({ policy }) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card className="border rounded-xl shadow-none">
           <CardHeader>
-            <CardTitle>سياسة الأكاديمية</CardTitle>
+            <CardTitle dir={isRTL ? "rtl" : "ltr"}>{t("title")}</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
@@ -75,9 +78,8 @@ const AddPrivicyPolicy: FC<AddPrivicyPolicyProps> = ({ policy }) => {
               name="policy"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    اقرأ هذا القالب وانقر فوق &quot;حفظ&quot; لتنقذ نفسك
-                    وعملائك.
+                  <FormLabel dir={isRTL ? "rtl" : "ltr"}>
+                    {t("label")}
                   </FormLabel>
                   <FormControl>
                     <CravveloEditor
@@ -97,7 +99,7 @@ const AddPrivicyPolicy: FC<AddPrivicyPolicyProps> = ({ policy }) => {
               type="submit"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              تاكيد
+              {t("confirm")}
             </Button>
           </CardFooter>
         </Card>

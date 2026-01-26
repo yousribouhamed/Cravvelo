@@ -16,7 +16,12 @@ import {
 import { formatCurrency } from "../../utils";
 import { approvePayment, rejectPayment } from "../../actions/payments";
 import { useConfirmation } from "@/src/hooks/use-confirmation";
-import Link from "next/link";
+import { useTranslations, useLocale } from "next-intl";
+import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { maketoast } from "@/src/components/toasts";
+import { PaymentProofModal } from "../payment-proof-modal";
 
 export type Payment = {
   id: string;
@@ -73,9 +78,14 @@ export type Payment = {
   }>;
 };
 
-// Date formatter
-const formatDate = (date: Date) => {
-  return new Intl.DateTimeFormat("ar-DZ", {
+// Date formatter - now accepts locale
+const formatDate = (date: Date, locale: string) => {
+  const localeMap: Record<string, string> = {
+    ar: "ar-DZ",
+    en: "en-US",
+  };
+  const dateLocale = localeMap[locale] || "en-US";
+  return new Intl.DateTimeFormat(dateLocale, {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -84,39 +94,73 @@ const formatDate = (date: Date) => {
   }).format(new Date(date));
 };
 
-// Status badge colors
-const getStatusBadgeVariant = (status: string) => {
-  switch (status) {
-    case "COMPLETED":
-      return "bg-green-100 text-green-800 border-green-200 dark:bg-green-900 dark:text-green-100";
-    case "PENDING":
-      return "bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900 dark:text-yellow-100";
-    case "PROCESSING":
-      return "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900 dark:text-blue-100";
-    case "FAILED":
-      return "bg-red-100 text-red-800 border-red-200 dark:bg-red-900 dark:text-red-100";
-    case "CANCELLED":
-      return "bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-900 dark:text-gray-100";
-    case "REFUNDED":
-      return "bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-900 dark:text-purple-100";
-    default:
-      return "bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-900 dark:text-gray-100";
+// Status badge colors - theme-aware function
+const getStatusBadgeVariant = (status: string, isDark: boolean) => {
+  if (isDark) {
+    switch (status) {
+      case "COMPLETED":
+        return "!border-green-700 !bg-green-900/40 !text-green-200";
+      case "PENDING":
+        return "!border-yellow-700 !bg-yellow-900/40 !text-yellow-200";
+      case "PROCESSING":
+        return "!border-blue-700 !bg-blue-900/40 !text-blue-200";
+      case "FAILED":
+        return "!border-red-700 !bg-red-900/40 !text-red-200";
+      case "CANCELLED":
+        return "!border-gray-700 !bg-gray-800 !text-gray-200";
+      case "REFUNDED":
+        return "!border-purple-700 !bg-purple-900/40 !text-purple-200";
+      default:
+        return "!border-gray-700 !bg-gray-800 !text-gray-200";
+    }
+  } else {
+    switch (status) {
+      case "COMPLETED":
+        return "!border-green-200 !bg-green-100 !text-green-800";
+      case "PENDING":
+        return "!border-yellow-200 !bg-yellow-100 !text-yellow-800";
+      case "PROCESSING":
+        return "!border-blue-200 !bg-blue-100 !text-blue-800";
+      case "FAILED":
+        return "!border-red-200 !bg-red-100 !text-red-800";
+      case "CANCELLED":
+        return "!border-gray-200 !bg-gray-100 !text-gray-800";
+      case "REFUNDED":
+        return "!border-purple-200 !bg-purple-100 !text-purple-800";
+      default:
+        return "!border-gray-200 !bg-gray-100 !text-gray-800";
+    }
   }
 };
 
-// Payment method badge colors
-const getMethodBadgeVariant = (method: string) => {
-  switch (method) {
-    case "BANK_TRANSFER":
-      return "bg-indigo-100 text-indigo-800 border-indigo-200 dark:bg-indigo-900 dark:text-indigo-100";
-    case "CASH":
-      return "bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900 dark:text-emerald-100";
-    case "CHARGILY":
-      return "bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900 dark:text-orange-100";
-    case "CREDIT_CARD":
-      return "bg-cyan-100 text-cyan-800 border-cyan-200 dark:bg-cyan-900 dark:text-cyan-100";
-    default:
-      return "bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-900 dark:text-gray-100";
+// Payment method badge colors - theme-aware function
+const getMethodBadgeVariant = (method: string, isDark: boolean) => {
+  if (isDark) {
+    switch (method) {
+      case "BANK_TRANSFER":
+        return "!border-indigo-700 !bg-indigo-900/40 !text-indigo-200";
+      case "CASH":
+        return "!border-emerald-700 !bg-emerald-900/40 !text-emerald-200";
+      case "CHARGILY":
+        return "!border-orange-700 !bg-orange-900/40 !text-orange-200";
+      case "CREDIT_CARD":
+        return "!border-cyan-700 !bg-cyan-900/40 !text-cyan-200";
+      default:
+        return "!border-gray-700 !bg-gray-800 !text-gray-200";
+    }
+  } else {
+    switch (method) {
+      case "BANK_TRANSFER":
+        return "!border-indigo-200 !bg-indigo-100 !text-indigo-800";
+      case "CASH":
+        return "!border-emerald-200 !bg-emerald-100 !text-emerald-800";
+      case "CHARGILY":
+        return "!border-orange-200 !bg-orange-100 !text-orange-800";
+      case "CREDIT_CARD":
+        return "!border-cyan-200 !bg-cyan-100 !text-cyan-800";
+      default:
+        return "!border-gray-200 !bg-gray-100 !text-gray-800";
+    }
   }
 };
 
@@ -138,23 +182,23 @@ const getTypeBadgeVariant = (type: string) => {
   }
 };
 
-// item helper
-const getItemInfo = (payment: Payment) => {
+// item helper - now accepts translation function
+const getItemInfo = (payment: Payment, t: (key: string) => string) => {
   if (payment.Sale?.Course) {
     return {
-      type: "دورة",
+      type: t("payments.types.course"),
       title: payment.Sale.Course.title,
       thumbnail: payment.Sale.Course.thumbnailUrl,
     };
   } else if (payment.Sale?.Product) {
     return {
-      type: "منتج",
+      type: t("payments.types.product"),
       title: payment.Sale.Product.title,
       thumbnail: payment.Sale.Product.thumbnailUrl,
     };
   } else if (payment.Subscription) {
     return {
-      type: "اشتراك",
+      type: t("payments.types.subscription"),
       title: payment.Subscription.plan,
       thumbnail: null,
     };
@@ -164,33 +208,73 @@ const getItemInfo = (payment: Payment) => {
 
 // Actions Cell Component
 const ActionsCell = ({ payment }: { payment: Payment }) => {
-  const isBankTransfer = payment.method === "BANK_TRANSFER";
+  const t = useTranslations();
+  const locale = useLocale();
+  const router = useRouter();
+  const isRTL = locale === "ar";
+  const isBankTransfer = payment.method === "BANK_TRANSFER" || payment.MethodConfig?.provider === "P2P";
+  const formattedAmount = formatCurrency({
+    amount: payment.amount,
+    currency: payment.currency as "DZD",
+  });
+  const [isProofModalOpen, setIsProofModalOpen] = useState(false);
+
+  // Copy to clipboard function with error handling and fallback
+  const copyToClipboard = async (text: string) => {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+        maketoast.successWithText({ text: t("payments.messages.copied") });
+      } else {
+        // Fallback for browsers without clipboard API
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
+        textArea.style.left = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+          document.execCommand("copy");
+          maketoast.successWithText({ text: t("payments.messages.copied") });
+        } catch (err) {
+          maketoast.errorWithText({ text: t("payments.errors.copyFailed") });
+        } finally {
+          document.body.removeChild(textArea);
+        }
+      }
+    } catch (error) {
+      maketoast.errorWithText({ text: t("payments.errors.copyFailed") });
+    }
+  };
 
   // Approve payment mutation with confirmation
   const approvePaymentMutation = useConfirmation(
     async (paymentId: string) => {
-      return await approvePayment({ paymentId });
+      const result = await approvePayment({ paymentId });
+      if (!result.success) {
+        throw new Error(result.message || t("payments.errors.approveFailed"));
+      }
+      return result;
     },
     {
       confirmationConfig: {
-        title: "الموافقة على الدفع",
-        description: `هل أنت متأكد من الموافقة على الدفع بمبلغ ${formatCurrency(
-          {
-            amount: payment.amount,
-            currency: payment.currency as "DZD",
-          }
-        )}؟ لن يمكن التراجع عن هذا الإجراء.`,
-        confirmText: "الموافقة",
-        cancelText: "إلغاء",
+        title: t("payments.confirmations.approveTitle"),
+        description: t("payments.confirmations.approveDescription", {
+          amount: formattedAmount,
+        }),
+        confirmText: t("payments.confirmations.approveConfirm"),
+        cancelText: t("common.cancel"),
         variant: "default",
       },
       onSuccess: () => {
-        console.log("Payment approved successfully");
-        // You can add toast notification here
+        maketoast.successWithText({ text: t("payments.messages.approveSuccess") });
+        router.refresh(); // Refresh server components
       },
-      onError: (error) => {
-        console.error("Failed to approve payment:", error);
-        // You can add error toast notification here
+      onError: (error: any) => {
+        const errorMessage = error?.message || error?.data?.message || t("payments.errors.approveFailed");
+        maketoast.errorWithText({ text: errorMessage });
       },
     }
   );
@@ -198,88 +282,109 @@ const ActionsCell = ({ payment }: { payment: Payment }) => {
   // Reject payment mutation with confirmation
   const rejectPaymentMutation = useConfirmation(
     async (paymentId: string) => {
-      return await rejectPayment({ paymentId });
+      const result = await rejectPayment({ paymentId });
+      if (!result.success) {
+        throw new Error(result.message || t("payments.errors.rejectFailed"));
+      }
+      return result;
     },
     {
       confirmationConfig: {
-        title: "رفض الدفع",
-        description: `هل أنت متأكد من رفض الدفع بمبلغ ${formatCurrency({
-          amount: payment.amount,
-          currency: payment.currency as "DZD",
-        })}؟ سيتم إلغاء المعاملة نهائياً.`,
-        confirmText: "رفض الدفع",
-        cancelText: "إلغاء",
+        title: t("payments.confirmations.rejectTitle"),
+        description: t("payments.confirmations.rejectDescription", {
+          amount: formattedAmount,
+        }),
+        confirmText: t("payments.confirmations.rejectConfirm"),
+        cancelText: t("common.cancel"),
         variant: "destructive",
       },
       onSuccess: () => {
-        console.log("Payment rejected successfully");
-        // You can add toast notification here
+        maketoast.successWithText({ text: t("payments.messages.rejectSuccess") });
+        router.refresh(); // Refresh server components
       },
-      onError: (error) => {
-        console.error("Failed to reject payment:", error);
-        // You can add error toast notification here
+      onError: (error: any) => {
+        const errorMessage = error?.message || error?.data?.message || t("payments.errors.rejectFailed");
+        maketoast.errorWithText({ text: errorMessage });
       },
     }
   );
 
   return (
-    <DropdownMenu dir="rtl">
+    <DropdownMenu dir={isRTL ? "rtl" : "ltr"}>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="h-8 w-8 p-0">
-          <span className="sr-only">فتح القائمة</span>
+          <span className="sr-only">{t("payments.actions.openMenu")}</span>
           <MoreHorizontal className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="bg-card text-card-foreground dtext-right"
+        className={`bg-card text-card-foreground ${isRTL ? "text-right" : "text-left"}`}
       >
-        <DropdownMenuLabel className="text-right">الإجراءات</DropdownMenuLabel>
+        <DropdownMenuLabel className={isRTL ? "text-right" : "text-left"}>
+          {t("payments.columns.actions")}
+        </DropdownMenuLabel>
         <DropdownMenuItem
-          onClick={() => navigator.clipboard.writeText(payment.id)}
-          className="text-right"
+          onClick={() => copyToClipboard(payment.id)}
+          className={isRTL ? "text-right" : "text-left"}
         >
-          نسخ معرف الدفع
+          {t("payments.actions.copyPaymentId")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
 
         {/* Show payment proofs only for bank transfers */}
         {isBankTransfer && payment.Proofs && payment.Proofs.length > 0 && (
-          <Link href={payment.Proofs[0].fileUrl} target="_blank">
-            <DropdownMenuItem className="text-right">
-              <FileImage className="ml-2 h-4 w-4" />
-              عرض إثباتات الدفع ({payment.Proofs.length})
+          <>
+            <DropdownMenuItem
+              className={isRTL ? "text-right" : "text-left"}
+              onSelect={(e) => {
+                e.preventDefault();
+                // Use setTimeout to ensure dropdown closes before modal opens
+                setTimeout(() => {
+                  setIsProofModalOpen(true);
+                }, 100);
+              }}
+            >
+              <FileImage className={isRTL ? "ml-2 h-4 w-4" : "mr-2 h-4 w-4"} />
+              {t("payments.actions.viewProofs")} ({payment.Proofs.length})
             </DropdownMenuItem>
-          </Link>
+            <PaymentProofModal
+              proofs={payment.Proofs}
+              isOpen={isProofModalOpen}
+              setIsOpen={setIsProofModalOpen}
+            />
+          </>
         )}
 
         {/* Show approve/reject actions only for bank transfers */}
         {isBankTransfer && payment.status === "PENDING" && (
           <DropdownMenuItem
-            className="text-green-600 dark:text-green-400 text-right"
+            className={`text-green-600 dark:text-green-400 ${isRTL ? "text-right" : "text-left"}`}
             onClick={() =>
               approvePaymentMutation.mutateWithConfirmation(payment.id)
             }
             disabled={approvePaymentMutation.isLoading}
           >
-            <Check className="ml-2 h-4 w-4" />
+            <Check className={isRTL ? "ml-2 h-4 w-4" : "mr-2 h-4 w-4"} />
             {approvePaymentMutation.isLoading
-              ? "جاري الموافقة..."
-              : "الموافقة على الدفع"}
+              ? t("payments.actions.approving")
+              : t("payments.actions.approvePayment")}
           </DropdownMenuItem>
         )}
 
         {isBankTransfer &&
           (payment.status === "PENDING" || payment.status === "PROCESSING") && (
             <DropdownMenuItem
-              className="text-red-600 dark:text-red-400 text-right"
+              className={`text-red-600 dark:text-red-400 ${isRTL ? "text-right" : "text-left"}`}
               onClick={() =>
                 rejectPaymentMutation.mutateWithConfirmation(payment.id)
               }
               disabled={rejectPaymentMutation.isLoading}
             >
-              <X className="ml-2 h-4 w-4" />
-              {rejectPaymentMutation.isLoading ? "جاري الرفض..." : "رفض الدفع"}
+              <X className={isRTL ? "ml-2 h-4 w-4" : "mr-2 h-4 w-4"} />
+              {rejectPaymentMutation.isLoading
+                ? t("payments.actions.rejecting")
+                : t("payments.actions.rejectPayment")}
             </DropdownMenuItem>
           )}
       </DropdownMenuContent>
@@ -287,88 +392,220 @@ const ActionsCell = ({ payment }: { payment: Payment }) => {
   );
 };
 
+// Column components that use translations
+const IdCell = ({ id }: { id: string | null }) => {
+  const t = useTranslations();
+  if (!id) {
+    return <span className="text-muted-foreground text-sm">{t("payments.emptyStates.noItem")}</span>;
+  }
+  return (
+    <div className="font-mono text-xs text-muted-foreground">
+      {id.slice(-8)}
+    </div>
+  );
+};
+
+const StudentCell = ({ student }: { student?: Payment["Student"] }) => {
+  const t = useTranslations();
+  if (!student)
+    return (
+      <span className="text-muted-foreground text-sm">
+        {t("payments.emptyStates.noStudent")}
+      </span>
+    );
+  return (
+    <div className="flex items-center gap-2 min-w-[180px]">
+      <Avatar className="h-8 w-8">
+        <AvatarImage src={student.photo_url || undefined} />
+        <AvatarFallback className="text-xs">
+          {student.full_name
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .slice(0, 2)}
+        </AvatarFallback>
+      </Avatar>
+      <div className="flex flex-col">
+        <span className="text-sm font-medium">{student.full_name}</span>
+        <span className="text-xs text-muted-foreground">
+          {student.email || t("payments.emptyStates.noItem")}
+        </span>
+      </div>
+    </div>
+  );
+};
+
+const ItemCell = ({ payment }: { payment: Payment }) => {
+  const t = useTranslations();
+  const info = getItemInfo(payment, t);
+  if (!info)
+    return <span className="text-muted-foreground text-sm">{t("payments.emptyStates.noItem")}</span>;
+  return (
+    <div className="flex items-center gap-2 min-w-[180px]">
+      {info.thumbnail && (
+        <img
+          src={info.thumbnail}
+          alt={info.title}
+          className="h-8 w-8 rounded object-cover"
+        />
+      )}
+      <div className="flex flex-col">
+        <span
+          className="text-sm font-medium truncate max-w-[150px]"
+          title={info.title}
+        >
+          {info.title}
+        </span>
+        <span className="text-xs text-muted-foreground">{info.type}</span>
+      </div>
+    </div>
+  );
+};
+
+const StatusCell = ({ status }: { status: string | null }) => {
+  const t = useTranslations();
+  const { resolvedTheme } = useTheme();
+  // resolvedTheme will be "dark" or "light" (or undefined during SSR)
+  const isDark = resolvedTheme === "dark";
+  
+  if (!status) {
+    return <span className="text-muted-foreground text-sm">{t("payments.emptyStates.noItem")}</span>;
+  }
+  return (
+    <Badge variant="outline" className={getStatusBadgeVariant(status, isDark)}>
+      {t(`payments.status.${status}`)}
+    </Badge>
+  );
+};
+
+const PaymentMethodCell = ({ method }: { method: string | null | undefined }) => {
+  const t = useTranslations();
+  const { resolvedTheme } = useTheme();
+  // resolvedTheme will be "dark" or "light" (or undefined during SSR)
+  const isDark = resolvedTheme === "dark";
+  
+  if (!method || method === "-") {
+    return <Badge variant="outline" className={getMethodBadgeVariant("", isDark)}>{t("payments.emptyStates.noMethod")}</Badge>;
+  }
+  const methodKey = method.toUpperCase().replace(/-/g, "_") as "CASH" | "CHARGILY" | "BANK_TRANSFER" | "CREDIT_CARD";
+  const translatedMethod = t(`payments.methods.${methodKey}`) || method;
+  return (
+    <Badge variant="outline" className={getMethodBadgeVariant(method, isDark)}>
+      {translatedMethod}
+    </Badge>
+  );
+};
+
+// Hook to get payment columns with translations
+export const usePaymentColumns = (): ColumnDef<Payment>[] => {
+  const t = useTranslations();
+  const locale = useLocale();
+  
+  return [
+    {
+      accessorKey: "id",
+      header: t("payments.columns.id"),
+      cell: ({ row }) => {
+        const id = row.getValue("id") as string;
+        return <IdCell id={id} />;
+      },
+    },
+    {
+      id: "student",
+      header: t("payments.columns.student"),
+      cell: ({ row }) => {
+        return <StudentCell student={row.original.Student} />;
+      },
+    },
+    {
+      id: "item",
+      header: t("payments.columns.item"),
+      cell: ({ row }) => {
+        return <ItemCell payment={row.original} />;
+      },
+    },
+    {
+      accessorKey: "amount",
+      header: t("payments.columns.amount"),
+      cell: ({ row }) => {
+        const p = row.original;
+        return (
+          <div className="font-semibold">
+            {formatCurrency({
+              amount: p.amount,
+              currency: (p.currency || "DZD") as "DZD",
+            })}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "status",
+      header: t("payments.columns.status"),
+      cell: ({ row }) => {
+        const status = row.getValue("status") as string;
+        return <StatusCell status={status} />;
+      },
+    },
+    {
+      id: "paymentMethod",
+      header: t("payments.columns.paymentMethod"),
+      cell: ({ row }) => {
+        const method =
+          row.original.method || row.original.MethodConfig?.provider || null;
+        return <PaymentMethodCell method={method} />;
+      },
+    },
+    {
+      accessorKey: "createdAt",
+      header: t("payments.columns.createdAt"),
+      cell: ({ row }) => {
+        const createdAt = row.getValue("createdAt") as Date;
+        if (!createdAt) {
+          return <span className="text-muted-foreground text-sm">-</span>;
+        }
+        return (
+          <div className="text-sm text-muted-foreground w-fit">
+            {formatDate(createdAt, locale)}
+          </div>
+        );
+      },
+    },
+    {
+      id: "actions",
+      header: t("payments.columns.actions"),
+      cell: ({ row }) => <ActionsCell payment={row.original} />,
+    },
+  ];
+};
+
+// Export default columns for backward compatibility (will be translated in cells)
 export const paymentColumns: ColumnDef<Payment>[] = [
   {
     accessorKey: "id",
-    header: "المعرف",
+    header: "ID",
     cell: ({ row }) => {
       const id = row.getValue("id") as string;
-      if (!id) {
-        return (
-          <span className="text-muted-foreground text-sm">-</span>
-        );
-      }
-      return (
-        <div className="font-mono text-xs text-muted-foreground">
-          {id.slice(-8)}
-        </div>
-      );
+      return <IdCell id={id} />;
     },
   },
   {
     id: "student",
-    header: "الطالب",
+    header: "Student",
     cell: ({ row }) => {
-      const s = row.original.Student;
-      if (!s)
-        return (
-          <span className="text-muted-foreground text-sm">لا يوجد طالب</span>
-        );
-      return (
-        <div className="flex items-center gap-2 min-w-[180px]">
-          <Avatar className="h-8 w-8">
-            <AvatarImage src={s.photo_url || undefined} />
-            <AvatarFallback className="text-xs">
-              {s.full_name
-                .split(" ")
-                .map((n) => n[0])
-                .join("")
-                .slice(0, 2)}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col">
-            <span className="text-sm font-medium">{s.full_name}</span>
-            <span className="text-xs text-muted-foreground">
-              {s.email || "-"}
-            </span>
-          </div>
-        </div>
-      );
+      return <StudentCell student={row.original.Student} />;
     },
   },
-
   {
     id: "item",
-    header: "العنصر",
+    header: "Item",
     cell: ({ row }) => {
-      const info = getItemInfo(row.original);
-      if (!info)
-        return <span className="text-muted-foreground text-sm">-</span>;
-      return (
-        <div className="flex items-center gap-2 min-w-[180px]">
-          {info.thumbnail && (
-            <img
-              src={info.thumbnail}
-              alt={info.title}
-              className="h-8 w-8 rounded object-cover"
-            />
-          )}
-          <div className="flex flex-col">
-            <span
-              className="text-sm font-medium truncate max-w-[150px]"
-              title={info.title}
-            >
-              {info.title}
-            </span>
-            <span className="text-xs text-muted-foreground">{info.type}</span>
-          </div>
-        </div>
-      );
+      return <ItemCell payment={row.original} />;
     },
   },
   {
     accessorKey: "amount",
-    header: "المبلغ",
+    header: "Amount",
     cell: ({ row }) => {
       const p = row.original;
       return (
@@ -383,31 +620,24 @@ export const paymentColumns: ColumnDef<Payment>[] = [
   },
   {
     accessorKey: "status",
-    header: "الحالة",
+    header: "Status",
     cell: ({ row }) => {
       const status = row.getValue("status") as string;
-      if (!status) {
-        return <span className="text-muted-foreground text-sm">-</span>;
-      }
-      return (
-        <Badge className={getStatusBadgeVariant(status)}>
-          {status}
-        </Badge>
-      );
+      return <StatusCell status={status} />;
     },
   },
   {
     id: "paymentMethod",
-    header: "طريقة الدفع",
+    header: "Payment Method",
     cell: ({ row }) => {
       const method =
-        row.original.method || row.original.MethodConfig?.provider || "-";
-      return <Badge className={getMethodBadgeVariant(method)}>{method}</Badge>;
+        row.original.method || row.original.MethodConfig?.provider || null;
+      return <PaymentMethodCell method={method} />;
     },
   },
   {
     accessorKey: "createdAt",
-    header: "تاريخ الإنشاء",
+    header: "Created At",
     cell: ({ row }) => {
       const createdAt = row.getValue("createdAt") as Date;
       if (!createdAt) {
@@ -422,7 +652,7 @@ export const paymentColumns: ColumnDef<Payment>[] = [
   },
   {
     id: "actions",
-    header: "الإجراءات",
+    header: "Actions",
     cell: ({ row }) => <ActionsCell payment={row.original} />,
   },
 ];

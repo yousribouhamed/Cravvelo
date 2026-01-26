@@ -4,34 +4,35 @@ import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { usePathname } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
-
-const getLinks = () => {
-  const links = [
-    {
-      name: "المظهر",
-      href: `/settings/website-settings/appearance`,
-    },
-    {
-      name: "المجال",
-      href: `/settings/website-settings`,
-    },
-    {
-      name: "القوانين",
-      href: `/settings/website-settings/legal`,
-    },
-    {
-      name: "الأذونات",
-      href: `/settings/website-settings/marketing`,
-    },
-  ];
-
-  return links;
-};
+import { useTranslations } from "next-intl";
+import { useMemo } from "react";
 
 function WebsiteSettingsHeader({ className, ...props }: ExamplesNavProps) {
+  const t = useTranslations("pages");
   const pathname = usePathname();
   const courseId = getValueFromUrl(pathname, 2);
-  const links = getLinks();
+  
+  const links = useMemo(
+    () => [
+      {
+        name: t("appearance"),
+        href: `/settings/website-settings/appearance`,
+      },
+      {
+        name: t("domain"),
+        href: `/settings/website-settings`,
+      },
+      {
+        name: t("legal"),
+        href: `/settings/website-settings/legal`,
+      },
+      {
+        name: t("marketing"),
+        href: `/settings/website-settings/marketing`,
+      },
+    ],
+    [t]
+  );
 
   return (
     <div className="relative w-full my-4 h-[60px]">

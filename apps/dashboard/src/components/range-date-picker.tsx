@@ -12,10 +12,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@ui/components/ui/popover";
-import { ar } from "date-fns/locale";
+import { ar, enUS } from "date-fns/locale";
+import { useTranslations, useLocale } from "next-intl";
 
 function formatDayInArabic(day) {
   const formattedDate = format(day, "dd MMMM yyyy", { locale: ar });
+  return formattedDate;
+}
+
+function formatDayInEnglish(day) {
+  const formattedDate = format(day, "MMM dd, yyyy", { locale: enUS });
   return formattedDate;
 }
 
@@ -36,6 +42,9 @@ export function DatePickerWithRange({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const t = useTranslations("dashboard");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
 
   const [from, to] = React.useMemo(() => {
     let fromDay: Date | undefined;
@@ -134,23 +143,30 @@ export function DatePickerWithRange({
                 stroke-linejoin="round"
               />
             </svg>
-            <span className="hidden md:block">
+            <span className="hidden md:block" dir={isRTL ? "rtl" : "ltr"}>
               {date?.from ? (
                 date.to ? (
                   <>
-                    {formatDayInArabic(date.from)} -{" "}
-                    {formatDayInArabic(date.to)}
+                    {isRTL
+                      ? formatDayInArabic(date.from)
+                      : formatDayInEnglish(date.from)}{" "}
+                    -{" "}
+                    {isRTL
+                      ? formatDayInArabic(date.to)
+                      : formatDayInEnglish(date.to)}
                   </>
                 ) : (
-                  formatDayInArabic(date.from)
+                  isRTL
+                    ? formatDayInArabic(date.from)
+                    : formatDayInEnglish(date.from)
                 )
               ) : (
-                <>{" تاريخ التقرير"}</>
+                <>{t("dateRange")}</>
               )}
             </span>
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0 bg-white shadow-lg" align="start">
+        <PopoverContent className="w-auto p-0 bg-white shadow-lg" align={isRTL ? "end" : "start"}>
           <div dir="ltr">
             <Calendar
               initialFocus
@@ -159,7 +175,7 @@ export function DatePickerWithRange({
               selected={date}
               onSelect={setDate}
               numberOfMonths={2}
-              locale={ar} // Set the Arabic locale for the calendar
+              locale={isRTL ? ar : enUS}
             />
           </div>
         </PopoverContent>

@@ -1,3 +1,5 @@
+"use client";
+
 import { ArrowLeft, User, ChevronDown, Eye, ArrowUpLeft } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@ui/components/ui/avatar";
 import { Button, buttonVariants } from "@ui/components/ui/button";
@@ -14,16 +16,13 @@ import Image from "next/image";
 import Link from "next/link";
 import LogoutButton from "./logout-button";
 import { UserData } from "@/src/types";
+import { useTranslations, useLocale } from "next-intl";
+import { useMemo } from "react";
+import { cn } from "@ui/lib/utils";
 
 interface UserNavProps {
   user: UserData;
 }
-
-// Helper function to get display name
-const getDisplayName = (user: UserData): string => {
-  const name = user?.firstName || user?.user_name || "";
-  return name.trim() === "" ? "مستخدم" : name;
-};
 
 // Helper function to get verification progress
 const getVerificationProgress = (steps: number | undefined): number => {
@@ -42,25 +41,37 @@ const getVerificationProgress = (steps: number | undefined): number => {
   }
 };
 
-const getVerificationText = (steps: number | undefined): string => {
-  return steps === 3 ? "تم التوثيق بنجاح" : "ابدأ التوثيق الآن";
-};
-
-const navigationItems = [
-  {
-    href: "/profile",
-    icon: User,
-    label: "الملف الشخصي",
-    external: false,
-  },
-] as const;
-
 export default function UserNav({ user }: UserNavProps) {
-  const displayName = getDisplayName(user);
+  const t = useTranslations("userNav");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
+
+  const displayName = useMemo(() => {
+    const name = user?.firstName || user?.user_name || "";
+    return name.trim() === "" ? t("defaultUser") : name;
+  }, [user?.firstName, user?.user_name, t]);
+
   const verificationProgress = getVerificationProgress(
     user?.verification_steps
   );
-  const verificationText = getVerificationText(user?.verification_steps);
+
+  const verificationText = useMemo(() => {
+    return user?.verification_steps === 3
+      ? t("verificationComplete")
+      : t("startVerification");
+  }, [user?.verification_steps, t]);
+
+  const navigationItems = useMemo(
+    () => [
+      {
+        href: "/profile",
+        icon: User,
+        label: t("profile"),
+        external: false,
+      },
+    ],
+    [t]
+  );
 
   return (
     <DropdownMenu>
@@ -80,7 +91,7 @@ export default function UserNav({ user }: UserNavProps) {
           </div>
           <div className="md:w-[80%] w-4 h-full justify-end items-center flex gap-x-2">
             <p className="text-md w-fit hidden md:flex text-foreground">
-              {displayName ?? "مستخدم"}
+              {displayName}
             </p>
             <ChevronDown className="w-4 h-4 text-muted-foreground hover:text-foreground transition-colors" />
           </div>
@@ -88,12 +99,12 @@ export default function UserNav({ user }: UserNavProps) {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-        align="start"
+        align={isRTL ? "start" : "end"}
         className="w-56 bg-popover border-border"
       >
         {/* User Profile Header */}
         <div
-          dir="ltr"
+          dir={isRTL ? "rtl" : "ltr"}
           className="w-full h-[70px] flex items-center justify-between px-2"
         >
           <Button
@@ -111,7 +122,7 @@ export default function UserNav({ user }: UserNavProps) {
               </AvatarFallback>
             </Avatar>
             <p className="text-md text-foreground">
-              {user?.firstName || ""} اكاديمية
+              {user?.firstName || ""} {t("academy")}
             </p>
           </div>
         </div>
@@ -122,8 +133,14 @@ export default function UserNav({ user }: UserNavProps) {
         <div className="w-full h-[80px] flex flex-col px-2">
           <div className="w-full h-[50px] flex items-center justify-between">
             <ArrowLeft className="w-4 h-4 text-muted-foreground" />
-            <div className="w-[70%] h-full flex items-center justify-end gap-x-2">
-              <p className="text-sm text-foreground text-start">
+            <div className={cn(
+              "w-[70%] h-full flex items-center gap-x-2",
+              isRTL ? "justify-end" : "justify-start"
+            )}>
+              <p className={cn(
+                "text-sm text-foreground",
+                isRTL ? "text-start" : "text-end"
+              )}>
                 {verificationText}
               </p>
               <Image
@@ -135,7 +152,7 @@ export default function UserNav({ user }: UserNavProps) {
             </div>
           </div>
           <div
-            dir="rtl"
+            dir={isRTL ? "rtl" : "ltr"}
             className="w-full h-[20px] flex justify-center items-center"
           >
             <Progress
@@ -181,7 +198,7 @@ export default function UserNav({ user }: UserNavProps) {
               onClick={!user?.subdomain ? (e) => e.preventDefault() : undefined}
             >
               <ArrowUpLeft className="h-4 w-4" />
-              <span>معاينة الأكاديمية</span>
+              <span>{t("academyPreview")}</span>
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>

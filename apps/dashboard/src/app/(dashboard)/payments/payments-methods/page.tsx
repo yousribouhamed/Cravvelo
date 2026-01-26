@@ -6,9 +6,11 @@ import {
 } from "@/src/actions/user.actions";
 import { getConnections } from "@/src/modules/payments/actions/connections";
 import AvailablePaymentMethods from "@/src/modules/payments/pages/connections-listing.page";
+import { getServerTranslations } from "@/src/lib/i18n/utils";
 
 const Page = async ({}) => {
   const user = await getMyUserAction();
+  const t = await getServerTranslations("paymentMethods");
 
   const [notifications, connections] = await Promise.all([
     getAllNotifications({ accountId: user.accountId }),
@@ -28,7 +30,7 @@ const Page = async ({}) => {
         <Header
           notifications={notifications}
           user={user}
-          title="بوابات الدفع"
+          title={t("title")}
         />
         <AvailablePaymentMethods connections={connections.data ?? []} />
       </main>

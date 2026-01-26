@@ -7,6 +7,7 @@ import { ArrowUpDown, Eye } from "lucide-react";
 import { format } from "date-fns";
 import type { InvoiceWithDetails } from "../../actions/invoices.actions";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 // Status color mapping
 const getStatusColor = (status: string) => {
@@ -47,23 +48,27 @@ const getInitials = (name: string) => {
     .slice(0, 2);
 };
 
-// Translate status to Arabic
-const translateStatus = (status: string): string => {
-  const statusMap: Record<string, string> = {
-    PENDING: "قيد الانتظار",
-    PROCESSING: "قيد المعالجة",
-    COMPLETED: "مكتمل",
-    FAILED: "فشل",
-    CANCELLED: "ملغي",
-    REFUNDED: "مسترد",
-  };
-  return statusMap[status.toUpperCase()] || status;
-};
+export const useInvoiceColumns = (): ColumnDef<InvoiceWithDetails>[] => {
+  const t = useTranslations("invoices");
 
-export const createInvoiceColumns = (): ColumnDef<InvoiceWithDetails>[] => [
+  // Translate status using translations
+  const translateStatus = (status: string): string => {
+    const statusKey = status.toUpperCase().toLowerCase();
+    const statusMap: Record<string, string> = {
+      pending: t("status.pending"),
+      processing: t("status.processing"),
+      completed: t("status.completed"),
+      failed: t("status.failed"),
+      cancelled: t("status.cancelled"),
+      refunded: t("status.refunded"),
+    };
+    return statusMap[statusKey] || status;
+  };
+
+  return [
   {
     accessorKey: "id",
-    header: "رقم الفاتورة",
+    header: t("columns.invoiceNumber"),
     cell: ({ row }) => {
       const id = row.getValue("id") as string;
       return (
@@ -81,7 +86,7 @@ export const createInvoiceColumns = (): ColumnDef<InvoiceWithDetails>[] => [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="h-auto p-0 hover:bg-transparent"
         >
-          المبلغ
+          {t("columns.amount")}
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -96,12 +101,12 @@ export const createInvoiceColumns = (): ColumnDef<InvoiceWithDetails>[] => [
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: t("columns.status"),
     cell: ({ row }) => {
       const status = row.getValue("status") as string;
       return (
         <Badge className={getStatusColor(status)} variant="secondary">
-          {status.toLowerCase().replace("_", " ")}
+          {translateStatus(status)}
         </Badge>
       );
     },
@@ -111,17 +116,17 @@ export const createInvoiceColumns = (): ColumnDef<InvoiceWithDetails>[] => [
   },
   {
     accessorKey: "Payment",
-    header: "معلومات الدفع",
+    header: t("columns.paymentInfo"),
     cell: ({ row }) => {
       const payment = row.original.Payment;
       const appInstall = payment?.AppInstall?.[0];
 
-      let itemInfo = "عنصر غير معروف";
-      let itemType = "غير معروف";
+      let itemInfo = t("payment.unknownItem");
+      let itemType = t("payment.unknownType");
 
       if (appInstall) {
         itemInfo = appInstall.App.name;
-        itemType = "اشتراك تطبيق";
+        itemType = t("payment.appSubscription");
       }
 
       return (
@@ -135,7 +140,7 @@ export const createInvoiceColumns = (): ColumnDef<InvoiceWithDetails>[] => [
           <span className="text-xs text-muted-foreground">{itemType}</span>
           {payment?.method && (
             <span className="text-xs text-muted-foreground">
-              عبر {payment.method.toLowerCase().replace("_", " ")}
+              {t("payment.via")} {payment.method.toLowerCase().replace("_", " ")}
             </span>
           )}
         </div>
@@ -151,7 +156,7 @@ export const createInvoiceColumns = (): ColumnDef<InvoiceWithDetails>[] => [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="h-auto p-0 hover:bg-transparent"
         >
-          Created
+          {t("columns.created")}
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -172,13 +177,13 @@ export const createInvoiceColumns = (): ColumnDef<InvoiceWithDetails>[] => [
   },
   {
     accessorKey: "dueDate",
-    header: "تاريخ الاستحقاق",
+    header: t("columns.dueDate"),
     cell: ({ row }) => {
       const dueDate = row.getValue("dueDate") as Date | null;
       const paidAt = row.original.paidAt;
 
       if (!dueDate) {
-        return <span className="text-muted-foreground">لا يوجد تاريخ استحقاق</span>;
+        return <span className="text-muted-foreground">{t("payment.noDueDate")}</span>;
       }
 
       const isOverdue = !paidAt && new Date(dueDate) < new Date();
@@ -190,7 +195,7 @@ export const createInvoiceColumns = (): ColumnDef<InvoiceWithDetails>[] => [
           </span>
           {isOverdue && (
             <Badge variant="destructive" className="text-xs w-fit">
-              متأخر
+              {t("payment.overdue")}
             </Badge>
           )}
         </div>
@@ -199,12 +204,12 @@ export const createInvoiceColumns = (): ColumnDef<InvoiceWithDetails>[] => [
   },
   {
     accessorKey: "paidAt",
-    header: "Paid Date",
+    header: t("columns.paidDate"),
     cell: ({ row }) => {
       const paidAt = row.getValue("paidAt") as Date | null;
 
       if (!paidAt) {
-        return <span className="text-muted-foreground">Not paid</span>;
+        return <span className="text-muted-foreground">{t("payment.notPaid")}</span>;
       }
 
       return (
@@ -233,25 +238,32 @@ export const createInvoiceColumns = (): ColumnDef<InvoiceWithDetails>[] => [
       );
     },
   },
-];
+  ];
+};
 
-// Export default columns without actions
-export const invoiceColumns = createInvoiceColumns();
+// Legacy export for backward compatibility (deprecated - use useInvoiceColumns hook instead)
+export const createInvoiceColumns = useInvoiceColumns;
 
 // Helper function to get status options for filtering
-export const getStatusOptions = () => [
-  { label: "قيد الانتظار", value: "PENDING" },
-  { label: "قيد المعالجة", value: "PROCESSING" },
-  { label: "مكتمل", value: "COMPLETED" },
-  { label: "فشل", value: "FAILED" },
-  { label: "ملغي", value: "CANCELLED" },
-  { label: "مسترد", value: "REFUNDED" },
-];
+export const useStatusOptions = () => {
+  const t = useTranslations("invoices");
+  return [
+    { label: t("status.pending"), value: "PENDING" },
+    { label: t("status.processing"), value: "PROCESSING" },
+    { label: t("status.completed"), value: "COMPLETED" },
+    { label: t("status.failed"), value: "FAILED" },
+    { label: t("status.cancelled"), value: "CANCELLED" },
+    { label: t("status.refunded"), value: "REFUNDED" },
+  ];
+};
 
 // Helper function to get sortable columns
-export const getSortableColumns = () => [
-  { label: "تاريخ الإنشاء", value: "createdAt" },
-  { label: "المبلغ", value: "amount" },
-  { label: "تاريخ الاستحقاق", value: "dueDate" },
-  { label: "تاريخ الدفع", value: "paidAt" },
-];
+export const useSortableColumns = () => {
+  const t = useTranslations("invoices");
+  return [
+    { label: t("columns.created"), value: "createdAt" },
+    { label: t("columns.amount"), value: "amount" },
+    { label: t("columns.dueDate"), value: "dueDate" },
+    { label: t("columns.paidDate"), value: "paidAt" },
+  ];
+};

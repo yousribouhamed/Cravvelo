@@ -25,6 +25,8 @@ import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 import { ImageUploaderS3 } from "@/src/components/uploaders/image-uploader";
+import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
 
 const formSchema = z.object({
   logoUrl: z.string(),
@@ -35,6 +37,10 @@ interface AddFavIconFormProps {
 }
 
 const AddFavIconForm: FC<AddFavIconFormProps> = ({ logoUrl }) => {
+  const t = useTranslations("websiteSettings.forms.favicon");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
+
   const mutation = trpc.addFavIcon.useMutation({
     onSuccess: () => {
       maketoast.success();
@@ -61,7 +67,7 @@ const AddFavIconForm: FC<AddFavIconFormProps> = ({ logoUrl }) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card className="border rounded-xl shadow-none">
           <CardHeader>
-            <CardTitle> إضافة أيقونة علامة التبويب إلى الموقع</CardTitle>
+            <CardTitle dir={isRTL ? "rtl" : "ltr"}>{t("title")}</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
@@ -69,9 +75,8 @@ const AddFavIconForm: FC<AddFavIconFormProps> = ({ logoUrl }) => {
               name="logoUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    قم بإنشاء رمز علامة التبويب المجانية الخاصة بك مجانًا من هذا
-                    الموقع https://favicon.io.
+                  <FormLabel dir={isRTL ? "rtl" : "ltr"}>
+                    {t("label")}
                   </FormLabel>
                   <FormControl>
                     <ImageUploaderS3
@@ -79,8 +84,8 @@ const AddFavIconForm: FC<AddFavIconFormProps> = ({ logoUrl }) => {
                       onChnage={field.onChange}
                     />
                   </FormControl>
-                  <FormDescription>
-                    يُسمح فقط باستخدام png وjpg وsvgs
+                  <FormDescription dir={isRTL ? "rtl" : "ltr"}>
+                    {t("description")}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -94,7 +99,7 @@ const AddFavIconForm: FC<AddFavIconFormProps> = ({ logoUrl }) => {
               type="submit"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              تاكيد
+              {t("confirm")}
             </Button>
           </CardFooter>
         </Card>

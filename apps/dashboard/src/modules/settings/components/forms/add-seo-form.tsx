@@ -26,6 +26,8 @@ import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { Textarea } from "@ui/components/ui/textarea";
 import { maketoast } from "@/src/components/toasts";
+import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
 
 const formSchema = z.object({
   title: z.string(),
@@ -38,6 +40,10 @@ interface AddSeoFormProps {
 }
 
 const AddSeoForm: FC<AddSeoFormProps> = ({ description, title }) => {
+  const t = useTranslations("websiteSettings.forms.seo");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
+
   const mutation = trpc.addWebSiteSeo.useMutation({
     onSuccess: () => {
       maketoast.success();
@@ -66,7 +72,7 @@ const AddSeoForm: FC<AddSeoFormProps> = ({ description, title }) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card className="border rounded-xl shadow-none">
           <CardHeader>
-            <CardTitle> عنوان علامة تبويب المتصفح</CardTitle>
+            <CardTitle dir={isRTL ? "rtl" : "ltr"}>{t("title")}</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
@@ -74,12 +80,12 @@ const AddSeoForm: FC<AddSeoFormProps> = ({ description, title }) => {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>سيظهر هذا في محرك البحث.</FormLabel>
+                  <FormLabel dir={isRTL ? "rtl" : "ltr"}>{t("titleLabel")}</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} dir={isRTL ? "rtl" : "ltr"} />
                   </FormControl>
-                  <FormDescription>
-                    استخدم شيئًا سيبحث عنه الناس
+                  <FormDescription dir={isRTL ? "rtl" : "ltr"}>
+                    {t("titleDescription")}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -90,12 +96,12 @@ const AddSeoForm: FC<AddSeoFormProps> = ({ description, title }) => {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel> هنا حاول أن تصف أكاديميتك .</FormLabel>
+                  <FormLabel dir={isRTL ? "rtl" : "ltr"}>{t("descriptionLabel")}</FormLabel>
                   <FormControl>
-                    <Textarea {...field} className="min-h-[140px]" />
+                    <Textarea {...field} className="min-h-[140px]" dir={isRTL ? "rtl" : "ltr"} />
                   </FormControl>
-                  <FormDescription>
-                    استخدم شيئًا سيبحث عنه الناس
+                  <FormDescription dir={isRTL ? "rtl" : "ltr"}>
+                    {t("descriptionDescription")}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -109,7 +115,7 @@ const AddSeoForm: FC<AddSeoFormProps> = ({ description, title }) => {
               type="submit"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              تاكيد
+              {t("confirm")}
             </Button>
           </CardFooter>
         </Card>

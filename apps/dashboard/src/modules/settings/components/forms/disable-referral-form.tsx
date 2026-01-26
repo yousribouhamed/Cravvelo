@@ -17,6 +17,8 @@ import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 import { Switch } from "@ui/components/ui/switch";
+import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
 
 const formSchema = z.object({
   isEnabled: z.boolean(),
@@ -29,6 +31,10 @@ interface DisableReferralFormAbdullahProps {
 const DisableReferralForm: FC<DisableReferralFormAbdullahProps> = ({
   enabled,
 }) => {
+  const t = useTranslations("websiteSettings.forms.referral");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
+
   const mutation = trpc.enableReferal.useMutation({
     onSuccess: () => {
       maketoast.success();
@@ -60,11 +66,11 @@ const DisableReferralForm: FC<DisableReferralFormAbdullahProps> = ({
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-8"
           >
-            <FormLabel className="text-xl  block font-bold text-black">
-              الصلاحيات
+            <FormLabel className={cn("text-xl block font-bold text-black", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
+              {t("permissions")}
             </FormLabel>
-            <FormLabel className="text-md block  text-gray-600">
-              اعطاء صلاحيات معينة للأكاديمية
+            <FormLabel className={cn("text-md block text-gray-600", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
+              {t("permissionsDescription")}
             </FormLabel>
 
             <div className="space-y-4">
@@ -74,7 +80,7 @@ const DisableReferralForm: FC<DisableReferralFormAbdullahProps> = ({
                 render={({ field }) => (
                   <FormItem className="flex flex-row bg-white items-center justify-between rounded-lg border p-3 shadow-sm">
                     <div className="space-y-0.5">
-                      <FormLabel>تفعيل نظام التسويق بالعمولة</FormLabel>
+                      <FormLabel dir={isRTL ? "rtl" : "ltr"}>{t("enableAffiliate")}</FormLabel>
                     </div>
                     <FormControl>
                       <div dir="ltr">
@@ -102,7 +108,7 @@ const DisableReferralForm: FC<DisableReferralFormAbdullahProps> = ({
               className="w-full  rounded-xl flex items-center gap-x-2 max-w-[200px]"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              حفظ والمتابعة
+              {t("saveAndContinue")}
             </Button>
           </CardContent>
         </Card>

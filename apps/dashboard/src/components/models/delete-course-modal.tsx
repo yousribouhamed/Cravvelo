@@ -19,12 +19,18 @@ import { maketoast } from "../toasts";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { Button } from "@ui/components/ui/button";
 import { useOpenCourseDeleteAction } from "@/src/lib/zustand/delete-actions";
+import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
 
 interface DeleteCourseModelProps {
   refetch: () => Promise<any>;
 }
 
 const DeleteCourseModel: FC<DeleteCourseModelProps> = ({ refetch }) => {
+  const t = useTranslations("modals");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
   const mounted = useMounted();
 
   const { id, open, setId, setIsOpen } = useOpenCourseDeleteAction();
@@ -34,11 +40,11 @@ const DeleteCourseModel: FC<DeleteCourseModelProps> = ({ refetch }) => {
       await refetch();
 
       setIsOpen(false);
-      maketoast.successWithText({ text: "تم حذف الدورة بنجاح" });
+      maketoast.successWithText({ text: t("courseDeleted") });
     },
     onError: () => {
       maketoast.error();
-      console.error("حدث خطأ ما في نموذج حذف الفصل");
+      console.error(t("deleteError"));
       setIsOpen(false);
     },
   });
@@ -49,23 +55,21 @@ const DeleteCourseModel: FC<DeleteCourseModelProps> = ({ refetch }) => {
     <AlertDialog open={open} onOpenChange={(val) => setIsOpen(val)}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle className="w-full flex justify-start">
-            هل أنت متأكد تمامًا من رغبتك في حذف هذا دورة؟
+          <AlertDialogTitle className={cn("w-full flex", isRTL ? "justify-start" : "justify-start")}>
+            {t("deleteCourseConfirm")}
           </AlertDialogTitle>
-          <AlertDialogDescription className="w-full my-4 flex justify-start">
-            <div dir="rtl">
-              <p className="text-start">
-                {" "}
-                لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف ملفك نهائيًا
-                الحساب وإزالة بياناتك من خوادمنا.
+          <AlertDialogDescription className={cn("w-full my-4 flex", isRTL ? "justify-start" : "justify-start")}>
+            <div dir={isRTL ? "rtl" : "ltr"}>
+              <p className={cn(isRTL ? "text-start" : "text-start")}>
+                {t("deleteCourseDescription")}
               </p>
             </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className=" w-full flex justify-start gap-x-4">
-          <AlertDialogCancel>الإلغاء</AlertDialogCancel>
+        <AlertDialogFooter className={cn("w-full flex gap-x-4", isRTL ? "justify-start" : "justify-end")}>
+          <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
           <Button
-            className=" flex items-center gap-x-2"
+            className="flex items-center gap-x-2"
             disabled={mutation.isLoading}
             onClick={() => {
               if (id === null) {
@@ -77,7 +81,7 @@ const DeleteCourseModel: FC<DeleteCourseModelProps> = ({ refetch }) => {
             }}
           >
             {mutation.isLoading ? <LoadingSpinner /> : null}
-            حذف دورة
+            {t("deleteCourse")}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

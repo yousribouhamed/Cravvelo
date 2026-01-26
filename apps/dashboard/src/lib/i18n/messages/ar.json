@@ -1,0 +1,814 @@
+{
+  "common": {
+    "language": "اللغة",
+    "darkMode": "الوضع الداكن",
+    "settings": "الإعدادات",
+    "general": "عام",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "create": "إنشاء",
+    "update": "تحديث",
+    "search": "بحث",
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "success": "نجح",
+    "confirm": "تأكيد",
+    "back": "رجوع",
+    "next": "التالي",
+    "previous": "سابق",
+    "submit": "إرسال",
+    "close": "إغلاق"
+  },
+  "settings": {
+    "title": "الإعدادات العامة",
+    "language": {
+      "label": "اللغة",
+      "description": "اختر لغتك المفضلة"
+    },
+    "theme": {
+      "label": "الوضع الداكن",
+      "description": "تبديل الوضع الداكن"
+    }
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "dashboard": "لوحة التحكم",
+    "payments": "الدفع",
+    "paymentMethods": "طرق الدفع",
+    "students": "الطلاب",
+    "courses": "الدورات",
+    "applications": "التطبيقات",
+    "settings": "الإعدادات",
+    "profile": "الملف الشخصي",
+    "billing": "الفواتير",
+    "invoices": "الفواتير"
+  },
+  "messages": {
+    "error": {
+      "generic": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+      "notFound": "لم يتم العثور على المورد المطلوب.",
+      "unauthorized": "غير مصرح لك بتنفيذ هذا الإجراء.",
+      "serverError": "حدث خطأ في الخادم. يرجى المحاولة مرة أخرى لاحقًا."
+    },
+    "success": {
+      "saved": "تم حفظ التغييرات بنجاح.",
+      "deleted": "تم حذف العنصر بنجاح.",
+      "created": "تم إنشاء العنصر بنجاح.",
+      "updated": "تم تحديث العنصر بنجاح."
+    }
+  },
+  "forms": {
+    "required": "هذا الحقل مطلوب",
+    "invalidEmail": "يرجى إدخال عنوان بريد إلكتروني صالح",
+    "invalidUrl": "يرجى إدخال رابط صالح",
+    "minLength": "يجب أن يكون هذا الحقل على الأقل {min} أحرف",
+    "maxLength": "يجب أن يكون هذا الحقل على الأكثر {max} أحرف"
+  },
+  "dataTable": {
+    "noResults": "لا توجد نتائج",
+    "page": "صفحة",
+    "of": "من",
+    "previous": "سابق",
+    "next": "التالي"
+  },
+  "search": {
+    "placeholder": "البحث في الدورات والمنتجات...",
+    "dialogTitle": "البحث",
+    "searchPlaceholder": "ابحث عن أي شيء...",
+    "searching": "جاري البحث...",
+    "suggestedPages": "الصفحات المقترحة",
+    "resultsFound": "تم العثور على {count} نتيجة",
+    "products": "المنتجات",
+    "courses": "الدورات",
+    "digitalProduct": "منتج رقمي",
+    "searchError": "حدث خطأ في البحث",
+    "searchFailed": "فشل في البحث. حاول مرة أخرى.",
+    "searchTimeout": "انتهت مهلة البحث. حاول مرة أخرى.",
+    "noResults": "لم يتم العثور على نتائج",
+    "noResultsDescription": "جرب كلمات مفتاحية مختلفة أو تحقق من الإملاء",
+    "defaultPages": {
+      "paymentMethods": "طرق الدفع",
+      "paymentMethodsDesc": "إدارة طرق الدفع والفواتير",
+      "appearance": "المظهر",
+      "appearanceDesc": "تخصيص الألوان والشعار والقالب",
+      "recentSales": "المبيعات الأخيرة",
+      "recentSalesDesc": "تتبع المبيعات والطلبات الحديثة",
+      "academySettings": "إعدادات الأكاديمية",
+      "academySettingsDesc": "إدارة الشروط والأحكام والخصوصية"
+    }
+  },
+  "userNav": {
+    "defaultUser": "مستخدم",
+    "verificationComplete": "تم التوثيق بنجاح",
+    "startVerification": "ابدأ التوثيق الآن",
+    "profile": "الملف الشخصي",
+    "academyPreview": "معاينة الأكاديمية",
+    "academy": "اكاديمية"
+  },
+  "auth": {
+    "logout": "تسجيل الخروج"
+  },
+  "sidebar": {
+    "home": "الرئيسية",
+    "payments": "الدفع",
+    "paymentRecords": "المدفوعات",
+    "paymentMethods": "طرق الدفع",
+    "customers": "العملاء",
+    "students": "الطلاب",
+    "applications": "التطبيقات",
+    "settings": "الإعدادات",
+    "account": "الحساب",
+    "websiteSettings": "إعدادات الموقع"
+  },
+  "pages": {
+    "dashboard": "لوحة التحكم",
+    "home": "الرئيسية",
+    "payments": "الدفع",
+    "students": "الطلاب",
+    "courses": "الدورات",
+    "products": "المنتجات",
+    "digitalProducts": "المنتجات الرقمية",
+    "applications": "التطبيقات",
+    "appStore": "متجر التطبيقات",
+    "productContent": "محتوى المنتج",
+    "profile": "الملف الشخصي",
+    "billing": "الفواتير",
+    "invoices": "الفواتير",
+    "websiteSettings": "إعدادات الموقع",
+    "appearance": "المظهر",
+    "marketing": "التسويق",
+    "legal": "القانونية",
+    "domain": "النطاق",
+    "balance": "الرصيد"
+  },
+  "addNew": {
+    "button": "إضافة جديد",
+    "dialogTitle": "إضافة جديد",
+    "courseTitle": "عنوان الدورة",
+    "productTitle": "عنوان المنتج",
+    "courseTitlePlaceholder": "أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم",
+    "productTitlePlaceholder": "أدخل عنوان المنتج الجديد، مثال: كتاب إلكتروني في التسويق الرقمي",
+    "contentType": "نوع المحتوى",
+    "trainingCourse": "دورة تدريبية",
+    "trainingCourseDescription": "إنشاء دورة تدريبية مع فصول ومحاضرات",
+    "digitalProduct": "منتج رقمي",
+    "digitalProductDescription": "إنشاء منتج رقمي مثل كتاب أو ملف قابل للتحميل",
+    "createCourse": "إنشاء دورة",
+    "createProduct": "إنشاء منتج",
+    "courseCreated": "تم انشاء الدورة بنجاح",
+    "productCreated": "تم انشاء المنتج بنجاح"
+  },
+  "apps": {
+    "addAppsToStore": "قم باظافة التطبيقات الى متجرك",
+    "installs": "تثبيت",
+    "goToApp": "الذهاب للتطبيق",
+    "noAppsToInstall": "لا توجد تطبيقات للتثبيت",
+    "install": "إضافة",
+    "uninstall": "إلغاء التثبيت",
+    "installApp": "تثبيت التطبيق",
+    "uninstallApp": "إلغاء تثبيت التطبيق",
+    "installAppDescription": "هل أنت متأكد أنك تريد تثبيت هذا التطبيق؟ سيتم إنشاء فاتورة وربط عملية الدفع الخاصة به بحسابك.",
+    "uninstallAppDescription": "هل أنت متأكد أنك تريد إلغاء تثبيت هذا التطبيق؟ سيتم إلغاء الاشتراك وستفقد الوصول إلى جميع ميزات التطبيق.",
+    "appInstalled": "تم تثبيت التطبيق بنجاح",
+    "appUninstalled": "تم إلغاء تثبيت التطبيق بنجاح",
+    "installFailed": "فشل تثبيت التطبيق",
+    "uninstallFailed": "فشل إلغاء تثبيت التطبيق"
+  },
+  "courseForms": {
+    "textTitle": "عنوان النص",
+    "textTitlePlaceholder": "لماذا لون البحر ازرق",
+    "readingDuration": "مدة القراءة المتوقعة (بالدقائق)",
+    "readingDurationOptional": "(اختياري - سيتم حسابه تلقائياً)",
+    "lessonContent": "محتوى الدرس",
+    "saveAndContinue": "حفظ والمتابعة",
+    "cancelAndGoBack": "إلغاء والعودة",
+    "lessonCreated": "تم إنشاء الدرس بنجاح",
+    "lessonUpdated": "تم تحديث الدرس بنجاح",
+    "lessonCreateFailed": "فشل في إنشاء الدرس",
+    "lessonUpdateFailed": "فشل في تحديث الدرس",
+    "loadingLessonData": "جاري تحميل بيانات الدرس...",
+    "lessonNotFound": "الدرس غير موجود",
+    "lessonNotFoundDescription": "لم يتم العثور على الدرس المطلوب",
+    "fileTitle": "عنوان الملف",
+    "fileTitlePlaceholder": "اين تذهب الشمس عندما يحل الليل",
+    "addPdfFile": "إضافة ملف pdf",
+    "planType": "نوع الخطة",
+    "free": "مجاني",
+    "oneTime": "دفعة واحدة",
+    "recurring": "اشتراك متجدد",
+    "price": "السعر",
+    "compareAtPrice": "مقارنة بالسعر",
+    "accessDuration": "مدة الوصول",
+    "selectDuration": "اختر المدة",
+    "limited": "محدودة",
+    "unlimited": "غير محدودة",
+    "numberOfDays": "عدد الأيام",
+    "renewalPeriod": "فترة التجديد",
+    "selectRenewalPeriod": "اختر فترة التجديد",
+    "customDays": "عدد الأيام المخصص",
+    "enterDays": "أدخل عدد الأيام",
+    "weekly": "أسبوعياً (7 أيام)",
+    "monthly": "شهرياً (30 يوماً)",
+    "quarterly": "ربع سنوي (90 يوماً)",
+    "yearly": "سنوياً (365 يوماً)",
+    "custom": "مخصص",
+    "requiredField": "يرجى ملئ الحقل",
+    "contentRequired": "المحتوى مطلوب"
+  },
+  "modals": {
+    "deleteCourse": "حذف دورة",
+    "deleteCourseConfirm": "هل أنت متأكد تمامًا من رغبتك في حذف هذا دورة؟",
+    "deleteCourseDescription": "لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف ملفك نهائيًا الحساب وإزالة بياناتك من خوادمنا.",
+    "deleteProduct": "حذف منتج",
+    "deleteProductConfirm": "هل أنت متأكد تمامًا من رغبتك في حذف هذا المنتج؟",
+    "deleteProductDescription": "لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف منتجك نهائيًا وإزالة بياناتك من خوادمنا.",
+    "deleteChapter": "حذف فصل",
+    "deleteChapterConfirm": "هل أنت متأكد تمامًا من رغبتك في حذف هذا الفصل؟",
+    "deleteChapterDescription": "لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف فصلك نهائيًا وإزالة بياناتك من خوادمنا.",
+    "courseDeleted": "تم حذف الدورة بنجاح",
+    "productDeleted": "تم حذف المنتج بنجاح",
+    "chapterDeleted": "تم حذف الفصل بنجاح",
+    "deleteError": "حدث خطأ ما في نموذج الحذف"
+  },
+  "websiteSettings": {
+    "forms": {
+      "privacyPolicy": {
+        "title": "سياسة الأكاديمية",
+        "label": "اقرأ هذا القالب وانقر فوق \"حفظ\" لتنقذ نفسك وعملائك.",
+        "confirm": "تاكيد"
+      },
+      "logo": {
+        "title": "شعار الاكادمية",
+        "label": "إضافة شعار إلى موقع الويب الخاص بك.",
+        "description": "يُسمح فقط باستخدام png وjpg وsvgs",
+        "confirm": "تاكيد"
+      },
+      "favicon": {
+        "title": "إضافة أيقونة علامة التبويب إلى الموقع",
+        "label": "قم بإنشاء رمز علامة التبويب المجانية الخاصة بك مجانًا من هذا الموقع https://favicon.io.",
+        "description": "يُسمح فقط باستخدام png وjpg وsvgs",
+        "confirm": "تاكيد"
+      },
+      "seo": {
+        "title": "عنوان علامة تبويب المتصفح",
+        "titleLabel": "سيظهر هذا في محرك البحث.",
+        "titleDescription": "استخدم شيئًا سيبحث عنه الناس",
+        "descriptionLabel": "هنا حاول أن تصف أكاديميتك .",
+        "descriptionDescription": "استخدم شيئًا سيبحث عنه الناس",
+        "confirm": "تاكيد"
+      },
+      "layout": {
+        "title": "بعض الإعدادات العامة",
+        "showCourses": "عرض الدورات في الصفحة الرئيسية",
+        "showProducts": "عرض المنتجات الرقمية في الصفحة الرئيسية",
+        "showSalesBanner": "عرض شريط التخفيضات",
+        "centerLayout": "تخطيط الدورات في الوسط",
+        "confirm": "تاكيد"
+      },
+      "stamp": {
+        "title": "أضف طابعك إلى شهاداتك",
+        "label": "سيؤدي هذا إلى زيادة قيمة الشهادات التي تقدمها",
+        "description": "يُسمح فقط باستخدام png وjpg وsvgs",
+        "confirm": "تاكيد"
+      },
+      "referral": {
+        "permissions": "الصلاحيات",
+        "permissionsDescription": "اعطاء صلاحيات معينة للأكاديمية",
+        "enableAffiliate": "تفعيل نظام التسويق بالعمولة",
+        "saveAndContinue": "حفظ والمتابعة"
+      },
+      "colors": {
+        "title": "ألوان الأكاديمية",
+        "primaryColor": "اللون الرئيسي (الوضع العادي)",
+        "primaryColorDescription": "سيظهر هذا اللون في الوضع العادي لأكاديميتك",
+        "darkPrimaryColor": "اللون الرئيسي (الوضع المظلم)",
+        "darkPrimaryColorDescription": "سيظهر هذا اللون في الوضع المظلم لأكاديميتك",
+        "colorPreview": "معاينة اللون",
+        "previewTitle": "معاينة الألوان",
+        "normalMode": "الوضع العادي",
+        "darkMode": "الوضع المظلم",
+        "sampleText": "عينة النص",
+        "primaryColorRequired": "اللون الرئيسي مطلوب",
+        "darkPrimaryColorRequired": "اللون الرئيسي للوضع المظلم مطلوب",
+        "confirm": "تأكيد"
+      },
+      "subdomain": {
+        "title": "النطاق الفرعي",
+        "label": "النطاق الفرعي لموقعك.",
+        "placeholder": "حدد اسم المجال الخاص بك",
+        "description": "يرجى استخدام 32 حرفًا كحد أقصى.",
+        "confirm": "تاكيد"
+      },
+      "customDomain": {
+        "title": "مجال مخصص",
+        "label": "النطاق المخصص لموقعك.",
+        "confirm": "تاكيد"
+      }
+    }
+  },
+  "dashboard": {
+    "today": "اليوم",
+    "yesterday": "أمس",
+    "totalRevenue": "إجمالي الإيرادات",
+    "balance": "الرصيد",
+    "view": "عرض",
+    "availableForWithdrawal": "متاح للسحب",
+    "payouts": "المدفوعات",
+    "revenueOverview": "نظرة عامة على الإيرادات",
+    "noDataAvailable": "لا توجد بيانات متاحة",
+    "loading": "جاري التحميل...",
+    "dateRange": "تاريخ التقرير",
+    "currency": {
+      "USD": "$",
+      "EUR": "€",
+      "DZD": "د.ج"
+    }
+  },
+  "payments": {
+    "columns": {
+      "id": "المعرف",
+      "student": "الطالب",
+      "item": "العنصر",
+      "amount": "المبلغ",
+      "status": "الحالة",
+      "paymentMethod": "طريقة الدفع",
+      "createdAt": "تاريخ الإنشاء",
+      "actions": "الإجراءات"
+    },
+    "status": {
+      "PENDING": "قيد الانتظار",
+      "PROCESSING": "قيد المعالجة",
+      "COMPLETED": "مكتمل",
+      "FAILED": "فشل",
+      "CANCELLED": "ملغي",
+      "REFUNDED": "مسترد"
+    },
+    "types": {
+      "BUYPRODUCT": "شراء منتج",
+      "BUYCOURSE": "شراء دورة",
+      "SUBSCRIPTION": "اشتراك",
+      "course": "دورة",
+      "product": "منتج",
+      "subscription": "اشتراك"
+    },
+    "methods": {
+      "CASH": "نقدي",
+      "CHARGILY": "شارجيلي",
+      "BANK_TRANSFER": "تحويل بنكي",
+      "CREDIT_CARD": "بطاقة ائتمانية"
+    },
+    "actions": {
+      "openMenu": "فتح القائمة",
+      "copyPaymentId": "نسخ معرف الدفع",
+      "viewProofs": "عرض إثباتات الدفع",
+      "approvePayment": "الموافقة على الدفع",
+      "rejectPayment": "رفض الدفع",
+      "approving": "جاري الموافقة...",
+      "rejecting": "جاري الرفض..."
+    },
+    "confirmations": {
+      "approveTitle": "الموافقة على الدفع",
+      "approveDescription": "هل أنت متأكد من الموافقة على الدفع بمبلغ {amount}؟ لن يمكن التراجع عن هذا الإجراء.",
+      "approveConfirm": "الموافقة",
+      "rejectTitle": "رفض الدفع",
+      "rejectDescription": "هل أنت متأكد من رفض الدفع بمبلغ {amount}؟ سيتم إلغاء المعاملة نهائياً.",
+      "rejectConfirm": "رفض الدفع"
+    },
+    "emptyStates": {
+      "noStudent": "لا يوجد طالب",
+      "noItem": "-",
+      "noMethod": "-"
+    },
+    "analytics": {
+      "totalRevenue": "إجمالي الإيرادات",
+      "totalRevenueDescription": "إجمالي المدفوعات المكتملة",
+      "pendingPayments": "المدفوعات المعلقة",
+      "pendingPaymentsDescription": "في انتظار الموافقة",
+      "completedPayments": "المدفوعات المكتملة",
+      "completedPaymentsDescription": "تمت معالجتها بنجاح",
+      "totalPayments": "إجمالي المدفوعات",
+      "totalPaymentsDescription": "جميع معاملات الدفع",
+      "payments": "مدفوعات"
+    },
+    "proofModal": {
+      "title": "إثبات الدفع",
+      "imageAlt": "صورة إثبات الدفع",
+      "note": "ملاحظة",
+      "verified": "تم التحقق",
+      "notVerified": "لم يتم التحقق",
+      "pdfErrorTitle": "خطأ في تحميل ملف PDF",
+      "pdfErrorDescription": "يرجى المحاولة مرة أخرى لاحقاً",
+      "unsupportedFormat": "تنسيق الملف غير مدعوم",
+      "openInNewTab": "فتح في تبويب جديد",
+      "openInNewTabDescription": "لا يمكن عرض تنسيق الملف هذا في المعاينة. انقر لفتحه في تبويب جديد.",
+      "previous": "السابق",
+      "next": "التالي",
+      "image": "صورة",
+      "pdf": "PDF",
+      "unknown": "غير معروف"
+    },
+    "messages": {
+      "approveSuccess": "تمت الموافقة على الدفع بنجاح",
+      "rejectSuccess": "تم رفض الدفع بنجاح",
+      "copied": "تم نسخ معرف الدفع إلى الحافظة"
+    },
+    "errors": {
+      "approveFailed": "فشل في الموافقة على الدفع",
+      "rejectFailed": "فشل في رفض الدفع",
+      "copyFailed": "فشل في نسخ معرف الدفع"
+    }
+  },
+  "paymentMethods": {
+    "title": "بوابات الدفع",
+    "pageTitle": "طرق الدفع",
+    "pageDescription": "اربط حسابك مع منصات الدفع المختلفة لبدء استقبال الأموال",
+    "chargily": {
+      "name": "شارجيلي",
+      "description": "المنصة الأولى في الجزائر لاستقبال الأموال عبر الإنترنت دون الحاجة لسجل تجاري",
+      "shortDesc": "الدفع الرقمي في الجزائر",
+      "features": ["دفع فوري", "بدون سجل تجاري", "آمن ومضمون"]
+    },
+    "p2p": {
+      "name": "التحويل المباشر",
+      "description": "تحويل مباشر من شخص لشخص عبر المحافظ الرقمية والتطبيقات المصرفية المحلية",
+      "shortDesc": "التحويل المباشر P2P",
+      "features": ["تحويل سريع", "رسوم منخفضة", "دعم محلي"]
+    },
+    "stripe": {
+      "name": "سترايب",
+      "description": "منصة مدفوعات عالمية تتيح للشركات قبول المدفوعات وإدارة العمليات المالية بسهولة وأمان",
+      "shortDesc": "المدفوعات العالمية",
+      "features": ["قبول دولي", "أمان متقدم", "تقارير مفصلة"]
+    },
+    "connected": "متصل",
+    "comingSoon": "قريباً",
+    "features": "المميزات",
+    "manageAccount": "إدارة الحساب",
+    "connectAccount": "ربط الحساب",
+    "security": {
+      "title": "أمان المدفوعات",
+      "description": "جميع طرق الدفع المتوفرة تستخدم أحدث تقنيات الأمان والتشفير لحماية بياناتك المالية",
+      "learnMore": "تعرف على المزيد"
+    },
+    "validation": {
+      "bankDetailsRequired": "الرجاء إدخال تفاصيل البنك",
+      "accountHolderRequired": "الرجاء إدخال اسم صاحب الحساب",
+      "bankNameRequired": "الرجاء إدخال اسم البنك",
+      "accountNumberRequired": "الرجاء إدخال رقم الحساب"
+    },
+    "chargilyPage": {
+      "title": "إعدادات شارجيلي",
+      "status": {
+        "active": "مفعل ويعمل",
+        "activeDescription": "حسابك متصل مع شارجيلي ويمكنك الآن استقبال المدفوعات",
+        "inactive": "متصل ولكن معطل",
+        "inactiveDescription": "الحساب متصل ولكن مُعطل مؤقتاً - لن تتم معالجة المدفوعات",
+        "notConnected": "لم يتم الربط بعد",
+        "notConnectedDescription": "أكمل الخطوات أدناه لربط حسابك مع شارجيلي"
+      },
+      "toggle": {
+        "enabled": "مفعل",
+        "disabled": "معطل",
+        "updating": "جاري التحديث..."
+      },
+      "form": {
+        "title": "إعداد مفاتيح API",
+        "description": "أدخل مفاتيح API الخاصة بك من لوحة تحكم شارجيلي",
+        "publicKey": "المفتاح العام (Public Key)",
+        "publicKeyPlaceholder": "live_pk_...",
+        "publicKeyHint": "المفتاح العام آمن للاستخدام في الواجهة الأمامية",
+        "secretKey": "المفتاح الخاص (Secret Key)",
+        "secretKeyPlaceholder": "live_sk_...",
+        "secretKeyWarning": "تنبيه: المفتاح الخاص سري جداً ولا يجب مشاركته مع أي شخص. يتم تشفيره وحفظه بأمان.",
+        "saveButton": "جاري الحفظ...",
+        "updateButton": "تحديث الإعدادات",
+        "connectButton": "ربط الحساب",
+        "activeStatus": "نشط",
+        "inactiveStatus": "معطل"
+      },
+      "paymentStatus": {
+        "active": "الدفع مُفعل",
+        "inactive": "الدفع معطل",
+        "activeItems": [
+          "العملاء يمكنهم الدفع عبر شارجيلي",
+          "ستتم معالجة جميع المدفوعات تلقائياً",
+          "ستحصل على إشعارات بالمدفوعات الجديدة"
+        ],
+        "inactiveItems": [
+          "لن يتمكن العملاء من الدفع عبر شارجيلي",
+          "لن تتم معالجة أي مدفوعات",
+          "يمكنك تفعيله مرة أخرى في أي وقت"
+        ]
+      },
+      "security": {
+        "title": "معلومات الأمان",
+        "items": [
+          "جميع المفاتيح محمية بتشفير AES-256",
+          "المفاتيح محفوظة بشكل آمن في قاعدة البيانات",
+          "اتصال آمن مع خوادم شارجيلي عبر HTTPS",
+          "يمكنك تعطيل الدفع مؤقتاً دون فقدان الإعدادات"
+        ]
+      },
+      "steps": {
+        "title": "الخطوات",
+        "step1": "احصل على المفاتيح",
+        "step1Description": "اذهب إلى لوحة تحكم شارجيلي واحصل على مفاتيح الـ API",
+        "step2": "أدخل المفاتيح",
+        "step2Description": "انسخ والصق المفاتيح في الحقول المطلوبة",
+        "step3": "احفظ الإعدادات",
+        "step3Description": "اضغط حفظ التغييرات لإكمال عملية الربط",
+        "step4": "فعّل الدفع",
+        "step4Description": "استخدم المفتاح لتفعيل أو تعطيل الدفع",
+        "openDashboard": "فتح لوحة تحكم شارجيلي"
+      }
+    },
+    "p2pPage": {
+      "title": "إعدادات التحويل المباشر",
+      "status": {
+        "active": "P2P مفعل ويعمل",
+        "activeDescription": "يمكن للعملاء الآن إجراء تحويلات بنكية P2P",
+        "inactive": "P2P متصل ولكن معطل",
+        "inactiveDescription": "الحساب البنكي متصل ولكن مُعطل مؤقتاً - لن تتم معالجة التحويلات",
+        "notConnected": "لم يتم الربط بعد",
+        "notConnectedDescription": "أدخل بيانات حسابك البنكي لإعداد التحويلات P2P"
+      },
+      "toggle": {
+        "enabled": "مفعل",
+        "disabled": "معطل",
+        "updating": "جاري التحديث..."
+      },
+      "form": {
+        "title": "إعداد التحويل البنكي (P2P)",
+        "description": "أدخل بيانات حسابك البنكي لاستقبال الأموال",
+        "activeStatus": "نشط",
+        "inactiveStatus": "معطل",
+        "accountHolder": "اسم صاحب الحساب",
+        "accountHolderPlaceholder": "الاسم الكامل",
+        "bankName": "اسم البنك",
+        "bankNamePlaceholder": "مثال: بنك الجزائر",
+        "accountNumber": "رقم الحساب",
+        "accountNumberPlaceholder": "رقم الحساب البنكي",
+        "routingNumber": "رقم التوجيه (اختياري)",
+        "routingNumberHint": "مطلوب للتحويلات الدولية أو بعض البنوك المحلية",
+        "bankDetails": "تفاصيل إضافية",
+        "bankDetailsPlaceholder": "اكتب تفاصيل إضافية عن البنك (مثل Swift, IBAN)",
+        "notes": "ملاحظات",
+        "notesPlaceholder": "ملاحظات إضافية للعملاء حول كيفية إجراء التحويل",
+        "saveButton": "جاري الحفظ...",
+        "updateButton": "تحديث الإعدادات",
+        "connectButton": "ربط الحساب"
+      },
+      "paymentStatus": {
+        "active": "التحويل البنكي مُفعل",
+        "inactive": "التحويل البنكي معطل",
+        "activeItems": [
+          "العملاء يمكنهم رؤية بيانات الحساب البنكي",
+          "سيتم عرض تعليمات التحويل للعملاء",
+          "ستحتاج لتأكيد استلام التحويلات يدوياً"
+        ],
+        "inactiveItems": [
+          "لن يتمكن العملاء من رؤية بيانات الحساب",
+          "لن يتم عرض خيار التحويل البنكي",
+          "يمكنك تفعيله مرة أخرى في أي وقت"
+        ]
+      },
+      "security": {
+        "title": "معلومات الأمان والخصوصية",
+        "items": [
+          "بيانات الحساب البنكي محفوظة بشكل آمن ومشفر",
+          "لن يتم مشاركة المعلومات مع جهات خارجية",
+          "تحقق من صحة البيانات قبل الحفظ",
+          "يمكنك تعطيل الدفع مؤقتاً دون فقدان الإعدادات"
+        ]
+      },
+      "steps": {
+        "title": "الخطوات",
+        "step1": "أدخل بيانات الحساب",
+        "step1Description": "اسم صاحب الحساب، البنك، ورقم الحساب",
+        "step2": "أضف التفاصيل",
+        "step2Description": "تفاصيل إضافية وملاحظات للعملاء",
+        "step3": "احفظ الإعدادات",
+        "step3Description": "اضغط حفظ لإكمال عملية الربط",
+        "step4": "فعّل التحويل",
+        "step4Description": "استخدم المفتاح لتفعيل أو تعطيل التحويل البنكي",
+        "importantNote": "ملاحظة مهمة: التحويلات البنكية P2P تتطلب تأكيد يدوي من طرفك عند استلام الأموال."
+      }
+    }
+  },
+  "students": {
+    "columns": {
+      "student": "الطالب",
+      "fullName": "الاسم الكامل",
+      "email": "البريد الالكتروني",
+      "phone": "رقم الهاتف",
+      "notAvailable": "لا يوجد",
+      "createdAt": "تاريخ الانضمام",
+      "status": "الحالة",
+      "purchases": "المشتريات",
+      "certificates": "الشهادات",
+      "emailVerified": "البريد الإلكتروني مؤكد",
+      "lastVisited": "آخر زيارة"
+    },
+    "actions": {
+      "openMenu": "فتح القائمة",
+      "copyEmail": "نسخ البريد الإلكتروني",
+      "moreInfo": "مزيد من المعلومات"
+    },
+    "detail": {
+      "personalInfo": "المعلومات الشخصية",
+      "name": "اسم",
+      "email": "بريد إلكتروني",
+      "phone": "هاتف",
+      "bio": "السيرة الذاتية",
+      "trainingCourses": "الدورات التدريبية",
+      "accountStatus": "حالة الحساب",
+      "activityTracking": "النشاط والتفضيلات",
+      "purchases": "المشتريات",
+      "certificates": "الشهادات",
+      "comments": "التعليقات",
+      "referrals": "الإحالات",
+      "payments": "المدفوعات",
+      "invoices": "الفواتير",
+      "status": "الحالة",
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "emailVerified": "البريد الإلكتروني مؤكد",
+      "emailVerifiedAt": "تاريخ تأكيد البريد الإلكتروني",
+      "lastVisited": "آخر زيارة",
+      "joinedDate": "تاريخ الانضمام",
+      "updatedAt": "آخر تحديث",
+      "preferredLanguage": "اللغة المفضلة",
+      "timezone": "المنطقة الزمنية",
+      "emailNotifications": "إشعارات البريد الإلكتروني",
+      "smsNotifications": "إشعارات الرسائل النصية",
+      "enabled": "مفعل",
+      "disabled": "معطل",
+      "course": "دورة",
+      "product": "منتج",
+      "amount": "المبلغ",
+      "date": "التاريخ",
+      "issuedDate": "تاريخ الإصدار",
+      "emptyStates": {
+        "noPurchases": "لم يتم العثور على مشتريات",
+        "noCertificates": "لم يتم العثور على شهادات",
+        "noComments": "لم يتم العثور على تعليقات",
+        "noReferrals": "لم يتم العثور على إحالات",
+        "noPayments": "لم يتم العثور على مدفوعات",
+        "noInvoices": "لم يتم العثور على فواتير",
+        "notAvailable": "غير متاح"
+      }
+    },
+    "analytics": {
+      "totalStudents": "إجمالي الطلاب",
+      "activeStudents": "الطلاب النشطون",
+      "newStudentsThisMonth": "طلاب جدد هذا الشهر",
+      "totalPurchases": "إجمالي المشتريات",
+      "totalStudentsDescription": "جميع الطلاب المسجلين",
+      "activeStudentsDescription": "الطلاب النشطون حالياً",
+      "newStudentsThisMonthDescription": "التسجيلات الجديدة هذا الشهر",
+      "totalPurchasesDescription": "إجمالي مشتريات الطلاب"
+    },
+    "filters": {
+      "status": "الحالة",
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "emailVerified": "البريد الإلكتروني مؤكد",
+      "verified": "مؤكد",
+      "notVerified": "غير مؤكد"
+    },
+    "search": {
+      "placeholder": "البحث عن الطلاب..."
+    }
+  },
+  "invoices": {
+    "columns": {
+      "invoiceNumber": "رقم الفاتورة",
+      "amount": "المبلغ",
+      "status": "الحالة",
+      "paymentInfo": "معلومات الدفع",
+      "created": "تاريخ الإنشاء",
+      "dueDate": "تاريخ الاستحقاق",
+      "paidDate": "تاريخ الدفع",
+      "actions": "الإجراءات"
+    },
+    "status": {
+      "pending": "قيد الانتظار",
+      "processing": "قيد المعالجة",
+      "completed": "مكتمل",
+      "failed": "فشل",
+      "cancelled": "ملغي",
+      "refunded": "مسترد",
+      "paid": "مدفوع"
+    },
+    "payment": {
+      "unknownItem": "عنصر غير معروف",
+      "unknownType": "غير معروف",
+      "appSubscription": "اشتراك تطبيق",
+      "via": "عبر",
+      "noDueDate": "لا يوجد تاريخ استحقاق",
+      "overdue": "متأخر",
+      "notPaid": "غير مدفوع"
+    },
+    "details": {
+      "title": "تفاصيل الفاتورة",
+      "invoiceNumber": "رقم الفاتورة",
+      "payInvoice": "دفع الفاتورة",
+      "summary": "ملخص الفاتورة",
+      "amount": "المبلغ",
+      "createdAt": "تاريخ الإنشاء",
+      "paymentType": "نوع الدفع",
+      "description": "الوصف",
+      "purchasedItem": "العنصر المشترى",
+      "plan": "الخطة",
+      "category": "الفئة",
+      "recurringSubscription": "اشتراك متجدد",
+      "paymentHistory": "سجل الدفع",
+      "totalAttempts": "إجمالي المحاولات",
+      "paymentMethod": "طريقة الدفع",
+      "notSpecified": "غير محدد",
+      "refundAmount": "مبلغ الاسترداد",
+      "refundReason": "سبب الاسترداد",
+      "notAvailable": "غير متاح",
+      "appInstallation": "تثبيت التطبيق",
+      "status": "الحالة",
+      "installedAt": "تم التثبيت في",
+      "subscriptionAmount": "مبلغ الاشتراك",
+      "notFound": "الفاتورة غير موجودة",
+      "notFoundDescription": "تعذر تحميل الفاتورة المطلوبة."
+    }
+  },
+  "profile": {
+    "header": {
+      "noBio": "لا توجد سيرة ذاتية",
+      "joinedOn": "انضم في",
+      "lastSignIn": "آخر دخول",
+      "editProfile": "تعديل الملف الشخصي",
+      "cancel": "إلغاء",
+      "user": "مستخدم"
+    },
+    "security": {
+      "title": "حالة الأمان",
+      "twoFactor": "المصادقة الثنائية",
+      "enabled": "مفعل",
+      "disabled": "غير مفعل",
+      "accountStatus": "حالة الحساب",
+      "active": "نشط",
+      "banned": "محظور",
+      "accessStatus": "حالة الوصول",
+      "unlocked": "مفتوح",
+      "locked": "مقفل"
+    },
+    "personalInfo": {
+      "title": "المعلومات الشخصية",
+      "description": "قم بتحديث معلوماتك الشخصية وإعدادات الملف الشخصي. يمكنك تعديل حقل واحد أو أكثر.",
+      "fullName": "الاسم الكامل",
+      "fullNamePlaceholder": "أدخل اسمك الكامل",
+      "fullNameDescription": "اسمك كما سيظهر للمستخدمين الآخرين",
+      "username": "اسم المستخدم",
+      "usernamePlaceholder": "اسم المستخدم الفريد",
+      "usernameDescription": "اسم المستخدم الفريد الخاص بك",
+      "email": "البريد الإلكتروني",
+      "emailPlaceholder": "example@email.com",
+      "emailDescription": "البريد الإلكتروني للتواصل والإشعارات",
+      "phone": "رقم الهاتف",
+      "phonePlaceholder": "+966 50 123 4567",
+      "phoneDescription": "رقم الهاتف للتواصل الطارئ",
+      "occupation": "المهنة",
+      "occupationPlaceholder": "مطور برمجيات، مصمم، مدرس...",
+      "occupationDescription": "مهنتك أو مجال عملك",
+      "location": "الموقع",
+      "locationPlaceholder": "الرياض، السعودية",
+      "locationDescription": "موقعك الجغرافي",
+      "website": "الموقع الإلكتروني",
+      "websitePlaceholder": "https://yourwebsite.com",
+      "websiteDescription": "موقعك الإلكتروني الشخصي أو المهني",
+      "bio": "السيرة الذاتية",
+      "bioPlaceholder": "اكتب نبذة قصيرة عن نفسك...",
+      "bioDescription": "نبذة موجزة عن شخصيتك واهتماماتك (الحد الأقصى 500 حرف)",
+      "saveChanges": "حفظ التغييرات",
+      "saving": "جاري الحفظ...",
+      "cancel": "إلغاء"
+    },
+    "accountDetails": {
+      "title": "تفاصيل الحساب",
+      "userId": "معرف المستخدم",
+      "notAvailable": "غير متوفر",
+      "createdAt": "تاريخ الإنشاء",
+      "updatedAt": "آخر تحديث",
+      "lastSignIn": "آخر دخول"
+    },
+    "messages": {
+      "fileTooLarge": "حجم الملف كبير جداً. الحد الأقصى 5 ميجابايت",
+      "unsupportedFileType": "نوع الملف غير مدعوم. يرجى اختيار صورة",
+      "loadingUser": "جاري تحميل بيانات المستخدم...",
+      "noChanges": "لم يتم إجراء أي تغييرات",
+      "uploadFailed": "فشل في الحصول على رابط التحميل",
+      "updateSuccess": "تم تحديث الملف الشخصي بنجاح",
+      "updateFailed": "فشل في تحديث الملف الشخصي",
+      "clerkUpdateFailed": "فشل في تحديث بيانات Clerk، سيتم تحديث بيانات الحساب فقط",
+      "updateError": "حدث خطأ أثناء تحديث الملف الشخصي"
+    }
+  }
+}

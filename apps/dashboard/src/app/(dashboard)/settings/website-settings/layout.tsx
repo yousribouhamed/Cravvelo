@@ -7,30 +7,39 @@ import {
   getMyUserAction,
 } from "@/src/actions/user.actions";
 import CreateAcademiaPage from "@/src/components/pages/create-academia.page";
+import { getServerTranslations } from "@/src/lib/i18n/utils";
 
 export default async function WebsiteSettingsLayout({
   children,
 }: React.PropsWithChildren) {
-  const user = await getMyUserAction();
+  try {
+    const user = await getMyUserAction();
+    const t = await getServerTranslations("pages");
 
-  const notifications = await getAllNotifications({
-    accountId: user.accountId,
-  });
+    const notifications = await getAllNotifications({
+      accountId: user.accountId,
+    });
 
-  if (!user?.subdomain) {
-    return <CreateAcademiaPage notifications={notifications} user={user} />;
+    if (!user?.subdomain) {
+      return <CreateAcademiaPage notifications={notifications} user={user} />;
+    }
+    return (
+      <MaxWidthWrapper>
+        <main className="w-full flex flex-col justify-start ">
+          <Header
+            notifications={notifications}
+            user={user}
+            title={t("websiteSettings")}
+          />
+          <WebsiteSettingsHeader />
+          {children}
+        </main>
+      </MaxWidthWrapper>
+    );
+  } catch (error) {
+    console.error("Error in WebsiteSettingsLayout:", error);
+    // Redirect to sign-in on authentication errors
+    const { redirect } = await import("next/navigation");
+    redirect("/sign-in");
   }
-  return (
-    <MaxWidthWrapper>
-      <main className="w-full flex flex-col justify-start ">
-        <Header
-          notifications={notifications}
-          user={user}
-          title="إعدادات الموقع"
-        />
-        <WebsiteSettingsHeader />
-        {children}
-      </main>
-    </MaxWidthWrapper>
-  );
 }

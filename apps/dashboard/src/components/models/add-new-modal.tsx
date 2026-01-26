@@ -28,6 +28,8 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { maketoast } from "../toasts";
 import { BookOpen, Package } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
 
 // Enhanced schema to include the type selection
 const enhancedSchema = addCourseSchema.extend({
@@ -36,13 +38,16 @@ const enhancedSchema = addCourseSchema.extend({
 
 const AddNew: FC = () => {
   const router = useRouter();
+  const t = useTranslations("addNew");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
   const [isOpen, setIsOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const courseMutation = trpc.createCourse.useMutation({
     onSuccess: ({ courseId }) => {
       router.push(`/courses/${courseId}/chapters`);
-      maketoast.successWithText({ text: "تم انشاء الدورة بنجاح" });
+      maketoast.successWithText({ text: t("courseCreated") });
       setIsOpen(false);
     },
     onError: () => {
@@ -54,7 +59,7 @@ const AddNew: FC = () => {
   const productMutation = trpc.createProduct.useMutation({
     onSuccess: ({ id }) => {
       router.push(`/products/${id}/content`);
-      maketoast.successWithText({ text: "تم انشاء المنتج بنجاح" });
+      maketoast.successWithText({ text: t("productCreated") });
       setIsOpen(false);
     },
     onError: () => {
@@ -132,10 +137,10 @@ const AddNew: FC = () => {
               fill="#FC6B00"
             />
           </svg>
-          <span className="qatar-bold">إضافة جديد</span>
+          <span className="qatar-bold">{t("button")}</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-lg" title="إضافة جديد">
+      <DialogContent className="max-w-lg" title={t("dialogTitle")}>
         <div className="w-full px-4 pb-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -146,16 +151,16 @@ const AddNew: FC = () => {
                   <FormItem>
                     <FormLabel>
                       {selectedType === "course"
-                        ? "عنوان الدورة"
-                        : "عنوان المنتج"}
+                        ? t("courseTitle")
+                        : t("productTitle")}
                       *
                     </FormLabel>
                     <FormControl>
                       <Input
                         placeholder={
                           selectedType === "course"
-                            ? "أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم"
-                            : "أدخل عنوان المنتج الجديد، مثال: كتاب إلكتروني في التسويق الرقمي"
+                            ? t("courseTitlePlaceholder")
+                            : t("productTitlePlaceholder")
                         }
                         {...field}
                       />
@@ -170,7 +175,7 @@ const AddNew: FC = () => {
                 name="type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>نوع المحتوى</FormLabel>
+                    <FormLabel>{t("contentType")}</FormLabel>
                     <FormControl>
                       <RadioGroup
                         onValueChange={field.onChange}
@@ -180,21 +185,21 @@ const AddNew: FC = () => {
                         <Card className="p-4 hover:shadow-md transition-all duration-200 hover:border-primary/50 dark:hover:border-primary/50">
                           <FormItem
                             className="flex justify-between items-center space-y-0"
-                            dir="rtl"
+                            dir={isRTL ? "rtl" : "ltr"}
                           >
-                            <div className="flex items-center gap-4">
+                            <div className={cn("flex items-center gap-4", isRTL ? "flex-row" : "flex-row-reverse")}>
                               <div className="p-2 rounded-full bg-blue-100 dark:bg-blue-900/30">
                                 <BookOpen
                                   size={20}
                                   className="text-blue-600 dark:text-blue-400"
                                 />
                               </div>
-                              <div className="text-right">
+                              <div className={isRTL ? "text-right" : "text-left"}>
                                 <FormLabel className="font-medium cursor-pointer text-foreground">
-                                  دورة تدريبية
+                                  {t("trainingCourse")}
                                 </FormLabel>
                                 <p className="text-sm text-muted-foreground">
-                                  إنشاء دورة تدريبية مع فصول ومحاضرات
+                                  {t("trainingCourseDescription")}
                                 </p>
                               </div>
                             </div>
@@ -207,21 +212,21 @@ const AddNew: FC = () => {
                         <Card className="p-4 hover:shadow-md transition-all duration-200 hover:border-primary/50 dark:hover:border-primary/50">
                           <FormItem
                             className="flex justify-between items-center space-y-0"
-                            dir="rtl"
+                            dir={isRTL ? "rtl" : "ltr"}
                           >
-                            <div className="flex items-center gap-4">
+                            <div className={cn("flex items-center gap-4", isRTL ? "flex-row" : "flex-row-reverse")}>
                               <div className="p-2 rounded-full bg-green-100 dark:bg-green-900/30">
                                 <Package
                                   size={20}
                                   className="text-green-600 dark:text-green-400"
                                 />
                               </div>
-                              <div className="text-right">
+                              <div className={isRTL ? "text-right" : "text-left"}>
                                 <FormLabel className="font-medium cursor-pointer text-foreground">
-                                  منتج رقمي
+                                  {t("digitalProduct")}
                                 </FormLabel>
                                 <p className="text-sm text-muted-foreground">
-                                  إنشاء منتج رقمي مثل كتاب أو ملف قابل للتحميل
+                                  {t("digitalProductDescription")}
                                 </p>
                               </div>
                             </div>
@@ -246,7 +251,7 @@ const AddNew: FC = () => {
                   loading={isLoading}
                   className="rounded-xl flex items-center justify-center gap-x-2 min-w-[120px]"
                 >
-                  {selectedType === "course" ? "إنشاء دورة" : "إنشاء منتج"}
+                  {selectedType === "course" ? t("createCourse") : t("createProduct")}
                 </Button>
               </DialogFooter>
             </form>

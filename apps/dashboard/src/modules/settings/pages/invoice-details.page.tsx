@@ -17,6 +17,7 @@ import { formatCurrency } from "../../payments/utils";
 import { useRouter } from "next/navigation";
 import { ar } from "date-fns/locale";
 import { format } from "date-fns";
+import { useTranslations } from "next-intl";
 
 interface PageProps {
   invoiceId: string;
@@ -82,17 +83,19 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
     }
   };
 
+  const tStatus = useTranslations("invoices.status");
   const translateStatus = (status: string): string => {
+    const statusKey = status.toUpperCase().toLowerCase();
     const statusMap: Record<string, string> = {
-      PENDING: "قيد الانتظار",
-      PAID: "مدفوع",
-      FAILED: "فشل",
-      CANCELLED: "ملغي",
-      COMPLETED: "مكتمل",
-      PROCESSING: "قيد المعالجة",
-      REFUNDED: "مسترد",
+      pending: tStatus("pending"),
+      paid: tStatus("paid"),
+      failed: tStatus("failed"),
+      cancelled: tStatus("cancelled"),
+      completed: tStatus("completed"),
+      processing: tStatus("processing"),
+      refunded: tStatus("refunded"),
     };
-    return statusMap[status.toUpperCase()] || status;
+    return statusMap[statusKey] || status;
   };
 
   const formatDate = (dateString: string) => {
@@ -104,8 +107,8 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
       {/* Header with Pay Button */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">تفاصيل الفاتورة</h1>
-          <p className="text-sm text-gray-500">رقم الفاتورة: {invoice.id}</p>
+          <h1 className="text-2xl font-bold text-gray-900">{t("title")}</h1>
+          <p className="text-sm text-gray-500">{t("invoiceNumber")}: {invoice.id}</p>
         </div>
         {invoice.status === "PENDING" && (
           <Button
@@ -114,7 +117,7 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
             className="w-full sm:w-auto"
           >
             <CreditCard className="w-4 h-4 mr-2" />
-            دفع الفاتورة -{" "}
+            {t("payInvoice")} -{" "}
             {formatCurrency({
               amount: invoice.amount,
               currency: invoice.currency as "DZD",
@@ -181,7 +184,7 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
       {purchasedItem && (
         <Card>
           <CardHeader>
-            <CardTitle>Purchased Item</CardTitle>
+            <CardTitle>{t("purchasedItem")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-start space-x-4">
@@ -201,15 +204,15 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
                 </p>
                 <div className="flex flex-wrap gap-4 text-sm">
                   <div>
-                    <span className="font-medium">Plan:</span>{" "}
+                    <span className="font-medium">{t("plan")}:</span>{" "}
                     {purchasedItem.planName}
                   </div>
                   <div>
-                    <span className="font-medium">Category:</span>{" "}
+                    <span className="font-medium">{t("category")}:</span>{" "}
                     {purchasedItem.item.category}
                   </div>
                   {purchasedItem.isRecurring && (
-                    <Badge variant="outline">Recurring Subscription</Badge>
+                    <Badge variant="outline">{t("recurringSubscription")}</Badge>
                   )}
                 </div>
               </div>
@@ -270,13 +273,13 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
       {invoice.Payment.AppInstall && invoice.Payment.AppInstall.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle>تثبيت التطبيق</CardTitle>
+            <CardTitle>{t("appInstallation")}</CardTitle>
           </CardHeader>
           <CardContent>
             {invoice.Payment.AppInstall.map((install) => (
               <div key={install.id} className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="font-medium">الحالة</span>
+                  <span className="font-medium">{t("status")}</span>
                   <Badge className={getStatusColor(install.status)}>
                     {translateStatus(install.status)}
                   </Badge>
@@ -284,11 +287,11 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
                 <Separator />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="font-medium">تم التثبيت في:</span>{" "}
+                    <span className="font-medium">{t("installedAt")}:</span>{" "}
                     {formatDate(install.installedAt.toISOString())}
                   </div>
                   <div>
-                    <span className="font-medium">مبلغ الاشتراك:</span>{" "}
+                    <span className="font-medium">{t("subscriptionAmount")}:</span>{" "}
                     {formatCurrency({
                       amount: invoice.amount,
                       currency: invoice.currency as "DZD",

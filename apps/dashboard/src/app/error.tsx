@@ -3,7 +3,9 @@
 import { Button, buttonVariants } from "@ui/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import * as React from "react";
+import { isAuthenticationError } from "@/src/lib/auth-error-utils";
 
 export default function StoreCheckoutError({
   error,
@@ -12,9 +14,23 @@ export default function StoreCheckoutError({
   error: Error;
   reset: () => void;
 }) {
+  const router = useRouter();
+
   React.useEffect(() => {
     console.error(error);
-  }, [error]);
+    
+    // If this is an authentication error, redirect to sign-in instead of showing error UI
+    if (isAuthenticationError(error)) {
+      router.push("/sign-in");
+      return;
+    }
+  }, [error, router]);
+
+  // If it's an authentication error, don't render the error UI
+  // The redirect will happen in useEffect
+  if (isAuthenticationError(error)) {
+    return null;
+  }
 
   return (
     <div className="w-full h-screen flex items-center  flex-col gap-y-8 justify-center pt-12">

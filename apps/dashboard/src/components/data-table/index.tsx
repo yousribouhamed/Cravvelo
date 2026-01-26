@@ -18,6 +18,8 @@ import {
 } from "@ui/components/ui/table";
 import { Button } from "@ui/components/ui/button";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -28,6 +30,10 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const t = useTranslations("dataTable");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
+  
   const table = useReactTable({
     data,
     columns,
@@ -52,7 +58,10 @@ export function DataTable<TData, TValue>({
               {headerGroup.headers.map((header) => (
                 <TableHead
                   key={header.id}
-                  className="text-sm text-right font-medium text-foreground dark:text-gray-200"
+                  className={cn(
+                    "text-sm font-medium text-foreground dark:text-gray-200",
+                    isRTL ? "text-right" : "text-left"
+                  )}
                 >
                   {header.isPlaceholder
                     ? null
@@ -85,7 +94,7 @@ export function DataTable<TData, TValue>({
                 colSpan={columns.length}
                 className="h-24 text-center text-muted-foreground"
               >
-                لا توجد نتائج
+                {t("noResults")}
               </TableCell>
             </TableRow>
           )}
@@ -93,7 +102,7 @@ export function DataTable<TData, TValue>({
       </Table>
       <div className="w-full h-[60px] border-t flex items-center justify-between gap-x-6 p-2 bg-card">
         <div className="text-sm text-muted-foreground">
-          صفحة {table.getState().pagination.pageIndex + 1} من{" "}
+          {t("page")} {table.getState().pagination.pageIndex + 1} {t("of")}{" "}
           {table.getPageCount() || 1}
         </div>
         <div className="flex items-center gap-x-2">
@@ -101,21 +110,45 @@ export function DataTable<TData, TValue>({
             disabled={!table.getCanPreviousPage()}
             onClick={() => table.previousPage()}
             variant="ghost"
-            className="rounded-xl border flex items-center gap-x-2"
+            className={cn(
+              "rounded-xl border flex items-center",
+              isRTL ? "gap-x-2" : "gap-x-2"
+            )}
             aria-label="Go to previous page"
           >
-            <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
-            سابق
+            {isRTL ? (
+              <>
+                <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+                {t("previous")}
+              </>
+            ) : (
+              <>
+                <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+                {t("previous")}
+              </>
+            )}
           </Button>
           <Button
             disabled={!table.getCanNextPage()}
             onClick={() => table.nextPage()}
             variant="ghost"
-            className="rounded-xl border flex items-center gap-x-2"
+            className={cn(
+              "rounded-xl border flex items-center",
+              isRTL ? "gap-x-2" : "gap-x-2"
+            )}
             aria-label="Go to next page"
           >
-            التالي
-            <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+            {isRTL ? (
+              <>
+                {t("next")}
+                <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+              </>
+            ) : (
+              <>
+                {t("next")}
+                <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+              </>
+            )}
           </Button>
         </div>
       </div>

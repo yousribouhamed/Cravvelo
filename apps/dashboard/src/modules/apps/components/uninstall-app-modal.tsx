@@ -14,8 +14,14 @@ import {
 import { uninstallApp } from "../actions/apps.actions";
 import { useState } from "react";
 import { maketoast } from "@/src/components/toasts";
+import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
 
 export default function UninstallAppModal({ appId }: { appId: string }) {
+  const t = useTranslations("apps");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
 
@@ -27,11 +33,11 @@ export default function UninstallAppModal({ appId }: { appId: string }) {
       setOpen(false);
       // Invalidate installedApps query to update sidebar immediately
       queryClient.invalidateQueries({ queryKey: ["installedApps"] });
-      maketoast.successWithText({ text: "تم إلغاء تثبيت التطبيق بنجاح" });
+      maketoast.successWithText({ text: t("appUninstalled") });
     },
     onError: (error: any) => {
       maketoast.errorWithText({
-        text: error?.message || "فشل إلغاء تثبيت التطبيق",
+        text: error?.message || t("uninstallFailed"),
       });
     },
   });
@@ -40,15 +46,19 @@ export default function UninstallAppModal({ appId }: { appId: string }) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button size="sm" variant="outline">
-          إلغاء التثبيت
+          {t("uninstall")}
         </Button>
       </DialogTrigger>
       <DialogContent>
-        <DialogHeader dir="ltr">
-          <DialogTitle className="text-right">إلغاء تثبيت التطبيق</DialogTitle>
-          <DialogDescription dir="ltr" className="text-right">
-            هل أنت متأكد أنك تريد إلغاء تثبيت هذا التطبيق؟ سيتم إلغاء الاشتراك
-            وستفقد الوصول إلى جميع ميزات التطبيق.
+        <DialogHeader dir={isRTL ? "rtl" : "ltr"}>
+          <DialogTitle className={cn(isRTL ? "text-right" : "text-left")}>
+            {t("uninstallApp")}
+          </DialogTitle>
+          <DialogDescription
+            dir={isRTL ? "rtl" : "ltr"}
+            className={cn(isRTL ? "text-right" : "text-left")}
+          >
+            {t("uninstallAppDescription")}
           </DialogDescription>
         </DialogHeader>
 
@@ -58,7 +68,7 @@ export default function UninstallAppModal({ appId }: { appId: string }) {
             onClick={() => setOpen(false)}
             disabled={mutation.isPending}
           >
-            إلغاء
+            {tCommon("cancel")}
           </Button>
           <Button
             onClick={() => mutation.mutate()}
@@ -66,7 +76,7 @@ export default function UninstallAppModal({ appId }: { appId: string }) {
             loading={mutation.isPending}
             variant="destructive"
           >
-            إلغاء التثبيت
+            {t("uninstallApp")}
           </Button>
         </DialogFooter>
       </DialogContent>

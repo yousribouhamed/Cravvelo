@@ -30,6 +30,9 @@ import {
   CreditCard,
   Palette,
 } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
+import { useMemo } from "react";
+import { cn } from "@ui/lib/utils";
 
 interface ProductGroup {
   pages: { name: string; path: string }[];
@@ -73,34 +76,10 @@ const SearchSkeleton = () => (
   </div>
 );
 
-const DEFAULT_PAGES = [
-  {
-    name: "طرق الدفع",
-    path: "/settings/payments-methods",
-    description: "إدارة طرق الدفع والفواتير",
-    icon: CreditCard,
-  },
-  {
-    name: "المظهر",
-    path: "/settings/website-settings/appearance",
-    description: "تخصيص الألوان والشعار والقالب",
-    icon: Palette,
-  },
-  {
-    name: "المبيعات الأخيرة",
-    path: "/orders",
-    description: "تتبع المبيعات والطلبات الحديثة",
-    icon: TrendingUp,
-  },
-  {
-    name: "إعدادات الأكاديمية",
-    path: "/settings/website-settings/legal",
-    description: "إدارة الشروط والأحكام والخصوصية",
-    icon: Settings,
-  },
-];
-
 export const SearchInput: FC = () => {
+  const t = useTranslations("search");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
@@ -108,6 +87,36 @@ export const SearchInput: FC = () => {
   const [data, setData] = React.useState<ProductGroup | null>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [isSearching, setIsSearching] = React.useState(false);
+
+  const DEFAULT_PAGES = useMemo(
+    () => [
+      {
+        name: t("defaultPages.paymentMethods"),
+        path: "/settings/payments-methods",
+        description: t("defaultPages.paymentMethodsDesc"),
+        icon: CreditCard,
+      },
+      {
+        name: t("defaultPages.appearance"),
+        path: "/settings/website-settings/appearance",
+        description: t("defaultPages.appearanceDesc"),
+        icon: Palette,
+      },
+      {
+        name: t("defaultPages.recentSales"),
+        path: "/orders",
+        description: t("defaultPages.recentSalesDesc"),
+        icon: TrendingUp,
+      },
+      {
+        name: t("defaultPages.academySettings"),
+        path: "/settings/website-settings/legal",
+        description: t("defaultPages.academySettingsDesc"),
+        icon: Settings,
+      },
+    ],
+    [t]
+  );
 
   const mutation = trpc.getUserQuery.useMutation({
     onSuccess: (data) => {
@@ -117,8 +126,8 @@ export const SearchInput: FC = () => {
     },
     onError: (error) => {
       console.error("Search error:", error);
-      setError(error.message || "حدث خطأ في البحث");
-      maketoast.error("فشل في البحث. حاول مرة أخرى.");
+      setError(error.message || t("searchError"));
+      maketoast.error(t("searchFailed"));
       setIsSearching(false);
       setData(null);
     },
@@ -146,7 +155,7 @@ export const SearchInput: FC = () => {
     // Add timeout to handle slow API responses
     const timeoutId = setTimeout(() => {
       if (isSearching) {
-        setError("انتهت مهلة البحث. حاول مرة أخرى.");
+        setError(t("searchTimeout"));
         setIsSearching(false);
       }
     }, 10000); // 10 second timeout
@@ -223,17 +232,20 @@ export const SearchInput: FC = () => {
       <Button
         variant="ghost"
         size="sm"
-        className="h-9 bg-card w-full max-w-sm justify-start px-3 text-right font-normal 
-                   border border-gray-200 dark:border-gray-700 
-                   hover:border-blue-300 dark:hover:border-blue-600
-                   hover:bg-blue-50 dark:hover:bg-blue-950
-                   transition-all duration-200 hover:shadow-sm"
+        className={cn(
+          "h-9 bg-card w-full max-w-sm px-3 font-normal",
+          "border border-gray-200 dark:border-gray-700",
+          "hover:border-blue-300 dark:hover:border-blue-600",
+          "hover:bg-blue-50 dark:hover:bg-blue-950",
+          "transition-all duration-200 hover:shadow-sm",
+          isRTL ? "justify-start text-right" : "justify-start text-left"
+        )}
         onClick={() => setOpen(true)}
-        dir="rtl"
+        dir={isRTL ? "rtl" : "ltr"}
       >
-        <Search className="ml-2 h-4 w-4 text-gray-400" />
+        <Search className={cn("h-4 w-4 text-gray-400", isRTL ? "ml-2" : "mr-2")} />
         <span className="flex-1 text-gray-500 text-sm">
-          البحث في الدورات والمنتجات...
+          {t("placeholder")}
         </span>
         <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex">
           <Command className="h-3 w-3" />K
@@ -241,13 +253,13 @@ export const SearchInput: FC = () => {
       </Button>
 
       {/* Search Dialog */}
-      <CommandDialog open={open} onOpenChange={setOpen} title="البحث">
-        <div dir="rtl">
+      <CommandDialog open={open} onOpenChange={setOpen} title={t("dialogTitle")}>
+        <div dir={isRTL ? "rtl" : "ltr"}>
           <CommandInput
-            placeholder="ابحث عن أي شيء..."
+            placeholder={t("searchPlaceholder")}
             value={query}
             onValueChange={setQuery}
-            className="text-right"
+            className={cn(isRTL ? "text-right" : "text-left")}
           />
 
           <CommandList>
@@ -255,7 +267,7 @@ export const SearchInput: FC = () => {
             {error && (
               <div
                 className="flex items-center gap-2 p-4 text-red-600 dark:text-red-400"
-                dir="rtl"
+                dir={isRTL ? "rtl" : "ltr"}
               >
                 <AlertCircle className="h-4 w-4 flex-shrink-0" />
                 <span className="text-sm">{error}</span>
@@ -267,10 +279,10 @@ export const SearchInput: FC = () => {
               <div className="p-2">
                 <div
                   className="flex items-center gap-2 p-3 text-sm text-gray-600 dark:text-gray-400"
-                  dir="rtl"
+                  dir={isRTL ? "rtl" : "ltr"}
                 >
                   <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-600 border-t-transparent"></div>
-                  <span>جاري البحث...</span>
+                  <span>{t("searching")}</span>
                 </div>
                 <SearchSkeleton />
               </div>
@@ -278,14 +290,14 @@ export const SearchInput: FC = () => {
 
             {/* Default Pages (when no query) */}
             {showDefaultPages && (
-              <CommandGroup heading="الصفحات المقترحة">
+              <CommandGroup heading={t("suggestedPages")}>
                 {DEFAULT_PAGES.map((page) => (
                   <CommandItem
                     key={page.path}
                     value={page.name}
                     onSelect={() => handleSelect(page.path)}
                     className="flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg mx-2"
-                    dir="rtl"
+                    dir={isRTL ? "rtl" : "ltr"}
                   >
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900 flex-shrink-0">
                       <page.icon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
@@ -309,34 +321,34 @@ export const SearchInput: FC = () => {
                 {totalResults > 0 && (
                   <div
                     className="px-3 py-2 text-xs text-gray-500 dark:text-gray-400"
-                    dir="rtl"
+                    dir={isRTL ? "rtl" : "ltr"}
                   >
-                    تم العثور على {totalResults} نتيجة
+                    {t("resultsFound", { count: totalResults })}
                   </div>
                 )}
 
                 {/* Products */}
                 {data.products && data.products.length > 0 && (
-                  <CommandGroup heading={`المنتجات (${data.products.length})`}>
+                  <CommandGroup heading={`${t("products")} (${data.products.length})`}>
                     {data.products.map((product) => (
                       <CommandItem
                         key={product.id}
                         value={product.title}
                         onSelect={() => handleSelect(`/product/${product.id}`)}
                         className="flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg mx-2"
-                        dir="rtl"
+                        dir={isRTL ? "rtl" : "ltr"}
                       >
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900 flex-shrink-0">
                           <Box className="h-5 w-5 text-green-600 dark:text-green-400" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="font-medium text-right truncate">
+                          <div className={cn("font-medium truncate", isRTL ? "text-right" : "text-left")}>
                             {product.title}
                           </div>
-                          <div className="text-xs text-gray-600 dark:text-gray-400 text-right truncate">
+                          <div className={cn("text-xs text-gray-600 dark:text-gray-400 truncate", isRTL ? "text-right" : "text-left")}>
                             {product.SeoDescription ||
                               product.subDescription ||
-                              "منتج رقمي"}
+                              t("digitalProduct")}
                           </div>
                         </div>
                       </CommandItem>
@@ -352,7 +364,7 @@ export const SearchInput: FC = () => {
 
                 {/* Courses */}
                 {data.courses && data.courses.length > 0 && (
-                  <CommandGroup heading={`الدورات (${data.courses.length})`}>
+                  <CommandGroup heading={`${t("courses")} (${data.courses.length})`}>
                     {data.courses.map((course) => (
                       <CommandItem
                         key={course.id}
@@ -361,17 +373,17 @@ export const SearchInput: FC = () => {
                           handleSelect(`/courses/${course.id}/chapters`)
                         }
                         className="flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg mx-2"
-                        dir="rtl"
+                        dir={isRTL ? "rtl" : "ltr"}
                       >
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900 flex-shrink-0">
                           <Youtube className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="font-medium text-right truncate">
+                          <div className={cn("font-medium truncate", isRTL ? "text-right" : "text-left")}>
                             {course.title}
                           </div>
-                          <div className="text-xs text-gray-600 dark:text-gray-400 text-right truncate">
-                            {course.courseResume || "دورة تعليمية"}
+                          <div className={cn("text-xs text-gray-600 dark:text-gray-400 truncate", isRTL ? "text-right" : "text-left")}>
+                            {course.courseResume || t("courses")}
                           </div>
                         </div>
                       </CommandItem>
@@ -389,10 +401,10 @@ export const SearchInput: FC = () => {
                     <Search className="h-6 w-6 text-gray-400" />
                   </div>
                   <h3 className="font-semibold text-gray-600 dark:text-gray-300 mb-2">
-                    لم يتم العثور على نتائج
+                    {t("noResults")}
                   </h3>
                   <p className="text-gray-500 dark:text-gray-400 text-sm max-w-sm">
-                    جرب كلمات مفتاحية مختلفة أو تحقق من الإملاء
+                    {t("noResultsDescription")}
                   </p>
                 </div>
               </CommandEmpty>

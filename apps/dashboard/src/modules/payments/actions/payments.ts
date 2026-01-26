@@ -16,6 +16,7 @@ export const getAllPayments = withAuth({
       const payments = await db.payment.findMany({
         where: {
           accountId: account.id,
+          type: { not: "SUBSCRIPTION" }, // Exclude app subscription payments, only show student payments
         },
         include: {
           Student: {
@@ -589,6 +590,7 @@ export const getPaymentStats = withAuth({
       const stats = await db.payment.aggregate({
         where: {
           accountId: account.id,
+          type: { not: "SUBSCRIPTION" }, // Exclude app subscription payments, only show student payments
         },
         _sum: {
           amount: true,
@@ -602,6 +604,7 @@ export const getPaymentStats = withAuth({
         by: ["status"],
         where: {
           accountId: account.id,
+          type: { not: "SUBSCRIPTION" }, // Exclude app subscription payments
         },
         _count: {
           _all: true,
@@ -615,6 +618,7 @@ export const getPaymentStats = withAuth({
         by: ["createdAt"],
         where: {
           accountId: account.id,
+          type: { not: "SUBSCRIPTION" }, // Exclude app subscription payments
           status: PaymentStatus.COMPLETED,
           createdAt: {
             gte: new Date(new Date().setMonth(new Date().getMonth() - 12)), // Last 12 months

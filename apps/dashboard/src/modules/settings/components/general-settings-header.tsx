@@ -4,31 +4,31 @@ import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { usePathname } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
-
-const getLinks = () => {
-  const links = [
-    {
-      name: "المظهر",
-      href: `/settings`,
-    },
-    {
-      name: "الملف الشخصي",
-      href: `/settings/profile`,
-    },
-
-    {
-      name: "الفواتير",
-      href: `/settings/invoices`,
-    },
-  ];
-
-  return links;
-};
+import { useTranslations } from "next-intl";
+import { useMemo } from "react";
 
 function GeneralSettingsHeader({ className, ...props }: ExamplesNavProps) {
+  const t = useTranslations("pages");
   const pathname = usePathname();
   const courseId = getValueFromUrl(pathname, 2);
-  const links = getLinks();
+  
+  const links = useMemo(
+    () => [
+      {
+        name: t("appearance"),
+        href: `/settings`,
+      },
+      {
+        name: t("profile"),
+        href: `/settings/profile`,
+      },
+      {
+        name: t("invoices"),
+        href: `/settings/invoices`,
+      },
+    ],
+    [t]
+  );
 
   const isActive = (href: string) => {
     // Exact match

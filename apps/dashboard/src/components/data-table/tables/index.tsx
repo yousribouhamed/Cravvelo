@@ -21,15 +21,19 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/components/ui/table";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, Search } from "lucide-react";
 import StudentTableHeader from "../tables-headers/students-table-header";
 import Image from "next/image";
-import { Search } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   refetch?: () => Promise<any>;
+  showSearch?: boolean;
+  searchPlaceholder?: string;
+  searchColumns?: string[];
 }
 
 interface ColumnFilter {
@@ -43,7 +47,14 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   refetch,
+  showSearch = false,
+  searchPlaceholder,
+  searchColumns = [],
 }: DataTableProps<TData, TValue>) {
+  const t = useTranslations("dataTable");
+  const tStudents = useTranslations("students");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
   const [rowSelection, setRowSelection] = React.useState({});
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -68,18 +79,36 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  console.log("this is the table coirse");
-  console.log({ columnFilters: table.getState().columnFilters }); // access the column filters state from the table instance
-
   return (
     <>
-      {/* <SimpleTableHeader data={data} table={table} /> */}
-      {/* <StudentTableHeader data={data} table={table} /> */}
-      <div className="rounded-md border my-4 bg-white">
+      <div className="flex items-center py-4 justify-start gap-x-4 mb-4 flex-wrap">
+        {showSearch && (
+          <div className="w-full max-w-sm h-[50px] p-4 rounded-xl bg-card border flex items-center justify-start gap-x-4">
+            <Search className="text-muted-foreground w-4 h-4" />
+            <input
+              className="border-none bg-transparent focus:outline-none focus:border-none focus:ring-0 flex-1 text-foreground placeholder:text-muted-foreground"
+              placeholder={searchPlaceholder || tStudents("search.placeholder")}
+              value={(table.getColumn(searchColumns[0] || "full_name")?.getFilterValue() as string) ?? ""}
+              onChange={(event) => {
+                const value = event.target.value;
+                table.getAllColumns().forEach((column) => {
+                  if (searchColumns.length > 0 && searchColumns.includes(column.id as string)) {
+                    column.setFilterValue(value);
+                  } else if (searchColumns.length === 0 && ["full_name", "email", "phone"].includes(column.id as string)) {
+                    column.setFilterValue(value);
+                  }
+                });
+              }}
+            />
+          </div>
+        )}
+        <StudentTableHeader data={data} table={table} setColumnFilters={setColumnFilters} />
+      </div>
+      <div className="rounded-md border my-4 bg-card text-card-foreground shadow-sm">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className="bg-muted/50 dark:bg-muted/30">
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
@@ -121,7 +150,7 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-24 text-center text-muted-foreground"
                 >
                   <div className="h-[300px]   flex flex-col justify-center items-center gap-y-1 text-center">
                     <Image
@@ -130,23 +159,35 @@ export function DataTable<TData, TValue>({
                       width={300}
                       height={300}
                     />
-                    لم يتم العثور على نتائج
+                    {t("noResults")}
                   </div>
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
-        <div className="w-full h-[60px] border-t flex items-center justify-start gap-x-6 p-2">
+        <div className={cn(
+          "w-full h-[60px] border-t flex items-center gap-x-6 p-2 bg-card",
+          isRTL ? "justify-start" : "justify-end"
+        )}>
           <Button
             disabled={!table.getCanPreviousPage()}
             aria-label="Go to previous page"
-            className="bg-white rounded-xl border flex items-center gap-x-2"
+            className="rounded-xl border flex items-center gap-x-2"
             onClick={() => table.previousPage()}
             variant="ghost"
           >
-            <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
-            سابق
+            {isRTL ? (
+              <>
+                <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+                {t("previous")}
+              </>
+            ) : (
+              <>
+                <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+                {t("previous")}
+              </>
+            )}
           </Button>
 
           <Button
@@ -154,10 +195,19 @@ export function DataTable<TData, TValue>({
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
             variant="ghost"
-            className="bg-white rounded-xl border flex items-center gap-x-2"
+            className="rounded-xl border flex items-center gap-x-2"
           >
-            التالي
-            <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+            {isRTL ? (
+              <>
+                {t("next")}
+                <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+              </>
+            ) : (
+              <>
+                {t("next")}
+                <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+              </>
+            )}
           </Button>
         </div>
       </div>

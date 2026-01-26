@@ -1,5 +1,9 @@
-/** @type {import('next').NextConfig} */
-module.exports = {
+import { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
+
+const withNextIntl = createNextIntlPlugin("./src/lib/i18n/request.ts");
+
+const config: NextConfig = {
   reactStrictMode: true,
   transpilePackages: ["ui"],
   images: {
@@ -32,13 +36,16 @@ module.exports = {
       };
     }
 
-    // Ignore handlebars on client-side completely
+    // Ignore handlebars and canvas on client-side completely
     config.resolve.alias = {
       ...config.resolve.alias,
       handlebars: isServer ? "handlebars" : false,
+      canvas: false,
     };
 
     return config;
   },
   output: 'standalone',
 };
+
+export default withNextIntl(config);

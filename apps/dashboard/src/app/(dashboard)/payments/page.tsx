@@ -4,17 +4,19 @@ import {
   getMyUserAction,
 } from "@/src/actions/user.actions";
 import CreateAcademiaPage from "@/src/components/pages/create-academia.page";
-import { getAllPayments } from "@/src/modules/payments/actions/payments";
-import { paymentColumns } from "@/src/modules/payments/components/columns/payments";
-import { DataTable } from "@/src/components/data-table";
-import { formatCurrency } from "@/src/modules/payments/utils";
+import { getAllPayments, getPaymentStats } from "@/src/modules/payments/actions/payments";
+import { PaymentsTable } from "@/src/modules/payments/components/payments-table";
+import { PaymentAnalytics } from "@/src/modules/payments/components/payment-analytics";
+import { getServerTranslations } from "@/src/lib/i18n/utils";
 
 const Page = async () => {
   const user = await getMyUserAction();
+  const t = await getServerTranslations("pages");
 
-  const [payments, notifications] = await Promise.all([
+  const [payments, notifications, stats] = await Promise.all([
     getAllPayments(),
     getAllNotifications({ accountId: user.accountId }),
+    getPaymentStats(),
   ]);
 
   if (!user?.subdomain) {
@@ -22,14 +24,9 @@ const Page = async () => {
   }
 
   return (
-    <AppShell title="الدفع" user={user} notifications={notifications}>
-      <div className="w-full h-[100px] flex items-start justify-center  flex-col gap-y-8 mb-4">
-        <h1>الرصيد</h1>
-        <p className="font-bold text-2xl">
-          {formatCurrency({ amount: 100, currency: "DZD" })}
-        </p>
-      </div>
-      <DataTable columns={paymentColumns} data={payments.data || []} />
+    <AppShell title={t("payments")} user={user} notifications={notifications}>
+      <PaymentAnalytics stats={stats.data} />
+      <PaymentsTable data={payments.data || []} />
     </AppShell>
   );
 };

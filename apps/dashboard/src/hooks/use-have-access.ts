@@ -1,13 +1,13 @@
 "use server";
 
-import { currentUser } from "@clerk/nextjs/server";
+import { getCurrentUserSafe } from "@/src/lib/clerk-utils";
 import { redirect } from "next/navigation";
 import { prisma } from "database/src";
 import { daysLeftInTrial } from "../lib/utils";
 
 // Rename to indicate it's a server function, not a hook
 const useHaveAccess = async () => {
-  const user = await currentUser();
+  const user = await getCurrentUserSafe();
 
   if (!user) {
     redirect("/sign-in");

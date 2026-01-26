@@ -46,6 +46,7 @@ import {
   disconnectChargily,
 } from "../actions/chargily";
 import { ChargilyConfigType } from "../types";
+import { useTranslations, useLocale } from "next-intl";
 
 type Inputs = z.infer<typeof ChargilyConnectSchema>;
 
@@ -59,12 +60,16 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
   isAlreadyActive,
 }) => {
   const router = useRouter();
+  const t = useTranslations("paymentMethods.chargilyPage");
+  const locale = useLocale();
+  const dir = locale === "ar" ? "rtl" : "ltr";
   const [isActive, setIsActive] = useState(isAlreadyActive ?? false);
 
   const mutation = useMutation({
     mutationFn: data ? updateChargily : connectChargily,
     onSuccess: () => {
       maketoast.success();
+      router.refresh();
       router.push(`/payments/payments-methods`);
     },
     onError: () => {
@@ -109,7 +114,7 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
   const isConnected = data?.publicKey && data?.secretKey;
 
   return (
-    <div className="w-full min-h-screen rtl my-8" dir="rtl">
+    <div className={`w-full min-h-screen my-8 ${dir === "rtl" ? "rtl" : ""}`} dir={dir}>
       {/* Header Section */}
       <div className="w-full mx-auto">
         {/* Status Card */}
@@ -136,7 +141,7 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
                         : "text-gray-700 dark:text-gray-300"
                     }`}
                   >
-                    {isActive ? "مفعل ويعمل" : "متصل ولكن معطل"}
+                    {isActive ? t("status.active") : t("status.inactive")}
                   </p>
                   <p
                     className={`text-sm ${
@@ -146,8 +151,8 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
                     }`}
                   >
                     {isActive
-                      ? "حسابك متصل مع شارجيلي ويمكنك الآن استقبال المدفوعات"
-                      : "الحساب متصل ولكن مُعطل مؤقتاً - لن تتم معالجة المدفوعات"}
+                      ? t("status.activeDescription")
+                      : t("status.inactiveDescription")}
                   </p>
                 </div>
               </div>
@@ -163,11 +168,11 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
                   />
                   <div className="flex flex-col items-end">
                     <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                      {isActive ? "مفعل" : "معطل"}
+                      {isActive ? t("toggle.enabled") : t("toggle.disabled")}
                     </span>
                     {toggleMutation.isLoading && (
                       <span className="text-xs text-gray-500 dark:text-gray-400">
-                        جاري التحديث...
+                        {t("toggle.updating")}
                       </span>
                     )}
                   </div>
@@ -181,10 +186,10 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
               <AlertCircle className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               <div>
                 <p className="font-semibold text-blue-800 dark:text-blue-200">
-                  لم يتم الربط بعد
+                  {t("status.notConnected")}
                 </p>
                 <p className="text-sm text-blue-600 dark:text-blue-400">
-                  أكمل الخطوات أدناه لربط حسابك مع شارجيلي
+                  {t("status.notConnectedDescription")}
                 </p>
               </div>
             </div>
@@ -204,10 +209,10 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
                     </div>
                     <div>
                       <CardTitle className="text-xl text-gray-900 dark:text-gray-100">
-                        إعداد مفاتيح API
+                        {t("form.title")}
                       </CardTitle>
                       <CardDescription className="text-gray-600 dark:text-gray-400">
-                        أدخل مفاتيح API الخاصة بك من لوحة تحكم شارجيلي
+                        {t("form.description")}
                       </CardDescription>
                     </div>
                   </div>
@@ -223,7 +228,7 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
                         }`}
                       ></div>
                       <span className="text-sm text-gray-600 dark:text-gray-400">
-                        {isActive ? "نشط" : "معطل"}
+                        {isActive ? t("form.activeStatus") : t("form.inactiveStatus")}
                       </span>
                     </div>
                   )}
@@ -246,17 +251,17 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
                           <FormItem>
                             <FormLabel className="text-gray-900 dark:text-gray-100 font-semibold flex items-center gap-2">
                               <Key className="w-4 h-4" />
-                              المفتاح العام (Public Key)
+                              {t("form.publicKey")}
                             </FormLabel>
                             <FormControl>
                               <div className="relative">
-                                <Input placeholder="live_pk_..." {...field} />
-                                <Key className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                                <Input placeholder={t("form.publicKeyPlaceholder")} {...field} />
+                                <Key className={`absolute ${dir === "rtl" ? "left-3" : "right-3"} top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4`} />
                               </div>
                             </FormControl>
                             <FormMessage />
                             <p className="text-xs text-gray-500 dark:text-gray-400">
-                              المفتاح العام آمن للاستخدام في الواجهة الأمامية
+                              {t("form.publicKeyHint")}
                             </p>
                           </FormItem>
                         )}
@@ -272,25 +277,23 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
                           <FormItem>
                             <FormLabel className="text-gray-900 dark:text-gray-100 font-semibold flex items-center gap-2">
                               <Shield className="w-4 h-4" />
-                              المفتاح الخاص (Secret Key)
+                              {t("form.secretKey")}
                             </FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Input
                                   type="password"
-                                  placeholder="live_sk_..."
+                                  placeholder={t("form.secretKeyPlaceholder")}
                                   {...field}
                                 />
-                                <Shield className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                                <Shield className={`absolute ${dir === "rtl" ? "left-3" : "right-3"} top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4`} />
                               </div>
                             </FormControl>
                             <FormMessage />
                             <div className="flex items-start gap-2 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
                               <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
                               <p className="text-xs text-amber-700 dark:text-amber-300">
-                                <strong>تنبيه:</strong> المفتاح الخاص سري جداً
-                                ولا يجب مشاركته مع أي شخص. يتم تشفيره وحفظه
-                                بأمان.
+                                {t("form.secretKeyWarning")}
                               </p>
                             </div>
                           </FormItem>
@@ -308,12 +311,12 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
                         {mutation.isLoading ? (
                           <div className="flex items-center gap-2">
                             <LoadingSpinner />
-                            جاري الحفظ...
+                            {t("form.saveButton")}
                           </div>
                         ) : (
                           <div className="flex items-center gap-2">
                             <CheckCircle2 className="w-5 h-5" />
-                            {isConnected ? "تحديث الإعدادات" : "ربط الحساب"}
+                            {isConnected ? t("form.updateButton") : t("form.connectButton")}
                           </div>
                         )}
                       </Button>
@@ -346,7 +349,7 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
                           : "text-amber-900 dark:text-amber-100"
                       }`}
                     >
-                      {isActive ? "الدفع مُفعل" : "الدفع معطل"}
+                      {isActive ? t("paymentStatus.active") : t("paymentStatus.inactive")}
                     </h3>
                     <ul
                       className={`text-sm space-y-1 ${
@@ -355,19 +358,9 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
                           : "text-amber-700 dark:text-amber-300"
                       }`}
                     >
-                      {isActive ? (
-                        <>
-                          <li>• العملاء يمكنهم الدفع عبر شارجيلي</li>
-                          <li>• ستتم معالجة جميع المدفوعات تلقائياً</li>
-                          <li>• ستحصل على إشعارات بالمدفوعات الجديدة</li>
-                        </>
-                      ) : (
-                        <>
-                          <li>• لن يتمكن العملاء من الدفع عبر شارجيلي</li>
-                          <li>• لن تتم معالجة أي مدفوعات</li>
-                          <li>• يمكنك تفعيله مرة أخرى في أي وقت</li>
-                        </>
-                      )}
+                      {((isActive ? t.raw("paymentStatus.activeItems") : t.raw("paymentStatus.inactiveItems")) as string[]).map((item, index) => (
+                        <li key={index}>• {item}</li>
+                      ))}
                     </ul>
                   </div>
                 </div>
@@ -380,13 +373,12 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
                 <Shield className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                    معلومات الأمان
+                    {t("security.title")}
                   </h3>
                   <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                    <li>• جميع المفاتيح محمية بتشفير AES-256</li>
-                    <li>• المفاتيح محفوظة بشكل آمن في قاعدة البيانات</li>
-                    <li>• اتصال آمن مع خوادم شارجيلي عبر HTTPS</li>
-                    <li>• يمكنك تعطيل الدفع مؤقتاً دون فقدان الإعدادات</li>
+                    {(t.raw("security.items") as string[]).map((item, index) => (
+                      <li key={index}>• {item}</li>
+                    ))}
                   </ul>
                 </div>
               </div>
@@ -399,7 +391,7 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl text-gray-900 dark:text-gray-100 flex items-center gap-2">
                   <Lightbulb className="w-5 h-5 text-amber-500" />
-                  الخطوات
+                  {t("steps.title")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -409,10 +401,10 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
                   </div>
                   <div>
                     <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
-                      احصل على المفاتيح
+                      {t("steps.step1")}
                     </p>
                     <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                      اذهب إلى لوحة تحكم شارجيلي واحصل على مفاتيح الـ API
+                      {t("steps.step1Description")}
                     </p>
                   </div>
                 </div>
@@ -423,10 +415,10 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
                   </div>
                   <div>
                     <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
-                      أدخل المفاتيح
+                      {t("steps.step2")}
                     </p>
                     <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                      انسخ والصق المفاتيح في الحقول المطلوبة
+                      {t("steps.step2Description")}
                     </p>
                   </div>
                 </div>
@@ -437,10 +429,10 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
                   </div>
                   <div>
                     <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
-                      احفظ الإعدادات
+                      {t("steps.step3")}
                     </p>
                     <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                      اضغط حفظ التغييرات لإكمال عملية الربط
+                      {t("steps.step3Description")}
                     </p>
                   </div>
                 </div>
@@ -451,10 +443,10 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
                   </div>
                   <div>
                     <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
-                      فعّل الدفع
+                      {t("steps.step4")}
                     </p>
                     <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                      استخدم المفتاح لتفعيل أو تعطيل الدفع
+                      {t("steps.step4Description")}
                     </p>
                   </div>
                 </div>
@@ -465,8 +457,8 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
                     window.open("https://pay.chargily.com/dashboard", "_blank")
                   }
                 >
-                  <ExternalLink className="w-4 h-4 ml-2" />
-                  فتح لوحة تحكم شارجيلي
+                  <ExternalLink className={`w-4 h-4 ${dir === "rtl" ? "ml-2" : "mr-2"}`} />
+                  {t("steps.openDashboard")}
                 </Button>
               </CardContent>
             </Card>

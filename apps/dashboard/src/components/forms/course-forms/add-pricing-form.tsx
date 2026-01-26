@@ -28,6 +28,8 @@ import { getValueFromUrl } from "@/src/lib/utils";
 import { maketoast } from "../../toasts";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { Course, Pricing } from "database";
+import { useTranslations } from "next-intl";
+import { useMemo } from "react";
 
 const PricingFormSchema = z.object({
   pricingType: z.enum(["FREE", "ONE_TIME", "RECURRING"]),
@@ -50,6 +52,7 @@ interface AddPricingFormProps {
 }
 
 function AddPricingForm({ course, pricingPlans }: AddPricingFormProps) {
+  const t = useTranslations("courseForms");
   const currentPlan = pricingPlans?.[0]; // Fixed: added optional chaining
   const router = useRouter();
   const path = usePathname();
@@ -174,7 +177,7 @@ function AddPricingForm({ course, pricingPlans }: AddPricingFormProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="mb-2 block text-sm font-medium">
-                      نوع الخطة
+                      {t("planType")}
                     </FormLabel>
                     <Tabs
                       value={field.value}
@@ -182,10 +185,10 @@ function AddPricingForm({ course, pricingPlans }: AddPricingFormProps) {
                       className="w-full"
                     >
                       <TabsList className="grid grid-cols-3 ml-auto rounded-xl border">
-                        <TabsTrigger value="FREE">مجاني</TabsTrigger>
-                        <TabsTrigger value="ONE_TIME">دفعة واحدة</TabsTrigger>
+                        <TabsTrigger value="FREE">{t("free")}</TabsTrigger>
+                        <TabsTrigger value="ONE_TIME">{t("oneTime")}</TabsTrigger>
                         <TabsTrigger value="RECURRING">
-                          اشتراك متجدد
+                          {t("recurring")}
                         </TabsTrigger>
                       </TabsList>
                     </Tabs>
@@ -234,20 +237,20 @@ function AddPricingForm({ course, pricingPlans }: AddPricingFormProps) {
                     name="accessDuration"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>مدة الوصول</FormLabel>
+                        <FormLabel>{t("accessDuration")}</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           value={field.value}
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="اختر المدة" />
+                              <SelectValue placeholder={t("selectDuration")} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="LIMITED">محدودة</SelectItem>
+                            <SelectItem value="LIMITED">{t("limited")}</SelectItem>
                             <SelectItem value="UNLIMITED">
-                              غير محدودة
+                              {t("unlimited")}
                             </SelectItem>
                           </SelectContent>
                         </Select>
@@ -261,7 +264,7 @@ function AddPricingForm({ course, pricingPlans }: AddPricingFormProps) {
                       name="accessDurationDays"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>عدد الأيام</FormLabel>
+                          <FormLabel>{t("numberOfDays")}</FormLabel>
                           <FormControl>
                             <Input type="number" min="1" {...field} />
                           </FormControl>
@@ -345,14 +348,14 @@ function AddPricingForm({ course, pricingPlans }: AddPricingFormProps) {
             className="flex items-center justify-center gap-x-2"
           >
             {mutation.isLoading ? <LoadingSpinner /> : null}
-            حفظ والمتابعة
+            {t("saveAndContinue")}
           </Button>
           <Button
             type="button"
             onClick={() => router.back()}
             variant="secondary"
           >
-            إلغاء والعودة
+            {t("cancelAndGoBack")}
           </Button>
         </CardContent>
       </Card>

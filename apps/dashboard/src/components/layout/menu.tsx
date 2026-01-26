@@ -17,9 +17,10 @@ import { buttonVariants } from "@ui/components/ui/button";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
 import { cn } from "@ui/lib/utils";
 import Link from "next/link";
-import { SIDE_BAR_ITEMS } from "../../constants/side-bar-items";
+import { useSidebarItems } from "@/src/hooks/use-sidebar-items";
 import { getValueFromUrl } from "@/src/lib/utils";
 import InstalledAppsBox from "@/src/modules/apps/components/installed-apps-box";
+import { useLocale } from "next-intl";
 
 interface MobileLinkProps extends React.PropsWithChildren {
   href: string;
@@ -35,6 +36,8 @@ const MobileLink: FC<MobileLinkProps> = ({
   setIsOpen,
   isSelected,
 }) => {
+  const locale = useLocale();
+  const isRTL = locale === "ar";
   const handleClick = useCallback(() => {
     setIsOpen(false);
   }, [setIsOpen]);
@@ -44,12 +47,16 @@ const MobileLink: FC<MobileLinkProps> = ({
       href={href}
       className={cn(
         buttonVariants({ variant: "ghost" }),
-        "w-full flex items-center justify-end text-sm pr-4 relative hover:!bg-transparent !text-black dark:!text-white gap-x-2 hover:bg-none"
+        "w-full flex items-center text-sm relative hover:!bg-transparent !text-black dark:!text-white gap-x-2 hover:bg-none",
+        isRTL ? "justify-end pr-4" : "justify-start pl-4"
       )}
       onClick={handleClick}
     >
       {isSelected && (
-        <div className="w-[15px] h-[15px] rounded-[50%] z-[20] absolute -right-1 bg-white" />
+        <div className={cn(
+          "w-[15px] h-[15px] rounded-[50%] z-[20] absolute bg-white",
+          isRTL ? "-right-1" : "-left-1"
+        )} />
       )}
       {children}
     </Link>
@@ -65,6 +72,9 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const router = useRouter();
   const path = usePathname();
+  const locale = useLocale();
+  const SIDE_BAR_ITEMS = useSidebarItems();
+  const isRTL = locale === "ar";
 
   const pathSegments = useMemo(() => {
     return {
@@ -152,18 +162,31 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
                     href={item.slug}
                     className={cn(
                       buttonVariants({ variant: "ghost" }),
-                      "w-full flex items-center justify-end qatar-semibold text-md gap-x-2  hover:bg-white/5 !text-black dark:!text-white",
+                      "w-full flex items-center qatar-semibold text-md gap-x-2  hover:bg-white/5 !text-black dark:!text-white",
+                      isRTL ? "justify-end" : "justify-start",
                       {
                         "dark:text-white bg-white/5": isActive,
                       }
                     )}
                     onClick={handleDirectLinkClick}
                   >
-                    {item.title}
-                    <item.icon
-                      className="w-5 h-5 !text-black dark:!text-white"
-                      aria-hidden="true"
-                    />
+                    {isRTL ? (
+                      <>
+                        {item.title}
+                        <item.icon
+                          className="w-5 h-5 !text-black dark:!text-white"
+                          aria-hidden="true"
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <item.icon
+                          className="w-5 h-5 !text-black dark:!text-white"
+                          aria-hidden="true"
+                        />
+                        {item.title}
+                      </>
+                    )}
                   </Link>
                 )}
 
@@ -172,22 +195,39 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
                     <AccordionTrigger
                       className={cn(
                         buttonVariants({ variant: "ghost" }),
-                        "w-full flex items-center justify-end qatar-semibold group text-sm gap-x-2 hover:bg-white/5 !text-black dark:!text-white",
+                        "w-full flex items-center qatar-semibold group text-sm gap-x-2 hover:bg-white/5 !text-black dark:!text-white",
+                        isRTL ? "justify-end" : "justify-start",
                         {
                           "dark:text-white hover:bg-white/5 bg-white/5":
                             isActive,
                         }
                       )}
                     >
-                      {item.title}
-                      <item.icon
-                        className="w-5 h-5 !text-black dark:!text-white"
-                        strokeWidth={3}
-                        aria-hidden="true"
-                      />
+                      {isRTL ? (
+                        <>
+                          {item.title}
+                          <item.icon
+                            className="w-5 h-5 !text-black dark:!text-white"
+                            strokeWidth={3}
+                            aria-hidden="true"
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <item.icon
+                            className="w-5 h-5 !text-black dark:!text-white"
+                            strokeWidth={3}
+                            aria-hidden="true"
+                          />
+                          {item.title}
+                        </>
+                      )}
                     </AccordionTrigger>
                     <AccordionContent>
-                      <div className="flex relative flex-col pr-4 space-y-1">
+                      <div className={cn(
+                        "flex relative flex-col space-y-1",
+                        isRTL ? "pr-4" : "pl-4"
+                      )}>
                         {item.subitems.map((subItem, subIndex) => (
                           <MobileLink
                             isSelected={isSubItemActive(subItem)}
@@ -200,7 +240,10 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
                             {subItem.title}
                           </MobileLink>
                         ))}
-                        <div className="absolute top-0 bottom-4 w-0.5 h-[80%] bg-white right-5" />
+                        <div className={cn(
+                          "absolute top-0 bottom-4 w-0.5 h-[80%] bg-white",
+                          isRTL ? "right-5" : "left-5"
+                        )} />
                       </div>
                     </AccordionContent>
                   </>

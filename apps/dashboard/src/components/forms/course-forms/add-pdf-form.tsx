@@ -20,6 +20,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "../../toasts";
+import { useTranslations } from "next-intl";
 
 const addPDFSchema = z.object({
   title: z.string().min(2).max(50),
@@ -28,6 +29,7 @@ const addPDFSchema = z.object({
 });
 
 function AddPdfForm() {
+  const t = useTranslations("courseForms");
   const router = useRouter();
   const path = usePathname();
   const chapterID = getValueFromUrl(path, 4);
@@ -80,11 +82,11 @@ function AddPdfForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    عنوان الملف <span className="text-red-600 text-xl">*</span>
+                    {t("fileTitle")} <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="اين تذهب الشمس عندما يحل الليل"
+                      placeholder={t("fileTitlePlaceholder")}
                       {...field}
                     />
                   </FormControl>
@@ -100,7 +102,7 @@ function AddPdfForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    إضافة ملف pdf{" "}
+                    {t("addPdfFile")}{" "}
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl></FormControl>

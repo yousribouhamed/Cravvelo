@@ -9,11 +9,13 @@ import {
 } from "@/src/actions/user.actions";
 
 import { getP2pConnection } from "@/src/modules/payments/actions/p2p";
+import { getServerTranslations } from "@/src/lib/i18n/utils";
 
 interface PageProps {}
 
 const PageProps = async ({}) => {
   const user = await getMyUserAction();
+  const t = await getServerTranslations("paymentMethods.p2pPage");
 
   const [connection, notifications] = await Promise.all([
     getP2pConnection().catch((error) => {
@@ -44,7 +46,7 @@ const PageProps = async ({}) => {
         <Header
           notifications={notifications}
           user={user}
-          title="بوابات الدفع"
+          title={t("title")}
           goBack
         />
 

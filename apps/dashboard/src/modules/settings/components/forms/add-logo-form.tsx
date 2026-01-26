@@ -25,6 +25,8 @@ import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 import { ImageUploaderS3 } from "@/src/components/uploaders/image-uploader";
+import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
 
 const formSchema = z.object({
   logoUrl: z.string(),
@@ -35,6 +37,10 @@ interface AddLogoFormProps {
 }
 
 const AddLogoForm: FC<AddLogoFormProps> = ({ logoUrl }) => {
+  const t = useTranslations("websiteSettings.forms.logo");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
+
   const mutation = trpc.addWebSiteLogo.useMutation({
     onSuccess: () => {
       maketoast.success();
@@ -61,7 +67,7 @@ const AddLogoForm: FC<AddLogoFormProps> = ({ logoUrl }) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card className="border rounded-xl shadow-none">
           <CardHeader>
-            <CardTitle>شعار الاكادمية</CardTitle>
+            <CardTitle dir={isRTL ? "rtl" : "ltr"}>{t("title")}</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
@@ -69,15 +75,15 @@ const AddLogoForm: FC<AddLogoFormProps> = ({ logoUrl }) => {
               name="logoUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>إضافة شعار إلى موقع الويب الخاص بك.</FormLabel>
+                  <FormLabel dir={isRTL ? "rtl" : "ltr"}>{t("label")}</FormLabel>
                   <FormControl>
                     <ImageUploaderS3
                       fileUrl={form.watch("logoUrl")}
                       onChnage={field.onChange}
                     />
                   </FormControl>
-                  <FormDescription>
-                    يُسمح فقط باستخدام png وjpg وsvgs
+                  <FormDescription dir={isRTL ? "rtl" : "ltr"}>
+                    {t("description")}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -91,7 +97,7 @@ const AddLogoForm: FC<AddLogoFormProps> = ({ logoUrl }) => {
               type="submit"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              تاكيد
+              {t("confirm")}
             </Button>
           </CardFooter>
         </Card>

@@ -24,6 +24,8 @@ import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 import { Switch } from "@ui/components/ui/switch";
+import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
 
 interface DisableSalesFormProps {
   dCoursesHomeScreen: boolean;
@@ -45,6 +47,10 @@ const WebsiteLayoutForm: FC<DisableSalesFormProps> = ({
   enableSalesBanner,
   itemsAlignment,
 }) => {
+  const t = useTranslations("websiteSettings.forms.layout");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
+
   const mutation = trpc.changeLayoutSettings.useMutation({
     onSuccess: () => {
       maketoast.success();
@@ -78,7 +84,7 @@ const WebsiteLayoutForm: FC<DisableSalesFormProps> = ({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card className="border rounded-xl shadow-none w-full h-full">
           <CardHeader>
-            <CardTitle>بعض الإعدادات العامة</CardTitle>
+            <CardTitle dir={isRTL ? "rtl" : "ltr"}>{t("title")}</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
@@ -87,7 +93,7 @@ const WebsiteLayoutForm: FC<DisableSalesFormProps> = ({
               render={({ field }) => (
                 <FormItem className="flex flex-row items-center justify-between rounded-lg  p-3 ">
                   <div className="space-y-0.5">
-                    <FormLabel>عرض الدورات في الصفحة الرئيسية</FormLabel>
+                    <FormLabel dir={isRTL ? "rtl" : "ltr"}>{t("showCourses")}</FormLabel>
                   </div>
                   <FormControl>
                     <div dir="ltr">
@@ -106,8 +112,8 @@ const WebsiteLayoutForm: FC<DisableSalesFormProps> = ({
               render={({ field }) => (
                 <FormItem className="flex flex-row items-center justify-between rounded-lg  p-3 ">
                   <div className="space-y-0.5">
-                    <FormLabel>
-                      عرض المنتجات الرقمية في الصفحة الرئيسية
+                    <FormLabel dir={isRTL ? "rtl" : "ltr"}>
+                      {t("showProducts")}
                     </FormLabel>
                   </div>
                   <FormControl>
@@ -127,7 +133,7 @@ const WebsiteLayoutForm: FC<DisableSalesFormProps> = ({
               render={({ field }) => (
                 <FormItem className="flex flex-row items-center justify-between rounded-lg  p-3">
                   <div className="space-y-0.5">
-                    <FormLabel>عرض شريط التخفيضات</FormLabel>
+                    <FormLabel dir={isRTL ? "rtl" : "ltr"}>{t("showSalesBanner")}</FormLabel>
                   </div>
                   <FormControl>
                     <div dir="ltr">
@@ -146,7 +152,7 @@ const WebsiteLayoutForm: FC<DisableSalesFormProps> = ({
               render={({ field }) => (
                 <FormItem className="flex flex-row items-center justify-between rounded-lg  p-3">
                   <div className="space-y-0.5">
-                    <FormLabel>تخطيط الدورات في الوسط</FormLabel>
+                    <FormLabel dir={isRTL ? "rtl" : "ltr"}>{t("centerLayout")}</FormLabel>
                   </div>
                   <FormControl>
                     <div dir="ltr">
@@ -167,7 +173,7 @@ const WebsiteLayoutForm: FC<DisableSalesFormProps> = ({
               type="submit"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              تاكيد
+              {t("confirm")}
             </Button>
           </CardFooter>
         </Card>

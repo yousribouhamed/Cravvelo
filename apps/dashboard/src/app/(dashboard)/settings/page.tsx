@@ -6,9 +6,11 @@ import {
   getMyUserAction,
 } from "@/src/actions/user.actions";
 import GeneralSettingsHeader from "@/src/modules/settings/components/general-settings-header";
+import { getServerTranslations } from "@/src/lib/i18n/utils";
 
 const Page = async ({}) => {
   const user = await getMyUserAction();
+  const t = await getServerTranslations("settings");
 
   const notifications = await getAllNotifications({
     accountId: user?.accountId,
@@ -20,7 +22,7 @@ const Page = async ({}) => {
         <Header
           notifications={notifications}
           user={user}
-          title="الاعدادات العامة"
+          title={t("title")}
         />
 
         <GeneralSettingsHeader />

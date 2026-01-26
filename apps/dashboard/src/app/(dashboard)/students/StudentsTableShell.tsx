@@ -3,10 +3,9 @@ import { DataTable } from "@/src/components/data-table/tables";
 import { Student } from "database";
 import type { FC } from "react";
 import { trpc } from "@/src/app/_trpc/client";
-import { StudentsColumns } from "@/src/components/data-table/columns/students";
+import { useStudentsColumns } from "@/src/components/data-table/columns/students";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DataTableLoading } from "@/src/components/data-table/table-helpers/table-loading";
-import DeleteCourseModel from "@/src/components/models/delete-course-modal";
 
 interface StudentsTableShellProps {
   initialData: Student[];
@@ -14,6 +13,7 @@ interface StudentsTableShellProps {
 
 const StudentsTableShell: FC<StudentsTableShellProps> = ({ initialData }) => {
   const isMounted = useMounted();
+  const columns = useStudentsColumns();
 
   const { data, refetch } = trpc.getAllStudents.useQuery(undefined, {
     initialData: initialData,
@@ -25,7 +25,12 @@ const StudentsTableShell: FC<StudentsTableShellProps> = ({ initialData }) => {
 
   return (
     <div className="w-full min-h-[300px] h-fit flex flex-col mt-8">
-      <DataTable columns={StudentsColumns} data={data} />
+      <DataTable 
+        columns={columns} 
+        data={data || []} 
+        showSearch={true}
+        searchColumns={["full_name", "email", "phone"]}
+      />
     </div>
   );
 };

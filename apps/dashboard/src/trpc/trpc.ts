@@ -1,4 +1,4 @@
-import { currentUser } from "@clerk/nextjs/server";
+import { getCurrentUserSafe } from "@/src/lib/clerk-utils";
 import { TRPCError, initTRPC } from "@trpc/server";
 import { prisma } from "database/src";
 
@@ -6,10 +6,13 @@ const t = initTRPC.create();
 const middleware = t.middleware;
 
 const isAuth = middleware(async (opts) => {
-  const user = await currentUser();
+  const user = await getCurrentUserSafe();
 
   if (!user || !user.id) {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
+    throw new TRPCError({ 
+      code: "UNAUTHORIZED",
+      message: "Authentication required. Please sign in to continue."
+    });
   }
 
   const account = await prisma.account.findUnique({
