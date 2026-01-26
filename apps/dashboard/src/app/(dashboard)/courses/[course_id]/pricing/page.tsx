@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import AddPricingForm from "@/src/components/forms/course-forms/add-pricing-form";
 import { prisma } from "database/src";
 import useHaveAccess from "@/src/hooks/use-have-access";
+import { getServerTranslations } from "@/src/lib/i18n/utils";
 
 export const fetchCache = "force-no-store";
 
@@ -14,6 +15,7 @@ interface PageProps {
 
 export default async function Page({ params }: PageProps) {
   const { course_id } = await params;
+  const t = await getServerTranslations("courses.pageTitles");
   const [user, course] = await Promise.all([
     useHaveAccess(),
     prisma.course.findUnique({
@@ -56,7 +58,7 @@ export default async function Page({ params }: PageProps) {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start">
-        <Header notifications={[]} user={user} title="التسعير" goBack />
+        <Header notifications={[]} user={user} title={t("pricing")} goBack />
         <CourseHeader />
         <AddPricingForm course={course} pricingPlans={pricingPlans} />
       </main>

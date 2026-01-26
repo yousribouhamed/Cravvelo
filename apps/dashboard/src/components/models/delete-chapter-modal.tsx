@@ -2,6 +2,7 @@
 
 import { trpc } from "@/src/app/_trpc/client";
 import { useMounted } from "@/src/hooks/use-mounted";
+import { useTranslations } from "next-intl";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,6 +33,7 @@ const DeleteChapter: FC<DeleteChapterProps> = ({
   chapterId,
   refetch,
 }) => {
+  const t = useTranslations("courses.deleteChapter");
   const mounted = useMounted();
 
   const mutation = trpc.deleteChapter.useMutation({
@@ -53,20 +55,18 @@ const DeleteChapter: FC<DeleteChapterProps> = ({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="w-full flex justify-start">
-            هل أنت متأكد تمامًا من رغبتك في حذف هذا الفصل؟
+            {t("confirmTitle")}
           </AlertDialogTitle>
           <AlertDialogDescription className="w-full my-4 flex justify-start">
             <div dir="rtl">
               <p className="text-start">
-                {" "}
-                لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف ملفك نهائيًا
-                الحساب وإزالة بياناتك من خوادمنا.
+                {t("confirmDescription")}
               </p>
             </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className=" w-full flex justify-start gap-x-4">
-          <AlertDialogCancel>الإلغاء</AlertDialogCancel>
+          <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
           <Button
             className=" flex items-center gap-x-2"
             disabled={mutation.isLoading}
@@ -80,7 +80,7 @@ const DeleteChapter: FC<DeleteChapterProps> = ({
             }}
           >
             {mutation.isLoading ? <LoadingSpinner /> : null}
-            حذف الفصل
+            {t("delete")}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -25,26 +25,33 @@ import { Card, CardContent } from "@ui/components/ui/card";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
 import { useState } from "react";
+import * as React from "react";
 import { maketoast } from "../../toasts";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { Product } from "database";
 import { HelpCircle } from "lucide-react";
-
-const PricingFormSchema = z.object({
-  price: z.string({ required_error: "يرجى ملئ الحقل" }),
-  compareAtPrice: z.string({ required_error: "يرجى ملئ الحقل" }),
-});
+import { useTranslations } from "next-intl";
 
 interface ProductPricingFormProps {
   product: Product;
 }
 
 function ProductPricingForm({ product }: ProductPricingFormProps) {
+  const t = useTranslations("productForms.pricingForm");
+  const tForm = useTranslations("courseForms");
   const router = useRouter();
   const path = usePathname();
   const productId = getValueFromUrl(path, 2);
   const [isFree, setIsFree] = useState(product?.price === 0 ? true : false);
-  const mutation = trpc.priceProduct.useMutation({
+  
+  const createPricingSchema = () => z.object({
+    price: z.string().min(1, { message: tForm("requiredField") }),
+    compareAtPrice: z.string().min(1, { message: tForm("requiredField") }),
+  });
+  
+  const PricingFormSchema = createPricingSchema();
+  
+  const mutation = trpc.products.priceProduct.useMutation({
     onSuccess: () => {
       maketoast.success();
       router.push(`/products/${product.id}/publishing`);
@@ -70,7 +77,9 @@ function ProductPricingForm({ product }: ProductPricingFormProps) {
   async function onSubmit(values: z.infer<typeof PricingFormSchema>) {
     await mutation.mutateAsync({
       productId,
+      pricingType: isFree ? "FREE" : "ONE_TIME",
       price: isFree ? 0 : Number(values.price),
+      compareAtPrice: isFree ? 0 : Number(values.compareAtPrice) || undefined,
     });
   }
 
@@ -84,9 +93,8 @@ function ProductPricingForm({ product }: ProductPricingFormProps) {
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-8 w-full "
             >
-              <FormLabel className="text-xl  block font-bold text-black">
-                {" "}
-                اختر أفضل الأسعار التي تناسب المنتج الخاصة بك
+              <FormLabel className="text-xl block font-bold text-foreground">
+                {t("pricingDescription")}
               </FormLabel>
 
               <div className="grid grid-cols-2 w-full h-fit gap-x-2">
@@ -97,14 +105,14 @@ function ProductPricingForm({ product }: ProductPricingFormProps) {
                     <FormItem>
                       <FormLabel asChild>
                         <div className="w-full h-fit flex gap-x-3 items-center">
-                          <span>سعر</span>
+                          <span>{t("price")}</span>
                           <Tooltip delayDuration={0}>
                             <TooltipTrigger>
-                              <HelpCircle className="text-black w-4 h-4" />
+                              <HelpCircle className="text-foreground w-4 h-4" />
                             </TooltipTrigger>
                             <TooltipContent className="max-w-[150px]">
                               <p>
-                                يجب على سعر المنتج ان يكون اكثر من 100 دينار
+                                {t("priceTooltip")}
                               </p>
                             </TooltipContent>
                           </Tooltip>
@@ -112,7 +120,7 @@ function ProductPricingForm({ product }: ProductPricingFormProps) {
                       </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="0 DZD"
+                          placeholder={t("pricePlaceholder")}
                           disabled={isFree}
                           {...field}
                         />
@@ -130,13 +138,13 @@ function ProductPricingForm({ product }: ProductPricingFormProps) {
                     <FormItem>
                       <FormLabel asChild>
                         <div className="w-full h-fit flex gap-x-3 items-center">
-                          <span> مقارنة بالسعر</span>
+                          <span>{t("compareAtPrice")}</span>
                           <Tooltip delayDuration={0}>
                             <TooltipTrigger>
-                              <HelpCircle className="text-black w-4 h-4" />
+                              <HelpCircle className="text-foreground w-4 h-4" />
                             </TooltipTrigger>
                             <TooltipContent className="max-w-[150px]">
-                              <p>هذا السعر سوف يظهم انه مشطب عند عرض المنتج</p>
+                              <p>{t("compareAtPriceTooltip")}</p>
                             </TooltipContent>
                           </Tooltip>
                         </div>
@@ -144,7 +152,7 @@ function ProductPricingForm({ product }: ProductPricingFormProps) {
                       <FormControl>
                         <Input
                           disabled={isFree}
-                          placeholder="0 DZD"
+                          placeholder={t("compareAtPricePlaceholder")}
                           {...field}
                         />
                       </FormControl>
@@ -155,9 +163,9 @@ function ProductPricingForm({ product }: ProductPricingFormProps) {
                 />
               </div>
 
-              <div className="flex flex-row bg-white items-center justify-between rounded-lg border p-3 shadow-sm">
+              <div className="flex flex-row bg-card items-center justify-between rounded-lg border border-border p-3 shadow-sm">
                 <div className="space-y-0.5">
-                  <FormLabel>جعل هذه الدورة مجانية</FormLabel>
+                  <FormLabel>{t("makeFree")}</FormLabel>
                 </div>
 
                 <div dir="ltr">
@@ -187,7 +195,7 @@ function ProductPricingForm({ product }: ProductPricingFormProps) {
                 size="lg"
               >
                 {mutation.isLoading ? <LoadingSpinner /> : null}
-                حفظ والمتابعة
+                {t("saveAndContinue")}
               </Button>
               <Button
                 type="button"
@@ -196,8 +204,7 @@ function ProductPricingForm({ product }: ProductPricingFormProps) {
                 variant="secondary"
                 size="lg"
               >
-                {" "}
-                إلغاء والعودة
+                {t("cancelAndGoBack")}
               </Button>
             </CardContent>
           </Card>

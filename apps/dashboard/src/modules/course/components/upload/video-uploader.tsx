@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslations } from "next-intl";
 import Dropzone from "react-dropzone";
 import { Progress } from "@ui/components/ui/progress";
 import { cn } from "@ui/lib/utils";
@@ -36,6 +37,7 @@ export const EnhancedVideoUploader: React.FC<EnhancedVideoUploaderProps> = ({
   isUploading,
   className,
 }) => {
+  const t = useTranslations("courses.videoUploader");
   const [dragError, setDragError] = React.useState<string>("");
 
   const formatFileSize = (bytes: number): string => {
@@ -67,13 +69,13 @@ export const EnhancedVideoUploader: React.FC<EnhancedVideoUploaderProps> = ({
         if (rejectedFiles.length > 0) {
           const rejection = rejectedFiles[0];
           if (rejection.errors.some((e) => e.code === "file-too-large")) {
-            setDragError("حجم الملف كبير جداً. الحد الأقصى 1GB");
+            setDragError(t("errors.fileTooLarge"));
           } else if (
             rejection.errors.some((e) => e.code === "file-invalid-type")
           ) {
-            setDragError("نوع الملف غير مدعوم. يرجى استخدام MP4, MOV, أو AVI");
+            setDragError(t("errors.invalidType"));
           } else {
-            setDragError("هناك خطأ في الملف المحدد");
+            setDragError(t("errors.fileError"));
           }
           return;
         }
@@ -96,7 +98,7 @@ export const EnhancedVideoUploader: React.FC<EnhancedVideoUploaderProps> = ({
         <div
           {...getRootProps()}
           className={cn(
-            "group relative my-8 grid h-[250px] w-full cursor-pointer place-items-center rounded-lg border-2 border-dashed border-muted-foreground/25 px-5 py-2.5 text-center transition bg-card dark:bg-gray-800 hover:bg-muted/25 dark:hover:bg-muted/50",
+            "group relative my-8 grid h-[250px] w-full cursor-pointer place-items-center rounded-lg border-2 border-dashed border-muted-foreground/25 px-5 py-2.5 text-center transition bg-card hover:bg-muted/25 dark:hover:bg-muted/50",
             "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all duration-300",
             isDragActive && "border-muted-foreground/50",
             isFocused && "border-primary",
@@ -112,10 +114,10 @@ export const EnhancedVideoUploader: React.FC<EnhancedVideoUploaderProps> = ({
               <XCircle className="h-8 w-8 text-red-500 mb-2" />
               <p className="mb-2 text-sm text-zinc-700 dark:text-zinc-50">
                 <span className="font-semibold mx-2 text-red-500">
-                  {dragError || "هذا الملف غير مقبول"}
+                  {dragError || t("errors.fileNotAccepted")}
                 </span>
                 <br />
-                الرجاء ادخال ملفات فيديو صحيحة
+                {t("errors.pleaseEnterValid")}
               </p>
             </div>
           ) : (
@@ -123,9 +125,9 @@ export const EnhancedVideoUploader: React.FC<EnhancedVideoUploaderProps> = ({
               if (isGeneratingUrl) {
                 return (
                   <div className="flex flex-col items-center justify-center gap-2">
-                    <Upload className="h-8 w-8 text-blue-500 dark:text-blue-400 animate-pulse" />
+                    <Upload className="h-8 w-8 text-blue-500 dark:text-blue-400 dark:group-hover:text-white animate-pulse transition-colors duration-200" />
                     <p className="text-base font-medium text-muted-foreground">
-                      جاري تحضير رفع الفيديو...
+                      {t("preparing")}
                     </p>
                   </div>
                 );
@@ -141,7 +143,7 @@ export const EnhancedVideoUploader: React.FC<EnhancedVideoUploaderProps> = ({
                       src="/video.png"
                     />
                     <div className="text-center">
-                      <p className="text-lg font-bold text-foreground">جاري رفع الفيديو...</p>
+                      <p className="text-lg font-bold text-foreground">{t("uploading")}</p>
                       <p className="text-sm text-muted-foreground">
                         {selectedVideo.file.name}
                       </p>
@@ -179,7 +181,7 @@ export const EnhancedVideoUploader: React.FC<EnhancedVideoUploaderProps> = ({
 
                     <CheckCircle className="w-12 h-12 text-green-500 dark:text-green-400 mb-2" />
                     <p className="text-green-600 dark:text-green-400 font-semibold">
-                      تم اختيار الفيديو
+                      {t("videoSelected")}
                     </p>
 
                     <div className="text-center space-y-1">
@@ -203,7 +205,7 @@ export const EnhancedVideoUploader: React.FC<EnhancedVideoUploaderProps> = ({
                       className="mt-2"
                     >
                       <Eye className="w-4 h-4 mr-2" />
-                      معاينة الفيديو
+                      {t("previewVideo")}
                     </Button>
                   </div>
                 );
@@ -218,13 +220,13 @@ export const EnhancedVideoUploader: React.FC<EnhancedVideoUploaderProps> = ({
                     src="/video.png"
                   />
                   <p className="mt-2 text-base font-medium text-muted-foreground">
-                    اسحب و اسقط الملف هنا او اضغط لاختيار الملف
+                    {t("dragDropText")}
                   </p>
                   <p className="text-sm text-muted-foreground dark:text-gray-400">
-                    يرجى تحميل الملف بحجم أقل من 1GB
+                    {t("fileSizeNote")}
                   </p>
                   <p className="text-xs text-muted-foreground dark:text-gray-500">
-                    الصيغ المدعومة: MP4, MOV, AVI
+                    {t("supportedFormats")}
                   </p>
                 </div>
               );

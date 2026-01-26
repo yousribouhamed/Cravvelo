@@ -4,55 +4,53 @@ import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { usePathname } from "next/navigation";
 import { getValueFromUrl } from "../lib/utils";
-
-const getLinks = ({ id }: { id: string }) => {
-  const links = [
-    {
-      name: "محتوى المنتج",
-      href: `/products/${id}/content`,
-    },
-    {
-      name: "التسعير",
-      href: `/products/${id}/pricing`,
-    },
-    {
-      name: "المعاينة والنشر",
-      href: `/products/${id}/publishing`,
-    },
-  ];
-
-  return links;
-};
+import { useTranslations } from "next-intl";
 
 function ProductsHeader({ className, ...props }: ExamplesNavProps) {
   const pathname = usePathname();
-
+  const t = useTranslations("products.productHeader.links");
   const courseId = getValueFromUrl(pathname, 2);
 
-  const links = getLinks({ id: courseId });
+  const links = [
+    {
+      name: t("productContent"),
+      href: `/products/${courseId}/content`,
+    },
+    {
+      name: t("pricing"),
+      href: `/products/${courseId}/pricing`,
+    },
+    {
+      name: t("previewAndPublish"),
+      href: `/products/${courseId}/publishing`,
+    },
+  ];
 
   return (
-    <div className="relative  w-full my-4 h-[60px]">
+    <div className="relative w-full my-4 h-[60px]">
       <div
         className={cn(
-          "mb-4 w-fit flex items-center ",
-          ` w-full  bg-white  border flex items-center justify-start   rounded-lg  h-full`
+          "mb-4 w-full flex items-center justify-start rounded-lg h-full border",
+          "bg-card border-border"
         )}
       >
-        {links.map((item, index) => (
-          <Link
-            href={item.href}
-            key={item.href}
-            className={cn(
-              "flex h-[60px] items-center justify-center border-b px-4 text-center text-sm transition-colors hover:text-primary",
-              pathname?.includes(item.href) || (index === 0 && pathname === "/")
-                ? "border-b-2 border-[#F0B110] text-black font-bold"
-                : ""
-            )}
-          >
-            {item.name}
-          </Link>
-        ))}
+        {links.map((item, index) => {
+          const isActive = pathname?.includes(item.href) || (index === 0 && pathname === "/");
+          return (
+            <Link
+              href={item.href}
+              key={item.href}
+              className={cn(
+                "flex h-[60px] items-center justify-center px-4 text-center text-sm transition-colors hover:text-primary text-foreground",
+                isActive
+                  ? "border-b-2 border-[#F0B110] font-bold text-foreground dark:text-white"
+                  : "border-b border-border"
+              )}
+            >
+              {item.name}
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

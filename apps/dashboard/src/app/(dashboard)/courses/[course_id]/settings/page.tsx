@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { CourseSettingsForm } from "@/src/components/forms/course-forms/course-settings";
 import { prisma } from "database/src";
 import useHaveAccess from "@/src/hooks/use-have-access";
+import { getServerTranslations } from "@/src/lib/i18n/utils";
 
 export const fetchCache = "force-no-store";
 
@@ -23,7 +24,7 @@ const getAllNotifications = async ({ accountId }: { accountId: string }) => {
 
 export default async function Page({ params }: PageProps) {
   const { course_id } = await params;
-
+  const t = await getServerTranslations("courses.pageTitles");
   const user = await useHaveAccess();
 
   const [course, notifications] = await Promise.all([
@@ -47,7 +48,7 @@ export default async function Page({ params }: PageProps) {
         <Header
           notifications={notifications}
           user={user}
-          title={"اعدادات الدورة"}
+          title={t("courseSettings")}
           goBack
         />
         <CourseHeader />

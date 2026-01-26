@@ -7,6 +7,7 @@ import {
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
+import { useTranslations } from "next-intl";
 import { Module } from "@/src/types";
 import { cn } from "@ui/lib/utils";
 import { useMounted } from "@/src/hooks/use-mounted";
@@ -55,6 +56,7 @@ const ModulesList: FC<ModulesListProps> = ({
   courseId,
   initialModules,
 }) => {
+  const t = useTranslations("courses.modulesList");
   const [modules, setModules] = useState<Module[]>(initialModules || []);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [dragStartIndex, setDragStartIndex] = useState<number | null>(null);
@@ -82,11 +84,11 @@ const ModulesList: FC<ModulesListProps> = ({
   // TRPC mutations
   const updateOrderMutation = trpc.updateModulesOrders.useMutation({
     onSuccess: () => {
-      maketoast.success("تم تحديث ترتيب المواد بنجاح");
+      maketoast.success(t("messages.updateOrderSuccess"));
     },
     onError: (error) => {
       console.error("Failed to update modules order:", error);
-      maketoast.error("فشل في تحديث ترتيب المواد");
+      maketoast.error(t("messages.updateOrderError"));
       // Revert to previous state
       if (initialModules) {
         setModules(initialModules);
@@ -96,21 +98,21 @@ const ModulesList: FC<ModulesListProps> = ({
 
   const toggleModuleVisibility = trpc.toggleModuleVisibility?.useMutation({
     onSuccess: () => {
-      maketoast.success("تم تحديث حالة المادة بنجاح");
+      maketoast.success(t("messages.updateVisibilitySuccess"));
     },
     onError: (error) => {
       console.error("Failed to toggle module visibility:", error);
-      maketoast.error("فشل في تحديث حالة المادة");
+      maketoast.error(t("messages.updateVisibilityError"));
     },
   });
 
   const deleteModuleMutation = trpc.deleteMaterial.useMutation({
     onSuccess: () => {
-      maketoast.success("تم تحديث حالة المادة بنجاح");
+      maketoast.success(t("messages.updateVisibilitySuccess"));
     },
     onError: (error) => {
       console.error("Failed to toggle module visibility:", error);
-      maketoast.error("فشل في تحديث حالة المادة");
+      maketoast.error(t("messages.updateVisibilityError"));
     },
   });
 
@@ -123,7 +125,7 @@ const ModulesList: FC<ModulesListProps> = ({
       type === "video" ||
       ["mp4", "webm", "ogg", "avi", "mov"].includes(fileExtension || "")
     ) {
-      return <Video className="h-4 w-4 text-blue-600" />;
+      return <Video className="h-4 w-4 text-primary" />;
     } else if (
       type === "document" ||
       ["pdf", "doc", "docx", "txt"].includes(fileExtension || "")
@@ -152,19 +154,19 @@ const ModulesList: FC<ModulesListProps> = ({
     if (module.isPublished === false) {
       return (
         <Badge variant="secondary" className="text-xs">
-          مسودة
+          {t("badge.draft")}
         </Badge>
       );
     }
     if (module.isFree) {
       return (
         <Badge variant="outline" className="text-xs text-green-600">
-          مجاني
+          {t("badge.free")}
         </Badge>
       );
     }
     return null;
-  }, []);
+  }, [t]);
 
   // Optimized drag handlers
   const onDragStart = useCallback((start: any) => {
@@ -212,10 +214,10 @@ const ModulesList: FC<ModulesListProps> = ({
         }, 300);
       } catch (error) {
         console.error("Error during module drag operation:", error);
-        maketoast.error("حدث خطأ أثناء إعادة ترتيب المواد");
+        maketoast.error(t("messages.reorderError"));
       }
     },
-    [chapterID, updateOrderMutation]
+    [chapterID, updateOrderMutation, t]
   );
 
   // Handle visibility toggle
@@ -261,8 +263,8 @@ const ModulesList: FC<ModulesListProps> = ({
   // Empty state
   if (sortedModules.length === 0) {
     return (
-      <div className="mr-12 min-h-[100px] flex items-center justify-center bg-gray-50 border-2 border-dashed border-gray-200 rounded-lg">
-        <p className="text-gray-500 text-sm">لا توجد مواد في هذا الفصل</p>
+      <div className="mr-12 min-h-[100px] flex items-center justify-center bg-card border-2 border-dashed border-border rounded-lg">
+        <p className="text-muted-foreground text-sm">{t("emptyState.noMaterials")}</p>
       </div>
     );
   }
@@ -277,7 +279,7 @@ const ModulesList: FC<ModulesListProps> = ({
               ref={provided.innerRef}
               className={cn(
                 "mr-12 min-h-[10px] h-fit transition-all duration-200",
-                snapshot.isDraggingOver && "bg-blue-50 rounded-lg p-2"
+                snapshot.isDraggingOver && "bg-accent/30 rounded-lg p-2"
               )}
             >
               {sortedModules.map((module, index) => {
@@ -299,15 +301,15 @@ const ModulesList: FC<ModulesListProps> = ({
                     {(provided, snapshot) => (
                       <div
                         className={cn(
-                          "group flex items-center gap-x-3 bg-card dark:bg-gray-800 border border-border dark:border-gray-700 h-fit min-h-[50px] justify-between rounded-lg my-2 p-3 text-sm transition-all duration-200 hover:shadow-sm",
+                          "group flex items-center gap-x-3 bg-card border border-border h-fit min-h-[50px] justify-between rounded-lg my-2 p-3 text-sm transition-all duration-200 hover:shadow-sm",
                           snapshot.isDragging &&
-                            "shadow-lg scale-105 rotate-1 z-50 bg-card dark:bg-gray-800",
+                            "shadow-lg scale-105 rotate-1 z-50 bg-card",
                           dragStartIndex === index &&
                             !snapshot.isDragging &&
                             "scale-95",
                           !module.isPublished &&
-                            "bg-muted dark:bg-gray-700 border-muted dark:border-gray-600 opacity-75",
-                          isHovered && "border-blue-300 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/20"
+                            "bg-muted border-muted opacity-75",
+                          isHovered && "border-primary/30 bg-accent/30"
                         )}
                         ref={provided.innerRef}
                         {...provided.draggableProps}
@@ -319,8 +321,9 @@ const ModulesList: FC<ModulesListProps> = ({
                           {/* Drag Handle */}
                           <div
                             className={cn(
-                              "flex-shrink-0 p-1 rounded cursor-grab active:cursor-grabbing transition-colors",
-                              "hover:bg-gray-100 dark:hover:bg-gray-700 group-hover:bg-gray-100 dark:group-hover:bg-gray-700",
+                              "flex-shrink-0 p-1 rounded cursor-grab active:cursor-grabbing transition-colors duration-200",
+                              "text-muted-foreground hover:text-foreground",
+                              "hover:bg-accent/50 group-hover:bg-accent/50",
                               snapshot.isDragging && "cursor-grabbing",
                               isDragDisabled && "cursor-not-allowed opacity-50"
                             )}
@@ -332,19 +335,19 @@ const ModulesList: FC<ModulesListProps> = ({
                               viewBox="0 0 21 20"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
-                              className="transition-opacity group-hover:opacity-80"
+                              className="transition-colors duration-200"
                             >
                               <path
                                 fillRule="evenodd"
                                 clipRule="evenodd"
                                 d="M6.51758 4.27791C6.51758 3.59749 7.06917 3.0459 7.74959 3.0459C8.43002 3.0459 8.98161 3.59749 8.98161 4.27791C8.98161 4.95834 8.43002 5.50993 7.74959 5.50993C7.06917 5.50993 6.51758 4.95834 6.51758 4.27791ZM6.51758 9.20597C6.51758 8.52554 7.06917 7.97396 7.74959 7.97396C8.43002 7.97396 8.98161 8.52554 8.98161 9.20597C8.98161 9.8864 8.43002 10.438 7.74959 10.438C7.06917 10.438 6.51758 9.8864 6.51758 9.20597ZM6.51758 14.134C6.51758 13.4536 7.06917 12.902 7.74959 12.902C8.43002 12.902 8.98161 13.4536 8.98161 14.134C8.98161 14.8145 8.43002 15.366 7.74959 15.366C7.06917 15.366 6.51758 14.8145 6.51758 14.134Z"
-                                fill="#6B7280"
+                                fill="currentColor"
                               />
                               <path
                                 fillRule="evenodd"
                                 clipRule="evenodd"
                                 d="M11.9385 4.27791C11.9385 3.59749 12.49 3.0459 13.1705 3.0459C13.851 3.0459 14.4025 3.59749 14.4025 4.27791C14.4025 4.95834 13.851 5.50993 13.1705 5.50993C12.49 5.50993 11.9385 4.95834 11.9385 4.27791ZM11.9385 9.20597C11.9385 8.52554 12.49 7.97396 13.1705 7.97396C13.851 7.97396 14.4025 8.52554 14.4025 9.20597C14.4025 9.8864 13.851 10.438 13.1705 10.438C12.49 10.438 11.9385 9.8864 11.9385 9.20597ZM11.9385 14.134C11.9385 13.4536 12.49 12.902 13.1705 12.902C13.851 12.902 14.4025 13.4536 14.4025 14.134C14.4025 14.8145 13.851 15.366 13.1705 15.366C12.49 15.366 11.9385 14.8145 11.9385 14.134Z"
-                                fill="#6B7280"
+                                fill="currentColor"
                               />
                             </svg>
                           </div>
@@ -359,9 +362,9 @@ const ModulesList: FC<ModulesListProps> = ({
                                 <TooltipTrigger asChild>
                                   <Link
                                     href={`/courses/${courseId}/chapters/${chapterID}/${module.id}/update-video`}
-                                    className="text-foreground hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 font-medium truncate flex-1"
+                                    className="text-foreground hover:text-primary transition-colors duration-200 font-medium truncate flex-1"
                                   >
-                                    {module.title || "مادة بدون عنوان"}
+                                    {module.title || t("module.noTitle")}
                                   </Link>
                                 </TooltipTrigger>
                                 <TooltipContent>
@@ -371,7 +374,7 @@ const ModulesList: FC<ModulesListProps> = ({
                             </div>
 
                             {/* Module Metadata */}
-                            <div className="flex items-center gap-x-2 text-xs text-gray-500">
+                            <div className="flex items-center gap-x-2 text-xs text-muted-foreground">
                               {duration && (
                                 <div className="flex items-center gap-x-1">
                                   <Clock className="h-3 w-3" />
@@ -384,7 +387,7 @@ const ModulesList: FC<ModulesListProps> = ({
                                 </span>
                               )}
                               {module.views && (
-                                <span>{module.views} مشاهدة</span>
+                                <span>{module.views} {t("metadata.views")}</span>
                               )}
                             </div>
                           </div>
@@ -399,7 +402,7 @@ const ModulesList: FC<ModulesListProps> = ({
                           {(updateOrderMutation.isLoading ||
                             deleteModuleMutation.isLoading ||
                             toggleModuleVisibility?.isLoading) && (
-                            <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
+                            <Loader2 className="h-4 w-4 animate-spin text-primary" />
                           )}
 
                           {/* Actions Dropdown */}
@@ -412,7 +415,7 @@ const ModulesList: FC<ModulesListProps> = ({
                                 disabled={isDragDisabled}
                               >
                                 <MoreHorizontal className="h-4 w-4" />
-                                <span className="sr-only">فتح القائمة</span>
+                                <span className="sr-only">{t("menu.openMenu")}</span>
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent
@@ -432,7 +435,7 @@ const ModulesList: FC<ModulesListProps> = ({
                                   }`}
                                   className="flex items-center justify-end w-full"
                                 >
-                                  تعديل المادة
+                                  {t("menu.editMaterial")}
                                 </Link>
                               </DropdownMenuItem>
 
@@ -451,12 +454,12 @@ const ModulesList: FC<ModulesListProps> = ({
                                     {module.isPublished ? (
                                       <>
                                         <EyeOff className="h-4 w-4" />
-                                        إخفاء المادة
+                                        {t("menu.hideMaterial")}
                                       </>
                                     ) : (
                                       <>
                                         <Eye className="h-4 w-4" />
-                                        نشر المادة
+                                        {t("menu.publishMaterial")}
                                       </>
                                     )}
                                   </DropdownMenuItem>
@@ -473,7 +476,7 @@ const ModulesList: FC<ModulesListProps> = ({
                                 }
                                 className="text-red-600 hover:bg-red-50 flex items-center justify-end"
                               >
-                                حذف المادة
+                                {t("menu.deleteMaterial")}
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>

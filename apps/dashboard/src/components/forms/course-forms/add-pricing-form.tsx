@@ -53,12 +53,13 @@ interface AddPricingFormProps {
 
 function AddPricingForm({ course, pricingPlans }: AddPricingFormProps) {
   const t = useTranslations("courseForms");
+  const tPricing = useTranslations("courses.pricingForm");
   const currentPlan = pricingPlans?.[0]; // Fixed: added optional chaining
   const router = useRouter();
   const path = usePathname();
   const courseId = getValueFromUrl(path, 2);
 
-  const mutation = trpc.priceCourse.useMutation({
+  const mutation = trpc.course.priceCourse.useMutation({
     onSuccess: () => {
       maketoast.success();
       router.push(`/courses/${courseId}/students-management`);
@@ -151,214 +152,241 @@ function AddPricingForm({ course, pricingPlans }: AddPricingFormProps) {
 
   // Predefined recurring options in days
   const recurringOptions = [
-    { value: "7", label: "أسبوعياً (7 أيام)" },
-    { value: "30", label: "شهرياً (30 يوماً)" },
-    { value: "90", label: "ربع سنوي (90 يوماً)" },
-    { value: "365", label: "سنوياً (365 يوماً)" },
-    { value: "custom", label: "مخصص" },
+    { value: "7", label: tPricing("recurringOptions.weekly") },
+    { value: "30", label: tPricing("recurringOptions.monthly") },
+    { value: "90", label: tPricing("recurringOptions.quarterly") },
+    { value: "365", label: tPricing("recurringOptions.yearly") },
+    { value: "custom", label: tPricing("recurringOptions.custom") },
   ];
 
   return (
-    <div className="w-full space-y-6">
-      {/* Form Section */}
-      <Card>
-        <CardContent className="py-4 space-y-6">
-        
-          <Form {...(form as any)}>
-            <form
-              id="add-pricing"
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-6"
-            >
-              {/* Pricing Type Tabs */}
-              <FormField
-                control={form.control as any}
-                name="pricingType"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="mb-2 block text-sm font-medium">
-                      {t("planType")}
-                    </FormLabel>
-                    <Tabs
-                      value={field.value}
-                      onValueChange={field.onChange}
-                      className="w-full"
-                    >
-                      <TabsList className="grid grid-cols-3 ml-auto rounded-xl border">
-                        <TabsTrigger value="FREE">{t("free")}</TabsTrigger>
-                        <TabsTrigger value="ONE_TIME">{t("oneTime")}</TabsTrigger>
-                        <TabsTrigger value="RECURRING">
-                          {t("recurring")}
-                        </TabsTrigger>
-                      </TabsList>
-                    </Tabs>
-                    <FormMessage />
-                  </FormItem>
+    <div className="w-full h-fit grid grid-cols-2 md:grid-cols-3 mt-4 gap-x-8">
+      <div className="col-span-2 w-full min-h-full h-fit pb-6">
+        <Form {...form}>
+          <form
+            id="add-pricing"
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-8"
+          >
+            <FormLabel className="text-xl block font-bold text-foreground">
+              {tPricing("pricingSettings")}
+            </FormLabel>
+            <FormLabel className="text-md block text-muted-foreground">
+              {tPricing("pricingDescription")}
+            </FormLabel>
+            {/* Pricing Type Tabs */}
+            <FormField
+              control={form.control}
+              name="pricingType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="mb-2 block text-sm font-medium">
+                    {t("planType")}
+                  </FormLabel>
+                  <Tabs
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    className="w-full"
+                  >
+                    <TabsList className="grid grid-cols-3 w-full rounded-xl border">
+                      <TabsTrigger value="FREE">{t("free")}</TabsTrigger>
+                      <TabsTrigger value="ONE_TIME">{t("oneTime")}</TabsTrigger>
+                      <TabsTrigger value="RECURRING">
+                        {t("recurring")}
+                      </TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Show price fields if not FREE */}
+            {pricingType !== "FREE" && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="price"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{tPricing("price")}</FormLabel>
+                      <FormControl>
+                        <Input type="number" min="0" step="0.01" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="compareAtPrice"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{tPricing("compareAtPrice")}</FormLabel>
+                      <FormControl>
+                        <Input type="number" min="0" step="0.01" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
+
+            {/* ONE_TIME extra fields */}
+            {pricingType === "ONE_TIME" && (
+              <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="accessDuration"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("accessDuration")}</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder={t("selectDuration")} />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="LIMITED">{t("limited")}</SelectItem>
+                          <SelectItem value="UNLIMITED">
+                            {t("unlimited")}
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {accessDuration === "LIMITED" && (
+                  <FormField
+                    control={form.control}
+                    name="accessDurationDays"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("numberOfDays")}</FormLabel>
+                        <FormControl>
+                          <Input type="number" min="1" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 )}
-              />
+              </div>
+            )}
 
-              {/* Show price fields if not FREE */}
-              {pricingType !== "FREE" && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control as any}
-                    name="price"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>السعر</FormLabel>
+            {/* RECURRING extra fields */}
+            {pricingType === "RECURRING" && (
+              <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="recurringDays"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{tPricing("renewalPeriod")}</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
                         <FormControl>
-                          <Input type="number" min="0" step="0.01" {...field} />
+                          <SelectTrigger>
+                            <SelectValue placeholder={tPricing("renewalPeriodPlaceholder")} />
+                          </SelectTrigger>
                         </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control as any}
-                    name="compareAtPrice"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>مقارنة بالسعر</FormLabel>
-                        <FormControl>
-                          <Input type="number" min="0" step="0.01" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              )}
-
-              {/* ONE_TIME extra fields */}
-              {pricingType === "ONE_TIME" && (
-                <div className="space-y-4">
-                  <FormField
-                    control={form.control as any}
-                    name="accessDuration"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t("accessDuration")}</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder={t("selectDuration")} />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="LIMITED">{t("limited")}</SelectItem>
-                            <SelectItem value="UNLIMITED">
-                              {t("unlimited")}
+                        <SelectContent>
+                          {recurringOptions.map((option) => (
+                            <SelectItem
+                              key={option.value}
+                              value={option.value}
+                            >
+                              {option.label}
                             </SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  {accessDuration === "LIMITED" && (
-                    <FormField
-                      control={form.control as any}
-                      name="accessDurationDays"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{t("numberOfDays")}</FormLabel>
-                          <FormControl>
-                            <Input type="number" min="1" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                </div>
-              )}
+                />
 
-              {/* RECURRING extra fields */}
-              {pricingType === "RECURRING" && (
-                <div className="space-y-4">
+                {/* Custom days input */}
+                {recurringDays === "custom" && (
                   <FormField
-                    control={form.control as any}
-                    name="recurringDays"
+                    control={form.control}
+                    name="customRecurringDays"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>فترة التجديد</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="اختر فترة التجديد" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {recurringOptions.map((option) => (
-                              <SelectItem
-                                key={option.value}
-                                value={option.value}
-                              >
-                                {option.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                        <FormLabel>{tPricing("customDays")}</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            min="1"
+                            placeholder={tPricing("customDaysPlaceholder")}
+                            {...field}
+                          />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+                )}
+              </div>
+            )}
 
-                  {/* Custom days input */}
-                  {recurringDays === "custom" && (
-                    <FormField
-                      control={form.control as any}
-                      name="customRecurringDays"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>عدد الأيام المخصص</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="number"
-                              min="1"
-                              placeholder="أدخل عدد الأيام"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  )}
-                </div>
-              )}
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-
-      {/* Save Actions - Now placed under the card */}
-      <Card className="flex flex-col sm:flex-row gap-4 ">
-        <CardContent className="flex items-center justify-end gap-x-4  h-full pt-4 flex-col lg:flex-row ">
-          <Button
-            disabled={mutation.isLoading}
-            type="submit"
-            form="add-pricing"
-            className="flex items-center justify-center gap-x-2"
-          >
-            {mutation.isLoading ? <LoadingSpinner /> : null}
-            {t("saveAndContinue")}
-          </Button>
-          <Button
-            type="button"
-            onClick={() => router.back()}
-            variant="secondary"
-          >
-            {t("cancelAndGoBack")}
-          </Button>
-        </CardContent>
-      </Card>
+            {/* Save Actions */}
+            <Card>
+              <CardContent className="w-full h-fit flex justify-end items-center p-6 gap-x-4">
+                <Button
+                  onClick={() => router.back()}
+                  className="rounded-xl"
+                  variant="secondary"
+                  type="button"
+                >
+                  {t("cancelAndGoBack")}
+                </Button>
+                <Button
+                  disabled={mutation.isLoading}
+                  type="submit"
+                  className="flex items-center gap-x-2 rounded-xl"
+                >
+                  {mutation.isLoading ? <LoadingSpinner /> : null}
+                  {t("saveAndContinue")}
+                </Button>
+              </CardContent>
+            </Card>
+          </form>
+        </Form>
+      </div>
+      <div className="col-span-1 w-full h-full hidden md:block">
+        <Card>
+          <CardContent className="w-full h-fit flex flex-col p-6 space-y-4">
+            <Button
+              disabled={mutation.isLoading}
+              type="submit"
+              form="add-pricing"
+              className="w-full flex items-center gap-x-2"
+              size="lg"
+            >
+              {mutation.isLoading ? <LoadingSpinner /> : null}
+              {t("saveAndContinue")}
+            </Button>
+            <Button
+              onClick={() => router.back()}
+              className="w-full"
+              variant="secondary"
+              type="button"
+              size="lg"
+            >
+              {t("cancelAndGoBack")}
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

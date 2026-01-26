@@ -133,6 +133,8 @@
     "applications": "التطبيقات",
     "appStore": "متجر التطبيقات",
     "productContent": "محتوى المنتج",
+    "productPricing": "تسعير المنتج",
+    "productPublishing": "نشر المنتج",
     "profile": "الملف الشخصي",
     "billing": "الفواتير",
     "invoices": "الفواتير",
@@ -745,6 +747,255 @@
       "minute": "منذ دقيقة واحدة",
       "seconds": "منذ {count} ثواني",
       "now": "الآن"
+    },
+    "chaptersBoard": {
+      "messages": {
+        "updateOrderSuccess": "تم تحديث ترتيب الفصول بنجاح",
+        "updateOrderError": "فشل في تحديث ترتيب الفصول",
+        "updateVisibilitySuccess": "تم تحديث حالة الفصل بنجاح",
+        "updateVisibilityError": "فشل في تحديث حالة الفصل",
+        "reorderError": "حدث خطأ أثناء إعادة ترتيب الفصول"
+      },
+      "emptyState": {
+        "noChapters": "لم تقم بإضافة أي فصل إلى هذه الدورة"
+      },
+      "dragHandle": {
+        "ariaLabel": "سحب لإعادة الترتيب"
+      },
+      "chapter": {
+        "noTitle": "فصل بدون عنوان"
+      },
+      "materials": {
+        "single": "مادة",
+        "plural": "مواد"
+      },
+      "badge": {
+        "hidden": "مختفي"
+      },
+      "menu": {
+        "openMenu": "فتح القائمة",
+        "hideChapter": "إخفاء هذا الفصل",
+        "showChapter": "إظهار هذا الفصل",
+        "editTitle": "تعديل عنوان الفصل",
+        "deleteChapter": "حذف هذا الفصل"
+      },
+      "error": {
+        "loadingError": "حدث خطأ أثناء تحميل الفصول",
+        "retry": "إعادة المحاولة"
+      },
+      "loading": {
+        "loadingChapters": "جاري تحميل الفصول..."
+      }
+    },
+    "modulesList": {
+      "messages": {
+        "updateOrderSuccess": "تم تحديث ترتيب المواد بنجاح",
+        "updateOrderError": "فشل في تحديث ترتيب المواد",
+        "updateVisibilitySuccess": "تم تحديث حالة المادة بنجاح",
+        "updateVisibilityError": "فشل في تحديث حالة المادة",
+        "reorderError": "حدث خطأ أثناء إعادة ترتيب المواد"
+      },
+      "module": {
+        "noTitle": "مادة بدون عنوان"
+      },
+      "emptyState": {
+        "noMaterials": "لا توجد مواد في هذا الفصل"
+      },
+      "badge": {
+        "draft": "مسودة",
+        "free": "مجاني"
+      },
+      "menu": {
+        "openMenu": "فتح القائمة",
+        "editMaterial": "تعديل المادة",
+        "hideMaterial": "إخفاء المادة",
+        "publishMaterial": "نشر المادة",
+        "deleteMaterial": "حذف المادة"
+      },
+      "metadata": {
+        "views": "مشاهدة"
+      }
+    },
+    "addToChapter": {
+      "title": "أضف مواد تعليمية جديدة إلى القسم",
+      "description": "اختر نوع المحتوى الذي تريد إضافته للقسم",
+      "contentTypes": {
+        "video": {
+          "name": "فيديو",
+          "description": "إضافة فيديو تعليمي"
+        }
+      },
+      "footer": {
+        "note": "يمكنك إضافة عدة أنواع من المحتوى لإثراء التجربة التعليمية"
+      }
+    },
+    "courseHeader": {
+      "links": {
+        "courseBuilder": "باني الدورة",
+        "settings": "إعدادات الدورة",
+        "pricing": "التسعير",
+        "studentEngagement": "تفاعل الطلاب",
+        "previewAndPublish": "المعاينة والنشر"
+      }
+    },
+    "createChapter": {
+      "button": "اضافة قسم جديد للدورة",
+      "dialogTitle": "إضافة دورة جديدة",
+      "formLabel": "عنوان الفصل",
+      "formPlaceholder": "أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم",
+      "cancel": "إلغاء",
+      "add": "إضافة جديد"
+    },
+    "updateChapter": {
+      "dialogTitle": "تحديث عنوان هذا الفصل",
+      "formLabel": "الفصل",
+      "formPlaceholder": "أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم",
+      "cancel": "إلغاء",
+      "save": "إضافة جديد"
+    },
+    "deleteChapter": {
+      "confirmTitle": "هل أنت متأكد تمامًا من رغبتك في حذف هذا الفصل؟",
+      "confirmDescription": "لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف ملفك نهائيًا الحساب وإزالة بياناتك من خوادمنا.",
+      "cancel": "الإلغاء",
+      "delete": "حذف الفصل"
+    },
+    "pageTitles": {
+      "courseContent": "محتوى الدورة",
+      "courseSettings": "اعدادات الدورة",
+      "pricing": "التسعير",
+      "studentEngagement": "تفاعل الطلاب",
+      "publishCourse": "ناشر الدورة"
+    },
+    "addVideoForm": {
+      "formTitle": "عنوان مقطع الفيديو",
+      "formPlaceholder": "مثال : دورة في التصميم الجرافيكي للمبتدئين",
+      "addVideoFile": "إضافة ملف فيديو",
+      "validationErrors": {
+        "titleRequired": "عنوان الفيديو مطلوب",
+        "invalidFile": "ملف غير صالح",
+        "prepareFailed": "فشل في تحضير الفيديو",
+        "selectVideo": "يرجى اختيار ملف فيديو",
+        "uploadFailed": "فشل في رفع الفيديو"
+      },
+      "messages": {
+        "uploadSuccess": "تم رفع الفيديو وإنشاء الوحدة بنجاح"
+      },
+      "buttonText": {
+        "uploading": "جاري الرفع {progress}%",
+        "completed": "تم بنجاح ✓",
+        "creating": "جاري إنشاء الوحدة...",
+        "uploadAndSave": "رفع وحفظ"
+      },
+      "cancelAndGoBack": "إلغاء والعودة"
+    },
+    "videoUploader": {
+      "errors": {
+        "fileTooLarge": "حجم الملف كبير جداً. الحد الأقصى 1GB",
+        "invalidType": "نوع الملف غير مدعوم. يرجى استخدام MP4, MOV, أو AVI",
+        "fileError": "هناك خطأ في الملف المحدد",
+        "fileNotAccepted": "هذا الملف غير مقبول",
+        "pleaseEnterValid": "الرجاء ادخال ملفات فيديو صحيحة"
+      },
+      "preparing": "جاري تحضير رفع الفيديو...",
+      "uploading": "جاري رفع الفيديو...",
+      "videoSelected": "تم اختيار الفيديو",
+      "previewVideo": "معاينة الفيديو",
+      "dragDropText": "اسحب و اسقط الملف هنا او اضغط لاختيار الملف",
+      "fileSizeNote": "يرجى تحميل الملف بحجم أقل من 1GB",
+      "supportedFormats": "الصيغ المدعومة: MP4, MOV, AVI"
+    },
+    "courseSettings": {
+      "sections": {
+        "generalSettings": "اعدادات عامة",
+        "generalDescription": "ادر اعدادات دورتك التدريبية بما في ذالك عنوانها و رابطها و الخصائص و اسماء المدرين و امكانية الوصول اليها و العديد من المميزات الاخرى",
+        "courseDetails": "تفاصيل الدورة",
+        "courseDetailsDescription": "من السهل تخصيص المظهر العام لدورتك عن طريق وضع صورة فريدة لها و اظافة وصف تعريفي يجذب الزوار عند زيارة صفحة الهبوط لدورة"
+      },
+      "fields": {
+        "courseTitle": "عنوان الدورة",
+        "courseTitlePlaceholder": "ادخل عنوان الدورة هنا",
+        "thumbnail": "الصورة البارزة لدورة",
+        "youtubeUrl": "أو يمكنك إضافة عنوان URL لفيديو يوتيوب",
+        "youtubeUrlPlaceholder": "https://youtu.be/",
+        "courseResume": "ملخص الدورة",
+        "courseResumePlaceholder": "أدخل ملخصًا للدورة هنا",
+        "whatYouWillLearn": "ماذا يتعلم الناس في الدورة",
+        "courseRequirements": "متطلبات حضور الدورة",
+        "fullDescription": "الوصف الكامل لدورة",
+        "courseLevel": "مستوى الدورة",
+        "courseLevelPlaceholder": "حدد مستوى لعرضه",
+        "courseLevelDescription": "هذا الحقل خاص بتحديد الفئة المستهدفة لهذه الدورات",
+        "courseSound": "الصوت في الدورة",
+        "courseSoundPlaceholder": "حدد صوت لعرضه",
+        "courseSoundDescription": "هذا الحقل خاص بتحديد الفئة المستهدفة لهذه الدورات"
+      },
+      "levels": {
+        "beginner": "مبتدئ",
+        "intermediate": "متوسط",
+        "advanced": "متقدم"
+      },
+      "sounds": {
+        "arabic": "عربي",
+        "french": "فرنسي",
+        "english": "انجليزي"
+      },
+      "seo": {
+        "searchEngineList": "قائمة محرك البحث",
+        "edit": "تعديل",
+        "yourCourseAtSearch": "دورتك الرائعة عند محرك البحث",
+        "seoTitle": "عنوان الموقع عند محرك البحث",
+        "seoTitlePlaceholder": "دورتك الرائعة عند محرك البحث",
+        "addDescription": "أضف وصفًا للموقع",
+        "seoDescriptionPlaceholder": "كل واحد منا يعيش معتمدًا وملتزمًا بمعرفتنا الفردية ووعينا. كل هذا هو ما نسميه الواقع. ومع ذلك، فإن المعرفة والوعي كلاهما ملتبسان. قد تكون حقيقة شخص ما وهمًا لشخص آخر. نحن جميعا نعيش داخل الأوهام الخاصة بنا"
+      },
+      "validation": {
+        "requiredField": "يرجى ملئ الحقل",
+        "invalidYoutubeUrl": "يرجى إدخال رابط يوتيوب صالح"
+      },
+      "saveAndContinue": "حفظ والمتابعة",
+      "cancelAndGoBack": "إلغاء والعودة"
+    },
+    "pricingForm": {
+      "pricingSettings": "إعدادات التسعير",
+      "pricingDescription": "قم بتكوين خطة تسعير الدورة ومدة الوصول",
+      "price": "السعر",
+      "compareAtPrice": "مقارنة بالسعر",
+      "renewalPeriod": "فترة التجديد",
+      "renewalPeriodPlaceholder": "اختر فترة التجديد",
+      "customDays": "عدد الأيام المخصص",
+      "customDaysPlaceholder": "أدخل عدد الأيام",
+      "recurringOptions": {
+        "weekly": "أسبوعياً (7 أيام)",
+        "monthly": "شهرياً (30 يوماً)",
+        "quarterly": "ربع سنوي (90 يوماً)",
+        "yearly": "سنوياً (365 يوماً)",
+        "custom": "مخصص"
+      }
+    },
+    "studentEngagement": {
+      "certificates": "الشهادات",
+      "certificatesDescription": "حدد اعدادات الشهادة في دورتك و متى يحق لطالب الحصول عليها",
+      "enableCertificate": "تفعيل شهادة على الدورة",
+      "contentInteraction": "التفاعل مع المحتوى",
+      "contentInteractionDescription": "حدد ما يمكن للطالب القيام به اثناء الدورة",
+      "allowComments": "السماح بالتعليقات على هذه الدورة",
+      "saveAndContinue": "حفظ والمتابعة",
+      "cancelAndGoBack": "إلغاء والعودة"
+    },
+    "publishCourse": {
+      "courseTitle": "عنوان الدورة",
+      "courseTitlePlaceholder": "عنوان الدورة",
+      "selectionButtons": {
+        "draft": "مسودة",
+        "draftDescription": "سيتم عرضها لفريقك فقط",
+        "availableToAll": "متاح للجميع",
+        "availableToAllDescription": "سيكون مرئيًا للجميع"
+      },
+      "publishCourse": "نشر الدورة",
+      "cancelAndGoBack": "إلغاء والعودة",
+      "validation": {
+        "requiredField": "يرجى ملئ الحقل"
+      }
     }
   },
   "products": {
@@ -797,6 +1048,71 @@
       "minute": "منذ دقيقة واحدة",
       "seconds": "منذ {count} ثواني",
       "now": "الآن"
+    },
+    "productHeader": {
+      "links": {
+        "productContent": "محتوى المنتج",
+        "pricing": "التسعير",
+        "previewAndPublish": "المعاينة والنشر"
+      }
+    }
+  },
+  "productForms": {
+    "contentForm": {
+      "productName": "اسم المنتج",
+      "productNamePlaceholder": "اسم المنتج",
+      "addPdfFile": "إضافة ملف pdf",
+      "addImage": "إضافة صورة",
+      "briefDescription": "وصف مختصر",
+      "briefDescriptionPlaceholder": "أدخل ملخصًا للدورة هنا",
+      "productDescription": "وصف المنتج الخاص بك",
+      "saveAndContinue": "حفظ والمتابعة",
+      "cancelAndGoBack": "إلغاء والعودة"
+    },
+    "pricingForm": {
+      "pricingSettings": "إعدادات التسعير",
+      "pricingDescription": "اختر أفضل الأسعار التي تناسب المنتج الخاصة بك",
+      "price": "سعر",
+      "pricePlaceholder": "0 DZD",
+      "compareAtPrice": "مقارنة بالسعر",
+      "compareAtPricePlaceholder": "0 DZD",
+      "priceTooltip": "يجب على سعر المنتج ان يكون اكثر من 100 دينار",
+      "compareAtPriceTooltip": "هذا السعر سوف يظهم انه مشطب عند عرض المنتج",
+      "makeFree": "جعل هذه الدورة مجانية",
+      "saveAndContinue": "حفظ والمتابعة",
+      "cancelAndGoBack": "إلغاء والعودة"
+    },
+    "publishingForm": {
+      "productTitle": "عنوان المنتج",
+      "productTitlePlaceholder": "عنوان المنتج",
+      "draft": "مسودة",
+      "draftDescription": "سيتم عرضها لك فقط",
+      "availableToAll": "متاح للجميع",
+      "availableToAllDescription": "سيكون مرئيًا للجميع",
+      "publishProduct": "نشر المنتج",
+      "cancelAndGoBack": "إلغاء والعودة"
+    },
+    "pdfUploader": {
+      "dragDropText": "اسحب و الملف المسقط هنا، أو انقر لتحديد الملف",
+      "fileSizeNote": "يرجى تحميل الملف بحجم أقل من",
+      "uploading": "جاري رفع الملف...",
+      "fileUploaded": "تم تحميل الملف الخاص بك",
+      "viewFile": "عرض الملف",
+      "fileRejected": "هذا الملف غير مقبول",
+      "pleaseUploadPdf": "الرجاء ادخال ملفات بصيغة pdf",
+      "errorOccurred": "هناك خطأ ما",
+      "pleaseTryAgain": "يرجى إعادة المحاولة مرة أخرى"
+    },
+    "imageUploader": {
+      "dragDropText": "اسحب وأسقط الملف هنا، أو انقر لتحديد الملف",
+      "fileSizeNote": "يرجى تحميل الملف بحجم أقل من",
+      "uploading": "جاري رفع الصورة...",
+      "imageUploaded": "تم تحميل الصورة الخاصة بك",
+      "fileRejected": "هذا الملف غير مقبول",
+      "pleaseUploadImage": "الرجاء ادخال ملفات بصيغة png , jpeg",
+      "errorOccurred": "هناك خطأ ما",
+      "pleaseTryAgain": "يرجى إعادة المحاولة مرة أخرى",
+      "imageAlt": "صورة المنتج"
     }
   },
   "invoices": {

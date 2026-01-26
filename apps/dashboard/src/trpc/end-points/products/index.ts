@@ -113,6 +113,7 @@ export const products = {
     )
     .mutation(async ({ input, ctx }) => {
       try {
+        const account = await getAccount({ userId: ctx.user.id });
         const result = await ctx.prisma.$transaction(async (tx) => {
           // 1. Check if the product already has a pricing plan
           const existingProductPricing = await tx.productPricingPlan.findFirst({
@@ -165,7 +166,7 @@ export const products = {
             // Create new pricing plan
             pricingPlan = await tx.pricing.create({
               data: {
-                accountId: ctx.user.id, // assuming ctx.user.id is the account ID
+                accountId: account.id,
                 name: `${
                   input.pricingType === "FREE"
                     ? "Free Access"

@@ -5,6 +5,7 @@ import ProductsHeader from "@/src/components/products-header";
 import ProductPublishingForm from "@/src/components/forms/product-forms/product-publishing-form";
 import { prisma } from "database/src";
 import { notFound } from "next/navigation";
+import { getServerTranslations } from "@/src/lib/i18n/utils";
 
 const getAllNotifications = async ({ accountId }: { accountId: string }) => {
   const notifications = await prisma.notification.findMany({
@@ -39,6 +40,7 @@ export default async function Page({ params }: PageProps) {
     useHaveAccess(),
     getData({ id: product_id }),
   ]);
+  const t = await getServerTranslations("pages");
 
   const notifications = await getAllNotifications({
     accountId: user.accountId,
@@ -54,7 +56,7 @@ export default async function Page({ params }: PageProps) {
           notifications={notifications}
           goBack
           user={user}
-          title="نشر المنتج"
+          title={t("productPublishing")}
         />
         <ProductsHeader />
         <div className="w-full pt-8 min-h-[100px] ">

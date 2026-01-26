@@ -133,6 +133,8 @@
     "applications": "Applications",
     "appStore": "App Store",
     "productContent": "Product Content",
+    "productPricing": "Product Pricing",
+    "productPublishing": "Publish Product",
     "profile": "Profile",
     "billing": "Billing",
     "invoices": "Invoices",
@@ -745,6 +747,255 @@
       "minute": "1 minute ago",
       "seconds": "{count} seconds ago",
       "now": "Just now"
+    },
+    "chaptersBoard": {
+      "messages": {
+        "updateOrderSuccess": "Chapters order updated successfully",
+        "updateOrderError": "Failed to update chapters order",
+        "updateVisibilitySuccess": "Chapter visibility updated successfully",
+        "updateVisibilityError": "Failed to update chapter visibility",
+        "reorderError": "Error occurred while reordering chapters"
+      },
+      "emptyState": {
+        "noChapters": "You haven't added any chapters to this course"
+      },
+      "dragHandle": {
+        "ariaLabel": "Drag to reorder"
+      },
+      "chapter": {
+        "noTitle": "Chapter without title"
+      },
+      "materials": {
+        "single": "material",
+        "plural": "materials"
+      },
+      "badge": {
+        "hidden": "Hidden"
+      },
+      "menu": {
+        "openMenu": "Open menu",
+        "hideChapter": "Hide this chapter",
+        "showChapter": "Show this chapter",
+        "editTitle": "Edit chapter title",
+        "deleteChapter": "Delete this chapter"
+      },
+      "error": {
+        "loadingError": "An error occurred while loading chapters",
+        "retry": "Retry"
+      },
+      "loading": {
+        "loadingChapters": "Loading chapters..."
+      }
+    },
+    "modulesList": {
+      "messages": {
+        "updateOrderSuccess": "Materials order updated successfully",
+        "updateOrderError": "Failed to update materials order",
+        "updateVisibilitySuccess": "Material visibility updated successfully",
+        "updateVisibilityError": "Failed to update material visibility",
+        "reorderError": "Error occurred while reordering materials"
+      },
+      "module": {
+        "noTitle": "Material without title"
+      },
+      "emptyState": {
+        "noMaterials": "No materials in this chapter"
+      },
+      "badge": {
+        "draft": "Draft",
+        "free": "Free"
+      },
+      "menu": {
+        "openMenu": "Open menu",
+        "editMaterial": "Edit material",
+        "hideMaterial": "Hide material",
+        "publishMaterial": "Publish material",
+        "deleteMaterial": "Delete material"
+      },
+      "metadata": {
+        "views": "views"
+      }
+    },
+    "addToChapter": {
+      "title": "Add new learning materials to the section",
+      "description": "Choose the type of content you want to add to the section",
+      "contentTypes": {
+        "video": {
+          "name": "Video",
+          "description": "Add educational video"
+        }
+      },
+      "footer": {
+        "note": "You can add multiple types of content to enrich the learning experience"
+      }
+    },
+    "courseHeader": {
+      "links": {
+        "courseBuilder": "Course Builder",
+        "settings": "Course Settings",
+        "pricing": "Pricing",
+        "studentEngagement": "Student Engagement",
+        "previewAndPublish": "Preview and Publish"
+      }
+    },
+    "createChapter": {
+      "button": "Add new section to course",
+      "dialogTitle": "Add new chapter",
+      "formLabel": "Chapter Title",
+      "formPlaceholder": "Enter new chapter title, e.g.: UX Design Course",
+      "cancel": "Cancel",
+      "add": "Add New"
+    },
+    "updateChapter": {
+      "dialogTitle": "Update chapter title",
+      "formLabel": "Chapter",
+      "formPlaceholder": "Enter new chapter title, e.g.: UX Design Course",
+      "cancel": "Cancel",
+      "save": "Save Changes"
+    },
+    "deleteChapter": {
+      "confirmTitle": "Are you absolutely sure you want to delete this chapter?",
+      "confirmDescription": "This action cannot be undone. This will permanently delete the chapter and remove all data from our servers.",
+      "cancel": "Cancel",
+      "delete": "Delete Chapter"
+    },
+    "pageTitles": {
+      "courseContent": "Course Content",
+      "courseSettings": "Course Settings",
+      "pricing": "Pricing",
+      "studentEngagement": "Student Engagement",
+      "publishCourse": "Publish Course"
+    },
+    "addVideoForm": {
+      "formTitle": "Video Title",
+      "formPlaceholder": "Example: Graphic Design Course for Beginners",
+      "addVideoFile": "Add video file",
+      "validationErrors": {
+        "titleRequired": "Video title is required",
+        "invalidFile": "Invalid file",
+        "prepareFailed": "Failed to prepare video",
+        "selectVideo": "Please select a video file",
+        "uploadFailed": "Failed to upload video"
+      },
+      "messages": {
+        "uploadSuccess": "Video uploaded and module created successfully"
+      },
+      "buttonText": {
+        "uploading": "Uploading {progress}%",
+        "completed": "Completed ✓",
+        "creating": "Creating module...",
+        "uploadAndSave": "Upload and Save"
+      },
+      "cancelAndGoBack": "Cancel and Go Back"
+    },
+    "videoUploader": {
+      "errors": {
+        "fileTooLarge": "File size is too large. Maximum 1GB",
+        "invalidType": "File type not supported. Please use MP4, MOV, or AVI",
+        "fileError": "There is an error in the selected file",
+        "fileNotAccepted": "This file is not accepted",
+        "pleaseEnterValid": "Please enter valid video files"
+      },
+      "preparing": "Preparing video upload...",
+      "uploading": "Uploading video...",
+      "videoSelected": "Video selected",
+      "previewVideo": "Preview video",
+      "dragDropText": "Drag and drop the file here or click to select file",
+      "fileSizeNote": "Please upload file less than 1GB",
+      "supportedFormats": "Supported formats: MP4, MOV, AVI"
+    },
+    "courseSettings": {
+      "sections": {
+        "generalSettings": "General Settings",
+        "generalDescription": "Manage your course settings including title, link, features, trainer names, access and many other features",
+        "courseDetails": "Course Details",
+        "courseDetailsDescription": "It's easy to customize the general appearance of your course by placing a unique image for it and adding an attractive description that attracts visitors when visiting your course landing page"
+      },
+      "fields": {
+        "courseTitle": "Course Title",
+        "courseTitlePlaceholder": "Enter course title here",
+        "thumbnail": "Course Thumbnail",
+        "youtubeUrl": "Or you can add a YouTube video URL",
+        "youtubeUrlPlaceholder": "https://youtu.be/",
+        "courseResume": "Course Summary",
+        "courseResumePlaceholder": "Enter course summary here",
+        "whatYouWillLearn": "What people will learn in the course",
+        "courseRequirements": "Course attendance requirements",
+        "fullDescription": "Full course description",
+        "courseLevel": "Course Level",
+        "courseLevelPlaceholder": "Select a level to display",
+        "courseLevelDescription": "This field is for specifying the target category for these courses",
+        "courseSound": "Sound in course",
+        "courseSoundPlaceholder": "Select a sound to display",
+        "courseSoundDescription": "This field is for specifying the target category for these courses"
+      },
+      "levels": {
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced"
+      },
+      "sounds": {
+        "arabic": "Arabic",
+        "french": "French",
+        "english": "English"
+      },
+      "seo": {
+        "searchEngineList": "Search Engine List",
+        "edit": "Edit",
+        "yourCourseAtSearch": "Your amazing course at search engine",
+        "seoTitle": "Site title at search engine",
+        "seoTitlePlaceholder": "Your amazing course at search engine",
+        "addDescription": "Add site description",
+        "seoDescriptionPlaceholder": "Each of us lives dependent on and committed to our individual knowledge and awareness. All of this is what we call reality. However, knowledge and awareness are both ambiguous. What may be one person's truth may be another's illusion. We all live within our own illusions"
+      },
+      "validation": {
+        "requiredField": "Please fill the field",
+        "invalidYoutubeUrl": "Please enter a valid YouTube link"
+      },
+      "saveAndContinue": "Save and Continue",
+      "cancelAndGoBack": "Cancel and Go Back"
+    },
+    "pricingForm": {
+      "pricingSettings": "Pricing Settings",
+      "pricingDescription": "Configure your course pricing plan and access duration",
+      "price": "Price",
+      "compareAtPrice": "Compare at Price",
+      "renewalPeriod": "Renewal Period",
+      "renewalPeriodPlaceholder": "Select renewal period",
+      "customDays": "Custom Days",
+      "customDaysPlaceholder": "Enter number of days",
+      "recurringOptions": {
+        "weekly": "Weekly (7 days)",
+        "monthly": "Monthly (30 days)",
+        "quarterly": "Quarterly (90 days)",
+        "yearly": "Yearly (365 days)",
+        "custom": "Custom"
+      }
+    },
+    "studentEngagement": {
+      "certificates": "Certificates",
+      "certificatesDescription": "Set certificate settings in your course and when a student is entitled to obtain it",
+      "enableCertificate": "Enable certificate on course",
+      "contentInteraction": "Content Interaction",
+      "contentInteractionDescription": "Specify what the student can do during the course",
+      "allowComments": "Allow comments on this course",
+      "saveAndContinue": "Save and Continue",
+      "cancelAndGoBack": "Cancel and Go Back"
+    },
+    "publishCourse": {
+      "courseTitle": "Course Title",
+      "courseTitlePlaceholder": "Course title",
+      "selectionButtons": {
+        "draft": "Draft",
+        "draftDescription": "Will be shown to your team only",
+        "availableToAll": "Available to All",
+        "availableToAllDescription": "Will be visible to everyone"
+      },
+      "publishCourse": "Publish Course",
+      "cancelAndGoBack": "Cancel and Go Back",
+      "validation": {
+        "requiredField": "Please fill the field"
+      }
     }
   },
   "products": {
@@ -797,6 +1048,71 @@
       "minute": "1 minute ago",
       "seconds": "{count} seconds ago",
       "now": "Just now"
+    },
+    "productHeader": {
+      "links": {
+        "productContent": "Product Content",
+        "pricing": "Pricing",
+        "previewAndPublish": "Preview and Publish"
+      }
+    }
+  },
+  "productForms": {
+    "contentForm": {
+      "productName": "Product Name",
+      "productNamePlaceholder": "Product name",
+      "addPdfFile": "Add PDF file",
+      "addImage": "Add Image",
+      "briefDescription": "Brief Description",
+      "briefDescriptionPlaceholder": "Enter product summary here",
+      "productDescription": "Product Description",
+      "saveAndContinue": "Save and Continue",
+      "cancelAndGoBack": "Cancel and Go Back"
+    },
+    "pricingForm": {
+      "pricingSettings": "Pricing Settings",
+      "pricingDescription": "Choose the best prices that suit your product",
+      "price": "Price",
+      "pricePlaceholder": "0 DZD",
+      "compareAtPrice": "Compare at Price",
+      "compareAtPricePlaceholder": "0 DZD",
+      "priceTooltip": "Product price must be more than 100 DZD",
+      "compareAtPriceTooltip": "This price will appear crossed out when displaying the product",
+      "makeFree": "Make this product free",
+      "saveAndContinue": "Save and Continue",
+      "cancelAndGoBack": "Cancel and Go Back"
+    },
+    "publishingForm": {
+      "productTitle": "Product Title",
+      "productTitlePlaceholder": "Product title",
+      "draft": "Draft",
+      "draftDescription": "Will be shown to you only",
+      "availableToAll": "Available to All",
+      "availableToAllDescription": "Will be visible to everyone",
+      "publishProduct": "Publish Product",
+      "cancelAndGoBack": "Cancel and Go Back"
+    },
+    "pdfUploader": {
+      "dragDropText": "Drag and drop the file here, or click to select file",
+      "fileSizeNote": "Please upload file less than",
+      "uploading": "Uploading file...",
+      "fileUploaded": "Your file has been uploaded",
+      "viewFile": "View PDF",
+      "fileRejected": "This file is not accepted",
+      "pleaseUploadPdf": "Please upload PDF files only",
+      "errorOccurred": "An error occurred",
+      "pleaseTryAgain": "Please try again"
+    },
+    "imageUploader": {
+      "dragDropText": "Drag and drop the file here, or click to select file",
+      "fileSizeNote": "Please upload file less than",
+      "uploading": "Uploading image...",
+      "imageUploaded": "Your image has been uploaded",
+      "fileRejected": "This file is not accepted",
+      "pleaseUploadImage": "Please upload PNG or JPEG images only",
+      "errorOccurred": "An error occurred",
+      "pleaseTryAgain": "Please try again",
+      "imageAlt": "Product image"
     }
   },
   "invoices": {

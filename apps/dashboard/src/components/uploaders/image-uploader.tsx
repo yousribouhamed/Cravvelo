@@ -8,6 +8,7 @@ import { cn } from "@ui/lib/utils";
 import { formatBytes, computeSHA256 } from "@/src/lib/utils";
 import { Button } from "@ui/components/ui/button";
 import { trpc } from "@/src/app/_trpc/client";
+import { useTranslations } from "next-intl";
 
 export const ImageUploaderS3 = ({
   onChnage,
@@ -18,6 +19,7 @@ export const ImageUploaderS3 = ({
   className?: string;
   onChnage: (value: any) => void;
 }) => {
+  const t = useTranslations("productForms.imageUploader");
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const [progress, setProgress] = React.useState<number>(0);
   const [status, setStatus] = React.useState<
@@ -136,8 +138,7 @@ export const ImageUploaderS3 = ({
           {...getRootProps()}
           className={cn(
             "group relative my-8 grid h-48 w-full cursor-pointer place-items-center rounded-lg border-2 border-dashed border-muted-foreground/25 px-5 py-2.5 text-center transition",
-            "bg-white dark:dark:bg-[#0A0A0C] hover:bg-muted/25 text-black",
-            "dark:bg-[#0A0A0C] dark:hover:bg-zinc-900 dark:text-zinc-50",
+            "bg-card hover:bg-muted/25",
             "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
             isDragActive && "border-muted-foreground/50",
             isFocused && "border-primary",
@@ -151,12 +152,12 @@ export const ImageUploaderS3 = ({
           {isDragReject || fileRejections?.length > 0 ? (
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
               <XCircle className="h-8 w-8 text-red-500 mb-2" />
-              <p className="mb-2 text-sm text-zinc-700 dark:text-zinc-200">
+              <p className="mb-2 text-sm text-foreground">
                 <span className="font-semibold mx-2 text-red-500">
-                  هذا الملف غير مقبول
+                  {t("fileRejected")}
                 </span>
                 <br />
-                الرجاء ادخال ملفات بصيغة png , jpeg
+                {t("pleaseUploadImage")}
               </p>
             </div>
           ) : (
@@ -182,12 +183,12 @@ export const ImageUploaderS3 = ({
                 case "LOADING":
                   return (
                     <div className="w-full mt-4 flex flex-col mx-auto px-4 gap-y-4">
-                      <p className="text-xl font-bold dark:text-zinc-100">
-                        جاري رفع الصورة...
+                      <p className="text-xl font-bold text-foreground">
+                        {t("uploading")}
                       </p>
                       <Progress
                         value={progress}
-                        className="h-1 w-full bg-[#EFEFEF] dark:bg-zinc-800"
+                        className="h-1 w-full bg-muted"
                       />
                     </div>
                   );
@@ -222,11 +223,11 @@ export const ImageUploaderS3 = ({
                   return (
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                       <XCircle className="h-8 w-8 text-red-500 mb-2" />
-                      <p className="mb-2 text-sm text-zinc-700 dark:text-zinc-200">
+                      <p className="mb-2 text-sm text-foreground">
                         <span className="font-semibold mx-2 text-red-500">
-                          هناك خطأ ما
+                          {t("errorOccurred")}
                         </span>
-                        يرجى إعادة المحاولة مرة أخرى
+                        {t("pleaseTryAgain")}
                       </p>
                     </div>
                   );

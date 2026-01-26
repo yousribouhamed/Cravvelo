@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "@/src/lib/zod-error-map";
+import { useTranslations } from "next-intl";
 import { Card, CardContent } from "@ui/components/ui/card";
 import { Button } from "@ui/components/ui/button";
 import {
@@ -40,14 +41,14 @@ interface ComponentProps {
   course: Course;
 }
 
-const formSchema = z.object({
-  courseResume: z.string({ required_error: "يرجى ملئ الحقل" }),
+const getFormSchema = (t: (key: string) => string) => z.object({
+  courseResume: z.string({ required_error: t("validation.requiredField") }),
   courseDescription: z.any(),
   sound: z.string(),
-  seoDescription: z.string({ required_error: "يرجى ملئ الحقل" }),
-  seoTitle: z.string({ required_error: "يرجى ملئ الحقل" }),
-  thumnailUrl: z.string({ required_error: "يرجى ملئ الحقل" }),
-  title: z.string({ required_error: "يرجى ملئ الحقل" }),
+  seoDescription: z.string({ required_error: t("validation.requiredField") }),
+  seoTitle: z.string({ required_error: t("validation.requiredField") }),
+  thumnailUrl: z.string({ required_error: t("validation.requiredField") }),
+  title: z.string({ required_error: t("validation.requiredField") }),
   youtubeUrl: z
     .string()
     .optional()
@@ -56,11 +57,11 @@ const formSchema = z.object({
         if (!val) return true;
         return youtubeUrlRegex.test(val);
       },
-      { message: "يرجى إدخال رابط يوتيوب صالح" }
+      { message: t("validation.invalidYoutubeUrl") }
     ),
-  courseRequirements: z.string({ required_error: "يرجى ملئ الحقل" }),
-  courseWhatYouWillLearn: z.string({ required_error: "يرجى ملئ الحقل" }),
-  level: z.string({ required_error: "يرجى ملئ الحقل" }),
+  courseRequirements: z.string({ required_error: t("validation.requiredField") }),
+  courseWhatYouWillLearn: z.string({ required_error: t("validation.requiredField") }),
+  level: z.string({ required_error: t("validation.requiredField") }),
   preview_video: z.string().optional(),
 });
 
@@ -94,12 +95,15 @@ export function CourseSettingsForm({ course }: ComponentProps) {
     return <div>Course not found</div>;
   }
 
+  const t = useTranslations("courses.courseSettings");
   const router = useRouter();
 
   const [open, setOpen] = React.useState<boolean>(false);
 
   const [isEditingSeoContent, setIsEditingSeoContent] =
     React.useState<boolean>(false);
+
+  const formSchema = getFormSchema(t);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -122,7 +126,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
     },
   });
 
-  const mutation = trpc.updateCourseSettings.useMutation({
+  const mutation = trpc.course.updateCourseSettings.useMutation({
     onSuccess: () => {
       maketoast.success();
       router.push(`/courses/${course.id}/pricing`);
@@ -169,12 +173,10 @@ export function CourseSettingsForm({ course }: ComponentProps) {
               className="space-y-8"
             >
               <FormLabel className="text-xl  block font-bold text-foreground">
-                اعدادات عامة
+                {t("sections.generalSettings")}
               </FormLabel>
               <FormLabel className="text-md block  text-muted-foreground">
-                ادر اعدادات دورتك التدريبية بما في ذالك عنوانها و رابطها و
-                الخصائص و اسماء المدرين و امكانية الوصول اليها و العديد من
-                المميزات الاخرى{" "}
+                {t("sections.generalDescription")}
               </FormLabel>
 
               <FormField
@@ -183,11 +185,11 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      عنوان الدورة{" "}
+                      {t("fields.courseTitle")}{" "}
                       <span className="text-red-600 text-xl">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder=" ادخل عنوان الدورة هنا" {...field} />
+                      <Input placeholder={t("fields.courseTitlePlaceholder")} {...field} />
                     </FormControl>
 
                     <FormMessage />
@@ -197,11 +199,10 @@ export function CourseSettingsForm({ course }: ComponentProps) {
 
               <div className="w-full h-0.5 bg-gray-500 " />
               <FormLabel className="text-xl  block font-bold text-black">
-                تفاصيل الدورة{" "}
+                {t("sections.courseDetails")}
               </FormLabel>
               <FormLabel className="text-md block  text-gray-600">
-                من السهل تخصيص المظهر العام لدورتك عن طريق وضع صورة فريدة لها و
-                اظافة وصف تعريفي يجذب الزوار عند زيارة صفحة الهبوط لدورة
+                {t("sections.courseDetailsDescription")}
               </FormLabel>
 
               <FormField
@@ -210,7 +211,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 render={({ field }) => (
                   <FormItem className="w-full ">
                     <FormLabel>
-                      الصورة البارزة لدورة{" "}
+                      {t("fields.thumbnail")}{" "}
                       <span className="text-red-600 text-xl">*</span>
                     </FormLabel>
                     <FormControl>
@@ -249,10 +250,10 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      أو يمكنك إضافة عنوان URL لفيديو يوتيوب
+                      {t("fields.youtubeUrl")}
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="https://youtu.be/" {...field} />
+                      <Input placeholder={t("fields.youtubeUrlPlaceholder")} {...field} />
                     </FormControl>
 
                     <FormMessage />
@@ -266,7 +267,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 render={({ field }) => (
                   <FormItem className="w-full ">
                     <FormLabel>
-                      ملخص الدورة{" "}
+                      {t("fields.courseResume")}{" "}
                       <span className="text-red-600 text-xl">*</span>
                     </FormLabel>
                     <FormControl>
@@ -274,7 +275,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                         id="courseResume"
                         rows={3}
                         className="min-h-[100px]"
-                        placeholder="أدخل ملخصًا للدورة هنا"
+                        placeholder={t("fields.courseResumePlaceholder")}
                         {...field}
                       />
                     </FormControl>
@@ -288,13 +289,13 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 name="courseWhatYouWillLearn"
                 render={({ field }) => (
                   <FormItem className="w-full ">
-                    <FormLabel>ماذا يتعلم الناس في الدورة</FormLabel>
+                    <FormLabel>{t("fields.whatYouWillLearn")}</FormLabel>
                     <FormControl>
                       <Textarea
                         id="what they will learn"
                         rows={3}
                         className="min-h-[100px]"
-                        placeholder="أدخل ملخصًا للدورة هنا"
+                        placeholder={t("fields.courseResumePlaceholder")}
                         {...field}
                       />
                     </FormControl>
@@ -308,13 +309,13 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 name="courseRequirements"
                 render={({ field }) => (
                   <FormItem className="w-full ">
-                    <FormLabel>متطلبات حضور الدورة</FormLabel>
+                    <FormLabel>{t("fields.courseRequirements")}</FormLabel>
                     <FormControl>
                       <Textarea
                         id="course requirements"
                         rows={3}
                         className="min-h-[100px]"
-                        placeholder="أدخل ملخصًا للدورة هنا"
+                        placeholder={t("fields.courseResumePlaceholder")}
                         {...field}
                       />
                     </FormControl>
@@ -329,7 +330,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 render={({ field }) => (
                   <FormItem className="w-full ">
                     <FormLabel>
-                      الوصف الكامل لدورة{" "}
+                      {t("fields.fullDescription")}{" "}
                       <span className="text-red-600 text-xl">*</span>
                     </FormLabel>
                     <FormControl>
@@ -348,14 +349,14 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 name="level"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>مستوى الدورة</FormLabel>
+                    <FormLabel>{t("fields.courseLevel")}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="حدد مستوى لعرضه" />
+                          <SelectValue placeholder={t("fields.courseLevelPlaceholder")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -363,24 +364,24 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                           value="BEGINNER"
                           className="flex items-center justify-end"
                         >
-                          مبتدئ
+                          {t("levels.beginner")}
                         </SelectItem>
                         <SelectItem
                           className="flex items-center justify-end"
                           value="INTERMEDIATE"
                         >
-                          متوسط
+                          {t("levels.intermediate")}
                         </SelectItem>
                         <SelectItem
                           className="flex items-center justify-end"
                           value="ADVANCED"
                         >
-                          متقدم
+                          {t("levels.advanced")}
                         </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormDescription>
-                      هذا الحقل خاص بتحديد الفئة المستهدفة لهذه الدورات
+                      {t("fields.courseLevelDescription")}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -392,14 +393,14 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 name="sound"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>الصوت في الدورة</FormLabel>
+                    <FormLabel>{t("fields.courseSound")}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="حدد صوت لعرضه" />
+                          <SelectValue placeholder={t("fields.courseSoundPlaceholder")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -407,24 +408,24 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                           value="ARABIC"
                           className="flex items-center justify-end"
                         >
-                          عربي
+                          {t("sounds.arabic")}
                         </SelectItem>
                         <SelectItem
                           className="flex items-center justify-end"
                           value="FRENSH"
                         >
-                          فرنسي
+                          {t("sounds.french")}
                         </SelectItem>
                         <SelectItem
                           className="flex items-center justify-end"
                           value="ENGLISH"
                         >
-                          انجليزي
+                          {t("sounds.english")}
                         </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormDescription>
-                      هذا الحقل خاص بتحديد الفئة المستهدفة لهذه الدورات
+                      {t("fields.courseSoundDescription")}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -436,23 +437,20 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                   {!isEditingSeoContent && (
                     <>
                       <div className="w-full h-[20px] mb-4 flex items-center justify-between">
-                        <p>قائمة محرك البحث</p>
+                        <p>{t("seo.searchEngineList")}</p>
                         <Button
                           onClick={() => setIsEditingSeoContent(true)}
                           variant="ghost"
                           type="button"
                         >
-                          تعديل
+                          {t("seo.edit")}
                         </Button>
                       </div>
                       <h1 className="text-indigo-600 text-xl font-bold text-start">
-                        دورتك الرائعة عند محرك البحث
+                        {t("seo.yourCourseAtSearch")}
                       </h1>
                       <p className="text-muted-foreground text-md text-start">
-                        كل واحد منا يعيش معتمدًا وملتزمًا بمعرفتنا الفردية
-                        ووعينا. كل هذا هو ما نسميه الواقع. ومع ذلك، فإن المعرفة
-                        والوعي كلاهما ملتبسان. قد تكون حقيقة شخص ما وهمًا لشخص
-                        آخر. نحن جميعا نعيش داخل الأوهام الخاصة بنا
+                        {t("seo.seoDescriptionPlaceholder")}
                       </p>
                     </>
                   )}
@@ -464,10 +462,10 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                         name="seoTitle"
                         render={({ field }) => (
                           <FormItem className="w-full ">
-                            <FormLabel>عنوان الموقع عند محرك البحث</FormLabel>
+                            <FormLabel>{t("seo.seoTitle")}</FormLabel>
                             <FormControl>
                               <Input
-                                placeholder="   دورتك الرائعة عند محرك البحث"
+                                placeholder={t("seo.seoTitlePlaceholder")}
                                 {...field}
                               />
                             </FormControl>
@@ -481,16 +479,13 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                         name="seoDescription"
                         render={({ field }) => (
                           <FormItem className="w-full ">
-                            <FormLabel>أضف وصفًا للموقع</FormLabel>
+                            <FormLabel>{t("seo.addDescription")}</FormLabel>
                             <FormControl>
                               <Textarea
                                 id="description"
                                 rows={3}
                                 className="min-h-[100px]"
-                                placeholder="    كل واحد منا يعيش معتمدًا وملتزمًا بمعرفتنا الفردية ووعينا.
-                              كل هذا هو ما نسميه الواقع. ومع ذلك، فإن المعرفة والوعي
-                              كلاهما ملتبسان. قد تكون حقيقة شخص ما وهمًا لشخص آخر. نحن
-                              جميعا نعيش داخل الأوهام الخاصة بنا"
+                                placeholder={t("seo.seoDescriptionPlaceholder")}
                                 value={field.value}
                                 onChange={field.onChange}
                               />
@@ -513,7 +508,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                     type="button"
                   >
                     {" "}
-                    إلغاء والعودة
+                    {t("cancelAndGoBack")}
                   </Button>
                   <Button
                     disabled={mutation.isLoading}
@@ -521,7 +516,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                     className=" flex items-center gap-x-2 rounded-xl"
                   >
                     {mutation.isLoading ? <LoadingSpinner /> : null}
-                    حفظ والمتابعة
+                    {t("saveAndContinue")}
                   </Button>
                 </CardContent>
               </Card>
@@ -539,7 +534,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 size="lg"
               >
                 {mutation.isLoading ? <LoadingSpinner /> : null}
-                حفظ والمتابعة
+                {t("saveAndContinue")}
               </Button>
               <Button
                 onClick={() => router.back()}
@@ -549,7 +544,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 size="lg"
               >
                 {" "}
-                إلغاء والعودة
+                {t("cancelAndGoBack")}
               </Button>
             </CardContent>
           </Card>

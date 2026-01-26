@@ -7,6 +7,7 @@ import {
   getAllNotifications,
   getMyUserAction,
 } from "@/src/actions/user.actions";
+import { getServerTranslations } from "@/src/lib/i18n/utils";
 
 interface PageProps {
   params: Promise<{ course_id: string }>;
@@ -34,6 +35,7 @@ const getChapters = async ({ courseId }: { courseId: string }) => {
 
 export default async function Home({ params }: PageProps) {
   const { course_id } = await params;
+  const t = await getServerTranslations("courses.pageTitles");
   const [user, chapters] = await Promise.all([
     getMyUserAction(),
     getChapters({ courseId: course_id }),
@@ -48,7 +50,7 @@ export default async function Home({ params }: PageProps) {
         <Header
           notifications={notifications}
           user={user}
-          title="محتوى الدورة"
+          title={t("courseContent")}
           goBack
         />
 

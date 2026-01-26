@@ -4,6 +4,7 @@ import CourseHeader from "@/src/modules/course/components/course-header";
 import StudentEngagment from "@/src/components/forms/course-forms/students-engagment";
 import useHaveAccess from "@/src/hooks/use-have-access";
 import { prisma } from "database/src";
+import { getServerTranslations } from "@/src/lib/i18n/utils";
 
 export const fetchCache = "force-no-store";
 
@@ -22,6 +23,7 @@ const getAllNotifications = async ({ accountId }: { accountId: string }) => {
 
 export default async function Home({ params }: PageProps) {
   const { course_id } = await params;
+  const t = await getServerTranslations("courses.pageTitles");
   const [user, course] = await Promise.all([
     useHaveAccess(),
     prisma.course.findUnique({
@@ -41,7 +43,7 @@ export default async function Home({ params }: PageProps) {
         <Header
           notifications={notifications}
           user={user}
-          title="تفاعل الطلاب"
+          title={t("studentEngagement")}
           goBack
         />
         <CourseHeader />

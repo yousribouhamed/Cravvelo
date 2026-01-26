@@ -8,6 +8,7 @@ import {
   DialogFooter,
   DialogTrigger,
 } from "@ui/components/ui/dialog";
+import { useTranslations } from "next-intl";
 import type { FC } from "react";
 import * as React from "react";
 import { maketoast } from "../toasts";
@@ -42,6 +43,7 @@ const UpdateChapterModel: FC<UpdateChapterProps> = ({
   refetch,
   prevTitle,
 }) => {
+  const t = useTranslations("courses.updateChapter");
   const mounted = useMounted();
 
   const mutation = trpc.updateChapterTitle.useMutation({
@@ -76,7 +78,7 @@ const UpdateChapterModel: FC<UpdateChapterProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
-      <DialogContent className="max-w-lg" title="تحديث عنوان هذا الفصل">
+      <DialogContent className="max-w-lg" title={t("dialogTitle")}>
         <div className="w-full px-4 pb-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -85,10 +87,10 @@ const UpdateChapterModel: FC<UpdateChapterProps> = ({
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel> الفصل *</FormLabel>
+                    <FormLabel>{t("formLabel")} *</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم"
+                        placeholder={t("formPlaceholder")}
                         {...field}
                       />
                     </FormControl>
@@ -99,7 +101,7 @@ const UpdateChapterModel: FC<UpdateChapterProps> = ({
               />
               <DialogFooter className="w-full h-[50px] flex items-center justify-end gap-x-4">
                 <Button variant="ghost" onClick={() => setIsOpen(false)}>
-                  إلغاء
+                  {t("cancel")}
                 </Button>
                 <Button
                   className=" flex items-center gap-x-2"
@@ -107,7 +109,7 @@ const UpdateChapterModel: FC<UpdateChapterProps> = ({
                   type="submit"
                 >
                   {mutation.isLoading ? <LoadingSpinner /> : null}
-                  إضافة جديد
+                  {t("save")}
                 </Button>
               </DialogFooter>
             </form>

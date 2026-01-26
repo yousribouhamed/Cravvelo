@@ -5,6 +5,7 @@
 import { Chapter as ChapterType } from "database";
 import { FC, useCallback, useEffect, useState, useMemo, useRef } from "react";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { trpc } from "@/src/app/_trpc/client";
 import { getValueFromUrl } from "../../../lib/utils";
 import {
@@ -48,6 +49,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
   const path = usePathname();
   const courseID = getValueFromUrl(path, 2);
   const isMounted = useMounted();
+  const t = useTranslations("courses.chaptersBoard");
 
   // State management
   const [isDeleteModelOpen, setIsDeleteModelOpen] = useState<boolean>(false);
@@ -84,12 +86,12 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
 
   const updateMutation = trpc.updateChapters.useMutation({
     onSuccess: () => {
-      maketoast.success("تم تحديث ترتيب الفصول بنجاح");
+      maketoast.success(t("messages.updateOrderSuccess"));
       refetch();
     },
     onError: (error) => {
       console.error("Failed to update chapters:", error);
-      maketoast.error("فشل في تحديث ترتيب الفصول");
+      maketoast.error(t("messages.updateOrderError"));
       // Revert to previous state
       if (data) {
         setSections(data);
@@ -99,12 +101,12 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
 
   const visibilityMutation = trpc.toggleChapterVisibility.useMutation({
     onSuccess: () => {
-      maketoast.success("تم تحديث حالة الفصل بنجاح");
+      maketoast.success(t("messages.updateVisibilitySuccess"));
       refetch();
     },
     onError: (error) => {
       console.error("Failed to toggle visibility:", error);
-      maketoast.error("فشل في تحديث حالة الفصل");
+      maketoast.error(t("messages.updateVisibilityError"));
       // Revert visibility change
       if (data) {
         setSections(data);
@@ -188,7 +190,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
         }, 300);
       } catch (error) {
         console.error("Error during drag operation:", error);
-        maketoast.error("حدث خطأ أثناء إعادة ترتيب الفصول");
+        maketoast.error(t("messages.reorderError"));
       }
     },
     [updateMutation, courseID]
@@ -261,14 +263,14 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
   if (error) {
     return (
       <div className="mt-8 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-        <p className="text-red-700 dark:text-red-200">حدث خطأ أثناء تحميل الفصول</p>
+        <p className="text-red-700 dark:text-red-200">{t("error.loadingError")}</p>
         <Button
           onClick={() => refetch()}
           variant="outline"
           size="sm"
           className="mt-2"
         >
-          إعادة المحاولة
+          {t("error.retry")}
         </Button>
       </div>
     );
@@ -279,7 +281,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
     return (
       <div className="mt-8 flex items-center justify-center">
         <Loader2 className="h-6 w-6 animate-spin" />
-        <span className="mr-2">جاري تحميل الفصول...</span>
+        <span className="mr-2">{t("loading.loadingChapters")}</span>
       </div>
     );
   }
@@ -291,7 +293,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
         <div className="mt-8">
           <NotFoundCard
             src={"/no-chapters.svg"}
-            text="لم تقم بإضافة أي فصل إلى هذه الدورة"
+            text={t("emptyState.noChapters")}
           />
         </div>
         <div className="w-full h-[100px] flex items-center justify-center py-2">
@@ -348,14 +350,14 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                     {(provided, snapshot) => (
                       <div
                         className={cn(
-                          "flex flex-col bg-card dark:bg-gray-800 justify-start gap-y-2 transition-all duration-300 bg-[#FC6B0033] dark:bg-[#FC6B0020] border dark:border-gray-700 my-3 rounded-2xl",
+                          "flex flex-col bg-card justify-start gap-y-2 transition-all duration-300 border border-border my-3 rounded-2xl",
                           chapter.isVisible ? "text-foreground" : "opacity-75",
                           snapshot.isDragging &&
                             " shadow-2xl scale-105 rotate-2 z-50 border-[#FC6B00] ",
                           dragStartIndex === index &&
                             !snapshot.isDragging &&
                             "scale-95",
-                          !chapter.isVisible && "bg-muted dark:bg-gray-700 border-muted dark:border-gray-600"
+                          !chapter.isVisible && "bg-muted border-muted"
                         )}
                         ref={provided.innerRef}
                         {...provided.draggableProps}
@@ -378,12 +380,13 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                                   {/* Drag Handle */}
                                   <div
                                     className={cn(
-                                      "px-2 rounded-lg py-3 transition-colors  cursor-grab active:cursor-grabbing",
-                                      "hover:bg-gray-100 dark:hover:bg-gray-700 group-hover:bg-gray-100 dark:group-hover:bg-gray-700",
+                                      "px-2 rounded-lg py-3 transition-colors duration-200 cursor-grab active:cursor-grabbing",
+                                      "text-muted-foreground hover:text-foreground",
+                                      "hover:bg-accent/50 group-hover:bg-accent/50",
                                       snapshot.isDragging && "cursor-grabbing"
                                     )}
                                     {...provided.dragHandleProps}
-                                    aria-label="سحب لإعادة الترتيب"
+                                    aria-label={t("dragHandle.ariaLabel")}
                                   >
                                     <svg
                                       width="21"
@@ -391,19 +394,19 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                                       viewBox="0 0 21 20"
                                       fill="none"
                                       xmlns="http://www.w3.org/2000/svg"
-                                      className="transition-opacity group-hover:opacity-80"
+                                      className="transition-colors duration-200"
                                     >
                                       <path
                                         fillRule="evenodd"
                                         clipRule="evenodd"
                                         d="M6.51758 4.27791C6.51758 3.59749 7.06917 3.0459 7.74959 3.0459C8.43002 3.0459 8.98161 3.59749 8.98161 4.27791C8.98161 4.95834 8.43002 5.50993 7.74959 5.50993C7.06917 5.50993 6.51758 4.95834 6.51758 4.27791ZM6.51758 9.20597C6.51758 8.52554 7.06917 7.97396 7.74959 7.97396C8.43002 7.97396 8.98161 8.52554 8.98161 9.20597C8.98161 9.8864 8.43002 10.438 7.74959 10.438C7.06917 10.438 6.51758 9.8864 6.51758 9.20597ZM6.51758 14.134C6.51758 13.4536 7.06917 12.902 7.74959 12.902C8.43002 12.902 8.98161 13.4536 8.98161 14.134C8.98161 14.8145 8.43002 15.366 7.74959 15.366C7.06917 15.366 6.51758 14.8145 6.51758 14.134Z"
-                                        fill="#2D2D2D"
+                                        fill="currentColor"
                                       />
                                       <path
                                         fillRule="evenodd"
                                         clipRule="evenodd"
                                         d="M11.9385 4.27791C11.9385 3.59749 12.49 3.0459 13.1705 3.0459C13.851 3.0459 14.4025 3.59749 14.4025 4.27791C14.4025 4.95834 13.851 5.50993 13.1705 5.50993C12.49 5.50993 11.9385 4.95834 11.9385 4.27791ZM11.9385 9.20597C11.9385 8.52554 12.49 7.97396 13.1705 7.97396C13.851 7.97396 14.4025 8.52554 14.4025 9.20597C14.4025 9.8864 13.851 10.438 13.1705 10.438C12.49 10.438 11.9385 9.8864 11.9385 9.20597ZM11.9385 14.134C11.9385 13.4536 12.49 12.902 13.1705 12.902C13.851 12.902 14.4025 13.4536 14.4025 14.134C14.4025 14.8145 13.851 15.366 13.1705 15.366C12.49 15.366 11.9385 14.8145 11.9385 14.134Z"
-                                        fill="#2D2D2D"
+                                        fill="currentColor"
                                       />
                                     </svg>
                                   </div>
@@ -411,13 +414,13 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                                   {/* Chapter Info */}
                                   <div className="w-fit flex flex-col h-full mr-4 justify-center gap-y-1">
                                     <div className="flex items-center gap-x-2">
-                                      <p className="text-black dark:text-white text-sm font-bold line-clamp-1">
-                                        {chapter.title || "فصل بدون عنوان"}
+                                      <p className="text-black dark:text-white text-sm font-bold line-clamp-1 transition-colors duration-200">
+                                        {chapter.title || t("chapter.noTitle")}
                                       </p>
                                     </div>
-                                    <span className="text-muted-foreground text-xs text-start">
+                                    <span className="text-muted-foreground text-xs text-start transition-colors duration-200">
                                       {materials.length}{" "}
-                                      {materials.length === 1 ? "مادة" : "مواد"}
+                                      {materials.length === 1 ? t("materials.single") : t("materials.plural")}
                                     </span>
                                   </div>
                                 </div>
@@ -433,7 +436,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                                       variant="secondary"
                                       className="text-xs"
                                     >
-                                      مختفي
+                                      {t("badge.hidden")}
                                     </Badge>
                                   )}
 
@@ -448,7 +451,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                                     <DropdownMenuTrigger asChild>
                                       <Button
                                         variant="ghost"
-                                        className="bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800  h-8 w-8 p-0"
+                                        className="bg-transparent hover:bg-accent/50 h-8 w-8 p-0"
                                         size="sm"
                                         disabled={
                                           updateMutation.isLoading ||
@@ -457,7 +460,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                                       >
                                         <MoreHorizontal className="h-4 w-4" />
                                         <span className="sr-only">
-                                          فتح القائمة
+                                          {t("menu.openMenu")}
                                         </span>
                                       </Button>
                                     </DropdownMenuTrigger>
@@ -477,8 +480,8 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                                         disabled={visibilityMutation.isLoading}
                                       >
                                         {chapter.isVisible
-                                          ? "إخفاء هذا الفصل"
-                                          : "إظهار هذا الفصل"}
+                                          ? t("menu.hideChapter")
+                                          : t("menu.showChapter")}
                                       </DropdownMenuItem>
                                       <DropdownMenuSeparator />
                                       <DropdownMenuItem
@@ -490,7 +493,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                                           setIsEditChapterOpen(true);
                                         }}
                                       >
-                                        تعديل عنوان الفصل
+                                        {t("menu.editTitle")}
                                       </DropdownMenuItem>
                                       <DropdownMenuSeparator />
                                       <DropdownMenuItem
@@ -501,7 +504,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
                                           setIsDeleteModelOpen(true);
                                         }}
                                       >
-                                        حذف هذا الفصل
+                                        {t("menu.deleteChapter")}
                                       </DropdownMenuItem>
                                     </DropdownMenuContent>
                                   </DropdownMenu>

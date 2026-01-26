@@ -1,5 +1,8 @@
+"use client";
+
 import { Video, Plus } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { cn } from "@ui/lib/utils";
 
 const getValueFromUrl = (path: string, index: number): string => {
@@ -13,17 +16,18 @@ export const AddToChapter = ({
   path: string;
   chapterID: string;
 }) => {
+  const t = useTranslations("courses.addToChapter");
   const courseId = getValueFromUrl(path, 2);
 
   const contentTypes = [
     {
-      name: "فيديو",
-      description: "إضافة فيديو تعليمي",
+      name: t("contentTypes.video.name"),
+      description: t("contentTypes.video.description"),
       url: `/courses/${courseId}/chapters/${chapterID}/add-video`,
       icon: Video,
       disabled: false,
-      color: "text-blue-600",
-      bgColor: "bg-blue-50",
+      color: "text-primary",
+      bgColor: "bg-primary/10",
     },
     // {
     //   name: "ملف PDF",
@@ -71,11 +75,11 @@ export const AddToChapter = ({
           <Plus className="w-4 h-4 text-white" strokeWidth={2.5} />
         </div>
         <div>
-          <h3 className="text-start font-bold text-lg md:text-xl text-gray-900 dark:text-gray-50">
-            أضف مواد تعليمية جديدة إلى القسم
+          <h3 className="text-start font-bold text-lg md:text-xl text-foreground">
+            {t("title")}
           </h3>
-          <p className="text-sm text-gray-500 dark:text-gray-200 mt-1">
-            اختر نوع المحتوى الذي تريد إضافته للقسم
+          <p className="text-sm text-muted-foreground mt-1">
+            {t("description")}
           </p>
         </div>
       </div>
@@ -93,8 +97,8 @@ export const AddToChapter = ({
                 className={cn(
                   "group relative flex flex-col items-center justify-center p-4 min-w-[140px] h-[120px] rounded-xl border-2 transition-all duration-200 hover:shadow-md",
                   item.disabled
-                    ? "cursor-not-allowed bg-card border-gray-200 dark:border-gray-800"
-                    : `cursor-pointer bg-card border-gray-200 dark:border-gray-700 hover:border-primary  ${item.bgColor}/20 hover:${item.bgColor}/30`
+                    ? "cursor-not-allowed bg-card border-border"
+                    : `cursor-pointer bg-card border-border hover:border-primary hover:bg-accent/30`
                 )}
                 href={item.disabled ? "#" : item.url}
                 onClick={item.disabled ? (e) => e.preventDefault() : undefined}
@@ -103,13 +107,13 @@ export const AddToChapter = ({
                 <div
                   className={cn(
                     "w-12 h-12 rounded-full flex items-center justify-center mb-3 transition-colors",
-                    item.disabled ? "bg-gray-200 dark:bg-gray-800" : `${item.bgColor} `
+                    item.disabled ? "bg-muted" : `${item.bgColor}`
                   )}
                 >
                   <IconComponent
                     className={cn(
                       "w-6 h-6 transition-colors",
-                      item.disabled ? "text-gray-400" : item.color
+                      item.disabled ? "text-muted-foreground" : item.color
                     )}
                     strokeWidth={2}
                   />
@@ -120,7 +124,7 @@ export const AddToChapter = ({
                   <h4
                     className={cn(
                       "font-semibold text-sm mb-1",
-                      item.disabled ? "text-gray-400" : "text-foreground"
+                      item.disabled ? "text-muted-foreground" : "text-foreground"
                     )}
                   >
                     {item.name}
@@ -128,7 +132,7 @@ export const AddToChapter = ({
                   <p
                     className={cn(
                       "text-xs leading-relaxed",
-                      item.disabled ? "text-gray-300" : "text-gray-500"
+                      item.disabled ? "text-muted-foreground" : "text-muted-foreground"
                     )}
                   >
                     {item.description}
@@ -146,9 +150,9 @@ export const AddToChapter = ({
       </div>
 
       {/* Footer Note */}
-      <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
-        <p className="text-xs text-gray-400 dark:text-gray-500 text-center">
-          يمكنك إضافة عدة أنواع من المحتوى لإثراء التجربة التعليمية
+      <div className="mt-4 pt-4 border-t border-border">
+        <p className="text-xs text-muted-foreground text-center">
+          {t("footer.note")}
         </p>
       </div>
     </div>

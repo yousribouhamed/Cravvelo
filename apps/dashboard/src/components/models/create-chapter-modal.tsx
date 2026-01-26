@@ -11,6 +11,7 @@ import { Button } from "@ui/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { useTranslations } from "next-intl";
 import {
   Form,
   FormControl,
@@ -34,6 +35,7 @@ interface Props {
 }
 
 const AddChapter: FC<Props> = ({ refetch, chaptersNumber }) => {
+  const t = useTranslations("courses.createChapter");
   const path = usePathname();
   const courseID = getValueFromUrl(path, 2);
   const [isOpen, setIsOpen] = React.useState(false);
@@ -91,10 +93,10 @@ const AddChapter: FC<Props> = ({ refetch, chaptersNumber }) => {
               fill="#FC6B00"
             />
           </svg>
-          اضافة قسم جديد للدورة
+          {t("button")}
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-lg" title="إضافة دورة جديدة">
+      <DialogContent className="max-w-lg" title={t("dialogTitle")}>
         <div className="w-full px-4 pb-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -103,10 +105,10 @@ const AddChapter: FC<Props> = ({ refetch, chaptersNumber }) => {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel> عنوان الفصل *</FormLabel>
+                    <FormLabel>{t("formLabel")} *</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم"
+                        placeholder={t("formPlaceholder")}
                         {...field}
                       />
                     </FormControl>
@@ -121,7 +123,7 @@ const AddChapter: FC<Props> = ({ refetch, chaptersNumber }) => {
                   variant="ghost"
                   onClick={() => setIsOpen(false)}
                 >
-                  إلغاء
+                  {t("cancel")}
                 </Button>
                 <Button
                   data-ripple-light="true"
@@ -130,7 +132,7 @@ const AddChapter: FC<Props> = ({ refetch, chaptersNumber }) => {
                   type="submit"
                 >
                   {mutation.isLoading ? <LoadingSpinner /> : null}
-                  إضافة جديد
+                  {t("add")}
                 </Button>
               </DialogFooter>
             </form>

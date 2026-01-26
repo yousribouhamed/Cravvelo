@@ -12,6 +12,7 @@ import { X } from "lucide-react";
 import Image from "next/image";
 import { computeSHA256 } from "@/src/lib/utils";
 import { trpc } from "@/src/app/_trpc/client";
+import { useTranslations } from "next-intl";
 
 export const PdfUploaderS3 = ({
   onChnage,
@@ -22,6 +23,7 @@ export const PdfUploaderS3 = ({
   className?: string;
   onChnage: (value: any) => void;
 }) => {
+  const t = useTranslations("productForms.pdfUploader");
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
 
   const [progress, setProgress] = React.useState<number>(0);
@@ -142,7 +144,7 @@ export const PdfUploaderS3 = ({
         <div
           {...getRootProps()}
           className={cn(
-            "group relative  my-8 grid h-48  w-full cursor-pointer  place-items-center rounded-lg border-2 border-dashed border-muted-foreground/25 px-5 py-2.5 text-center transition bg-white hover:bg-muted/25",
+            "group relative my-8 grid h-48 w-full cursor-pointer place-items-center rounded-lg border-2 border-dashed border-muted-foreground/25 px-5 py-2.5 text-center transition bg-card hover:bg-muted/25",
             "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
             isDragActive && "border-muted-foreground/50",
             isFocused && "border-primary",
@@ -154,12 +156,12 @@ export const PdfUploaderS3 = ({
           {isDragReject || fileRejections?.length > 0 ? (
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
               <XCircle className="h-8 w-8 text-red-500 mb-2" />
-              <p className="mb-2 text-sm text-zinc-700 dark:text-zinc-50">
+              <p className="mb-2 text-sm text-foreground">
                 <span className="font-semibold mx-2 text-red-500">
-                  هذا الملف غير مقبول
+                  {t("fileRejected")}
                 </span>
                 <br />
-                الرجاء ادخال ملفات بصيغة pdf
+                {t("pleaseUploadPdf")}
               </p>
             </div>
           ) : (
@@ -173,21 +175,20 @@ export const PdfUploaderS3 = ({
                         aria-hidden="true"
                       />
                       <p className="mt-2 text-base font-medium text-muted-foreground">
-                        اسحب و الملف المسقط هنا، أو انقر لتحديد الملف
+                        {t("dragDropText")}
                       </p>
-                      <p className="text-sm text-slate-500">
-                        يرجى تحميل الملف بحجم أقل من
-                        {formatBytes(1024 * 1024 * 2)}
+                      <p className="text-sm text-muted-foreground">
+                        {t("fileSizeNote")} {formatBytes(1024 * 1024 * 2)}
                       </p>
                     </div>
                   );
                 case "LOADING":
                   return (
                     <div className="w-full mt-4 flex flex-col mx-auto px-4 gap-y-4">
-                      <p className="text-xl font-bold ">جاري رفع الملف...</p>
+                      <p className="text-xl font-bold text-foreground">{t("uploading")}</p>
                       <Progress
                         value={progress}
-                        className="h-1 w-full bg-[#EFEFEF]"
+                        className="h-1 w-full bg-muted"
                       />
                     </div>
                   );
@@ -197,27 +198,40 @@ export const PdfUploaderS3 = ({
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="absolute top-0 right-0 text-black rounded-[50%] hover:bg-black hover:text-white cursor-pointer "
+                        className="absolute top-0 right-0 text-foreground rounded-[50%] hover:bg-destructive hover:text-destructive-foreground cursor-pointer"
                         onClick={(e: React.MouseEvent) => {
                           e.stopPropagation();
                           setStatus("WAITING");
+                          setSelectedFile(null);
+                          onChnage("");
                         }}
                       >
-                        <X className="w-4 h-4 " />
+                        <X className="w-4 h-4" />
                       </Button>
                       <div className="w-[140px] h-[140px] relative">
                         {fileUrl && (
                           <Image
                             fill
-                            alt="course image"
+                            alt="PDF file"
                             src={"/pdf-image.png"}
                           />
                         )}
                       </div>
                       <div className="flex flex-col gap-y-4 items-start">
-                        <span className="text-xl  text-black">
-                          تم تحميل الملف الخاص بك
+                        <span className="text-xl text-foreground">
+                          {t("fileUploaded")}
                         </span>
+                        {fileUrl && (
+                          <a
+                            href={fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm text-primary hover:underline"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {t("viewFile")}
+                          </a>
+                        )}
                       </div>
                     </div>
                   );
@@ -226,11 +240,11 @@ export const PdfUploaderS3 = ({
                   return (
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                       <XCircle className="h-8 w-8 text-red-500 mb-2" />
-                      <p className="mb-2 text-sm text-zinc-700 dark:text-zinc-50">
+                      <p className="mb-2 text-sm text-foreground">
                         <span className="font-semibold mx-2 text-red-500">
-                          هناك خطأ ما
+                          {t("errorOccurred")}
                         </span>
-                        يرجى إعادة المحاولة مرة أخرى
+                        {t("pleaseTryAgain")}
                       </p>
                     </div>
                   );

@@ -21,6 +21,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { Chapter, Course, Product } from "database";
+import { useTranslations } from "next-intl";
 // import CourseContent from "@/src/app/(academy)/_components/course-component/course-content";
 
 const addTextSchema = z.object({
@@ -28,24 +29,13 @@ const addTextSchema = z.object({
   content: z.any(),
 });
 
-const selectionButtoms = [
-  {
-    title: "مسودة",
-    description: "سيتم عرضها لك فقط",
-    value: "DRAFT",
-  },
-  {
-    title: "متاح للجميع",
-    description: "سيكون مرئيًا للجميع",
-    value: "PUBLISED",
-  },
-];
 
 interface PublishProductFormProps {
   product: Product;
 }
 
 function ProductPublishingForm({ product }: PublishProductFormProps) {
+  const t = useTranslations("productForms.publishingForm");
   const router = useRouter();
   const path = usePathname();
   const productId = getValueFromUrl(path, 2);
@@ -53,6 +43,19 @@ function ProductPublishingForm({ product }: PublishProductFormProps) {
   const [selectedItem, setSelectedItem] = React.useState<
     "DRAFT" | "PUBLISED" | "EARLY_ACCESS" | "PRIVATE"
   >("PUBLISED");
+
+  const selectionButtoms = [
+    {
+      title: t("draft"),
+      description: t("draftDescription"),
+      value: "DRAFT",
+    },
+    {
+      title: t("availableToAll"),
+      description: t("availableToAllDescription"),
+      value: "PUBLISED",
+    },
+  ];
   const form = useForm<z.infer<typeof addTextSchema>>({
     mode: "onChange",
     resolver: zodResolver(addTextSchema),
@@ -61,7 +64,7 @@ function ProductPublishingForm({ product }: PublishProductFormProps) {
     },
   });
 
-  const mutation = trpc.launchProduct.useMutation({
+  const mutation = trpc.products.launchProduct.useMutation({
     onSuccess: () => {
       maketoast.success();
       window.location.href = "/products";
@@ -93,10 +96,10 @@ function ProductPublishingForm({ product }: PublishProductFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    عنوان المنتج <span className="text-red-600 text-xl">*</span>
+                    {t("productTitle")} <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="عنوان المنتج" {...field} />
+                    <Input placeholder={t("productTitlePlaceholder")} {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -108,7 +111,7 @@ function ProductPublishingForm({ product }: PublishProductFormProps) {
       </div>
       <div className="col-span-1 hidden md:block  w-full h-full ">
         <Card>
-          <CardContent className="w-full bg-[#F2F4F4]  h-fit flex flex-col pt-4  space-y-2">
+          <CardContent className="w-full bg-muted h-fit flex flex-col pt-4 space-y-2">
             {selectionButtoms.map((item) => (
               <Button
                 key={item.value}
@@ -117,14 +120,14 @@ function ProductPublishingForm({ product }: PublishProductFormProps) {
                 onClick={() => setSelectedItem(item.value)}
                 variant="secondary"
                 size="lg"
-                className={`bg-white flex items-start justify-center flex-col gap-x-4 text-lg border text-black h-16 ${
+                className={`bg-card flex items-start justify-start flex-col gap-y-1 text-lg border border-border text-foreground min-h-[80px] w-full ${
                   selectedItem === item.value ? "border-primary border-2" : ""
                 }`}
               >
-                <span className="text-md font-bold text-start">
+                <span className="text-md font-bold text-start w-full">
                   {item.title}
                 </span>
-                <p className="text-gray-500 text-sm text-start my-1">
+                <p className="text-muted-foreground text-sm text-start w-full">
                   {item.description}
                 </p>
               </Button>
@@ -139,11 +142,16 @@ function ProductPublishingForm({ product }: PublishProductFormProps) {
                 size="lg"
               >
                 {mutation.isLoading ? <LoadingSpinner /> : null}
-                نشر المنتج
+                {t("publishProduct")}
               </Button>
-              <Button className="w-full" variant="secondary" size="lg">
-                {" "}
-                إلغاء والعودة
+              <Button
+                onClick={() => router.back()}
+                className="w-full"
+                variant="secondary"
+                size="lg"
+                type="button"
+              >
+                {t("cancelAndGoBack")}
               </Button>
             </div>
           </CardContent>

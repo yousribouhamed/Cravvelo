@@ -5,6 +5,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   Form,
   FormControl,
@@ -27,17 +28,12 @@ import { maketoast } from "@/src/components/toasts";
 import { trpc } from "@/src/app/_trpc/client";
 import axios from "axios";
 
-const addVideoSchema = z.object({
-  title: z.string().min(1, "عنوان الفيديو مطلوب"),
-  content: z.any().optional(),
-  videoFile: z.any().optional(),
-});
-
 interface AddVideoFormProps {
   chapterID: string;
 }
 
 function AddVideoForm({ chapterID }: AddVideoFormProps) {
+  const t = useTranslations("courses.addVideoForm");
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [selectedVideo, setSelectedVideo] = React.useState<File | null>(null);
@@ -55,6 +51,12 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
 
   const createModuleMutation = trpc.createModuleWithVideo.useMutation();
 
+  const addVideoSchema = z.object({
+    title: z.string().min(1, t("validationErrors.titleRequired")),
+    content: z.any().optional(),
+    videoFile: z.any().optional(),
+  });
+
   const form = useForm<z.infer<typeof addVideoSchema>>({
     resolver: zodResolver(addVideoSchema),
     defaultValues: {
@@ -70,7 +72,7 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
       // Validate file
       const validation = VideoValidation.validateFile(file);
       if (!validation.valid) {
-        handleError(validation.error || "ملف غير صالح");
+        handleError(validation.error || t("validationErrors.invalidFile"));
         return;
       }
 
@@ -86,8 +88,8 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
       setSelectedVideo(file);
       form.setValue("videoFile", file);
     } catch (error) {
-      handleError(error, "فشل في تحضير الفيديو");
-      maketoast.error("فشل في تحضير الفيديو");
+      handleError(error, t("validationErrors.prepareFailed"));
+      maketoast.error(t("validationErrors.prepareFailed"));
     }
   };
 
@@ -200,7 +202,7 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
   // Form submission with direct upload
   async function onSubmit(values: z.infer<typeof addVideoSchema>) {
     if (!selectedVideo) {
-      maketoast.error("يرجى اختيار ملف فيديو");
+      maketoast.error(t("validationErrors.selectVideo"));
       return;
     }
 
@@ -232,7 +234,7 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
 
       updateProgress(100);
       setUploadStatus("completed");
-      maketoast.success("تم رفع الفيديو وإنشاء الوحدة بنجاح");
+      maketoast.success(t("messages.uploadSuccess"));
 
       // Small delay to show completion before redirect
       setTimeout(() => {
@@ -241,8 +243,8 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
     } catch (error) {
       console.error("Upload error:", error);
       setUploadStatus("error");
-      handleError(error, "فشل في رفع الفيديو");
-      maketoast.error("فشل في رفع الفيديو");
+      handleError(error, t("validationErrors.uploadFailed"));
+      maketoast.error(t("validationErrors.uploadFailed"));
     }
   }
 
@@ -257,15 +259,15 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
   const getUploadButtonText = () => {
     switch (uploadStatus) {
       case "uploading":
-        return `جاري الرفع ${uploadProgress}%`;
+        return t("buttonText.uploading", { progress: uploadProgress });
 
       case "completed":
-        return "تم بنجاح ✓";
+        return t("buttonText.completed");
       default:
         if (createModuleMutation.isLoading) {
-          return "جاري إنشاء الوحدة...";
+          return t("buttonText.creating");
         }
-        return "رفع وحفظ";
+        return t("buttonText.uploadAndSave");
     }
   };
 
@@ -287,12 +289,12 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      عنوان مقطع الفيديو{" "}
+                      {t("formTitle")}{" "}
                       <span className="text-red-600 text-xl">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="مثال : دورة في التصميم الجرافيكي للمبتدئين"
+                        placeholder={t("formPlaceholder")}
                         {...field}
                         disabled={uploadStatus === "uploading"}
                       />
@@ -308,7 +310,7 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      إضافة ملف فيديو{" "}
+                      {t("addVideoFile")}{" "}
                       <span className="text-red-600 text-xl">*</span>
                     </FormLabel>
                     <FormControl>
@@ -352,12 +354,12 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
                 <CardContent className="w-full h-fit flex justify-end items-center p-6 gap-x-4">
                   <Button
                     onClick={() => router.back()}
-                    className="rounded-xl"
+                    className="bg-white dark:bg-card rounded-xl border"
                     variant="secondary"
                     type="button"
                     disabled={uploadStatus === "uploading"}
                   >
-                    إلغاء والعودة
+                    {t("cancelAndGoBack")}
                   </Button>
                   <Button
                     disabled={isSubmitDisabled}
@@ -390,12 +392,12 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
               </Button>
               <Button
                 onClick={() => router.back()}
-                className="w-full"
+                className="w-full bg-white dark:bg-card rounded-xl border"
                 variant="secondary"
                 size="lg"
                 disabled={uploadStatus === "uploading"}
               >
-                إلغاء والعودة
+                {t("cancelAndGoBack")}
               </Button>
             </CardContent>
           </Card>

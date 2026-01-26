@@ -3,6 +3,7 @@
 import { z } from "@/src/lib/zod-error-map";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
 import { trpc } from "@/src/app/_trpc/client";
 import { Button } from "@ui/components/ui/button";
 import {
@@ -31,9 +32,10 @@ interface StudentEngagmentProps {
 }
 
 function StudentEngagment({ course }: StudentEngagmentProps) {
+  const t = useTranslations("courses.studentEngagement");
   const router = useRouter();
 
-  const mutation = trpc.updateCourseStudentEngagment.useMutation({
+  const mutation = trpc.course.updateCourseStudentEngagment.useMutation({
     onSuccess: () => {
       maketoast.success();
       router.push(`/courses/${course.id}/publishing`);
@@ -60,8 +62,8 @@ function StudentEngagment({ course }: StudentEngagmentProps) {
       allowComment: values.allowComments,
       certificate: values.cerrificate,
       courseId: course.id,
-      allowRating: false,
-      forceWatchAllCourse: false,
+      allowRating: values.allowRating,
+      forceWatchAllCourse: values.forceWatchAllCourse,
     });
   }
 
@@ -75,10 +77,10 @@ function StudentEngagment({ course }: StudentEngagmentProps) {
             className="space-y-8"
           >
             <FormLabel className="text-xl  block font-bold text-foreground">
-              الشهادات
+              {t("certificates")}
             </FormLabel>
             <FormLabel className="text-md block  text-muted-foreground">
-              حدد اعدادات الشهادة في دورتك و متى يحق لطالب الحصول عليها
+              {t("certificatesDescription")}
             </FormLabel>
 
             <div>
@@ -87,9 +89,9 @@ function StudentEngagment({ course }: StudentEngagmentProps) {
                   control={form.control}
                   name="cerrificate"
                   render={({ field }) => (
-                    <FormItem className="flex flex-row bg-card dark:bg-gray-800 items-center justify-between rounded-lg border dark:border-gray-700 p-3 shadow-sm">
+                    <FormItem className="flex flex-row bg-card items-center justify-between rounded-lg border border-border p-3 shadow-sm">
                       <div className="space-y-0.5">
-                        <FormLabel>تفعيل شهادة على الدورة</FormLabel>
+                        <FormLabel>{t("enableCertificate")}</FormLabel>
                       </div>
                       <FormControl>
                         <div dir="ltr">
@@ -104,18 +106,18 @@ function StudentEngagment({ course }: StudentEngagmentProps) {
                 />
 
                 <FormLabel className="text-xl  block font-bold text-foreground">
-                  التفاعل مع المحتوى
+                  {t("contentInteraction")}
                 </FormLabel>
                 <FormLabel className="text-md block  text-muted-foreground">
-                  حدد ما يمكن للطالب القيام به اثناء الدورة
+                  {t("contentInteractionDescription")}
                 </FormLabel>
                 <FormField
                   control={form.control}
                   name="allowComments"
                   render={({ field }) => (
-                    <FormItem className="flex flex-row bg-card dark:bg-gray-800 items-center justify-between rounded-lg border dark:border-gray-700 p-3 shadow-sm">
+                    <FormItem className="flex flex-row bg-card items-center justify-between rounded-lg border border-border p-3 shadow-sm">
                       <div className="space-y-0.5">
-                        <FormLabel>السماح بالتعليقات على هذه الدورة</FormLabel>
+                        <FormLabel>{t("allowComments")}</FormLabel>
                       </div>
                       <FormControl>
                         <div dir="ltr">
@@ -144,7 +146,7 @@ function StudentEngagment({ course }: StudentEngagmentProps) {
               size="lg"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              حفظ والمتابعة
+              {t("saveAndContinue")}
             </Button>
             <Button
               onClick={() => router.back()}
@@ -153,7 +155,7 @@ function StudentEngagment({ course }: StudentEngagmentProps) {
               size="lg"
             >
               {" "}
-              إلغاء والعودة
+              {t("cancelAndGoBack")}
             </Button>
           </CardContent>
         </Card>

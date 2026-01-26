@@ -23,6 +23,7 @@ import { CravveloEditor } from "@cravvelo/editor";
 import { Product } from "database";
 import { maketoast } from "../../toasts";
 import { PdfUploaderS3 } from "../../uploaders/pdf-uploader";
+import { useTranslations } from "next-intl";
 
 const addProductConentNameSchema = z.object({
   name: z.string().min(1).max(50),
@@ -37,10 +38,11 @@ interface ProductContentFormProps {
 }
 
 function ProductContentForm({ product }: ProductContentFormProps) {
+  const t = useTranslations("productForms.contentForm");
   const router = useRouter();
   const path = usePathname();
 
-  const mutation = trpc.createProductContent.useMutation({
+  const mutation = trpc.products.createProductContent.useMutation({
     onSuccess: () => {
       maketoast.success();
       router.push(`/products/${product.id}/pricing`);
@@ -108,10 +110,10 @@ function ProductContentForm({ product }: ProductContentFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    اسم المنتج <span className="text-red-600 text-xl">*</span>
+                    {t("productName")} <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="اسم المنتج" {...field} />
+                    <Input placeholder={t("productNamePlaceholder")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -123,7 +125,7 @@ function ProductContentForm({ product }: ProductContentFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    إضافة ملف pdf{" "}
+                    {t("addPdfFile")}{" "}
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
@@ -142,7 +144,7 @@ function ProductContentForm({ product }: ProductContentFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    إضافة صورة
+                    {t("addImage")}
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
@@ -161,14 +163,14 @@ function ProductContentForm({ product }: ProductContentFormProps) {
               render={({ field }) => (
                 <FormItem className="w-full ">
                   <FormLabel>
-                    وصف مختصر <span className="text-red-600 text-xl">*</span>
+                    {t("briefDescription")} <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
                     <Textarea
                       id="description"
                       rows={3}
                       className="min-h-[100px]"
-                      placeholder="أدخل ملخصًا للدورة هنا"
+                      placeholder={t("briefDescriptionPlaceholder")}
                       {...field}
                     />
                   </FormControl>
@@ -182,7 +184,7 @@ function ProductContentForm({ product }: ProductContentFormProps) {
               render={({ field }) => (
                 <FormItem className="w-full ">
                   <FormLabel>
-                    وصف المنتج الخاص بك{" "}
+                    {t("productDescription")}{" "}
                     <span className="text-red-600 text-xl">*</span>
                   </FormLabel>
                   <FormControl>
@@ -203,8 +205,7 @@ function ProductContentForm({ product }: ProductContentFormProps) {
                   variant="secondary"
                   type="button"
                 >
-                  {" "}
-                  إلغاء والعودة
+                  {t("cancelAndGoBack")}
                 </Button>
                 <Button
                   disabled={mutation.isLoading}
@@ -212,7 +213,7 @@ function ProductContentForm({ product }: ProductContentFormProps) {
                   className=" flex items-center gap-x-2 rounded-xl"
                 >
                   {mutation.isLoading ? <LoadingSpinner /> : null}
-                  حفظ والمتابعة
+                  {t("saveAndContinue")}
                 </Button>
               </CardContent>
             </Card>
@@ -230,7 +231,7 @@ function ProductContentForm({ product }: ProductContentFormProps) {
               size="lg"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              حفظ والمتابعة
+              {t("saveAndContinue")}
             </Button>
             <Button
               onClick={() => router.back()}
@@ -238,8 +239,7 @@ function ProductContentForm({ product }: ProductContentFormProps) {
               variant="secondary"
               size="lg"
             >
-              {" "}
-              إلغاء والعودة
+              {t("cancelAndGoBack")}
             </Button>
           </CardContent>
         </Card>
