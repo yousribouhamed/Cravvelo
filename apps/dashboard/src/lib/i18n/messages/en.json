@@ -682,6 +682,123 @@
       "placeholder": "Search students..."
     }
   },
+  "courses": {
+    "columns": {
+      "title": "Course Title",
+      "price": "Price",
+      "level": "Level",
+      "status": "Status",
+      "createdAt": "Created At",
+      "studentsNbr": "Enrolled Students",
+      "actions": "Actions"
+    },
+    "filters": {
+      "status": "Status",
+      "level": "Level",
+      "draft": "Draft",
+      "published": "Published",
+      "archived": "Archived",
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "search": {
+      "placeholder": "Search courses..."
+    },
+    "status": {
+      "draft": "Draft",
+      "published": "Published",
+      "archived": "Archived",
+      "private": "Private"
+    },
+    "level": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "actions": {
+      "edit": "Edit",
+      "duplicate": "Duplicate",
+      "viewRatings": "View Ratings",
+      "delete": "Delete Course",
+      "addNew": "Add New Course"
+    },
+    "modal": {
+      "title": "Add New Course",
+      "courseTitle": "Course Title",
+      "courseTitlePlaceholder": "Enter new course title, e.g.: UX Design Course",
+      "cancel": "Cancel",
+      "add": "Add New"
+    },
+    "timeAgo": {
+      "years": "{count} years ago",
+      "year": "1 year ago",
+      "months": "{count} months ago",
+      "month": "1 month ago",
+      "weeks": "{count} weeks ago",
+      "week": "1 week ago",
+      "days": "{count} days ago",
+      "day": "1 day ago",
+      "hours": "{count} hours ago",
+      "hour": "1 hour ago",
+      "minutes": "{count} minutes ago",
+      "minute": "1 minute ago",
+      "seconds": "{count} seconds ago",
+      "now": "Just now"
+    }
+  },
+  "products": {
+    "columns": {
+      "title": "Product Title",
+      "price": "Price",
+      "createdAt": "Created At",
+      "numberOfDownloads": "Number of Downloads",
+      "actions": "Actions"
+    },
+    "filters": {
+      "status": "Status",
+      "draft": "Draft",
+      "published": "Published",
+      "private": "Private"
+    },
+    "search": {
+      "placeholder": "Search products..."
+    },
+    "status": {
+      "draft": "Draft",
+      "published": "Published",
+      "private": "Private"
+    },
+    "actions": {
+      "edit": "Edit",
+      "duplicate": "Duplicate",
+      "delete": "Delete Product",
+      "addNew": "Add New Product"
+    },
+    "modal": {
+      "title": "Add New Product",
+      "productTitle": "Product Title",
+      "productTitlePlaceholder": "Enter new product title, e.g.: Digital Marketing E-book",
+      "cancel": "Cancel",
+      "add": "Add New"
+    },
+    "timeAgo": {
+      "years": "{count} years ago",
+      "year": "1 year ago",
+      "months": "{count} months ago",
+      "month": "1 month ago",
+      "weeks": "{count} weeks ago",
+      "week": "1 week ago",
+      "days": "{count} days ago",
+      "day": "1 day ago",
+      "hours": "{count} hours ago",
+      "hour": "1 hour ago",
+      "minutes": "{count} minutes ago",
+      "minute": "1 minute ago",
+      "seconds": "{count} seconds ago",
+      "now": "Just now"
+    }
+  },
   "invoices": {
     "columns": {
       "invoiceNumber": "Invoice Number",

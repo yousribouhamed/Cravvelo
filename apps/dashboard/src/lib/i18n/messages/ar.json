@@ -682,6 +682,123 @@
       "placeholder": "البحث عن الطلاب..."
     }
   },
+  "courses": {
+    "columns": {
+      "title": "عنوان الدورة",
+      "price": "السعر",
+      "level": "المستوى",
+      "status": "الحالة",
+      "createdAt": "تاريخ الإنشاء",
+      "studentsNbr": "عدد الطلاب الملتحقين",
+      "actions": "الإجراءات"
+    },
+    "filters": {
+      "status": "الحالة",
+      "level": "المستوى",
+      "draft": "مسودة",
+      "published": "منشور",
+      "archived": "مؤرشف",
+      "beginner": "مبتدئ",
+      "intermediate": "متوسط",
+      "advanced": "متقدم"
+    },
+    "search": {
+      "placeholder": "البحث عن الدورات..."
+    },
+    "status": {
+      "draft": "مسودة",
+      "published": "منشور",
+      "archived": "مؤرشف",
+      "private": "خاص"
+    },
+    "level": {
+      "beginner": "مبتدئ",
+      "intermediate": "متوسط",
+      "advanced": "متقدم"
+    },
+    "actions": {
+      "edit": "تعديل",
+      "duplicate": "استنساخ",
+      "viewRatings": "عرض التقييمات",
+      "delete": "حذف الدورة",
+      "addNew": "أنشئ دورة جديدة"
+    },
+    "modal": {
+      "title": "إضافة دورة جديدة",
+      "courseTitle": "عنوان الدورة",
+      "courseTitlePlaceholder": "أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم",
+      "cancel": "إلغاء",
+      "add": "إضافة جديد"
+    },
+    "timeAgo": {
+      "years": "منذ {count} سنوات",
+      "year": "منذ سنة واحدة",
+      "months": "منذ {count} أشهر",
+      "month": "منذ شهر واحد",
+      "weeks": "منذ {count} أسابيع",
+      "week": "منذ أسبوع واحد",
+      "days": "منذ {count} أيام",
+      "day": "منذ يوم واحد",
+      "hours": "منذ {count} ساعات",
+      "hour": "منذ ساعة واحدة",
+      "minutes": "منذ {count} دقائق",
+      "minute": "منذ دقيقة واحدة",
+      "seconds": "منذ {count} ثواني",
+      "now": "الآن"
+    }
+  },
+  "products": {
+    "columns": {
+      "title": "عنوان المنتج",
+      "price": "السعر",
+      "createdAt": "تاريخ الإنشاء",
+      "numberOfDownloads": "عدد التحميلات",
+      "actions": "الإجراءات"
+    },
+    "filters": {
+      "status": "الحالة",
+      "draft": "مسودة",
+      "published": "منشور",
+      "private": "خاص"
+    },
+    "search": {
+      "placeholder": "البحث عن المنتجات..."
+    },
+    "status": {
+      "draft": "مسودة",
+      "published": "منشور",
+      "private": "خاص"
+    },
+    "actions": {
+      "edit": "تعديل",
+      "duplicate": "استنساخ",
+      "delete": "حذف المنتج",
+      "addNew": "أنشئ منتج جديد"
+    },
+    "modal": {
+      "title": "إضافة منتج جديد",
+      "productTitle": "عنوان المنتج",
+      "productTitlePlaceholder": "أدخل عنوان المنتج الجديد، مثال: كتاب إلكتروني في التسويق الرقمي",
+      "cancel": "إلغاء",
+      "add": "إضافة جديد"
+    },
+    "timeAgo": {
+      "years": "منذ {count} سنوات",
+      "year": "منذ سنة واحدة",
+      "months": "منذ {count} أشهر",
+      "month": "منذ شهر واحد",
+      "weeks": "منذ {count} أسابيع",
+      "week": "منذ أسبوع واحد",
+      "days": "منذ {count} أيام",
+      "day": "منذ يوم واحد",
+      "hours": "منذ {count} ساعات",
+      "hour": "منذ ساعة واحدة",
+      "minutes": "منذ {count} دقائق",
+      "minute": "منذ دقيقة واحدة",
+      "seconds": "منذ {count} ثواني",
+      "now": "الآن"
+    }
+  },
   "invoices": {
     "columns": {
       "invoiceNumber": "رقم الفاتورة",

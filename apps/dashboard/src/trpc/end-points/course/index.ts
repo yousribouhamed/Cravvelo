@@ -32,15 +32,46 @@ export const course = {
       }
     }),
 
-  getAllCourses: privateProcedure.query(async ({ input, ctx }) => {
-    const courses = await ctx.prisma.course.findMany({
-      where: {
+  getAllCourses: privateProcedure
+    .input(
+      z.object({
+        search: z.string().optional(),
+        status: z.array(z.string()).optional(),
+        level: z.array(z.string()).optional(),
+      }).optional()
+    )
+    .query(async ({ input, ctx }) => {
+      const whereClause: any = {
         accountId: ctx.account.id,
-      },
-    });
+      };
 
-    return courses;
-  }),
+      // Add search filter
+      if (input?.search && input.search.trim().length > 0) {
+        whereClause.OR = [
+          { title: { contains: input.search, mode: "insensitive" } },
+          { seoTitle: { contains: input.search, mode: "insensitive" } },
+        ];
+      }
+
+      // Add status filter
+      if (input?.status && input.status.length > 0) {
+        // Normalize PUBLISHED to PUBLISED (handle typo in database)
+        const normalizedStatus = input.status.map(s => s === "PUBLISHED" ? "PUBLISED" : s);
+        whereClause.status = { in: normalizedStatus };
+      }
+
+      // Add level filter
+      if (input?.level && input.level.length > 0) {
+        whereClause.level = { in: input.level };
+      }
+
+      const courses = await ctx.prisma.course.findMany({
+        where: whereClause,
+        orderBy: { createdAt: "desc" },
+      });
+
+      return courses;
+    }),
   priceCourse: privateProcedure
     .input(
       z.object({
@@ -265,19 +296,45 @@ export const course = {
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const course = await ctx.prisma.course.delete({
+        const course = await ctx.prisma.course.findUnique({
           where: {
             id: input.courseId,
           },
         });
 
-        await deleteFileFromS3Bucket({
-          fileName: getKeyFromUrl(course.thumbnailUrl),
+        if (!course) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Course not found",
+          });
+        }
+
+        // Delete thumbnail from S3 if it exists
+        if (course.thumbnailUrl) {
+          try {
+            await deleteFileFromS3Bucket({
+              fileName: getKeyFromUrl(course.thumbnailUrl),
+            });
+          } catch (s3Error) {
+            console.error("Error deleting thumbnail from S3:", s3Error);
+            // Continue with course deletion even if S3 deletion fails
+          }
+        }
+
+        // Delete the course
+        await ctx.prisma.course.delete({
+          where: {
+            id: input.courseId,
+          },
         });
 
-        return course;
+        return { success: true };
       } catch (err) {
-        console.error(err);
+        console.error("Error deleting course:", err);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: err instanceof Error ? err.message : "Failed to delete course",
+        });
       }
     }),
 

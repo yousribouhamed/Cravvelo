@@ -1,7 +1,5 @@
 import { Course } from "database";
-import { CoursesColumns } from "../components/columns/courses";
-import { DataTable } from "@/src/components/data-table";
-import AddCourse from "@/src/components/models/create-course-modal";
+import CoursesTableShell from "@/src/app/(dashboard)/courses/CoursesTableShell";
 
 interface CoursesPageProps {
   courses: Course[];
@@ -10,10 +8,7 @@ interface CoursesPageProps {
 export default function CoursesPage({ courses }: CoursesPageProps) {
   return (
     <div className="my-8 flex flex-col gap-y-4">
-      <div className="w-full h-[40px] flex items-center justify-end">
-        <AddCourse />
-      </div>
-      <DataTable columns={CoursesColumns} data={courses ?? []} />
+      <CoursesTableShell initialData={courses ?? []} />
     </div>
   );
 }

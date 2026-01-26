@@ -24,13 +24,15 @@ import { Input } from "@ui/components/ui/input";
 import { addCourseSchema } from "@/src/lib/validators/course";
 import { trpc } from "@/src/app/_trpc/client";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import * as React from "react";
 
 const AddProductModel: FC = ({}) => {
+  const t = useTranslations("products");
   const router = useRouter();
   const [isOpen, setIsOpen] = React.useState(false);
   const [isLaoding, setIsLoading] = React.useState(false);
-  const mutation = trpc.createProduct.useMutation({
+  const mutation = trpc.products.createProduct.useMutation({
     onSuccess: ({ id }) => {
       router.push(`/products/${id}/content`);
     },
@@ -79,10 +81,10 @@ const AddProductModel: FC = ({}) => {
               stroke-linejoin="round"
             />
           </svg>
-          إنشاء منتج جديد
+          {t("actions.addNew")}
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-lg" title="إضافة منتج جديد">
+      <DialogContent className="max-w-lg" title={t("modal.title")}>
         <div className="w-full px-4 pb-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -91,10 +93,10 @@ const AddProductModel: FC = ({}) => {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>اسم المنتج*</FormLabel>
+                    <FormLabel>{t("modal.productTitle")} *</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="أدخل اسم المنتج الجديد مثل كتاب جديد أو شيء من هذا القبيل"
+                        placeholder={t("modal.productTitlePlaceholder")}
                         {...field}
                       />
                     </FormControl>
@@ -105,7 +107,7 @@ const AddProductModel: FC = ({}) => {
               />
               <DialogFooter className="w-full h-[50px] flex items-center justify-end gap-x-4">
                 <Button data-ripple-light="true" variant="ghost">
-                  إلغاء
+                  {t("modal.cancel")}
                 </Button>
                 <Button
                   data-ripple-light="true"
@@ -114,7 +116,7 @@ const AddProductModel: FC = ({}) => {
                   type="submit"
                 >
                   {mutation.isLoading ? <LoadingSpinner /> : null}
-                  إضافة جديد
+                  {t("modal.add")}
                 </Button>
               </DialogFooter>
             </form>

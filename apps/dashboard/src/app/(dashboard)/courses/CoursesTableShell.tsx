@@ -1,32 +1,34 @@
 "use client";
 import { DataTable } from "@/src/components/data-table/tables";
-import { Product } from "database";
+import { Course } from "database";
 import type { FC } from "react";
 import { trpc } from "@/src/app/_trpc/client";
-import { useProductsColumns } from "@/src/components/data-table/columns/products";
+import { useCoursesColumns } from "@/src/modules/course/components/columns/courses";
 import { useMounted } from "@/src/hooks/use-mounted";
-import DeleteProductModel from "@/src/components/models/delete-product-modal";
+import DeleteCourseModel from "@/src/components/models/delete-course-modal";
 import { Loader } from "@/src/components/loader-icon";
 import { useState } from "react";
 import { useDebounce } from "@/src/hooks/use-debounce";
 
-interface ProductsTableShellProps {
-  initialData: Product[];
+interface CoursesTableShellProps {
+  initialData: Course[];
 }
 
-const ProductsTableShell: FC<ProductsTableShellProps> = ({ initialData }) => {
+const CoursesTableShell: FC<CoursesTableShellProps> = ({ initialData }) => {
   const isMounted = useMounted();
-  const columns = useProductsColumns();
+  const columns = useCoursesColumns();
   
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilters, setStatusFilters] = useState<string[]>([]);
+  const [levelFilters, setLevelFilters] = useState<string[]>([]);
   
   const debouncedSearch = useDebounce(searchQuery, 400);
 
-  const { data, refetch, isLoading, isFetching } = trpc.products.getProducts.useQuery(
+  const { data, refetch, isLoading, isFetching } = trpc.course.getAllCourses.useQuery(
     {
       search: debouncedSearch || undefined,
       status: statusFilters.length > 0 ? statusFilters : undefined,
+      level: levelFilters.length > 0 ? levelFilters : undefined,
     },
     {
       placeholderData: initialData,
@@ -50,23 +52,29 @@ const ProductsTableShell: FC<ProductsTableShellProps> = ({ initialData }) => {
     setStatusFilters(values);
   };
 
+  const handleLevelFilterChange = (values: string[]) => {
+    setLevelFilters(values);
+  };
+
   // Show loader only when initially loading and no data exists
   // Don't show during background refetches when data already exists
-  const products = (data ?? []) as Product[];
-  const hasData = products.length > 0 || (initialData && initialData.length > 0);
+  const courses = (data ?? []) as Course[];
+  const hasData = courses.length > 0 || (initialData && initialData.length > 0);
   const showLoader = isLoading && !hasData;
+
 
   return (
     <div className="w-full min-h-[300px] h-fit flex flex-col mt-8">
-      <DeleteProductModel refetch={refetch} />
+      <DeleteCourseModel refetch={refetch} />
       <DataTable 
         columns={columns} 
-        data={products} 
+        data={courses} 
         showSearch={true}
         searchColumns={["title"]}
-        tableType="products"
+        tableType="courses"
         onSearchChange={handleSearchChange}
         onStatusFilterChange={handleStatusFilterChange}
+        onLevelFilterChange={handleLevelFilterChange}
         serverSideFiltering={true}
         isLoading={showLoader}
       />
@@ -74,4 +82,4 @@ const ProductsTableShell: FC<ProductsTableShellProps> = ({ initialData }) => {
   );
 };
 
-export default ProductsTableShell;
+export default CoursesTableShell;

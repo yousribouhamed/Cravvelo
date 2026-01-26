@@ -56,7 +56,7 @@ const AddNew: FC = () => {
     },
   });
 
-  const productMutation = trpc.createProduct.useMutation({
+  const productMutation = trpc.products.createProduct.useMutation({
     onSuccess: ({ id }) => {
       router.push(`/products/${id}/content`);
       maketoast.successWithText({ text: t("productCreated") });

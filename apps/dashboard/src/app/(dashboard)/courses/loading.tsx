@@ -4,7 +4,7 @@ import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import HeaderLoading from "@/src/components/layout/header-loading";
 import { Spinner as CravveloSpinner } from "@geist-ui/core";
 
-const Loading = async ({}) => {
+const Loading = () => {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">

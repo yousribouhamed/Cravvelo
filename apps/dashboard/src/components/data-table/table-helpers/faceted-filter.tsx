@@ -27,6 +27,9 @@ interface DataTableFacetedFilter<TData> {
     value: string;
     icon?: LucideIcon;
   }[];
+  serverSideFiltering?: boolean;
+  selectedValues?: string[];
+  onValuesChange?: (values: string[]) => void;
 }
 
 export function FacetedFilter<TData>({
@@ -35,31 +38,46 @@ export function FacetedFilter<TData>({
   table,
   setColumnFilters,
   id,
+  serverSideFiltering = false,
+  selectedValues = [],
+  onValuesChange,
 }: DataTableFacetedFilter<TData>) {
   const fliterState = table.getState().columnFilters;
-  // get all the selected itema
-  const ACTIVE_FILTERS = fliterState
-    .filter((item) => item.id === id)
-    .map((item) => item.value);
+  // get all the selected items
+  const ACTIVE_FILTERS = serverSideFiltering 
+    ? selectedValues
+    : fliterState
+        .filter((item) => item.id === id)
+        .map((item) => item.value as string);
 
   const onItemClicked = (isActive: boolean, value: string) => {
-    const currentFilters = fliterState.filter((item) => item.id === id);
-    const otherFilters = fliterState.filter((item) => item.id !== id);
-
-    if (isActive) {
-      // Remove this value from filters
-      const updatedFilters = currentFilters.filter((item) => item.value !== value);
-      setColumnFilters([...otherFilters, ...updatedFilters]);
+    if (serverSideFiltering && onValuesChange) {
+      // Server-side filtering
+      if (isActive) {
+        onValuesChange(ACTIVE_FILTERS.filter((v) => v !== value));
+      } else {
+        onValuesChange([...ACTIVE_FILTERS, value]);
+      }
     } else {
-      // Add this value to filters
-      setColumnFilters([
-        ...otherFilters,
-        ...currentFilters,
-        {
-          id,
-          value,
-        },
-      ]);
+      // Client-side filtering
+      const currentFilters = fliterState.filter((item) => item.id === id);
+      const otherFilters = fliterState.filter((item) => item.id !== id);
+
+      if (isActive) {
+        // Remove this value from filters
+        const updatedFilters = currentFilters.filter((item) => item.value !== value);
+        setColumnFilters([...otherFilters, ...updatedFilters]);
+      } else {
+        // Add this value to filters
+        setColumnFilters([
+          ...otherFilters,
+          ...currentFilters,
+          {
+            id,
+            value,
+          },
+        ]);
+      }
     }
   };
 

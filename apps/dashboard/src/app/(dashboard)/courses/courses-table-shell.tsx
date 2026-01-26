@@ -19,8 +19,8 @@ const CoursesTableShell: FC<CoursesTableShellProps> = ({
 }) => {
   const isMounted = useMounted();
 
-  const { data, refetch } = trpc.getAllCourses.useQuery(undefined, {
-    initialData: initialData,
+  const { data, refetch } = trpc.course.getAllCourses.useQuery(undefined, {
+    placeholderData: initialData,
   });
 
   if (!isMounted) {

@@ -70,10 +70,11 @@ const DeleteCourseModel: FC<DeleteCourseModelProps> = ({ refetch }) => {
           <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
           <Button
             className="flex items-center gap-x-2"
-            disabled={mutation.isLoading}
+            disabled={mutation.isLoading || !id}
             onClick={() => {
-              if (id === null) {
+              if (!id) {
                 setIsOpen(false);
+                return;
               }
               mutation.mutate({
                 courseId: id,

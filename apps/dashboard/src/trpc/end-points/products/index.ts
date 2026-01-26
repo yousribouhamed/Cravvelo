@@ -14,20 +14,49 @@ const getAccount = async ({ userId }: { userId: string }) => {
 };
 
 export const products = {
-  getProducts: privateProcedure.query(async ({ ctx }) => {
-    try {
-      const account = await getAccount({ userId: ctx.user.id });
-      const products = ctx.prisma.product.findMany({
-        where: {
+  getProducts: privateProcedure
+    .input(
+      z.object({
+        search: z.string().optional(),
+        status: z.array(z.string()).optional(),
+      }).optional()
+    )
+    .query(async ({ input, ctx }) => {
+      try {
+        const account = await getAccount({ userId: ctx.user.id });
+        const whereClause: any = {
           accountId: account.id,
-        },
-      });
+        };
 
-      return products;
-    } catch (err) {
-      console.error(err);
-    }
-  }),
+        // Add search filter
+        if (input?.search && input.search.trim().length > 0) {
+          whereClause.OR = [
+            { title: { contains: input.search, mode: "insensitive" } },
+            { SeoTitle: { contains: input.search, mode: "insensitive" } },
+          ];
+        }
+
+        // Add status filter
+        if (input?.status && input.status.length > 0) {
+          // Normalize PUBLISHED to PUBLISED (handle typo in database)
+          const normalizedStatus = input.status.map(s => s === "PUBLISHED" ? "PUBLISED" : s);
+          whereClause.status = { in: normalizedStatus };
+        }
+
+        const products = await ctx.prisma.product.findMany({
+          where: whereClause,
+          orderBy: { createdAt: "desc" },
+        });
+
+        return products;
+      } catch (err) {
+        console.error(err);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to fetch products",
+        });
+      }
+    }),
   createProduct: privateProcedure
     .input(
       z.object({

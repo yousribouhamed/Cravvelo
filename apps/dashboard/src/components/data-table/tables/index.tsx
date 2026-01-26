@@ -23,9 +23,14 @@ import {
 } from "@ui/components/ui/table";
 import { ChevronLeftIcon, ChevronRightIcon, Search } from "lucide-react";
 import StudentTableHeader from "../tables-headers/students-table-header";
+import CoursesTableHeader from "../tables-headers/courses-table-header";
+import ProductsTableHeader from "../tables-headers/products-table-header";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import { cn } from "@ui/lib/utils";
+import AddCourse from "@/src/components/models/create-course-modal";
+import AddProduct from "@/src/components/models/create-product-modal";
+import { Loader } from "@/src/components/loader-icon";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -34,6 +39,12 @@ interface DataTableProps<TData, TValue> {
   showSearch?: boolean;
   searchPlaceholder?: string;
   searchColumns?: string[];
+  tableType?: "students" | "courses" | "products";
+  onSearchChange?: (value: string) => void;
+  onStatusFilterChange?: (values: string[]) => void;
+  onLevelFilterChange?: (values: string[]) => void;
+  serverSideFiltering?: boolean;
+  isLoading?: boolean;
 }
 
 interface ColumnFilter {
@@ -50,9 +61,17 @@ export function DataTable<TData, TValue>({
   showSearch = false,
   searchPlaceholder,
   searchColumns = [],
+  tableType = "students",
+  onSearchChange,
+  onStatusFilterChange,
+  onLevelFilterChange,
+  serverSideFiltering = false,
+  isLoading = false,
 }: DataTableProps<TData, TValue>) {
   const t = useTranslations("dataTable");
   const tStudents = useTranslations("students");
+  const tCourses = useTranslations("courses");
+  const tProducts = useTranslations("products");
   const locale = useLocale();
   const isRTL = locale === "ar";
   const [rowSelection, setRowSelection] = React.useState({});
@@ -60,6 +79,8 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+  const [searchValue, setSearchValue] = React.useState("");
+
 
   const table = useReactTable({
     data,
@@ -69,8 +90,7 @@ export function DataTable<TData, TValue>({
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
-
+    getFilteredRowModel: serverSideFiltering && (tableType === "courses" || tableType === "products") ? undefined : getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     state: {
       sorting,
@@ -87,24 +107,65 @@ export function DataTable<TData, TValue>({
             <Search className="text-muted-foreground w-4 h-4" />
             <input
               className="border-none bg-transparent focus:outline-none focus:border-none focus:ring-0 flex-1 text-foreground placeholder:text-muted-foreground"
-              placeholder={searchPlaceholder || tStudents("search.placeholder")}
-              value={(table.getColumn(searchColumns[0] || "full_name")?.getFilterValue() as string) ?? ""}
+              placeholder={searchPlaceholder || (tableType === "courses" ? tCourses("search.placeholder") : tableType === "products" ? tProducts("search.placeholder") : tStudents("search.placeholder"))}
+              value={serverSideFiltering && (tableType === "courses" || tableType === "products") ? searchValue : (table.getColumn(searchColumns[0] || (tableType === "courses" || tableType === "products" ? "title" : "full_name"))?.getFilterValue() as string) ?? ""}
               onChange={(event) => {
                 const value = event.target.value;
-                table.getAllColumns().forEach((column) => {
-                  if (searchColumns.length > 0 && searchColumns.includes(column.id as string)) {
-                    column.setFilterValue(value);
-                  } else if (searchColumns.length === 0 && ["full_name", "email", "phone"].includes(column.id as string)) {
-                    column.setFilterValue(value);
+                if (serverSideFiltering && (tableType === "courses" || tableType === "products")) {
+                  setSearchValue(value);
+                  if (onSearchChange) {
+                    onSearchChange(value);
                   }
-                });
+                } else {
+                  table.getAllColumns().forEach((column) => {
+                    if (searchColumns.length > 0 && searchColumns.includes(column.id as string)) {
+                      column.setFilterValue(value);
+                    } else if (searchColumns.length === 0 && ["full_name", "email", "phone"].includes(column.id as string)) {
+                      column.setFilterValue(value);
+                    }
+                  });
+                }
               }}
             />
           </div>
         )}
-        <StudentTableHeader data={data} table={table} setColumnFilters={setColumnFilters} />
+        {tableType === "courses" ? (
+          <>
+            <CoursesTableHeader 
+              data={data} 
+              table={table} 
+              setColumnFilters={setColumnFilters}
+              onStatusFilterChange={onStatusFilterChange}
+              onLevelFilterChange={onLevelFilterChange}
+              serverSideFiltering={serverSideFiltering}
+            />
+            <div className="ml-auto">
+              <AddCourse />
+            </div>
+          </>
+        ) : tableType === "products" ? (
+          <>
+            <ProductsTableHeader 
+              data={data} 
+              table={table} 
+              setColumnFilters={setColumnFilters}
+              onStatusFilterChange={onStatusFilterChange}
+              serverSideFiltering={serverSideFiltering}
+            />
+            <div className="ml-auto">
+              <AddProduct />
+            </div>
+          </>
+        ) : (
+          <StudentTableHeader data={data} table={table} setColumnFilters={setColumnFilters} />
+        )}
       </div>
-      <div className="rounded-md border my-4 bg-card text-card-foreground shadow-sm">
+      <div className="rounded-md border my-4 bg-card text-card-foreground shadow-sm relative">
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm z-20 rounded-md">
+            <Loader size={20} />
+          </div>
+        )}
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

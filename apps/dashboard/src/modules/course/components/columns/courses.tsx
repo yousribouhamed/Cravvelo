@@ -21,18 +21,31 @@ import { maketoast } from "@/src/components/toasts";
 import { useOpenCourseDeleteAction } from "@/src/lib/zustand/delete-actions";
 import { formatDZD, timeSince } from "@/src/lib/utils";
 import { DataTableColumnHeader } from "@/src/components/data-table/table-helpers/data-table-head";
+import { useTranslations } from "next-intl";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const CoursesColumns: ColumnDef<Course>[] = [
+export const useCoursesColumns = (): ColumnDef<Course>[] => {
+  const t = useTranslations("courses");
+
+  return [
   {
     id: "title",
     accessorKey: "title",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="عنوان الدورة" />
+      <DataTableColumnHeader column={column} title={t("columns.title")} />
     ),
     cell: ({ row }) => {
+      const status = row.original.status;
+      const statusKey = status === "DRAFT" 
+        ? "draft" 
+        : status === "PUBLISHED" || status === "PUBLISED"
+        ? "published"
+        : status === "ARCHIVED"
+        ? "archived"
+        : "private";
+      
       return (
         <div className="flex flex-col gap-y-2 justify-center items-start ">
           <Link href={`/courses/${row.original.id}/chapters`}>
@@ -42,11 +55,7 @@ export const CoursesColumns: ColumnDef<Course>[] = [
           </Link>
 
           <Badge className="bg-muted hover:bg-muted text-muted-foreground rounded-md">
-            {row.original.status === "DRAFT"
-              ? "مسودة"
-              : row.original.status === "PUBLISED"
-              ? "منشور"
-              : "خاص"}
+            {t(`status.${statusKey}`)}
           </Badge>
         </div>
       );
@@ -57,7 +66,7 @@ export const CoursesColumns: ColumnDef<Course>[] = [
     id: "price",
     accessorKey: "price",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="السعر" />
+      <DataTableColumnHeader column={column} title={t("columns.price")} />
     ),
     cell: ({ row }) => {
       return formatDZD(row.original.price === null ? 0 : row.original.price);
@@ -68,16 +77,19 @@ export const CoursesColumns: ColumnDef<Course>[] = [
     id: "level",
     accessorKey: "level",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title=" المستوى" />
+      <DataTableColumnHeader column={column} title={t("columns.level")} />
     ),
     cell: ({ row }) => {
+      const level = row.original.level;
+      const levelKey = level === "BEGINNER"
+        ? "beginner"
+        : level === "INTERMEDIATE"
+        ? "intermediate"
+        : "advanced";
+      
       return (
         <Badge className="bg-blue-500 hover:bg-blue-600 text-white rounded-md">
-          {row.original.level === "BEGINNER"
-            ? "مبتدئ"
-            : row.original.level === "INTERMEDIATE"
-            ? "متوسط"
-            : "صعب"}
+          {t(`level.${levelKey}`)}
         </Badge>
       );
     },
@@ -85,14 +97,14 @@ export const CoursesColumns: ColumnDef<Course>[] = [
   },
 
   {
-    id: "status",
-    accessorKey: "status",
+    id: "createdAt",
+    accessorKey: "createdAt",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="تاريخ الانشاء" />
+      <DataTableColumnHeader column={column} title={t("columns.createdAt")} />
     ),
     cell: ({ row }) => {
       return (
-        <p className="text-foreground">{timeSince(row.original.createdAt)}</p>
+        <p className="text-foreground">{timeSince(row.original.createdAt, t)}</p>
       );
     },
     filterFn: "includesString", // use built-in filter function
@@ -102,7 +114,7 @@ export const CoursesColumns: ColumnDef<Course>[] = [
     id: "studenstNbr",
     accessorKey: "studenstNbr",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="عدد الطلاب الملتحقين" />
+      <DataTableColumnHeader column={column} title={t("columns.studentsNbr")} />
     ),
     cell: ({ row }) => {
       return (
@@ -119,6 +131,7 @@ export const CoursesColumns: ColumnDef<Course>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
+      const t = useTranslations("courses");
       const payment = row.original;
       /* eslint-disable */
       const { setId, setIsOpen } = useOpenCourseDeleteAction();
@@ -132,7 +145,7 @@ export const CoursesColumns: ColumnDef<Course>[] = [
               "bg-muted border rounded-xl text-foreground dark:border-gray-700 dark:hover:bg-muted/80 dark:bg-muted/50"
             )}
           >
-            تعديل
+            {t("actions.edit")}
           </Link>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -162,7 +175,7 @@ export const CoursesColumns: ColumnDef<Course>[] = [
                       strokeLinejoin="round"
                     />
                   </svg>
-                  تعديل
+                  {t("actions.edit")}
                 </DropdownMenuItem>
               </Link>
 
@@ -189,7 +202,7 @@ export const CoursesColumns: ColumnDef<Course>[] = [
                     strokeLinejoin="round"
                   />
                 </svg>
-                استنساخ
+                {t("actions.duplicate")}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
 
@@ -210,7 +223,7 @@ export const CoursesColumns: ColumnDef<Course>[] = [
                       strokeLinejoin="round"
                     />
                   </svg>
-                  عرض التقييمات
+                  {t("actions.viewRatings")}
                 </DropdownMenuItem>
               </Link>
               <DropdownMenuSeparator />
@@ -236,7 +249,7 @@ export const CoursesColumns: ColumnDef<Course>[] = [
                     strokeLinejoin="round"
                   />
                 </svg>
-                حذف الدورة
+                {t("actions.delete")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -245,3 +258,4 @@ export const CoursesColumns: ColumnDef<Course>[] = [
     },
   },
 ];
+};

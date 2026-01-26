@@ -266,11 +266,63 @@ export function constructMetadata({
   };
 }
 
-export function timeSince(createdAt: Date): string {
+export function timeSince(createdAt: Date, t?: (key: string, values?: { count: number }) => string): string {
   const now = new Date();
   const createdDate = new Date(createdAt);
   const seconds = Math.floor((now.getTime() - createdDate.getTime()) / 1000);
 
+  // If translation function is provided, use it
+  if (t) {
+    let interval = Math.floor(seconds / 31536000); // seconds in a year
+    if (interval > 1) {
+      return t("timeAgo.years", { count: interval });
+    } else if (interval === 1) {
+      return t("timeAgo.year");
+    }
+
+    interval = Math.floor(seconds / 2592000); // seconds in a month
+    if (interval > 1) {
+      return t("timeAgo.months", { count: interval });
+    } else if (interval === 1) {
+      return t("timeAgo.month");
+    }
+
+    interval = Math.floor(seconds / 604800); // seconds in a week
+    if (interval > 1) {
+      return t("timeAgo.weeks", { count: interval });
+    } else if (interval === 1) {
+      return t("timeAgo.week");
+    }
+
+    interval = Math.floor(seconds / 86400); // seconds in a day
+    if (interval > 1) {
+      return t("timeAgo.days", { count: interval });
+    } else if (interval === 1) {
+      return t("timeAgo.day");
+    }
+
+    interval = Math.floor(seconds / 3600); // seconds in an hour
+    if (interval > 1) {
+      return t("timeAgo.hours", { count: interval });
+    } else if (interval === 1) {
+      return t("timeAgo.hour");
+    }
+
+    interval = Math.floor(seconds / 60); // seconds in a minute
+    if (interval > 1) {
+      return t("timeAgo.minutes", { count: interval });
+    } else if (interval === 1) {
+      return t("timeAgo.minute");
+    }
+
+    if (seconds < 10) {
+      return t("timeAgo.now");
+    }
+
+    return t("timeAgo.seconds", { count: seconds });
+  }
+
+  // Fallback to Arabic (for backward compatibility)
   let interval = Math.floor(seconds / 31536000); // seconds in a year
   if (interval > 1) {
     return `منذ ${interval} سنوات`;

@@ -26,9 +26,11 @@ import { trpc } from "@/src/app/_trpc/client";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { maketoast } from "../toasts";
+import { useTranslations } from "next-intl";
 
 const AddCourse: FC = ({}) => {
   const router = useRouter();
+  const t = useTranslations("courses");
   const [isOpen, setIsOpen] = React.useState(false);
 
   const [isLaoding, setIsLoading] = React.useState(false);
@@ -90,10 +92,10 @@ const AddCourse: FC = ({}) => {
                 strokeLinejoin="round"
               />
             </svg>
-            <span className="text-xs md:text-base text-foreground">أنشئ دورة جديدة</span>
+            <span className="text-xs md:text-base text-foreground">{t("actions.addNew")}</span>
           </Button>
         </DialogTrigger>
-        <DialogContent className="max-w-lg" title="إضافة دورة جديدة">
+        <DialogContent className="max-w-lg" title={t("modal.title")}>
           <div className="w-full px-4 pb-6">
             <Form {...form}>
               <form
@@ -105,10 +107,10 @@ const AddCourse: FC = ({}) => {
                   name="title"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>عنوان الدورة *</FormLabel>
+                      <FormLabel>{t("modal.courseTitle")} *</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="أدخل عنوان الدورة الجديدة، مثال: دورة تصميم تجربة المستخدم"
+                          placeholder={t("modal.courseTitlePlaceholder")}
                           {...field}
                         />
                       </FormControl>
@@ -119,7 +121,7 @@ const AddCourse: FC = ({}) => {
                 />
                 <DialogFooter className="w-full h-[50px] flex items-center  flex-nowrap justify-end gap-x-1 md:gap-x-4">
                   <Button variant="ghost" type="button" onClick={handleCancel}>
-                    إلغاء
+                    {t("modal.cancel")}
                   </Button>
                   <Button
                     className=" flex items-center gap-x-2"
@@ -127,7 +129,7 @@ const AddCourse: FC = ({}) => {
                     type="submit"
                   >
                     {mutation.isLoading ? <LoadingSpinner /> : null}
-                    إضافة جديد
+                    {t("modal.add")}
                   </Button>
                 </DialogFooter>
               </form>
