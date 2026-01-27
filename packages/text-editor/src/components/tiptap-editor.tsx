@@ -11,6 +11,52 @@ import { TiptapEditorProps } from "../types";
 import { MenuBar } from "./menu-bar";
 import "../style/editor.css";
 
+// Function to detect text direction from content
+const detectTextDirection = (html: string): "ltr" | "rtl" => {
+  if (!html || typeof document === "undefined") return "ltr";
+  
+  try {
+    // Extract text content from HTML
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    const text = tempDiv.textContent || tempDiv.innerText || "";
+    
+    if (!text.trim()) return "ltr";
+    
+    // RTL Unicode ranges: Arabic, Hebrew, and other RTL scripts
+    const rtlRanges = [
+      /[\u0590-\u05FF]/, // Hebrew
+      /[\u0600-\u06FF]/, // Arabic
+      /[\u0700-\u074F]/, // Syriac
+      /[\u0750-\u077F]/, // Arabic Supplement
+      /[\u08A0-\u08FF]/, // Arabic Extended-A
+      /[\uFB50-\uFDFF]/, // Arabic Presentation Forms-A
+      /[\uFE70-\uFEFF]/, // Arabic Presentation Forms-B
+    ];
+    
+    // Count RTL and LTR characters
+    let rtlCount = 0;
+    let ltrCount = 0;
+    
+    for (const char of text) {
+      const isRtl = rtlRanges.some(range => range.test(char));
+      
+      if (isRtl) {
+        rtlCount++;
+      } else if (/\S/.test(char)) {
+        // Count non-whitespace LTR characters
+        ltrCount++;
+      }
+    }
+    
+    // If we have significant RTL content, use RTL
+    // Otherwise default to LTR
+    return rtlCount > ltrCount * 0.3 ? "rtl" : "ltr";
+  } catch (error) {
+    return "ltr";
+  }
+};
+
 export const CravveloEditor: React.FC<TiptapEditorProps> = ({
   value,
   onChange,
@@ -19,10 +65,36 @@ export const CravveloEditor: React.FC<TiptapEditorProps> = ({
   onPreview,
   onClear,
   readOnly = false,
+  dir,
 }) => {
-  // Force RTL direction (Arabic)
-  const textDirection = "rtl";
-  const isRtl = true;
+  // Detect direction from content, with fallback to provided dir or DOM
+  const [detectedDirection, setDetectedDirection] = useState<"ltr" | "rtl">(() => {
+    if (value) {
+      return detectTextDirection(value);
+    }
+    return dir || (typeof window !== "undefined" 
+      ? (document.documentElement.dir || "ltr") as "ltr" | "rtl"
+      : "ltr");
+  });
+  
+  // Use provided direction as base, but detect from content
+  const baseDirection = dir || (typeof window !== "undefined" 
+    ? (document.documentElement.dir || "ltr") as "ltr" | "rtl"
+    : "ltr");
+  
+  // Detect direction from content when it changes
+  useEffect(() => {
+    if (value) {
+      const contentDir = detectTextDirection(value);
+      setDetectedDirection(contentDir);
+    } else {
+      setDetectedDirection(baseDirection);
+    }
+  }, [value, baseDirection]);
+  
+  // Use detected direction from content, fallback to base direction
+  const textDirection = detectedDirection || baseDirection;
+  const isRtl = textDirection === "rtl";
 
   // Safe value handling - ensure we have a valid string
   const safeValue = value || "";
@@ -65,10 +137,26 @@ export const CravveloEditor: React.FC<TiptapEditorProps> = ({
         const newContent = editor.getHTML();
         // Ensure we're passing a valid string
         if (typeof newContent === "string") {
+          // Detect direction from new content in real-time
+          const contentDir = detectTextDirection(newContent);
+          setDetectedDirection(contentDir);
+          
           onChange(newContent);
         }
       } catch (error) {
         console.error("Error getting editor content:", error);
+      }
+    },
+    onSelectionUpdate: ({ editor }) => {
+      // Also detect direction when selection changes (as user types)
+      if (readOnly) return;
+      
+      try {
+        const currentContent = editor.getHTML();
+        const contentDir = detectTextDirection(currentContent);
+        setDetectedDirection(contentDir);
+      } catch (error) {
+        // Silently fail for selection updates
       }
     },
     editorProps: {
@@ -77,6 +165,7 @@ export const CravveloEditor: React.FC<TiptapEditorProps> = ({
           isFullscreen ? "min-h-[calc(100vh-200px)]" : ""
         } ${readOnly ? "cursor-default" : ""}`,
         dir: textDirection,
+        "data-direction": textDirection,
       },
     },
   });
@@ -99,25 +188,39 @@ export const CravveloEditor: React.FC<TiptapEditorProps> = ({
     }
   }, [readOnly, editor]);
 
-  // Set RTL direction on editor mount
+  // Set direction on editor mount and when direction changes
   useEffect(() => {
     if (editor) {
       try {
         const editorElement = editor.view.dom as HTMLElement;
         if (editorElement) {
-          editorElement.dir = "rtl";
+          editorElement.dir = textDirection;
+          editorElement.setAttribute("dir", textDirection);
 
           // Update prose direction classes
           const proseElement = editorElement.closest(".prose");
           if (proseElement) {
-            proseElement.classList.add("rtl");
+            if (textDirection === "rtl") {
+              proseElement.classList.add("rtl");
+              proseElement.classList.remove("ltr");
+            } else {
+              proseElement.classList.add("ltr");
+              proseElement.classList.remove("rtl");
+            }
+          }
+          
+          // Also update the ProseMirror editor's direction
+          const proseMirrorElement = editorElement.querySelector(".ProseMirror") as HTMLElement;
+          if (proseMirrorElement) {
+            proseMirrorElement.dir = textDirection;
+            proseMirrorElement.setAttribute("dir", textDirection);
           }
         }
       } catch (error) {
-        console.error("Error setting RTL direction:", error);
+        console.error("Error setting direction:", error);
       }
     }
-  }, [editor]);
+  }, [editor, textDirection]);
 
   // Get active formats and editor state
   const activeFormats = new Set<string>();
@@ -220,10 +323,10 @@ export const CravveloEditor: React.FC<TiptapEditorProps> = ({
 
   return (
     <div
-      className={`border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden bg-transparent ${
+      className={`border border-border rounded-lg overflow-hidden bg-card ${
         isFullscreen ? "fixed inset-4 z-50 rounded-lg" : ""
-      } ${readOnly ? "bg-gray-50/50 dark:!bg-[#0A0A0C]" : ""}`}
-      dir="rtl"
+      } ${readOnly ? "bg-muted/50" : ""}`}
+      dir={textDirection}
     >
       {!readOnly && (
         <MenuBar
@@ -254,9 +357,9 @@ export const CravveloEditor: React.FC<TiptapEditorProps> = ({
       )}
       <EditorContent
         editor={editor}
-        className={`bg-transparent dark:!bg-[#0A0A0C] overflow-y-auto tiptap-content rtl ${
-          readOnly ? "bg-gray-50/50 dark:!bg-[#0A0A0C]" : ""
-        }`}
+        className={`bg-card overflow-y-auto tiptap-content ${
+          textDirection === "rtl" ? "rtl" : "ltr"
+        } ${readOnly ? "bg-muted/50" : ""}`}
       />
     </div>
   );

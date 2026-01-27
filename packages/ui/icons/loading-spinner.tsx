@@ -22,20 +22,20 @@ export function LoadingSpinner({
         fy=".3125"
         gradientTransform="scale(1.5)"
       >
-        <stop offset="0" stop-color="#FFFFFF"></stop>
-        <stop offset=".3" stop-color="#FFFFFF" stop-opacity=".9"></stop>
-        <stop offset=".6" stop-color="#FFFFFF" stop-opacity=".6"></stop>
-        <stop offset=".8" stop-color="#FFFFFF" stop-opacity=".3"></stop>
-        <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"></stop>
+        <stop offset="0" stopColor="#FFFFFF"></stop>
+        <stop offset=".3" stopColor="#FFFFFF" stopOpacity=".9"></stop>
+        <stop offset=".6" stopColor="#FFFFFF" stopOpacity=".6"></stop>
+        <stop offset=".8" stopColor="#FFFFFF" stopOpacity=".3"></stop>
+        <stop offset="1" stopColor="#FFFFFF" stopOpacity="0"></stop>
       </radialGradient>
       <circle
-        transform-origin="center"
+        transformOrigin="center"
         fill="none"
         stroke="url(#a12)"
-        stroke-width="22"
-        stroke-linecap="round"
-        stroke-dasharray="200 1000"
-        stroke-dashoffset="0"
+        strokeWidth="22"
+        strokeLinecap="round"
+        strokeDasharray="200 1000"
+        strokeDashoffset="0"
         cx="100"
         cy="100"
         r="70"
@@ -52,12 +52,12 @@ export function LoadingSpinner({
         ></animateTransform>
       </circle>
       <circle
-        transform-origin="center"
+        transformOrigin="center"
         fill="none"
         opacity=".2"
         stroke="#FFFFFF"
-        stroke-width="22"
-        stroke-linecap="round"
+        strokeWidth="22"
+        strokeLinecap="round"
         cx="100"
         cy="100"
         r="70"
@@ -88,20 +88,20 @@ export function OrangeLoadingSpinner({
         fy=".3125"
         gradientTransform="scale(1.5)"
       >
-        <stop offset="0" stop-color="#FC6B00"></stop>
-        <stop offset=".3" stop-color="#FC6B00" stop-opacity=".9"></stop>
-        <stop offset=".6" stop-color="#FC6B00" stop-opacity=".6"></stop>
-        <stop offset=".8" stop-color="#FC6B00" stop-opacity=".3"></stop>
-        <stop offset="1" stop-color="#FC6B00" stop-opacity="0"></stop>
+        <stop offset="0" stopColor="#FC6B00"></stop>
+        <stop offset=".3" stopColor="#FC6B00" stopOpacity=".9"></stop>
+        <stop offset=".6" stopColor="#FC6B00" stopOpacity=".6"></stop>
+        <stop offset=".8" stopColor="#FC6B00" stopOpacity=".3"></stop>
+        <stop offset="1" stopColor="#FC6B00" stopOpacity="0"></stop>
       </radialGradient>
       <circle
-        transform-origin="center"
+        transformOrigin="center"
         fill="none"
         stroke="url(#a12)"
-        stroke-width="22"
-        stroke-linecap="round"
-        stroke-dasharray="200 1000"
-        stroke-dashoffset="0"
+        strokeWidth="22"
+        strokeLinecap="round"
+        strokeDasharray="200 1000"
+        strokeDashoffset="0"
         cx="100"
         cy="100"
         r="70"
@@ -118,12 +118,12 @@ export function OrangeLoadingSpinner({
         ></animateTransform>
       </circle>
       <circle
-        transform-origin="center"
+        transformOrigin="center"
         fill="none"
         opacity=".2"
         stroke="#FC6B00"
-        stroke-width="22"
-        stroke-linecap="round"
+        strokeWidth="22"
+        strokeLinecap="round"
         cx="100"
         cy="100"
         r="70"

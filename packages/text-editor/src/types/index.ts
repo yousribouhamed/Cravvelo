@@ -31,6 +31,7 @@ export type TiptapEditorProps =
       onToggleFullscreen?: () => void;
       onPreview?: () => void;
       onClear?: () => void;
+      dir?: "ltr" | "rtl"; // Text direction
     }
   | {
       value: string;
@@ -40,6 +41,7 @@ export type TiptapEditorProps =
       onToggleFullscreen?: () => void;
       onPreview?: () => void;
       onClear?: () => void;
+      dir?: "ltr" | "rtl"; // Text direction
     };
 
 // Additional utility types for RTL support

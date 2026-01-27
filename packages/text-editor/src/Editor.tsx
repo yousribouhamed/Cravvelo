@@ -21,6 +21,12 @@ const CravveloEditor: React.FC<CravveloEditorProps> = ({
   const [wordCount, setWordCount] = useState(0);
   const [characterCount, setCharacterCount] = useState(0);
   const [content, setContent] = useState(initialValue);
+  const [direction, setDirection] = useState<"ltr" | "rtl">(() => {
+    if (typeof window !== "undefined") {
+      return (document.documentElement.dir || "ltr") as "ltr" | "rtl";
+    }
+    return "ltr";
+  });
 
   // Calculate word and character count
   useEffect(() => {
@@ -32,6 +38,31 @@ const CravveloEditor: React.FC<CravveloEditorProps> = ({
     setWordCount(words.length);
     setCharacterCount(textContent.length);
   }, [content]);
+
+  // Detect direction changes from DOM
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const updateDirection = () => {
+        const dir = (document.documentElement.dir || "ltr") as "ltr" | "rtl";
+        setDirection(dir);
+      };
+
+      // Initial check
+      updateDirection();
+
+      // Watch for direction changes
+      const observer = new MutationObserver(() => {
+        updateDirection();
+      });
+
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["dir"],
+      });
+
+      return () => observer.disconnect();
+    }
+  }, []);
 
   // Handle content changes
   const handleContentChange = (newContent: string) => {
@@ -68,14 +99,14 @@ const CravveloEditor: React.FC<CravveloEditorProps> = ({
   };
 
   return (
-    <div className={`bg-gray-100 ${className}`}>
+    <div className={`bg-card ${className}`}>
       <div className="max-w-full">
         {/* Header */}
-        <div className="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
+        <div className="bg-card shadow-sm border-b border-border px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <FileText className="h-6 w-6 text-blue-600" />
-              <div className="text-sm text-gray-500">
+              <FileText className="h-6 w-6 text-primary" />
+              <div className="text-sm text-muted-foreground">
                 {wordCount} words • {characterCount} characters
               </div>
             </div>
@@ -83,7 +114,7 @@ const CravveloEditor: React.FC<CravveloEditorProps> = ({
             <div className="flex items-center gap-3">
               <button
                 onClick={handleExport}
-                className="flex items-center gap-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm"
+                className="flex items-center gap-2 px-3 py-2 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition-colors text-sm"
               >
                 <Download className="h-4 w-4" />
                 Export
@@ -93,8 +124,8 @@ const CravveloEditor: React.FC<CravveloEditorProps> = ({
                 onClick={handlePreview}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-sm ${
                   showPreview
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-foreground hover:bg-muted/80"
                 }`}
               >
                 <Eye className="h-4 w-4" />
@@ -107,7 +138,7 @@ const CravveloEditor: React.FC<CravveloEditorProps> = ({
         {/* Main Content */}
         <div className="p-6">
           {showPreview ? (
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+            <div className="bg-card rounded-lg shadow-sm border border-border p-8">
               <div
                 className="prose prose-lg max-w-none"
                 dangerouslySetInnerHTML={{ __html: content }}
@@ -122,6 +153,7 @@ const CravveloEditor: React.FC<CravveloEditorProps> = ({
                 onToggleFullscreen={toggleFullscreen}
                 onPreview={handlePreview}
                 onClear={handleClear}
+                dir={direction}
               />
             </div>
           )}
