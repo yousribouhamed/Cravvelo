@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
+import { useTranslations } from "next-intl";
 import {
   CreditCard,
   Calendar,

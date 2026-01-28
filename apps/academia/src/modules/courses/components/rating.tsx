@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Star, Plus } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { getCourseRatings, createCourseRating } from "@/modules/courses/actions/ratings";
@@ -82,51 +82,54 @@ const Ratings: React.FC<RatingsProps> = ({
     studentName: "",
   });
 
-  const ratingsQuery = useQuery({
-    queryKey: ["courseRatings", courseId],
+  const queryOptions: UseQueryOptions<any, Error> = {
+    queryKey: ["courseRatings", courseId] as const,
     queryFn: async () => {
       const res = await getCourseRatings({ courseId, limit: 10, sortBy: "newest" });
       if (!res.success || !res.data) throw new Error(res.message || "Failed to load reviews");
       return res.data;
     },
-    initialData: initialComments.length
-      ? {
-          ratings: initialComments.map((c) => ({
-            id: c.id,
-            content: c.content,
-            rating: c.rating,
-            createdAt: c.createdAt,
-            Student: c.Student,
-          })),
-          pagination: {
-            total: initialComments.length,
-            limit: initialComments.length,
-            offset: 0,
-            hasMore: false,
-            totalPages: 1,
-            currentPage: 1,
-          },
-          statistics: {
-            averageRating:
-              initialComments.reduce((sum, c) => sum + (c.rating || 0), 0) /
-              (initialComments.length || 1),
-            totalRatings: initialComments.length,
-            highestRating: 5,
-            lowestRating: 1,
-            distribution: [5, 4, 3, 2, 1].map((r) => ({
-              rating: r,
-              count: initialComments.filter((c) => c.rating === r).length,
-              percentage:
-                initialComments.length > 0
-                  ? (initialComments.filter((c) => c.rating === r).length /
-                      initialComments.length) *
-                    100
-                  : 0,
-            })),
-          },
-        }
-      : undefined,
-  });
+  };
+
+  if (initialComments.length > 0) {
+    queryOptions.initialData = {
+      ratings: initialComments.map((c) => ({
+        id: c.id,
+        content: c.content,
+        rating: c.rating,
+        createdAt: c.createdAt,
+        Student: c.Student,
+      })),
+      pagination: {
+        total: initialComments.length,
+        limit: initialComments.length,
+        offset: 0,
+        hasMore: false,
+        totalPages: 1,
+        currentPage: 1,
+      },
+      statistics: {
+        averageRating:
+          initialComments.reduce((sum, c) => sum + (c.rating || 0), 0) /
+          (initialComments.length || 1),
+        totalRatings: initialComments.length,
+        highestRating: 5,
+        lowestRating: 1,
+        distribution: [5, 4, 3, 2, 1].map((r) => ({
+          rating: r,
+          count: initialComments.filter((c) => c.rating === r).length,
+          percentage:
+            initialComments.length > 0
+              ? (initialComments.filter((c) => c.rating === r).length /
+                  initialComments.length) *
+                100
+              : 0,
+        })),
+      },
+    };
+  }
+
+  const ratingsQuery = useQuery(queryOptions);
 
   const createMutation = useMutation({
     mutationFn: async () => {
