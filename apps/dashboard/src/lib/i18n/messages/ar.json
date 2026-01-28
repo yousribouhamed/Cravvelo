@@ -219,8 +219,12 @@
     "payments": "الدفع",
     "paymentRecords": "المدفوعات",
     "paymentMethods": "طرق الدفع",
+    "coupons": "القسائم",
+    "affiliateMarketing": "التسويق بالعمولة",
     "customers": "العملاء",
     "students": "الطلاب",
+    "certificates": "الشهادات",
+    "reviews": "التقييمات",
     "applications": "التطبيقات",
     "settings": "الإعدادات",
     "account": "الحساب",
@@ -247,6 +251,7 @@
     "marketing": "التسويق",
     "legal": "القانونية",
     "domain": "النطاق",
+    "general": "عام",
     "balance": "الرصيد"
   },
   "addNew": {
@@ -404,13 +409,54 @@
         "title": "النطاق الفرعي",
         "label": "النطاق الفرعي لموقعك.",
         "placeholder": "حدد اسم المجال الخاص بك",
-        "description": "يرجى استخدام 32 حرفًا كحد أقصى.",
-        "confirm": "تاكيد"
+        "description": "أدخل النطاق الفرعي المطلوب لموقعك",
+        "confirm": "تأكيد",
+        "preview": "المعاينة",
+        "validation": {
+          "required": "يرجى إدخال النطاق الفرعي"
+        }
       },
       "customDomain": {
         "title": "مجال مخصص",
         "label": "النطاق المخصص لموقعك.",
-        "confirm": "تاكيد"
+        "placeholder": "yourdomain.com",
+        "description": "أدخل النطاق الذي تريد استخدامه لموقعك (مثل: yourdomain.com). اتركه فارغاً لإزالة النطاق المخصص الحالي.",
+        "confirm": "تأكيد"
+      },
+      "socialLinks": {
+        "title": "روابط وسائل التواصل الاجتماعي",
+        "facebookUrl": "رابط فيسبوك",
+        "twitterUrl": "رابط تويتر",
+        "instagramUrl": "رابط انستغرام",
+        "linkedinUrl": "رابط لينكد إن",
+        "youtubeUrl": "رابط يوتيوب",
+        "confirm": "حفظ"
+      },
+      "currencySettings": {
+        "title": "العملة والتوطين",
+        "currency": "العملة",
+        "currencySymbol": "رمز العملة",
+        "language": "اللغة",
+        "timezone": "المنطقة الزمنية",
+        "confirm": "حفظ"
+      },
+      "termsOfService": {
+        "title": "شروط الخدمة",
+        "label": "أضف شروط الخدمة الخاصة بك هنا",
+        "confirm": "حفظ"
+      },
+      "refundPolicy": {
+        "title": "سياسة الاسترداد",
+        "label": "أضف سياسة الاسترداد الخاصة بك هنا",
+        "confirm": "حفظ"
+      },
+      "analytics": {
+        "title": "التحليلات والتتبع",
+        "googleAnalyticsId": "معرف Google Analytics",
+        "googleAnalyticsIdDescription": "أدخل معرف قياس GA4 الخاص بك (مثال: G-XXXXXXXXXX)",
+        "facebookPixelId": "معرف Facebook Pixel",
+        "facebookPixelIdDescription": "أدخل معرف Facebook Pixel الخاص بك",
+        "confirm": "حفظ"
       }
     }
   },
@@ -425,7 +471,21 @@
     "revenueOverview": "نظرة عامة على الإيرادات",
     "noDataAvailable": "لا توجد بيانات متاحة",
     "loading": "جاري التحميل...",
-    "dateRange": "تاريخ التقرير",
+    "dateRange": "اختر التاريخ",
+    "grossVolume": "إجمالي الحجم",
+    "successfulPayments": "المدفوعات الناجحة",
+    "newCustomers": "عملاء جدد",
+    "averageOrder": "متوسط الطلب",
+    "refunds": "المبالغ المستردة",
+    "comparedTo": "مقارنة بالفترة السابقة",
+    "presets": {
+      "today": "اليوم",
+      "7days": "7 أيام",
+      "4weeks": "4 أسابيع",
+      "3months": "3 أشهر",
+      "12months": "12 شهر",
+      "allTime": "كل الوقت"
+    },
     "currency": {
       "USD": "$",
       "EUR": "€",
@@ -524,6 +584,112 @@
       "approveFailed": "فشل في الموافقة على الدفع",
       "rejectFailed": "فشل في رفض الدفع",
       "copyFailed": "فشل في نسخ معرف الدفع"
+    }
+  },
+  "coupons": {
+    "title": "القسائم",
+    "pageTitle": "إدارة القسائم",
+    "createCoupon": "إنشاء قسيمة",
+    "editCoupon": "تعديل القسيمة",
+    "columns": {
+      "code": "الرمز",
+      "discountType": "نمط التخفيض",
+      "discountAmount": "كمية التخفيض",
+      "expirationDate": "تاريخ نهاية الفعالية",
+      "usageLimit": "حدود الاستعمال",
+      "usageCount": "عدد الاستخدام",
+      "status": "الحالة",
+      "actions": "الإجراءات"
+    },
+    "discountTypes": {
+      "PERCENTAGE": "نسبة مئوية",
+      "FIXED_AMOUNT": "قيمة ثابتة"
+    },
+    "status": {
+      "active": "مفعل",
+      "inactive": "غير فعال",
+      "archived": "مؤرشف",
+      "expired": "منتهي الصلاحية"
+    },
+    "filters": {
+      "status": "الحالة",
+      "discountType": "نمط التخفيض",
+      "all": "الكل"
+    },
+    "search": {
+      "placeholder": "البحث عن القسائم..."
+    },
+    "cancel": "إلغاء",
+    "form": {
+      "createDescription": "أدخل التفاصيل لإنشاء قسيمة جديدة",
+      "editDescription": "قم بتحديث تفاصيل القسيمة أدناه",
+      "code": "كود القسيمة",
+      "codePlaceholder": "SAVE20",
+      "codeDescription": "كود فريد للقسيمة (أحرف إنجليزية كبيرة وأرقام فقط)",
+      "generateCode": "إنشاء تلقائي",
+      "discountType": "نمط التخفيض",
+      "percentageDiscount": "تخفيض بالنسبة المئوية",
+      "percentageDescription": "خصم نسبة مئوية من السعر",
+      "fixedDiscount": "تخفيض بالقيمة الثابتة",
+      "fixedDescription": "خصم مبلغ ثابت من السعر",
+      "discountAmount": "كمية التخفيض",
+      "discountAmountDescription": "المبلغ المحدد سيتم خصمه من السعر الإجمالي",
+      "discountPercentageDescription": "النسبة المئوية للخصم (حتى 100%)",
+      "usageLimit": "حدود الاستعمال",
+      "usageLimitDescription": "العدد الأقصى للمرات التي يمكن استخدام القسيمة فيها",
+      "duration": "مدة الفعالية",
+      "durationPlaceholder": "اختر مدة الفعالية",
+      "forever": "صالحة إلى الأبد",
+      "limitedTime": "محدودة بفترة زمنية",
+      "numberOfDays": "عدد الأيام",
+      "numberOfDaysDescription": "عدد الأيام التي ستبقى فيها القسيمة صالحة",
+      "expirationDate": "تاريخ انتهاء الصلاحية",
+      "isActive": "حالة التفعيل",
+      "minimumAmount": "الحد الأدنى للشراء"
+    },
+    "actions": {
+      "copyCode": "استنساخ الرمز",
+      "edit": "تعديل القسيمة",
+      "archive": "أرشفة القسيمة",
+      "activate": "تفعيل",
+      "deactivate": "تعطيل",
+      "delete": "حذف القسيمة"
+    },
+    "messages": {
+      "created": "تم إنشاء القسيمة بنجاح!",
+      "updated": "تم تحديث القسيمة بنجاح!",
+      "archived": "تم أرشفة القسيمة بنجاح!",
+      "activated": "تم تفعيل القسيمة بنجاح!",
+      "deactivated": "تم تعطيل القسيمة بنجاح!",
+      "deleted": "تم حذف القسيمة بنجاح!",
+      "copied": "تم نسخ رمز القسيمة",
+      "createError": "حدث خطأ أثناء إنشاء القسيمة",
+      "updateError": "حدث خطأ أثناء تحديث القسيمة"
+    },
+    "validation": {
+      "codeRequired": "كود القسيمة مطلوب",
+      "codeMinLength": "يجب أن يكون الكود 3 أحرف على الأقل",
+      "codeMaxLength": "يجب أن يكون الكود 20 حرف على الأكثر",
+      "codeFormat": "يجب أن يحتوي الكود على أحرف إنجليزية كبيرة وأرقام فقط",
+      "amountRequired": "المبلغ مطلوب",
+      "amountPositive": "المبلغ يجب أن يكون أكبر من صفر",
+      "percentageMax": "النسبة المئوية لا يمكن أن تتجاوز 100%",
+      "usageLimitRequired": "حدود الاستعمال مطلوبة",
+      "durationRequired": "مدة الفعالية مطلوبة",
+      "daysRequired": "عدد الأيام مطلوب عندما تكون المدة محدودة"
+    },
+    "emptyState": {
+      "title": "لم يتم العثور على قسائم",
+      "description": "أنشئ قسيمتك الأولى لبدء تقديم الخصومات"
+    },
+    "pagination": {
+      "previous": "سابق",
+      "next": "التالي",
+      "page": "صفحة",
+      "of": "من",
+      "showing": "عرض",
+      "to": "إلى",
+      "results": "نتائج"
     }
   },
   "paymentMethods": {
@@ -1346,6 +1512,142 @@
       "updateFailed": "فشل في تحديث الملف الشخصي",
       "clerkUpdateFailed": "فشل في تحديث بيانات Clerk، سيتم تحديث بيانات الحساب فقط",
       "updateError": "حدث خطأ أثناء تحديث الملف الشخصي"
+    }
+  },
+  "certificates": {
+    "pageTitle": "الشهادات",
+    "createTitle": "باني الشهادة",
+    "tabs": {
+      "content": "المحتوى",
+      "design": "التصميم"
+    },
+    "form": {
+      "certificateName": "اسم الشهادة",
+      "certificateNamePlaceholder": "أدخل اسم الشهادة",
+      "courseName": "اسم الدورة",
+      "courseNamePlaceholder": "أدخل اسم الدورة",
+      "studentName": "اسم الطالب",
+      "studentNamePlaceholder": "أدخل اسم الطالب",
+      "selectStudent": "الطالب المعني بالشهادة",
+      "selectStudentPlaceholder": "اختر طالب",
+      "buildCertificate": "بناء الشهادة",
+      "required": "*"
+    },
+    "columns": {
+      "status": "الحالة",
+      "success": "نجاح",
+      "createdAt": "وقت الانشاء",
+      "certificateName": "اسم الشهادة",
+      "studentName": "اسم الطالب"
+    },
+    "actions": {
+      "viewCertificate": "عرض الشهادة",
+      "deleteCertificate": "حذف الشهادة",
+      "createNew": "تصميم شهادة جديدة"
+    },
+    "table": {
+      "noResults": "لم يتم العثور على نتائج",
+      "previous": "سابق",
+      "next": "التالي"
+    },
+    "deleteModal": {
+      "title": "هل أنت متأكد تمامًا من رغبتك في حذف هذه الشهادة؟",
+      "description": "لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف الشهادة نهائيًا وإزالة بياناتها من خوادمنا.",
+      "cancel": "الإلغاء",
+      "confirm": "حذف الشهادة",
+      "success": "تم حذف الشهادة بنجاح"
+    },
+    "variants": {
+      "deadDeer": "الغزال الميت",
+      "partyUnderSun": "حفلة تحت الشمس",
+      "coldCertificate": "شهادة باردة"
+    }
+  },
+  "comments": {
+    "pageTitle": "التقييمات والتعليقات",
+    "pageDescription": "إدارة تقييمات وتعليقات الطلاب على دوراتك",
+    "columns": {
+      "student": "الطالب",
+      "content": "محتوى التعليق",
+      "rating": "التقييم",
+      "status": "الحالة",
+      "course": "الدورة",
+      "createdAt": "وقت الانشاء"
+    },
+    "status": {
+      "approved": "موافق عليه",
+      "pending": "قيد الانتظار",
+      "rejected": "مرفوض",
+      "verification_pending": "قيد التحقق"
+    },
+    "filters": {
+      "status": "الحالة",
+      "rating": "التقييم",
+      "all": "الكل"
+    },
+    "search": {
+      "placeholder": "البحث عن التعليقات..."
+    },
+    "actions": {
+      "approve": "موافقة",
+      "reject": "الرفض",
+      "copyContent": "استنساخ المحتوى",
+      "delete": "حذف التعليق",
+      "openMenu": "فتح القائمة"
+    },
+    "messages": {
+      "approved": "تمت الموافقة على التعليق بنجاح",
+      "rejected": "تم رفض التعليق بنجاح",
+      "deleted": "تم حذف التعليق بنجاح",
+      "copied": "تم نسخ المحتوى إلى الحافظة",
+      "approveError": "حدث خطأ أثناء الموافقة على التعليق",
+      "rejectError": "حدث خطأ أثناء رفض التعليق"
+    },
+    "emptyState": {
+      "title": "لم يتم العثور على تعليقات",
+      "description": "ستظهر تعليقات الطلاب هنا"
+    },
+    "pagination": {
+      "previous": "سابق",
+      "next": "التالي",
+      "page": "صفحة",
+      "of": "من",
+      "showing": "عرض",
+      "to": "إلى",
+      "results": "نتائج"
+    }
+  },
+  "affiliateMarketing": {
+    "pageTitle": "التسويق بالعمولة",
+    "pageDescription": "إدارة برنامج الإحالة والمسوقين بالعمولة",
+    "columns": {
+      "createdAt": "وقت الانشاء",
+      "studentName": "اسم الطالب",
+      "ccp": "CCP",
+      "numberOfReferrals": "عدد الإحالات",
+      "totalEarnings": "إجمالي الأرباح",
+      "pendingPayout": "الدفع المعلق"
+    },
+    "actions": {
+      "openMenu": "فتح القائمة",
+      "copyCcp": "نسخ CCP",
+      "viewDetails": "عرض التفاصيل"
+    },
+    "messages": {
+      "copied": "تم نسخ CCP إلى الحافظة"
+    },
+    "emptyState": {
+      "title": "لم يتم العثور على إحالات",
+      "description": "ستظهر إحالات برنامج التسويق بالعمولة هنا"
+    },
+    "search": {
+      "placeholder": "البحث عن الإحالات..."
+    },
+    "pagination": {
+      "previous": "سابق",
+      "next": "التالي",
+      "page": "صفحة",
+      "of": "من"
     }
   }
 }

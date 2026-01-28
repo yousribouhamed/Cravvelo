@@ -4,6 +4,7 @@ import { Student } from "database";
 import { prisma } from "database/src";
 import useHaveAccess from "@/src/hooks/use-have-access";
 import CertificateForm from "./certificate-form";
+import { getServerTranslations } from "@/src/lib/i18n/utils";
 
 async function getData({
   accountId,
@@ -32,21 +33,17 @@ const getStamp = async ({
 }: {
   accountId: string;
 }): Promise<string | null> => {
-  // get it from prisma account
-
   const website = await prisma.website.findFirst({
     where: {
       accountId,
     },
   });
-  // return the url of the stamp
-
-  console.log(website);
-  return website.stamp;
+  return website?.stamp ?? null;
 };
 
 const Page = async ({}) => {
   const user = await useHaveAccess();
+  const t = await getServerTranslations("certificates");
 
   const [data, notifications, stamp] = await Promise.all([
     getData({ accountId: user.accountId }),
@@ -57,11 +54,10 @@ const Page = async ({}) => {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
-        {/* @ts-ignore */}
         <Header
           notifications={notifications}
           user={user}
-          title="باني الشهادة"
+          title={t("createTitle")}
         />
 
         <CertificateForm stamp={stamp} students={data} />

@@ -23,6 +23,10 @@ function WebsiteSettingsHeader({ className, ...props }: ExamplesNavProps) {
         href: `/settings/website-settings`,
       },
       {
+        name: t("general"),
+        href: `/settings/website-settings/general`,
+      },
+      {
         name: t("legal"),
         href: `/settings/website-settings/legal`,
       },
@@ -39,7 +43,7 @@ function WebsiteSettingsHeader({ className, ...props }: ExamplesNavProps) {
       <div
         className={cn(
           "mb-4 w-full flex items-center justify-start rounded-lg h-full border",
-          "bg-white text-black dark:bg-[#0A0A0C] dark:text-zinc-50"
+          "bg-card border-border"
         )}
       >
         {links.map((item, index) => (
@@ -48,10 +52,10 @@ function WebsiteSettingsHeader({ className, ...props }: ExamplesNavProps) {
             href={item.href}
             className={cn(
               "flex h-[60px] items-center justify-center px-4 text-center text-sm transition-colors",
-              "hover:text-primary",
+              "hover:text-primary text-foreground",
               pathname === item.href
-                ? "border-b-2 border-[#F0B110] font-semibold text-black dark:text-white"
-                : "text-zinc-600 dark:text-zinc-400"
+                ? "border-b-2 border-[#F0B110] font-semibold text-foreground"
+                : "text-muted-foreground"
             )}
           >
             {item.name}

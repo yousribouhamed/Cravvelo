@@ -24,6 +24,9 @@ import { Input } from "@ui/components/ui/input";
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
+import { useTranslations, useLocale } from "next-intl";
+import DomainStatus from "@/src/components/domain-status";
+import DomainConfiguration from "@/src/components/domain-configuration";
 
 interface AddCustomDomain {
   customDomain: string | null;
@@ -34,9 +37,13 @@ const formSchema = z.object({
 });
 
 const AddCustomDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
+  const t = useTranslations("websiteSettings.forms.customDomain");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
+
   const mutation = trpc.setCustomDomain.useMutation({
     onSuccess: () => {
-      maketoast.successWithText({ text: "domain has been chnaged" });
+      maketoast.success();
     },
     onError: (err) => {
       console.error(err);
@@ -51,6 +58,8 @@ const AddCustomDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
     },
   });
 
+  const watchedDomain = form.watch("cutomedomain");
+
   async function onSubmit(data: z.infer<typeof formSchema>) {
     await mutation.mutateAsync({
       customdomain: data?.cutomedomain,
@@ -60,9 +69,9 @@ const AddCustomDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <Card className="border h-full w-full rounded-xl shadow-none">
+        <Card className="border border-gray-200 dark:border-gray-700 h-full w-full rounded-xl shadow-none bg-card">
           <CardHeader>
-            <CardTitle>مجال مخصص</CardTitle>
+            <CardTitle dir={isRTL ? "rtl" : "ltr"}>{t("title")}</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
@@ -70,22 +79,32 @@ const AddCustomDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
               name="cutomedomain"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>النطاق المخصص لموقعك.</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="yourdomain.com"
-                      {...field}
-                      className="flex-1 rounded-md border border-stone-300 text-sm text-stone-900 placeholder-stone-300 focus:border-stone-500 focus:outline-none focus:ring-stone-500 dark:border-stone-600 dark:bg-black dark:text-white dark:placeholder-stone-700"
-                    />
-                  </FormControl>
+                  <FormLabel dir={isRTL ? "rtl" : "ltr"}>{t("label")}</FormLabel>
+                  <div className="relative flex w-full">
+                    <FormControl>
+                      <Input
+                        placeholder={t("placeholder")}
+                        {...field}
+                        dir="ltr"
+                        className="z-10 flex-1 rounded-md border border-stone-300 text-sm text-stone-900 placeholder-stone-300 focus:border-stone-500 focus:outline-none focus:ring-stone-500 dark:border-stone-600 dark:bg-black dark:text-white dark:placeholder-stone-700"
+                      />
+                    </FormControl>
+                    <div className="absolute left-3 z-10 flex h-full items-center">
+                      {watchedDomain && <DomainStatus domain={watchedDomain} />}
+                    </div>
+                  </div>
                   <FormMessage />
-                  <p className="text-sm text-muted-foreground mt-2">
-                    أدخل النطاق الذي تريد استخدامه لموقعك (مثل: yourdomain.com).
-                    اتركه فارغاً لإزالة النطاق المخصص الحالي.
+                  <p className="text-sm text-muted-foreground mt-2" dir={isRTL ? "rtl" : "ltr"}>
+                    {t("description")}
                   </p>
                 </FormItem>
               )}
             />
+            {watchedDomain && (
+              <div dir="ltr" className="w-full min-h-[300px] h-fit">
+                <DomainConfiguration domain={watchedDomain} />
+              </div>
+            )}
           </CardContent>
           <CardFooter>
             <Button
@@ -94,7 +113,7 @@ const AddCustomDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
               type="submit"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              تاكيد
+              {t("confirm")}
             </Button>
           </CardFooter>
         </Card>

@@ -54,8 +54,8 @@ const MobileLink: FC<MobileLinkProps> = ({
     >
       {isSelected && (
         <div className={cn(
-          "w-[15px] h-[15px] rounded-[50%] z-[20] absolute bg-white",
-          isRTL ? "-right-1" : "-left-1"
+          "w-[10px] h-[10px] rounded-full z-[20] absolute bg-gray-800 dark:bg-white border-2 border-gray-200 dark:border-gray-600",
+          isRTL ? "-right-[3px]" : "-left-[3px]"
         )} />
       )}
       {children}
@@ -162,10 +162,10 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
                     href={item.slug}
                     className={cn(
                       buttonVariants({ variant: "ghost" }),
-                      "w-full flex items-center qatar-semibold text-md gap-x-2  hover:bg-white/5 !text-black dark:!text-white",
+                      "w-full flex items-center qatar-semibold text-md gap-x-2 hover:bg-black/5 dark:hover:bg-white/5 !text-black dark:!text-white",
                       isRTL ? "justify-end" : "justify-start",
                       {
-                        "dark:text-white bg-white/5": isActive,
+                        "bg-black/5 dark:bg-white/5": isActive,
                       }
                     )}
                     onClick={handleDirectLinkClick}
@@ -195,11 +195,10 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
                     <AccordionTrigger
                       className={cn(
                         buttonVariants({ variant: "ghost" }),
-                        "w-full flex items-center qatar-semibold group text-sm gap-x-2 hover:bg-white/5 !text-black dark:!text-white",
+                        "w-full flex items-center qatar-semibold group text-sm gap-x-2 hover:bg-black/5 dark:hover:bg-white/5 !text-black dark:!text-white",
                         isRTL ? "justify-end" : "justify-start",
                         {
-                          "dark:text-white hover:bg-white/5 bg-white/5":
-                            isActive,
+                          "bg-black/5 dark:bg-white/5": isActive,
                         }
                       )}
                     >
@@ -241,7 +240,7 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
                           </MobileLink>
                         ))}
                         <div className={cn(
-                          "absolute top-0 bottom-4 w-0.5 h-[80%] bg-white",
+                          "absolute top-0 bottom-4 w-0.5 h-[80%] bg-gray-300 dark:bg-white/60",
                           isRTL ? "right-5" : "left-5"
                         )} />
                       </div>

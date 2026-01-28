@@ -3,7 +3,7 @@
 import { Certificate } from "database";
 import type { FC } from "react";
 import { trpc } from "@/src/app/_trpc/client";
-import { CertificateColumns } from "@/src/components/data-table/columns/certificate";
+import { useCertificateColumns } from "@/src/components/data-table/columns/certificate";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DataTableLoading } from "@/src/components/data-table/table-helpers/table-loading";
 import { CertificateDataTable } from "@/src/components/data-table/tables/certificate-table";
@@ -15,6 +15,7 @@ interface TableShellProps {
 
 const CertificateTableShell: FC<TableShellProps> = ({ initialData }) => {
   const isMounted = useMounted();
+  const columns = useCertificateColumns();
 
   const { data, refetch } = trpc.getAllCertificates.useQuery(undefined, {
     initialData: initialData,
@@ -24,12 +25,11 @@ const CertificateTableShell: FC<TableShellProps> = ({ initialData }) => {
     return <DataTableLoading columnCount={6} />;
   }
 
-  console.log(data);
   return (
     <div className="w-full min-h-[300px] my-4 h-fit flex flex-col ">
       <DeleteCertificateModel refetch={refetch} />
       <CertificateDataTable
-        columns={CertificateColumns}
+        columns={columns}
         data={data}
         refetch={refetch}
       />

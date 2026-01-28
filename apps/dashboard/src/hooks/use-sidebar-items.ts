@@ -13,6 +13,10 @@ import {
   Palette,
   Receipt,
   Wallet,
+  Ticket,
+  Award,
+  MessageSquare,
+  Share2,
 } from "lucide-react";
 
 export interface SidebarItem {
@@ -53,6 +57,16 @@ export function useSidebarItems(): SidebarItem[] {
             icon: Wallet,
             slug: "/payments/payments-methods",
           },
+          {
+            title: t("coupons"),
+            icon: Ticket,
+            slug: "/payments/coupons",
+          },
+          {
+            title: t("affiliateMarketing"),
+            icon: Share2,
+            slug: "/payments/affiliate-marketing",
+          },
         ],
       },
       {
@@ -64,6 +78,16 @@ export function useSidebarItems(): SidebarItem[] {
             title: t("students"),
             icon: GraduationCap,
             slug: "/students",
+          },
+          {
+            title: t("certificates"),
+            icon: Award,
+            slug: "/students/certificates",
+          },
+          {
+            title: t("reviews"),
+            icon: MessageSquare,
+            slug: "/students/comments",
           },
         ],
       },

@@ -11,10 +11,49 @@ import {
   DomainVerificationStatusProps,
 } from "../types/domain-types";
 import { useEffect, useState } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@ui/components/ui/tooltip";
 
 type Response = {
   status: DomainVerificationStatusProps;
   domainJson: DomainResponse & { error: { code: string; message: string } };
+};
+
+const statusConfig = {
+  "Valid Configuration": {
+    icon: CheckCircle2,
+    fillClass: "fill-blue-500 dark:fill-blue-400",
+    strokeClass: "text-white dark:text-gray-900",
+    tooltip: "Domain is properly configured",
+  },
+  "Pending Verification": {
+    icon: AlertCircle,
+    fillClass: "fill-yellow-500 dark:fill-yellow-400",
+    strokeClass: "text-white dark:text-gray-900",
+    tooltip: "Waiting for DNS verification",
+  },
+  "Invalid Configuration": {
+    icon: XCircle,
+    fillClass: "fill-red-500 dark:fill-red-400",
+    strokeClass: "text-white dark:text-gray-900",
+    tooltip: "Domain configuration is invalid",
+  },
+  "Domain Not Found": {
+    icon: XCircle,
+    fillClass: "fill-red-500 dark:fill-red-400",
+    strokeClass: "text-white dark:text-gray-900",
+    tooltip: "Domain not found on Vercel",
+  },
+  "Unknown Error": {
+    icon: XCircle,
+    fillClass: "fill-red-500 dark:fill-red-400",
+    strokeClass: "text-white dark:text-gray-900",
+    tooltip: "An error occurred",
+  },
 };
 
 export default function DomainStatus({ domain }: { domain: string }) {
@@ -28,39 +67,42 @@ export default function DomainStatus({ domain }: { domain: string }) {
     function verifyCustomDomain() {
       const interval = setInterval(async () => {
         try {
-          setLoading(true); // Set loading state to true before fetch
+          setLoading(true);
           const response = await fetch(`/api/domain/${domain}/verify`);
           const values: Response = (await response.json()) as Response;
           setStatus(values.status);
-          console.log("Verification response:", values);
-          // Do something with the verification values if needed
-          setLoading(false); // Set loading state to false after fetch
+          setLoading(false);
         } catch (error) {
           console.error("There was a problem with the fetch operation:", error);
-          setLoading(false); // Set loading state to false on error
-          // Handle errors if necessary
+          setLoading(false);
         }
       }, 5000);
 
-      // Clean up the interval on component unmount
       return () => clearInterval(interval);
     }
 
-    // Call the function to start fetching every 5000 ms
     verifyCustomDomain();
-  }, [domain]); // Empty dependency array to run the effect only once on mount
+  }, [domain]);
 
-  return loading ? (
-    <OrangeLoadingSpinner />
-  ) : status === "Valid Configuration" ? (
-    <CheckCircle2
-      fill="#2563EB"
-      stroke="currentColor"
-      className="text-black dark:text-black"
-    />
-  ) : status === "Pending Verification" ? (
-    <AlertCircle fill="#FBBF24" stroke="currentColor" className="text-black" />
-  ) : (
-    <XCircle fill="#DC2626" stroke="currentColor" className="text-black" />
+  if (loading) {
+    return <OrangeLoadingSpinner />;
+  }
+
+  const config = statusConfig[status] || statusConfig["Unknown Error"];
+  const IconComponent = config.icon;
+
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <IconComponent
+            className={`h-5 w-5 ${config.fillClass} ${config.strokeClass}`}
+          />
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{config.tooltip}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }

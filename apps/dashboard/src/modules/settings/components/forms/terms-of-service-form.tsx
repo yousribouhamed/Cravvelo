@@ -7,7 +7,6 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@ui/components/ui/card";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -19,33 +18,33 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@ui/components/ui/form";
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
-import { Switch } from "@ui/components/ui/switch";
+import { CravveloEditor } from "@cravvelo/editor";
 import { useTranslations, useLocale } from "next-intl";
 
 const formSchema = z.object({
-  isEnabled: z.boolean(),
+  termsOfService: z.any(),
 });
 
-interface DisableReferralFormAbdullahProps {
-  enabled: boolean;
+interface TermsOfServiceFormProps {
+  termsOfService: any;
 }
 
-const DisableReferralForm: FC<DisableReferralFormAbdullahProps> = ({
-  enabled,
-}) => {
-  const t = useTranslations("websiteSettings.forms.referral");
+const TermsOfServiceForm: FC<TermsOfServiceFormProps> = ({ termsOfService }) => {
+  const t = useTranslations("websiteSettings.forms.termsOfService");
   const locale = useLocale();
   const isRTL = locale === "ar";
 
-  const mutation = trpc.enableReferal.useMutation({
+  const mutation = trpc.addTermsOfService.useMutation({
     onSuccess: () => {
       maketoast.success();
     },
-    onError: () => {
+    onError: (error) => {
+      console.log("Error:", error);
       maketoast.error();
     },
   });
@@ -53,47 +52,39 @@ const DisableReferralForm: FC<DisableReferralFormAbdullahProps> = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      isEnabled: enabled,
+      termsOfService: termsOfService ? JSON.parse(termsOfService as string) : undefined,
     },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     await mutation.mutateAsync({
-      enabled: data.isEnabled,
+      termsOfService: data.termsOfService,
     });
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <Card className="border border-border rounded-xl shadow-none">
+        <Card className="border rounded-xl shadow-none">
           <CardHeader>
-            <CardTitle dir={isRTL ? "rtl" : "ltr"}>
-              {t("permissions")}
-            </CardTitle>
-            <CardDescription dir={isRTL ? "rtl" : "ltr"}>
-              {t("permissionsDescription")}
-            </CardDescription>
+            <CardTitle dir={isRTL ? "rtl" : "ltr"}>{t("title")}</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
               control={form.control}
-              name="isEnabled"
+              name="termsOfService"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border p-3 shadow-sm bg-card">
-                  <div className="space-y-0.5">
-                    <FormLabel dir={isRTL ? "rtl" : "ltr"}>
-                      {t("enableAffiliate")}
-                    </FormLabel>
-                  </div>
+                <FormItem>
+                  <FormLabel dir={isRTL ? "rtl" : "ltr"}>
+                    {t("label")}
+                  </FormLabel>
                   <FormControl>
-                    <div dir="ltr">
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </div>
+                    <CravveloEditor
+                      value={form.getValues("termsOfService")}
+                      onChange={field.onChange}
+                    />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -105,7 +96,7 @@ const DisableReferralForm: FC<DisableReferralFormAbdullahProps> = ({
               type="submit"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              {t("saveAndContinue")}
+              {t("confirm")}
             </Button>
           </CardFooter>
         </Card>
@@ -114,4 +105,4 @@ const DisableReferralForm: FC<DisableReferralFormAbdullahProps> = ({
   );
 };
 
-export default DisableReferralForm;
+export default TermsOfServiceForm;

@@ -4,10 +4,13 @@ import { useQuery } from "@tanstack/react-query";
 import { getInstalledApps } from "../actions/apps.actions";
 import { Skeleton } from "@ui/components/ui/skeleton";
 import Link from "next/link";
+import { useLocale } from "next-intl";
 
 interface InstalledAppsBoxProps {}
 
 export default function InstalledAppsBox({}: InstalledAppsBoxProps) {
+  const locale = useLocale();
+  const isRTL = locale === "ar";
   // React Query fetching
   const { data, isLoading, isError } = useQuery({
     queryKey: ["installedApps"],
@@ -19,8 +22,8 @@ export default function InstalledAppsBox({}: InstalledAppsBoxProps) {
 
   if (isLoading) {
     return (
-      <div dir={"rtl"} className="p-2">
-        <div className="flex items-center space-x-2">
+      <div dir={isRTL ? "rtl" : "ltr"} className="p-2">
+        <div className="flex items-center gap-2">
           <Skeleton className="h-4 w-4 rounded" />
           <Skeleton className="h-3 w-24" />
         </div>
@@ -30,8 +33,8 @@ export default function InstalledAppsBox({}: InstalledAppsBoxProps) {
 
   if (isError) {
     return (
-      <div dir={"rtl"} className="text-red-500 text-sm p-2">
-        فشل تحميل التطبيقات المثبتة
+      <div dir={isRTL ? "rtl" : "ltr"} className="text-red-500 text-sm p-2">
+        {isRTL ? "فشل تحميل التطبيقات المثبتة" : "Failed to load installed apps"}
       </div>
     );
   }
@@ -47,15 +50,17 @@ export default function InstalledAppsBox({}: InstalledAppsBoxProps) {
   }
 
   return (
-    <div dir={"rtl"} className="flex flex-col space-y-2 p-2">
+    <div dir={isRTL ? "rtl" : "ltr"} className="flex flex-col space-y-2 p-2">
       {activeApps.length === 0 ? (
-        <span className="text-xs text-gray-400">لا توجد تطبيقات مثبتة</span>
+        <span className="text-xs text-gray-400">
+          {isRTL ? "لا توجد تطبيقات مثبتة" : "No installed apps"}
+        </span>
       ) : (
         activeApps
           .filter((item: any) => item.App) // Only show apps where App relation exists
           .map((item: any) => (
             <Link key={item.id} href={item.App?.slug || "#"}>
-              <div className="flex items-center space-x-2 gap-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg p-1 transition">
+              <div className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg p-1 transition">
                 {/* App Icon */}
                 <div className="relative w-5 h-5 flex-shrink-0">
                   {item.App?.logoUrl ? (

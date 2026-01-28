@@ -1,31 +1,132 @@
 "use client";
 
 import { Coupon } from "database";
+import { useState, useCallback } from "react";
 import type { FC } from "react";
 import { trpc } from "@/src/app/_trpc/client";
-import { CouponColumns } from "@/src/components/data-table/columns/cobons";
+import { useCouponColumns } from "@/src/components/data-table/columns/cobons";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { DataTableLoading } from "@/src/components/data-table/table-helpers/table-loading";
 import { CouponDataTable } from "@/src/components/data-table/tables/coupon-table";
+import { useDebounce } from "@/src/hooks/use-debounce";
+import { CouponSheet } from "@/src/modules/payments/components/coupon-sheet";
 
 interface CouponTableShellProps {
-  initialData: Coupon[];
+  initialData: {
+    coupons: Coupon[];
+    totalCount: number;
+    pageCount: number;
+    currentPage: number;
+  };
 }
 
 const CouponsTableShell: FC<CouponTableShellProps> = ({ initialData }) => {
   const isMounted = useMounted();
 
-  const { data, refetch } = trpc.getAllCoupons.useQuery(undefined, {
-    initialData: initialData,
-  });
+  // Pagination state
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(10);
+
+  // Filter state
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilters, setStatusFilters] = useState<
+    ("active" | "inactive" | "archived")[]
+  >([]);
+  const [discountTypeFilters, setDiscountTypeFilters] = useState<
+    ("PERCENTAGE" | "FIXED_AMOUNT")[]
+  >([]);
+
+  // Sheet state
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [editingCoupon, setEditingCoupon] = useState<Coupon | null>(null);
+
+  const debouncedSearch = useDebounce(searchQuery, 400);
+
+  const { data, refetch, isLoading, isFetching } = trpc.getAllCoupons.useQuery(
+    {
+      page,
+      limit: pageSize,
+      search: debouncedSearch || undefined,
+      status: statusFilters.length > 0 ? statusFilters : undefined,
+      discountType: discountTypeFilters.length > 0 ? discountTypeFilters : undefined,
+    },
+    {
+      placeholderData: initialData,
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  // Handlers
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchQuery(value);
+    setPage(1); // Reset to first page when searching
+  }, []);
+
+  const handleStatusFilterChange = useCallback((values: string[]) => {
+    setStatusFilters(values as ("active" | "inactive" | "archived")[]);
+    setPage(1);
+  }, []);
+
+  const handleDiscountTypeFilterChange = useCallback((values: string[]) => {
+    setDiscountTypeFilters(values as ("PERCENTAGE" | "FIXED_AMOUNT")[]);
+    setPage(1);
+  }, []);
+
+  const handlePageChange = useCallback((newPage: number) => {
+    setPage(newPage);
+  }, []);
+
+  const handleCreateCoupon = useCallback(() => {
+    setEditingCoupon(null);
+    setSheetOpen(true);
+  }, []);
+
+  const handleEditCoupon = useCallback((coupon: Coupon) => {
+    setEditingCoupon(coupon);
+    setSheetOpen(true);
+  }, []);
+
+  const handleSheetSuccess = useCallback(() => {
+    refetch();
+  }, [refetch]);
+
+  // Get columns with edit handler
+  const columns = useCouponColumns({ onEdit: handleEditCoupon });
 
   if (!isMounted) {
-    return <DataTableLoading columnCount={6} />;
+    return <DataTableLoading columnCount={7} />;
   }
 
+  const coupons = data?.coupons ?? [];
+  const totalCount = data?.totalCount ?? 0;
+  const pageCount = data?.pageCount ?? 1;
+  const hasData = coupons.length > 0;
+  const showLoader = isLoading && !hasData;
+
   return (
-    <div className="w-full min-h-[300px] h-fit flex flex-col ">
-      <CouponDataTable columns={CouponColumns} data={data} refetch={refetch} />
+    <div className="w-full min-h-[300px] h-fit flex flex-col">
+      <CouponDataTable
+        columns={columns}
+        data={coupons}
+        refetch={refetch}
+        pageCount={pageCount}
+        totalCount={totalCount}
+        currentPage={page}
+        onPageChange={handlePageChange}
+        onSearchChange={handleSearchChange}
+        onStatusFilterChange={handleStatusFilterChange}
+        onDiscountTypeFilterChange={handleDiscountTypeFilterChange}
+        onCreateCoupon={handleCreateCoupon}
+        isLoading={showLoader || isFetching}
+        serverSideFiltering={true}
+      />
+      
+      <CouponSheet
+        open={sheetOpen}
+        onOpenChange={setSheetOpen}
+        coupon={editingCoupon}
+        onSuccess={handleSheetSuccess}
+      />
     </div>
   );
 };

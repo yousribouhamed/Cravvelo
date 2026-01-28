@@ -18,12 +18,39 @@ type Response = {
   domainJson: DomainResponse & { error: { code: string; message: string } };
 };
 
+// Subdomain validation regex - alphanumeric and hyphens only, 3-32 chars
+const subdomainRegex = /^[a-zA-Z0-9][a-zA-Z0-9-]{1,30}[a-zA-Z0-9]$/;
+
+// List of restricted subdomain names
+const restrictedSubdomains = [
+  "admin",
+  "api",
+  "app",
+  "www",
+  "mail",
+  "ftp",
+  "smtp",
+  "pop",
+  "imap",
+  "beta",
+  "staging",
+  "test",
+  "dev",
+  "development",
+  "production",
+  "prod",
+  "support",
+  "help",
+  "status",
+  "dashboard",
+];
+
 export const domain = {
-  // this if the user wants to chnage it's subdomain
+  // Change subdomain with improved validation and error handling
   chnageSubDmain: privateProcedure
     .input(
       z.object({
-        subdomain: z.string(),
+        subdomain: z.string().min(3).max(64),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -31,19 +58,51 @@ export const domain = {
         const account = await ctx.prisma.account.findFirst({
           where: { userId: ctx.user.id },
         });
-        // if the subdomain exists in the data base then throw an error
-        const webSiteWithSameSubDomain = await ctx.prisma.website.findFirst({
+
+        if (!account) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Account not found",
+          });
+        }
+
+        // Extract subdomain name from full domain (e.g., "test.cravvelo.com" -> "test")
+        const subdomainName = input.subdomain.split(".")[0].toLowerCase();
+
+        // Validate subdomain format
+        if (!subdomainRegex.test(subdomainName)) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message:
+              "Subdomain must be 3-32 characters long and contain only letters, numbers, and hyphens",
+          });
+        }
+
+        // Check for restricted subdomains
+        if (restrictedSubdomains.includes(subdomainName)) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "This subdomain is reserved and cannot be used",
+          });
+        }
+
+        // Check if the subdomain already exists for another user
+        const existingWebsite = await ctx.prisma.website.findFirst({
           where: {
             subdomain: input.subdomain,
+            NOT: {
+              accountId: account.id,
+            },
           },
         });
 
-        if (webSiteWithSameSubDomain) {
+        if (existingWebsite) {
           throw new TRPCError({
             code: "CONFLICT",
-            message: "sub domain exists in the database and it has be unique",
+            message: "This subdomain is already taken. Please choose another.",
           });
         }
+
         const site = await ctx.prisma.website.update({
           data: {
             subdomain: input.subdomain,
@@ -52,9 +111,17 @@ export const domain = {
             accountId: account.id,
           },
         });
+
         return site;
       } catch (err) {
-        console.error(err);
+        if (err instanceof TRPCError) {
+          throw err;
+        }
+        console.error("Error changing subdomain:", err);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "An unexpected error occurred while updating the subdomain",
+        });
       }
     }),
 
@@ -69,10 +136,26 @@ export const domain = {
         const account = await ctx.prisma.account.findFirst({
           where: { userId: ctx.user.id },
         });
+
+        if (!account) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Account not found",
+          });
+        }
+
         const site = await ctx.prisma.website.findFirst({
           where: { accountId: account.id },
         });
 
+        if (!site) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Website not found",
+          });
+        }
+
+        // Prevent using cravvelo.com as custom domain
         if (input.customdomain.includes("cravvelo.com")) {
           throw new TRPCError({
             code: "BAD_REQUEST",
@@ -80,9 +163,33 @@ export const domain = {
           });
         }
 
+        // Check if another user already has this custom domain
+        if (input.customdomain !== "") {
+          const existingDomain = await ctx.prisma.website.findFirst({
+            where: {
+              customDomain: input.customdomain,
+              NOT: {
+                accountId: account.id,
+              },
+            },
+          });
+
+          if (existingDomain) {
+            throw new TRPCError({
+              code: "CONFLICT",
+              message: "This domain is already in use by another website",
+            });
+          }
+        }
+
         // Remove old domain from Vercel if it exists and is different
         if (site.customDomain && site.customDomain !== input.customdomain) {
-          await removeDomainFromVercelProject(site.customDomain);
+          try {
+            await removeDomainFromVercelProject(site.customDomain);
+          } catch (removeError) {
+            console.error("Error removing old domain from Vercel:", removeError);
+            // Continue even if removal fails - the old domain might already be removed
+          }
         }
 
         let updatedSite;
@@ -109,17 +216,31 @@ export const domain = {
           });
 
           // Add domain to Vercel
-          await Promise.all([
-            addDomainToVercel(input.customdomain),
-            // Optional: add www subdomain as well and redirect to apex domain
-            // addDomainToVercel(`www.${input.customdomain}`),
-          ]);
+          try {
+            await addDomainToVercel(input.customdomain);
+          } catch (vercelError) {
+            // Revert database change if Vercel add fails
+            await ctx.prisma.website.update({
+              where: {
+                accountId: account.id,
+              },
+              data: {
+                customDomain: site.customDomain, // Restore original
+              },
+            });
 
-          console.log("Domain added to Vercel");
+            console.error("Error adding domain to Vercel:", vercelError);
+            throw new TRPCError({
+              code: "INTERNAL_SERVER_ERROR",
+              message:
+                "Failed to add domain to Vercel. Please check your domain settings and try again.",
+            });
+          }
         } else {
           throw new TRPCError({
             code: "BAD_REQUEST",
-            message: "Invalid domain format",
+            message:
+              "Invalid domain format. Please enter a valid domain (e.g., yourdomain.com)",
           });
         }
 
@@ -143,19 +264,28 @@ export const domain = {
     .input(z.object({ domain: z.string() }))
     .mutation(async ({ input }) => {
       try {
+        if (!validDomainRegex.test(input.domain)) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Invalid domain format",
+          });
+        }
+
         const URL =
           process.env.NODE_ENV === "development"
             ? `http://localhost:3001/api/domain/${input.domain}/verify`
             : `https://beta.cravvelo.com/api/domain/${input.domain}/verify`;
-        //if we are on prod it willl be beta.cravvelo.com
-        const data: Response = (await axios.get(URL)) as Response;
 
-        console.log(data);
-        return data;
+        const response = await axios.get(URL);
+        return response.data as Response;
       } catch (err) {
+        if (err instanceof TRPCError) {
+          throw err;
+        }
+        console.error("Error getting domain status:", err);
         throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: err,
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to check domain status",
         });
       }
     }),

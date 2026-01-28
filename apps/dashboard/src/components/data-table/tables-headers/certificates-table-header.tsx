@@ -1,12 +1,15 @@
+"use client";
+
 import { buttonVariants } from "@ui/components/ui/button";
 import type { FC } from "react";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 import { PackagePlus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface TableHeaderProps {
   table: any;
-  refetch: () => Promise<any>;
+  refetch?: () => Promise<any>;
   data: any[];
 }
 
@@ -15,6 +18,8 @@ const CertificateTableHeader: FC<TableHeaderProps> = ({
   refetch,
   data,
 }) => {
+  const t = useTranslations("certificates");
+
   return (
     <div className="w-full h-[70px] flex items-center justify-end">
       <Link
@@ -22,7 +27,7 @@ const CertificateTableHeader: FC<TableHeaderProps> = ({
         className={cn(buttonVariants(), "rounded-xl")}
       >
         <PackagePlus className="w-5 h-5 mx-2" />
-        تصميم شهادة جديدة
+        {t("actions.createNew")}
       </Link>
     </div>
   );

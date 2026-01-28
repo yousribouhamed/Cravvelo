@@ -218,4 +218,134 @@ export const collector = {
         console.error(err);
       }
     }),
+
+  addSocialLinks: privateProcedure
+    .input(
+      z.object({
+        facebookUrl: z.string().optional(),
+        twitterUrl: z.string().optional(),
+        instagramUrl: z.string().optional(),
+        linkedinUrl: z.string().optional(),
+        youtubeUrl: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const site = await ctx.prisma.website.update({
+          where: { accountId: ctx.account.id },
+          data: {
+            facebookUrl: input.facebookUrl,
+            twitterUrl: input.twitterUrl,
+            instagramUrl: input.instagramUrl,
+            linkedinUrl: input.linkedinUrl,
+            youtubeUrl: input.youtubeUrl,
+          },
+        });
+
+        return site;
+      } catch (err) {
+        console.error(err);
+        throw err;
+      }
+    }),
+
+  addCurrencySettings: privateProcedure
+    .input(
+      z.object({
+        currency: z.string(),
+        currencySymbol: z.string(),
+        language: z.string(),
+        timezone: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const site = await ctx.prisma.website.update({
+          where: { accountId: ctx.account.id },
+          data: {
+            currency: input.currency,
+            currencySymbol: input.currencySymbol,
+            language: input.language,
+            timezone: input.timezone,
+          },
+        });
+
+        return site;
+      } catch (err) {
+        console.error(err);
+        throw err;
+      }
+    }),
+
+  addTermsOfService: privateProcedure
+    .input(
+      z.object({
+        termsOfService: z.any(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const termsAsJson = JSON.stringify(input.termsOfService);
+
+        const site = await ctx.prisma.website.update({
+          where: { accountId: ctx.account.id },
+          data: {
+            terms_of_service: termsAsJson,
+          },
+        });
+
+        return site;
+      } catch (err) {
+        console.error("Error in addTermsOfService:", err);
+        throw err;
+      }
+    }),
+
+  addRefundPolicy: privateProcedure
+    .input(
+      z.object({
+        refundPolicy: z.any(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const refundAsJson = JSON.stringify(input.refundPolicy);
+
+        const site = await ctx.prisma.website.update({
+          where: { accountId: ctx.account.id },
+          data: {
+            refund_policy: refundAsJson,
+          },
+        });
+
+        return site;
+      } catch (err) {
+        console.error("Error in addRefundPolicy:", err);
+        throw err;
+      }
+    }),
+
+  addAnalyticsIds: privateProcedure
+    .input(
+      z.object({
+        googleAnalyticsId: z.string().optional(),
+        facebookPixelId: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const site = await ctx.prisma.website.update({
+          where: { accountId: ctx.account.id },
+          data: {
+            googleAnalyticsId: input.googleAnalyticsId,
+            facebookPixelId: input.facebookPixelId,
+          },
+        });
+
+        return site;
+      } catch (err) {
+        console.error(err);
+        throw err;
+      }
+    }),
 };

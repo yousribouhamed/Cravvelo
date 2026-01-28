@@ -4,6 +4,7 @@ import { Certificate } from "database";
 import { prisma } from "database/src";
 import CertificateTableShell from "./CertificatesTableShell";
 import useHaveAccess from "@/src/hooks/use-have-access";
+import { getServerTranslations } from "@/src/lib/i18n/utils";
 
 async function getData({
   accountId,
@@ -29,6 +30,7 @@ const getAllNotifications = async ({ accountId }: { accountId: string }) => {
 
 const Page = async ({}) => {
   const user = await useHaveAccess();
+  const t = await getServerTranslations("certificates");
 
   const [data, notifications] = await Promise.all([
     getData({
@@ -46,7 +48,7 @@ const Page = async ({}) => {
           goBack
           notifications={notifications}
           user={user}
-          title="الشهادات"
+          title={t("pageTitle")}
         />
         <CertificateTableShell initialData={data} />
       </main>

@@ -30,7 +30,6 @@ export default async function Page() {
         <div dir={dir} className="my-4 mx-auto space-y-6">
           <RevenueChart
             initialData={revenueData.success ? revenueData.data : undefined}
-            currency={revenueData.success ? revenueData.data.walletCurrency : "DZD"}
           />
         </div>
       </main>

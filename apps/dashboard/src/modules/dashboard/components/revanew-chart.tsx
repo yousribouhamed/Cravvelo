@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useMemo } from "react";
 import {
   Card,
   CardContent,
@@ -14,25 +14,24 @@ import {
   YAxis,
   ResponsiveContainer,
   Tooltip,
+  AreaChart,
+  Area,
 } from "recharts";
-import { ChartConfig, ChartContainer } from "@ui/components/ui/chart";
 import { useTranslations, useLocale } from "next-intl";
 import { cn } from "@ui/lib/utils";
 import { trpc } from "@/src/app/_trpc/client";
 import { DateRange } from "react-day-picker";
 import { DatePickerWithRange } from "@/src/components/range-date-picker";
 import { useSearchParams } from "next/navigation";
-
-const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "#3b82f6",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "#60a5fa",
-  },
-} satisfies ChartConfig;
+import { useCurrency } from "@/src/hooks/use-currency";
+import { StatsCard, StatsGrid } from "@/src/components/stats-card";
+import { 
+  DollarSign, 
+  CreditCard, 
+  Users, 
+  ShoppingCart,
+  RefreshCcw
+} from "lucide-react";
 
 interface RevenueChartProps {
   initialData?: {
@@ -42,20 +41,34 @@ interface RevenueChartProps {
     grossRevenue: number;
     todayRevenue: number;
     yesterdayRevenue: number;
+    successfulPayments: number;
+    newCustomers: number;
+    averageOrderValue: number;
+    refunds: { count: number; amount: number };
+    previousPeriod: {
+      grossRevenue: number;
+      successfulPayments: number;
+      newCustomers: number;
+      averageOrderValue: number;
+    };
+    changes: {
+      volumeChange: number;
+      paymentsChange: number;
+      customersChange: number;
+      avgOrderChange: number;
+    };
     walletBalance: number;
     walletCurrency: string;
+    currencySymbol: string;
   };
-  currency?: string;
 }
 
-export const RevenueChart = ({
-  currency: initialCurrency = "DZD",
-  initialData,
-}: RevenueChartProps) => {
+export const RevenueChart = ({ initialData }: RevenueChartProps) => {
   const t = useTranslations("dashboard");
   const locale = useLocale();
   const isRTL = locale === "ar";
   const searchParams = useSearchParams();
+  const { formatPrice, currencySymbol, isLoading: currencyLoading } = useCurrency();
 
   // Read date range from URL params
   const dateRange = useMemo(() => {
@@ -73,7 +86,6 @@ export const RevenueChart = ({
   // Prepare query params for tRPC
   const queryParams = useMemo(() => {
     if (dateRange?.from && dateRange?.to) {
-      // Set to start and end of day
       const start = new Date(dateRange.from);
       start.setHours(0, 0, 0, 0);
       const end = new Date(dateRange.to);
@@ -97,29 +109,12 @@ export const RevenueChart = ({
           }
         : undefined,
       refetchOnMount: false,
+      staleTime: 1000 * 60 * 2, // Cache for 2 minutes
     }
   );
 
   // Extract data from response
   const data = revenueData?.success ? revenueData.data : null;
-  const currency = data?.walletCurrency || initialCurrency;
-
-  // Helper function to format currency
-  const formatCurrency = (amount) => {
-    const currencySymbols = {
-      USD: t("currency.USD"),
-      EUR: t("currency.EUR"),
-      DZD: t("currency.DZD"),
-    };
-    const symbol = currencySymbols[currency] || currency;
-    return `${amount.toFixed(2)}${symbol}`;
-  };
-
-  // Helper function to safely convert to number
-  const toNumber = (value) => {
-    const num = Number(value);
-    return isNaN(num) ? 0 : num;
-  };
 
   // Use data from backend or fallback to empty
   const todayData = data?.todayData || [];
@@ -130,6 +125,18 @@ export const RevenueChart = ({
   const todayRevenue = data?.todayRevenue || 0;
   const yesterdayRevenue = data?.yesterdayRevenue || 0;
   const balance = data?.walletBalance || 0;
+  
+  // New metrics
+  const successfulPayments = data?.successfulPayments || 0;
+  const newCustomers = data?.newCustomers || 0;
+  const averageOrderValue = data?.averageOrderValue || 0;
+  const refunds = data?.refunds || { count: 0, amount: 0 };
+  const changes = data?.changes || {
+    volumeChange: 0,
+    paymentsChange: 0,
+    customersChange: 0,
+    avgOrderChange: 0,
+  };
 
   // Get current time for display
   const getCurrentTime = () => {
@@ -142,19 +149,21 @@ export const RevenueChart = ({
     });
   };
 
-  // Custom tooltip component
-  const CustomTooltip = ({ active, payload, label }) => {
+  // Custom tooltip component for chart
+  const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            {new Date(label).toLocaleTimeString(locale === "ar" ? "ar-DZ" : "en-US", {
+        <div className="bg-white dark:bg-card p-3 rounded-lg shadow-lg border border-gray-200 dark:border-border">
+          <p className="text-sm text-gray-600 dark:text-muted-foreground">
+            {new Date(label).toLocaleDateString(locale === "ar" ? "ar-DZ" : "en-US", {
+              month: "short",
+              day: "numeric",
               hour: "2-digit",
               minute: "2-digit",
             })}
           </p>
           <p className="text-sm font-semibold text-blue-600 dark:text-blue-400">
-            {formatCurrency(payload[0].value)}
+            {formatPrice(payload[0].value)}
           </p>
         </div>
       );
@@ -162,182 +171,253 @@ export const RevenueChart = ({
     return null;
   };
 
-  // Mini chart component that shows recent trend
-  const MiniChart = ({ data, label, showAxes = false }) => {
-    return (
-      <div className="space-y-2">
-        <div className="h-20 rounded-lg overflow-hidden">
-          {data && data.length > 0 ? (
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart
-                data={data}
-                margin={{ top: 8, right: 8, left: 8, bottom: 8 }}
-              >
-                {showAxes && (
-                  <>
-                    <XAxis
-                      dataKey="time"
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{ fontSize: 11, fill: "#6b7280" }}
-                      tickFormatter={(value) => {
-                        const date = new Date(value);
-                        const localeString = locale === "ar" ? "ar-DZ" : "en-US";
-                        return date.toLocaleTimeString(localeString, {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        });
-                      }}
-                    />
-                    <YAxis
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{ fontSize: 11, fill: "#6b7280" }}
-                      tickFormatter={(value) => formatCurrency(value)}
-                    />
-                  </>
-                )}
-                {!showAxes && (
-                  <>
-                    <XAxis hide />
-                    <YAxis hide />
-                  </>
-                )}
-                <Line
-                  type="monotone"
-                  dataKey="value"
-                  stroke="#3b82f6"
-                  strokeWidth={2.5}
-                  dot={false}
-                  activeDot={{
-                    r: 5,
-                    stroke: "#3b82f6",
-                    strokeWidth: 2,
-                    fill: "#ffffff",
-                  }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          ) : (
-            <div className={cn("flex items-center justify-center h-full text-gray-400 dark:text-gray-500 text-xs", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
-              {t("noDataAvailable")}
-            </div>
-          )}
-        </div>
-        {!showAxes && (
-          <div className={cn("flex justify-between text-xs text-gray-400 dark:text-gray-500", isRTL ? "flex-row-reverse" : "")}>
-            <span dir={isRTL ? "rtl" : "ltr"}>{getCurrentTime()}</span>
-            <span dir={isRTL ? "rtl" : "ltr"}>{getCurrentTime()}</span>
-          </div>
-        )}
-      </div>
-    );
-  };
+  // Sparkline data for stats cards
+  const revenueSparkline = allChartData.map(d => ({ value: d.value }));
 
   return (
     <div className="space-y-6 max-w-full">
-      {/* Date Range Picker */}
-      <div className={cn("flex", isRTL ? "justify-start" : "justify-end")}>
+      {/* Date Range Picker with Presets */}
+      <div className={cn("flex flex-wrap items-center gap-4", isRTL ? "flex-row-reverse" : "")}>
         <DatePickerWithRange
           dateRange={dateRange}
-          className={cn(isRTL ? "mr-auto" : "ml-auto")}
+          showPresets={true}
         />
       </div>
 
+      {/* Balance Card - at the top */}
+      <Card className="border border-gray-200 dark:border-border bg-card" dir={isRTL ? "rtl" : "ltr"}>
+        <CardContent className="p-4 sm:p-6">
+          <div className={cn("flex items-center justify-between", isRTL && "flex-row-reverse")}>
+            <div className={cn(isRTL && "text-right")}>
+              <p className="text-sm font-medium text-muted-foreground mb-1">
+                {t("balance")}
+              </p>
+              <p className="text-2xl sm:text-3xl font-bold text-foreground">
+                {formatPrice(balance)}
+              </p>
+            </div>
+            <button className="text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors">
+              {t("view")}
+            </button>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Loading State */}
-      {isLoading && !data && (
-        <div className={cn("text-center py-8", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
-          <p className="text-gray-500 dark:text-gray-400">{t("loading")}</p>
-        </div>
+      {(isLoading || currencyLoading) && !data && (
+        <StatsGrid>
+          <StatsCard title="" value="" isLoading={true} />
+          <StatsCard title="" value="" isLoading={true} />
+          <StatsCard title="" value="" isLoading={true} />
+          <StatsCard title="" value="" isLoading={true} />
+        </StatsGrid>
       )}
 
-      {/* Today's metrics card */}
-      <Card dir={isRTL ? "rtl" : "ltr"}>
-        <CardHeader className="pb-4 px-4 sm:px-6">
-          <CardTitle className={cn("text-lg font-semibold text-gray-900 dark:text-gray-100", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
-            {t("today")}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6 px-4 sm:px-6">
-          {/* Responsive grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Left side - Revenue metrics with charts */}
-            <div className="space-y-6">
-              <div>
-                <p className={cn("text-sm text-gray-500 dark:text-gray-400 mb-2 font-medium", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
-                  {t("totalRevenue")}
-                </p>
-                <p className={cn("text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
-                  {todayRevenue > 0 ? formatCurrency(todayRevenue) : "--"}
-                </p>
-                <MiniChart data={todayData} label="today" />
-              </div>
+      {/* Stats Cards Row - Stripe-like metrics */}
+      {data && (
+        <StatsGrid>
+          <StatsCard
+            title={t("grossVolume")}
+            value={formatPrice(grossRevenue)}
+            change={changes.volumeChange}
+            changeLabel={t("comparedTo")}
+            icon={<DollarSign className="h-4 w-4" />}
+            sparklineData={revenueSparkline}
+            isRTL={isRTL}
+          />
+          <StatsCard
+            title={t("successfulPayments")}
+            value={successfulPayments.toLocaleString()}
+            change={changes.paymentsChange}
+            changeLabel={t("comparedTo")}
+            icon={<CreditCard className="h-4 w-4" />}
+            isRTL={isRTL}
+          />
+          <StatsCard
+            title={t("newCustomers")}
+            value={newCustomers.toLocaleString()}
+            change={changes.customersChange}
+            changeLabel={t("comparedTo")}
+            icon={<Users className="h-4 w-4" />}
+            isRTL={isRTL}
+          />
+          <StatsCard
+            title={t("averageOrder")}
+            value={formatPrice(averageOrderValue)}
+            change={changes.avgOrderChange}
+            changeLabel={t("comparedTo")}
+            icon={<ShoppingCart className="h-4 w-4" />}
+            isRTL={isRTL}
+          />
+        </StatsGrid>
+      )}
 
-              <div>
-                <p className={cn("text-sm text-gray-500 dark:text-gray-400 mb-2 font-medium", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
-                  {t("yesterday")}
+      {/* Refunds card (if any) */}
+      {data && refunds.count > 0 && (
+        <Card className="border border-gray-200 dark:border-border bg-card">
+          <CardContent className="p-4 sm:p-6">
+            <div className={cn("flex items-center gap-4", isRTL && "flex-row-reverse")}>
+              <div className="p-2 rounded-full bg-red-50 dark:bg-red-900/20">
+                <RefreshCcw className="h-5 w-5 text-red-600 dark:text-red-400" />
+              </div>
+              <div className={cn(isRTL && "text-right")}>
+                <p className="text-sm font-medium text-muted-foreground">
+                  {t("refunds")}
                 </p>
-                <p className={cn("text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
-                  {yesterdayRevenue > 0
-                    ? formatCurrency(yesterdayRevenue)
-                    : "--"}
+                <p className="text-lg font-bold text-red-600 dark:text-red-400">
+                  {refunds.count} ({formatPrice(refunds.amount)})
                 </p>
-                <p className={cn("text-xs text-gray-400 dark:text-gray-500 mt-1", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
-                  {getCurrentTime()}
-                </p>
-                <div className="mt-4">
-                  <MiniChart data={yesterdayData} label="yesterday" />
-                </div>
               </div>
             </div>
+          </CardContent>
+        </Card>
+      )}
 
-            {/* Right side - Balance and Payouts */}
-            <div className="space-y-6">
-              <div>
-                <div className={cn("flex items-center mb-2", isRTL ? "flex-row-reverse justify-between" : "justify-between")}>
-                  <p className={cn("text-sm text-gray-500 dark:text-gray-400 font-medium", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
-                    {t("balance")}
-                  </p>
-                  <button className={cn("text-sm font-semibold transition-colors text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
-                    {t("view")}
-                  </button>
-                </div>
-                <p className={cn("text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-1", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
-                  {formatCurrency(balance)}
-                </p>
-              </div>
-
-              <div>
-                <div className={cn("flex items-center mb-2", isRTL ? "flex-row-reverse justify-between" : "justify-between")}>
-                  <p className={cn("text-sm text-gray-500 dark:text-gray-400 font-medium", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
-                    {t("payouts")}
-                  </p>
-                  <button className={cn("text-sm font-semibold transition-colors text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
-                    {t("view")}
-                  </button>
-                </div>
-                <p className={cn("text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
-                  --
-                </p>
-              </div>
+      {/* Main Revenue Chart */}
+      <Card className="border border-gray-200 dark:border-border" dir={isRTL ? "rtl" : "ltr"}>
+        <CardHeader className="pb-4 px-4 sm:px-6">
+          <div className={cn("flex items-center justify-between", isRTL && "flex-row-reverse")}>
+            <CardTitle className={cn("text-lg font-semibold text-foreground", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
+              {t("revenueOverview")}
+            </CardTitle>
+            <div className={cn("text-2xl font-bold text-foreground", isRTL ? "text-left" : "text-right")}>
+              {formatPrice(grossRevenue)}
             </div>
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Main comprehensive chart */}
-      <Card dir={isRTL ? "rtl" : "ltr"}>
-        <CardHeader className="pb-4 px-4 sm:px-6">
-          <CardTitle className={cn("text-lg font-semibold text-gray-900 dark:text-gray-100", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
-            {t("revenueOverview")}
-          </CardTitle>
         </CardHeader>
-        <CardContent className="px-4 sm:px-6">
+        <CardContent className="px-4 sm:px-6 pb-6">
           <div className="h-64 sm:h-80 w-full">
-            <MiniChart data={allChartData} label="overview" showAxes={true} />
+            {allChartData && allChartData.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart
+                  data={allChartData}
+                  margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+                >
+                  <defs>
+                    <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <XAxis
+                    dataKey="time"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fontSize: 11, fill: "#6b7280" }}
+                    tickFormatter={(value) => {
+                      const date = new Date(value);
+                      return date.toLocaleDateString(locale === "ar" ? "ar-DZ" : "en-US", {
+                        month: "short",
+                        day: "numeric",
+                      });
+                    }}
+                    dy={10}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fontSize: 11, fill: "#6b7280" }}
+                    tickFormatter={(value) => {
+                      if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`;
+                      if (value >= 1000) return `${(value / 1000).toFixed(1)}K`;
+                      return value.toString();
+                    }}
+                    dx={-10}
+                    width={50}
+                  />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Area
+                    type="monotone"
+                    dataKey="value"
+                    stroke="#3b82f6"
+                    strokeWidth={2}
+                    fill="url(#colorRevenue)"
+                    activeDot={{
+                      r: 6,
+                      stroke: "#3b82f6",
+                      strokeWidth: 2,
+                      fill: "#ffffff",
+                    }}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className={cn("flex items-center justify-center h-full text-muted-foreground", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
+                {t("noDataAvailable")}
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
+
+      {/* Today vs Yesterday Comparison */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Today's Revenue */}
+        <Card className="border border-gray-200 dark:border-border" dir={isRTL ? "rtl" : "ltr"}>
+          <CardHeader className="pb-2 px-4 sm:px-6">
+            <CardTitle className={cn("text-sm font-medium text-muted-foreground", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
+              {t("today")}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="px-4 sm:px-6 pb-4">
+            <p className={cn("text-2xl sm:text-3xl font-bold text-foreground mb-4", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
+              {todayRevenue > 0 ? formatPrice(todayRevenue) : "--"}
+            </p>
+            <div className="h-16">
+              {todayData && todayData.length > 0 ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={todayData}>
+                    <Line
+                      type="monotone"
+                      dataKey="value"
+                      stroke="#22c55e"
+                      strokeWidth={2}
+                      dot={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="flex items-center justify-center h-full text-muted-foreground text-xs">
+                  {t("noDataAvailable")}
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Yesterday's Revenue */}
+        <Card className="border border-gray-200 dark:border-border" dir={isRTL ? "rtl" : "ltr"}>
+          <CardHeader className="pb-2 px-4 sm:px-6">
+            <CardTitle className={cn("text-sm font-medium text-muted-foreground", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
+              {t("yesterday")}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="px-4 sm:px-6 pb-4">
+            <p className={cn("text-2xl sm:text-3xl font-bold text-foreground mb-4", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
+              {yesterdayRevenue > 0 ? formatPrice(yesterdayRevenue) : "--"}
+            </p>
+            <div className="h-16">
+              {yesterdayData && yesterdayData.length > 0 ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={yesterdayData}>
+                    <Line
+                      type="monotone"
+                      dataKey="value"
+                      stroke="#6b7280"
+                      strokeWidth={2}
+                      dot={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="flex items-center justify-center h-full text-muted-foreground text-xs">
+                  {t("noDataAvailable")}
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

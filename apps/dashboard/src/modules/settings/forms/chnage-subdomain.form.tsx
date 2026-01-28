@@ -24,10 +24,8 @@ import {
 import { Input } from "@ui/components/ui/input";
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-
-const formSchema = z.object({
-  subdomain: z.string().min(1, { message: "يرجى إدخال النطاق الفرعي" }),
-});
+import { useTranslations, useLocale } from "next-intl";
+import { maketoast } from "@/src/components/toasts";
 
 interface ChangeDomainFormProps {
   subdomain: string | null;
@@ -40,14 +38,24 @@ const ChangeSubDomainForm: FC<ChangeDomainFormProps> = ({
   onSuccess,
   onError,
 }) => {
+  const t = useTranslations("websiteSettings.forms.subdomain");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
+
+  const formSchema = z.object({
+    subdomain: z.string().min(1, { message: t("validation.required") }),
+  });
+
   const initialSubdomain = subdomain ? subdomain.split(".")[0] : "";
 
   const mutation = trpc.chnageSubDmain.useMutation({
     onSuccess: (data) => {
+      maketoast.success();
       onSuccess?.(data?.subdomain || form.getValues().subdomain);
     },
     onError: (error) => {
-      const errorMessage = error.message || "حدث خطأ أثناء تحديث النطاق الفرعي";
+      const errorMessage = error.message;
+      maketoast.error();
       onError?.(errorMessage);
       form.setError("subdomain", { message: errorMessage });
     },
@@ -71,9 +79,9 @@ const ChangeSubDomainForm: FC<ChangeDomainFormProps> = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <Card className="border rounded-xl shadow-none">
+        <Card className="border border-gray-200 dark:border-gray-700 rounded-xl shadow-none bg-card">
           <CardHeader>
-            <CardTitle>النطاق الفرعي</CardTitle>
+            <CardTitle dir={isRTL ? "rtl" : "ltr"}>{t("title")}</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
@@ -81,23 +89,24 @@ const ChangeSubDomainForm: FC<ChangeDomainFormProps> = ({
               name="subdomain"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>النطاق الفرعي لموقعك</FormLabel>
+                  <FormLabel dir={isRTL ? "rtl" : "ltr"}>{t("label")}</FormLabel>
                   <FormControl>
-                    <div className="w-full h-14 border rounded-xl flex items-center p-2">
+                    <div className="w-full h-14 border border-gray-200 dark:border-gray-700 rounded-xl flex items-center p-2 bg-background">
                       <div className="w-[150px] h-full flex items-center justify-center bg-primary text-white rounded-lg">
                         <span className="text-sm">cravvelo.com/</span>
                       </div>
                       <div className="flex-1 flex items-center">
                         <Input
-                          className="border-none shadow-none focus-visible:ring-0"
-                          placeholder="حدد اسم المجال الخاص بك"
+                          className="border-none shadow-none focus-visible:ring-0 bg-transparent dark:text-white"
+                          placeholder={t("placeholder")}
                           {...field}
+                          dir={isRTL ? "rtl" : "ltr"}
                         />
                       </div>
                     </div>
                   </FormControl>
-                  <FormDescription>
-                    أدخل النطاق الفرعي المطلوب لموقعك
+                  <FormDescription dir={isRTL ? "rtl" : "ltr"}>
+                    {t("description")}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -111,13 +120,15 @@ const ChangeSubDomainForm: FC<ChangeDomainFormProps> = ({
               type="submit"
             >
               {mutation.isLoading ? <LoadingSpinner /> : null}
-              تأكيد
+              {t("confirm")}
             </Button>
 
             {/* Preview */}
-            <div className="text-xs text-gray-500">
+            <div className="text-xs text-gray-500 dark:text-gray-400">
               {watchedSubdomain && (
-                <span>المعاينة: {watchedSubdomain}.cravvelo.com</span>
+                <span dir={isRTL ? "rtl" : "ltr"}>
+                  {t("preview")}: {watchedSubdomain}.cravvelo.com
+                </span>
               )}
             </div>
           </CardFooter>

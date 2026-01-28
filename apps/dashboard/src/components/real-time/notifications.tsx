@@ -47,6 +47,9 @@ const Notifications: FC<NotificationsProps> = ({
   const { data: ourNotifications = [], refetch } =
     trpc.getAllNotifications.useQuery(undefined, {
       initialData: notifications,
+      staleTime: 1000 * 60 * 2, // Consider data fresh for 2 minutes
+      refetchOnMount: false, // Don't refetch on mount since we have initialData from server
+      refetchOnWindowFocus: false, // Don't refetch when window regains focus
     });
 
   const [data, setData] = useState<Notification[]>(ourNotifications);

@@ -13,10 +13,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
-import { formatCurrency } from "../../utils";
 import { approvePayment, rejectPayment } from "../../actions/payments";
 import { useConfirmation } from "@/src/hooks/use-confirmation";
 import { useTranslations, useLocale } from "next-intl";
+import { useCurrency } from "@/src/hooks/use-currency";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -206,17 +206,21 @@ const getItemInfo = (payment: Payment, t: (key: string) => string) => {
   return null;
 };
 
+// Amount Cell Component that uses the currency hook
+const AmountCell = ({ amount }: { amount: number }) => {
+  const { formatPrice } = useCurrency();
+  return <div className="font-semibold">{formatPrice(amount)}</div>;
+};
+
 // Actions Cell Component
 const ActionsCell = ({ payment }: { payment: Payment }) => {
   const t = useTranslations();
   const locale = useLocale();
   const router = useRouter();
+  const { formatPrice } = useCurrency();
   const isRTL = locale === "ar";
   const isBankTransfer = payment.method === "BANK_TRANSFER" || payment.MethodConfig?.provider === "P2P";
-  const formattedAmount = formatCurrency({
-    amount: payment.amount,
-    currency: payment.currency as "DZD",
-  });
+  const formattedAmount = formatPrice(payment.amount);
   const [isProofModalOpen, setIsProofModalOpen] = useState(false);
 
   // Copy to clipboard function with error handling and fallback
@@ -496,6 +500,19 @@ const PaymentMethodCell = ({ method }: { method: string | null | undefined }) =>
   );
 };
 
+// Date Cell Component that uses locale
+const DateCell = ({ date }: { date: Date | null }) => {
+  const locale = useLocale();
+  if (!date) {
+    return <span className="text-muted-foreground text-sm">-</span>;
+  }
+  return (
+    <div className="text-sm text-muted-foreground w-fit">
+      {formatDate(date, locale)}
+    </div>
+  );
+};
+
 // Hook to get payment columns with translations
 export const usePaymentColumns = (): ColumnDef<Payment>[] => {
   const t = useTranslations();
@@ -528,15 +545,7 @@ export const usePaymentColumns = (): ColumnDef<Payment>[] => {
       accessorKey: "amount",
       header: t("payments.columns.amount"),
       cell: ({ row }) => {
-        const p = row.original;
-        return (
-          <div className="font-semibold">
-            {formatCurrency({
-              amount: p.amount,
-              currency: (p.currency || "DZD") as "DZD",
-            })}
-          </div>
-        );
+        return <AmountCell amount={row.original.amount} />;
       },
     },
     {
@@ -607,15 +616,7 @@ export const paymentColumns: ColumnDef<Payment>[] = [
     accessorKey: "amount",
     header: "Amount",
     cell: ({ row }) => {
-      const p = row.original;
-      return (
-        <div className="font-semibold">
-          {formatCurrency({
-            amount: p.amount,
-            currency: (p.currency || "DZD") as "DZD",
-          })}
-        </div>
-      );
+      return <AmountCell amount={row.original.amount} />;
     },
   },
   {
@@ -640,14 +641,7 @@ export const paymentColumns: ColumnDef<Payment>[] = [
     header: "Created At",
     cell: ({ row }) => {
       const createdAt = row.getValue("createdAt") as Date;
-      if (!createdAt) {
-        return <span className="text-muted-foreground text-sm">-</span>;
-      }
-      return (
-        <div className="text-sm text-muted-foreground w-fit">
-          {formatDate(createdAt)}
-        </div>
-      );
+      return <DateCell date={createdAt} />;
     },
   },
   {

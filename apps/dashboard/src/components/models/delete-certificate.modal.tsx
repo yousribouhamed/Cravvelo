@@ -17,13 +17,15 @@ import { maketoast } from "../toasts";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { Button } from "@ui/components/ui/button";
 import { useOpenCertificateDeleteAction } from "@/src/lib/zustand/delete-actions";
+import { useTranslations } from "next-intl";
 
-interface DeleteCourseModelProps {
+interface DeleteCertificateModelProps {
   refetch: () => Promise<any>;
 }
 
-const DeleteCertificateModel: FC<DeleteCourseModelProps> = ({ refetch }) => {
+const DeleteCertificateModel: FC<DeleteCertificateModelProps> = ({ refetch }) => {
   const mounted = useMounted();
+  const t = useTranslations("certificates");
 
   const { id, open, setId, setIsOpen } = useOpenCertificateDeleteAction();
 
@@ -32,11 +34,10 @@ const DeleteCertificateModel: FC<DeleteCourseModelProps> = ({ refetch }) => {
       await refetch();
 
       setIsOpen(false);
-      maketoast.successWithText({ text: "تم حذف الشهادة بنجاح" });
+      maketoast.successWithText({ text: t("deleteModal.success") });
     },
     onError: () => {
       maketoast.error();
-      console.error("حدث خطأ ما في نموذج حذف الفصل");
       setIsOpen(false);
     },
   });
@@ -48,20 +49,16 @@ const DeleteCertificateModel: FC<DeleteCourseModelProps> = ({ refetch }) => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="w-full flex justify-start">
-            هل أنت متأكد تمامًا من رغبتك في حذف هذه الشهادة؟
+            {t("deleteModal.title")}
           </AlertDialogTitle>
           <AlertDialogDescription className="w-full my-4 flex justify-start">
-            <div dir="rtl">
-              <p className="text-start">
-                {" "}
-                لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف ملفك نهائيًا
-                الحساب وإزالة بياناتك من خوادمنا.
-              </p>
-            </div>
+            <p className="text-start">
+              {t("deleteModal.description")}
+            </p>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className=" w-full flex justify-start gap-x-4">
-          <AlertDialogCancel>الإلغاء</AlertDialogCancel>
+          <AlertDialogCancel>{t("deleteModal.cancel")}</AlertDialogCancel>
           <Button
             className=" flex items-center gap-x-2"
             disabled={mutation.isLoading}
@@ -75,7 +72,7 @@ const DeleteCertificateModel: FC<DeleteCourseModelProps> = ({ refetch }) => {
             }}
           >
             {mutation.isLoading ? <LoadingSpinner /> : null}
-            حذف دورة
+            {t("deleteModal.confirm")}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

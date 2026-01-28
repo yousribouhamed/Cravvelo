@@ -19,7 +19,14 @@ import { Course } from "database";
 import { Badge } from "@ui/components/ui/badge";
 import { maketoast } from "../../toasts";
 import { useOpenCourseDeleteAction } from "@/src/lib/zustand/delete-actions";
-import { formatDZD, timeSince } from "@/src/lib/utils";
+import { timeSince } from "@/src/lib/utils";
+import { useCurrency } from "@/src/hooks/use-currency";
+
+// Price cell component that uses the currency hook
+const PriceCell = ({ price }: { price: number | null }) => {
+  const { formatPrice } = useCurrency();
+  return <span>{formatPrice(price === null ? 0 : price)}</span>;
+};
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -84,7 +91,7 @@ export const columns: ColumnDef<Course>[] = [
       <DataTableColumnHeader column={column} title="السعر" />
     ),
     cell: ({ row }) => {
-      return formatDZD(row.original.price === null ? 0 : row.original.price);
+      return <PriceCell price={row.original.price} />;
     },
     filterFn: "inNumberRange",
   },

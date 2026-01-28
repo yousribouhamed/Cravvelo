@@ -6,12 +6,25 @@ import {
   getAllNotifications,
   getMyUserAction,
 } from "@/src/actions/user.actions";
+import { getServerTranslations } from "@/src/lib/i18n/utils";
 
 const Page = async () => {
   const user = await getMyUserAction();
+  const t = await getServerTranslations("coupons");
 
-  const [coupons, notifications] = await Promise.all([
+  const limit = 10;
+
+  const [coupons, totalCount, notifications] = await Promise.all([
     prisma.coupon.findMany({
+      where: {
+        accountId: user.accountId,
+      },
+      take: limit,
+      orderBy: {
+        createdAt: "desc",
+      },
+    }),
+    prisma.coupon.count({
       where: {
         accountId: user.accountId,
       },
@@ -19,15 +32,24 @@ const Page = async () => {
     getAllNotifications({ accountId: user.accountId }),
   ]);
 
+  const pageCount = Math.ceil(totalCount / limit);
+
+  const initialData = {
+    coupons,
+    totalCount,
+    pageCount,
+    currentPage: 1,
+  };
+
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
         <Header
           notifications={notifications}
           user={user}
-          title="صانع القسائم"
+          title={t("pageTitle")}
         />
-        <CouponsTableShell initialData={coupons} />
+        <CouponsTableShell initialData={initialData} />
       </main>
     </MaxWidthWrapper>
   );

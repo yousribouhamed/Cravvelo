@@ -22,11 +22,13 @@ import { Product } from "database";
 import { Badge } from "@ui/components/ui/badge";
 import { maketoast } from "../../toasts";
 import { useOpenProductDeleteAction } from "@/src/lib/zustand/delete-actions";
-import { formatDZD, timeSince } from "@/src/lib/utils";
+import { timeSince } from "@/src/lib/utils";
 import { useTranslations } from "next-intl";
+import { useCurrency } from "@/src/hooks/use-currency";
 
 export const useProductsColumns = (): ColumnDef<Product>[] => {
   const t = useTranslations("products");
+  const { formatPrice } = useCurrency();
 
   return [
   {
@@ -92,7 +94,7 @@ export const useProductsColumns = (): ColumnDef<Product>[] => {
       <DataTableColumnHeader column={column} title={t("columns.price")} />
     ),
     cell: ({ row }) => {
-      return formatDZD(row.original.price === null ? 0 : row.original.price);
+      return formatPrice(row.original.price === null ? 0 : row.original.price);
     },
     filterFn: "inNumberRange",
   },

@@ -372,19 +372,70 @@ export function timeSince(createdAt: Date, t?: (key: string, values?: { count: n
   return `منذ ${seconds} ثواني`;
 }
 
+/**
+ * Format amount with a specific currency
+ * @param amount - The amount to format
+ * @param currency - ISO 4217 currency code (e.g., "DZD", "USD", "EUR")
+ * @param customSymbol - Optional custom symbol to use instead of the default currency symbol
+ * @returns Formatted currency string
+ */
+export function formatCurrency(
+  amount: number,
+  currency: string = "DZD",
+  customSymbol?: string
+): string {
+  // Map of currency codes to their locales for better formatting
+  const currencyLocales: Record<string, string> = {
+    USD: "en-US",
+    EUR: "de-DE",
+    GBP: "en-GB",
+    DZD: "ar-DZ",
+    SAR: "ar-SA",
+    AED: "ar-AE",
+    MAD: "ar-MA",
+    TND: "ar-TN",
+    EGP: "ar-EG",
+  };
+
+  const locale = currencyLocales[currency] || "en-US";
+
+  try {
+    const formatter = new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+
+    const formattedAmount = formatter.format(amount);
+
+    // If custom symbol is provided, replace the default currency symbol
+    if (customSymbol) {
+      // Remove the currency code/symbol and add the custom symbol
+      const numericPart = formatter
+        .format(amount)
+        .replace(/[^\d.,\s-]/g, "")
+        .trim();
+      return `${numericPart} ${customSymbol}`;
+    }
+
+    return formattedAmount;
+  } catch (error) {
+    // Fallback for unsupported currencies
+    const formatted = new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+    return `${formatted} ${customSymbol || currency}`;
+  }
+}
+
+/**
+ * @deprecated Use formatCurrency instead
+ * Legacy function for backward compatibility - formats amount in DZD
+ */
 export function formatDZD(amount: number): string {
-  // Create a number formatter for Algerian Dinar
-  const formatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "DZD",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-
-  // Format the amount and replace the currency symbol with "DZD"
-  const formattedAmount = formatter.format(amount).replace("DZD", "").trim();
-
-  return `${formattedAmount} DZD`;
+  return formatCurrency(amount, "DZD");
 }
 
 /**

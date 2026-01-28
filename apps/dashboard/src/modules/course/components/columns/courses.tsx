@@ -19,15 +19,17 @@ import { Course } from "database";
 import { Badge } from "@ui/components/ui/badge";
 import { maketoast } from "@/src/components/toasts";
 import { useOpenCourseDeleteAction } from "@/src/lib/zustand/delete-actions";
-import { formatDZD, timeSince } from "@/src/lib/utils";
+import { timeSince } from "@/src/lib/utils";
 import { DataTableColumnHeader } from "@/src/components/data-table/table-helpers/data-table-head";
 import { useTranslations } from "next-intl";
+import { useCurrency } from "@/src/hooks/use-currency";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
 export const useCoursesColumns = (): ColumnDef<Course>[] => {
   const t = useTranslations("courses");
+  const { formatPrice } = useCurrency();
 
   return [
   {
@@ -69,7 +71,7 @@ export const useCoursesColumns = (): ColumnDef<Course>[] => {
       <DataTableColumnHeader column={column} title={t("columns.price")} />
     ),
     cell: ({ row }) => {
-      return formatDZD(row.original.price === null ? 0 : row.original.price);
+      return formatPrice(row.original.price === null ? 0 : row.original.price);
     },
     filterFn: "inNumberRange",
   },

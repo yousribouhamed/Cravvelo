@@ -1,20 +1,16 @@
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
 import Header from "@/src/components/layout/header";
-import useHaveAccess from "@/src/hooks/use-have-access";
 import ReferralTableShell from "./referral-table-shell";
 import { prisma } from "database/src";
-
-const getAllNotifications = async ({ accountId }: { accountId: string }) => {
-  const notifications = await prisma.notification.findMany({
-    where: {
-      accountId,
-    },
-  });
-  return notifications;
-};
+import {
+  getAllNotifications,
+  getMyUserAction,
+} from "@/src/actions/user.actions";
+import { getServerTranslations } from "@/src/lib/i18n/utils";
 
 const Page = async () => {
-  const user = await useHaveAccess();
+  const user = await getMyUserAction();
+  const t = await getServerTranslations("affiliateMarketing");
 
   const [subscribers, notifications] = await Promise.all([
     prisma.referral.findMany({
@@ -27,11 +23,11 @@ const Page = async () => {
 
   return (
     <MaxWidthWrapper>
-      <main className="w-full flex flex-col justify-start ">
+      <main className="w-full flex flex-col justify-start">
         <Header
           notifications={notifications}
           user={user}
-          title="التسويق بالعمولة"
+          title={t("pageTitle")}
         />
         <ReferralTableShell initialData={subscribers} />
       </main>

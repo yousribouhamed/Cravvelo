@@ -33,6 +33,7 @@ import Image from "next/image";
 import SunCertificateViewer from "./sun-certificate-viewer";
 import DeerCertificateViewer from "./deer-certificate-viewer";
 import { Hammer } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const FormSchema = z.object({
   studentName: z.string(),
@@ -49,6 +50,7 @@ interface CertificateProps {
 export default function CertificateForm({ students, stamp }: CertificateProps) {
   const router = useRouter();
   const path = usePathname();
+  const t = useTranslations("certificates");
 
   // this variable will determen what is going to be seen in the view of the screen
   const [isCertificateSeen, setIsCertificateSeen] =
@@ -100,7 +102,7 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
                 isCertificateSeen ? "" : "border-b-4 border-yellow-500 "
               } h-full rounded-[0] `}
             >
-              المحتوى
+              {t("tabs.content")}
             </Button>
             <Button
               onClick={() => setIsCertificateSeen(true)}
@@ -109,32 +111,37 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
                 isCertificateSeen ? "border-b-4 border-yellow-500 " : ""
               } h-full rounded-[0] `}
             >
-              التصميم
+              {t("tabs.design")}
             </Button>
           </div>
           <div className="w-full h-full">
             {isCertificateSeen ? (
               <div className="w-full h-full flex flex-wrap gap-4 bg-white ">
-                {CERTIFICATE_VARIANTS.map((item) => (
-                  <div
-                    onClick={() => setCertificateTheme(item.code)}
-                    key={item.code}
-                    className={`flex hover:bg-white hover:shadow cursor-pointer p-2 transition-all duration-300 rounded-xl border w-[150px] h-[150px] flex-col gap-y-2 ${
-                      item.code === certificateTheme
-                        ? "border-2 border-blue-500 "
-                        : ""
-                    }`}
-                  >
-                    <div className="w-full h-[80%] relative flex items-center justify-center">
-                      <Image src={item.image} fill alt={item.name} />
+                {CERTIFICATE_VARIANTS.map((item) => {
+                  const variantKey = item.code === "DEAD_DEER" ? "deadDeer" 
+                    : item.code === "PARTY_UNDER_SUN" ? "partyUnderSun" 
+                    : "coldCertificate";
+                  return (
+                    <div
+                      onClick={() => setCertificateTheme(item.code)}
+                      key={item.code}
+                      className={`flex hover:bg-white hover:shadow cursor-pointer p-2 transition-all duration-300 rounded-xl border w-[150px] h-[150px] flex-col gap-y-2 ${
+                        item.code === certificateTheme
+                          ? "border-2 border-blue-500 "
+                          : ""
+                      }`}
+                    >
+                      <div className="w-full h-[80%] relative flex items-center justify-center">
+                        <Image src={item.image} fill alt={t(`variants.${variantKey}`)} />
+                      </div>
+                      <div className="w-full h-[20%] flex items-center justify-start border-t">
+                        <p className="text-sm text-black text-center">
+                          {t(`variants.${variantKey}`)}
+                        </p>
+                      </div>
                     </div>
-                    <div className="w-full h-[20%] flex items-center justify-start border-t">
-                      <p className="text-sm text-black text-center">
-                        {item.name}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               
@@ -150,12 +157,12 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>
-                          اسم الشهادة{" "}
-                          <span className="text-red-600 text-xl">*</span>
+                          {t("form.certificateName")}{" "}
+                          <span className="text-red-600 text-xl">{t("form.required")}</span>
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="اين تذهب الشمس عندما يحل الليل"
+                            placeholder={t("form.certificateNamePlaceholder")}
                             {...field}
                           />
                         </FormControl>
@@ -170,12 +177,12 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>
-                          اسم الدورة{" "}
-                          <span className="text-red-600 text-xl">*</span>
+                          {t("form.courseName")}{" "}
+                          <span className="text-red-600 text-xl">{t("form.required")}</span>
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="اين تذهب الشمس عندما يحل الليل"
+                            placeholder={t("form.courseNamePlaceholder")}
                             {...field}
                           />
                         </FormControl>
@@ -190,12 +197,12 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>
-                          اسم الطالب{" "}
-                          <span className="text-red-600 text-xl">*</span>
+                          {t("form.studentName")}{" "}
+                          <span className="text-red-600 text-xl">{t("form.required")}</span>
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="اين تذهب الشمس عندما يحل الليل"
+                            placeholder={t("form.studentNamePlaceholder")}
                             {...field}
                           />
                         </FormControl>
@@ -208,14 +215,14 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
                     name="studentId"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>الطالب المعني بالشهادة</FormLabel>
+                        <FormLabel>{t("form.selectStudent")}</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select a student" />
+                              <SelectValue placeholder={t("form.selectStudentPlaceholder")} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -241,7 +248,7 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
                       ) : (
                         <Hammer className="text-white w-4 h-4" />
                       )}
-                      بناء الشهادة
+                      {t("form.buildCertificate")}
                     </Button>
                   </div>
                 </form>

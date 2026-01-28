@@ -1,19 +1,10 @@
 "use client";
 
-import { Button } from "@ui/components/ui/button";
 import { Input } from "@ui/components/ui/input";
 import type { FC } from "react";
 import { ColumnFiltersState, Table } from "@tanstack/react-table";
 import { FacetedFilter } from "../table-helpers/faceted-filter";
-import {
-  Search,
-  Plus,
-  CheckCircle,
-  XCircle,
-  Archive,
-  Percent,
-  DollarSign,
-} from "lucide-react";
+import { Search, CheckCircle, XCircle, Clock, AlertCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
 
@@ -24,59 +15,44 @@ interface TableHeaderProps {
   setColumnFilters: React.Dispatch<React.SetStateAction<ColumnFiltersState>>;
   onSearchChange?: (value: string) => void;
   onStatusFilterChange?: (values: string[]) => void;
-  onDiscountTypeFilterChange?: (values: string[]) => void;
-  onCreateCoupon?: () => void;
   serverSideFiltering?: boolean;
 }
 
 const statusOptions = [
   {
-    value: "active",
-    label: "Active",
+    value: "approved",
+    label: "Approved",
     icon: CheckCircle,
   },
   {
-    value: "inactive",
-    label: "Inactive",
+    value: "pending",
+    label: "Pending",
+    icon: Clock,
+  },
+  {
+    value: "rejected",
+    label: "Rejected",
     icon: XCircle,
   },
   {
-    value: "archived",
-    label: "Archived",
-    icon: Archive,
+    value: "verification_pending",
+    label: "Pending Verification",
+    icon: AlertCircle,
   },
 ];
 
-const discountTypeOptions = [
-  {
-    value: "PERCENTAGE",
-    label: "Percentage",
-    icon: Percent,
-  },
-  {
-    value: "FIXED_AMOUNT",
-    label: "Fixed Amount",
-    icon: DollarSign,
-  },
-];
-
-const CouponsTableHeader: FC<TableHeaderProps> = ({
+const CommentsTableHeader: FC<TableHeaderProps> = ({
   table,
   refetch,
   data,
   setColumnFilters,
   onSearchChange,
   onStatusFilterChange,
-  onDiscountTypeFilterChange,
-  onCreateCoupon,
   serverSideFiltering = false,
 }) => {
-  const t = useTranslations("coupons");
+  const t = useTranslations("comments");
   const [searchValue, setSearchValue] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<string[]>([]);
-  const [selectedDiscountType, setSelectedDiscountType] = useState<string[]>(
-    []
-  );
 
   // Sync with table filters if not server-side
   useEffect(() => {
@@ -85,12 +61,7 @@ const CouponsTableHeader: FC<TableHeaderProps> = ({
         .getState()
         .columnFilters.filter((f) => f.id === "status")
         .map((f) => f.value as string);
-      const discountTypeFilters = table
-        .getState()
-        .columnFilters.filter((f) => f.id === "discountType")
-        .map((f) => f.value as string);
       setSelectedStatus(statusFilters);
-      setSelectedDiscountType(discountTypeFilters);
     }
   }, [table.getState().columnFilters, serverSideFiltering]);
 
@@ -100,8 +71,8 @@ const CouponsTableHeader: FC<TableHeaderProps> = ({
     if (serverSideFiltering && onSearchChange) {
       onSearchChange(value);
     } else {
-      // Client-side search
-      table.getColumn("code")?.setFilterValue(value);
+      // Client-side search on content
+      table.getColumn("content")?.setFilterValue(value);
     }
   };
 
@@ -109,13 +80,6 @@ const CouponsTableHeader: FC<TableHeaderProps> = ({
     setSelectedStatus(values);
     if (serverSideFiltering && onStatusFilterChange) {
       onStatusFilterChange(values);
-    }
-  };
-
-  const handleDiscountTypeChange = (values: string[]) => {
-    setSelectedDiscountType(values);
-    if (serverSideFiltering && onDiscountTypeFilterChange) {
-      onDiscountTypeFilterChange(values);
     }
   };
 
@@ -148,32 +112,9 @@ const CouponsTableHeader: FC<TableHeaderProps> = ({
           selectedValues={selectedStatus}
           onValuesChange={handleStatusChange}
         />
-
-        {/* Discount Type Filter */}
-        <FacetedFilter
-          table={table}
-          title={t("filters.discountType")}
-          id="discountType"
-          setColumnFilters={serverSideFiltering ? () => {} : setColumnFilters}
-          options={discountTypeOptions.map((opt) => ({
-            ...opt,
-            label: t(`discountTypes.${opt.value}`),
-          }))}
-          serverSideFiltering={serverSideFiltering}
-          selectedValues={selectedDiscountType}
-          onValuesChange={handleDiscountTypeChange}
-        />
-      </div>
-
-      {/* Create Button */}
-      <div className="flex items-center gap-x-4">
-        <Button onClick={onCreateCoupon} className="flex items-center gap-2">
-          <Plus size={18} />
-          <span>{t("createCoupon")}</span>
-        </Button>
       </div>
     </div>
   );
 };
 
-export default CouponsTableHeader;
+export default CommentsTableHeader;

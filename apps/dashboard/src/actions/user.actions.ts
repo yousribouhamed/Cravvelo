@@ -1,21 +1,44 @@
 import { getCurrentUserSafe } from "@/src/lib/clerk-utils";
 import { redirect } from "next/navigation";
 import { prisma } from "database/src";
+import { cache } from "react";
 
-export const getAllNotifications = async ({
-  accountId,
-}: {
-  accountId: string;
-}) => {
-  const notifications = await prisma.notification.findMany({
-    where: {
-      accountId,
-    },
-  });
-  return notifications;
-};
+/**
+ * Get website data for an account
+ * Cached to deduplicate requests within a single render cycle
+ */
+export const getWebsiteByAccountId = cache(
+  async (accountId: string) => {
+    const website = await prisma.website.findFirst({
+      where: {
+        accountId,
+      },
+    });
+    return website;
+  }
+);
 
-export const getMyUserAction = async () => {
+/**
+ * Get all notifications for an account
+ * Cached to deduplicate requests within a single render cycle
+ */
+export const getAllNotifications = cache(
+  async ({ accountId }: { accountId: string }) => {
+    const notifications = await prisma.notification.findMany({
+      where: {
+        accountId,
+      },
+    });
+    return notifications;
+  }
+);
+
+/**
+ * Get the current user with their account and website data
+ * Cached to deduplicate requests within a single render cycle
+ * This prevents multiple DB queries when the same data is needed in layouts and pages
+ */
+export const getMyUserAction = cache(async () => {
   const user = await getCurrentUserSafe();
 
   if (!user) {
@@ -50,7 +73,7 @@ export const getMyUserAction = async () => {
     verified: account.verified,
     verification_steps: account.verification_steps,
   };
-};
+});
 
 export const getUserProfileAction = async () => {
   const user = await getCurrentUserSafe();
