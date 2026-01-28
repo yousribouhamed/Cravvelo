@@ -6,6 +6,8 @@ import { CourseWithPricing } from "../types";
 import { Rating } from "@smastrom/react-rating";
 import { BookOpen, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useLocale, useTranslations } from "next-intl";
+import { useTenantCurrency } from "@/hooks/use-tenant";
 
 interface CourseCardProps {
   course: CourseWithPricing;
@@ -16,6 +18,9 @@ export default function CourseCard({
   course,
   isOwned = false,
 }: CourseCardProps) {
+  const locale = useLocale();
+  const t = useTranslations("courses");
+  const { formatPrice } = useTenantCurrency();
   const {
     id,
     thumbnailUrl,
@@ -44,47 +49,37 @@ export default function CourseCard({
   // Check if there's a discount
   const hasDiscount = originalPrice && originalPrice > currentPrice;
 
-  // Format prices in Arabic locale
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("ar-DZ", {
-      style: "currency",
-      currency: "DZD",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
-
-  // Get level in Arabic
-  const getLevelInArabic = (level: string | null) => {
+  // Get level translation
+  const getLevelText = (level: string | null) => {
     switch (level) {
       case "BEGINNER":
-        return "مبتدئ";
+        return t("level.beginner");
       case "INTERMEDIATE":
-        return "متوسط";
+        return t("level.intermediate");
       case "ADVANCED":
-        return "متقدم";
+        return t("level.advanced");
       default:
-        return "غير محدد";
+        return t("level.unspecified");
     }
   };
 
-  // Get pricing display text in Arabic
+  // Get pricing display text
   const getPricingDisplay = () => {
     if (isFree) {
       return {
-        main: "مجاني",
-        badge: "مجاني",
+        main: t("pricing.free"),
+        badge: t("pricing.free"),
         badgeVariant: "success" as const,
       };
     }
 
     if (isRecurring) {
       const recurringText = defaultPricing?.recurringDays
-        ? `كل ${defaultPricing.recurringDays} يوم`
-        : "اشتراك";
+        ? t("pricing.recurringDays", { days: defaultPricing.recurringDays })
+        : t("pricing.subscription");
       return {
         main: formatPrice(currentPrice),
-        badge: "اشتراك",
+        badge: t("pricing.subscription"),
         badgeVariant: "secondary" as const,
         subtitle: recurringText,
       };
@@ -92,7 +87,7 @@ export default function CourseCard({
 
     return {
       main: formatPrice(currentPrice),
-      badge: "مدفوع",
+      badge: t("pricing.paid"),
       badgeVariant: "outline" as const,
     };
   };
@@ -128,7 +123,7 @@ export default function CourseCard({
               variant="secondary"
               className="bg-white/90 text-gray-900 hover:bg-white/90"
             >
-              {getLevelInArabic(level)}
+              {getLevelText(level)}
             </Badge>
           </div>
 
@@ -136,7 +131,7 @@ export default function CourseCard({
           {hasDiscount && (
             <div className="absolute top-3 left-3">
               <Badge className="bg-red-500 text-white hover:bg-red-500">
-                خصم{" "}
+                {t("discount")}{" "}
                 {Math.round(
                   ((originalPrice! - currentPrice) / originalPrice!) * 100
                 )}
@@ -156,7 +151,7 @@ export default function CourseCard({
           {/* Trainers */}
           {trainers && (
             <p className="text-sm text-gray-600 dark:text-gray-400 text-right">
-              المدرب: {trainers}
+              {t("trainer")}: {trainers}
             </p>
           )}
 
@@ -177,7 +172,7 @@ export default function CourseCard({
             {salesCount > 0 && (
               <div className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400">
                 <Users className="w-4 h-4" />
-                <span>{salesCount} طالب</span>
+                <span>{salesCount} {t("student")}</span>
               </div>
             )}
           </div>
@@ -187,7 +182,7 @@ export default function CourseCard({
             {isOwned ? (
               <div className="flex items-center gap-2 w-full">
                 <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/30">
-                  الوصول إلى الكورس
+                  {t("accessCourse")}
                 </Badge>
               </div>
             ) : (
@@ -235,7 +230,7 @@ export default function CourseCard({
           {CoursePricingPlans && CoursePricingPlans.length > 1 && (
             <div className="pt-2 border-t border-gray-100 dark:border-gray-800">
               <span className="text-xs text-blue-600 dark:text-blue-400 font-medium text-right">
-                {CoursePricingPlans.length} خيارات تسعير متاحة
+                {t("pricingOptionsAvailable", { count: CoursePricingPlans.length })}
               </span>
             </div>
           )}

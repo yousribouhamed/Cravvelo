@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import MaxWidthWrapper from "../max-with-wrapper";
 import NavigationLink from "../navigation-link";
 import { useTenant } from "@/contexts/tenant";
+import { useTranslations } from "next-intl";
 import {
   useTenantBranding,
   useTenantSettings,
@@ -13,20 +14,21 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import ProfileDropdown from "@/modules/profile/components/user-dropdown";
+import { logoutUser } from "@/modules/auth/actions/auth";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [, startTransition] = useTransition();
   const { tenant } = useTenant();
   const { logo, name, primaryColor } = useTenantBranding();
   const { userName, avatarUrl } = useTenantAccount();
   const { showCoursesOnHome, showProductsOnHome } = useTenantSettings();
+  const tNav = useTranslations("nav");
 
   const navigationLinks = [
-    { href: `/`, label: "الرئيسية", show: true },
-    { href: `/courses`, label: "الدورات", show: showCoursesOnHome },
-    { href: `/products`, label: "المنتجات", show: showProductsOnHome },
-    { href: `/about`, label: "من نحن", show: true },
-    { href: `/contact`, label: "اتصل بنا", show: true },
+    { href: `/`, label: tNav("home"), show: true },
+    { href: `/courses`, label: tNav("courses"), show: showCoursesOnHome },
+    { href: `/products`, label: tNav("products"), show: showProductsOnHome },
   ].filter((link) => link.show);
 
   const isAuthenticated = useIsAuthenticated();
@@ -86,12 +88,18 @@ export default function Header() {
           {/* Desktop Auth Buttons */}
 
           {isAuthenticated ? (
-            <ProfileDropdown onLogout={() => console.log("Logout clicked")} />
+            <ProfileDropdown
+              onLogout={() => {
+                startTransition(() => {
+                  logoutUser();
+                });
+              }}
+            />
           ) : (
             <div className="hidden md:flex items-center justify-end gap-x-4">
               <Link href={`/login`}>
                 <button className="px-4 py-2 cursor-pointer text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
-                  Sign In
+                  {tNav("signIn")}
                 </button>
               </Link>
               <Link href={`/register`}>
@@ -99,7 +107,7 @@ export default function Header() {
                   className="px-4 py-2 cursor-pointer text-white font-medium rounded-lg hover:opacity-90 transition-opacity"
                   style={{ backgroundColor: primaryColor }}
                 >
-                  Sign Up
+                  {tNav("signUp")}
                 </button>
               </Link>
             </div>
@@ -150,7 +158,7 @@ export default function Header() {
                     className="w-full px-4 py-2 text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium text-left"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    Sign In
+                    {tNav("signIn")}
                   </button>
                 </Link>
                 <Link href={`/${tenant}/auth/signup`}>
@@ -159,7 +167,7 @@ export default function Header() {
                     style={{ backgroundColor: primaryColor }}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    Sign Up
+                    {tNav("signUp")}
                   </button>
                 </Link>
               </div>

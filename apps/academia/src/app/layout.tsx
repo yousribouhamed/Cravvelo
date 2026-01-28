@@ -3,6 +3,11 @@ import { Geist, Geist_Mono } from "next/font/google";
 // import { Tajawal } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import Providers from "@/components/providers";
+import { cookies, headers } from "next/headers";
+import { locales, defaultLocale, Locale } from "@/lib/i18n/config";
+import { getTenantWebsite } from "@/actions/tanant";
+import { preferredLanguageToLocale } from "@/lib/i18n/preferred-language";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,13 +33,37 @@ export const metadata: Metadata = {
   description: "cravvelo",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const cookieLocale = cookieStore.get("NEXT_LOCALE")?.value;
+
+  let locale: Locale = defaultLocale;
+
+  if (cookieLocale && locales.includes(cookieLocale as Locale)) {
+    locale = cookieLocale as Locale;
+  } else {
+    // If no valid cookie, derive from tenant preferredLanguage.
+    const headersList = await headers();
+    const tenant = headersList.get("x-tenant");
+
+    if (tenant) {
+      const website = await getTenantWebsite(tenant);
+      const derivedLocale = preferredLanguageToLocale(
+        website?.Account?.preferredLanguage
+      );
+      locale = derivedLocale;
+    }
+  }
+
+  const dir = locale === "ar" ? "rtl" : "ltr";
+  const messages = (await import(`../lib/i18n/messages/${locale}.json`)).default;
+
   return (
-    <html lang="ar" dir="rtl">
+    <html suppressHydrationWarning lang={locale} dir={dir}>
       <body
         className={`${geistSans.variable} ${geistMono.variable}  antialiased`}
       >
@@ -44,7 +73,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <Providers locale={locale} messages={messages}>
+            {children}
+          </Providers>
         </ThemeProvider>
       </body>
     </html>

@@ -1,0 +1,303 @@
+{
+  "common": {
+    "appName": "كرافيلو",
+    "mainDomain": "هذا هو النطاق الرئيسي الموجود لدينا"
+  },
+  "nav": {
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "home": "الرئيسية",
+    "courses": "الدورات",
+    "products": "المنتجات",
+    "about": "من نحن",
+    "contact": "اتصل بنا"
+  },
+  "auth": {
+    "signIn": {
+      "title": "تسجيل الدخول",
+      "description": "أدخل بياناتك للوصول إلى حسابك",
+      "emailLabel": "البريد الإلكتروني",
+      "emailPlaceholder": "أدخل بريدك الإلكتروني",
+      "passwordLabel": "كلمة المرور",
+      "passwordPlaceholder": "أدخل كلمة المرور",
+      "button": "تسجيل الدخول",
+      "loading": "جاري تسجيل الدخول...",
+      "forgotPassword": "هل نسيت كلمة المرور؟"
+    },
+    "signUp": {
+      "title": "إنشاء حساب",
+      "description": "أنشئ حسابك للبدء",
+      "nameLabel": "الاسم الكامل",
+      "namePlaceholder": "أدخل اسمك الكامل",
+      "emailLabel": "البريد الإلكتروني",
+      "emailPlaceholder": "أدخل بريدك الإلكتروني",
+      "passwordLabel": "كلمة المرور",
+      "passwordPlaceholder": "أدخل كلمة المرور",
+      "confirmPasswordLabel": "تأكيد كلمة المرور",
+      "confirmPasswordPlaceholder": "أكد كلمة المرور",
+      "termsLabel": "أوافق على الشروط والأحكام",
+      "button": "إنشاء حساب",
+      "loading": "جاري إنشاء الحساب...",
+      "successMessage": "تم إنشاء المستخدم بنجاح",
+      "errorMessage": "فشل إنشاء المستخدم"
+    },
+    "confirmEmail": {
+      "title": "التحقق من البريد الإلكتروني",
+      "description": "أدخل رمز التحقق من بريدك الإلكتروني",
+      "emailLabel": "عنوان البريد الإلكتروني",
+      "tokenLabel": "رمز التحقق",
+      "tokenPlaceholder": "أدخل رمز التحقق من البريد الإلكتروني",
+      "tokenHint": "انسخ والصق رمز التحقق من بريدك الإلكتروني",
+      "button": "التحقق من البريد الإلكتروني",
+      "verifying": "جاري التحقق...",
+      "resendPrompt": "لم تستلم البريد الإلكتروني؟",
+      "resendButton": "إعادة إرسال بريد التحقق",
+      "sending": "جاري الإرسال...",
+      "successMessage": "تم التحقق من البريد الإلكتروني بنجاح",
+      "errorMessage": "فشل التحقق من البريد الإلكتروني",
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "tokenRequired": "يرجى إدخال رمز التحقق",
+      "noEmailProvided": "لم يتم توفير بريد إلكتروني",
+      "emailMissing": "معامل البريد الإلكتروني مفقود من الرابط"
+    }
+  },
+  "courses": {
+    "list": {
+      "title": "الكورسات",
+      "emptyTitle": "لم يتم العثور على كورسات",
+      "emptyDescription": "لا توجد كورسات منشورة بعد.",
+      "loadErrorTitle": "خطأ في تحميل الكورسات",
+      "genericError": "حدث خطأ غير متوقع"
+    },
+    "description": "وصف الكورس",
+    "level": {
+      "beginner": "مبتدئ",
+      "intermediate": "متوسط",
+      "advanced": "متقدم",
+      "unspecified": "غير محدد"
+    },
+    "pricing": {
+      "free": "مجاني",
+      "paid": "مدفوع",
+      "subscription": "اشتراك",
+      "recurringDays": "كل {days} يوم"
+    },
+    "trainer": "المدرب",
+    "students": "طالب",
+    "student": "طالب",
+    "discount": "خصم",
+    "pricingOptionsAvailable": "{count} خيارات تسعير متاحة",
+    "accessCourse": "الوصول إلى الكورس",
+    "notFound": "الكورس غير موجود",
+    "notFoundMessage": "لم يتم العثور على الكورس المطلوب",
+    "buyCard": {
+      "freeBadge": "مجانا",
+      "buyNow": "شراء الآن",
+      "accessCourse": "الوصول إلى الكورس",
+      "watchNow": "شاهد الآن",
+      "positiveReviews": "{percentage}% تقييمات إيجابية ({count})",
+      "students": "{count} طالبا",
+      "duration": "{chapters} درسًا{length}",
+      "chapters": "درسًا",
+      "level": "المستوى",
+      "language": "الصوت",
+      "certificate": "ستحصل على شهادة بعد اتمام الدورة",
+      "onlineAccess": "عبر الإنترنت وبالسرعة التي تناسبك",
+      "accessUnlimited": "وصول غير محدود إلى الأبد",
+      "accessFreeUnlimited": "وصول مجاني غير محدود",
+      "accessRecurring": "وصول لمدة {days} يوم (متجدد)",
+      "accessLimited": "وصول لمدة {days} يوم",
+      "languageArabic": "عربي",
+      "languageFrench": "فرنسي",
+      "languageEnglish": "انجليزي",
+      "hours": "ساعة",
+      "minutes": "دقيقة",
+      "seconds": "ثانية",
+      "and": "و"
+    },
+    "reviews": {
+      "reviews": "تقييمات",
+      "allReviews": "جميع التقييمات ({count})",
+      "addButton": "إضافة تقييم",
+      "addTitle": "إضافة تقييم جديد",
+      "ratingLabel": "التقييم",
+      "commentLabel": "التعليق",
+      "commentPlaceholder": "اكتب تقييمك هنا...",
+      "submit": "إرسال التقييم",
+      "submitting": "جاري الإرسال...",
+      "cancel": "إلغاء",
+      "loading": "جاري تحميل التقييمات...",
+      "empty": "لا توجد تقييمات بعد.",
+      "anonymous": "مجهول",
+      "submitted": "تم إرسال التقييم للمراجعة",
+      "submitError": "تعذر إرسال التقييم",
+      "time": {
+        "today": "اليوم",
+        "yesterday": "أمس",
+        "daysAgo": "منذ {count} أيام",
+        "weeksAgo": "منذ {count} أسابيع",
+        "monthsAgo": "منذ {count} شهور"
+      }
+    }
+  },
+  "payments": {
+    "title": "إتمام عملية الشراء",
+    "description": "راجع طلبك واختر طريقة الدفع المناسبة لإكمال عملية الشراء",
+    "noProductSelected": "لم يتم اختيار منتج",
+    "noProductMessage": "يرجى اختيار منتج قبل المتابعة إلى عملية الدفع",
+    "summary": "ملخص الطلب",
+    "total": "المجموع الكلي",
+    "free": "مجاني",
+    "selectPaymentMethod": "طرق الدفع",
+    "paymentDetails": "تفاصيل الدفع",
+    "loadingConnections": "جاري تحميل طرق الدفع...",
+    "securePayment": "دفع آمن 100%",
+    "securePaymentMessage": "جميع المعاملات مشفرة ومحمية. لن نحتفظ بمعلومات الدفع الخاصة بك.",
+    "freeProduct": "منتج مجاني",
+    "freeProductMessage": "هذا المنتج متاح مجاناً. يمكنك الوصول إليه مباشرة دون الحاجة للدفع.",
+    "unlimitedAccess": "وصول غير محدود",
+    "limitedAccess": "وصول لمدة {days} يوم",
+    "recurringAccess": "يتجدد كل {days} يوم",
+    "chargily": {
+      "couponLabel": "كود الخصم (قريباً)",
+      "couponPlaceholder": "أدخل كود الخصم",
+      "couponApply": "تطبيق",
+      "couponApplied": "تم التطبيق",
+      "couponHint": "* ميزة كود الخصم قيد التطوير",
+      "submitButton": "إتمام الدفع عبر Chargily"
+    },
+    "p2p": {
+      "uploadLabel": "إثبات الدفع *",
+      "dragDropText": "اسحب وأفلت الملف هنا أو",
+      "chooseFile": "اختر ملف",
+      "fileTypesHint": "PNG, JPG, PDF حتى 10MB",
+      "notesLabel": "ملاحظات (اختياري)",
+      "notesPlaceholder": "أضف أي ملاحظات إضافية...",
+      "submitButton": "إتمام الدفع المباشر"
+    }
+  },
+  "profile": {
+    "account": "الحساب",
+    "accountSettings": "إعدادات الحساب",
+    "profile": "الملف الشخصي",
+    "affiliates": "التسويق بالعمولة",
+    "certificates": "الشهادات",
+    "courses": "الدورات",
+    "products": "المنتجات",
+    "payments": "المدفوعات",
+    "settings": "الإعدادات",
+    "lightMode": "الوضع النهاري",
+    "darkMode": "الوضع الليلي",
+    "logout": "تسجيل الخروج",
+    "dashboard": "لوحة التحكم",
+    "manageAccount": "إدارة حسابك وإعداداتك",
+    "user": "المستخدم",
+    "premiumMember": "عضو مميز",
+    "myProfile": "ملفي الشخصي",
+    "profilePicture": "صورة الملف الشخصي",
+    "fullName": "الاسم الكامل",
+    "fullNamePlaceholder": "أدخل اسمك الكامل",
+    "bio": "نبذة عنك",
+    "bioPlaceholder": "أخبرنا قليلاً عن نفسك",
+    "phoneNumber": "رقم الهاتف",
+    "phoneNumberPlaceholder": "أدخل رقم هاتفك",
+    "email": "البريد الإلكتروني",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "saving": "جاري الحفظ...",
+    "edit": "تعديل",
+    "saveSuccess": "تم حفظ الملف الشخصي بنجاح",
+    "saveError": "حدث خطأ أثناء حفظ الملف الشخصي. حاول مرة أخرى.",
+    "errorLoading": "خطأ في تحميل الملف الشخصي",
+    "products": {
+      "title": "منتجاتي",
+      "empty": "لم يتم شراء أي منتجات بعد",
+      "productName": "اسم المنتج",
+      "productNotFound": "المنتج غير موجود",
+      "purchaseDate": "تاريخ الشراء",
+      "status": "الحالة",
+      "amount": "المبلغ",
+      "currency": "دج"
+    },
+    "payments": {
+      "title": "سجل المدفوعات",
+      "empty": "لم يتم العثور على مدفوعات",
+      "paymentId": "رقم الدفع",
+      "amount": "المبلغ",
+      "status": "الحالة",
+      "method": "طريقة الدفع",
+      "date": "التاريخ",
+      "item": "العنصر",
+      "methods": {
+        "CHARGILY": "Chargily",
+        "BANK_TRANSFER": "تحويل بنكي",
+        "CASH": "نقدي",
+        "CREDIT_CARD": "بطاقة ائتمانية"
+      }
+    },
+    "settings": {
+      "title": "الإعدادات",
+      "loading": "جاري تحميل الإعدادات...",
+      "preferences": "التفضيلات",
+      "language": "اللغة المفضلة",
+      "languageArabic": "العربية",
+      "languageEnglish": "الإنجليزية",
+      "languageFrench": "الفرنسية",
+      "timezone": "المنطقة الزمنية",
+      "timezonePlaceholder": "أدخل المنطقة الزمنية (مثل: Africa/Algiers)",
+      "notifications": "الإشعارات",
+      "emailNotifications": "إشعارات البريد الإلكتروني",
+      "smsNotifications": "إشعارات الرسائل النصية",
+      "save": "حفظ الإعدادات",
+      "saving": "جاري الحفظ...",
+      "saveSuccess": "تم حفظ الإعدادات بنجاح",
+      "saveError": "فشل حفظ الإعدادات"
+    },
+    "certificates": {
+      "title": "الشهادات",
+      "empty": "لم يتم العثور على شهادات",
+      "columns": {
+        "studentName": "اسم الطالب",
+        "courseName": "اسم الدورة",
+        "fileUrl": "رابط الشهادة",
+        "status": "الحالة",
+        "issueDate": "تاريخ الإصدار",
+        "expiryDate": "تاريخ الانتهاء"
+      },
+      "status": {
+        "PENDING": "قيد المراجعة",
+        "APPROVED": "مقبولة",
+        "REJECTED": "مرفوضة"
+      },
+      "actions": {
+        "viewCertificate": "عرض الشهادة"
+      },
+      "notAvailable": "غير متوفر",
+      "expired": "منتهية الصلاحية",
+      "expiringSoon": "تنتهي قريباً"
+    }
+  },
+  "banner": {
+    "welcome": "مرحباً بك في آكاديمية"
+  },
+  "home": {
+    "courses": {
+      "title": "الدورات",
+      "subtitle": "استكشف أحدث الكورسات المنشورة"
+    }
+  },
+  "watch": {
+    "error": "خطأ",
+    "failedToLoad": "فشل تحميل الكورس",
+    "noModuleSelected": "لم يتم اختيار وحدة",
+    "selectModule": "اختر وحدة من الشريط الجانبي للبدء في التعلم",
+    "courseContent": "محتوى الدورة",
+    "chapters": "فصول",
+    "chapter": "فصل",
+    "modules": "وحدات",
+    "module": "وحدة",
+    "previous": "السابق",
+    "next": "التالي",
+    "of": "من"
+  }
+}

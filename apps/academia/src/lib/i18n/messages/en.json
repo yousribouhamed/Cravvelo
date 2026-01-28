@@ -1,0 +1,303 @@
+{
+  "common": {
+    "appName": "Cravvelo",
+    "mainDomain": "This is our existing main domain"
+  },
+  "nav": {
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "home": "Home",
+    "courses": "Courses",
+    "products": "Products",
+    "about": "About Us",
+    "contact": "Contact Us"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Sign in",
+      "description": "Enter your credentials to access your account",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "button": "Sign in",
+      "loading": "Signing in...",
+      "forgotPassword": "Forgot your password?"
+    },
+    "signUp": {
+      "title": "Sign Up",
+      "description": "Create your account to get started",
+      "nameLabel": "Full Name",
+      "namePlaceholder": "Enter your full name",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "confirmPasswordLabel": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm your password",
+      "termsLabel": "I agree to the terms and conditions",
+      "button": "Sign Up",
+      "loading": "Creating account...",
+      "successMessage": "User created successfully",
+      "errorMessage": "Failed to create user"
+    },
+    "confirmEmail": {
+      "title": "Verify Email",
+      "description": "Enter the verification token from your email",
+      "emailLabel": "Email Address",
+      "tokenLabel": "Verification Token",
+      "tokenPlaceholder": "Enter verification token from email",
+      "tokenHint": "Copy and paste the verification token from your email",
+      "button": "Verify Email",
+      "verifying": "Verifying...",
+      "resendPrompt": "Didn't receive the email?",
+      "resendButton": "Resend verification email",
+      "sending": "Sending...",
+      "successMessage": "Email verified successfully",
+      "errorMessage": "Failed to verify email",
+      "emailRequired": "Email is required",
+      "tokenRequired": "Please enter the verification token",
+      "noEmailProvided": "No email provided",
+      "emailMissing": "Email parameter is missing from URL"
+    }
+  },
+  "courses": {
+    "list": {
+      "title": "Courses",
+      "emptyTitle": "No courses found",
+      "emptyDescription": "No published courses are available yet.",
+      "loadErrorTitle": "Error loading courses",
+      "genericError": "Something went wrong"
+    },
+    "description": "Course Description",
+    "level": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced",
+      "unspecified": "Unspecified"
+    },
+    "pricing": {
+      "free": "Free",
+      "paid": "Paid",
+      "subscription": "Subscription",
+      "recurringDays": "Every {days} days"
+    },
+    "trainer": "Trainer",
+    "students": "students",
+    "student": "student",
+    "discount": "Discount",
+    "pricingOptionsAvailable": "{count} pricing options available",
+    "accessCourse": "Access Course",
+    "notFound": "Course not found",
+    "notFoundMessage": "The requested course was not found",
+    "buyCard": {
+      "freeBadge": "Free",
+      "buyNow": "Buy Now",
+      "accessCourse": "Access Course",
+      "watchNow": "Watch Now",
+      "positiveReviews": "{percentage}% positive reviews ({count})",
+      "students": "{count} students",
+      "duration": "{chapters} lessons{length}",
+      "chapters": "lessons",
+      "level": "Level",
+      "language": "Audio",
+      "certificate": "You will receive a certificate upon course completion",
+      "onlineAccess": "Online and at your own pace",
+      "accessUnlimited": "Unlimited access forever",
+      "accessFreeUnlimited": "Free unlimited access",
+      "accessRecurring": "Access for {days} days (recurring)",
+      "accessLimited": "Access for {days} days",
+      "languageArabic": "Arabic",
+      "languageFrench": "French",
+      "languageEnglish": "English",
+      "hours": "hours",
+      "minutes": "minutes",
+      "seconds": "seconds",
+      "and": "and"
+    },
+    "reviews": {
+      "reviews": "Reviews",
+      "allReviews": "All reviews ({count})",
+      "addButton": "Add review",
+      "addTitle": "Add a new review",
+      "ratingLabel": "Rating",
+      "commentLabel": "Comment",
+      "commentPlaceholder": "Write your review here...",
+      "submit": "Submit",
+      "submitting": "Submitting...",
+      "cancel": "Cancel",
+      "loading": "Loading reviews...",
+      "empty": "No reviews yet.",
+      "anonymous": "Anonymous",
+      "submitted": "Review submitted for approval",
+      "submitError": "Failed to submit review",
+      "time": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "daysAgo": "{count} days ago",
+        "weeksAgo": "{count} weeks ago",
+        "monthsAgo": "{count} months ago"
+      }
+    }
+  },
+  "payments": {
+    "title": "Complete Purchase",
+    "description": "Review your order and choose the appropriate payment method to complete your purchase",
+    "noProductSelected": "No product selected",
+    "noProductMessage": "Please select a product before proceeding to checkout",
+    "summary": "Order Summary",
+    "total": "Total",
+    "free": "Free",
+    "selectPaymentMethod": "Payment Methods",
+    "paymentDetails": "Payment Details",
+    "loadingConnections": "Loading payment methods...",
+    "securePayment": "100% Secure Payment",
+    "securePaymentMessage": "All transactions are encrypted and protected. We will not store your payment information.",
+    "freeProduct": "Free Product",
+    "freeProductMessage": "This product is available for free. You can access it directly without payment.",
+    "unlimitedAccess": "Unlimited access",
+    "limitedAccess": "Access for {days} days",
+    "recurringAccess": "Renews every {days} days",
+    "chargily": {
+      "couponLabel": "Coupon Code (Coming Soon)",
+      "couponPlaceholder": "Enter coupon code",
+      "couponApply": "Apply",
+      "couponApplied": "Applied",
+      "couponHint": "* Coupon feature is under development",
+      "submitButton": "Complete Payment via Chargily"
+    },
+    "p2p": {
+      "uploadLabel": "Payment Proof *",
+      "dragDropText": "Drag and drop file here or",
+      "chooseFile": "Choose file",
+      "fileTypesHint": "PNG, JPG, PDF up to 10MB",
+      "notesLabel": "Notes (optional)",
+      "notesPlaceholder": "Add any additional notes...",
+      "submitButton": "Complete Direct Payment"
+    }
+  },
+  "profile": {
+    "account": "Account",
+    "accountSettings": "Account Settings",
+    "profile": "Profile",
+    "affiliates": "Affiliate Marketing",
+    "certificates": "Certificates",
+    "courses": "Courses",
+    "products": "Products",
+    "payments": "Payments",
+    "settings": "Settings",
+    "lightMode": "Light Mode",
+    "darkMode": "Dark Mode",
+    "logout": "Logout",
+    "dashboard": "Dashboard",
+    "manageAccount": "Manage your account and settings",
+    "user": "User",
+    "premiumMember": "Premium member",
+    "myProfile": "My Profile",
+    "profilePicture": "Profile Picture",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Enter your full name",
+    "bio": "About You",
+    "bioPlaceholder": "Tell us a bit about yourself",
+    "phoneNumber": "Phone Number",
+    "phoneNumberPlaceholder": "Enter your phone number",
+    "email": "Email",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving...",
+    "edit": "Edit",
+    "saveSuccess": "Profile saved successfully",
+    "saveError": "An error occurred while saving the profile. Please try again.",
+    "errorLoading": "Error loading profile",
+    "products": {
+      "title": "My Products",
+      "empty": "No products purchased yet",
+      "productName": "Product Name",
+      "productNotFound": "Product not found",
+      "purchaseDate": "Purchase Date",
+      "status": "Status",
+      "amount": "Amount",
+      "currency": "DZD"
+    },
+    "payments": {
+      "title": "Payment History",
+      "empty": "No payments found",
+      "paymentId": "Payment ID",
+      "amount": "Amount",
+      "status": "Status",
+      "method": "Payment Method",
+      "date": "Date",
+      "item": "Item",
+      "methods": {
+        "CHARGILY": "Chargily",
+        "BANK_TRANSFER": "Bank Transfer",
+        "CASH": "Cash",
+        "CREDIT_CARD": "Credit Card"
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "loading": "Loading settings...",
+      "preferences": "Preferences",
+      "language": "Preferred Language",
+      "languageArabic": "Arabic",
+      "languageEnglish": "English",
+      "languageFrench": "French",
+      "timezone": "Timezone",
+      "timezonePlaceholder": "Enter timezone (e.g., Africa/Algiers)",
+      "notifications": "Notifications",
+      "emailNotifications": "Email Notifications",
+      "smsNotifications": "SMS Notifications",
+      "save": "Save Settings",
+      "saving": "Saving...",
+      "saveSuccess": "Settings saved successfully",
+      "saveError": "Failed to save settings"
+    },
+    "certificates": {
+      "title": "Certificates",
+      "empty": "No certificates found",
+      "columns": {
+        "studentName": "Student Name",
+        "courseName": "Course Name",
+        "fileUrl": "Certificate Link",
+        "status": "Status",
+        "issueDate": "Issue Date",
+        "expiryDate": "Expiry Date"
+      },
+      "status": {
+        "PENDING": "Pending",
+        "APPROVED": "Approved",
+        "REJECTED": "Rejected"
+      },
+      "actions": {
+        "viewCertificate": "View Certificate"
+      },
+      "notAvailable": "Not Available",
+      "expired": "Expired",
+      "expiringSoon": "Expiring Soon"
+    }
+  },
+  "banner": {
+    "welcome": "Welcome to Academy"
+  },
+  "home": {
+    "courses": {
+      "title": "Courses",
+      "subtitle": "Explore the latest published courses"
+    }
+  },
+  "watch": {
+    "error": "Error",
+    "failedToLoad": "Failed to load course",
+    "noModuleSelected": "No module selected",
+    "selectModule": "Select a module from the sidebar to start learning",
+    "courseContent": "Course Content",
+    "chapters": "chapters",
+    "chapter": "chapter",
+    "modules": "modules",
+    "module": "module",
+    "previous": "Previous",
+    "next": "Next",
+    "of": "of"
+  }
+}

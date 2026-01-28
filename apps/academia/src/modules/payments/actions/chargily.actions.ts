@@ -15,12 +15,13 @@ export const createChargilyCheckout = withTenant({
     totalPrice: z.string(),
     paymentId: z.string(),
   }),
-  handler: async ({ tenant, input }) => {
+  handler: async ({ tenant, website, input }) => {
     try {
+      const tenantCurrency = (website?.currency || "DZD").toLowerCase();
       const amount = Math.round(Number(input.totalPrice) * 1); // convert DZD → centimes
       const payload = {
         amount,
-        currency: "dzd",
+        currency: tenantCurrency,
         payment_method: "EDAHABIA",
         success_url: `https://${tenant}.cravvelo.com/payments/success`,
         failure_url: `https://${tenant}.cravvelo.com/payments/failure`,
@@ -69,9 +70,11 @@ export const createChargilyPaymentIntent = withTenant({
     type: z.enum(["COURSE", "PRODUCT"]),
   }),
 
-  handler: async ({ accountId, tenant, input, db }) => {
+  handler: async ({ accountId, tenant, website, input, db }) => {
     const user = await getCurrentUser();
     if (!user) throw new Error("Unauthorized");
+
+    const tenantCurrency = website?.currency || "DZD";
 
     return await db.$transaction(async (tx) => {
       // 1. Fetch the item (course or product)
@@ -129,7 +132,7 @@ export const createChargilyPaymentIntent = withTenant({
           type: input.type === "COURSE" ? "BUYCOURSE" : "BUYPRODUCT",
           amount: price,
           status: "PENDING",
-          currency: "DZD",
+          currency: tenantCurrency,
           method: "CHARGILY",
           studentId: user.userId,
           accountId,

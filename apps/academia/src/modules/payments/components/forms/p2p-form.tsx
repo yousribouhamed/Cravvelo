@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { createP2pPaymentIntent } from "../../actions/p2p.actions";
 import { uploadImageToS3 } from "@/modules/aws/s3";
 import { usePaymentContext } from "../../context/payments-provider";
+import { useTranslations } from "next-intl";
 
 interface P2PFormData {
   paymentProof: File | null;
@@ -30,6 +31,7 @@ interface P2PFormProps {
 
 export function P2PForm({ isLoading = false }: P2PFormProps) {
   const { selectedProduct } = usePaymentContext();
+  const t = useTranslations("payments.p2p");
   const [formData, setFormData] = useState<P2PFormData>({
     paymentProof: null,
     notes: "",
@@ -184,11 +186,11 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
                     <Upload className="w-8 h-8 mx-auto text-gray-400" />
                     <div>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
-                        اسحب وأفلت الملف هنا أو
+                        {t("dragDropText")}
                       </p>
                       <label className="cursor-pointer">
                         <span className="text-green-600 hover:text-green-700 font-medium">
-                          اختر ملف
+                          {t("chooseFile")}
                         </span>
                         <input
                           type="file"
@@ -200,7 +202,7 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
                       </label>
                     </div>
                     <p className="text-xs text-gray-500">
-                      PNG, JPG, PDF حتى 10MB
+                      {t("fileTypesHint")}
                     </p>
                   </div>
                 )}
@@ -239,7 +241,7 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
           disabled={!isFormValid() || isSubmitLoading}
           loading={isSubmitLoading}
         >
-          إتمام الدفع المباشر
+          {t("submitButton")}
         </BrandButton>
       </div>
     </form>

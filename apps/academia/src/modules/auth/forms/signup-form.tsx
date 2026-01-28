@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, Mail, Lock, User, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import BrandButton from "@/components/brand-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -21,11 +21,13 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { signUpSchema, type SignUpFormData } from "../lib/validators/auth";
 import { useForm } from "@/hooks/use-form";
 import { createUser } from "../actions/user";
+import { useTranslations } from "next-intl";
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
   const router = useRouter();
+  const t = useTranslations("auth.signUp");
 
   const form = useForm<SignUpFormData>(
     {
@@ -47,7 +49,7 @@ export default function SignUpForm() {
       });
     },
     onSuccess: (res) => {
-      setSubmitMessage(res.message || "User created successfully");
+      setSubmitMessage(res.message || t("successMessage"));
       form.reset();
 
       // Redirect to email confirmation page with the user's email
@@ -55,7 +57,7 @@ export default function SignUpForm() {
       router.push(`/register/confirm?email=${email}`);
     },
     onError: (error: any) => {
-      setSubmitMessage(error.message || "Failed to create user");
+      setSubmitMessage(error.message || t("errorMessage"));
     },
   });
 
@@ -69,24 +71,24 @@ export default function SignUpForm() {
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold text-center">
-          Sign Up
+          {t("title")}
         </CardTitle>
         <CardDescription className="text-center">
-          Create your account to get started
+          {t("description")}
         </CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-4">
         {/* Name */}
         <div className="space-y-2">
-          <Label htmlFor="name">Full Name</Label>
+          <Label htmlFor="name">{t("nameLabel")}</Label>
           <div className="relative">
             <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
             <Input
               id="name"
               name="name"
               type="text"
-              placeholder="Enter your full name"
+              placeholder={t("namePlaceholder")}
               value={form.values.name}
               onChange={(e) => form.setValue("name", e.target.value)}
               onBlur={() => form.setTouched("name")}
@@ -103,14 +105,14 @@ export default function SignUpForm() {
 
         {/* Email */}
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t("emailLabel")}</Label>
           <div className="relative">
             <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
             <Input
               id="email"
               name="email"
               type="email"
-              placeholder="Enter your email"
+              placeholder={t("emailPlaceholder")}
               value={form.values.email}
               onChange={(e) => form.setValue("email", e.target.value)}
               onBlur={() => form.setTouched("email")}
@@ -127,14 +129,14 @@ export default function SignUpForm() {
 
         {/* Password */}
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">{t("passwordLabel")}</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
             <Input
               id="password"
               name="password"
               type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
+              placeholder={t("passwordPlaceholder")}
               value={form.values.password}
               onChange={(e) => form.setValue("password", e.target.value)}
               onBlur={() => form.setTouched("password")}
@@ -164,12 +166,12 @@ export default function SignUpForm() {
 
         {/* Confirm Password */}
         <div className="space-y-2">
-          <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <Label htmlFor="confirmPassword">{t("confirmPasswordLabel")}</Label>
           <Input
             id="confirmPassword"
             name="confirmPassword"
             type="password"
-            placeholder="Confirm your password"
+            placeholder={t("confirmPasswordPlaceholder")}
             value={form.values.confirmPassword}
             onChange={(e) => form.setValue("confirmPassword", e.target.value)}
             onBlur={() => form.setTouched("confirmPassword")}
@@ -198,7 +200,7 @@ export default function SignUpForm() {
             disabled={mutation.isPending}
           />
           <Label htmlFor="terms" className="text-sm text-gray-600">
-            I agree to the terms and conditions
+            {t("termsLabel")}
           </Label>
         </div>
         {form.errors.terms && (
@@ -228,21 +230,15 @@ export default function SignUpForm() {
       </CardContent>
 
       <CardFooter className="flex flex-col space-y-4">
-        <Button
+        <BrandButton
           type="button"
           onClick={handleSubmit}
           className="w-full"
           disabled={mutation.isPending}
+          loading={mutation.isPending}
         >
-          {mutation.isPending ? (
-            <div className="flex items-center space-x-2">
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Creating account...</span>
-            </div>
-          ) : (
-            "Sign Up"
-          )}
-        </Button>
+          {mutation.isPending ? t("loading") : t("button")}
+        </BrandButton>
       </CardFooter>
     </Card>
   );

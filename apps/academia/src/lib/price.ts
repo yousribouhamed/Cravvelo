@@ -6,12 +6,19 @@ interface PriceFormatterOptions {
 }
 
 /**
- * Formats a price value to Algerian Dinar (DZD) currency format
+ * Formats a price value to currency format
+ * @param price - The price value to format
+ * @param currency - Optional currency code (default: "DZD")
+ * @param locale - Optional locale code (default: "ar-DZ")
  */
-const formatPrice = (price: number): string => {
-  return new Intl.NumberFormat("ar-DZ", {
+const formatPrice = (
+  price: number,
+  currency: string = "DZD",
+  locale: string = "ar-DZ"
+): string => {
+  return new Intl.NumberFormat(locale, {
     style: "currency",
-    currency: "DZD",
+    currency: currency,
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(price);

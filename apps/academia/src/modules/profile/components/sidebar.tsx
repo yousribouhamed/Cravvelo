@@ -13,59 +13,61 @@ import {
   Settings,
 } from "lucide-react";
 import { useTenantBranding } from "@/hooks/use-tenant";
+import { useTranslations } from "next-intl";
 
 interface SidebarProps {}
-
-export const Links = [
-  {
-    url: "/profile",
-    name: "الملف الشخصي",
-    icon: User,
-  },
-  {
-    url: "/profile/affiliates",
-    name: "التسويق بالعمولة",
-    icon: Users,
-  },
-  {
-    url: "/profile/certificate",
-    name: "الشهادات",
-    icon: Award,
-  },
-  {
-    url: "/profile/courses",
-    name: "الدورات",
-    icon: BookOpen,
-  },
-  {
-    url: "/profile/products",
-    name: "المنتجات",
-    icon: Package,
-  },
-  {
-    url: "/profile/payments",
-    name: "المدفوعات",
-    icon: CreditCard,
-  },
-  {
-    url: "/profile/settings",
-    name: "الإعدادات",
-    icon: Settings,
-  },
-];
 
 export default function ProfileSidebar({}: SidebarProps) {
   const pathname = usePathname();
   const { primaryColor, primaryColorDark } = useTenantBranding();
+  const t = useTranslations("profile");
+
+  const Links = [
+    {
+      url: "/profile",
+      name: t("profile"),
+      icon: User,
+    },
+    {
+      url: "/profile/affiliates",
+      name: t("affiliates"),
+      icon: Users,
+    },
+    {
+      url: "/profile/certificate",
+      name: t("certificates"),
+      icon: Award,
+    },
+    {
+      url: "/profile/courses",
+      name: t("courses"),
+      icon: BookOpen,
+    },
+    {
+      url: "/profile/products",
+      name: t("products"),
+      icon: Package,
+    },
+    {
+      url: "/profile/payments",
+      name: t("payments"),
+      icon: CreditCard,
+    },
+    {
+      url: "/profile/settings",
+      name: t("settings"),
+      icon: Settings,
+    },
+  ];
 
   return (
     <div className="w-full bg-card text-card-foreground border border-gray-200/80 dark:border-[#1A1A1D] rounded-2xl p-6 shadow-sm">
       <div className="mb-6">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-          لوحة التحكم
+          {t("dashboard")}
         </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          إدارة حسابك وإعداداتك
+          {t("manageAccount")}
         </p>
       </div>
 
@@ -118,9 +120,9 @@ export default function ProfileSidebar({}: SidebarProps) {
           </div>
           <div>
             <p className="text-sm font-medium text-gray-900 dark:text-white">
-              المستخدم
+              {t("user")}
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">عضو مميز</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">{t("premiumMember")}</p>
           </div>
         </div>
       </div>

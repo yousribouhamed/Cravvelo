@@ -11,6 +11,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ChapterType } from "../types";
+import { useTranslations, useLocale } from "next-intl";
 
 interface CourseNavigatorProps {
   chapters: ChapterType[];
@@ -27,6 +28,10 @@ export const CourseNavigator: React.FC<CourseNavigatorProps> = ({
   const searchParams = useSearchParams();
   const currentChapterId = searchParams.get("chapter");
   const currentModuleId = searchParams.get("module");
+  const t = useTranslations("watch");
+  const locale = useLocale();
+  const dir = locale === "ar" ? "rtl" : "ltr";
+  const isRTL = locale === "ar";
 
   // Parse modules from JSON strings and sort chapters
   const parsedChapters = React.useMemo(() => {
@@ -58,15 +63,15 @@ export const CourseNavigator: React.FC<CourseNavigatorProps> = ({
     <div
       className={cn(
         "w-full max-w-md bg-background border rounded-lg",
-        "rtl:text-right",
+        isRTL ? "text-right" : "text-left",
         className
       )}
-      dir="rtl"
+      dir={dir}
     >
       <div className="p-4 border-b">
-        <h3 className="text-lg font-semibold">محتوى الدورة</h3>
+        <h3 className="text-lg font-semibold">{t("courseContent")}</h3>
         <p className="text-sm text-muted-foreground">
-          {parsedChapters.length} فصول
+          {parsedChapters.length} {parsedChapters.length === 1 ? t("chapter") : t("chapters")}
         </p>
       </div>
 
@@ -89,12 +94,15 @@ export const CourseNavigator: React.FC<CourseNavigatorProps> = ({
                 className="border rounded-lg bg-card"
               >
                 <AccordionTrigger className="px-4 py-3 hover:bg-muted/50 rounded-t-lg [&[data-state=open]]:border-b">
-                  <div className="flex items-center space-x-3 space-x-reverse">
-                    <div className="text-right">
+                  <div className={cn(
+                    "flex items-center",
+                    isRTL ? "space-x-reverse space-x-3" : "space-x-3"
+                  )}>
+                    <div className={isRTL ? "text-right" : "text-left"}>
                       <p className="font-medium text-sm">{chapter.title}</p>
                       <p className="text-xs text-muted-foreground">
                         {modules.length}{" "}
-                        {modules.length === 1 ? "وحدة" : "وحدات"}
+                        {modules.length === 1 ? t("module") : t("modules")}
                       </p>
                     </div>
                   </div>
@@ -114,15 +122,19 @@ export const CourseNavigator: React.FC<CourseNavigatorProps> = ({
                             navigateToModule(chapter.id, module.id)
                           }
                           className={cn(
-                            "w-full flex items-center space-x-3 space-x-reverse p-3 pr-8 hover:bg-muted/75 transition-colors text-right",
+                            "w-full flex items-center p-3 hover:bg-muted/75 transition-colors",
+                            isRTL ? "space-x-reverse space-x-3 pr-8 text-right" : "space-x-3 pl-8 text-left",
                             isCurrentModule &&
-                              "bg-primary/10 border-l-2 border-primary",
+                              (isRTL ? "bg-primary/10 border-r-2 border-primary" : "bg-primary/10 border-l-2 border-primary"),
                             index === modules.length - 1 && "rounded-b-lg"
                           )}
                         >
                           <div className="flex-shrink-0">
                             {isVideo ? (
-                              <Play className="h-4 w-4 text-primary scale-x-[-1]" />
+                              <Play className={cn(
+                                "h-4 w-4 text-primary",
+                                isRTL && "scale-x-[-1]"
+                              )} />
                             ) : module.isFree ? (
                               <div className="h-4 w-4 rounded border border-muted-foreground/50" />
                             ) : (
@@ -133,13 +145,17 @@ export const CourseNavigator: React.FC<CourseNavigatorProps> = ({
                           <div className="flex-1 min-w-0">
                             <p
                               className={cn(
-                                "text-sm font-medium truncate text-right",
+                                "text-sm font-medium truncate",
+                                isRTL ? "text-right" : "text-left",
                                 isCurrentModule && "text-primary"
                               )}
                             >
                               {module.title}
                             </p>
-                            <div className="flex items-center justify-end space-x-2 space-x-reverse text-xs text-muted-foreground">
+                            <div className={cn(
+                              "flex items-center text-xs text-muted-foreground",
+                              isRTL ? "justify-end space-x-reverse space-x-2" : "justify-start space-x-2"
+                            )}>
                               <span>{formatDuration(module.duration)}</span>
                             </div>
                           </div>

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { Mail, Loader2, CheckCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import BrandButton from "@/components/brand-button";
 import { Label } from "@/components/ui/label";
 import {
   Card,
@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 
 import { requestEmailConfirmation } from "../actions/request-email-confirmation";
 import { confirmEmail } from "../actions/confirm-email";
+import { useTranslations } from "next-intl";
 
 interface ConfirmEmailFormData {
   email: string;
@@ -31,6 +32,7 @@ export default function ConfirmEmailForm() {
   const [submitMessage, setSubmitMessage] = useState("");
   const [isResending, setIsResending] = useState(false);
   const searchParams = useSearchParams();
+  const t = useTranslations("auth.confirmEmail");
 
   // Get email and token from search parameters
   useEffect(() => {
@@ -68,23 +70,23 @@ export default function ConfirmEmailForm() {
       return await requestEmailConfirmation({ email });
     },
     onSuccess: (res) => {
-      setSubmitMessage(res.message || "Verification email sent successfully");
+      setSubmitMessage(res.message || t("successMessage"));
       setIsResending(false);
     },
     onError: (error: any) => {
-      setSubmitMessage(error.message || "Failed to send verification email");
+      setSubmitMessage(error.message || t("errorMessage"));
       setIsResending(false);
     },
   });
 
   const handleSubmit = async () => {
     if (!email) {
-      setSubmitMessage("Email is required");
+      setSubmitMessage(t("emailRequired"));
       return;
     }
 
     if (!tokenValue || tokenValue.trim().length === 0) {
-      setSubmitMessage("Please enter the verification token");
+      setSubmitMessage(t("tokenRequired"));
       return;
     }
 
@@ -96,7 +98,7 @@ export default function ConfirmEmailForm() {
 
   const handleResendCode = async () => {
     if (!email) {
-      setSubmitMessage("Email is required to resend verification");
+      setSubmitMessage(t("emailRequired"));
       return;
     }
 
@@ -109,10 +111,10 @@ export default function ConfirmEmailForm() {
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold text-center">
-          Verify Email
+          {t("title")}
         </CardTitle>
         <CardDescription className="text-center">
-          Enter the verification token from your email
+          {t("description")}
         </CardDescription>
       </CardHeader>
 
@@ -188,26 +190,20 @@ export default function ConfirmEmailForm() {
       </CardContent>
 
       <CardFooter className="flex flex-col space-y-4">
-        <Button
+        <BrandButton
           type="button"
           onClick={handleSubmit}
           className="w-full"
           disabled={mutation.isPending || !email || !tokenValue.trim()}
+          loading={mutation.isPending}
         >
-          {mutation.isPending ? (
-            <div className="flex items-center space-x-2">
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Verifying...</span>
-            </div>
-          ) : (
-            "Verify Email"
-          )}
-        </Button>
+          {mutation.isPending ? t("verifying") : t("button")}
+        </BrandButton>
 
         {/* Resend Token */}
         <div className="text-center">
           <p className="text-sm text-gray-600 mb-2">
-            Didn't receive the email?
+            {t("resendPrompt")}
           </p>
           <button
             type="button"
@@ -218,10 +214,10 @@ export default function ConfirmEmailForm() {
             {isResending || resendMutation.isPending ? (
               <div className="flex items-center justify-center space-x-1">
                 <Loader2 className="w-3 h-3 animate-spin" />
-                <span>Sending...</span>
+                <span>{t("sending")}</span>
               </div>
             ) : (
-              "Resend verification email"
+              t("resendButton")
             )}
           </button>
         </div>

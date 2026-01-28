@@ -1,4 +1,6 @@
 import { useTenant } from "@/contexts/tenant";
+import { useMemo, useCallback } from "react";
+import { formatPrice as baseFormatPrice } from "@/lib/price";
 
 export function useTenantBranding() {
   const { website } = useTenant();
@@ -14,6 +16,34 @@ export function useTenantBranding() {
     customDomain: website?.customDomain,
     subdomain: website?.subdomain,
   };
+}
+
+export function useTenantCurrency() {
+  const { website } = useTenant();
+
+  const currency = website?.currency || "DZD";
+  const currencySymbol = website?.currencySymbol || "DA";
+  const language = website?.language || "ARABIC";
+  
+  // Determine locale based on language setting
+  const locale = language === "ARABIC" ? "ar-DZ" : "en-US";
+
+  const formatPrice = useCallback(
+    (price: number): string => {
+      return baseFormatPrice(price, currency, locale);
+    },
+    [currency, locale]
+  );
+
+  return useMemo(
+    () => ({
+      currency,
+      currencySymbol,
+      locale,
+      formatPrice,
+    }),
+    [currency, currencySymbol, locale, formatPrice]
+  );
 }
 
 export function useTenantSettings() {

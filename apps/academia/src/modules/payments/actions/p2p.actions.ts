@@ -12,11 +12,12 @@ export const createP2pPaymentIntent = withTenant({
     paymentProof: z.string(), // proof URL (screenshot, receipt)
   }),
 
-  handler: async ({ input, db, accountId }) => {
+  handler: async ({ input, db, accountId, website }) => {
     const user = await getCurrentUser();
     if (!user) throw new Error("Unauthorized");
 
     const { paymentProof, productId, type, notes } = input;
+    const tenantCurrency = website?.currency || "DZD";
 
     return await db.$transaction(async (tx) => {
       // 1. Fetch item (course or product) + pricing plan
@@ -75,7 +76,7 @@ export const createP2pPaymentIntent = withTenant({
           type: type === "COURSE" ? "BUYCOURSE" : "BUYPRODUCT",
           amount: price,
           status: "PENDING",
-          currency: "DZD",
+          currency: tenantCurrency,
           method: "BANK_TRANSFER", // or "CASH" depending on how you classify P2P
           studentId: user.userId,
           accountId,

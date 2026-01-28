@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, Mail, Lock, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import BrandButton from "@/components/brand-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -18,10 +19,14 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { loginSchema, type LoginFormData } from "../lib/validators/auth";
 import { useForm } from "@/hooks/use-form";
 import { loginUser } from "../actions/auth";
+import { useTranslations } from "next-intl";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
+  const t = useTranslations("auth.signIn");
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const form = useForm<LoginFormData>(
     {
@@ -41,8 +46,9 @@ export default function LoginForm() {
     },
     onSuccess: (res) => {
       setSubmitMessage(res.message || "Login successful");
-      // Redirect or handle successful login here
-      // For example: router.push('/dashboard');
+      const redirectTo = searchParams.get("redirect") ?? "/";
+      router.push(redirectTo);
+      router.refresh();
     },
     onError: (error: any) => {
       setSubmitMessage(error.message || "Failed to login");
@@ -59,24 +65,24 @@ export default function LoginForm() {
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold text-center">
-          Sign In
+          {t("title")}
         </CardTitle>
         <CardDescription className="text-center">
-          Enter your credentials to access your account
+          {t("description")}
         </CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-4">
         {/* Email */}
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t("emailLabel")}</Label>
           <div className="relative">
             <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
             <Input
               id="email"
               name="email"
               type="email"
-              placeholder="Enter your email"
+              placeholder={t("emailPlaceholder")}
               value={form.values.email}
               onChange={(e) => form.setValue("email", e.target.value)}
               onBlur={() => form.setTouched("email")}
@@ -93,14 +99,14 @@ export default function LoginForm() {
 
         {/* Password */}
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">{t("passwordLabel")}</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
             <Input
               id="password"
               name="password"
               type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
+              placeholder={t("passwordPlaceholder")}
               value={form.values.password}
               onChange={(e) => form.setValue("password", e.target.value)}
               onBlur={() => form.setTouched("password")}
@@ -151,21 +157,15 @@ export default function LoginForm() {
       </CardContent>
 
       <CardFooter className="flex flex-col space-y-4">
-        <Button
+        <BrandButton
           type="button"
           onClick={handleSubmit}
           className="w-full"
           disabled={mutation.isPending}
+          loading={mutation.isPending}
         >
-          {mutation.isPending ? (
-            <div className="flex items-center space-x-2">
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Signing in...</span>
-            </div>
-          ) : (
-            "Sign In"
-          )}
-        </Button>
+          {mutation.isPending ? t("loading") : t("button")}
+        </BrandButton>
 
         {/* Optional: Forgot Password Link */}
         <div className="text-center">
@@ -174,7 +174,7 @@ export default function LoginForm() {
             className="text-sm text-gray-600 hover:text-gray-800 underline"
             disabled={mutation.isPending}
           >
-            Forgot your password?
+            {t("forgotPassword")}
           </button>
         </div>
       </CardFooter>

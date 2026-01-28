@@ -3,6 +3,7 @@
 import { withTenant } from "@/_internals/with-tenant";
 import z from "zod";
 import { getTimeAgo } from "../uttils";
+import { requireAuth } from "@/modules/auth/lib/utils";
 
 export const getCourseRatings = withTenant({
   input: z.object({
@@ -235,6 +236,74 @@ export const getCourseRatingSummary = withTenant({
         data: null,
         success: false,
         message: error instanceof Error ? error.message : "حدث خطأ غير معروف",
+      };
+    }
+  },
+});
+
+export const createCourseRating = withTenant({
+  input: z.object({
+    courseId: z.string(),
+    rating: z.number().min(1).max(5),
+    content: z.string().min(1).max(2000),
+  }),
+  handler: async ({ db, accountId, input }) => {
+    try {
+      const user = await requireAuth();
+
+      // Ensure course belongs to this tenant/account
+      const course = await db.course.findFirst({
+        where: { id: input.courseId, accountId },
+        select: { id: true, allowComment: true, allowRating: true },
+      });
+
+      if (!course) {
+        return {
+          data: null,
+          success: false,
+          message: "Course not found",
+        };
+      }
+
+      if (!course.allowComment || !course.allowRating) {
+        return {
+          data: null,
+          success: false,
+          message: "Reviews are disabled for this course",
+        };
+      }
+
+      const created = await db.comment.create({
+        data: {
+          courseId: input.courseId,
+          accountId,
+          studentId: user.userId,
+          rating: input.rating,
+          content: input.content,
+          isPublic: true,
+          isApproved: false,
+          status: "PENDING",
+        } as any,
+        select: {
+          id: true,
+          rating: true,
+          content: true,
+          createdAt: true,
+        },
+      });
+
+      return {
+        data: created,
+        success: true,
+        message: "Review submitted for approval",
+      };
+    } catch (error) {
+      console.log(`Error creating course rating: `, error);
+
+      return {
+        data: null,
+        success: false,
+        message: error instanceof Error ? error.message : "Unknown error",
       };
     }
   },

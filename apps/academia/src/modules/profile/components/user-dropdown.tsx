@@ -24,16 +24,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-
-const ProfileLinks = [
-  { url: "/profile", name: "الملف الشخصي", icon: User },
-  { url: "/profile/affiliates", name: "التسويق بالعمولة", icon: Users },
-  { url: "/profile/certificate", name: "الشهادات", icon: Award },
-  { url: "/profile/courses", name: "الدورات", icon: BookOpen },
-  { url: "/profile/products", name: "المنتجات", icon: Package },
-  { url: "/profile/payments", name: "المدفوعات", icon: CreditCard },
-  { url: "/profile/settings", name: "الإعدادات", icon: Settings },
-];
+import { useTranslations } from "next-intl";
 
 interface ProfileDropdownProps {
   onLogout?: () => void;
@@ -41,10 +32,21 @@ interface ProfileDropdownProps {
 
 export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
   const { theme, setTheme } = useTheme();
+  const t = useTranslations("profile");
 
   const toggleDarkMode = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
+
+  const ProfileLinks = [
+    { url: "/profile", name: t("profile"), icon: User },
+    { url: "/profile/affiliates", name: t("affiliates"), icon: Users },
+    { url: "/profile/certificate", name: t("certificates"), icon: Award },
+    { url: "/profile/courses", name: t("courses"), icon: BookOpen },
+    { url: "/profile/products", name: t("products"), icon: Package },
+    { url: "/profile/payments", name: t("payments"), icon: CreditCard },
+    { url: "/profile/settings", name: t("settings"), icon: Settings },
+  ];
 
   return (
     <DropdownMenu>
@@ -55,13 +57,13 @@ export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
           className="flex cursor-pointer items-center gap-2 text-gray-800 dark:text-gray-200"
         >
           <User className="w-5 h-5" />
-          الحساب
+          {t("account")}
         </Button>
       </DropdownMenuTrigger>
 
       {/* Dropdown Content */}
       <DropdownMenuContent align="start" className="w-56">
-        <DropdownMenuLabel dir="rtl">إعدادات الحساب</DropdownMenuLabel>
+        <DropdownMenuLabel dir="rtl">{t("accountSettings")}</DropdownMenuLabel>
         <DropdownMenuSeparator />
 
         {ProfileLinks.map((link) => {
@@ -93,7 +95,7 @@ export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
           ) : (
             <Moon className="w-4 h-4" />
           )}
-          {theme === "dark" ? "الوضع النهاري" : "الوضع الليلي"}
+          {theme === "dark" ? t("lightMode") : t("darkMode")}
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
@@ -103,7 +105,7 @@ export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
           className="text-red-600 focus:text-red-700"
         >
           <LogOut className="w-4 h-4 mr-2" />
-          تسجيل الخروج
+          {t("logout")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

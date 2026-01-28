@@ -1,5 +1,6 @@
 import { getCourseWithChapters } from "@/modules/profile/actions/course.actions";
 import { CourseWatchClient } from "@/modules/courses/components/course-watch-client";
+import { getTranslations } from "next-intl/server";
 
 interface PageProps {
   params: Promise<{
@@ -10,6 +11,7 @@ interface PageProps {
 
 export default async function Page({ params }: PageProps) {
   const { courseId } = await params;
+  const t = await getTranslations("watch");
 
   const res = await getCourseWithChapters({ courseId });
 
@@ -17,9 +19,9 @@ export default async function Page({ params }: PageProps) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-destructive mb-2">Error</h1>
+          <h1 className="text-2xl font-bold text-destructive mb-2">{t("error")}</h1>
           <p className="text-muted-foreground">
-            {res.message || "Failed to load course"}
+            {res.message || t("failedToLoad")}
           </p>
         </div>
       </div>

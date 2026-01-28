@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ChapterType, ModuleType } from "../types";
+import { useTranslations, useLocale } from "next-intl";
 
 interface CourseControlsProps {
   chapters: ChapterType[];
@@ -19,6 +20,9 @@ export const CourseControls: React.FC<CourseControlsProps> = ({
   const searchParams = useSearchParams();
   const currentChapterId = searchParams.get("chapter");
   const currentModuleId = searchParams.get("module");
+  const t = useTranslations("watch");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
 
   // Parse modules from JSON strings and create flat list
   const allModules = React.useMemo(() => {
@@ -106,14 +110,19 @@ export const CourseControls: React.FC<CourseControlsProps> = ({
         onClick={goToPrevious}
         disabled={!canGoPrevious}
         className={cn(
-          "flex items-center space-x-2 px-4 py-2 rounded-md transition-colors",
+          "flex items-center px-4 py-2 rounded-md transition-colors",
+          isRTL ? "space-x-reverse space-x-2" : "space-x-2",
           canGoPrevious
             ? "bg-primary text-primary-foreground hover:bg-primary/90"
             : "bg-muted text-muted-foreground cursor-not-allowed"
         )}
       >
-        <ChevronLeft className="h-4 w-4" />
-        <span className="hidden sm:inline">Previous</span>
+        {isRTL ? (
+          <ChevronRight className="h-4 w-4" />
+        ) : (
+          <ChevronLeft className="h-4 w-4" />
+        )}
+        <span className="hidden sm:inline">{t("previous")}</span>
       </button>
 
       {/* Current Module Info */}
@@ -123,7 +132,7 @@ export const CourseControls: React.FC<CourseControlsProps> = ({
             {currentInfo.module.title}
           </p>
           <p className="text-xs text-muted-foreground">
-            {currentModuleIndex + 1} of {allModules.length} modules
+            {currentModuleIndex + 1} {t("of")} {allModules.length} {t("modules")}
           </p>
         </div>
       )}
@@ -133,14 +142,19 @@ export const CourseControls: React.FC<CourseControlsProps> = ({
         onClick={goToNext}
         disabled={!canGoNext}
         className={cn(
-          "flex items-center space-x-2 px-4 py-2 rounded-md transition-colors",
+          "flex items-center px-4 py-2 rounded-md transition-colors",
+          isRTL ? "space-x-reverse space-x-2" : "space-x-2",
           canGoNext
             ? "bg-primary text-primary-foreground hover:bg-primary/90"
             : "bg-muted text-muted-foreground cursor-not-allowed"
         )}
       >
-        <span className="hidden sm:inline">Next</span>
-        <ChevronRight className="h-4 w-4" />
+        <span className="hidden sm:inline">{t("next")}</span>
+        {isRTL ? (
+          <ChevronLeft className="h-4 w-4" />
+        ) : (
+          <ChevronRight className="h-4 w-4" />
+        )}
       </button>
     </div>
   );

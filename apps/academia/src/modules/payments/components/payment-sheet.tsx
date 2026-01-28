@@ -18,6 +18,8 @@ import {
   PaymentPricingOption,
 } from "@/modules/payments/types/index";
 import React from "react";
+import { useTranslations } from "next-intl";
+import { useTenantCurrency } from "@/hooks/use-tenant";
 
 export function PaymentSheet() {
   const {
@@ -28,6 +30,8 @@ export function PaymentSheet() {
     activeConnections,
     isConnectionsLoading,
   } = usePaymentContext();
+  const t = useTranslations("payments");
+  const { formatPrice } = useTenantCurrency();
 
   console.log(selectedProduct);
 
@@ -92,10 +96,10 @@ export function PaymentSheet() {
               <AlertCircle className="w-12 h-12 text-muted-foreground mx-auto" />
               <div>
                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                  لم يتم اختيار منتج
+                  {t("noProductSelected")}
                 </h3>
                 <p className="text-muted-foreground">
-                  يرجى اختيار منتج قبل المتابعة إلى عملية الدفع
+                  {t("noProductMessage")}
                 </p>
               </div>
             </div>
@@ -104,10 +108,10 @@ export function PaymentSheet() {
           <div className="h-full flex flex-col" dir="rtl">
             <SheetHeader className="text-right pb-6 flex-shrink-0">
               <SheetTitle className="text-2xl font-bold text-foreground">
-                إتمام عملية الشراء
+                {t("title")}
               </SheetTitle>
               <SheetDescription className="text-muted-foreground">
-                راجع طلبك واختر طريقة الدفع المناسبة لإكمال عملية الشراء
+                {t("description")}
               </SheetDescription>
             </SheetHeader>
 
@@ -121,7 +125,7 @@ export function PaymentSheet() {
                       <div dir="rtl" className="space-y-4">
                         <div className="space-y-4">
                           <h3 className="text-lg font-semibold text-foreground">
-                            ملخص الطلب
+                            {t("summary")}
                           </h3>
                           <div className="bg-muted/50 rounded-lg p-4 border my-4">
                             <div className="flex items-center gap-4">
@@ -158,12 +162,11 @@ export function PaymentSheet() {
                                 <div className="flex items-center justify-between">
                                   {currentPrice > 0 ? (
                                     <span className="text-lg font-bold text-green-600 dark:text-green-400">
-                                      {currentPrice.toLocaleString()}{" "}
-                                      {selectedProduct.currency}
+                                      {formatPrice(currentPrice)}
                                     </span>
                                   ) : (
                                     <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
-                                      مجاني
+                                      {t("free")}
                                     </span>
                                   )}
                                   <span className="text-sm text-muted-foreground">
@@ -177,8 +180,7 @@ export function PaymentSheet() {
                                     currentPrice && (
                                     <div className="mt-1">
                                       <span className="text-sm text-muted-foreground line-through">
-                                        {selectedPricing.compareAtPrice.toLocaleString()}{" "}
-                                        {selectedProduct.currency}
+                                        {formatPrice(selectedPricing.compareAtPrice)}
                                       </span>
                                     </div>
                                   )}
@@ -188,7 +190,7 @@ export function PaymentSheet() {
                             <div className="mt-4 pt-4 border-t border-border">
                               <div className="flex justify-between items-center">
                                 <span className="text-sm font-bold text-foreground">
-                                  المجموع الكلي
+                                  {t("total")}
                                 </span>
                                 {currentPrice > 0 ? (
                                   <span className="text-xl font-bold text-green-600 dark:text-green-400">
@@ -197,7 +199,7 @@ export function PaymentSheet() {
                                   </span>
                                 ) : (
                                   <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
-                                    مجاني
+                                    {t("free")}
                                   </span>
                                 )}
                               </div>
@@ -208,15 +210,19 @@ export function PaymentSheet() {
                               <div className="mt-3 pt-3 border-t border-border">
                                 <div className="text-xs text-muted-foreground text-center">
                                   {selectedPricing.accessDuration ===
-                                    "UNLIMITED" && "وصول غير محدود"}
+                                    "UNLIMITED" && t("unlimitedAccess")}
                                   {selectedPricing.accessDuration ===
                                     "LIMITED" &&
                                     selectedPricing.accessDurationDays &&
-                                    `وصول لمدة ${selectedPricing.accessDurationDays} يوم`}
+                                    t("limitedAccess", {
+                                      days: selectedPricing.accessDurationDays,
+                                    })}
                                   {selectedPricing.pricingType ===
                                     "RECURRING" &&
                                     selectedPricing.recurringDays &&
-                                    ` • يتجدد كل ${selectedPricing.recurringDays} يوم`}
+                                    ` • ${t("recurringAccess", {
+                                      days: selectedPricing.recurringDays,
+                                    })}`}
                                 </div>
                               </div>
                             )}
@@ -229,11 +235,10 @@ export function PaymentSheet() {
                             <div className="flex items-start gap-3">
                               <div className="text-right text-sm text-muted-foreground flex-1">
                                 <div className="font-medium mb-1 text-foreground">
-                                  دفع آمن 100%
+                                  {t("securePayment")}
                                 </div>
                                 <div>
-                                  جميع المعاملات مشفرة ومحمية. لن نحتفظ بمعلومات
-                                  الدفع الخاصة بك.
+                                  {t("securePaymentMessage")}
                                 </div>
                               </div>
                               <Lock className="w-5 h-5 text-muted-foreground mt-0.5 flex-shrink-0" />
@@ -251,7 +256,7 @@ export function PaymentSheet() {
                           <div className="text-xs text-yellow-700 dark:text-yellow-300">
                             Debug: {connections?.length || 0} total connections,{" "}
                             {activeConnections?.length || 0} active | Price:{" "}
-                            {currentPrice} {selectedProduct.currency}
+                            {formatPrice(currentPrice)}
                             {selectedPricing &&
                               ` | Pricing: ${selectedPricing.name}`}
                           </div>
@@ -264,7 +269,7 @@ export function PaymentSheet() {
                           {/* Payment Methods */}
                           <div className="space-y-4">
                             <h3 className="text-lg font-semibold text-foreground">
-                              طرق الدفع
+                              {t("selectPaymentMethod")}
                             </h3>
 
                             <PaymentMethodCards />
@@ -275,7 +280,7 @@ export function PaymentSheet() {
                             activeConnections.length > 0 && (
                               <div className="space-y-4">
                                 <h3 className="text-lg font-semibold text-foreground">
-                                  تفاصيل الدفع
+                                  {t("paymentDetails")}
                                 </h3>
 
                                 <PaymentForms />
@@ -287,11 +292,10 @@ export function PaymentSheet() {
                         <div className="text-center py-8">
                           <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
                             <h3 className="text-lg font-semibold text-blue-700 dark:text-blue-300 mb-2">
-                              منتج مجاني
+                              {t("freeProduct")}
                             </h3>
                             <p className="text-blue-600 dark:text-blue-400">
-                              هذا المنتج متاح مجاناً. يمكنك الوصول إليه مباشرة
-                              دون الحاجة للدفع.
+                              {t("freeProductMessage")}
                             </p>
                           </div>
                         </div>

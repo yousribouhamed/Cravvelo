@@ -1,4 +1,5 @@
 import { PaymentPricingOption, PaymentProduct } from "../types";
+import { formatPrice as baseFormatPrice } from "@/lib/price";
 
 export interface CourseToPaymentProductParams {
   course: {
@@ -24,12 +25,13 @@ export interface CourseToPaymentProductParams {
       };
     }>;
   };
+  tenantCurrency?: string; // Optional tenant currency override
 }
 
 export function courseToPaymentProduct(
   params: CourseToPaymentProductParams
 ): PaymentProduct {
-  const { course } = params;
+  const { course, tenantCurrency } = params;
 
   // Convert pricing plans to payment pricing options
   // Filter out any plans where PricingPlan is missing
@@ -70,12 +72,15 @@ export function courseToPaymentProduct(
     }
   }
 
+  // Use tenant currency if provided, otherwise use currency from pricing plan, fallback to DZD
+  const currency = tenantCurrency || defaultPricing?.currency || "DZD";
+
   return {
     id: course.id,
     name: course.title,
     description,
     price: mainPrice,
-    currency: defaultPricing?.currency || "DZD",
+    currency,
     image: course.thumbnailUrl || undefined,
     pricingOptions,
     selectedPricingId: defaultPricing?.id,
@@ -128,7 +133,10 @@ export function isProductRecurring(product: PaymentProduct): boolean {
 }
 
 // Helper function to format pricing display
-export function formatPricingDisplay(product: PaymentProduct): {
+export function formatPricingDisplay(
+  product: PaymentProduct,
+  locale: string = "ar-DZ"
+): {
   price: string;
   originalPrice?: string;
   isFree: boolean;
@@ -153,13 +161,11 @@ export function formatPricingDisplay(product: PaymentProduct): {
   const originalPrice = selectedPricing?.compareAtPrice;
   const hasDiscount = originalPrice && originalPrice > currentPrice;
 
+  // Use currency from pricing plan or product, fallback to DZD
+  const currency = selectedPricing?.currency || product.currency || "DZD";
+
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("ar-DZ", {
-      style: "currency",
-      currency: selectedPricing?.currency || product.currency,
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
+    return baseFormatPrice(price, currency, locale);
   };
 
   let recurringText;

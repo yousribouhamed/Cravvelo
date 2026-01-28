@@ -1,7 +1,6 @@
 "use client";
 
 import BrandButton from "@/components/brand-button";
-import { formatPrice } from "@/lib/price";
 import {
   Star,
   User,
@@ -16,6 +15,8 @@ import { CourseWithPricing } from "../types";
 import { usePaymentIntent } from "@/modules/payments/hooks/use-paymentIntent";
 import { courseToPaymentProduct } from "@/modules/payments/utils";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { useTenantCurrency } from "@/hooks/use-tenant";
 
 interface CourseCardProps {
   course: CourseWithPricing;
@@ -29,19 +30,19 @@ const calculatePositiveReviewPercentage = (ratings: number[]) => {
   return Math.round((positiveRatings / ratings.length) * 100);
 };
 
-const formatVideoLength = (totalSeconds: number) => {
+const formatVideoLength = (totalSeconds: number, t: any) => {
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = Math.floor(totalSeconds % 60);
 
   let formattedTime = "";
   if (hours > 0) {
-    formattedTime += `${hours} ساعة و `;
+    formattedTime += `${hours} ${t("buyCard.hours")} ${t("buyCard.and")} `;
   }
   if (minutes > 0) {
-    formattedTime += `${minutes} دقيقة و `;
+    formattedTime += `${minutes} ${t("buyCard.minutes")} ${t("buyCard.and")} `;
   }
-  formattedTime += `${seconds} ثانية`;
+  formattedTime += `${seconds} ${t("buyCard.seconds")}`;
 
   return formattedTime.trim();
 };
@@ -51,9 +52,12 @@ export default function CourseBuyCard({
   isOwned = false,
   courseId,
 }: CourseCardProps) {
+  const t = useTranslations("courses");
+  const { formatPrice, currency } = useTenantCurrency();
   const { invokePaymentIntent } = usePaymentIntent(
     courseToPaymentProduct({
       course,
+      tenantCurrency: currency,
     })
   );
 
@@ -81,7 +85,7 @@ export default function CourseBuyCard({
       {/* Free Badge */}
       {isFree && (
         <span className="text-xs text-white p-2 rounded-full absolute -top-5 right-0 bg-[#FC6B00]">
-          مجانا
+          {t("buyCard.freeBadge")}
         </span>
       )}
 
@@ -98,10 +102,10 @@ export default function CourseBuyCard({
 
       {isOwned ? (
         <Link href={`/courses/${courseId}/watch`}>
-          <BrandButton className="w-full">الوصول إلى الكورس</BrandButton>
+          <BrandButton className="w-full">{t("buyCard.watchNow")}</BrandButton>
         </Link>
       ) : (
-        <BrandButton onClick={invokePaymentIntent}>شراء الآن</BrandButton>
+        <BrandButton onClick={invokePaymentIntent}>{t("buyCard.buyNow")}</BrandButton>
       )}
 
       <div className="border-b w-full h-1 my-1 dark:border-gray-700" />
@@ -112,8 +116,10 @@ export default function CourseBuyCard({
         <div className="w-full flex items-center justify-start gap-x-4">
           <Star className="w-5 h-5 text-black dark:text-white" />
           <span className="text-black dark:text-white">
-            {calculatePositiveReviewPercentage(ratings)}% تقييمات إيجابية (
-            {ratings.length})
+            {t("buyCard.positiveReviews", {
+              percentage: calculatePositiveReviewPercentage(ratings),
+              count: ratings.length,
+            })}
           </span>
         </div>
 
@@ -121,7 +127,7 @@ export default function CourseBuyCard({
         <div className="w-full flex items-center justify-start gap-x-4">
           <User className="w-5 h-5 text-black dark:text-white" />
           <span className="text-black dark:text-white">
-            {course?.studentsNbr || 0} طالبا
+            {t("buyCard.students", { count: course?.studentsNbr || 0 })}
           </span>
         </div>
 
@@ -129,8 +135,10 @@ export default function CourseBuyCard({
         <div className="w-full flex items-center justify-start gap-x-4">
           <Clock className="w-5 h-5 text-black dark:text-white" />
           <span className="text-black dark:text-white">
-            {course?.nbrChapters || 0} درسًا
-            {course?.length && ` (${formatVideoLength(course.length)})`}
+            {t("buyCard.duration", {
+              chapters: course?.nbrChapters || 0,
+              length: course?.length ? ` (${formatVideoLength(course.length, t)})` : "",
+            })}
           </span>
         </div>
 
@@ -138,7 +146,7 @@ export default function CourseBuyCard({
         <div className="w-full flex items-center justify-start gap-x-4">
           <Globe className="w-5 h-5 text-black dark:text-white" />
           <span className="text-black dark:text-white">
-            عبر الإنترنت وبالسرعة التي تناسبك
+            {t("buyCard.onlineAccess")}
           </span>
         </div>
 
@@ -146,12 +154,12 @@ export default function CourseBuyCard({
         <div className="w-full flex items-center justify-start gap-x-4">
           <Headphones className="w-5 h-5 text-black dark:text-white" />
           <span className="text-black dark:text-white">
-            الصوت:{" "}
+            {t("buyCard.language")}:{" "}
             {course?.sound === "ARABIC"
-              ? "عربي"
+              ? t("buyCard.languageArabic")
               : course?.sound === "FRENCH"
-              ? "فرنسي"
-              : "انجليزي"}
+              ? t("buyCard.languageFrench")
+              : t("buyCard.languageEnglish")}
           </span>
         </div>
 
@@ -159,12 +167,12 @@ export default function CourseBuyCard({
         <div className="w-full flex items-center justify-start gap-x-4">
           <ArrowBigUp className="w-5 h-5 text-black dark:text-white" />
           <span className="text-black dark:text-white">
-            المستوى:{" "}
+            {t("buyCard.level")}:{" "}
             {course?.level === "BEGINNER"
-              ? "مبتدئ"
+              ? t("level.beginner")
               : course?.level === "INTERMEDIATE"
-              ? "متوسط"
-              : "متقدم"}
+              ? t("level.intermediate")
+              : t("level.advanced")}
           </span>
         </div>
 
@@ -173,19 +181,21 @@ export default function CourseBuyCard({
           <Infinity className="w-5 h-5 text-black dark:text-white" />
           <span className="text-black dark:text-white">
             {!defaultPricingPlan
-              ? "وصول غير محدود إلى الأبد"
+              ? t("buyCard.accessUnlimited")
               : defaultPricingPlan.pricingType === "FREE"
-              ? "وصول مجاني غير محدود"
+              ? t("buyCard.accessFreeUnlimited")
               : defaultPricingPlan.pricingType === "RECURRING"
-              ? `وصول لمدة ${
-                  defaultPricingPlan.recurringDays || 30
-                } يوم (متجدد)`
+              ? t("buyCard.accessRecurring", {
+                  days: defaultPricingPlan.recurringDays || 30,
+                })
               : defaultPricingPlan.accessDuration === "UNLIMITED"
-              ? "وصول غير محدود إلى الأبد"
+              ? t("buyCard.accessUnlimited")
               : defaultPricingPlan.accessDuration === "LIMITED" &&
                 defaultPricingPlan.accessDurationDays
-              ? `وصول لمدة ${defaultPricingPlan.accessDurationDays} يوم`
-              : "وصول غير محدود إلى الأبد"}
+              ? t("buyCard.accessLimited", {
+                  days: defaultPricingPlan.accessDurationDays,
+                })
+              : t("buyCard.accessUnlimited")}
           </span>
         </div>
 
@@ -194,7 +204,7 @@ export default function CourseBuyCard({
           <div className="w-full flex items-center justify-start gap-x-4">
             <GraduationCap className="w-5 h-5 text-black dark:text-white" />
             <span className="text-black dark:text-white">
-              ستحصل على شهادة بعد اتمام الدورة
+              {t("buyCard.certificate")}
             </span>
           </div>
         )}

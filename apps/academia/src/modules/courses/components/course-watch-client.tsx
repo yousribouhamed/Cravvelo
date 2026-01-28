@@ -7,6 +7,7 @@ import { CourseNavigator } from "./course-navigator";
 import { CourseControls } from "./course-controls";
 import { Menu, X } from "lucide-react";
 import { ChapterType, Course } from "../types";
+import { useTranslations } from "next-intl";
 
 interface CourseWatchClientProps {
   course: Course & { Chapter: ChapterType[] };
@@ -18,6 +19,7 @@ export const CourseWatchClient: React.FC<CourseWatchClientProps> = ({
   const searchParams = useSearchParams();
   const currentChapterId = searchParams.get("chapter");
   const currentModuleId = searchParams.get("module");
+  const t = useTranslations("watch");
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -161,10 +163,10 @@ export const CourseWatchClient: React.FC<CourseWatchClientProps> = ({
               <div className="flex items-center justify-center min-h-[400px]">
                 <div className="text-center">
                   <h2 className="text-xl font-semibold mb-2">
-                    No module selected
+                    {t("noModuleSelected")}
                   </h2>
                   <p className="text-muted-foreground">
-                    Select a module from the sidebar to start learning
+                    {t("selectModule")}
                   </p>
                 </div>
               </div>

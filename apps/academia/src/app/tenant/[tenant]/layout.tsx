@@ -3,7 +3,6 @@ import { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { getTenantWebsite, validateTenant } from "@/actions/tanant";
 import { TenantProvider } from "@/contexts/tenant";
-import Providers from "@/components/providers";
 import MaxWidthWrapper from "@/components/max-with-wrapper";
 import { getCurrentUser } from "@/modules/auth/lib/utils";
 import "@smastrom/react-rating/style.css";
@@ -40,7 +39,6 @@ export default async function TenantLayout({
 
   return (
     <div
-      dir={"rtl"}
       className="min-h-screen h-fit bg-neutral-50 dark:bg-[#0E0E10] text-neutral-900 dark:text-neutral-200"
       style={
         {
@@ -49,16 +47,14 @@ export default async function TenantLayout({
       }
     >
       <TenantProvider website={websiteData} tenant={tenant} user={user}>
-        <Providers>
-          <PaymentProvider>
-            <Header />
-            <MaxWidthWrapper className="flex flex-col">
-              {children}
+        <PaymentProvider>
+          <Header />
+          <MaxWidthWrapper className="flex flex-col">
+            {children}
 
-              <Toaster />
-            </MaxWidthWrapper>
-          </PaymentProvider>
-        </Providers>
+            <Toaster />
+          </MaxWidthWrapper>
+        </PaymentProvider>
       </TenantProvider>
     </div>
   );

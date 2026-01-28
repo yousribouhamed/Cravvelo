@@ -19,12 +19,14 @@ import type { Value as PhoneValue } from "react-phone-number-input";
 import { updateStudentProfile } from "../actions/profile.actions";
 import { uploadImageToS3, deleteImageFromS3 } from "@/modules/aws/s3";
 import { getKeyFromUrl } from "@/modules/aws/utils";
+import { useTranslations } from "next-intl";
 
 interface Props {
   profileData: StudentProfile;
 }
 
 export default function ProfileForm({ profileData }: Props) {
+  const t = useTranslations("profile");
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formValues, setFormValues] = useState({
@@ -107,14 +109,14 @@ export default function ProfileForm({ profileData }: Props) {
         // Update form values with the new image URL
         setFormValues((prev) => ({ ...prev, photo_url: imageUrl }));
         setIsEditing(false);
-        console.log("تم حفظ الملف الشخصي بنجاح");
+        console.log(t("saveSuccess"));
       } else {
         throw new Error(result.message || "Failed to update profile");
       }
     } catch (error) {
-      console.error("خطأ في حفظ الملف الشخصي:", error);
+      console.error(t("saveError"), error);
       // You might want to show a toast notification here
-      alert("حدث خطأ أثناء حفظ الملف الشخصي. حاول مرة أخرى.");
+      alert(t("saveError"));
     } finally {
       setIsLoading(false);
     }
@@ -134,11 +136,11 @@ export default function ProfileForm({ profileData }: Props) {
   return (
     <Card className="w-full h-full">
       <CardHeader>
-        <CardTitle className="text-xl font-bold">ملفي الشخصي</CardTitle>
+        <CardTitle className="text-xl font-bold">{t("myProfile")}</CardTitle>
       </CardHeader>
 
       <CardContent className="space-y-6">
-        {/* صورة الملف الشخصي */}
+        {/* Profile Picture */}
         <div className="flex items-center space-x-4">
           <ProfileImageInput
             value={formValues.photo_url}
@@ -148,48 +150,48 @@ export default function ProfileForm({ profileData }: Props) {
           />
         </div>
 
-        {/* الاسم الكامل */}
+        {/* Full Name */}
         <div className="space-y-2">
-          <Label htmlFor="full_name">الاسم الكامل</Label>
+          <Label htmlFor="full_name">{t("fullName")}</Label>
           <Input
             id="full_name"
             value={formValues.full_name}
             onChange={(e) => handleChange("full_name", e.target.value)}
-            placeholder="أدخل اسمك الكامل"
+            placeholder={t("fullNamePlaceholder")}
             disabled={!isEditing || isLoading}
           />
         </div>
 
-        {/* السيرة الذاتية */}
+        {/* Bio */}
         <div className="space-y-2">
-          <Label htmlFor="bio">نبذة عنك</Label>
+          <Label htmlFor="bio">{t("bio")}</Label>
           <Textarea
             id="bio"
             value={formValues.bio}
             onChange={(e) => handleChange("bio", e.target.value)}
-            placeholder="أخبرنا قليلاً عن نفسك"
+            placeholder={t("bioPlaceholder")}
             disabled={!isEditing || isLoading}
             rows={3}
           />
         </div>
 
-        {/* رقم الهاتف */}
+        {/* Phone Number */}
         <div className="space-y-2">
-          <Label htmlFor="phone">رقم الهاتف</Label>
+          <Label htmlFor="phone">{t("phoneNumber")}</Label>
           <PhoneInput
             id="phone"
             value={formValues.phone}
             onChange={(value) => handleChange("phone", value || "")}
-            placeholder="أدخل رقم هاتفك"
+            placeholder={t("phoneNumberPlaceholder")}
             disabled={!isEditing || isLoading}
             defaultCountry="DZ"
             className={!isEditing || isLoading ? "opacity-60" : ""}
           />
         </div>
 
-        {/* البريد الإلكتروني (دائماً للقراءة فقط) */}
+        {/* Email (read-only) */}
         <div className="space-y-2">
-          <Label>البريد الإلكتروني</Label>
+          <Label>{t("email")}</Label>
           <Input value={profileData.email} disabled />
         </div>
       </CardContent>
@@ -202,14 +204,14 @@ export default function ProfileForm({ profileData }: Props) {
               onClick={handleCancel}
               disabled={isLoading}
             >
-              إلغاء
+              {t("cancel")}
             </Button>
             <Button onClick={handleSave} disabled={isLoading}>
-              {isLoading ? "جاري الحفظ..." : "حفظ"}
+              {isLoading ? t("saving") : t("save")}
             </Button>
           </>
         ) : (
-          <Button onClick={() => setIsEditing(true)}>تعديل</Button>
+          <Button onClick={() => setIsEditing(true)}>{t("edit")}</Button>
         )}
       </CardFooter>
     </Card>

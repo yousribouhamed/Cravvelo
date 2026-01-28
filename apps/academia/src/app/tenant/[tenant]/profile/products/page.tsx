@@ -1,16 +1,17 @@
-import { getStudentCertificates } from "@/modules/profile/actions/certificae.actions";
-import { CertificateTable } from "@/modules/profile/components/certificate-table";
+import { getStudentProducts } from "@/modules/profile/actions/products.actions";
+import { ProductColumns } from "@/modules/profile/components/columns/products";
+import { DataTable } from "@/modules/profile/components/data-table";
 import { getTranslations } from "next-intl/server";
 
-export default async function page() {
-  const res = await getStudentCertificates();
-  const t = await getTranslations("profile.certificates");
+export default async function Page() {
+  const res = await getStudentProducts();
+  const t = await getTranslations("profile.products");
 
   if (res.data && res.data.length > 0) {
     return (
       <div className="bg-card h-full rounded-2xl flex flex-col gap-y-4 p-4 border">
         <h2 className="font-bold text-xl">{t("title")}</h2>
-        <CertificateTable data={res.data} />
+        <DataTable columns={ProductColumns} data={res.data} />
       </div>
     );
   }

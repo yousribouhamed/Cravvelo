@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import BrandButton from "@/components/brand-button";
 import { createChargilyPaymentIntent } from "../../actions/chargily.actions";
 import { usePaymentContext } from "../../context/payments-provider";
+import { useTranslations } from "next-intl";
 
 interface ChargilyFormProps {
   isLoading?: boolean;
@@ -29,6 +30,7 @@ interface PaymentResponse {
 
 export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
   const { selectedProduct } = usePaymentContext();
+  const t = useTranslations("payments.chargily");
   const [formData, setFormData] = useState<ChargilyFormData>({
     couponCode: "",
   });
@@ -104,7 +106,7 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
                 htmlFor="coupon"
                 className="block text-right text-foreground"
               >
-                كود الخصم (قريباً)
+                {t("couponLabel")}
               </Label>
               <div className="flex gap-2">
                 <Input
@@ -112,7 +114,7 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
                   type="text"
                   value={formData.couponCode}
                   onChange={(e) => handleChange("couponCode", e.target.value)}
-                  placeholder="أدخل كود الخصم"
+                  placeholder={t("couponPlaceholder")}
                   className="text-right bg-background flex-1"
                   dir="rtl"
                   disabled={true} // Disabled until coupon logic is implemented
@@ -124,11 +126,11 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
                   size="sm"
                   className="px-4 bg-blue-600 hover:bg-blue-700 text-white"
                 >
-                  {couponApplied ? "تم التطبيق" : "تطبيق"}
+                  {couponApplied ? t("couponApplied") : t("couponApply")}
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground text-right">
-                * ميزة كود الخصم قيد التطوير
+                {t("couponHint")}
               </p>
             </div>
           </div>
@@ -144,7 +146,7 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
           loading={isSubmitLoading}
           disabled={!selectedProduct || isSubmitLoading}
         >
-          إتمام الدفع عبر Chargily
+          {t("submitButton")}
         </BrandButton>
       </div>
     </form>

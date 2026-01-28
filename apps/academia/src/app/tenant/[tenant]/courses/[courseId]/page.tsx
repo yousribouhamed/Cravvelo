@@ -5,6 +5,7 @@ import EmbedYouTubeVideo from "@/modules/courses/components/yotube-player";
 import { CravveloEditor } from "@cravvelo/editor";
 import { PaymentSheet } from "@/modules/payments/components/payment-sheet";
 import { checkCourseOwnership } from "@/modules/courses/actions/check-ownership";
+import { getTranslations } from "next-intl/server";
 
 interface PageProps {
   params: Promise<{
@@ -15,6 +16,7 @@ interface PageProps {
 
 export default async function Page({ params }: PageProps) {
   const { courseId } = await params;
+  const t = await getTranslations("courses");
 
   const [response, ownershipResponse] = await Promise.all([
     getCourseById({ courseId }),
@@ -34,20 +36,19 @@ export default async function Page({ params }: PageProps) {
       <>
         <div
           className="w-full min-h-screen h-fit grid grid-cols-1 lg:grid-cols-3 gap-4 p-4 my-8"
-          dir="rtl"
         >
           <div className="w-full col-span-1 lg:col-span-2 h-fit min-h-[400px]">
-            <h1 className="text-2xl font-bold text-right text-gray-900 dark:text-white mb-4">
+            <h1 className="text-2xl font-bold text-start text-foreground mb-4">
               {course?.title}
             </h1>
             <div className="my-8 flex flex-col gap-y-4">
               <EmbedYouTubeVideo url={course.youtubeUrl} />
 
               {/* Course Description Section */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                  <h2 className="text-lg font-semibold text-right text-gray-900 dark:text-white">
-                    وصف الكورس
+              <div className="bg-card text-card-foreground rounded-lg border border-border">
+                <div className="p-4 border-b border-border">
+                  <h2 className="text-lg font-semibold text-start">
+                    {t("description")}
                   </h2>
                 </div>
                 <div className="p-0">
@@ -55,7 +56,12 @@ export default async function Page({ params }: PageProps) {
                 </div>
               </div>
 
-              <Ratings />
+              <Ratings
+                courseId={courseId}
+                initialComments={course.Comment || []}
+                allowComment={course.allowComment}
+                allowRating={course.allowRating}
+              />
             </div>
           </div>
 
@@ -69,15 +75,14 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <div
-      className="w-full h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center"
-      dir="rtl"
+      className="w-full h-screen bg-background flex items-center justify-center"
     >
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-          الكورس غير موجود
+        <h1 className="text-2xl font-bold text-foreground mb-2">
+          {t("notFound")}
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          لم يتم العثور على الكورس المطلوب
+        <p className="text-muted-foreground">
+          {t("notFoundMessage")}
         </p>
       </div>
     </div>
