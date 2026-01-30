@@ -40,6 +40,7 @@ export async function middleware(request: NextRequest) {
 
   let response: NextResponse;
   let tenant: string | null = null;
+  let rewrittenUrl: URL | null = null;
 
   // Handle localhost (development environment)
   if (isLocalhost) {
@@ -56,6 +57,7 @@ export async function middleware(request: NextRequest) {
       // Rewrite to the tenant-specific path (URL stays the same in browser)
       const url = request.nextUrl.clone();
       url.pathname = `/tenant/${tenant}${url.pathname}`;
+      rewrittenUrl = url;
       response = NextResponse.rewrite(url);
     } else {
       response = NextResponse.next();
@@ -80,10 +82,18 @@ export async function middleware(request: NextRequest) {
       // Rewrite to the tenant-specific path
       const url = request.nextUrl.clone();
       url.pathname = `/tenant/${tenant}${url.pathname}`;
+      rewrittenUrl = url;
       response = NextResponse.rewrite(url);
     } else {
       response = NextResponse.next();
     }
+  }
+
+  // Prepare base headers for server components (e.g., locale resolution).
+  // IMPORTANT: tenant lookups in DB expect a full domain-like key (e.g. "tenant.cravvelo.com").
+  const baseRequestHeaders = new Headers(request.headers);
+  if (tenant) {
+    baseRequestHeaders.set("x-tenant", `${tenant}.cravvelo.com`);
   }
 
   // ========================================
@@ -95,7 +105,17 @@ export async function middleware(request: NextRequest) {
 
   // Skip auth logic for public routes
   if (isPublicRoute) {
-    return response;
+    // Preserve tenant header for public tenant pages so server components can resolve DB locale.
+    if (rewrittenUrl) {
+      return NextResponse.rewrite(rewrittenUrl, {
+        request: { headers: baseRequestHeaders },
+      });
+    }
+
+    // If we didn't rewrite, still forward headers.
+    return NextResponse.next({
+      request: { headers: baseRequestHeaders },
+    });
   }
 
   // Get token from cookies
@@ -140,16 +160,12 @@ export async function middleware(request: NextRequest) {
 
   // Add user info and tenant info to headers for server components
   if (payload || tenant) {
-    const requestHeaders = new Headers(request.headers);
+    const requestHeaders = new Headers(baseRequestHeaders);
 
     if (payload) {
       requestHeaders.set("x-user-id", payload.userId);
       requestHeaders.set("x-user-email", payload.email);
       requestHeaders.set("x-account-id", payload.accountId);
-    }
-
-    if (tenant) {
-      requestHeaders.set("x-tenant", tenant);
     }
 
     // For tenant routes, create proper rewrite with headers

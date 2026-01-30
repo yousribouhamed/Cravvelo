@@ -12,6 +12,25 @@
     "about": "About Us",
     "contact": "Contact Us"
   },
+  "footer": {
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "refundPolicy": "Refund Policy",
+    "defaultBrandName": "Academy",
+    "rightsReserved": "© {year} {name}. All rights reserved."
+  },
+  "legal": {
+    "privacyPolicy": {
+      "title": "Privacy Policy"
+    },
+    "termsOfService": {
+      "title": "Terms of Service"
+    },
+    "refundPolicy": {
+      "title": "Refund Policy"
+    },
+    "empty": "No content available yet."
+  },
   "auth": {
     "signIn": {
       "title": "Sign in",
@@ -140,6 +159,31 @@
       }
     }
   },
+  "products": {
+    "free": "Free",
+    "paid": "Paid",
+    "discount": "Discount",
+    "list": {
+      "title": "Products",
+      "emptyTitle": "No products found",
+      "emptyDescription": "No published products are available yet.",
+      "loadErrorTitle": "Error loading products",
+      "genericError": "Something went wrong"
+    },
+    "landing": {
+      "title": "Product",
+      "description": "Product Description",
+      "buy": "Buy Now",
+      "buyHint": "Complete checkout to unlock your download.",
+      "download": "Download",
+      "downloadHint": "Your download link is secure and expires shortly.",
+      "downloadLinkError": "Failed to get download link",
+      "downloadError": "Failed to download",
+      "alreadyHaveAccount": "Sign in to buy/download",
+      "notFound": "Product not found",
+      "notFoundMessage": "The requested product was not found"
+    }
+  },
   "payments": {
     "title": "Complete Purchase",
     "description": "Review your order and choose the appropriate payment method to complete your purchase",
@@ -167,25 +211,34 @@
       "submitButton": "Complete Payment via Chargily"
     },
     "p2p": {
+      "bankDetailsTitle": "Bank transfer details",
+      "bankName": "Bank",
+      "accountHolder": "Account holder",
+      "accountNumber": "Account number",
+      "routingNumber": "Routing number",
+      "ibanSwift": "Additional details",
       "uploadLabel": "Payment Proof *",
       "dragDropText": "Drag and drop file here or",
       "chooseFile": "Choose file",
       "fileTypesHint": "PNG, JPG, PDF up to 10MB",
       "notesLabel": "Notes (optional)",
       "notesPlaceholder": "Add any additional notes...",
-      "submitButton": "Complete Direct Payment"
+      "submitButton": "Complete Direct Payment",
+      "submittedButton": "Submitted"
     }
   },
   "profile": {
     "account": "Account",
     "accountSettings": "Account Settings",
-    "profile": "Profile",
-    "affiliates": "Affiliate Marketing",
-    "certificates": "Certificates",
-    "courses": "Courses",
-    "products": "Products",
-    "payments": "Payments",
-    "settings": "Settings",
+    "menu": {
+      "profile": "Profile",
+      "affiliates": "Affiliate Marketing",
+      "certificates": "Certificates",
+      "courses": "Courses",
+      "products": "Products",
+      "payments": "Payments",
+      "settings": "Settings"
+    },
     "lightMode": "Light Mode",
     "darkMode": "Dark Mode",
     "logout": "Logout",
@@ -209,6 +262,34 @@
     "saveSuccess": "Profile saved successfully",
     "saveError": "An error occurred while saving the profile. Please try again.",
     "errorLoading": "Error loading profile",
+    "table": {
+      "noResults": "No results."
+    },
+    "image": {
+      "fallbackInitial": "U",
+      "upload": "Upload photo",
+      "change": "Change photo",
+      "crop": "Crop photo",
+      "cropYourPhoto": "Crop your photo",
+      "cropAlt": "Crop photo"
+    },
+    "courses": {
+      "title": "My Courses",
+      "empty": "No courses found",
+      "courseNotFound": "Course not found",
+      "currency": "DZD",
+      "columns": {
+        "courseName": "Course Name",
+        "amount": "Amount",
+        "status": "Status",
+        "purchaseDate": "Purchase Date"
+      },
+      "status": {
+        "CREATED": "Created",
+        "COMPLETED": "Completed",
+        "CANCELLED": "Cancelled"
+      }
+    },
     "products": {
       "title": "My Products",
       "empty": "No products purchased yet",
@@ -284,6 +365,10 @@
     "courses": {
       "title": "Courses",
       "subtitle": "Explore the latest published courses"
+    },
+    "products": {
+      "title": "Products",
+      "subtitle": "Explore the latest digital products"
     }
   },
   "watch": {

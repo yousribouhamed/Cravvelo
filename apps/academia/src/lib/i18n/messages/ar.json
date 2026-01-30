@@ -12,6 +12,25 @@
     "about": "من نحن",
     "contact": "اتصل بنا"
   },
+  "footer": {
+    "privacyPolicy": "سياسة الخصوصية",
+    "termsOfService": "شروط الخدمة",
+    "refundPolicy": "سياسة الاسترداد",
+    "defaultBrandName": "الأكاديمية",
+    "rightsReserved": "© {year} {name}. جميع الحقوق محفوظة."
+  },
+  "legal": {
+    "privacyPolicy": {
+      "title": "سياسة الخصوصية"
+    },
+    "termsOfService": {
+      "title": "شروط الخدمة"
+    },
+    "refundPolicy": {
+      "title": "سياسة الاسترداد"
+    },
+    "empty": "لا يوجد محتوى متاح بعد."
+  },
   "auth": {
     "signIn": {
       "title": "تسجيل الدخول",
@@ -140,6 +159,31 @@
       }
     }
   },
+  "products": {
+    "free": "مجاني",
+    "paid": "مدفوع",
+    "discount": "خصم",
+    "list": {
+      "title": "المنتجات",
+      "emptyTitle": "لم يتم العثور على منتجات",
+      "emptyDescription": "لا توجد منتجات منشورة بعد.",
+      "loadErrorTitle": "خطأ في تحميل المنتجات",
+      "genericError": "حدث خطأ غير متوقع"
+    },
+    "landing": {
+      "title": "المنتج",
+      "description": "وصف المنتج",
+      "buy": "شراء الآن",
+      "buyHint": "أكمل الدفع لفتح التحميل.",
+      "download": "تحميل",
+      "downloadHint": "رابط التحميل آمن وينتهي خلال وقت قصير.",
+      "downloadLinkError": "تعذر الحصول على رابط التحميل",
+      "downloadError": "تعذر التحميل",
+      "alreadyHaveAccount": "سجّل الدخول للشراء/التحميل",
+      "notFound": "المنتج غير موجود",
+      "notFoundMessage": "لم يتم العثور على المنتج المطلوب"
+    }
+  },
   "payments": {
     "title": "إتمام عملية الشراء",
     "description": "راجع طلبك واختر طريقة الدفع المناسبة لإكمال عملية الشراء",
@@ -167,25 +211,34 @@
       "submitButton": "إتمام الدفع عبر Chargily"
     },
     "p2p": {
+      "bankDetailsTitle": "بيانات التحويل البنكي",
+      "bankName": "البنك",
+      "accountHolder": "اسم صاحب الحساب",
+      "accountNumber": "رقم الحساب",
+      "routingNumber": "رقم التوجيه",
+      "ibanSwift": "تفاصيل إضافية",
       "uploadLabel": "إثبات الدفع *",
       "dragDropText": "اسحب وأفلت الملف هنا أو",
       "chooseFile": "اختر ملف",
       "fileTypesHint": "PNG, JPG, PDF حتى 10MB",
       "notesLabel": "ملاحظات (اختياري)",
       "notesPlaceholder": "أضف أي ملاحظات إضافية...",
-      "submitButton": "إتمام الدفع المباشر"
+      "submitButton": "إتمام الدفع المباشر",
+      "submittedButton": "تم الإرسال"
     }
   },
   "profile": {
     "account": "الحساب",
     "accountSettings": "إعدادات الحساب",
-    "profile": "الملف الشخصي",
-    "affiliates": "التسويق بالعمولة",
-    "certificates": "الشهادات",
-    "courses": "الدورات",
-    "products": "المنتجات",
-    "payments": "المدفوعات",
-    "settings": "الإعدادات",
+    "menu": {
+      "profile": "الملف الشخصي",
+      "affiliates": "التسويق بالعمولة",
+      "certificates": "الشهادات",
+      "courses": "الدورات",
+      "products": "المنتجات",
+      "payments": "المدفوعات",
+      "settings": "الإعدادات"
+    },
     "lightMode": "الوضع النهاري",
     "darkMode": "الوضع الليلي",
     "logout": "تسجيل الخروج",
@@ -209,6 +262,34 @@
     "saveSuccess": "تم حفظ الملف الشخصي بنجاح",
     "saveError": "حدث خطأ أثناء حفظ الملف الشخصي. حاول مرة أخرى.",
     "errorLoading": "خطأ في تحميل الملف الشخصي",
+    "table": {
+      "noResults": "لا توجد نتائج."
+    },
+    "image": {
+      "fallbackInitial": "م",
+      "upload": "رفع صورة",
+      "change": "تغيير الصورة",
+      "crop": "قص الصورة",
+      "cropYourPhoto": "قص صورتك",
+      "cropAlt": "قص الصورة"
+    },
+    "courses": {
+      "title": "دوراتي",
+      "empty": "لا توجد دورات",
+      "courseNotFound": "الدورة غير موجودة",
+      "currency": "دج",
+      "columns": {
+        "courseName": "اسم الدورة",
+        "amount": "المبلغ",
+        "status": "الحالة",
+        "purchaseDate": "تاريخ الشراء"
+      },
+      "status": {
+        "CREATED": "تم الإنشاء",
+        "COMPLETED": "مكتمل",
+        "CANCELLED": "ملغي"
+      }
+    },
     "products": {
       "title": "منتجاتي",
       "empty": "لم يتم شراء أي منتجات بعد",
@@ -284,6 +365,10 @@
     "courses": {
       "title": "الدورات",
       "subtitle": "استكشف أحدث الكورسات المنشورة"
+    },
+    "products": {
+      "title": "المنتجات",
+      "subtitle": "استكشف أحدث المنتجات الرقمية"
     }
   },
   "watch": {

@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import {
-  ChargilyCheckout,
   ChargilyWebhookEvent,
 } from "@/modules/payments/types";
+import { prisma } from "database/src";
+import { PurchaseStatus } from "@prisma/client";
 
 // Your Chargily Pay Secret key
 const apiSecretKey =
@@ -39,30 +40,29 @@ export async function POST(request: NextRequest) {
 
     // Switch based on the event type
     switch (event.type) {
-      case "checkout.paid":
-        const checkout = event.data;
-        console.log("Payment successful:", {
-          checkoutId: checkout.id,
-          amount: checkout.amount,
-          customerId: checkout.customer_id,
-          status: checkout.status,
-        });
-
-        // Handle the successful payment
-        await handleSuccessfulPayment(checkout);
+      case "checkout.paid": {
+        const paymentId = extractPaymentId(event);
+        if (!paymentId) {
+          return NextResponse.json(
+            { error: "Missing paymentId in metadata" },
+            { status: 400 }
+          );
+        }
+        await handleSuccessfulPayment(paymentId);
         break;
+      }
 
-      case "checkout.failed":
-        const failedCheckout = event.data;
-        console.log("Payment failed:", {
-          checkoutId: failedCheckout.id,
-          customerId: failedCheckout.customer_id,
-          status: failedCheckout.status,
-        });
-
-        // Handle the failed payment
-        await handleFailedPayment(failedCheckout);
+      case "checkout.failed": {
+        const paymentId = extractPaymentId(event);
+        if (!paymentId) {
+          return NextResponse.json(
+            { error: "Missing paymentId in metadata" },
+            { status: 400 }
+          );
+        }
+        await handleFailedPayment(paymentId);
         break;
+      }
 
       default:
         console.log("Unknown event type:", event.type);
@@ -79,43 +79,162 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Helper functions to handle different payment scenarios
-async function handleSuccessfulPayment(checkout: ChargilyCheckout) {
+function extractPaymentId(event: ChargilyWebhookEvent): string | null {
+  const metadata: any = (event as any)?.data?.metadata;
+  // Chargily commonly sends metadata as an array of objects.
+  const fromArray = Array.isArray(metadata) ? metadata?.[0]?.paymentId : null;
+  const fromObject = !Array.isArray(metadata) ? metadata?.paymentId : null;
+  return (fromArray || fromObject || null) as string | null;
+}
+
+async function handleSuccessfulPayment(paymentId: string) {
   try {
-    // Add your business logic here
-    // For example:
-    // - Update order status in database
-    // - Send confirmation email
-    // - Update user account
-    // - Trigger fulfillment process
+    const payment = await prisma.payment.findUnique({
+      where: { id: paymentId },
+      include: { Sale: true, Student: true },
+    });
 
-    console.log(`Processing successful payment for checkout: ${checkout.id}`);
-    console.log(`Amount: ${checkout.amount} (fees: ${checkout.fees})`);
-    console.log(`Customer: ${checkout.customer_id}`);
+    if (!payment) {
+      console.error("Payment not found:", paymentId);
+      return;
+    }
 
-    // Example database update (pseudo-code)
-    // await updateOrderStatus(checkout.id, 'completed');
-    // await sendConfirmationEmail(checkout.customer_id, checkout);
+    if (!payment.Sale) {
+      console.error("Payment has no sale:", paymentId);
+      await prisma.payment.update({
+        where: { id: paymentId },
+        data: { status: "COMPLETED" },
+      });
+      return;
+    }
+
+    const sale = payment.Sale;
+
+    await prisma.$transaction(async (tx) => {
+      await tx.payment.update({
+        where: { id: paymentId },
+        data: { status: "COMPLETED" },
+      });
+
+      await tx.sale.update({
+        where: { id: sale.id },
+        data: { status: "COMPLETED" },
+      });
+
+      // Grant access by creating ItemPurchase (idempotent)
+      if (!payment.Student) return;
+
+      const existingPurchase = await tx.itemPurchase.findFirst({
+        where: {
+          studentId: payment.Student.id,
+          itemType: sale.itemType,
+          itemId: sale.itemId,
+          status: PurchaseStatus.ACTIVE,
+        },
+      });
+      if (existingPurchase) return;
+
+      // Resolve default pricing plan for this item
+      let plan: any = null;
+
+      if (sale.itemType === "COURSE") {
+        const course = await tx.course.findUnique({
+          where: { id: sale.itemId },
+          include: {
+            CoursePricingPlans: { include: { PricingPlan: true } },
+          },
+        });
+        const pricingPlan =
+          course?.CoursePricingPlans?.find((p: any) => p.isDefault) ??
+          course?.CoursePricingPlans?.[0];
+        plan = pricingPlan?.PricingPlan ?? null;
+      }
+
+      if (sale.itemType === "PRODUCT") {
+        const product = await tx.product.findUnique({
+          where: { id: sale.itemId },
+          include: {
+            ProductPricingPlans: { include: { PricingPlan: true } },
+          },
+        });
+        const pricingPlan =
+          product?.ProductPricingPlans?.find((p: any) => p.isDefault) ??
+          product?.ProductPricingPlans?.[0];
+        plan = pricingPlan?.PricingPlan ?? null;
+      }
+
+      if (!plan?.id) {
+        console.warn("No pricing plan found for sale:", sale.id);
+        return;
+      }
+
+      const accessStartDate = new Date();
+      let accessEndDate: Date | null = null;
+
+      if (plan.pricingType === "RECURRING" && plan.recurringDays) {
+        accessEndDate = new Date(accessStartDate);
+        accessEndDate.setDate(accessEndDate.getDate() + plan.recurringDays);
+      } else if (
+        plan.pricingType === "ONE_TIME" &&
+        plan.accessDuration === "LIMITED" &&
+        plan.accessDurationDays
+      ) {
+        accessEndDate = new Date(accessStartDate);
+        accessEndDate.setDate(accessEndDate.getDate() + plan.accessDurationDays);
+      }
+
+      await tx.itemPurchase.create({
+        data: {
+          studentId: payment.Student.id,
+          accountId: sale.accountId,
+          pricingPlanId: plan.id,
+          itemType: sale.itemType,
+          itemId: sale.itemId,
+          purchaseAmount: payment.amount,
+          currency: payment.currency || "DZD",
+          status: PurchaseStatus.ACTIVE,
+          accessStartDate,
+          accessEndDate,
+          nextBillingDate:
+            plan.pricingType === "RECURRING" && plan.recurringDays
+              ? (() => {
+                  const next = new Date(accessStartDate);
+                  next.setDate(next.getDate() + plan.recurringDays);
+                  return next;
+                })()
+              : null,
+        },
+      });
+    });
   } catch (error) {
     console.error("Error handling successful payment:", error);
     throw error;
   }
 }
 
-async function handleFailedPayment(checkout: ChargilyCheckout) {
+async function handleFailedPayment(paymentId: string) {
   try {
-    // Add your business logic here
-    // For example:
-    // - Update order status to failed
-    // - Send failure notification
-    // - Log for analysis
+    const payment = await prisma.payment.findUnique({
+      where: { id: paymentId },
+      include: { Sale: true },
+    });
 
-    console.log(`Processing failed payment for checkout: ${checkout.id}`);
-    console.log(`Customer: ${checkout.customer_id}`);
+    if (!payment) {
+      console.error("Payment not found:", paymentId);
+      return;
+    }
 
-    // Example database update (pseudo-code)
-    // await updateOrderStatus(checkout.id, 'failed');
-    // await logFailedPayment(checkout);
+    await prisma.payment.update({
+      where: { id: paymentId },
+      data: { status: "FAILED" },
+    });
+
+    if (payment.Sale) {
+      await prisma.sale.update({
+        where: { id: payment.Sale.id },
+        data: { status: "CANCELLED" },
+      });
+    }
   } catch (error) {
     console.error("Error handling failed payment:", error);
     throw error;
@@ -123,4 +242,4 @@ async function handleFailedPayment(checkout: ChargilyCheckout) {
 }
 
 // Optional: Export types for use in other parts of your application
-export type { ChargilyWebhookEvent, ChargilyCheckout };
+export type { ChargilyWebhookEvent };

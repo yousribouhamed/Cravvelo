@@ -61,16 +61,7 @@ export default function Header() {
                     className="object-cover rounded-full"
                   />
                 </div>
-              ) : (
-                <div className="relative w-10 h-10">
-                  <Image
-                    src={"/logo.png"}
-                    alt={userName || "Academy"}
-                    fill
-                    className="object-cover rounded-2xl"
-                  />
-                </div>
-              )}
+              ) : null}
             </Link>
 
             {/* Desktop Navigation */}

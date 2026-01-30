@@ -7,9 +7,10 @@ import { Button } from "@ui/components/ui/button";
 import { useRouter } from "next/navigation";
 import MobildSideBard from "./mobile-sidebar";
 import Notifications from "../real-time/notifications";
-import { ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { UserData } from "@/src/types";
 import { Notification } from "database";
+import { useLocale } from "next-intl";
 
 interface Props {
   title: string;
@@ -27,6 +28,9 @@ const Header: FC<Props> = ({
   notifications,
 }) => {
   const router = useRouter();
+  const locale = useLocale();
+  const isRTL = locale === "ar";
+  const BackDirectionIcon = isRTL ? ArrowRight : ArrowLeft;
 
   return (
     <div className="w-full">
@@ -46,7 +50,7 @@ const Header: FC<Props> = ({
               size="icon"
               className="flex-shrink-0 h-8 w-8 sm:h-9 sm:w-9"
             >
-              <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
+              <BackDirectionIcon className="w-3 h-3 sm:w-4 sm:h-4" />
             </Button>
           )}
 

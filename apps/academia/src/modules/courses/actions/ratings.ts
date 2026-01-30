@@ -4,6 +4,7 @@ import { withTenant } from "@/_internals/with-tenant";
 import z from "zod";
 import { getTimeAgo } from "../uttils";
 import { requireAuth } from "@/modules/auth/lib/utils";
+import { createAndTriggerNotification } from "@/lib/notify";
 
 export const getCourseRatings = withTenant({
   input: z.object({
@@ -126,6 +127,8 @@ export const getCourseRatings = withTenant({
         updatedAt: rating.updatedAt,
         status: rating.status,
         isApproved: rating.isApproved,
+        // Keep Student info so the UI can show name/avatar (and avoid "Anonymous" after refetch)
+        Student: rating.Student,
         // Calculate time ago helper
         timeAgo: getTimeAgo(rating.createdAt),
         // Format rating as stars
@@ -254,7 +257,7 @@ export const createCourseRating = withTenant({
       // Ensure course belongs to this tenant/account
       const course = await db.course.findFirst({
         where: { id: input.courseId, accountId },
-        select: { id: true, allowComment: true, allowRating: true },
+        select: { id: true, title: true, allowComment: true, allowRating: true },
       });
 
       if (!course) {
@@ -291,6 +294,46 @@ export const createCourseRating = withTenant({
           createdAt: true,
         },
       });
+
+      // Store-owner notification (dashboard)
+      try {
+        const student = await db.student.findUnique({
+          where: { id: user.userId },
+          select: { full_name: true },
+        });
+
+        await createAndTriggerNotification({
+          db,
+          data: {
+            accountId,
+            type: "INFO",
+            // Fallback strings; UI will prefer i18n key + values from metadata.
+            title: "New review",
+            content: "You received a new review.",
+            actionUrl: "/students/comments",
+            metadata: {
+              source: "academia",
+              i18nKey: "notifications.events.review_received",
+              values: {
+                courseTitle: course.title,
+                studentName: student?.full_name ?? null,
+                rating: input.rating,
+              },
+              entity: {
+                courseId: input.courseId,
+                commentId: created.id,
+              },
+            },
+          },
+          payload: {
+            type: "review_received",
+            commentId: created.id,
+            courseId: input.courseId,
+          },
+        });
+      } catch (err) {
+        console.error("Failed to create review notification:", err);
+      }
 
       return {
         data: created,

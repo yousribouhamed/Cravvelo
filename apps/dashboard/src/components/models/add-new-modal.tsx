@@ -44,7 +44,7 @@ const AddNew: FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const courseMutation = trpc.createCourse.useMutation({
+  const courseMutation = trpc.course.createCourse.useMutation({
     onSuccess: ({ courseId }) => {
       router.push(`/courses/${courseId}/chapters`);
       maketoast.successWithText({ text: t("courseCreated") });

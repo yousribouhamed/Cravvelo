@@ -109,6 +109,40 @@
     "academyPreview": "معاينة الأكاديمية",
     "academy": "اكاديمية"
   },
+  "notifications": {
+    "ui": {
+      "title": "الإشعارات",
+      "tabs": {
+        "all": "الكل",
+        "archived": "مؤرشف"
+      },
+      "emptyStates": {
+        "noUnread": "لا يوجد إشعارات غير مقروءة بعد",
+        "noArchived": "لا يوجد إشعارات مؤرشفة بعد",
+        "noNotificationsAlt": "لا توجد إشعارات",
+        "noArchivedAlt": "لا توجد إشعارات مؤرشفة"
+      },
+      "badge": {
+        "new": "جديد"
+      },
+      "actions": {
+        "archive": "أرشف هذا الإشعار",
+        "archived": "هذا الإشعار مؤرشف"
+      },
+      "errors": {
+        "updateFailed": "خطأ في تحديث الإشعارات",
+        "markReadFailed": "فشل في تحديث الإشعار",
+        "archiveFailed": "فشل في أرشفة الإشعار"
+      },
+      "ariaLabel": "الإشعارات {count}",
+      "ariaLabelWithNew": "الإشعارات - {count} جديد"
+    },
+    "events": {
+      "review_received": "{studentName, select, null {تم استلام تقييم جديد للدورة {courseTitle}.} other {{studentName} ترك تقييمًا {rating} نجوم للدورة {courseTitle}.}}",
+      "sale_created": "تم إنشاء عملية بيع جديدة ({method}): {itemTitle} - {amount} {currency}",
+      "p2p_validation_required": "عملية بيع P2P تحتاج تحقق: {itemTitle} - {amount} {currency}"
+    }
+  },
   "auth": {
     "logout": "تسجيل الخروج",
     "signIn": {
@@ -216,6 +250,8 @@
   },
   "sidebar": {
     "home": "الرئيسية",
+    "courses": "الدورات",
+    "digitalProducts": "المنتجات الرقمية",
     "payments": "الدفع",
     "paymentRecords": "المدفوعات",
     "paymentMethods": "طرق الدفع",

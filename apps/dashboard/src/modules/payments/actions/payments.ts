@@ -402,9 +402,31 @@ export const approvePayment = withAuth({
             // Add course to student bag if it's a course purchase
             if (sale.itemType === "COURSE" && item) {
               const student = payment.Student;
-              const studentBag: StudentBag = student.bag
-                ? (JSON.parse(student.bag as string) as StudentBag)
-                : { courses: [], products: [], certificates: [] };
+              const defaultBag: StudentBag = {
+                courses: [],
+                products: [],
+                certificates: [],
+              };
+
+              const studentBag: StudentBag = (() => {
+                const bag = (student as any)?.bag as unknown;
+                if (!bag) return defaultBag;
+
+                // `Student.bag` is a Prisma `Json` field, but some older codepaths
+                // stored it as a JSON-string. Support both shapes.
+                if (typeof bag === "string") {
+                  try {
+                    const parsed = JSON.parse(bag);
+                    return parsed && typeof parsed === "object"
+                      ? (parsed as StudentBag)
+                      : defaultBag;
+                  } catch {
+                    return defaultBag;
+                  }
+                }
+
+                return typeof bag === "object" ? (bag as StudentBag) : defaultBag;
+              })();
 
               // Check if course already exists in bag
               const courseExists =
@@ -424,7 +446,8 @@ export const approvePayment = withAuth({
                   courses: [
                     ...oldCourses,
                     {
-                      course: item,
+                      // Ensure JSON-safe data (no Dates/BigInts/functions)
+                      course: JSON.parse(JSON.stringify(item)),
                       currentEpisode: 0,
                     },
                   ],
@@ -433,7 +456,8 @@ export const approvePayment = withAuth({
                 await tx.student.update({
                   where: { id: student.id },
                   data: {
-                    bag: JSON.stringify(newStudentBag),
+                    // Ensure we store actual JSON (not a JSON-string) going forward.
+                    bag: JSON.parse(JSON.stringify(newStudentBag)),
                   },
                 });
               }

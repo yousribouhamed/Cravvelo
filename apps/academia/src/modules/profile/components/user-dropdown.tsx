@@ -32,20 +32,21 @@ interface ProfileDropdownProps {
 
 export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
   const { theme, setTheme } = useTheme();
-  const t = useTranslations("profile");
+  const tProfile = useTranslations("profile");
+  const tMenu = useTranslations("profile.menu");
 
   const toggleDarkMode = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
 
   const ProfileLinks = [
-    { url: "/profile", name: t("profile"), icon: User },
-    { url: "/profile/affiliates", name: t("affiliates"), icon: Users },
-    { url: "/profile/certificate", name: t("certificates"), icon: Award },
-    { url: "/profile/courses", name: t("courses"), icon: BookOpen },
-    { url: "/profile/products", name: t("products"), icon: Package },
-    { url: "/profile/payments", name: t("payments"), icon: CreditCard },
-    { url: "/profile/settings", name: t("settings"), icon: Settings },
+    { url: "/profile", name: tMenu("profile"), icon: User },
+    { url: "/profile/affiliates", name: tMenu("affiliates"), icon: Users },
+    { url: "/profile/certificate", name: tMenu("certificates"), icon: Award },
+    { url: "/profile/courses", name: tMenu("courses"), icon: BookOpen },
+    { url: "/profile/products", name: tMenu("products"), icon: Package },
+    { url: "/profile/payments", name: tMenu("payments"), icon: CreditCard },
+    { url: "/profile/settings", name: tMenu("settings"), icon: Settings },
   ];
 
   return (
@@ -57,13 +58,13 @@ export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
           className="flex cursor-pointer items-center gap-2 text-gray-800 dark:text-gray-200"
         >
           <User className="w-5 h-5" />
-          {t("account")}
+          {tProfile("account")}
         </Button>
       </DropdownMenuTrigger>
 
       {/* Dropdown Content */}
       <DropdownMenuContent align="start" className="w-56">
-        <DropdownMenuLabel dir="rtl">{t("accountSettings")}</DropdownMenuLabel>
+        <DropdownMenuLabel>{tProfile("accountSettings")}</DropdownMenuLabel>
         <DropdownMenuSeparator />
 
         {ProfileLinks.map((link) => {
@@ -71,7 +72,6 @@ export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
           return (
             <DropdownMenuItem key={link.url} asChild>
               <Link
-                dir="rtl"
                 href={link.url}
                 className="flex items-center justify-start gap-2 w-full"
               >
@@ -87,7 +87,6 @@ export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
         {/* Dark Mode Toggle */}
         <DropdownMenuItem
           onClick={toggleDarkMode}
-          dir="rtl"
           className="flex items-center justify-start gap-2 cursor-pointer"
         >
           {theme === "dark" ? (
@@ -95,17 +94,16 @@ export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
           ) : (
             <Moon className="w-4 h-4" />
           )}
-          {theme === "dark" ? t("lightMode") : t("darkMode")}
+          {theme === "dark" ? tProfile("lightMode") : tProfile("darkMode")}
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={onLogout}
-          dir="rtl"
           className="text-red-600 focus:text-red-700"
         >
           <LogOut className="w-4 h-4 mr-2" />
-          {t("logout")}
+          {tProfile("logout")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

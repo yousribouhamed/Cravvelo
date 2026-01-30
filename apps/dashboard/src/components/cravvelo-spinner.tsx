@@ -49,8 +49,8 @@ const CravveloSpinner = React.forwardRef<HTMLSpanElement, SpinnerProps>(
             <span
               className={cn(
                 "block w-full h-[30%] rounded-full",
-                // Default colors that support dark mode
-                " dark:bg-gray-200"
+                // Visible in light + dark mode
+                "bg-gray-900 dark:bg-gray-200"
               )}
             />
           </span>

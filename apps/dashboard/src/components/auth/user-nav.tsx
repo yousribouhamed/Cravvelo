@@ -1,6 +1,14 @@
 "use client";
 
-import { ArrowLeft, User, ChevronDown, Eye, ArrowUpLeft } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  User,
+  ChevronDown,
+  Eye,
+  ArrowUpLeft,
+  ArrowUpRight,
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@ui/components/ui/avatar";
 import { Button, buttonVariants } from "@ui/components/ui/button";
 import {
@@ -46,6 +54,9 @@ export default function UserNav({ user }: UserNavProps) {
   const locale = useLocale();
   const isRTL = locale === "ar";
 
+  const VerificationDirectionIcon = isRTL ? ArrowLeft : ArrowRight;
+  const ExternalLinkDirectionIcon = isRTL ? ArrowUpLeft : ArrowUpRight;
+
   const displayName = useMemo(() => {
     const name = user?.firstName || user?.user_name || "";
     return name.trim() === "" ? t("defaultUser") : name;
@@ -64,7 +75,7 @@ export default function UserNav({ user }: UserNavProps) {
   const navigationItems = useMemo(
     () => [
       {
-        href: "/profile",
+        href: "/settings/profile",
         icon: User,
         label: t("profile"),
         external: false,
@@ -77,20 +88,21 @@ export default function UserNav({ user }: UserNavProps) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div
-          className={`${buttonVariants({
-            variant: "ghost",
-          })} cursor-pointer w-20 md:w-48 flex items-center rounded-xl border border-border justify-start gap-x-6 md:gap-x-4 bg-card hover:bg-accent/50 transition-colors !p-2`}
+          className={cn(
+            buttonVariants({ variant: "ghost" }),
+            "cursor-pointer w-20 md:w-48 flex items-center rounded-xl border border-border bg-card hover:bg-accent/50 transition-colors !p-2 py-4 !h-10",
+            isRTL ? "flex-row-reverse" : "flex-row"
+          )}
         >
-          <div className="w-[20%] h-full flex items-center justify-start">
-            <Avatar className="w-8 h-8 rounded-2xl">
-              <AvatarImage src={user?.avatar || ""} />
-              <AvatarFallback className="bg-muted text-muted-foreground">
-                AB
-              </AvatarFallback>
-            </Avatar>
-          </div>
-          <div className="md:w-[80%] w-4 h-full justify-end items-center flex gap-x-2">
-            <p className="text-md w-fit hidden md:flex text-foreground">
+          <Avatar className="w-8 h-8 rounded-md">
+            <AvatarImage src={user?.avatar || ""} />
+            <AvatarFallback className="bg-muted text-muted-foreground">
+              AB
+            </AvatarFallback>
+          </Avatar>
+
+          <div className="flex items-center gap-x-2 flex-1 justify-between">
+            <p className="text-md hidden md:flex text-foreground">
               {displayName}
             </p>
             <ChevronDown className="w-4 h-4 text-muted-foreground hover:text-foreground transition-colors" />
@@ -99,22 +111,21 @@ export default function UserNav({ user }: UserNavProps) {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
+       
         align={isRTL ? "start" : "end"}
         className="w-56 bg-popover border-border"
       >
         {/* User Profile Header */}
-        <div
-          dir={isRTL ? "rtl" : "ltr"}
-          className="w-full h-[70px] flex items-center justify-between px-2"
-        >
+        <div className="w-full h-[70px] flex items-center justify-between px-2">
           <Button
             size="icon"
             className="w-6 h-6 p-1 hover:bg-accent/50 transition-colors"
             variant="secondary"
           >
-            <Eye className="text-muted-foreground hover:text-foreground w-2 h-2 transition-colors " />
+            <Eye className="text-muted-foreground hover:text-foreground w-3 h-3 transition-colors" />
           </Button>
-          <div className="cursor-pointer flex justify-center items-end gap-y-2 w-full h-full flex-col hover:opacity-80 transition-opacity">
+
+          <div className="cursor-pointer flex flex-col items-end justify-center flex-1 hover:opacity-80 transition-opacity">
             <Avatar className="w-8 h-8 rounded-md">
               <AvatarImage src={user?.avatar || ""} />
               <AvatarFallback className="bg-muted text-muted-foreground">
@@ -131,16 +142,16 @@ export default function UserNav({ user }: UserNavProps) {
 
         {/* Verification Section */}
         <div className="w-full h-[80px] flex flex-col px-2">
-          <div className="w-full h-[50px] flex items-center justify-between">
-            <ArrowLeft className="w-4 h-4 text-muted-foreground" />
-            <div className={cn(
-              "w-[70%] h-full flex items-center gap-x-2",
-              isRTL ? "justify-end" : "justify-start"
-            )}>
-              <p className={cn(
-                "text-sm text-foreground",
-                isRTL ? "text-start" : "text-end"
-              )}>
+          <div
+            className={cn(
+              "w-full h-[50px] flex items-center justify-between",
+              isRTL ? "flex-row" : "flex-row-reverse"
+            )}
+          >
+            <VerificationDirectionIcon className="w-4 h-4 text-muted-foreground" />
+
+            <div className="flex items-center gap-x-2">
+              <p className="text-sm text-foreground">
                 {verificationText}
               </p>
               <Image
@@ -151,10 +162,8 @@ export default function UserNav({ user }: UserNavProps) {
               />
             </div>
           </div>
-          <div
-            dir={isRTL ? "rtl" : "ltr"}
-            className="w-full h-[20px] flex justify-center items-center"
-          >
+
+          <div className="w-full h-[20px] flex items-center">
             <Progress
               value={verificationProgress}
               className="h-1 w-full bg-muted"
@@ -169,12 +178,15 @@ export default function UserNav({ user }: UserNavProps) {
           {navigationItems.map((item) => (
             <DropdownMenuItem
               key={item.href}
-              className="w-full h-full flex justify-between items-center hover:bg-accent focus:bg-accent transition-colors"
+              className="hover:bg-accent focus:bg-accent transition-colors"
             >
               <Link
-                className="cursor-pointer w-full h-full flex justify-between items-center p-2 text-foreground hover:text-foreground/80 transition-colors"
                 href={item.href}
                 target={item.external ? "_blank" : undefined}
+                className={cn(
+                  "w-full flex items-center justify-between p-2 text-foreground hover:text-foreground/80 transition-colors",
+                  isRTL ? "flex-row-reverse" : "flex-row"
+                )}
               >
                 <item.icon className="h-4 w-4" />
                 <span>{item.label}</span>
@@ -182,22 +194,24 @@ export default function UserNav({ user }: UserNavProps) {
             </DropdownMenuItem>
           ))}
 
-          {/* Academy Preview - Conditional Item */}
+          {/* Academy Preview */}
           <DropdownMenuItem
             disabled={!user?.subdomain}
-            className="w-full h-full flex justify-between items-center hover:bg-accent focus:bg-accent data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed transition-colors"
+            className="hover:bg-accent focus:bg-accent transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed"
           >
             <Link
-              target="_blank"
-              className={`w-full h-full flex justify-between items-center p-2 text-foreground transition-colors ${
-                user?.subdomain
-                  ? "cursor-pointer hover:text-foreground/80"
-                  : "cursor-not-allowed opacity-50"
-              }`}
               href={user?.subdomain ? `https://${user.subdomain}` : "#"}
+              target="_blank"
               onClick={!user?.subdomain ? (e) => e.preventDefault() : undefined}
+              className={cn(
+                "w-full flex items-center justify-between p-2 text-foreground transition-colors",
+                isRTL ? "flex-row-reverse" : "flex-row",
+                user?.subdomain
+                  ? "hover:text-foreground/80"
+                  : "cursor-not-allowed opacity-50"
+              )}
             >
-              <ArrowUpLeft className="h-4 w-4" />
+              <ExternalLinkDirectionIcon className="h-4 w-4" />
               <span>{t("academyPreview")}</span>
             </Link>
           </DropdownMenuItem>

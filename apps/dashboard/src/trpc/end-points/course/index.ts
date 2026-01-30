@@ -13,22 +13,28 @@ export const course = {
 
     .mutation(async ({ input, ctx }) => {
       try {
-        const course = await ctx.prisma.course
-          .create({
-            data: {
-              status: "DRAFT",
-              title: input.title,
-              accountId: ctx.account.id,
-            },
-          })
-          .catch((err) => {
-            console.log(err);
-            throw new TRPCError({ code: "NOT_FOUND" });
-          });
+        const createdCourse = await ctx.prisma.course.create({
+          data: {
+            status: "DRAFT",
+            title: input.title,
+            accountId: ctx.account.id,
+          },
+        });
 
-        return { success: true, courseId: course.id, planExceeded: false };
-      } catch (error) {
-        return { success: false, courseId: undefined, error };
+        return {
+          success: true,
+          courseId: createdCourse.id,
+          planExceeded: false,
+        };
+      } catch (err) {
+        console.error("createCourse failed:", err);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message:
+            err instanceof Error
+              ? err.message
+              : "Failed to create course. Please try again.",
+        });
       }
     }),
 
@@ -273,6 +279,7 @@ export const course = {
           },
           data: {
             status: input.status,
+            
           },
         })
         .catch((err) => {

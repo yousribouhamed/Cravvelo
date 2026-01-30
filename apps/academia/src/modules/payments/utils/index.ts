@@ -88,6 +88,91 @@ export function courseToPaymentProduct(
   };
 }
 
+export interface ProductToPaymentProductParams {
+  product: {
+    id: string;
+    title: string;
+    description?: any;
+    thumbnailUrl?: string | null;
+    ProductPricingPlans?: Array<{
+      id: string;
+      isDefault: boolean;
+      PricingPlan: {
+        id: string;
+        name: string;
+        description?: string | null;
+        pricingType: "FREE" | "ONE_TIME" | "RECURRING";
+        price: number | null;
+        compareAtPrice?: number | null;
+        currency: string;
+        accessDuration?: "LIMITED" | "UNLIMITED" | null;
+        accessDurationDays?: number | null;
+        recurringDays?: number | null;
+        isActive: boolean;
+      };
+    }>;
+    price?: number | null; // legacy/back-compat
+  };
+  tenantCurrency?: string;
+}
+
+export function productToPaymentProduct(
+  params: ProductToPaymentProductParams
+): PaymentProduct {
+  const { product, tenantCurrency } = params;
+
+  const pricingOptions: PaymentPricingOption[] =
+    product.ProductPricingPlans?.filter((pp) => pp.PricingPlan != null)
+      .map((pp) => ({
+        id: pp.PricingPlan.id,
+        name: pp.PricingPlan.name,
+        description: pp.PricingPlan.description || undefined,
+        pricingType: pp.PricingPlan.pricingType,
+        price: pp.PricingPlan.price ?? 0,
+        compareAtPrice: pp.PricingPlan.compareAtPrice ?? undefined,
+        currency: pp.PricingPlan.currency,
+        accessDuration: pp.PricingPlan.accessDuration || undefined,
+        accessDurationDays: pp.PricingPlan.accessDurationDays ?? undefined,
+        recurringDays: pp.PricingPlan.recurringDays ?? undefined,
+        isDefault: pp.isDefault,
+        isActive: pp.PricingPlan.isActive,
+      })) || [];
+
+  const defaultPricing =
+    pricingOptions.find((option) => option.isDefault) ||
+    pricingOptions[0] ||
+    null;
+
+  const mainPrice =
+    defaultPricing?.price ?? (product.price != null ? Number(product.price) : 0);
+
+  // Extract description (rich JSON or string)
+  let description = "Product description";
+  if (product.description) {
+    if (typeof product.description === "string") {
+      description = product.description;
+    } else if (product.description.text) {
+      description = product.description.text;
+    } else {
+      description = JSON.stringify(product.description).slice(0, 100) + "...";
+    }
+  }
+
+  const currency = tenantCurrency || defaultPricing?.currency || "DZD";
+
+  return {
+    id: product.id,
+    name: product.title,
+    description,
+    price: mainPrice,
+    currency,
+    image: product.thumbnailUrl || undefined,
+    pricingOptions,
+    selectedPricingId: defaultPricing?.id,
+    type: "PRODUCT",
+  };
+}
+
 // Helper function to get selected pricing option
 export function getSelectedPricingOption(
   product: PaymentProduct

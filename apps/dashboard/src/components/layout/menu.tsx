@@ -252,7 +252,7 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onItemClick }) => {
           })}
         </Accordion>
 
-        <InstalledAppsBox />
+        {/* <InstalledAppsBox /> */}
       </div>
     </ScrollArea>
   );

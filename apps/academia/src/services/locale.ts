@@ -8,17 +8,18 @@ import { preferredLanguageToLocale } from "@/lib/i18n/preferred-language";
 const COOKIE_NAME = "NEXT_LOCALE";
 
 export async function getUserLocale() {
-  const cookieLocale = (await cookies()).get(COOKIE_NAME)?.value;
-
-  if (cookieLocale && locales.includes(cookieLocale as Locale)) {
-    return cookieLocale as Locale;
-  }
-
-  // If no valid cookie, derive from tenant preferredLanguage (no cookie write here).
   const tenant = (await headers()).get("x-tenant");
   if (tenant) {
     const website = await getTenantWebsite(tenant);
-    return preferredLanguageToLocale(website?.Account?.preferredLanguage);
+    // Prefer the website's language (tenant-level), then fallback to the account's preference.
+    return preferredLanguageToLocale(
+      (website as any)?.language ?? website?.Account?.preferredLanguage
+    );
+  }
+
+  const cookieLocale = (await cookies()).get(COOKIE_NAME)?.value;
+  if (cookieLocale && locales.includes(cookieLocale as Locale)) {
+    return cookieLocale as Locale;
   }
 
   return defaultLocale;

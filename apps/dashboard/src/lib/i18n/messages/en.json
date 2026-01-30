@@ -109,6 +109,40 @@
     "academyPreview": "Academy Preview",
     "academy": "Academy"
   },
+  "notifications": {
+    "ui": {
+      "title": "Notifications",
+      "tabs": {
+        "all": "All",
+        "archived": "Archived"
+      },
+      "emptyStates": {
+        "noUnread": "No unread notifications yet",
+        "noArchived": "No archived notifications yet",
+        "noNotificationsAlt": "No notifications",
+        "noArchivedAlt": "No archived notifications"
+      },
+      "badge": {
+        "new": "New"
+      },
+      "actions": {
+        "archive": "Archive this notification",
+        "archived": "This notification is archived"
+      },
+      "errors": {
+        "updateFailed": "Failed to update notifications",
+        "markReadFailed": "Failed to mark notification as read",
+        "archiveFailed": "Failed to archive notification"
+      },
+      "ariaLabel": "Notifications {count}",
+      "ariaLabelWithNew": "Notifications - {count} new"
+    },
+    "events": {
+      "review_received": "{studentName, select, null {You received a new review for {courseTitle}.} other {{studentName} left a {rating}-star review for {courseTitle}.}}",
+      "sale_created": "New sale created ({method}): {itemTitle} - {amount} {currency}",
+      "p2p_validation_required": "P2P sale requires validation: {itemTitle} - {amount} {currency}"
+    }
+  },
   "auth": {
     "logout": "Logout",
     "signIn": {
@@ -216,6 +250,8 @@
   },
   "sidebar": {
     "home": "Home",
+    "courses": "Courses",
+    "digitalProducts": "Digital Products",
     "payments": "Payments",
     "paymentRecords": "Payment Records",
     "paymentMethods": "Payment Methods",

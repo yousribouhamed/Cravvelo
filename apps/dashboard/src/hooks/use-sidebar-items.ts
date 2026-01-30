@@ -17,6 +17,8 @@ import {
   Award,
   MessageSquare,
   Share2,
+  BookOpen,
+  Package,
 } from "lucide-react";
 
 export interface SidebarItem {
@@ -40,6 +42,18 @@ export function useSidebarItems(): SidebarItem[] {
         title: t("home"),
         slug: "/",
         icon: LayoutGrid,
+        subitems: [],
+      },
+      {
+        title: t("courses"),
+        slug: "/courses",
+        icon: BookOpen,
+        subitems: [],
+      },
+      {
+        title: t("digitalProducts"),
+        slug: "/products",
+        icon: Package,
         subitems: [],
       },
       {
@@ -91,12 +105,12 @@ export function useSidebarItems(): SidebarItem[] {
           },
         ],
       },
-      {
-        title: t("applications"),
-        slug: "/applications",
-        icon: Puzzle,
-        subitems: [],
-      },
+      // {
+      //   title: t("applications"),
+      //   slug: "/applications",
+      //   icon: Puzzle,
+      //   subitems: [],
+      // },
       {
         title: t("settings"),
         icon: Settings,

@@ -9,15 +9,17 @@ import { Loader } from "@/src/components/loader-icon";
 
 export default function InvoicesPage() {
   const columns = useInvoiceColumns();
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError, error, refetch, isFetching } = useQuery({
+    queryKey: ["invoices"],
     queryFn: async () => {
       const res = await getAllInvoices();
 
       return res.invoices;
     },
+    retry: 1,
   });
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return (
       <div className="w-full h-[400px] flex items-center justify-center ">
         <Loader size={16} />
@@ -25,9 +27,25 @@ export default function InvoicesPage() {
     );
   }
 
+  if (isError) {
+    return (
+      <div className="w-full min-h-[300px] flex flex-col items-center justify-center gap-3 text-center">
+        <p className="text-sm text-gray-600">
+          {error instanceof Error ? error.message : "Failed to load invoices."}
+        </p>
+        <button
+          className="text-sm font-medium text-primary underline"
+          onClick={() => refetch()}
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={data ?? []} />
     </div>
   );
 }

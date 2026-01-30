@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Crop as CropIcon, Upload } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 // Utility: crop image into a canvas and return base64 blob
 async function getCroppedImg(
@@ -66,6 +67,9 @@ export default function ProfileImageInput({
   name,
   disabled = false,
 }: Props) {
+  const tProfile = useTranslations("profile");
+  const tImage = useTranslations("profile.image");
+
   const [open, setOpen] = useState(false);
   const [upImg, setUpImg] = useState<string | null>(null);
   const [crop, setCrop] = useState<Crop>(DEFAULT_CROP);
@@ -138,7 +142,7 @@ export default function ProfileImageInput({
             {name
               ?.split(" ")
               .map((n) => n[0])
-              .join("") || "م"}
+              .join("") || tImage("fallbackInitial")}
           </AvatarFallback>
         </Avatar>
 
@@ -160,7 +164,7 @@ export default function ProfileImageInput({
           {/* رفع صورة */}
           <Button variant="outline" className="relative">
             <Upload className="w-4 h-4 mr-2" />
-            {value ? "تغيير الصورة" : "رفع صورة"}
+            {value ? tImage("change") : tImage("upload")}
             <Input
               type="file"
               accept="image/*"
@@ -173,7 +177,7 @@ export default function ProfileImageInput({
           {value && (
             <Button variant="outline" onClick={handleCropExisting}>
               <CropIcon className="w-4 h-4 mr-2" />
-              قص الصورة
+              {tImage("crop")}
             </Button>
           )}
         </div>
@@ -183,7 +187,7 @@ export default function ProfileImageInput({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>قص صورتك</DialogTitle>
+            <DialogTitle>{tImage("cropYourPhoto")}</DialogTitle>
           </DialogHeader>
 
           <div className="flex justify-center">
@@ -198,7 +202,7 @@ export default function ProfileImageInput({
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   ref={imgRef}
-                  alt="قص الصورة"
+                  alt={tImage("cropAlt")}
                   src={upImg}
                   style={{ maxHeight: "400px", maxWidth: "100%" }}
                   onLoad={(e) => onImageLoaded(e.currentTarget)}
@@ -209,10 +213,10 @@ export default function ProfileImageInput({
 
           <DialogFooter>
             <Button variant="outline" onClick={handleCancel}>
-              إلغاء
+              {tProfile("cancel")}
             </Button>
             <Button onClick={handleSave} disabled={!completedCrop}>
-              حفظ
+              {tProfile("save")}
             </Button>
           </DialogFooter>
         </DialogContent>

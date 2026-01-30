@@ -37,6 +37,31 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
     notes: "",
   });
   const [isDragActive, setIsDragActive] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
+
+  const { getActiveConnection } = usePaymentContext();
+  const p2pConnection = getActiveConnection("P2P");
+  const p2pConfigRaw = p2pConnection?.config;
+  const p2pConfig =
+    typeof p2pConfigRaw === "string"
+      ? (() => {
+          try {
+            return JSON.parse(p2pConfigRaw);
+          } catch {
+            return null;
+          }
+        })()
+      : p2pConfigRaw ?? null;
+  const bankDetails = p2pConfig as
+    | {
+        accountHolder?: string;
+        bankName?: string;
+        accountNumber?: string;
+        routingNumber?: string;
+        bankDetails?: string;
+        notes?: string;
+      }
+    | null;
 
   const createP2pMutation = useMutation({
     mutationFn: async (payload: PaymentIntentPayload) => {
@@ -54,10 +79,12 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
     onSuccess: () => {
       toast.success("تم إرسال إثبات الدفع بنجاح");
       setFormData({ paymentProof: null, notes: "" });
+      setIsLocked(true); // keep locked to prevent re-submission
     },
     onError: (error) => {
       console.error(error);
       toast.error("حدث خطأ أثناء إرسال إثبات الدفع");
+      setIsLocked(false);
     },
   });
 
@@ -71,6 +98,7 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
+    if (isLocked) return;
     setIsDragActive(false);
     const files = e.dataTransfer.files;
     if (files.length > 0) {
@@ -80,15 +108,18 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
+    if (isLocked) return;
     setIsDragActive(true);
   };
 
   const handleDragLeave = (e: React.DragEvent) => {
     e.preventDefault();
+    if (isLocked) return;
     setIsDragActive(false);
   };
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isLocked) return;
     const files = e.target.files;
     if (files && files.length > 0) {
       handleFileUpload(files[0]);
@@ -96,6 +127,7 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
   };
 
   const removeFile = () => {
+    if (isLocked) return;
     setFormData((prev) => ({ ...prev, paymentProof: null }));
   };
 
@@ -105,6 +137,7 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLocked) return;
 
     if (!selectedProduct) {
       toast.error("لم يتم اختيار منتج");
@@ -117,6 +150,9 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
     }
 
     try {
+      // Immediately lock all interactions to avoid double submit during upload.
+      setIsLocked(true);
+
       // Upload to S3
       const fd = new FormData();
       fd.append("file", formData.paymentProof);
@@ -136,16 +172,74 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
     } catch (err) {
       console.error(err);
       toast.error("تعذر رفع الملف");
+      setIsLocked(false);
     }
   };
 
   const isSubmitLoading = isLoading || createP2pMutation.isPending;
+  const isDisabled = isSubmitLoading || isLocked;
 
   return (
     <form onSubmit={handleSubmit} className="h-full flex flex-col">
       <Card className="flex-1">
         <CardContent className="p-4">
           <div className="space-y-6">
+            {/* Bank Details (P2P instructions) */}
+            {bankDetails && (
+              <div className="space-y-2 rounded-lg border border-border bg-muted/20 p-4">
+                <p className="text-sm font-semibold text-foreground text-right">
+                  {t("bankDetailsTitle") ?? "بيانات التحويل البنكي"}
+                </p>
+                <div className="space-y-1 text-sm text-foreground/90 text-right">
+                  {bankDetails.bankName && (
+                    <p>
+                      <span className="font-medium">
+                        {t("bankName") ?? "البنك"}:
+                      </span>{" "}
+                      {bankDetails.bankName}
+                    </p>
+                  )}
+                  {bankDetails.accountHolder && (
+                    <p>
+                      <span className="font-medium">
+                        {t("accountHolder") ?? "اسم صاحب الحساب"}:
+                      </span>{" "}
+                      {bankDetails.accountHolder}
+                    </p>
+                  )}
+                  {bankDetails.accountNumber && (
+                    <p>
+                      <span className="font-medium">
+                        {t("accountNumber") ?? "رقم الحساب"}:
+                      </span>{" "}
+                      {bankDetails.accountNumber}
+                    </p>
+                  )}
+                  {bankDetails.routingNumber && (
+                    <p>
+                      <span className="font-medium">
+                        {t("routingNumber") ?? "رقم التوجيه"}:
+                      </span>{" "}
+                      {bankDetails.routingNumber}
+                    </p>
+                  )}
+                  {bankDetails.bankDetails && (
+                    <p className="whitespace-pre-wrap">
+                      <span className="font-medium">
+                        {t("ibanSwift") ?? "تفاصيل إضافية"}:
+                      </span>{" "}
+                      {bankDetails.bankDetails}
+                    </p>
+                  )}
+                  {bankDetails.notes && (
+                    <p className="whitespace-pre-wrap text-muted-foreground">
+                      {bankDetails.notes}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Payment Proof Upload */}
             <div className="space-y-2">
               <Label className="block text-right text-foreground">
@@ -157,16 +251,16 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
                     ? "border-green-500 bg-green-50 dark:bg-green-950/50"
                     : "border-gray-300 dark:border-gray-600"
                 }`}
-                onDrop={handleDrop}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
+                onDrop={isDisabled ? undefined : handleDrop}
+                onDragOver={isDisabled ? undefined : handleDragOver}
+                onDragLeave={isDisabled ? undefined : handleDragLeave}
               >
                 {formData.paymentProof ? (
                   <div className="flex items-center justify-between bg-green-100 dark:bg-green-900/30 rounded-md p-3">
                     <button
                       type="button"
                       onClick={removeFile}
-                      disabled={isLoading}
+                      disabled={isDisabled}
                       className="text-red-600 hover:text-red-700 p-1"
                     >
                       <X className="w-4 h-4" />
@@ -197,7 +291,7 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
                           className="hidden"
                           accept="image/*,.pdf"
                           onChange={handleFileInputChange}
-                          disabled={isLoading}
+                          disabled={isDisabled}
                         />
                       </label>
                     </div>
@@ -225,7 +319,7 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
                 className="text-right bg-background resize-none"
                 dir="rtl"
                 rows={3}
-                disabled={isLoading}
+                disabled={isDisabled}
               />
             </div>
           </div>
@@ -238,10 +332,10 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
           size={"lg"}
           type="submit"
           className="w-full h-[40px]"
-          disabled={!isFormValid() || isSubmitLoading}
+          disabled={!isFormValid() || isDisabled}
           loading={isSubmitLoading}
         >
-          {t("submitButton")}
+          {isLocked && !isSubmitLoading ? t("submittedButton") : t("submitButton")}
         </BrandButton>
       </div>
     </form>

@@ -28,6 +28,10 @@ export const getAllNotifications = cache(
       where: {
         accountId,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 30,
     });
     return notifications;
   }

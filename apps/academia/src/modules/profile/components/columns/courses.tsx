@@ -3,6 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
+import { useMemo } from "react";
 import {
   BookOpen,
   Calendar,
@@ -11,13 +12,14 @@ import {
   Clock,
   XCircle,
 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 
-type CourseSale = {
+export type CourseSale = {
   id: string;
   orderNumber: number;
   amount: number;
   status: string;
-  createdAt: Date;
+  createdAt: Date | string;
   Course: {
     id: string;
     title: string;
@@ -25,142 +27,164 @@ type CourseSale = {
   } | null;
 };
 
-const statusMap: Record<
-  string,
-  {
-    label: string;
-    variant: "default" | "secondary" | "destructive" | "outline";
-    icon: React.ComponentType<{ className?: string }>;
-  }
-> = {
-  CREATED: {
-    label: "تم الإنشاء",
-    variant: "secondary",
-    icon: Clock,
-  },
-  COMPLETED: {
-    label: "مكتمل",
-    variant: "default",
-    icon: CheckCircle,
-  },
-  CANCELLED: {
-    label: "ملغي",
-    variant: "destructive",
-    icon: XCircle,
-  },
+type StatusConfig = {
+  label: string;
+  variant: "default" | "secondary" | "destructive" | "outline";
+  icon: React.ComponentType<{ className?: string }>;
 };
 
-export const CourseColumns: ColumnDef<CourseSale>[] = [
-  {
-    accessorKey: "Course.title",
-    header: () => (
-      <div className="flex items-center gap-2 font-semibold">
-        <BookOpen className="h-4 w-4" />
-        اسم الدورة
-      </div>
-    ),
-    cell: ({ row }) => {
-      const course = row.original.Course;
-      const thumbnailUrl = course?.thumbnailUrl;
+export function useCourseColumns(): ColumnDef<CourseSale>[] {
+  const t = useTranslations("profile.courses");
+  const locale = useLocale();
 
-      if (!course) {
-        return (
-          <span className="text-gray-400 text-sm">
-            الدورة غير موجودة
-          </span>
-        );
-      }
+  const dateLocale = locale === "ar" ? "ar-DZ" : "en-US";
 
-      return (
-        <div className="flex items-center gap-3">
-          {thumbnailUrl && (
-            <div className="relative h-12 w-12 rounded-lg overflow-hidden border">
-              <Image
-                src={thumbnailUrl}
-                alt={course.title}
-                fill
-                className="object-cover"
-              />
+  return useMemo(() => {
+    const statusMap: Record<string, StatusConfig> = {
+      CREATED: {
+        label: t("status.CREATED"),
+        variant: "secondary",
+        icon: Clock,
+      },
+      COMPLETED: {
+        label: t("status.COMPLETED"),
+        variant: "default",
+        icon: CheckCircle,
+      },
+      CANCELLED: {
+        label: t("status.CANCELLED"),
+        variant: "destructive",
+        icon: XCircle,
+      },
+    };
+
+    const formatAmount = (amount: number) => {
+      const formatted = new Intl.NumberFormat(dateLocale).format(amount);
+      return `${formatted} ${t("currency")}`;
+    };
+
+    const formatDate = (rawDate: Date | string) => {
+      const d = new Date(rawDate);
+      if (Number.isNaN(d.getTime())) return String(rawDate);
+
+      return {
+        date: d.toLocaleDateString(dateLocale, {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        }),
+        weekday: d.toLocaleDateString(dateLocale, { weekday: "short" }),
+      };
+    };
+
+    return [
+      {
+        accessorKey: "Course.title",
+        header: () => (
+          <div className="flex items-center gap-2 font-semibold">
+            <BookOpen className="h-4 w-4" />
+            {t("columns.courseName")}
+          </div>
+        ),
+        cell: ({ row }) => {
+          const course = row.original.Course;
+          const thumbnailUrl = course?.thumbnailUrl;
+
+          if (!course) {
+            return (
+              <span className="text-gray-400 text-sm">
+                {t("courseNotFound")}
+              </span>
+            );
+          }
+
+          return (
+            <div className="flex items-center gap-3">
+              {thumbnailUrl && (
+                <div className="relative h-12 w-12 rounded-lg overflow-hidden border">
+                  <Image
+                    src={thumbnailUrl}
+                    alt={course.title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              )}
+              <span className="font-medium text-gray-900 dark:text-gray-100">
+                {course.title}
+              </span>
             </div>
-          )}
-          <span className="font-medium text-gray-900 dark:text-gray-100">
-            {course.title}
-          </span>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "amount",
-    header: () => (
-      <div className="flex items-center gap-2 font-semibold">
-        <DollarSign className="h-4 w-4" />
-        المبلغ
-      </div>
-    ),
-    cell: ({ row }) => {
-      const amount = row.getValue("amount") as number;
-      return (
-        <span className="font-medium">
-          {amount.toLocaleString()} دج
-        </span>
-      );
-    },
-  },
-  {
-    accessorKey: "status",
-    header: () => (
-      <div className="flex items-center gap-2 font-semibold">الحالة</div>
-    ),
-    cell: ({ row }) => {
-      const status = row.getValue("status") as string;
-      const statusConfig =
-        statusMap[status] ||
-        statusMap.CREATED || {
-          label: status,
-          variant: "outline" as const,
-          icon: Clock,
-        };
-      const { label, variant, icon: Icon } = statusConfig;
+          );
+        },
+      },
+      {
+        accessorKey: "amount",
+        header: () => (
+          <div className="flex items-center gap-2 font-semibold">
+            <DollarSign className="h-4 w-4" />
+            {t("columns.amount")}
+          </div>
+        ),
+        cell: ({ row }) => {
+          const amountRaw = row.getValue("amount");
+          const amount = typeof amountRaw === "number" ? amountRaw : Number(amountRaw);
+          return <span className="font-medium">{formatAmount(amount)}</span>;
+        },
+      },
+      {
+        accessorKey: "status",
+        header: () => (
+          <div className="flex items-center gap-2 font-semibold">
+            {t("columns.status")}
+          </div>
+        ),
+        cell: ({ row }) => {
+          const status = String(row.getValue("status") ?? "");
+          const statusConfig =
+            statusMap[status] ||
+            ({
+              label: status,
+              variant: "outline",
+              icon: Clock,
+            } satisfies StatusConfig);
 
-      return (
-        <Badge
-          variant={variant}
-          className="flex items-center gap-1 px-2 py-1 text-xs font-medium w-fit"
-        >
-          <Icon className="h-3 w-3" />
-          {label}
-        </Badge>
-      );
-    },
-  },
-  {
-    accessorKey: "createdAt",
-    header: () => (
-      <div className="flex items-center gap-2 font-semibold">
-        <Calendar className="h-4 w-4" />
-        تاريخ الشراء
-      </div>
-    ),
-    cell: ({ row }) => {
-      const date = row.getValue("createdAt") as Date;
+          const { label, variant, icon: Icon } = statusConfig;
 
-      return (
-        <div className="flex flex-col">
-          <span className="text-sm font-medium">
-            {new Date(date).toLocaleDateString("ar-DZ", {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            })}
-          </span>
-          <span className="text-xs text-gray-500">
-            {new Date(date).toLocaleDateString("en-US", {
-              weekday: "short",
-            })}
-          </span>
-        </div>
-      );
-    },
-  },
-];
+          return (
+            <Badge
+              variant={variant}
+              className="flex items-center gap-1 px-2 py-1 text-xs font-medium w-fit"
+            >
+              <Icon className="h-3 w-3" />
+              {label}
+            </Badge>
+          );
+        },
+      },
+      {
+        accessorKey: "createdAt",
+        header: () => (
+          <div className="flex items-center gap-2 font-semibold">
+            <Calendar className="h-4 w-4" />
+            {t("columns.purchaseDate")}
+          </div>
+        ),
+        cell: ({ row }) => {
+          const rawDate = row.getValue("createdAt") as Date | string;
+          const formatted = formatDate(rawDate);
+
+          if (typeof formatted === "string") {
+            return <span className="text-sm font-medium">{formatted}</span>;
+          }
+
+          return (
+            <div className="flex flex-col">
+              <span className="text-sm font-medium">{formatted.date}</span>
+              <span className="text-xs text-gray-500">{formatted.weekday}</span>
+            </div>
+          );
+        },
+      },
+    ] satisfies ColumnDef<CourseSale>[];
+  }, [dateLocale, t]);
+}

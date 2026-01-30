@@ -20,42 +20,43 @@ interface SidebarProps {}
 export default function ProfileSidebar({}: SidebarProps) {
   const pathname = usePathname();
   const { primaryColor, primaryColorDark } = useTenantBranding();
-  const t = useTranslations("profile");
+  const tProfile = useTranslations("profile");
+  const tMenu = useTranslations("profile.menu");
 
   const Links = [
     {
       url: "/profile",
-      name: t("profile"),
+      name: tMenu("profile"),
       icon: User,
     },
     {
       url: "/profile/affiliates",
-      name: t("affiliates"),
+      name: tMenu("affiliates"),
       icon: Users,
     },
     {
       url: "/profile/certificate",
-      name: t("certificates"),
+      name: tMenu("certificates"),
       icon: Award,
     },
     {
       url: "/profile/courses",
-      name: t("courses"),
+      name: tMenu("courses"),
       icon: BookOpen,
     },
     {
       url: "/profile/products",
-      name: t("products"),
+      name: tMenu("products"),
       icon: Package,
     },
     {
       url: "/profile/payments",
-      name: t("payments"),
+      name: tMenu("payments"),
       icon: CreditCard,
     },
     {
       url: "/profile/settings",
-      name: t("settings"),
+      name: tMenu("settings"),
       icon: Settings,
     },
   ];
@@ -64,10 +65,10 @@ export default function ProfileSidebar({}: SidebarProps) {
     <div className="w-full bg-card text-card-foreground border border-gray-200/80 dark:border-[#1A1A1D] rounded-2xl p-6 shadow-sm">
       <div className="mb-6">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-          {t("dashboard")}
+          {tProfile("dashboard")}
         </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          {t("manageAccount")}
+          {tProfile("manageAccount")}
         </p>
       </div>
 
@@ -120,9 +121,11 @@ export default function ProfileSidebar({}: SidebarProps) {
           </div>
           <div>
             <p className="text-sm font-medium text-gray-900 dark:text-white">
-              {t("user")}
+              {tProfile("user")}
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">{t("premiumMember")}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              {tProfile("premiumMember")}
+            </p>
           </div>
         </div>
       </div>

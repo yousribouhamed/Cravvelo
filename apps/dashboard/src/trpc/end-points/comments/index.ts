@@ -26,6 +26,7 @@ export const comments = {
         },
         data: {
           status: "rejected",
+          isApproved: false,
         },
       });
 
@@ -45,6 +46,9 @@ export const comments = {
         },
         data: {
           status: "approved",
+          isApproved: true,
+          // Ensure an approved comment is visible on the public course page
+          isPublic: true,
         },
       });
 

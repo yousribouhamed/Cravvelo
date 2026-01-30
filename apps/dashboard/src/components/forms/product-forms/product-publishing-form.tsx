@@ -20,7 +20,7 @@ import { maketoast } from "../../toasts";
 import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
-import { Chapter, Course, Product } from "database";
+import {  Product } from "database";
 import { useTranslations } from "next-intl";
 // import CourseContent from "@/src/app/(academy)/_components/course-component/course-content";
 
@@ -53,7 +53,7 @@ function ProductPublishingForm({ product }: PublishProductFormProps) {
     {
       title: t("availableToAll"),
       description: t("availableToAllDescription"),
-      value: "PUBLISED",
+      value: "PUBLISHED",
     },
   ];
   const form = useForm<z.infer<typeof addTextSchema>>({

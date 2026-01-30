@@ -124,7 +124,6 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
   const grossRevenue = data?.grossRevenue || 0;
   const todayRevenue = data?.todayRevenue || 0;
   const yesterdayRevenue = data?.yesterdayRevenue || 0;
-  const balance = data?.walletBalance || 0;
   
   // New metrics
   const successfulPayments = data?.successfulPayments || 0;
@@ -183,25 +182,6 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
           showPresets={true}
         />
       </div>
-
-      {/* Balance Card - at the top */}
-      <Card className="border border-gray-200 dark:border-border bg-card" dir={isRTL ? "rtl" : "ltr"}>
-        <CardContent className="p-4 sm:p-6">
-          <div className={cn("flex items-center justify-between", isRTL && "flex-row-reverse")}>
-            <div className={cn(isRTL && "text-right")}>
-              <p className="text-sm font-medium text-muted-foreground mb-1">
-                {t("balance")}
-              </p>
-              <p className="text-2xl sm:text-3xl font-bold text-foreground">
-                {formatPrice(balance)}
-              </p>
-            </div>
-            <button className="text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors">
-              {t("view")}
-            </button>
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Loading State */}
       {(isLoading || currencyLoading) && !data && (

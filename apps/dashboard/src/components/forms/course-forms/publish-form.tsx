@@ -53,7 +53,7 @@ function PublishCourseForm({ course, chapters }: PublishCourseFormProps) {
     {
       title: t("selectionButtons.availableToAll"),
       description: t("selectionButtons.availableToAllDescription"),
-      value: "PUBLISED",
+      value: "PUBLISHED",
     },
   ];
 

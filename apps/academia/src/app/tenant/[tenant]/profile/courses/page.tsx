@@ -1,6 +1,5 @@
 import { getStudentCourses } from "@/modules/profile/actions/courses.actions";
-import { CourseColumns } from "@/modules/profile/components/columns/courses";
-import { DataTable } from "@/modules/profile/components/data-table";
+import CoursesTable from "@/modules/profile/components/courses-table";
 import { getTranslations } from "next-intl/server";
 
 export default async function Page() {
@@ -11,7 +10,7 @@ export default async function Page() {
     return (
       <div className="bg-card h-full rounded-2xl flex flex-col gap-y-4 p-4 border">
         <h2 className="font-bold text-xl">{t("title")}</h2>
-        <DataTable columns={CourseColumns} data={res.data} />
+        <CoursesTable data={res.data} />
       </div>
     );
   }

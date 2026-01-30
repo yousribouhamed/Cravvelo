@@ -10,19 +10,39 @@ export async function POST(request: NextRequest) {
     case "checkout.paid":
       const studentId = payload.data.metadata[0]?.studentId;
       const productId = payload.data.metadata[0]?.productId;
+      if (!studentId || !productId) return;
+
       const student = await prisma.student.findFirst({
         where: {
           id: studentId,
         },
       });
 
-      const studentbag = JSON.parse(student.bag as string) as StudentBag;
+      if (!student) return;
+
+      const defaultBag: StudentBag = { courses: [], products: [], certificates: [] };
+      const studentbag: StudentBag = (() => {
+        const bag = (student as any)?.bag as unknown;
+        if (!bag) return defaultBag;
+        if (typeof bag === "string") {
+          try {
+            const parsed = JSON.parse(bag);
+            return parsed && typeof parsed === "object"
+              ? (parsed as StudentBag)
+              : defaultBag;
+          } catch {
+            return defaultBag;
+          }
+        }
+        return typeof bag === "object" ? (bag as StudentBag) : defaultBag;
+      })();
 
       const product = await prisma.product.findFirst({
         where: {
           id: productId,
         },
       });
+      if (!product) return;
 
       // Check if the course already exists in the student's bag.
       const theCourseExists =
@@ -42,7 +62,7 @@ export async function POST(request: NextRequest) {
 
       const newStudentBag = {
         ...studentbag,
-        products: [...oldData, product],
+        products: [...oldData, JSON.parse(JSON.stringify(product))],
       } as StudentBag;
 
       await prisma.student.update({
@@ -50,7 +70,7 @@ export async function POST(request: NextRequest) {
           id: student.id,
         },
         data: {
-          bag: JSON.stringify(newStudentBag),
+          bag: JSON.parse(JSON.stringify(newStudentBag)),
         },
       });
       // await create_product_sale({

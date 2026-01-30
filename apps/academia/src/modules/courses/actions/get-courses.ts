@@ -21,7 +21,7 @@ export const getAllCourses = withTenant({
               PricingPlan: true,
             },
             orderBy: {
-              isDefault: "desc", // Show default pricing plans first
+              isDefault: "desc", 
             },
           },
           _count: {
@@ -35,7 +35,10 @@ export const getAllCourses = withTenant({
 
       const websites = await db.website.findMany();
 
-      console.log(websites);
+
+      console.log(courses)
+
+     
 
       return {
         data: courses as CourseWithPricing[],
@@ -63,7 +66,7 @@ export const getCourseById = withTenant({
       const course = await db.course.findFirst({
         where: {
           id: input.courseId,
-          accountId, // Add accountId for security
+          accountId, 
         },
         include: {
           CoursePricingPlans: {
@@ -71,7 +74,7 @@ export const getCourseById = withTenant({
               PricingPlan: true,
             },
             orderBy: {
-              isDefault: "desc", // Show default pricing plans first
+              isDefault: "desc", 
             },
           },
           Chapter: {
@@ -95,7 +98,7 @@ export const getCourseById = withTenant({
             orderBy: {
               createdAt: "desc",
             },
-            take: 10, // Limit comments for performance
+            take: 10, 
           },
           _count: {
             select: {

@@ -105,7 +105,7 @@ const CravveloEditor: React.FC<CravveloEditorProps> = ({
         <div className="bg-card shadow-sm border-b border-border px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <FileText className="h-6 w-6 text-primary" />
+              <FileText className="h-6 w-6 text-foreground dark:text-primary" />
               <div className="text-sm text-muted-foreground">
                 {wordCount} words • {characterCount} characters
               </div>

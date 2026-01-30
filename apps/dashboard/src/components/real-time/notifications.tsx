@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, type FC } from "react";
+import Link from "next/link";
 import {
   Popover,
   PopoverContent,
@@ -32,6 +33,9 @@ import {
 import Image from "next/image";
 import { maketoast } from "../toasts";
 import { timeSince } from "./time";
+import { useLocale, useTranslations } from "next-intl";
+import { cn } from "@ui/lib/utils";
+import { useRouter } from "next/navigation";
 
 interface NotificationsProps {
   notifications: Notification[];
@@ -43,12 +47,17 @@ const Notifications: FC<NotificationsProps> = ({
   accountId,
 }) => {
   const isMounted = useMounted();
+  const t = useTranslations();
+  const locale = useLocale();
+  const isRTL = locale === "ar";
+  const router = useRouter();
 
   const { data: ourNotifications = [], refetch } =
     trpc.getAllNotifications.useQuery(undefined, {
       initialData: notifications,
       staleTime: 1000 * 60 * 2, // Consider data fresh for 2 minutes
-      refetchOnMount: false, // Don't refetch on mount since we have initialData from server
+      // If a page passes [] as initialData, we must refetch once to avoid a permanently empty list.
+      refetchOnMount: notifications.length === 0,
       refetchOnWindowFocus: false, // Don't refetch when window regains focus
     });
 
@@ -72,12 +81,12 @@ const Notifications: FC<NotificationsProps> = ({
           error
         );
 
-        maketoast.errorWithText({ text: "خطأ في تحديث الإشعارات" });
+        maketoast.errorWithText({ text: t("notifications.ui.errors.updateFailed") });
       }
     },
     onError: (err) => {
       console.error("Failed to mark notification as read:", err);
-      maketoast.errorWithText({ text: "فشل في تحديث الإشعار" });
+      maketoast.errorWithText({ text: t("notifications.ui.errors.markReadFailed") });
     },
   });
 
@@ -86,13 +95,13 @@ const Notifications: FC<NotificationsProps> = ({
       try {
         await refetch();
       } catch (error) {
-        maketoast.errorWithText({ text: "خطأ في تحديث الإشعارات" });
+        maketoast.errorWithText({ text: t("notifications.ui.errors.updateFailed") });
       }
     },
     onError: (err) => {
       console.error("Failed to archive notification:", err);
 
-      maketoast.errorWithText({ text: "فشل في أرشفة الإشعار" });
+      maketoast.errorWithText({ text: t("notifications.ui.errors.archiveFailed") });
     },
   });
 
@@ -148,6 +157,18 @@ const Notifications: FC<NotificationsProps> = ({
   const unarchivedNotifications = data.filter((item) => !item.isArchived);
   const archivedNotifications = data.filter((item) => item.isArchived);
 
+  const getDisplayText = (notification: Notification) => {
+    const md = notification?.metadata as any;
+    if (md && typeof md === "object" && typeof md.i18nKey === "string") {
+      try {
+        return t(md.i18nKey as string, (md.values ?? {}) as any);
+      } catch {
+        // fall back
+      }
+    }
+    return notification.content;
+  };
+
   const handleMarkAsRead = async (notificationId: string) => {
     // Optimistic UI update
     setData((prevData) =>
@@ -202,12 +223,19 @@ const Notifications: FC<NotificationsProps> = ({
         <Button
           size="icon"
           className=" !bg-card dark:bg-card border border-border rounded-xl w-10 h-10 relative hover:bg-accent transition-colors"
-          aria-label={`الإشعارات ${
-            isNewNotifications > 0 ? `- ${isNewNotifications} جديد` : ""
-          }`}
+          aria-label={
+            isNewNotifications > 0
+              ? t("notifications.ui.ariaLabelWithNew", { count: isNewNotifications })
+              : t("notifications.ui.ariaLabel", { count: isNewNotifications })
+          }
         >
           {isNewNotifications > 0 && (
-            <span className="rounded-full w-5 h-5 text-white flex items-center justify-center bg-red-500 absolute -top-1 -right-1 font-bold text-xs shadow-lg">
+            <span
+              className={cn(
+                "rounded-full w-5 h-5 text-white flex items-center justify-center bg-red-500 absolute -top-1 font-bold text-xs shadow-lg",
+                isRTL ? "-left-1" : "-right-1"
+              )}
+            >
               {isNewNotifications > 99 ? "99+" : isNewNotifications}
             </span>
           )}
@@ -215,28 +243,43 @@ const Notifications: FC<NotificationsProps> = ({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        align="end"
+        align={isRTL ? "start" : "end"}
         className="p-0 border-none ring-none shadow-none w-screen h-screen sm:w-[500px] sm:h-[450px]"
       >
-        <div className="shadow-lg bg-popover border border-border rounded-xl">
-          <div className="w-full h-[50px] flex items-center justify-start p-4 border-b border-border">
-            <p className="text-lg font-bold text-foreground">الإشعارات</p>
+        <div
+          dir={isRTL ? "rtl" : "ltr"}
+          className="shadow-lg bg-popover border border-border rounded-xl"
+        >
+          <div
+            className={cn(
+              "w-full h-[50px] flex items-center p-4 border-b border-border",
+              isRTL ? "justify-end" : "justify-start"
+            )}
+          >
+            <p className="text-lg font-bold text-foreground">
+              {t("notifications.ui.title")}
+            </p>
           </div>
 
           <Tabs defaultValue="all" className="w-full">
-            <TabsList className="w-full flex items-center justify-end h-[50px] border-b border-border bg-muted/30">
+            <TabsList
+              className={cn(
+                "w-full flex items-center h-[50px] border-b border-border bg-muted/30",
+                isRTL ? "justify-start" : "justify-end"
+              )}
+            >
               <TabsTrigger
                 value="archived"
                 className="data-[state=active]:bg-background data-[state=active]:text-foreground"
               >
-                مؤرشف
-                <Package className="w-4 h-4 ml-2" />
+                {t("notifications.ui.tabs.archived")}
+                <Package className={cn("w-4 h-4", isRTL ? "mr-2" : "ml-2")} />
               </TabsTrigger>
               <TabsTrigger
                 value="all"
                 className="data-[state=active]:bg-background data-[state=active]:text-foreground"
               >
-                الكل
+                {t("notifications.ui.tabs.all")}
               </TabsTrigger>
             </TabsList>
 
@@ -246,14 +289,14 @@ const Notifications: FC<NotificationsProps> = ({
                   <div className="w-full h-[330px] flex flex-col justify-center items-center gap-y-5">
                     <Image
                       loading="eager"
-                      alt="لا توجد إشعارات"
+                      alt={t("notifications.ui.emptyStates.noNotificationsAlt")}
                       src="/empty-box.svg"
                       width={150}
                       height={150}
                       className="dark:opacity-80"
                     />
                     <p className="text-md text-center text-muted-foreground">
-                      لا يوجد إشعارات غير مقروءة بعد
+                      {t("notifications.ui.emptyStates.noUnread")}
                     </p>
                   </div>
                 ) : (
@@ -268,6 +311,9 @@ const Notifications: FC<NotificationsProps> = ({
                       onClick={() => {
                         if (!item.isRead) {
                           handleMarkAsRead(item.id);
+                        }
+                        if (item.actionUrl) {
+                          router.push(item.actionUrl);
                         }
                       }}
                       role={!item.isRead ? "button" : undefined}
@@ -299,35 +345,65 @@ const Notifications: FC<NotificationsProps> = ({
                                   item.isArchived ||
                                   archiveNotification.isLoading
                                 }
-                                aria-label="أرشف هذا الإشعار"
+                                aria-label={t("notifications.ui.actions.archive")}
                                 className="hover:bg-accent transition-colors"
                               >
                                 <Archive className="w-4 h-4 text-muted-foreground hover:text-foreground transition-colors" />
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent>
-                              <p>أرشف هذا الإشعار</p>
+                              <p>{t("notifications.ui.actions.archive")}</p>
                             </TooltipContent>
                           </Tooltip>
                         </TooltipProvider>
                       </div>
-                      <div className="flex items-center justify-end gap-x-3">
-                        <div className="flex flex-col h-full w-fit items-start justify-between gap-2">
-                          <div className="w-full h-[90%] flex items-start justify-start">
+                      <div
+                        className={cn(
+                          "flex items-center gap-x-3",
+                          isRTL ? "justify-start" : "justify-end"
+                        )}
+                      >
+                        <div
+                          className={cn(
+                            "flex flex-col h-full w-fit justify-between gap-2",
+                            isRTL ? "items-end" : "items-start"
+                          )}
+                        >
+                          <div
+                            className={cn(
+                              "w-full h-[90%] flex items-start",
+                              isRTL ? "justify-end" : "justify-start"
+                            )}
+                          >
                             <span className="text-md font-medium text-foreground">
-                              {item.content}
+                              {item.actionUrl ? (
+                                <Link
+                                  href={item.actionUrl}
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="hover:underline underline-offset-4"
+                                >
+                                  {getDisplayText(item)}
+                                </Link>
+                              ) : (
+                                getDisplayText(item)
+                              )}
                             </span>
                           </div>
-                          <div className="flex w-full h-[10%] items-center justify-end gap-x-3">
+                          <div
+                            className={cn(
+                              "flex w-full h-[10%] items-center gap-x-3",
+                              isRTL ? "justify-start" : "justify-end"
+                            )}
+                          >
                             <span className="text-xs text-muted-foreground">
-                              {timeSince(item.createdAt)}
+                              {timeSince(item.createdAt, isRTL ? "ar" : "en")}
                             </span>
                             {!item.isRead && (
                               <Badge
                                 variant="default"
                                 className="bg-green-500 hover:bg-green-600 text-white"
                               >
-                                جديد
+                                {t("notifications.ui.badge.new")}
                               </Badge>
                             )}
                           </div>
@@ -349,14 +425,14 @@ const Notifications: FC<NotificationsProps> = ({
                   <div className="w-full h-[330px] flex flex-col justify-center items-center gap-y-5">
                     <Image
                       loading="eager"
-                      alt="لا توجد إشعارات مؤرشفة"
+                      alt={t("notifications.ui.emptyStates.noArchivedAlt")}
                       src="/empty-box.svg"
                       width={150}
                       height={150}
                       className="dark:opacity-80"
                     />
                     <p className="text-md text-center text-muted-foreground">
-                      لا يوجد إشعارات مؤرشفة بعد
+                      {t("notifications.ui.emptyStates.noArchived")}
                     </p>
                   </div>
                 ) : (
@@ -373,28 +449,48 @@ const Notifications: FC<NotificationsProps> = ({
                                 disabled
                                 variant="ghost"
                                 size="icon"
-                                aria-label="هذا الإشعار مؤرشف"
+                                aria-label={t("notifications.ui.actions.archived")}
                                 className="opacity-50"
                               >
                                 <Archive className="w-4 h-4 text-muted-foreground" />
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent>
-                              <p>هذا الإشعار مؤرشف</p>
+                              <p>{t("notifications.ui.actions.archived")}</p>
                             </TooltipContent>
                           </Tooltip>
                         </TooltipProvider>
                       </div>
-                      <div className="flex items-center justify-end gap-x-3">
-                        <div className="flex flex-col h-full w-fit items-start justify-between gap-2">
-                          <div className="w-full h-[90%] flex items-start justify-start">
+                      <div
+                        className={cn(
+                          "flex items-center gap-x-3",
+                          isRTL ? "justify-start" : "justify-end"
+                        )}
+                      >
+                        <div
+                          className={cn(
+                            "flex flex-col h-full w-fit justify-between gap-2",
+                            isRTL ? "items-end" : "items-start"
+                          )}
+                        >
+                          <div
+                            className={cn(
+                              "w-full h-[90%] flex items-start",
+                              isRTL ? "justify-end" : "justify-start"
+                            )}
+                          >
                             <span className="text-md font-medium text-muted-foreground">
-                              {item.content}
+                              {getDisplayText(item)}
                             </span>
                           </div>
-                          <div className="flex w-full h-[10%] items-center justify-end gap-x-3">
+                          <div
+                            className={cn(
+                              "flex w-full h-[10%] items-center gap-x-3",
+                              isRTL ? "justify-start" : "justify-end"
+                            )}
+                          >
                             <span className="text-xs text-muted-foreground">
-                              {timeSince(item.createdAt)}
+                              {timeSince(item.createdAt, isRTL ? "ar" : "en")}
                             </span>
                           </div>
                         </div>

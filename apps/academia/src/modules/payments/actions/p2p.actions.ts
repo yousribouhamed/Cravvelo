@@ -3,6 +3,7 @@
 import { withTenant } from "@/_internals/with-tenant";
 import { getCurrentUser } from "@/modules/auth/lib/utils";
 import z from "zod";
+import { triggerNotificationEvent } from "@/lib/notify";
 
 export const createP2pPaymentIntent = withTenant({
   input: z.object({
@@ -19,7 +20,7 @@ export const createP2pPaymentIntent = withTenant({
     const { paymentProof, productId, type, notes } = input;
     const tenantCurrency = website?.currency || "DZD";
 
-    return await db.$transaction(async (tx) => {
+    const result = await db.$transaction(async (tx) => {
       // 1. Fetch item (course or product) + pricing plan
       let item: any = null;
       let pricingPlan: any = null;
@@ -96,12 +97,52 @@ export const createP2pPaymentIntent = withTenant({
         },
       });
 
+      // Store-owner notification (dashboard) - validation required for P2P
+      const notification = await tx.notification.create({
+        data: {
+          accountId,
+          type: "WARNING",
+          title: "P2P validation required",
+          content: "A new P2P payment proof was submitted and requires validation.",
+          actionUrl: "/payments",
+          metadata: {
+            source: "academia",
+            i18nKey: "notifications.events.p2p_validation_required",
+            values: {
+              method: "P2P",
+              itemTitle: item.title,
+              amount: price,
+              currency: tenantCurrency,
+              itemType: type,
+            },
+            entity: {
+              saleId: sale.id,
+              paymentId: payment.id,
+              itemId: item.id,
+              paymentProofUrl: paymentProof,
+            },
+          },
+        },
+      });
+
       return {
         success: true,
         message: "P2P payment intent created. Pending verification.",
         paymentId: payment.id,
         saleId: sale.id,
+        notificationId: notification.id,
       };
     });
+
+    if (result?.success && result.notificationId) {
+      await triggerNotificationEvent({
+        accountId,
+        payload: { id: result.notificationId, type: "p2p_validation_required" },
+      });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { notificationId, ...publicResult } = result as any;
+    return publicResult;
   },
 });

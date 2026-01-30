@@ -164,7 +164,10 @@ export const useCommentColumns = (
                     });
                   }}
                   className="w-full h-full flex justify-between items-center px-2"
-                  disabled={comment.status === "approved"}
+                  // Disable only when it's actually approved for public display.
+                  // This also lets us fix older rows where `status` was set to "approved"
+                  // but `isApproved` stayed false (so comments never appeared publicly).
+                  disabled={comment.isApproved === true}
                 >
                   <Check className="w-4 h-4 mr-2 text-green-500" />
                   {t("actions.approve")}

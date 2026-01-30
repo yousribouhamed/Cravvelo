@@ -67,6 +67,35 @@ export const CravveloEditor: React.FC<TiptapEditorProps> = ({
   readOnly = false,
   dir,
 }) => {
+  // Match the app theme (Tailwind's `.dark` class) instead of OS preference.
+  // This prevents `prefers-color-scheme: dark` styles from forcing light text in light mode.
+  const [themeMode, setThemeMode] = useState<"light" | "dark">(() => {
+    if (typeof document === "undefined") return "light";
+    return document.documentElement.classList.contains("dark") ? "dark" : "light";
+  });
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+
+    const root = document.documentElement;
+    const updateThemeMode = () => {
+      setThemeMode(root.classList.contains("dark") ? "dark" : "light");
+    };
+
+    updateThemeMode();
+
+    const observer = new MutationObserver(() => {
+      updateThemeMode();
+    });
+
+    observer.observe(root, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   // Detect direction from content, with fallback to provided dir or DOM
   const [detectedDirection, setDetectedDirection] = useState<"ltr" | "rtl">(() => {
     if (value) {
@@ -166,6 +195,7 @@ export const CravveloEditor: React.FC<TiptapEditorProps> = ({
         } ${readOnly ? "cursor-default" : ""}`,
         dir: textDirection,
         "data-direction": textDirection,
+        "data-theme": themeMode,
       },
     },
   });

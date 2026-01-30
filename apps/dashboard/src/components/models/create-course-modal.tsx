@@ -33,8 +33,8 @@ const AddCourse: FC = ({}) => {
   const t = useTranslations("courses");
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const [isLaoding, setIsLoading] = React.useState(false);
-  const mutation = trpc.createCourse.useMutation({
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const mutation = trpc.course.createCourse.useMutation({
     onSuccess: ({ courseId, planExceeded, success }) => {
       if (success) {
         router.push(`/courses/${courseId}/chapters`);
@@ -45,6 +45,7 @@ const AddCourse: FC = ({}) => {
     onError: () => {
       maketoast.error();
       setIsOpen(false);
+      setIsSubmitting(false);
     },
   });
 
@@ -56,20 +57,20 @@ const AddCourse: FC = ({}) => {
   });
 
   async function onSubmit(data: z.infer<typeof addCourseSchema>) {
-    setIsLoading(true);
-    await mutation
-      .mutateAsync({
+    setIsSubmitting(true);
+    try {
+      await mutation.mutateAsync({
         title: data.title,
-      })
-
-      .then(() => {
-        setIsLoading(false);
       });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   const handleCancel = () => {
     form.reset();
     setIsOpen(false);
+    setIsSubmitting(false);
   };
 
   return (
@@ -125,7 +126,7 @@ const AddCourse: FC = ({}) => {
                   </Button>
                   <Button
                     className=" flex items-center gap-x-2"
-                    disabled={isLaoding}
+                    disabled={isSubmitting || mutation.isLoading}
                     type="submit"
                   >
                     {mutation.isLoading ? <LoadingSpinner /> : null}

@@ -15,9 +15,9 @@ import { Separator } from "@ui/components/ui/separator";
 import { CalendarDays, CreditCard, Package, User, Globe } from "lucide-react";
 import { formatCurrency } from "../../payments/utils";
 import { useRouter } from "next/navigation";
-import { ar } from "date-fns/locale";
+import { ar, enUS } from "date-fns/locale";
 import { format } from "date-fns";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 interface PageProps {
   invoiceId: string;
@@ -25,21 +25,51 @@ interface PageProps {
 
 export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
   const router = useRouter();
+  const locale = useLocale();
+  const dateLocale = locale === "ar" ? ar : enUS;
+  const t = useTranslations("invoices.details");
+  const tStatus = useTranslations("invoices.status");
+  const retryLabel = locale === "ar" ? "إعادة المحاولة" : "Retry";
+  const backToInvoicesLabel = locale === "ar" ? "العودة إلى الفواتير" : "Back to invoices";
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["invoice-details"],
+  const { data, isLoading, isError, error, refetch, isFetching } = useQuery({
+    queryKey: ["invoice-details", invoiceId],
     queryFn: async () => {
       const res = await getInvoiceDetailById({ invoiceId });
       return res;
     },
+    enabled: Boolean(invoiceId),
+    retry: 1,
   });
 
-  console.log("here is the invoice details : ", data);
-
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return (
-      <div className="w-full h-[400px] flex items-center justify-center ">
-        <CravveloSpinner />
+      <div className="w-full h-[400px] flex flex-col gap-3 items-center justify-center ">
+        <CravveloSpinner size="md" />
+        <p className="text-sm text-gray-600">{locale === "ar" ? "جاري تحميل تفاصيل الفاتورة..." : "Loading invoice details..."}</p>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="w-full min-h-[300px] flex items-center justify-center p-6">
+        <Card className="w-full max-w-lg">
+          <CardHeader>
+            <CardTitle>{t("notFound")}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-gray-600">
+              {error instanceof Error ? error.message : t("notFoundDescription")}
+            </p>
+            <div className="flex items-center gap-3">
+              <Button onClick={() => refetch()}>{retryLabel}</Button>
+              <Button variant="secondary" onClick={() => router.push("/settings/invoices")}>
+                {backToInvoicesLabel}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -49,10 +79,10 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
       <div className="w-full h-[400px] flex items-center justify-center">
         <div className="text-center">
           <h3 className="text-lg font-medium text-gray-900">
-            الفاتورة غير موجودة
+            {t("notFound")}
           </h3>
           <p className="text-sm text-gray-500">
-            تعذر تحميل الفاتورة المطلوبة.
+            {t("notFoundDescription")}
           </p>
         </div>
       </div>
@@ -83,7 +113,6 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
     }
   };
 
-  const tStatus = useTranslations("invoices.status");
   const translateStatus = (status: string): string => {
     const statusKey = status.toUpperCase().toLowerCase();
     const statusMap: Record<string, string> = {
@@ -98,8 +127,10 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
     return statusMap[statusKey] || status;
   };
 
-  const formatDate = (dateString: string) => {
-    return format(new Date(dateString), "dd MMMM yyyy, HH:mm", { locale: ar });
+  const formatDate = (dateInput: string | Date | null | undefined) => {
+    if (!dateInput) return "-";
+    const date = typeof dateInput === "string" ? new Date(dateInput) : dateInput;
+    return format(date, "dd MMMM yyyy, HH:mm", { locale: dateLocale });
   };
 
   return (
@@ -108,7 +139,9 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">{t("title")}</h1>
-          <p className="text-sm text-gray-500">{t("invoiceNumber")}: {invoice.id}</p>
+          <p className="text-sm text-gray-500">
+            {t("invoiceNumber")}: {invoice.id}
+          </p>
         </div>
         {invoice.status === "PENDING" && (
           <Button
@@ -130,7 +163,7 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
-            ملخص الفاتورة
+            {t("summary")}
             <Badge className={getStatusColor(invoice.status)}>
               {translateStatus(invoice.status)}
             </Badge>
@@ -141,7 +174,7 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
             <div className="flex items-center space-x-3">
               <CreditCard className="w-5 h-5 text-gray-400" />
               <div>
-                <p className="text-sm font-medium text-gray-500">المبلغ</p>
+                <p className="text-sm font-medium text-gray-500">{t("amount")}</p>
                 <p className="text-lg font-semibold">
                   {formatCurrency({
                     amount: invoice.amount,
@@ -153,18 +186,16 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
             <div className="flex items-center space-x-3">
               <CalendarDays className="w-5 h-5 text-gray-400" />
               <div>
-                <p className="text-sm font-medium text-gray-500">تاريخ الإنشاء</p>
+                <p className="text-sm font-medium text-gray-500">{t("createdAt")}</p>
                 <p className="text-sm">
-                  {formatDate(invoice.createdAt.toISOString())}
+                  {formatDate(invoice.createdAt)}
                 </p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
               <Package className="w-5 h-5 text-gray-400" />
               <div>
-                <p className="text-sm font-medium text-gray-500">
-                  نوع الدفع
-                </p>
+                <p className="text-sm font-medium text-gray-500">{t("paymentType")}</p>
                 <p className="text-sm">{invoice.Payment.type}</p>
               </div>
             </div>
@@ -172,7 +203,7 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
           {invoice.description && (
             <div>
               <p className="text-sm font-medium text-gray-500 mb-1">
-                الوصف
+                {t("description")}
               </p>
               <p className="text-sm">{invoice.description}</p>
             </div>
@@ -224,29 +255,29 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
       {/* Payment History */}
       <Card>
         <CardHeader>
-          <CardTitle>سجل الدفع</CardTitle>
+          <CardTitle>{t("paymentHistory")}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <p className="text-sm font-medium text-gray-500">
-                إجمالي المحاولات
+                {t("totalAttempts")}
               </p>
               <p className="font-medium">{paymentHistory.totalAttempts}</p>
             </div>
             <div>
               <p className="text-sm font-medium text-gray-500">
-                طريقة الدفع
+                {t("paymentMethod")}
               </p>
               <p className="font-medium">
-                {paymentHistory.method || "غير محدد"}
+                {paymentHistory.method || t("notSpecified")}
               </p>
             </div>
             {paymentHistory.refundAmount > 0 && (
               <>
                 <div>
                   <p className="text-sm font-medium text-gray-500">
-                    مبلغ الاسترداد
+                    {t("refundAmount")}
                   </p>
                   <p className="font-medium">
                     {formatCurrency({
@@ -257,10 +288,10 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-500">
-                    سبب الاسترداد
+                    {t("refundReason")}
                   </p>
                   <p className="font-medium">
-                    {paymentHistory.refundReason || "غير متاح"}
+                    {paymentHistory.refundReason || t("notAvailable")}
                   </p>
                 </div>
               </>
@@ -288,7 +319,7 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div>
                     <span className="font-medium">{t("installedAt")}:</span>{" "}
-                    {formatDate(install.installedAt.toISOString())}
+                    {formatDate(install.installedAt)}
                   </div>
                   <div>
                     <span className="font-medium">{t("subscriptionAmount")}:</span>{" "}

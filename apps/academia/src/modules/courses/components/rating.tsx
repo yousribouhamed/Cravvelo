@@ -302,14 +302,28 @@ const Ratings: React.FC<RatingsProps> = ({
                   </div>
                 )}
                 {comments.slice(0, 3).map((comment, index) => (
-                  <img
-                    key={index}
-                    width={32}
-                    height={32}
-                    className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover"
-                    src={comment.studentImage || undefined}
-                    alt="Student avatar"
-                  />
+                  comment.studentImage ? (
+                    <img
+                      key={index}
+                      width={32}
+                      height={32}
+                      className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover"
+                      src={comment.studentImage}
+                      alt={comment.studentName}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = "none";
+                      }}
+                    />
+                  ) : (
+                    <div
+                      key={index}
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-full ring-2 ring-white bg-muted text-muted-foreground text-xs font-semibold"
+                      aria-label={comment.studentName}
+                      title={comment.studentName}
+                    >
+                      {comment.studentName?.charAt(0) || "A"}
+                    </div>
+                  )
                 ))}
               </div>
             </div>

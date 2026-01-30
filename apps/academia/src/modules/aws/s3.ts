@@ -1,9 +1,14 @@
 "use server";
 
-import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  PutObjectCommand,
+} from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import crypto from "crypto";
 import { s3 } from "./index";
+import { getKeyFromUrl } from "./utils";
 
 const allowedFileTypes = ["image/jpeg", "image/png", "image/jpg"];
 const maxFileSize = 1048576 * 10; // 10 MB
@@ -132,6 +137,46 @@ export async function deleteImageFromS3(fileName: string) {
     return {
       error: "Failed to delete file",
       success: false,
+    };
+  }
+}
+
+export async function getSignedDownloadUrlFromS3Url(
+  url: string,
+  expiresInSeconds: number = 60
+) {
+  const bucketName = process.env.S3_BUCKET_NAME;
+  if (!bucketName) {
+    return {
+      success: false as const,
+      error: "S3 configuration error",
+      url: null as string | null,
+    };
+  }
+
+  try {
+    const key = getKeyFromUrl(url);
+    const cmd = new GetObjectCommand({
+      Bucket: bucketName,
+      Key: key,
+    });
+
+    const signedUrl = await getSignedUrl(s3, cmd, {
+      expiresIn: expiresInSeconds,
+    });
+
+    return {
+      success: true as const,
+      error: null as string | null,
+      url: signedUrl,
+    };
+  } catch (error) {
+    console.error("Signed download URL error:", error);
+    return {
+      success: false as const,
+      error:
+        error instanceof Error ? error.message : "Failed to generate download URL",
+      url: null as string | null,
     };
   }
 }
