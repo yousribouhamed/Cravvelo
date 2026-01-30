@@ -7,9 +7,9 @@ import { getCurrentUser } from "@/modules/auth/lib/utils";
 import { triggerNotificationEvent } from "@/lib/notify";
 
 const BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? "https://pay.chargily.net/test/api/v2/checkouts"
-    : "https://pay.chargily.net/api/v2/checkouts";
+  process.env.NODE_ENV === "production" ? "https://pay.chargily.net/api/v2/checkouts"
+    : "https://pay.chargily.net/test/api/v2/checkouts"
+    
 
 export const createChargilyCheckout = withTenant({
   input: z.object({
