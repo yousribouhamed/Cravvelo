@@ -6,17 +6,45 @@ import z from "zod";
 import { getCurrentUser } from "@/modules/auth/lib/utils";
 import { triggerNotificationEvent } from "@/lib/notify";
 
-const BASE_URL =
-  process.env.NODE_ENV === "production" ? "https://pay.chargily.net/api/v2/checkouts"
-    : "https://pay.chargily.net/test/api/v2/checkouts"
-    
+const CHARGILY_LIVE_CHECKOUT_URL = "https://pay.chargily.net/api/v2/checkouts";
+const CHARGILY_TEST_CHECKOUT_URL =
+  "https://pay.chargily.net/test/api/v2/checkouts";
+
+function normalizeChargilyConfig(config: unknown): { secretKey?: string } {
+  // `PaymentMethodConfig.config` is Prisma `Json`, but some code stores it as a stringified JSON.
+  // Handle both shapes safely.
+  if (!config) return {};
+
+  if (typeof config === "string") {
+    try {
+      const parsed = JSON.parse(config) as any;
+      return { secretKey: parsed?.secretKey };
+    } catch {
+      return {};
+    }
+  }
+
+  if (typeof config === "object") {
+    const obj = config as any;
+    return { secretKey: obj?.secretKey };
+  }
+
+  return {};
+}
+
+function getChargilyCheckoutBaseUrl(secretKey: string) {
+  // Chargily keys typically look like `test_sk_...` for test mode.
+  // Selecting the endpoint based on the key avoids common prod/dev mismatches.
+  const isTestKey = secretKey.startsWith("test_") || secretKey.startsWith("test_sk_");
+  return isTestKey ? CHARGILY_TEST_CHECKOUT_URL : CHARGILY_LIVE_CHECKOUT_URL;
+}
 
 export const createChargilyCheckout = withTenant({
   input: z.object({
     totalPrice: z.string(),
     paymentId: z.string(),
   }),
-  handler: async ({ tenant, website, input }) => {
+  handler: async ({ tenant, website, input, accountId, db }) => {
     try {
       const tenantCurrency = (website?.currency || "DZD").toLowerCase();
       const amount = Math.round(Number(input.totalPrice) * 1); // convert DZD → centimes
@@ -32,10 +60,27 @@ export const createChargilyCheckout = withTenant({
         locale: "ar",
       };
 
-      const response = await fetch(BASE_URL, {
+      const connection = await db.paymentMethodConfig.findFirst({
+        where: { accountId, provider: "CHARGILY", isActive: true },
+        select: { config: true },
+      });
+
+      const configuredSecretKey = normalizeChargilyConfig(connection?.config)
+        ?.secretKey;
+      const secretKey = configuredSecretKey || process.env.CHARGILY_SECRET_KEY;
+
+      if (!secretKey) {
+        throw new Error(
+          "Chargily is not configured: missing secret key. Set `CHARGILY_SECRET_KEY` or connect Chargily in the dashboard for this tenant."
+        );
+      }
+
+      const baseUrl = getChargilyCheckoutBaseUrl(secretKey);
+
+      const response = await fetch(baseUrl, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${process.env.CHARGILY_SECRET_KEY!}`,
+          Authorization: `Bearer ${secretKey}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
@@ -58,7 +103,7 @@ export const createChargilyCheckout = withTenant({
       console.error("Failed to create Chargily checkout:", error);
       return {
         success: false,
-        message: "Failed to create checkout",
+        message: error instanceof Error ? error.message : "Failed to create checkout",
         data: null,
       };
     }
