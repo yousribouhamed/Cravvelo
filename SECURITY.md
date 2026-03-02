@@ -2,20 +2,30 @@
 
 ## Supported Versions
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+We currently support the **latest `main` branch** with security updates. When we have tagged releases, we will document supported versions here.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+| main    | :white_check_mark: |
 
 ## Reporting a Vulnerability
 
-Use this section to tell people how to report a vulnerability.
+If you believe you've found a security vulnerability, please report it responsibly.
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+**How to report**
+
+- Email **abdellah.chehri14@gmail.com** with a description of the issue, steps to reproduce, and any impact you’re aware of.
+- Please do not open a public issue for security vulnerabilities.
+
+**What to expect**
+
+- We will acknowledge your report within **5 business days**.
+- We will follow up with our assessment and any next steps (e.g. fix, release, CVE).
+- If the report is accepted, we will work on a fix and coordinate disclosure. We are happy to credit you in the advisory if you wish.
+
+**Out of scope**
+
+- Issues that require already-compromised credentials or physical access.
+- General best-practice recommendations without a concrete exploit.
+
+Thank you for helping keep Cravvelo and its users safe.
