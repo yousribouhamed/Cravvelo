@@ -20,6 +20,11 @@ const eslintConfig = [
       "next-env.d.ts",
     ],
   },
+  {
+    rules: {
+      "@next/next/no-duplicate-head": "off",
+    },
+  },
 ];
 
 export default eslintConfig;
