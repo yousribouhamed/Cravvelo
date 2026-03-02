@@ -5,6 +5,7 @@ module.exports = {
     "@next/next/no-img-element": "off",
     "react/no-unescaped-entities": "off",
     "react-hooks/rules-of-hooks": "off",
+    "turbo/no-undeclared-env-vars": "off",
   },
   parserOptions: {
     babelOptions: {
