@@ -25,6 +25,7 @@ const PUBLIC_ROUTES = [
 const PROTECTED_ROUTES = [
   "/admin/dashboard",
   "/admin/users",
+  "/users",
   "/admin/courses",
   "/admin/products",
   "/admin/payments",
@@ -41,6 +42,7 @@ const ROLE_BASED_ROUTES: Record<string, string[]> = {
   "/admin/system": ["SUPER_ADMIN"],
   "/api/admin/users": ["SUPER_ADMIN", "ADMIN"],
   "/api/admin/system": ["SUPER_ADMIN"],
+  "/users": ["SUPER_ADMIN", "ADMIN"],
 };
 
 // Helper function to check if route is public

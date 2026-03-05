@@ -34,7 +34,7 @@ export const SIDEBAR_ITEMS = [
     name: "Users",
     slug: "/users",
     icon: <Users className="w-5 h-5" />,
-    enabled: false,
+    enabled: true,
   },
   {
     name: "Admins",

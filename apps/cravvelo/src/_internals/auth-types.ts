@@ -115,6 +115,9 @@ export const PERMISSIONS = {
   DELETE_ADMIN: "DELETE_ADMIN",
   VIEW_ADMINS: "VIEW_ADMINS",
 
+  // User management (end users / accounts)
+  VIEW_USERS: "VIEW_USERS",
+
   // System management
   MANAGE_SETTINGS: "MANAGE_SETTINGS",
   VIEW_LOGS: "VIEW_LOGS",
