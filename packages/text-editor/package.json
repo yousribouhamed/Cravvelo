@@ -20,13 +20,13 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@tiptap/extension-bullet-list": "^3.0.1",
-    "@tiptap/extension-list-item": "^3.0.1",
-    "@tiptap/extension-ordered-list": "^3.0.1",
-    "@tiptap/extension-underline": "^3.0.1",
-    "@tiptap/pm": "^2.1.16",
-    "@tiptap/react": "^2.1.16",
-    "@tiptap/starter-kit": "^2.1.16",
+    "@tiptap/extension-bullet-list": "2.27.2",
+    "@tiptap/extension-list-item": "2.27.2",
+    "@tiptap/extension-ordered-list": "2.27.2",
+    "@tiptap/extension-underline": "2.27.2",
+    "@tiptap/pm": "2.27.2",
+    "@tiptap/react": "2.27.2",
+    "@tiptap/starter-kit": "2.27.2",
     "lucide-react": "^0.525.0",
     "react-hook-form": "^7.49.2",
     "ui": "workspace:*"
