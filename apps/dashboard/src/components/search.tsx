@@ -87,6 +87,12 @@ export const SearchInput: FC = () => {
   const [data, setData] = React.useState<ProductGroup | null>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [isSearching, setIsSearching] = React.useState(false);
+  const [isMac, setIsMac] = React.useState(true); // default for SSR; detect on mount
+
+  React.useEffect(() => {
+    const platform = typeof navigator !== "undefined" ? navigator.platform ?? navigator.userAgent : "";
+    setIsMac(/Mac|iPod|iPhone|iPad/i.test(platform));
+  }, []);
 
   const DEFAULT_PAGES = useMemo(
     () => [
@@ -95,24 +101,32 @@ export const SearchInput: FC = () => {
         path: "/settings/payments-methods",
         description: t("defaultPages.paymentMethodsDesc"),
         icon: CreditCard,
+        iconBg: "bg-blue-100 dark:bg-blue-900/50",
+        iconColor: "text-blue-600 dark:text-blue-400",
       },
       {
         name: t("defaultPages.appearance"),
         path: "/settings/website-settings/appearance",
         description: t("defaultPages.appearanceDesc"),
         icon: Palette,
+        iconBg: "bg-amber-100 dark:bg-amber-900/50",
+        iconColor: "text-amber-600 dark:text-amber-400",
       },
       {
         name: t("defaultPages.recentSales"),
         path: "/orders",
         description: t("defaultPages.recentSalesDesc"),
         icon: TrendingUp,
+        iconBg: "bg-emerald-100 dark:bg-emerald-900/50",
+        iconColor: "text-emerald-600 dark:text-emerald-400",
       },
       {
         name: t("defaultPages.academySettings"),
         path: "/settings/website-settings/legal",
         description: t("defaultPages.academySettingsDesc"),
         icon: Settings,
+        iconBg: "bg-violet-100 dark:bg-violet-900/50",
+        iconColor: "text-violet-600 dark:text-violet-400",
       },
     ],
     [t]
@@ -228,41 +242,46 @@ export const SearchInput: FC = () => {
 
   return (
     <>
-      {/* Search Trigger Button */}
+      {/* Search Trigger Button - same height as notification (h-10), more width on desktop, platform-aware shortcut */}
       <Button
         variant="ghost"
         size="sm"
         className={cn(
-          "h-9 bg-card w-full max-w-sm px-3 font-normal",
-          "border border-gray-200 dark:border-gray-700",
+          "h-10 px-3 font-normal w-full lg:w-auto lg:min-w-[220px] lg:max-w-[320px]",
+          "bg-card border border-border rounded-xl",
           "hover:border-blue-300 dark:hover:border-blue-600",
-          "hover:bg-blue-50 dark:hover:bg-blue-950",
+          "hover:bg-blue-50/80 dark:hover:bg-blue-950/50",
           "transition-all duration-200 hover:shadow-sm",
           isRTL ? "justify-start text-right" : "justify-start text-left"
         )}
         onClick={() => setOpen(true)}
         dir={isRTL ? "rtl" : "ltr"}
       >
-        <Search className={cn("h-4 w-4 text-gray-400", isRTL ? "ml-2" : "mr-2")} />
-        <span className="flex-1 text-gray-500 text-sm">
+        <Search className={cn("h-4 w-4 text-gray-500 dark:text-gray-400 flex-shrink-0", isRTL ? "ml-2" : "mr-2")} />
+        <span className={cn("flex-1 text-gray-600 dark:text-gray-300 text-sm truncate", isRTL ? "text-right" : "text-left")}>
           {t("placeholder")}
         </span>
-        <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex">
-          <Command className="h-3 w-3" />K
+        <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:inline-flex">
+          {isMac ? (
+            <Command className="h-3 w-3" aria-hidden />
+          ) : (
+            <span className="text-[10px] font-semibold">Ctrl</span>
+          )}
+          K
         </kbd>
       </Button>
 
-      {/* Search Dialog */}
-      <CommandDialog open={open} onOpenChange={setOpen} title={t("dialogTitle")}>
-        <div dir={isRTL ? "rtl" : "ltr"}>
+      {/* Search Dialog - improved spacing and max height for UX */}
+      <CommandDialog open={open} onOpenChange={setOpen} title={t("dialogTitle")} className="max-h-[85vh]">
+        <div dir={isRTL ? "rtl" : "ltr"} className="p-1">
           <CommandInput
             placeholder={t("searchPlaceholder")}
             value={query}
             onValueChange={setQuery}
-            className={cn(isRTL ? "text-right" : "text-left")}
+            className={cn("h-11 rounded-lg", isRTL ? "text-right" : "text-left")}
           />
 
-          <CommandList>
+          <CommandList className="max-h-[min(60vh,400px)] py-2">
             {/* Error State */}
             {error && (
               <div
@@ -288,25 +307,35 @@ export const SearchInput: FC = () => {
               </div>
             )}
 
-            {/* Default Pages (when no query) */}
+            {/* Default Pages (when no query) - colorful icons and improved UX */}
             {showDefaultPages && (
-              <CommandGroup heading={t("suggestedPages")}>
+              <CommandGroup heading={t("suggestedPages")} className="px-2">
                 {DEFAULT_PAGES.map((page) => (
                   <CommandItem
                     key={page.path}
                     value={page.name}
                     onSelect={() => handleSelect(page.path)}
-                    className="flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg mx-2"
+                    className={cn(
+                      "flex items-center gap-3 p-3.5 cursor-pointer rounded-xl mx-1 my-0.5 transition-colors",
+                      "hover:bg-gray-100 dark:hover:bg-gray-800/80",
+                      "data-[selected=true]:bg-gray-100 dark:data-[selected=true]:bg-gray-800/80",
+                      "border border-transparent hover:border-gray-200 dark:hover:border-gray-700"
+                    )}
                     dir={isRTL ? "rtl" : "ltr"}
                   >
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900 flex-shrink-0">
-                      <page.icon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                    <div
+                      className={cn(
+                        "flex h-11 w-11 items-center justify-center rounded-xl flex-shrink-0 ring-1 ring-black/5 dark:ring-white/10",
+                        page.iconBg
+                      )}
+                    >
+                      <page.icon className={cn("h-5 w-5", page.iconColor)} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-right truncate">
+                      <div className={cn("font-semibold truncate", isRTL ? "text-right" : "text-left")}>
                         {page.name}
                       </div>
-                      <div className="text-xs text-gray-600 dark:text-gray-400 text-right truncate">
+                      <div className={cn("text-xs text-muted-foreground truncate mt-0.5", isRTL ? "text-right" : "text-left")}>
                         {page.description}
                       </div>
                     </div>
@@ -329,17 +358,20 @@ export const SearchInput: FC = () => {
 
                 {/* Products */}
                 {data.products && data.products.length > 0 && (
-                  <CommandGroup heading={`${t("products")} (${data.products.length})`}>
+                  <CommandGroup heading={`${t("products")} (${data.products.length})`} className="px-2">
                     {data.products.map((product) => (
                       <CommandItem
                         key={product.id}
                         value={product.title}
-                        onSelect={() => handleSelect(`/product/${product.id}`)}
-                        className="flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg mx-2"
+                        onSelect={() => handleSelect(`/products/${product.id}/content`)}
+                        className={cn(
+                          "flex items-center gap-3 p-3.5 cursor-pointer rounded-xl mx-1 my-0.5 transition-colors",
+                          "hover:bg-gray-100 dark:hover:bg-gray-800/80 border border-transparent hover:border-gray-200 dark:hover:border-gray-700"
+                        )}
                         dir={isRTL ? "rtl" : "ltr"}
                       >
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900 flex-shrink-0">
-                          <Box className="h-5 w-5 text-green-600 dark:text-green-400" />
+                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 dark:bg-emerald-900/50 flex-shrink-0 ring-1 ring-black/5 dark:ring-white/10">
+                          <Box className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className={cn("font-medium truncate", isRTL ? "text-right" : "text-left")}>
@@ -364,7 +396,7 @@ export const SearchInput: FC = () => {
 
                 {/* Courses */}
                 {data.courses && data.courses.length > 0 && (
-                  <CommandGroup heading={`${t("courses")} (${data.courses.length})`}>
+                  <CommandGroup heading={`${t("courses")} (${data.courses.length})`} className="px-2">
                     {data.courses.map((course) => (
                       <CommandItem
                         key={course.id}
@@ -372,11 +404,14 @@ export const SearchInput: FC = () => {
                         onSelect={() =>
                           handleSelect(`/courses/${course.id}/chapters`)
                         }
-                        className="flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg mx-2"
+                        className={cn(
+                          "flex items-center gap-3 p-3.5 cursor-pointer rounded-xl mx-1 my-0.5 transition-colors",
+                          "hover:bg-gray-100 dark:hover:bg-gray-800/80 border border-transparent hover:border-gray-200 dark:hover:border-gray-700"
+                        )}
                         dir={isRTL ? "rtl" : "ltr"}
                       >
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900 flex-shrink-0">
-                          <Youtube className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-100 dark:bg-violet-900/50 flex-shrink-0 ring-1 ring-black/5 dark:ring-white/10">
+                          <Youtube className="h-5 w-5 text-violet-600 dark:text-violet-400" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className={cn("font-medium truncate", isRTL ? "text-right" : "text-left")}>

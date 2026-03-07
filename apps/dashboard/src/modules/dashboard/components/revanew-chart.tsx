@@ -25,6 +25,7 @@ import { DatePickerWithRange } from "@/src/components/range-date-picker";
 import { useSearchParams } from "next/navigation";
 import { useCurrency } from "@/src/hooks/use-currency";
 import { StatsCard, StatsGrid } from "@/src/components/stats-card";
+import { Skeleton } from "@ui/components/ui/skeleton";
 import { 
   DollarSign, 
   CreditCard, 
@@ -183,14 +184,47 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
         />
       </div>
 
-      {/* Loading State */}
+      {/* Loading State - full layout skeleton */}
       {(isLoading || currencyLoading) && !data && (
-        <StatsGrid>
-          <StatsCard title="" value="" isLoading={true} />
-          <StatsCard title="" value="" isLoading={true} />
-          <StatsCard title="" value="" isLoading={true} />
-          <StatsCard title="" value="" isLoading={true} />
-        </StatsGrid>
+        <>
+          <StatsGrid>
+            <StatsCard title="" value="" isLoading />
+            <StatsCard title="" value="" isLoading />
+            <StatsCard title="" value="" isLoading />
+            <StatsCard title="" value="" isLoading />
+          </StatsGrid>
+          <Card className="border border-gray-200 dark:border-border bg-card" dir={isRTL ? "rtl" : "ltr"}>
+            <CardHeader className="pb-4 px-4 sm:px-6">
+              <div className={cn("flex items-center justify-between", isRTL && "flex-row-reverse")}>
+                <Skeleton className="h-6 w-32 rounded-md" />
+                <Skeleton className="h-8 w-24 rounded-md" />
+              </div>
+            </CardHeader>
+            <CardContent className="px-4 sm:px-6 pb-6">
+              <Skeleton className="h-64 sm:h-80 w-full rounded-md" />
+            </CardContent>
+          </Card>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card className="border border-gray-200 dark:border-border bg-card" dir={isRTL ? "rtl" : "ltr"}>
+              <CardHeader className="pb-2 px-4 sm:px-6">
+                <Skeleton className="h-4 w-16 rounded-md" />
+              </CardHeader>
+              <CardContent className="px-4 sm:px-6 pb-4">
+                <Skeleton className="h-8 w-24 rounded-md mb-4" />
+                <Skeleton className="h-16 w-full rounded-md" />
+              </CardContent>
+            </Card>
+            <Card className="border border-gray-200 dark:border-border bg-card" dir={isRTL ? "rtl" : "ltr"}>
+              <CardHeader className="pb-2 px-4 sm:px-6">
+                <Skeleton className="h-4 w-20 rounded-md" />
+              </CardHeader>
+              <CardContent className="px-4 sm:px-6 pb-4">
+                <Skeleton className="h-8 w-24 rounded-md mb-4" />
+                <Skeleton className="h-16 w-full rounded-md" />
+              </CardContent>
+            </Card>
+          </div>
+        </>
       )}
 
       {/* Stats Cards Row - Stripe-like metrics */}

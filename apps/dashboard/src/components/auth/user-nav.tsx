@@ -111,28 +111,38 @@ export default function UserNav({ user }: UserNavProps) {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-       
         align={isRTL ? "start" : "end"}
-        className="w-56 bg-popover border-border"
+        dir={isRTL ? "rtl" : "ltr"}
+        className="w-60 bg-popover border-border text-base antialiased"
       >
         {/* User Profile Header */}
-        <div className="w-full h-[70px] flex items-center justify-between px-2">
+        <div
+          className={cn(
+            "w-full min-h-[70px] flex items-center gap-3 px-3 py-3",
+            isRTL ? "flex-row-reverse" : "flex-row"
+          )}
+        >
           <Button
             size="icon"
-            className="w-6 h-6 p-1 hover:bg-accent/50 transition-colors"
+            className="w-8 h-8 flex-shrink-0 hover:bg-accent/50 transition-colors"
             variant="secondary"
           >
-            <Eye className="text-muted-foreground hover:text-foreground w-3 h-3 transition-colors" />
+            <Eye className="text-muted-foreground hover:text-foreground w-4 h-4 transition-colors" />
           </Button>
 
-          <div className="cursor-pointer flex flex-col items-end justify-center flex-1 hover:opacity-80 transition-opacity">
-            <Avatar className="w-8 h-8 rounded-md">
+          <div
+            className={cn(
+              "cursor-pointer flex flex-1 items-center gap-3 hover:opacity-90 transition-opacity min-w-0",
+              isRTL ? "flex-row-reverse" : "flex-row"
+            )}
+          >
+            <Avatar className="w-9 h-9 rounded-lg flex-shrink-0">
               <AvatarImage src={user?.avatar || ""} />
-              <AvatarFallback className="bg-muted text-muted-foreground">
+              <AvatarFallback className="bg-muted text-muted-foreground text-sm font-medium">
                 AB
               </AvatarFallback>
             </Avatar>
-            <p className="text-md text-foreground">
+            <p className="text-sm font-semibold text-foreground truncate">
               {user?.firstName || ""} {t("academy")}
             </p>
           </div>
@@ -141,17 +151,22 @@ export default function UserNav({ user }: UserNavProps) {
         <DropdownMenuSeparator className="bg-border" />
 
         {/* Verification Section */}
-        <div className="w-full h-[80px] flex flex-col px-2">
+        <div className="w-full min-h-[80px] flex flex-col px-3 py-2">
           <div
             className={cn(
-              "w-full h-[50px] flex items-center justify-between",
-              isRTL ? "flex-row" : "flex-row-reverse"
+              "w-full min-h-[50px] flex items-center gap-2",
+              isRTL ? "flex-row-reverse justify-between" : "flex-row justify-between"
             )}
           >
-            <VerificationDirectionIcon className="w-4 h-4 text-muted-foreground" />
+            <VerificationDirectionIcon className="w-4 h-4 text-muted-foreground flex-shrink-0" />
 
-            <div className="flex items-center gap-x-2">
-              <p className="text-sm text-foreground">
+            <div
+              className={cn(
+                "flex items-center gap-2 min-w-0 flex-1",
+                isRTL ? "flex-row-reverse justify-end" : "flex-row justify-start"
+              )}
+            >
+              <p className="text-sm font-medium text-foreground leading-snug">
                 {verificationText}
               </p>
               <Image
@@ -159,67 +174,86 @@ export default function UserNav({ user }: UserNavProps) {
                 src="/verified.svg"
                 width={20}
                 height={20}
+                className="flex-shrink-0"
               />
             </div>
           </div>
 
-          <div className="w-full h-[20px] flex items-center">
+          <div className="w-full h-2 flex items-center mt-1">
             <Progress
               value={verificationProgress}
-              className="h-1 w-full bg-muted"
+              className="h-1.5 w-full bg-muted"
             />
           </div>
         </div>
 
         <DropdownMenuSeparator className="bg-border" />
 
-        {/* Navigation Items */}
+        {/* Navigation Items - English: label first then icon; Arabic: icon first then label */}
         <DropdownMenuGroup>
           {navigationItems.map((item) => (
             <DropdownMenuItem
               key={item.href}
-              className="hover:bg-accent focus:bg-accent transition-colors"
+              className="hover:bg-accent focus:bg-accent transition-colors p-0"
             >
               <Link
                 href={item.href}
                 target={item.external ? "_blank" : undefined}
                 className={cn(
-                  "w-full flex items-center justify-between p-2 text-foreground hover:text-foreground/80 transition-colors",
-                  isRTL ? "flex-row-reverse" : "flex-row"
+                  "w-full flex items-center gap-2 px-3 py-2.5 text-foreground hover:text-foreground transition-colors",
+                  isRTL ? "flex-row-reverse justify-between" : "flex-row justify-between"
                 )}
               >
-                <item.icon className="h-4 w-4" />
-                <span>{item.label}</span>
+                {isRTL ? (
+                  <>
+                    <item.icon className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                    <span className="font-medium text-sm">{item.label}</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="font-medium text-sm">{item.label}</span>
+                    <item.icon className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                  </>
+                )}
               </Link>
             </DropdownMenuItem>
           ))}
 
-          {/* Academy Preview */}
+          {/* Academy Preview - English: label first then icon; Arabic: icon first then label */}
           <DropdownMenuItem
             disabled={!user?.subdomain}
-            className="hover:bg-accent focus:bg-accent transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed"
+            className="hover:bg-accent focus:bg-accent transition-colors p-0 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed"
           >
             <Link
               href={user?.subdomain ? `https://${user.subdomain}` : "#"}
               target="_blank"
               onClick={!user?.subdomain ? (e) => e.preventDefault() : undefined}
               className={cn(
-                "w-full flex items-center justify-between p-2 text-foreground transition-colors",
-                isRTL ? "flex-row-reverse" : "flex-row",
+                "w-full flex items-center gap-2 px-3 py-2.5 transition-colors",
+                isRTL ? "flex-row-reverse justify-between" : "flex-row justify-between",
                 user?.subdomain
-                  ? "hover:text-foreground/80"
-                  : "cursor-not-allowed opacity-50"
+                  ? "text-foreground hover:text-foreground/90"
+                  : "cursor-not-allowed opacity-50 text-foreground"
               )}
             >
-              <ExternalLinkDirectionIcon className="h-4 w-4" />
-              <span>{t("academyPreview")}</span>
+              {isRTL ? (
+                <>
+                  <ExternalLinkDirectionIcon className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                  <span className="font-medium text-sm">{t("academyPreview")}</span>
+                </>
+              ) : (
+                <>
+                  <span className="font-medium text-sm">{t("academyPreview")}</span>
+                  <ExternalLinkDirectionIcon className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                </>
+              )}
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator className="bg-border" />
 
-        <LogoutButton />
+        <LogoutButton isRTL={isRTL} />
       </DropdownMenuContent>
     </DropdownMenu>
   );

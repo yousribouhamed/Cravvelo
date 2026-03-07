@@ -60,13 +60,11 @@ const Header: FC<Props> = ({
           </h1>
         </div>
 
-        {/* Center Section - Search (Desktop only) */}
-        <div className="hidden lg:flex flex-1 max-w-sm xl:max-w-md mx-4 xl:mx-8">
-          <SearchInput />
-        </div>
-
-        {/* Right Section - Notifications & User Nav */}
-        <div className="flex items-center gap-1 sm:gap-2 md:gap-3 flex-shrink-0">
+        {/* Right Section - Search, Notifications & User Nav (search close to notification) */}
+        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+          <div className="hidden lg:block flex-shrink-0">
+            <SearchInput />
+          </div>
           <div className="flex-shrink-0">
             <Notifications
               accountId={user.accountId}

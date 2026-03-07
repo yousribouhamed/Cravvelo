@@ -22,6 +22,7 @@ import {
   CreditCard,
 } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
 
 interface PaymentConnection {
   provider: string;
@@ -102,12 +103,12 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
   ];
 
   return (
-    <div className={`w-full min-h-[400px] my-4 ${dir === "rtl" ? "rtl" : ""}`} dir={dir}>
-      <div className="mb-8">
+    <div className="w-full min-h-[400px] my-4" dir={dir}>
+      <div className={cn("mb-8", dir === "rtl" && "text-right")}>
         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
           {t("pageTitle")}
         </h2>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-gray-600 dark:text-gray-400 text-sm">
           {t("pageDescription")}
         </p>
       </div>
@@ -116,15 +117,14 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
         {paymentMethods.map((method) => (
           <Card
             key={method.id}
-            className={`relative overflow-hidden ${
-              method.isConnected
-                ? "ring-2 ring-green-200 dark:ring-green-700"
-                : ""
-            }`}
+            className={cn(
+              "relative overflow-hidden flex flex-col",
+              method.isConnected && "ring-2 ring-green-200 dark:ring-green-700"
+            )}
           >
             {/* Connected Badge */}
             {method.isConnected && (
-              <div className={`absolute top-2 z-10 ${dir === "rtl" ? "left-4" : "right-4"}`}>
+              <div className={cn("absolute top-2 z-10", dir === "rtl" ? "left-4" : "right-4")}>
                 <Badge className="bg-green-100 text-green-700 border-green-200 dark:bg-green-900 dark:text-green-300 dark:border-green-700">
                   {t("connected")}
                 </Badge>
@@ -133,18 +133,18 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
 
             {/* Coming Soon Badge */}
             {!method.isAvailable && (
-              <div className={`absolute top-4 z-10 ${dir === "rtl" ? "left-4" : "right-4"}`}>
+              <div className={cn("absolute top-2 z-10", dir === "rtl" ? "left-4" : "right-4")}>
                 <Badge className="bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:border-gray-600">
-                  <Clock className={`w-3 h-3 ${dir === "rtl" ? "ml-1" : "mr-1"}`} />
+                  <Clock className={cn("w-3 h-3", dir === "rtl" ? "ml-1" : "mr-1")} />
                   {t("comingSoon")}
                 </Badge>
               </div>
             )}
 
-            <CardHeader className="pb-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-xl ${method.badgeColor}`}>
+            <CardHeader className="pb-2">
+              <div className={cn("flex items-center justify-between", dir === "rtl" && "flex-row-reverse")}>
+                <div className={cn("flex items-center gap-3", dir === "rtl" && "flex-row-reverse")}>
+                  <div className={cn("p-2 rounded-xl shrink-0", method.badgeColor)}>
                     {method.id === "p2p" ? (
                       method.icon
                     ) : (
@@ -157,7 +157,7 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
                       />
                     )}
                   </div>
-                  <div>
+                  <div className={cn("min-w-0", dir === "rtl" && "text-right")}>
                     <CardTitle className="text-lg font-bold text-gray-900 dark:text-gray-100">
                       {method.name}
                     </CardTitle>
@@ -166,21 +166,16 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
                     </p>
                   </div>
                 </div>
-                <div className="text-gray-600 dark:text-gray-400">
-                  {method.icon}
-                </div>
               </div>
             </CardHeader>
 
-            <CardContent className="space-y-4">
-              <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed line-clamp-3">
+            <CardContent className="space-y-3 flex-1">
+              <p className="text-gray-700 dark:text-gray-300 text-sm line-clamp-2">
                 {method.description}
               </p>
-
-              {/* Features */}
               <div className="space-y-2">
-                <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                  <Shield className="w-4 h-4" />
+                <h4 className={cn("text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2", dir === "rtl" && "flex-row-reverse justify-end")}>
+                  <Shield className="w-4 h-4 shrink-0" />
                   {t("features")}
                 </h4>
                 <div className="flex flex-wrap gap-1">
@@ -197,55 +192,53 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
               </div>
             </CardContent>
 
-            <CardFooter className="pt-4 gap-2">
-              {method.isAvailable ? (
-                <>
-                  <Button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      router.push(method.route);
-                    }}
-                    className={`flex-1 ${method.accentColor} ${method.hoverColor} dark:text-white text-black font-medium transition-all duration-200 flex items-center justify-center gap-2`}
-                    size="sm"
-                  >
-                    {method.isConnected ? (
-                      <>
-                        <Settings className="w-4 h-4" />
-                        {t("manageAccount")}
-                      </>
-                    ) : (
-                      <>
-                        <ArrowLeft className="w-4 h-4" />
-                        {t("connectAccount")}
-                      </>
-                    )}
-                  </Button>
-                </>
-              ) : (
-                <Button
-                  disabled
-                  className="flex-1 bg-gray-200 text-gray-500 cursor-not-allowed dark:bg-gray-700 dark:text-gray-400"
-                  size="sm"
-                >
-                  <Clock className={`w-4 h-4 ${dir === "rtl" ? "ml-2" : "mr-2"}`} />
-                  {t("comingSoon")}
-                </Button>
-              )}
+            <CardFooter className="pt-4 pb-4 min-h-[44px] flex items-end">
+              <Button
+                onClick={(e) => {
+                  if (!method.isAvailable) return;
+                  e.stopPropagation();
+                  router.push(method.route);
+                }}
+                disabled={!method.isAvailable}
+                className={cn(
+                  "flex-1 flex items-center justify-center gap-2 font-medium transition-all duration-200 min-h-[36px]",
+                  method.isAvailable
+                    ? `${method.accentColor} ${method.hoverColor} dark:text-white text-black`
+                    : "bg-gray-200 text-gray-500 cursor-not-allowed dark:bg-gray-700 dark:text-gray-400"
+                )}
+                size="sm"
+              >
+                {method.isAvailable && method.isConnected ? (
+                  <>
+                    <Settings className="w-4 h-4 shrink-0" />
+                    {t("manageAccount")}
+                  </>
+                ) : method.isAvailable ? (
+                  <>
+                    <ArrowLeft className={cn("w-4 h-4 shrink-0", dir === "rtl" && "rotate-180")} />
+                    {t("connectAccount")}
+                  </>
+                ) : (
+                  <>
+                    <Settings className="w-4 h-4 shrink-0" />
+                    {t("manageAccount")}
+                  </>
+                )}
+              </Button>
             </CardFooter>
 
-            {/* Subtle hover effect overlay */}
-            <div className="absolute inset-0 bg-white dark:bg-gray-800 opacity-0 hover:opacity-5 transition-opacity duration-300 pointer-events-none" />
+            <div className="absolute inset-0 bg-white dark:bg-gray-800 opacity-0 hover:opacity-5 transition-opacity duration-300 pointer-events-none rounded-lg" />
           </Card>
         ))}
       </div>
 
       {/* Help Section */}
-      <div className="mt-12 p-6 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700">
-        <div className="flex items-start gap-4">
-          <div className="p-2 bg-blue-100 dark:bg-gray-700 rounded-lg">
+      <div className={cn("mt-12 p-6 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700", dir === "rtl" && "text-right")}>
+        <div className={cn("flex items-start gap-4", dir === "rtl" && "flex-row-reverse")}>
+          <div className="p-2 bg-blue-100 dark:bg-gray-700 rounded-lg shrink-0">
             <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400" />
           </div>
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
               {t("security.title")}
             </h3>
@@ -255,10 +248,13 @@ const AvailablePaymentMethods: FC<PaymentMethodsConnectorsProps> = ({
             <Button
               variant="outline"
               size="sm"
-              className="text-blue-600 border-blue-200 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-700 dark:hover:bg-blue-900/50"
+              className={cn(
+                "text-blue-600 border-blue-200 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-700 dark:hover:bg-blue-900/50 inline-flex items-center gap-2",
+                dir === "rtl" && "flex-row-reverse"
+              )}
             >
               {t("security.learnMore")}
-              <ArrowLeft className={`w-4 h-4 ${dir === "rtl" ? "ml-2" : "mr-2"}`} />
+              <ArrowLeft className={cn("w-4 h-4 shrink-0", dir === "rtl" && "rotate-180")} />
             </Button>
           </div>
         </div>

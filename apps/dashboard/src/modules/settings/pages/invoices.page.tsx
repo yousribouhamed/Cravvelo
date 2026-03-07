@@ -1,11 +1,11 @@
 "use client";
 
 import { DataTable } from "@/src/components/data-table";
+import { DataTableLoading } from "@/src/components/data-table/table-helpers/table-loading";
 import { useInvoiceColumns } from "../components/columns/invoices";
 
 import { getAllInvoices } from "../actions/invoices.actions";
 import { useQuery } from "@tanstack/react-query";
-import { Loader } from "@/src/components/loader-icon";
 
 export default function InvoicesPage() {
   const columns = useInvoiceColumns();
@@ -21,8 +21,8 @@ export default function InvoicesPage() {
 
   if (isLoading || isFetching) {
     return (
-      <div className="w-full h-[400px] flex items-center justify-center ">
-        <Loader size={16} />
+      <div className="w-full min-h-[400px]">
+        <DataTableLoading columnCount={6} rowCount={8} />
       </div>
     );
   }
@@ -30,7 +30,7 @@ export default function InvoicesPage() {
   if (isError) {
     return (
       <div className="w-full min-h-[300px] flex flex-col items-center justify-center gap-3 text-center">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           {error instanceof Error ? error.message : "Failed to load invoices."}
         </p>
         <button

@@ -27,6 +27,7 @@ import { VideoValidation } from "@/src/modules/course/validation";
 import { useUploadProgress } from "@/src/modules/course/hooks";
 import { useVideoUploadError } from "@/src/modules/course/hooks";
 import axios from "axios";
+import { useTranslations } from "next-intl";
 
 const updateVedioSchema = z.object({
   title: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
@@ -41,6 +42,9 @@ interface UpdateVedioFormProps {
 }
 
 function UpdateVedioForm({ material, courseId }: UpdateVedioFormProps) {
+  const t = useTranslations("common");
+  const tBtn = useTranslations("courses.chapters.video.buttonText");
+  const tProfile = useTranslations("courses.profile");
   const router = useRouter();
   const path = usePathname();
   const chapterID = getValueFromUrl(path, 4);
@@ -278,15 +282,15 @@ function UpdateVedioForm({ material, courseId }: UpdateVedioFormProps) {
   const getUpdateButtonText = () => {
     switch (uploadStatus) {
       case "uploading":
-        return `جاري الرفع ${uploadProgress}%`;
+        return tBtn("uploading", { progress: uploadProgress });
 
       case "completed":
-        return "تم بنجاح ✓";
+        return tBtn("completed");
       default:
         if (mutation.isLoading) {
-          return "جاري التحديث...";
+          return t("updating");
         }
-        return "حفظ التغييرات";
+        return tProfile("saveChanges");
     }
   };
 

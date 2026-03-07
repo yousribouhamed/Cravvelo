@@ -47,6 +47,7 @@ import { Input } from "@ui/components/ui/input";
 import { Textarea } from "@ui/components/ui/textarea";
 import React, { useState, useMemo } from "react";
 import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
 
 type Inputs = {
   bankDetails: string;
@@ -264,13 +265,19 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-900 dark:text-gray-100 font-semibold flex items-center gap-2">
-                            <User className="w-4 h-4" />
+                            <User className="w-4 h-4 shrink-0" />
                             {t("form.accountHolder")}
                           </FormLabel>
                           <FormControl>
                             <div className="relative">
-                              <Input placeholder={t("form.accountHolderPlaceholder")} {...field} />
-                              <User className={`absolute ${dir === "rtl" ? "left-3" : "right-3"} top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4`} />
+                              <Input
+                                placeholder={t("form.accountHolderPlaceholder")}
+                                className={cn("border-gray-300 dark:border-gray-600", dir === "rtl" ? "pl-10 pr-3" : "pl-3 pr-10")}
+                                {...field}
+                              />
+                              <span className={cn("pointer-events-none absolute top-0 bottom-0 flex items-center text-gray-400", dir === "rtl" ? "left-0 pl-3" : "right-0 pr-3")} aria-hidden>
+                                <User className="h-4 w-4" />
+                              </span>
                             </div>
                           </FormControl>
                           <FormMessage />
@@ -285,16 +292,19 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-900 dark:text-gray-100 font-semibold flex items-center gap-2">
-                            <Building className="w-4 h-4" />
+                            <Building className="w-4 h-4 shrink-0" />
                             {t("form.bankName")}
                           </FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Input
                                 placeholder={t("form.bankNamePlaceholder")}
+                                className={dir === "rtl" ? "pl-10 pr-3" : "pl-3 pr-10"}
                                 {...field}
                               />
-                              <Building className={`absolute ${dir === "rtl" ? "left-3" : "right-3"} top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4`} />
+                              <span className={cn("pointer-events-none absolute top-0 bottom-0 flex items-center text-gray-400", dir === "rtl" ? "left-0 pl-3" : "right-0 pr-3")} aria-hidden>
+                                <Building className="h-4 w-4" />
+                              </span>
                             </div>
                           </FormControl>
                           <FormMessage />
@@ -309,16 +319,19 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-900 dark:text-gray-100 font-semibold flex items-center gap-2">
-                            <Hash className="w-4 h-4" />
+                            <Hash className="w-4 h-4 shrink-0" />
                             {t("form.accountNumber")}
                           </FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Input
                                 placeholder={t("form.accountNumberPlaceholder")}
+                                className={cn("border-gray-300 dark:border-gray-600", dir === "rtl" ? "pl-10 pr-3" : "pl-3 pr-10")}
                                 {...field}
                               />
-                              <Hash className={`absolute ${dir === "rtl" ? "left-3" : "right-3"} top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4`} />
+                              <span className={cn("pointer-events-none absolute top-0 bottom-0 flex items-center text-gray-400", dir === "rtl" ? "left-0 pl-3" : "right-0 pr-3")} aria-hidden>
+                                <Hash className="h-4 w-4" />
+                              </span>
                             </div>
                           </FormControl>
                           <FormMessage />
@@ -335,8 +348,8 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                           <FormLabel className="text-gray-900 dark:text-gray-100 font-semibold">
                             {t("form.routingNumber")}
                           </FormLabel>
-                          <FormControl>
-                            <Input placeholder="Routing Number" {...field} />
+                            <FormControl>
+                            <Input placeholder="Routing Number" className="border-gray-300 dark:border-gray-600" {...field} />
                           </FormControl>
                           <FormMessage />
                           <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -358,7 +371,7 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                           <FormControl>
                             <Textarea
                               placeholder={t("form.bankDetailsPlaceholder")}
-                              className="min-h-[100px]"
+                              className="min-h-[100px] overflow-auto"
                               {...field}
                             />
                           </FormControl>
@@ -379,7 +392,7 @@ const P2PConnector: FC<P2PConnectorProps> = ({ data, isAlreadyActive }) => {
                           <FormControl>
                             <Textarea
                               placeholder={t("form.notesPlaceholder")}
-                              className="min-h-[80px]"
+                              className="min-h-[80px] overflow-auto"
                               {...field}
                             />
                           </FormControl>

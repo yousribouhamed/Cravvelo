@@ -23,6 +23,7 @@ import { maketoast } from "@/src/components/toasts";
 import { VideoPlayer } from "@/src/components/models/video-player";
 import { Module } from "@/src/types";
 import { NewVideoUploader } from "@/src/components/uploaders/NewVideoUploader";
+import { useTranslations } from "next-intl";
 
 const updateVedioSchema = z.object({
   title: z.string({ required_error: "يرجى ملئ الحقل" }).min(2).max(50),
@@ -35,6 +36,8 @@ interface UpdateVedioFormProps {
 }
 
 function UpdateVedioForm({ material }: UpdateVedioFormProps) {
+  const t = useTranslations("common");
+  const tCourses = useTranslations("courses");
   const router = useRouter();
   const path = usePathname();
   const chapterID = getValueFromUrl(path, 4);
@@ -214,7 +217,7 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
                 size="lg"
               >
                 {mutation.isLoading ? <LoadingSpinner /> : null}
-                {mutation.isLoading ? "جاري التحديث..." : "حفظ التغييرات"}
+                {mutation.isLoading ? t("updating") : tCourses("profile.saveChanges")}
               </Button>
 
               <Button
@@ -240,7 +243,7 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
                 size="lg"
               >
                 {delete_mutation.isLoading ? <LoadingSpinner /> : null}
-                {delete_mutation.isLoading ? "جاري الحذف..." : "حذف هذه المادة"}
+                {delete_mutation.isLoading ? t("deleting") : tCourses("chapters.menu.deleteMaterial")}
               </Button>
 
               <Button

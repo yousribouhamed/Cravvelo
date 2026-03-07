@@ -31,7 +31,7 @@ import AddChapter from "../../../components/models/create-chapter-modal";
 import { NotFoundCard } from "../../../components/not-found-card";
 import { cn } from "@ui/lib/utils";
 import { Button } from "@ui/components/ui/button";
-import { MoreHorizontal, ChevronDown, Loader2 } from "lucide-react";
+import { MoreHorizontal, ChevronDown } from "lucide-react";
 import DeleteChapter from "../../../components/models/delete-chapter-modal";
 import { useMounted } from "../../../hooks/use-mounted";
 import UpdateChapterModel from "../../../components/models/update-chapter-modal";
@@ -40,6 +40,7 @@ import { AddToChapter } from "./AddToChapter";
 import ModulesList from "./modules-list";
 import { Module } from "@/src/types";
 import { maketoast } from "@/src/components/toasts";
+import { Skeleton } from "@ui/components/ui/skeleton";
 
 interface ChaptersBoardProps {
   initialData: ChapterType[];
@@ -279,9 +280,27 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
   // Loading state
   if (isLoading) {
     return (
-      <div className="mt-8 flex items-center justify-center">
-        <Loader2 className="h-6 w-6 animate-spin" />
-        <span className="mr-2">{t("loading.loadingChapters")}</span>
+      <div className="mt-8 flex flex-col gap-y-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div
+            key={i}
+            className="flex flex-col bg-card justify-start gap-y-2 border border-border rounded-2xl p-4"
+          >
+            <div className="w-full h-[40px] flex items-center justify-between">
+              <div className="w-fit h-full flex items-center gap-x-3">
+                <Skeleton className="h-5 w-5 rounded-lg shrink-0" />
+                <div className="flex flex-col gap-y-2">
+                  <Skeleton className="h-4 w-40 rounded-md" />
+                  <Skeleton className="h-3 w-20 rounded-md" />
+                </div>
+              </div>
+              <div className="flex items-center gap-x-2">
+                <Skeleton className="h-6 w-14 rounded-full" />
+                <Skeleton className="h-8 w-8 rounded-lg" />
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     );
   }

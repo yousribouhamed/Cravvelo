@@ -1,35 +1,15 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
 interface LoadingScreenProps {
   mode?: "loading" | "signin" | "signup" | "restriction";
 }
 
 export function LoadingScreen({ mode = "loading" }: LoadingScreenProps) {
-  const getDisplayText = () => {
-    switch (mode) {
-      case "signin":
-        return {
-          title: "مرحبًا بعودتك ...",
-          subtitle: "العلم خير من المال، العلم يحرسك وأنت تحرس المال",
-        };
-      case "signup":
-        return {
-          title: "مرحبًا بك ...",
-          subtitle: "اطلبوا العلم من المهد إلى اللحد",
-        };
-      case "restriction":
-        return {
-          title: "جاري التحقق ...",
-          subtitle: "من طلب العلا سهر الليالي",
-        };
-      default:
-        return {
-          title: "جاري التحميل ...",
-          subtitle:
-            "أول العلم الصمت والثاني حسن الإستماع والثالث حفظه والرابع العمل به والخامس نشره",
-        };
-    }
-  };
-
-  const { title, subtitle } = getDisplayText();
+  const t = useTranslations("loadingScreen");
+  const title = t(`${mode}.title`);
+  const subtitle = t(`${mode}.subtitle`);
 
   return (
     <div
@@ -91,7 +71,7 @@ export function LoadingScreen({ mode = "loading" }: LoadingScreenProps) {
         ></circle>
       </svg>
       <span className="text-xl font-bold">{title}</span>
-      <span className="text-sm text-gray-500">{subtitle}</span>
+      <span className="text-sm text-muted-foreground">{subtitle}</span>
     </div>
   );
 }

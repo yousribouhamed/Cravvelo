@@ -21,6 +21,7 @@ import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 import { CravveloEditor } from "@cravvelo/editor";
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 const updateTextSchema = z.object({
   title: z.string().min(2).max(50),
@@ -29,6 +30,7 @@ const updateTextSchema = z.object({
 });
 
 function UpdateTextModuleForm() {
+  const t = useTranslations("courses");
   const router = useRouter();
   const path = usePathname();
   const chapterID = getValueFromUrl(path, 4);
@@ -101,9 +103,9 @@ function UpdateTextModuleForm() {
   // Show loading spinner while fetching module data
   if (isLoadingModule) {
     return (
-      <div className="flex justify-center items-center h-64">
+      <div className="flex justify-center items-center h-64 gap-2">
         <LoadingSpinner />
-        <span className="mr-2">جاري تحميل بيانات الدرس...</span>
+        <span>{t("loadingLessonData")}</span>
       </div>
     );
   }

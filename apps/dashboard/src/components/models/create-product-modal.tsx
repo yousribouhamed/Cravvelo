@@ -64,8 +64,8 @@ const AddProductModel: FC = ({}) => {
       <DialogTrigger asChild>
         <Button
           data-ripple-light="true"
-          variant="secondary"
-          className="h-[50px] px-4 rounded-xl border bg-card text-foreground flex items-center gap-x-2"
+          variant="default"
+          className="h-[50px] px-4 rounded-xl flex items-center gap-x-2"
         >
           <svg
             width="18"
@@ -73,13 +73,13 @@ const AddProductModel: FC = ({}) => {
             viewBox="0 0 18 18"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            className="stroke-current"
           >
             <path
               d="M8.8575 3.61523V14.0404M14.0701 8.82784H3.6449"
-              stroke="white"
-              stroke-width="1.04252"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="1.04252"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
           </svg>
           {t("actions.addNew")}

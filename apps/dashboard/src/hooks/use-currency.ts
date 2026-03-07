@@ -1,7 +1,6 @@
 "use client";
 
 import { trpc } from "@/src/app/_trpc/client";
-import { formatCurrency } from "@/src/lib/utils";
 import { useCallback, useMemo } from "react";
 
 export interface CurrencyConfig {
@@ -14,10 +13,11 @@ export interface CurrencyConfig {
 /**
  * Hook to get the website's currency settings and provide formatting utilities.
  * Uses the website settings to ensure consistent currency display across the dashboard.
+ * formatPrice returns plain integers (e.g. 1000) with no decimals, separators, or symbol.
  *
  * @example
  * const { currency, formatPrice } = useCurrency();
- * return <span>{formatPrice(100)}</span>; // "100.00 DA" or "$100.00" etc.
+ * return <span>{formatPrice(100)}</span>; // "100"
  */
 export function useCurrency(): CurrencyConfig {
   const { data: website, isLoading } = trpc.getWebsiteAssets.useQuery(
@@ -31,12 +31,9 @@ export function useCurrency(): CurrencyConfig {
   const currency = website?.currency || "DZD";
   const currencySymbol = website?.currencySymbol || "DA";
 
-  const formatPrice = useCallback(
-    (amount: number): string => {
-      return formatCurrency(amount, currency, currencySymbol);
-    },
-    [currency, currencySymbol]
-  );
+  const formatPrice = useCallback((amount: number): string => {
+    return Math.round(amount).toString();
+  }, []);
 
   return useMemo(
     () => ({
@@ -63,7 +60,6 @@ export function getCurrencyConfig(website: {
   return {
     currency,
     currencySymbol,
-    formatPrice: (amount: number) =>
-      formatCurrency(amount, currency, currencySymbol),
+    formatPrice: (amount: number) => Math.round(amount).toString(),
   };
 }

@@ -1,8 +1,8 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { CravveloSpinner } from "@/src/components/cravvelo-spinner";
 import { getInvoiceDetailById } from "../actions/invoices.actions";
+import { Skeleton } from "@ui/components/ui/skeleton";
 import { Button } from "@ui/components/ui/button";
 import { Badge } from "@ui/components/ui/badge";
 import {
@@ -44,9 +44,54 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
 
   if (isLoading || isFetching) {
     return (
-      <div className="w-full h-[400px] flex flex-col gap-3 items-center justify-center ">
-        <CravveloSpinner size="md" />
-        <p className="text-sm text-gray-600">{locale === "ar" ? "جاري تحميل تفاصيل الفاتورة..." : "Loading invoice details..."}</p>
+      <div className="p-4 space-y-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-48 rounded-md" />
+            <Skeleton className="h-4 w-32 rounded-md" />
+          </div>
+          <Skeleton className="h-10 w-40 rounded-md" />
+        </div>
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <Skeleton className="h-6 w-24 rounded-md" />
+              <Skeleton className="h-6 w-20 rounded-full" />
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="flex items-center space-x-3">
+                  <Skeleton className="h-5 w-5 rounded shrink-0" />
+                  <div className="space-y-2 flex-1">
+                    <Skeleton className="h-4 w-16 rounded-md" />
+                    <Skeleton className="h-5 w-24 rounded-md" />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-full rounded-md" />
+              <Skeleton className="h-4 w-3/4 rounded-md" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <Skeleton className="h-6 w-32 rounded-md" />
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-start space-x-4">
+              <Skeleton className="w-16 h-16 rounded-lg shrink-0" />
+              <div className="flex-1 space-y-2">
+                <Skeleton className="h-5 w-48 rounded-md" />
+                <Skeleton className="h-4 w-full rounded-md" />
+                <Skeleton className="h-4 w-24 rounded-md" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }

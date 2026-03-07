@@ -79,8 +79,8 @@ const AddCourse: FC = ({}) => {
       <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
         <DialogTrigger asChild>
           <Button
-            variant="secondary"
-            className="h-[50px] px-4 rounded-xl border bg-card text-foreground flex items-center gap-x-2 dark:border-gray-700 dark:bg-card dark:hover:bg-muted/80"
+            variant="default"
+            className="h-[50px] px-4 rounded-xl flex items-center gap-x-2"
           >
             <svg
               width="20"
@@ -97,7 +97,7 @@ const AddCourse: FC = ({}) => {
                 strokeLinejoin="round"
               />
             </svg>
-            <span className="text-xs md:text-base text-foreground">{t("actions.addNew")}</span>
+            <span className="text-xs md:text-base">{t("actions.addNew")}</span>
           </Button>
         </DialogTrigger>
         <DialogContent className="max-w-lg" title={t("modal.title")}>

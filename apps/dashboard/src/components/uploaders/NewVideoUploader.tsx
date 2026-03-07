@@ -9,6 +9,7 @@ import { cn } from "@ui/lib/utils";
 import { Trash2, XCircle } from "lucide-react";
 import { Button } from "@ui/components/ui/button";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export const NewVideoUploader = ({
   onChange,
@@ -24,6 +25,7 @@ export const NewVideoUploader = ({
   initialVideoId?: string;
   setVideoSize?: React.Dispatch<React.SetStateAction<number>>;
 }) => {
+  const t = useTranslations("courses.chapters.videoUploader");
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
   const [progress, setProgress] = React.useState<number>(0);
 
@@ -151,10 +153,10 @@ export const NewVideoUploader = ({
               <XCircle className="h-8 w-8 text-red-500 mb-2" />
               <p className="mb-2 text-sm text-zinc-700 dark:text-zinc-50">
                 <span className="font-semibold mx-2 text-red-500">
-                  هذا الملف غير مقبول
+                  {t("errors.fileNotAccepted")}
                 </span>
                 <br />
-                الرجاء ادخال ملفات بصيغة الفيديو
+                {t("errors.pleaseEnterValid")}
               </p>
             </div>
           ) : (
@@ -170,10 +172,10 @@ export const NewVideoUploader = ({
                         src={"/video.png"}
                       />
                       <p className="mt-2 text-base font-medium text-muted-foreground">
-                        اسحب و اسقط الملف هنا او اضغط لاختيار الملف
+                        {t("dragDropText")}
                       </p>
-                      <p className="text-sm text-slate-500">
-                        يرجى تحميل الملف بحجم أقل من 1G
+                      <p className="text-sm text-slate-500 dark:text-muted-foreground">
+                        {t("fileSizeNote")}
                       </p>
                     </div>
                   );
@@ -216,19 +218,19 @@ export const NewVideoUploader = ({
                         alt="video uploder"
                         src={"/video.png"}
                       />
-                      <p className="text-blue-600">تم تحميل الفيديو الخاص بك</p>
+                      <p className="text-blue-600 dark:text-blue-400">{t("videoUploaded")}</p>
 
                       <div>
-                        <span className="text-lg text-gray-500">
-                          يمكنك معاينة الفيديو من{" "}
+                        <span className="text-lg text-muted-foreground">
+                          {t("previewVideo")}{" "}
                           <span
                             onClick={(e: React.MouseEvent) => {
                               e.stopPropagation();
                               setOpen(true);
                             }}
-                            className="text-primary font-bold"
+                            className="text-primary font-bold cursor-pointer"
                           >
-                            هنا
+                            {t("previewHere")}
                           </span>
                         </span>
                       </div>

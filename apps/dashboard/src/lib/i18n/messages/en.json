@@ -21,10 +21,16 @@
     "submit": "Submit",
     "close": "Close",
     "showPassword": "Show password",
-    "hidePassword": "Hide password"
+    "hidePassword": "Hide password",
+    "saveAndContinue": "Save and continue",
+    "cancelAndBack": "Cancel and go back",
+    "deleting": "Deleting...",
+    "updating": "Updating...",
+    "saving": "Saving..."
   },
   "settings": {
     "title": "General Settings",
+    "checkingDomainStatus": "Checking domain status...",
     "language": {
       "label": "Language",
       "description": "Select your preferred language"
@@ -70,6 +76,33 @@
       "loading": "Loading..."
     }
   },
+  "loadingScreen": {
+    "loading": {
+      "title": "Loading...",
+      "subtitle": "Please wait a moment"
+    },
+    "signin": {
+      "title": "Welcome back...",
+      "subtitle": "Signing you in"
+    },
+    "signup": {
+      "title": "Welcome...",
+      "subtitle": "Creating your account"
+    },
+    "restriction": {
+      "title": "Verifying...",
+      "subtitle": "Checking access"
+    },
+    "settingUpAccount": "Setting up your account...",
+    "ssoProcessing": "Processing sign in...",
+    "authError": {
+      "title": "Sign-in error",
+      "backToSignIn": "Back to sign in",
+      "retry": "Retry",
+      "timeout": "Sign-in took too long. Please try again.",
+      "generic": "An error occurred during sign in. Please try again."
+    }
+  },
   "forms": {
     "required": "This field is required",
     "invalidEmail": "Please enter a valid email address",
@@ -79,6 +112,8 @@
   },
   "dataTable": {
     "noResults": "No results found",
+    "searchPlaceholder": "Search...",
+    "exportData": "Export data",
     "page": "Page",
     "of": "of",
     "previous": "Previous",
@@ -309,6 +344,10 @@
     "domain": "Domain",
     "general": "General",
     "balance": "Balance"
+  },
+  "createAcademia": {
+    "heading": "You need to create an academy to view dashboard analytics and use the platform.",
+    "imageAlt": "Create your academy"
   },
   "addNew": {
     "button": "Add New",
@@ -751,22 +790,22 @@
   "paymentMethods": {
     "title": "Payment Gateways",
     "pageTitle": "Payment Methods",
-    "pageDescription": "Connect your account with different payment platforms to start receiving money",
+    "pageDescription": "Connect payment platforms to receive money",
     "chargily": {
       "name": "Chargily",
-      "description": "The leading platform in Algeria for receiving money online without needing a business license",
+      "description": "Receive payments online in Algeria—no business license required.",
       "shortDesc": "Digital payments in Algeria",
       "features": ["Instant payment", "No business license required", "Secure and guaranteed"]
     },
     "p2p": {
       "name": "P2P Transfer",
-      "description": "Direct transfer from person to person via digital wallets and local banking apps",
+      "description": "Direct transfers via digital wallets and local banking apps.",
       "shortDesc": "Direct P2P Transfer",
       "features": ["Fast transfer", "Low fees", "Local support"]
     },
     "stripe": {
       "name": "Stripe",
-      "description": "Global payment platform that enables businesses to accept payments and manage financial operations easily and securely",
+      "description": "Accept payments and manage operations globally and securely.",
       "shortDesc": "Global Payments",
       "features": ["International acceptance", "Advanced security", "Detailed reports"]
     },
@@ -777,7 +816,7 @@
     "connectAccount": "Connect Account",
     "security": {
       "title": "Payment Security",
-      "description": "All available payment methods use the latest security and encryption technologies to protect your financial data",
+      "description": "All payment methods use encryption to protect your data.",
       "learnMore": "Learn More"
     },
     "validation": {
@@ -1228,7 +1267,10 @@
       "previewVideo": "Preview video",
       "dragDropText": "Drag and drop the file here or click to select file",
       "fileSizeNote": "Please upload file less than 1GB",
-      "supportedFormats": "Supported formats: MP4, MOV, AVI"
+      "supportedFormats": "Supported formats: MP4, MOV, AVI",
+      "videoUploaded": "Your video has been uploaded",
+      "uploadMayTakeTime": "Video upload may take a moment",
+      "previewHere": "here"
     },
     "courseSettings": {
       "sections": {
@@ -1494,6 +1536,7 @@
       "status": "Status",
       "installedAt": "Installed At",
       "subscriptionAmount": "Subscription Amount",
+      "loadingDetails": "Loading invoice details...",
       "notFound": "Invoice not found",
       "notFoundDescription": "Unable to load the requested invoice."
     }

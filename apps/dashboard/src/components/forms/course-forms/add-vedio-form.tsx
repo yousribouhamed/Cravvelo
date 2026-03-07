@@ -25,6 +25,7 @@ import { VideoPlayer } from "../../models/video-player";
 import { maketoast } from "../../toasts";
 import { trpc } from "@/src/app/_trpc/client";
 import axios from "axios";
+import { useTranslations } from "next-intl";
 
 const addVideoSchema = z.object({
   title: z.string().min(1, "عنوان الفيديو مطلوب"),
@@ -38,6 +39,7 @@ interface AddVideoFormProps {
 }
 
 function AddVideoForm({ chapterID, courseId }: AddVideoFormProps) {
+  const t = useTranslations("courses.chapters.video.buttonText");
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [selectedVideo, setSelectedVideo] = React.useState<File | null>(null);
@@ -255,15 +257,15 @@ function AddVideoForm({ chapterID, courseId }: AddVideoFormProps) {
   const getUploadButtonText = () => {
     switch (uploadStatus) {
       case "uploading":
-        return `جاري الرفع ${uploadProgress}%`;
+        return t("uploading", { progress: uploadProgress });
 
       case "completed":
-        return "تم بنجاح ✓";
+        return t("completed");
       default:
         if (createModuleMutation.isLoading) {
-          return "جاري إنشاء الوحدة...";
+          return t("creating");
         }
-        return "رفع وحفظ";
+        return t("uploadAndSave");
     }
   };
 

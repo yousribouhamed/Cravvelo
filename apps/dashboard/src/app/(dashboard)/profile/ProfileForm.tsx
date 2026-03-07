@@ -690,7 +690,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
                     {loading || accountMutation.isLoading || signedUrlMutation.isLoading ? (
                       <span className="flex items-center gap-2">
                         <span className="animate-spin">⏳</span>
-                        جاري الحفظ...
+                        {t("personalInfo.saving")}
                       </span>
                     ) : (
                       <span className="flex items-center gap-2">

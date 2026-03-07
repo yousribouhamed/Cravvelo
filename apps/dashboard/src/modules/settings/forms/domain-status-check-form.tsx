@@ -26,12 +26,14 @@ import { maketoast } from "@/src/components/toasts";
 import DomainStatus from "@/src/components/domain-status";
 import DomainConfiguration from "@/src/components/domain-configuration";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 const domainCheckSchema = z.object({
   domain: z.string().min(1, "يجب إدخال النطاق"),
 });
 
 const DomainStatusCheckForm: FC = () => {
+  const t = useTranslations("settings");
   const [domainStatusData, setDomainStatusData] = useState<any>(null);
   const [isCheckingDomain, setIsCheckingDomain] = useState(false);
   const [checkedDomain, setCheckedDomain] = useState<string>("");
@@ -129,7 +131,7 @@ const DomainStatusCheckForm: FC = () => {
                 <div className="flex flex-col items-center gap-4">
                   <LoadingSpinner />
                   <p className="text-sm text-muted-foreground">
-                    جاري فحص حالة النطاق...
+                    {t("checkingDomainStatus")}
                   </p>
                 </div>
               </div>

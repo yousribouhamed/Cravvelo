@@ -47,6 +47,7 @@ import {
 } from "../actions/chargily";
 import { ChargilyConfigType } from "../types";
 import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
 
 type Inputs = z.infer<typeof ChargilyConnectSchema>;
 
@@ -250,13 +251,19 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="text-gray-900 dark:text-gray-100 font-semibold flex items-center gap-2">
-                              <Key className="w-4 h-4" />
+                              <Key className="w-4 h-4 shrink-0" />
                               {t("form.publicKey")}
                             </FormLabel>
                             <FormControl>
                               <div className="relative">
-                                <Input placeholder={t("form.publicKeyPlaceholder")} {...field} />
-                                <Key className={`absolute ${dir === "rtl" ? "left-3" : "right-3"} top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4`} />
+                                <Input
+                                  placeholder={t("form.publicKeyPlaceholder")}
+                                  className={cn("border-gray-300 dark:border-gray-600", dir === "rtl" ? "pl-10 pr-3" : "pl-3 pr-10")}
+                                  {...field}
+                                />
+                                <span className={cn("pointer-events-none absolute top-0 bottom-0 flex items-center text-gray-400", dir === "rtl" ? "left-0 pl-3" : "right-0 pr-3")} aria-hidden>
+                                  <Key className="h-4 w-4" />
+                                </span>
                               </div>
                             </FormControl>
                             <FormMessage />
@@ -276,7 +283,7 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="text-gray-900 dark:text-gray-100 font-semibold flex items-center gap-2">
-                              <Shield className="w-4 h-4" />
+                              <Shield className="w-4 h-4 shrink-0" />
                               {t("form.secretKey")}
                             </FormLabel>
                             <FormControl>
@@ -284,9 +291,12 @@ const ChargilyConnector: FC<PaymentMethodsConnectorsProps> = ({
                                 <Input
                                   type="password"
                                   placeholder={t("form.secretKeyPlaceholder")}
+                                  className={cn("border-gray-300 dark:border-gray-600", dir === "rtl" ? "pl-10 pr-3" : "pl-3 pr-10")}
                                   {...field}
                                 />
-                                <Shield className={`absolute ${dir === "rtl" ? "left-3" : "right-3"} top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4`} />
+                                <span className={cn("pointer-events-none absolute top-0 bottom-0 flex items-center text-gray-400", dir === "rtl" ? "left-0 pl-3" : "right-0 pr-3")} aria-hidden>
+                                  <Shield className="h-4 w-4" />
+                                </span>
                               </div>
                             </FormControl>
                             <FormMessage />

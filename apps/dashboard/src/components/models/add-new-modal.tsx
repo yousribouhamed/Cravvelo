@@ -187,14 +187,14 @@ const AddNew: FC = () => {
                             className="flex justify-between items-center space-y-0"
                             dir={isRTL ? "rtl" : "ltr"}
                           >
-                            <div className={cn("flex items-center gap-4", isRTL ? "flex-row" : "flex-row-reverse")}>
-                              <div className="p-2 rounded-full bg-blue-100 dark:bg-blue-900/30">
+                            <div className="flex items-center gap-4 flex-row">
+                              <div className="p-2 rounded-full bg-blue-100 dark:bg-blue-900/30 shrink-0">
                                 <BookOpen
                                   size={20}
                                   className="text-blue-600 dark:text-blue-400"
                                 />
                               </div>
-                              <div className={isRTL ? "text-right" : "text-left"}>
+                              <div className={cn("min-w-0", isRTL ? "text-right" : "text-left")}>
                                 <FormLabel className="font-medium cursor-pointer text-foreground">
                                   {t("trainingCourse")}
                                 </FormLabel>
@@ -203,7 +203,7 @@ const AddNew: FC = () => {
                                 </p>
                               </div>
                             </div>
-                            <FormControl>
+                            <FormControl className="shrink-0">
                               <RadioGroupItem value="course" />
                             </FormControl>
                           </FormItem>
@@ -214,14 +214,14 @@ const AddNew: FC = () => {
                             className="flex justify-between items-center space-y-0"
                             dir={isRTL ? "rtl" : "ltr"}
                           >
-                            <div className={cn("flex items-center gap-4", isRTL ? "flex-row" : "flex-row-reverse")}>
-                              <div className="p-2 rounded-full bg-green-100 dark:bg-green-900/30">
+                            <div className="flex items-center gap-4 flex-row">
+                              <div className="p-2 rounded-full bg-green-100 dark:bg-green-900/30 shrink-0">
                                 <Package
                                   size={20}
                                   className="text-green-600 dark:text-green-400"
                                 />
                               </div>
-                              <div className={isRTL ? "text-right" : "text-left"}>
+                              <div className={cn("min-w-0", isRTL ? "text-right" : "text-left")}>
                                 <FormLabel className="font-medium cursor-pointer text-foreground">
                                   {t("digitalProduct")}
                                 </FormLabel>
@@ -230,7 +230,7 @@ const AddNew: FC = () => {
                                 </p>
                               </div>
                             </div>
-                            <FormControl>
+                            <FormControl className="shrink-0">
                               <RadioGroupItem value="product" />
                             </FormControl>
                           </FormItem>

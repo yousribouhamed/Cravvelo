@@ -49,6 +49,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@ui/components/ui/popover";
+import { useTranslations } from "next-intl";
 import { Separator } from "@ui/components/ui/separator";
 import { Badge } from "@ui/components/ui/badge";
 import { Column } from "@tanstack/react-table";
@@ -98,6 +99,7 @@ export function DataTable<TData, TValue>({
 
   academia_url,
 }: DataTableProps<TData, TValue>) {
+  const t = useTranslations("common");
   const [rowSelection, setRowSelection] = React.useState({});
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -297,7 +299,7 @@ export function DataTable<TData, TValue>({
             disabled={isDeleteButtonLoading}
           >
             {isDeleteButtonLoading ? (
-              <>جاري الحذف ...</>
+              <>{t("deleting")}</>
             ) : (
               <>
                 <Trash2 className="w-5 h-5 mx-2" />

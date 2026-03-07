@@ -44,8 +44,8 @@ function GeneralSettingsHeader({ className, ...props }: ExamplesNavProps) {
     <div className="relative w-full my-4 h-[60px]">
       <div
         className={cn(
-          "mb-4 w-full flex items-center justify-start rounded-lg h-full border",
-          "bg-white text-black dark:bg-[#0A0A0C] dark:text-zinc-50"
+          "mb-4 w-full flex items-center justify-start rounded-lg h-full border border-border",
+          "bg-card text-foreground"
         )}
       >
         {links.map((item, index) => (
@@ -56,8 +56,8 @@ function GeneralSettingsHeader({ className, ...props }: ExamplesNavProps) {
               "flex h-[60px] items-center justify-center px-4 text-center text-sm transition-colors",
               "hover:text-primary",
               isActive(item.href)
-                ? "border-b-2 border-[#F0B110] font-semibold text-black dark:text-white"
-                : "text-zinc-600 dark:text-zinc-400"
+                ? "border-b-2 border-[#F0B110] font-semibold text-foreground"
+                : "text-muted-foreground"
             )}
           >
             {item.name}
