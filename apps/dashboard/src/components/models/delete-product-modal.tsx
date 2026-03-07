@@ -17,6 +17,8 @@ import { maketoast } from "../toasts";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { Button } from "@ui/components/ui/button";
 import { useOpenProductDeleteAction } from "@/src/lib/zustand/delete-actions";
+import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
 
 interface DeleteProductModelProps {
   refetch: () => Promise<any>;
@@ -24,6 +26,10 @@ interface DeleteProductModelProps {
 
 const DeleteProductModel: FC<DeleteProductModelProps> = ({ refetch }) => {
   const mounted = useMounted();
+  const t = useTranslations("modals");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
 
   const { id, open, setId, setIsOpen } = useOpenProductDeleteAction();
 
@@ -31,7 +37,7 @@ const DeleteProductModel: FC<DeleteProductModelProps> = ({ refetch }) => {
     onSuccess: async () => {
       await refetch();
       setIsOpen(false);
-      maketoast.successWithText({ text: "تم حذف منتجك" });
+      maketoast.successWithText({ text: t("productDeleted") });
     },
     onError: () => {
       maketoast.error();
@@ -46,21 +52,19 @@ const DeleteProductModel: FC<DeleteProductModelProps> = ({ refetch }) => {
     <AlertDialog open={open} onOpenChange={(val) => setIsOpen(val)}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle className="w-full flex justify-start">
-            هل أنت متأكد تمامًا من رغبتك في حذف هذا منتج؟
+          <AlertDialogTitle className={cn("w-full flex", isRTL ? "justify-start" : "justify-start")}>
+            {t("deleteProductConfirm")}
           </AlertDialogTitle>
-          <AlertDialogDescription className="w-full my-4 flex justify-start">
-            <div dir="rtl">
-              <p className="text-start">
-                {" "}
-                لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف ملفك نهائيًا
-                الحساب وإزالة بياناتك من خوادمنا.
+          <AlertDialogDescription className={cn("w-full my-4 flex", isRTL ? "justify-start" : "justify-start")}>
+            <div dir={isRTL ? "rtl" : "ltr"}>
+              <p className={cn(isRTL ? "text-start" : "text-start")}>
+                {t("deleteProductDescription")}
               </p>
             </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className=" w-full flex justify-start gap-x-4">
-          <AlertDialogCancel>الإلغاء</AlertDialogCancel>
+        <AlertDialogFooter className={cn("w-full flex gap-x-4", isRTL ? "justify-start" : "justify-end")}>
+          <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
           <Button
             className=" flex items-center gap-x-2"
             disabled={mutation.isLoading}

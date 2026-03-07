@@ -74,6 +74,43 @@ const getColors = (type: keyof typeof colors.light) => {
   return theme[type];
 };
 
+// Locale helpers for default messages
+type ToastKind = "success" | "error" | "info" | "warning" | "loading";
+
+const getCurrentLocale = (): "en" | "ar" => {
+  if (typeof document !== "undefined") {
+    const htmlLang = document.documentElement.lang;
+    if (htmlLang) {
+      const normalized = htmlLang.toLowerCase();
+      if (normalized.startsWith("en")) return "en";
+      if (normalized.startsWith("ar")) return "ar";
+    }
+  }
+  return "ar";
+};
+
+const defaultMessages: Record<"en" | "ar", Record<ToastKind, string>> = {
+  en: {
+    success: "Success",
+    error: "Error",
+    info: "Info",
+    warning: "Warning",
+    loading: "Loading...",
+  },
+  ar: {
+    success: "نجاح",
+    error: "خطأ",
+    info: "معلومة",
+    warning: "تحذير",
+    loading: "جاري التحميل...",
+  },
+};
+
+const getDefaultMessage = (type: ToastKind) => {
+  const locale = getCurrentLocale();
+  return defaultMessages[locale][type];
+};
+
 // Base toast style
 const getBaseStyle = (type: keyof typeof colors.light) => {
   const themeColors = getColors(type);
@@ -136,7 +173,7 @@ const ToastContent = ({
 
 export const maketoast = {
   success: (text?: string) => {
-    const message = text || "نجاح";
+    const message = text || getDefaultMessage("success");
     return toast.custom(
       (t) => (
         <div style={getBaseStyle("success")}>
@@ -173,7 +210,7 @@ export const maketoast = {
   },
 
   error: (text?: string) => {
-    const message = text || "خطأ";
+    const message = text || getDefaultMessage("error");
     return toast.custom(
       (t) => (
         <div style={getBaseStyle("error")}>
@@ -210,7 +247,7 @@ export const maketoast = {
   },
 
   info: (text?: string) => {
-    const message = text || "معلومة";
+    const message = text || getDefaultMessage("info");
     return toast.custom(
       (t) => (
         <div style={getBaseStyle("info")}>
@@ -229,7 +266,7 @@ export const maketoast = {
   },
 
   warning: (text?: string) => {
-    const message = text || "تحذير";
+    const message = text || getDefaultMessage("warning");
     return toast.custom(
       (t) => (
         <div style={getBaseStyle("warning")}>
@@ -252,7 +289,7 @@ export const maketoast = {
 
   // Loading toast
   loading: (text?: string) => {
-    const message = text || "جاري التحميل...";
+    const message = text || getDefaultMessage("loading");
     return toast.loading(message, {
       style: getBaseStyle("info"),
       position: "bottom-right",

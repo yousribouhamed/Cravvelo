@@ -61,6 +61,15 @@
       "updated": "Item updated successfully."
     }
   },
+  "toasts": {
+    "generic": {
+      "success": "Success",
+      "error": "Error",
+      "info": "Info",
+      "warning": "Warning",
+      "loading": "Loading..."
+    }
+  },
   "forms": {
     "required": "This field is required",
     "invalidEmail": "Please enter a valid email address",
@@ -73,7 +82,18 @@
     "page": "Page",
     "of": "of",
     "previous": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "sort": {
+      "ascending": "Ascending",
+      "descending": "Descending",
+      "aria": {
+        "sortedDescending": "Sorted descending. Click to sort ascending.",
+        "sortedAscending": "Sorted ascending. Click to sort descending.",
+        "notSorted": "Not sorted. Click to sort ascending.",
+        "sortAscending": "Sort ascending",
+        "sortDescending": "Sort descending"
+      }
+    }
   },
   "search": {
     "placeholder": "Search courses and products...",

@@ -31,6 +31,7 @@ import { useTranslations } from "next-intl";
 const AddCourse: FC = ({}) => {
   const router = useRouter();
   const t = useTranslations("courses");
+  const tAddNew = useTranslations("addNew");
   const [isOpen, setIsOpen] = React.useState(false);
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -38,7 +39,7 @@ const AddCourse: FC = ({}) => {
     onSuccess: ({ courseId, planExceeded, success }) => {
       if (success) {
         router.push(`/courses/${courseId}/chapters`);
-        maketoast.success();
+        maketoast.successWithText({ text: tAddNew("courseCreated") });
         setIsOpen(false);
       }
     },
@@ -77,7 +78,10 @@ const AddCourse: FC = ({}) => {
     <>
       <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
         <DialogTrigger asChild>
-          <Button className="rounded-xl border flex items-center gap-x-2 dark:border-gray-700 dark:hover:bg-gray-800">
+          <Button
+            variant="secondary"
+            className="h-[50px] px-4 rounded-xl border bg-card text-foreground flex items-center gap-x-2 dark:border-gray-700 dark:bg-card dark:hover:bg-muted/80"
+          >
             <svg
               width="20"
               height="20"

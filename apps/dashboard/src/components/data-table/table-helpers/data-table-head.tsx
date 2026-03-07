@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -5,6 +7,7 @@ import {
   EyeNoneIcon,
 } from "@radix-ui/react-icons";
 import { type Column } from "@tanstack/react-table";
+import { useTranslations } from "next-intl";
 
 import { cn } from "@ui/lib/utils";
 import { Button } from "@ui/components/ui/button";
@@ -27,6 +30,8 @@ export function DataTableColumnHeader<TData, TValue>({
   title,
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
+  const t = useTranslations("dataTable");
+
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
   }
@@ -38,10 +43,10 @@ export function DataTableColumnHeader<TData, TValue>({
           <Button
             aria-label={
               column.getIsSorted() === "desc"
-                ? `Sorted descending. Click to sort ascending.`
+                ? t("sort.aria.sortedDescending")
                 : column.getIsSorted() === "asc"
-                ? `Sorted ascending. Click to sort descending.`
-                : `Not sorted. Click to sort ascending.`
+                ? t("sort.aria.sortedAscending")
+                : t("sort.aria.notSorted")
             }
             variant="ghost"
             size="lg"
@@ -75,7 +80,7 @@ export function DataTableColumnHeader<TData, TValue>({
           className="bg-background border-border"
         >
           <DropdownMenuItem
-            aria-label="Sort ascending"
+            aria-label={t("sort.aria.sortAscending")}
             className="w-full items-center justify-between p-2 hover:bg-accent focus:bg-accent"
             onClick={() => column.toggleSorting(false)}
           >
@@ -85,11 +90,11 @@ export function DataTableColumnHeader<TData, TValue>({
                 aria-hidden="true"
               />
             </div>
-            ترتيب تصاعدي
+            {t("sort.ascending")}
           </DropdownMenuItem>
           <DropdownMenuSeparator className="bg-border" />
           <DropdownMenuItem
-            aria-label="Sort descending"
+            aria-label={t("sort.aria.sortDescending")}
             className="w-full items-center justify-between p-2 hover:bg-accent focus:bg-accent"
             onClick={() => column.toggleSorting(true)}
           >
@@ -99,7 +104,7 @@ export function DataTableColumnHeader<TData, TValue>({
                 aria-hidden="true"
               />
             </div>
-            ترتيب تنازلي
+            {t("sort.descending")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

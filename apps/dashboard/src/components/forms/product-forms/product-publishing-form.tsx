@@ -66,7 +66,7 @@ function ProductPublishingForm({ product }: PublishProductFormProps) {
 
   const mutation = trpc.products.launchProduct.useMutation({
     onSuccess: () => {
-      maketoast.success();
+      maketoast.success(t("productPublished"));
       window.location.href = "/products";
     },
     onError: () => {

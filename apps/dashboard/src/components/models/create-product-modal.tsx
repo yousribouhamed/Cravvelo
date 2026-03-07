@@ -64,7 +64,8 @@ const AddProductModel: FC = ({}) => {
       <DialogTrigger asChild>
         <Button
           data-ripple-light="true"
-          className=" rounded-xl border flex items-center gap-x-2"
+          variant="secondary"
+          className="h-[50px] px-4 rounded-xl border bg-card text-foreground flex items-center gap-x-2"
         >
           <svg
             width="18"

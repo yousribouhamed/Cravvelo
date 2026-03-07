@@ -61,6 +61,15 @@
       "updated": "تم تحديث العنصر بنجاح."
     }
   },
+  "toasts": {
+    "generic": {
+      "success": "نجاح",
+      "error": "خطأ",
+      "info": "معلومة",
+      "warning": "تحذير",
+      "loading": "جاري التحميل..."
+    }
+  },
   "forms": {
     "required": "هذا الحقل مطلوب",
     "invalidEmail": "يرجى إدخال عنوان بريد إلكتروني صالح",
@@ -73,7 +82,18 @@
     "page": "صفحة",
     "of": "من",
     "previous": "سابق",
-    "next": "التالي"
+    "next": "التالي",
+    "sort": {
+      "ascending": "تصاعدي",
+      "descending": "تنازلي",
+      "aria": {
+        "sortedDescending": "مرتب تنازلياً. اضغط للترتيب تصاعدياً.",
+        "sortedAscending": "مرتب تصاعدياً. اضغط للترتيب تنازلياً.",
+        "notSorted": "غير مرتب. اضغط للترتيب تصاعدياً.",
+        "sortAscending": "ترتيب تصاعدي",
+        "sortDescending": "ترتيب تنازلي"
+      }
+    }
   },
   "search": {
     "placeholder": "البحث في الدورات والمنتجات...",

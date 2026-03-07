@@ -21,7 +21,7 @@ import { maketoast } from "@/src/components/toasts";
 import { useOpenCourseDeleteAction } from "@/src/lib/zustand/delete-actions";
 import { timeSince } from "@/src/lib/utils";
 import { DataTableColumnHeader } from "@/src/components/data-table/table-helpers/data-table-head";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useCurrency } from "@/src/hooks/use-currency";
 
 // This type is used to define the shape of our data.
@@ -30,6 +30,8 @@ import { useCurrency } from "@/src/hooks/use-currency";
 export const useCoursesColumns = (): ColumnDef<Course>[] => {
   const t = useTranslations("courses");
   const { formatPrice } = useCurrency();
+  const locale = useLocale();
+  const isRTL = locale === "ar";
 
   return [
   {
@@ -160,7 +162,7 @@ export const useCoursesColumns = (): ColumnDef<Course>[] => {
                 <MoreHorizontal className="h-4 w-4 text-foreground" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
+            <DropdownMenuContent align={isRTL ? "end" : "start"} dir={isRTL ? "rtl" : "ltr"}>
               <Link href={`/courses/${row.original.id}/chapters`}>
                 <DropdownMenuItem className="w-full h-full flex justify-between items-center px-2">
                   <svg
@@ -181,53 +183,6 @@ export const useCoursesColumns = (): ColumnDef<Course>[] => {
                 </DropdownMenuItem>
               </Link>
 
-              <DropdownMenuSeparator />
-
-              <DropdownMenuItem
-                onClick={() => {
-                  navigator.clipboard.writeText(payment.title);
-                  maketoast.info();
-                }}
-                className="w-full h-full flex justify-between items-center px-2"
-              >
-                <svg
-                  width="16"
-                  height="17"
-                  viewBox="0 0 16 17"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M10.5 12V14.25C10.5 14.664 10.164 15 9.75 15H3.25C3.05109 15 2.86032 14.921 2.71967 14.7803C2.57902 14.6397 2.5 14.4489 2.5 14.25V5.75C2.5 5.336 2.836 5 3.25 5H4.5C4.83505 4.99977 5.16954 5.02742 5.5 5.08267M10.5 12H12.75C13.164 12 13.5 11.664 13.5 11.25V8C13.5 5.02667 11.338 2.55933 8.5 2.08267C8.16954 2.02742 7.83505 1.99977 7.5 2H6.25C5.836 2 5.5 2.336 5.5 2.75V5.08267M10.5 12H6.25C6.05109 12 5.86032 11.921 5.71967 11.7803C5.57902 11.6397 5.5 11.4489 5.5 11.25V5.08267M13.5 9.5V8.25C13.5 7.65326 13.2629 7.08097 12.841 6.65901C12.419 6.23705 11.8467 6 11.25 6H10.25C10.0511 6 9.86032 5.92098 9.71967 5.78033C9.57902 5.63968 9.5 5.44891 9.5 5.25V4.25C9.5 3.95453 9.4418 3.66195 9.32873 3.38896C9.21566 3.11598 9.04992 2.86794 8.84099 2.65901C8.63206 2.45008 8.38402 2.28435 8.11104 2.17127C7.83806 2.0582 7.54547 2 7.25 2H6.5"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                {t("actions.duplicate")}
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-
-              <DropdownMenuSeparator />
-              <Link href={`/students/comments`}>
-                <DropdownMenuItem className="w-full h-full flex justify-between items-center px-2">
-                  <svg
-                    width="16"
-                    height="17"
-                    viewBox="0 0 16 17"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M7.65311 2.83265C7.6813 2.76387 7.72932 2.70503 7.79105 2.66362C7.85279 2.62221 7.92544 2.6001 7.99978 2.6001C8.07411 2.6001 8.14676 2.62221 8.2085 2.66362C8.27023 2.70503 8.31825 2.76387 8.34644 2.83265L9.76311 6.23998C9.78963 6.30374 9.83322 6.35894 9.88909 6.39952C9.94496 6.4401 10.0109 6.46448 10.0798 6.46998L13.7584 6.76465C14.0911 6.79131 14.2258 7.20665 13.9724 7.42331L11.1698 9.82465C11.1174 9.86944 11.0784 9.92778 11.057 9.99328C11.0356 10.0588 11.0326 10.1289 11.0484 10.196L11.9051 13.786C11.9223 13.858 11.9178 13.9335 11.8921 14.003C11.8665 14.0724 11.8208 14.1327 11.7609 14.1763C11.7009 14.2198 11.6295 14.2445 11.5555 14.2475C11.4815 14.2504 11.4083 14.2313 11.3451 14.1926L8.19511 12.2693C8.13627 12.2335 8.06869 12.2145 7.99978 12.2145C7.93086 12.2145 7.86328 12.2335 7.80444 12.2693L4.65444 14.1933C4.59128 14.232 4.51808 14.2511 4.44408 14.2481C4.37008 14.2452 4.29861 14.2204 4.23869 14.1769C4.17877 14.1334 4.13308 14.0731 4.10741 14.0036C4.08174 13.9342 4.07722 13.8587 4.09444 13.7866L4.95111 10.196C4.967 10.1289 4.96408 10.0588 4.94267 9.99325C4.92126 9.92773 4.8822 9.86939 4.82978 9.82465L2.02711 7.42331C1.97098 7.37505 1.93038 7.31128 1.91041 7.24C1.89043 7.16873 1.89198 7.09314 1.91485 7.02274C1.93772 6.95235 1.9809 6.89028 2.03895 6.84436C2.097 6.79844 2.16734 6.7707 2.24111 6.76465L5.91978 6.46998C5.98861 6.46448 6.05459 6.4401 6.11046 6.39952C6.16633 6.35894 6.20992 6.30374 6.23644 6.23998L7.65311 2.83265Z"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  {t("actions.viewRatings")}
-                </DropdownMenuItem>
-              </Link>
               <DropdownMenuSeparator />
 
               <DropdownMenuItem
