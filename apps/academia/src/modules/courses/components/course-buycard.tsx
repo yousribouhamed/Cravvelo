@@ -81,7 +81,7 @@ export default function CourseBuyCard({
   const ratings = course.Comment?.map((comment) => comment.rating) || [];
 
   return (
-    <div className="w-full lg:w-[350px] bg-card text-card-foreground min-h-[500px] h-fit rounded-xl border p-4 flex flex-col gap-y-4  mt-6 sticky top-[120px]">
+    <div className="w-full bg-card text-card-foreground min-h-0 md:min-h-[500px] h-fit rounded-xl border p-4 flex flex-col gap-y-4 mt-6 md:sticky md:top-[86px]">
       {/* Free Badge */}
       {isFree && (
         <span className="text-xs text-white p-2 rounded-full absolute -top-5 right-0 bg-[#FC6B00]">

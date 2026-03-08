@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { createP2pPaymentIntent } from "../../actions/p2p.actions";
 import { uploadImageToS3 } from "@/modules/aws/s3";
 import { usePaymentContext } from "../../context/payments-provider";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 interface P2PFormData {
   paymentProof: File | null;
@@ -32,6 +32,8 @@ interface P2PFormProps {
 export function P2PForm({ isLoading = false }: P2PFormProps) {
   const { selectedProduct } = usePaymentContext();
   const t = useTranslations("payments.p2p");
+  const locale = useLocale();
+  const dir = locale === "ar" ? "rtl" : "ltr";
   const [formData, setFormData] = useState<P2PFormData>({
     paymentProof: null,
     notes: "",
@@ -72,18 +74,18 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
         notes: payload.notes,
       });
       if (!response.success) {
-        throw new Error(response.message || "فشل إنشاء الطلب");
+        throw new Error(response.message || t("toastError"));
       }
       return response;
     },
     onSuccess: () => {
-      toast.success("تم إرسال إثبات الدفع بنجاح");
+      toast.success(t("toastSuccess"));
       setFormData({ paymentProof: null, notes: "" });
       setIsLocked(true); // keep locked to prevent re-submission
     },
     onError: (error) => {
       console.error(error);
-      toast.error("حدث خطأ أثناء إرسال إثبات الدفع");
+      toast.error(t("toastError"));
       setIsLocked(false);
     },
   });
@@ -140,12 +142,12 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
     if (isLocked) return;
 
     if (!selectedProduct) {
-      toast.error("لم يتم اختيار منتج");
+      toast.error(t("toastNoProduct"));
       return;
     }
 
     if (!formData.paymentProof) {
-      toast.error("يرجى رفع إثبات الدفع");
+      toast.error(t("toastProofRequired"));
       return;
     }
 
@@ -160,7 +162,7 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
       const uploadResult = await uploadImageToS3(fd);
 
       if (!uploadResult.success || !uploadResult.url) {
-        throw new Error(uploadResult.error || "فشل رفع الملف");
+        throw new Error(uploadResult.error || t("toastUploadFailed"));
       }
 
       createP2pMutation.mutate({
@@ -171,12 +173,12 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
       });
     } catch (err) {
       console.error(err);
-      toast.error("تعذر رفع الملف");
+      toast.error(t("toastUploadFailed"));
       setIsLocked(false);
     }
   };
 
-  const isSubmitLoading = isLoading || createP2pMutation.isPending;
+  const isSubmitLoading = isLoading || createP2pMutation.isLoading;
   const isDisabled = isSubmitLoading || isLocked;
 
   return (
@@ -187,22 +189,24 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
             {/* Bank Details (P2P instructions) */}
             {bankDetails && (
               <div className="space-y-2 rounded-lg border border-border bg-muted/20 p-4">
-                <p className="text-sm font-semibold text-foreground text-right">
-                  {t("bankDetailsTitle") ?? "بيانات التحويل البنكي"}
+                <p
+                  className={`text-sm font-semibold text-foreground ${dir === "rtl" ? "text-right" : "text-left"}`}
+                >
+                  {t("bankDetailsTitle")}
                 </p>
-                <div className="space-y-1 text-sm text-foreground/90 text-right">
+                <div
+                  className={`space-y-1 text-sm text-foreground/90 ${dir === "rtl" ? "text-right" : "text-left"}`}
+                >
                   {bankDetails.bankName && (
                     <p>
-                      <span className="font-medium">
-                        {t("bankName") ?? "البنك"}:
-                      </span>{" "}
+                      <span className="font-medium">{t("bankName")}:</span>{" "}
                       {bankDetails.bankName}
                     </p>
                   )}
                   {bankDetails.accountHolder && (
                     <p>
                       <span className="font-medium">
-                        {t("accountHolder") ?? "اسم صاحب الحساب"}:
+                        {t("accountHolder")}:
                       </span>{" "}
                       {bankDetails.accountHolder}
                     </p>
@@ -210,7 +214,7 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
                   {bankDetails.accountNumber && (
                     <p>
                       <span className="font-medium">
-                        {t("accountNumber") ?? "رقم الحساب"}:
+                        {t("accountNumber")}:
                       </span>{" "}
                       {bankDetails.accountNumber}
                     </p>
@@ -218,16 +222,14 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
                   {bankDetails.routingNumber && (
                     <p>
                       <span className="font-medium">
-                        {t("routingNumber") ?? "رقم التوجيه"}:
+                        {t("routingNumber")}:
                       </span>{" "}
                       {bankDetails.routingNumber}
                     </p>
                   )}
                   {bankDetails.bankDetails && (
                     <p className="whitespace-pre-wrap">
-                      <span className="font-medium">
-                        {t("ibanSwift") ?? "تفاصيل إضافية"}:
-                      </span>{" "}
+                      <span className="font-medium">{t("ibanSwift")}:</span>{" "}
                       {bankDetails.bankDetails}
                     </p>
                   )}
@@ -241,9 +243,11 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
             )}
 
             {/* Payment Proof Upload */}
-            <div className="space-y-2">
-              <Label className="block text-right text-foreground">
-                إثبات الدفع *
+            <div className="space-y-2" dir={dir}>
+              <Label
+                className={`block text-foreground ${dir === "rtl" ? "text-right" : "text-left"}`}
+              >
+                {t("uploadLabel")}
               </Label>
               <div
                 className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
@@ -265,7 +269,9 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
                     >
                       <X className="w-4 h-4" />
                     </button>
-                    <div className="text-right">
+                    <div
+                      className={dir === "rtl" ? "text-right" : "text-left"}
+                    >
                       <p className="text-sm font-medium text-green-700 dark:text-green-300">
                         {formData.paymentProof.name}
                       </p>
@@ -282,7 +288,7 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
                       <p className="text-sm text-gray-600 dark:text-gray-400">
                         {t("dragDropText")}
                       </p>
-                      <label className="cursor-pointer">
+                      <label className="cursor-pointer inline-flex items-center justify-center min-h-11 px-4 rounded-md bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900/40 transition-colors">
                         <span className="text-green-600 hover:text-green-700 font-medium">
                           {t("chooseFile")}
                         </span>
@@ -304,20 +310,20 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
             </div>
 
             {/* Notes Section */}
-            <div className="space-y-2">
+            <div className="space-y-2" dir={dir}>
               <Label
                 htmlFor="notes"
-                className="block text-right text-foreground"
+                className={`block text-foreground ${dir === "rtl" ? "text-right" : "text-left"}`}
               >
-                ملاحظات (اختياري)
+                {t("notesLabel")}
               </Label>
               <Textarea
                 id="notes"
                 value={formData.notes}
                 onChange={(e) => handleChange("notes", e.target.value)}
-                placeholder="أضف أي ملاحظات إضافية..."
-                className="text-right bg-background resize-none"
-                dir="rtl"
+                placeholder={t("notesPlaceholder")}
+                className={`bg-background resize-none min-h-11 md:min-h-0 ${dir === "rtl" ? "text-right" : "text-left"}`}
+                dir={dir}
                 rows={3}
                 disabled={isDisabled}
               />
@@ -326,12 +332,12 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
         </CardContent>
       </Card>
 
-      {/* Fixed Bottom Button */}
-      <div className=" my-4 flex items-center justify-center p-4 ">
+      {/* Fixed Bottom Button - sticky on mobile for always-visible CTA */}
+      <div className="sticky bottom-0 z-10 bg-card pt-4 pb-[env(safe-area-inset-bottom)] md:static md:my-4 md:pb-4 flex items-center justify-center p-4">
         <BrandButton
-          size={"lg"}
+          size="lg"
           type="submit"
-          className="w-full h-[40px]"
+          className="w-full min-h-11 sm:h-10"
           disabled={!isFormValid() || isDisabled}
           loading={isSubmitLoading}
         >

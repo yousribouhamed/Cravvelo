@@ -37,7 +37,7 @@ export default function ProductBuyCard({
   };
 
   return (
-    <div className="w-full lg:w-[350px] bg-card text-card-foreground min-h-[320px] h-fit rounded-xl border p-4 flex flex-col gap-y-4 mt-6 sticky top-[120px]">
+    <div className="w-full bg-card text-card-foreground min-h-0 md:min-h-[320px] h-fit rounded-xl border p-4 flex flex-col gap-y-4 mt-6 md:sticky md:top-[86px]">
       <h3 className="text-lg font-semibold text-right">{t("title")}</h3>
 
       {isOwned ? (

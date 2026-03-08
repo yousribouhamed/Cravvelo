@@ -4,15 +4,36 @@ import { withTenant } from "@/_internals/with-tenant";
 import z from "zod";
 import type { ProductWithDefaultPricing, ProductWithPricing } from "../types";
 
+const productListInputSchema = z
+  .object({
+    search: z.string().optional(),
+    sort: z.enum(["newest", "price_asc", "price_desc"]).optional(),
+  })
+  .optional();
+
 export const getProductsWithDefaultPricing = withTenant({
-  handler: async ({ db, accountId }) => {
+  input: productListInputSchema,
+  handler: async ({ db, accountId, input }) => {
     try {
+      const where: {
+        accountId: string;
+        status: string;
+        title?: { contains: string; mode: "insensitive" };
+      } = {
+        accountId,
+        status: "PUBLISHED",
+      };
+      if (input?.search?.trim()) {
+        where.title = {
+          contains: input.search.trim(),
+          mode: "insensitive",
+        };
+      }
+
+      const sort = input?.sort ?? "newest";
+
       const products = await db.product.findMany({
-        where: {
-          accountId,
-          status: "PUBLISHED"
-         
-        },
+        where,
         include: {
           ProductPricingPlans: {
             where: { isDefault: true },
@@ -40,8 +61,20 @@ export const getProductsWithDefaultPricing = withTenant({
         orderBy: { createdAt: "desc" },
       });
 
+      let result = products as unknown as ProductWithDefaultPricing[];
+      if (sort === "price_asc" || sort === "price_desc") {
+        const dir = sort === "price_asc" ? 1 : -1;
+        result = [...result].sort((a, b) => {
+          const priceA =
+            a.ProductPricingPlans?.[0]?.PricingPlan?.price ?? Infinity;
+          const priceB =
+            b.ProductPricingPlans?.[0]?.PricingPlan?.price ?? Infinity;
+          return (priceA - priceB) * dir;
+        });
+      }
+
       return {
-        data: products as unknown as ProductWithDefaultPricing[],
+        data: result,
         success: true,
         message: "Products with default pricing retrieved successfully",
       };

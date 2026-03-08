@@ -89,7 +89,7 @@ export default function LoginForm() {
               className={`pl-10 ${
                 form.errors.email ? "border-red-500 focus:ring-red-500" : ""
               }`}
-              disabled={mutation.isPending}
+              disabled={mutation.isLoading}
             />
           </div>
           {form.errors.email && (
@@ -113,13 +113,13 @@ export default function LoginForm() {
               className={`pl-10 pr-10 ${
                 form.errors.password ? "border-red-500 focus:ring-red-500" : ""
               }`}
-              disabled={mutation.isPending}
+              disabled={mutation.isLoading}
             />
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
               className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 focus:outline-none"
-              disabled={mutation.isPending}
+              disabled={mutation.isLoading}
               tabIndex={-1}
             >
               {showPassword ? (
@@ -161,10 +161,10 @@ export default function LoginForm() {
           type="button"
           onClick={handleSubmit}
           className="w-full"
-          disabled={mutation.isPending}
-          loading={mutation.isPending}
+          disabled={mutation.isLoading}
+          loading={mutation.isLoading}
         >
-          {mutation.isPending ? t("loading") : t("button")}
+          {mutation.isLoading ? t("loading") : t("button")}
         </BrandButton>
 
         {/* Optional: Forgot Password Link */}
@@ -172,7 +172,7 @@ export default function LoginForm() {
           <button
             type="button"
             className="text-sm text-gray-600 hover:text-gray-800 underline"
-            disabled={mutation.isPending}
+            disabled={mutation.isLoading}
           >
             {t("forgotPassword")}
           </button>

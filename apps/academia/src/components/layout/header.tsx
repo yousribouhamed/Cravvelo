@@ -3,7 +3,6 @@
 import { useState, useTransition } from "react";
 import MaxWidthWrapper from "../max-with-wrapper";
 import NavigationLink from "../navigation-link";
-import { useTenant } from "@/contexts/tenant";
 import { useTranslations } from "next-intl";
 import {
   useTenantBranding,
@@ -19,7 +18,6 @@ import { logoutUser } from "@/modules/auth/actions/auth";
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [, startTransition] = useTransition();
-  const { tenant } = useTenant();
   const { logo, name, primaryColor } = useTenantBranding();
   const { userName, avatarUrl } = useTenantAccount();
   const { showCoursesOnHome, showProductsOnHome } = useTenantSettings();
@@ -144,7 +142,7 @@ export default function Header() {
               ))}
 
               <div className="flex flex-col gap-y-2 pt-4 border-t dark:border-[#1F1F23]">
-                <Link href={`/${tenant}/auth/signin`}>
+                <Link href="/login">
                   <button
                     className="w-full px-4 py-2 text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium text-left"
                     onClick={() => setIsMobileMenuOpen(false)}
@@ -152,7 +150,7 @@ export default function Header() {
                     {tNav("signIn")}
                   </button>
                 </Link>
-                <Link href={`/${tenant}/auth/signup`}>
+                <Link href="/register">
                   <button
                     className="w-full px-4 py-2 text-white font-medium rounded-lg hover:opacity-90 transition-opacity"
                     style={{ backgroundColor: primaryColor }}

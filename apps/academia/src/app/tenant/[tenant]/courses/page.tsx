@@ -1,33 +1,56 @@
+import { ListEmptyState } from "@/components/list-empty-state";
 import { getCoursesWithDefaultPricing } from "@/modules/courses/actions/get-courses";
 import CourseCard from "@/modules/courses/components/course-card";
+import { CoursesListFilters } from "@/modules/courses/components/courses-list-filters";
 import { getTranslations } from "next-intl/server";
+import { BookOpen } from "lucide-react";
 
-export default async function page() {
+type PageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function page({ searchParams }: PageProps) {
   const t = await getTranslations("courses.list");
-  const response = await getCoursesWithDefaultPricing();
+  const sp = searchParams ? await searchParams : {};
+  const search = typeof sp.search === "string" ? sp.search : undefined;
+  const level =
+    typeof sp.level === "string" &&
+    ["BEGINNER", "INTERMEDIATE", "ADVANCED"].includes(sp.level)
+      ? (sp.level as "BEGINNER" | "INTERMEDIATE" | "ADVANCED")
+      : undefined;
+  const sort =
+    typeof sp.sort === "string" &&
+    ["newest", "price_asc", "price_desc", "rating", "students"].includes(sp.sort)
+      ? (sp.sort as "newest" | "price_asc" | "price_desc" | "rating" | "students")
+      : undefined;
+
+  const response = await getCoursesWithDefaultPricing({
+    search,
+    level,
+    sort,
+  });
 
   if (response.success) {
     return (
       <div className="p-8">
-        <h1 className="text-3xl font-bold mb-6 text-right text-black dark:text-white">
+        <h1 className="text-3xl font-bold mb-6 text-start text-black dark:text-white">
           {t("title")}
         </h1>
+        <CoursesListFilters />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4 auto-rows-fr">
           {response.data?.map((course) => (
             <CourseCard key={course.id} course={course as any} />
           ))}
         </div>
 
-        {/* Empty state */}
         {response.data?.length === 0 && (
-          <div className="text-center py-12">
-            <h3 className="text-lg font-medium text-black dark:text-white mb-2">
-              {t("emptyTitle")}
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400">
-              {t("emptyDescription")}
-            </p>
-          </div>
+          <ListEmptyState
+            icon={<BookOpen />}
+            title={t("emptyTitle")}
+            description={t("emptyDescription")}
+            actionLabel={t("backToHome")}
+            actionHref="/"
+          />
         )}
       </div>
     );
@@ -35,10 +58,10 @@ export default async function page() {
     return (
       <div className="p-8">
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
-          <h1 className="text-xl font-bold text-red-900 dark:text-red-100 mb-2 text-right">
+          <h1 className="text-xl font-bold text-red-900 dark:text-red-100 mb-2 text-start">
             {t("loadErrorTitle")}
           </h1>
-          <p className="text-red-700 dark:text-red-300 text-right">
+          <p className="text-red-700 dark:text-red-300 text-start">
             {typeof response.message === "string"
               ? response.message
               : t("genericError")}

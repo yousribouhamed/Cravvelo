@@ -35,7 +35,7 @@ export default async function Page({ params }: PageProps) {
     return (
       <>
         <div className="w-full min-h-screen h-fit grid grid-cols-1 lg:grid-cols-3 gap-4 p-4 my-8">
-          <div className="w-full col-span-1 lg:col-span-2 h-fit min-h-[400px]">
+          <div className="w-full col-span-1 lg:col-span-2 min-h-[400px]">
             <h1 className="text-2xl font-bold text-start text-foreground mb-4">
               {product.title}
             </h1>
@@ -63,7 +63,9 @@ export default async function Page({ params }: PageProps) {
             </div>
           </div>
 
-          <ProductBuyCard product={product as any} isOwned={isOwned} />
+          <div className="w-full lg:w-auto">
+            <ProductBuyCard product={product as any} isOwned={isOwned} />
+          </div>
         </div>
 
         <PaymentSheet />

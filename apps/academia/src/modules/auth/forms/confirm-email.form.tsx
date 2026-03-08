@@ -152,7 +152,7 @@ export default function ConfirmEmailForm() {
                 ? "border-red-500 focus:ring-red-500"
                 : ""
             }`}
-            disabled={mutation.isPending}
+            disabled={mutation.isLoading}
           />
           <p className="text-xs text-gray-500">
             Copy and paste the verification token from your email
@@ -194,10 +194,10 @@ export default function ConfirmEmailForm() {
           type="button"
           onClick={handleSubmit}
           className="w-full"
-          disabled={mutation.isPending || !email || !tokenValue.trim()}
-          loading={mutation.isPending}
+          disabled={mutation.isLoading || !email || !tokenValue.trim()}
+          loading={mutation.isLoading}
         >
-          {mutation.isPending ? t("verifying") : t("button")}
+          {mutation.isLoading ? t("verifying") : t("button")}
         </BrandButton>
 
         {/* Resend Token */}
@@ -209,9 +209,9 @@ export default function ConfirmEmailForm() {
             type="button"
             onClick={handleResendCode}
             className="text-sm text-blue-600 hover:text-blue-800 underline disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={mutation.isPending || resendMutation.isPending || !email}
+            disabled={mutation.isLoading || resendMutation.isLoading || !email}
           >
-            {isResending || resendMutation.isPending ? (
+            {isResending || resendMutation.isLoading ? (
               <div className="flex items-center justify-center space-x-1">
                 <Loader2 className="w-3 h-3 animate-spin" />
                 <span>{t("sending")}</span>

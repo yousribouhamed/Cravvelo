@@ -100,6 +100,26 @@ export async function middleware(request: NextRequest) {
   // 2. AUTHENTICATION LOGIC
   // ========================================
 
+  // Redirect authenticated users away from auth routes (login/register) even when they are "public"
+  const isAuthRoute = authRoutes.includes(pathname);
+  if (isAuthRoute) {
+    const authToken = request.cookies.get("auth-token")?.value;
+    if (authToken) {
+      try {
+        const authPayload = await verifyJWT(authToken);
+        if (authPayload) {
+          const redirectParam = request.nextUrl.searchParams.get("redirect");
+          const redirectUrl = redirectParam
+            ? new URL(redirectParam, request.url)
+            : new URL("/", request.url);
+          return NextResponse.redirect(redirectUrl);
+        }
+      } catch {
+        // Token invalid, continue and let them access the auth route
+      }
+    }
+  }
+
   // Check if current route is public
   const isPublicRoute = isRoutePublic(pathname);
 
@@ -138,7 +158,6 @@ export async function middleware(request: NextRequest) {
 
   // Check if route is protected (using prefix matching for nested routes)
   const isProtectedRoute = isRouteProtected(pathname);
-  const isAuthRoute = authRoutes.includes(pathname);
 
   // Redirect unauthenticated users from protected routes
   if (isProtectedRoute && !isAuthenticated) {

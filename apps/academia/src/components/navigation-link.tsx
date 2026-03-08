@@ -17,7 +17,10 @@ export default function NavigationLink({
   onClick,
 }: NavigationLinkProps) {
   const pathname = usePathname();
-  const isActive = pathname === href;
+  // Exact match, or prefix match so /courses and /products stay active on detail pages
+  const isActive =
+    pathname === href ||
+    (href !== "/" && pathname.startsWith(href + "/"));
 
   const baseClasses =
     "relative text-gray-700 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium h-full flex items-center";

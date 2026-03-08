@@ -16,27 +16,24 @@ async function getTenantFromRequest(): Promise<string | null> {
     const headersList = await headers();
     const host = headersList.get("host");
 
-    console.log("this is the host");
-    console.log(host);
-
     if (!host) return null;
 
-    // Development environment - check for localhost with port
-    if (host.startsWith("localhost:") || host === "twice.localhost:3000") {
-      // In development, you might want to:
-      // 1. Use a default tenant for testing
-      // 2. Extract from a query parameter or header
-      // 3. Use environment variable
-
-      // Option 1: Return a default tenant for development
-      return process.env.NODE_ENV === "development" ? "twice" : null;
-
-      // Option 2: Extract from a custom header (uncomment if needed)
-      // const devTenant = headersList.get("x-tenant");
-      // return devTenant || "dev-tenant";
+    // Development environment - any host containing localhost (e.g. localhost:3001 or twice.localhost:3001)
+    if (host.includes("localhost")) {
+      if (process.env.NODE_ENV !== "development") return null;
+      // Plain localhost:<port> -> default tenant
+      if (host.startsWith("localhost:")) {
+        return "twice";
+      }
+      // Subdomain.localhost:<port> (e.g. twice.localhost:3001) -> extract subdomain
+      const subdomain = host.split(".")[0];
+      if (subdomain && subdomain !== "localhost") {
+        return subdomain.replace(/[^a-zA-Z0-9]/g, "");
+      }
+      return "twice";
     }
 
-    // Production environment - extract subdomain from host
+    // Production environment - extract subdomain from host (e.g. tenant.cravvelo.com)
     const parts = host.split(".");
     if (parts.length >= 3 && parts[1] === "cravvelo" && parts[2] === "com") {
       return parts[0];
@@ -106,8 +103,6 @@ export function withTenant<TInput = void, TOutput = void>(
 
       // Extract tenant from request
       const tenant = await getTenantFromRequest();
-
-      console.log(tenant);
 
       if (!tenant) {
         throw new TenantError("Could not determine tenant from request");

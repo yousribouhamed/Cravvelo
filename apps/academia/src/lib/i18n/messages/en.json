@@ -3,9 +3,16 @@
     "appName": "Cravvelo",
     "mainDomain": "This is our existing main domain"
   },
+  "salesBanner": {
+    "message": "This price won't last long...",
+    "hours": "hours",
+    "mins": "mins",
+    "secs": "secs",
+    "dismissLabel": "Dismiss banner"
+  },
   "nav": {
     "signIn": "Sign in",
-    "signUp": "Sign up",
+    "signUp": "Join for Free",
     "home": "Home",
     "courses": "Courses",
     "products": "Products",
@@ -44,7 +51,7 @@
       "forgotPassword": "Forgot your password?"
     },
     "signUp": {
-      "title": "Sign Up",
+      "title": "Join for Free",
       "description": "Create your account to get started",
       "nameLabel": "Full Name",
       "namePlaceholder": "Enter your full name",
@@ -55,7 +62,7 @@
       "confirmPasswordLabel": "Confirm Password",
       "confirmPasswordPlaceholder": "Confirm your password",
       "termsLabel": "I agree to the terms and conditions",
-      "button": "Sign Up",
+      "button": "Join for Free",
       "loading": "Creating account...",
       "successMessage": "User created successfully",
       "errorMessage": "Failed to create user"
@@ -86,7 +93,18 @@
       "emptyTitle": "No courses found",
       "emptyDescription": "No published courses are available yet.",
       "loadErrorTitle": "Error loading courses",
-      "genericError": "Something went wrong"
+      "genericError": "Something went wrong",
+      "searchPlaceholder": "Search courses...",
+      "searchButton": "Search",
+      "filterLevel": "Level",
+      "filterLevelAll": "All levels",
+      "sortLabel": "Sort by",
+      "sortNewest": "Newest",
+      "sortPriceAsc": "Price: low to high",
+      "sortPriceDesc": "Price: high to low",
+      "sortRating": "Rating",
+      "sortStudents": "Students",
+      "backToHome": "Back to Home"
     },
     "description": "Course Description",
     "level": {
@@ -168,7 +186,14 @@
       "emptyTitle": "No products found",
       "emptyDescription": "No published products are available yet.",
       "loadErrorTitle": "Error loading products",
-      "genericError": "Something went wrong"
+      "genericError": "Something went wrong",
+      "searchPlaceholder": "Search products...",
+      "searchButton": "Search",
+      "sortLabel": "Sort by",
+      "sortNewest": "Newest",
+      "sortPriceAsc": "Price: low to high",
+      "sortPriceDesc": "Price: high to low",
+      "backToHome": "Back to Home"
     },
     "landing": {
       "title": "Product",
@@ -195,6 +220,13 @@
     "selectPaymentMethod": "Payment Methods",
     "paymentDetails": "Payment Details",
     "loadingConnections": "Loading payment methods...",
+    "chargilyTitle": "Chargily",
+    "chargilyDescription": "Secure payment by bank card",
+    "p2pTitle": "Direct Transfer (P2P)",
+    "p2pDescription": "Direct transfer via mobile phone",
+    "noPaymentMethods": "No payment methods available",
+    "noActivePaymentMethods": "No active payment methods available",
+    "noActivePaymentMethodsHint": "{count} connection(s) found but none are active",
     "securePayment": "100% Secure Payment",
     "securePaymentMessage": "All transactions are encrypted and protected. We will not store your payment information.",
     "freeProduct": "Free Product",
@@ -208,7 +240,12 @@
       "couponApply": "Apply",
       "couponApplied": "Applied",
       "couponHint": "* Coupon feature is under development",
-      "submitButton": "Complete Payment via Chargily"
+      "submitButton": "Complete Payment via Chargily",
+      "toastSuccess": "Payment link created successfully",
+      "toastError": "Failed to create payment link. Please try again.",
+      "toastNoProduct": "No product selected",
+      "toastInvalidProduct": "Invalid product ID",
+      "toastCouponComing": "Coupon logic will be applied later"
     },
     "p2p": {
       "bankDetailsTitle": "Bank transfer details",
@@ -224,7 +261,12 @@
       "notesLabel": "Notes (optional)",
       "notesPlaceholder": "Add any additional notes...",
       "submitButton": "Complete Direct Payment",
-      "submittedButton": "Submitted"
+      "submittedButton": "Submitted",
+      "toastSuccess": "Payment proof submitted successfully",
+      "toastError": "An error occurred while submitting payment proof",
+      "toastNoProduct": "No product selected",
+      "toastProofRequired": "Please upload payment proof",
+      "toastUploadFailed": "File upload failed"
     }
   },
   "profile": {

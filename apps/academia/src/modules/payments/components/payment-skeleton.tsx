@@ -3,11 +3,18 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SheetFooter, SheetHeader } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useLocale } from "next-intl";
 
 export function PaymentSheetSkeleton() {
+  const locale = useLocale();
+  const dir = locale === "ar" ? "rtl" : "ltr";
+  const isRTL = locale === "ar";
+
   return (
-    <div className="h-full flex flex-col" dir="rtl">
-      <SheetHeader className="text-right pb-6 flex-shrink-0">
+    <div className="h-full flex flex-col min-h-0" dir={dir}>
+      <SheetHeader
+        className={`pb-6 flex-shrink-0 ${isRTL ? "text-right" : "text-left"}`}
+      >
         <Skeleton className="h-8 w-48 mb-2" />
         <Skeleton className="h-4 w-64" />
       </SheetHeader>
@@ -16,9 +23,11 @@ export function PaymentSheetSkeleton() {
         <ScrollArea className="h-full">
           <div className="p-4">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Order Summary Skeleton */}
-              <div className="lg:sticky lg:top-0">
-                <div dir="rtl" className="space-y-4">
+              {/* Order Summary Skeleton - right in LTR, left in RTL */}
+              <div
+                className={`lg:sticky lg:top-0 ${isRTL ? "lg:order-1" : "lg:order-2"}`}
+              >
+                <div dir={dir} className="space-y-4">
                   <Skeleton className="h-6 w-24" />
                   <div className="bg-muted/50 rounded-lg p-4 border">
                     <div className="flex items-center gap-4">
@@ -41,7 +50,9 @@ export function PaymentSheetSkeleton() {
                   </div>
                   <div className="bg-muted/50 rounded-lg p-4 border">
                     <div className="flex items-start gap-3">
-                      <div className="text-right flex-1 space-y-2">
+                      <div
+                        className={`flex-1 space-y-2 ${isRTL ? "text-right" : "text-left"}`}
+                      >
                         <Skeleton className="h-4 w-20" />
                         <Skeleton className="h-4 w-full" />
                         <Skeleton className="h-4 w-3/4" />
@@ -52,8 +63,11 @@ export function PaymentSheetSkeleton() {
                 </div>
               </div>
 
-              {/* Payment Methods & Form Skeleton */}
-              <div className="space-y-6 col-span-2" dir="rtl">
+              {/* Payment Methods & Form Skeleton - left in LTR, right in RTL */}
+              <div
+                className={`space-y-6 col-span-2 ${isRTL ? "lg:order-2" : "lg:order-1"}`}
+                dir={dir}
+              >
                 <div className="space-y-4">
                   <Skeleton className="h-6 w-24" />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -94,10 +108,9 @@ export function PaymentSheetSkeleton() {
         </ScrollArea>
       </div>
 
-      <SheetFooter className="pt-6 border-t mt-4 flex-shrink-0">
-        <div className="w-full space-y-3">
-          <Skeleton className="w-full h-12" />
-          <Skeleton className="h-3 w-3/4 mx-auto" />
+      <SheetFooter className="sticky bottom-0 z-10 bg-card pt-4 pb-[env(safe-area-inset-bottom)] md:static md:pt-6 border-t mt-4 flex-shrink-0">
+        <div className="w-full space-y-3 p-4">
+          <Skeleton className="w-full h-11" />
         </div>
       </SheetFooter>
     </div>

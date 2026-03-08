@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import BrandButton from "@/components/brand-button";
 import { createChargilyPaymentIntent } from "../../actions/chargily.actions";
 import { usePaymentContext } from "../../context/payments-provider";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 interface ChargilyFormProps {
   isLoading?: boolean;
@@ -31,6 +31,8 @@ interface PaymentResponse {
 export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
   const { selectedProduct } = usePaymentContext();
   const t = useTranslations("payments.chargily");
+  const locale = useLocale();
+  const dir = locale === "ar" ? "rtl" : "ltr";
   const [formData, setFormData] = useState<ChargilyFormData>({
     couponCode: "",
   });
@@ -50,13 +52,12 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
       return response;
     },
     onSuccess: (data) => {
-      toast.success("تم إنشاء رابط الدفع بنجاح");
-      // Redirect to checkout URL
+      toast.success(t("toastSuccess"));
       window.location.href = data.checkoutUrl;
     },
     onError: (error) => {
       console.error("Payment creation error:", error);
-      toast.error("حدث خطأ في إنشاء رابط الدفع. يرجى المحاولة مرة أخرى");
+      toast.error(t("toastError"));
     },
   });
 
@@ -67,8 +68,7 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
   const handleCouponApply = () => {
     if (formData.couponCode?.trim()) {
       setCouponApplied(true);
-      toast.info("سيتم تطبيق منطق كود الخصم لاحقاً");
-      console.log("Applying coupon:", formData.couponCode);
+      toast.info(t("toastCouponComing"));
       // TODO: Implement coupon application logic
     }
   };
@@ -77,12 +77,12 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
     e.preventDefault();
 
     if (!selectedProduct) {
-      toast.error("لم يتم اختيار منتج");
+      toast.error(t("toastNoProduct"));
       return;
     }
 
     if (!selectedProduct.id) {
-      toast.error("معرف المنتج غير صحيح");
+      toast.error(t("toastInvalidProduct"));
       return;
     }
 
@@ -93,7 +93,7 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
     });
   };
 
-  const isSubmitLoading = isLoading || createPaymentMutation.isPending;
+  const isSubmitLoading = isLoading || createPaymentMutation.isLoading;
 
   return (
     <form onSubmit={handleSubmit} className="h-full flex flex-col">
@@ -101,10 +101,10 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
         <CardContent className="p-4">
           <div className="space-y-6">
             {/* Coupon Code Section - Disabled for now */}
-            <div className="space-y-2 opacity-60">
+            <div className="space-y-2 opacity-60" dir={dir}>
               <Label
                 htmlFor="coupon"
-                className="block text-right text-foreground"
+                className="block text-start text-foreground"
               >
                 {t("couponLabel")}
               </Label>
@@ -115,8 +115,8 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
                   value={formData.couponCode}
                   onChange={(e) => handleChange("couponCode", e.target.value)}
                   placeholder={t("couponPlaceholder")}
-                  className="text-right bg-background flex-1"
-                  dir="rtl"
+                  className="text-start bg-background flex-1 min-w-0 min-h-11 md:min-h-0"
+                  dir={dir}
                   disabled={true} // Disabled until coupon logic is implemented
                 />
                 <Button
@@ -124,12 +124,12 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
                   onClick={handleCouponApply}
                   disabled={true} // Disabled until coupon logic is implemented
                   size="sm"
-                  className="px-4 bg-blue-600 hover:bg-blue-700 text-white"
+                  className="px-4 bg-blue-600 hover:bg-blue-700 text-white shrink-0"
                 >
                   {couponApplied ? t("couponApplied") : t("couponApply")}
                 </Button>
               </div>
-              <p className="text-xs text-muted-foreground text-right">
+              <p className="text-xs text-muted-foreground text-start">
                 {t("couponHint")}
               </p>
             </div>
@@ -137,12 +137,12 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
         </CardContent>
       </Card>
 
-      {/* Fixed Bottom Button */}
-      <div className="my-4 p-4 flex items-center justify-center">
+      {/* Fixed Bottom Button - sticky on mobile for always-visible CTA */}
+      <div className="sticky bottom-0 z-10 bg-card pt-4 pb-[env(safe-area-inset-bottom)] md:static md:my-4 md:pb-4 flex items-center justify-center p-4">
         <BrandButton
           size="lg"
           type="submit"
-          className="w-full h-[40px]"
+          className="w-full min-h-11 sm:h-10"
           loading={isSubmitLoading}
           disabled={!selectedProduct || isSubmitLoading}
         >

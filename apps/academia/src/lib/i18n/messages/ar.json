@@ -3,9 +3,16 @@
     "appName": "كرافيلو",
     "mainDomain": "هذا هو النطاق الرئيسي الموجود لدينا"
   },
+  "salesBanner": {
+    "message": "هذا السعر لن يدوم طويلاً...",
+    "hours": "ساعات",
+    "mins": "دقائق",
+    "secs": "ثوانٍ",
+    "dismissLabel": "إغلاق الشريط"
+  },
   "nav": {
     "signIn": "تسجيل الدخول",
-    "signUp": "إنشاء حساب",
+    "signUp": "انضم مجاناً",
     "home": "الرئيسية",
     "courses": "الدورات",
     "products": "المنتجات",
@@ -44,7 +51,7 @@
       "forgotPassword": "هل نسيت كلمة المرور؟"
     },
     "signUp": {
-      "title": "إنشاء حساب",
+      "title": "انضم مجاناً",
       "description": "أنشئ حسابك للبدء",
       "nameLabel": "الاسم الكامل",
       "namePlaceholder": "أدخل اسمك الكامل",
@@ -55,7 +62,7 @@
       "confirmPasswordLabel": "تأكيد كلمة المرور",
       "confirmPasswordPlaceholder": "أكد كلمة المرور",
       "termsLabel": "أوافق على الشروط والأحكام",
-      "button": "إنشاء حساب",
+      "button": "انضم مجاناً",
       "loading": "جاري إنشاء الحساب...",
       "successMessage": "تم إنشاء المستخدم بنجاح",
       "errorMessage": "فشل إنشاء المستخدم"
@@ -86,7 +93,18 @@
       "emptyTitle": "لم يتم العثور على كورسات",
       "emptyDescription": "لا توجد كورسات منشورة بعد.",
       "loadErrorTitle": "خطأ في تحميل الكورسات",
-      "genericError": "حدث خطأ غير متوقع"
+      "genericError": "حدث خطأ غير متوقع",
+      "searchPlaceholder": "البحث في الكورسات...",
+      "searchButton": "بحث",
+      "filterLevel": "المستوى",
+      "filterLevelAll": "جميع المستويات",
+      "sortLabel": "ترتيب حسب",
+      "sortNewest": "الأحدث",
+      "sortPriceAsc": "السعر: من الأقل إلى الأعلى",
+      "sortPriceDesc": "السعر: من الأعلى إلى الأقل",
+      "sortRating": "التقييم",
+      "sortStudents": "الطلاب",
+      "backToHome": "العودة للرئيسية"
     },
     "description": "وصف الكورس",
     "level": {
@@ -168,7 +186,14 @@
       "emptyTitle": "لم يتم العثور على منتجات",
       "emptyDescription": "لا توجد منتجات منشورة بعد.",
       "loadErrorTitle": "خطأ في تحميل المنتجات",
-      "genericError": "حدث خطأ غير متوقع"
+      "genericError": "حدث خطأ غير متوقع",
+      "searchPlaceholder": "البحث في المنتجات...",
+      "searchButton": "بحث",
+      "sortLabel": "ترتيب حسب",
+      "sortNewest": "الأحدث",
+      "sortPriceAsc": "السعر: من الأقل إلى الأعلى",
+      "sortPriceDesc": "السعر: من الأعلى إلى الأقل",
+      "backToHome": "العودة للرئيسية"
     },
     "landing": {
       "title": "المنتج",
@@ -195,6 +220,13 @@
     "selectPaymentMethod": "طرق الدفع",
     "paymentDetails": "تفاصيل الدفع",
     "loadingConnections": "جاري تحميل طرق الدفع...",
+    "chargilyTitle": "شارجيلي - Chargily",
+    "chargilyDescription": "دفع آمن بالبطاقة البنكية",
+    "p2pTitle": "التحويل المباشر - P2P",
+    "p2pDescription": "تحويل مباشر عبر الهاتف المحمول",
+    "noPaymentMethods": "لا توجد طرق دفع متاحة حالياً",
+    "noActivePaymentMethods": "لا توجد طرق دفع نشطة متاحة حالياً",
+    "noActivePaymentMethodsHint": "تم العثور على {count} اتصال(ات) ولكن لا يوجد منها نشط",
     "securePayment": "دفع آمن 100%",
     "securePaymentMessage": "جميع المعاملات مشفرة ومحمية. لن نحتفظ بمعلومات الدفع الخاصة بك.",
     "freeProduct": "منتج مجاني",
@@ -208,7 +240,12 @@
       "couponApply": "تطبيق",
       "couponApplied": "تم التطبيق",
       "couponHint": "* ميزة كود الخصم قيد التطوير",
-      "submitButton": "إتمام الدفع عبر Chargily"
+      "submitButton": "إتمام الدفع عبر Chargily",
+      "toastSuccess": "تم إنشاء رابط الدفع بنجاح",
+      "toastError": "حدث خطأ في إنشاء رابط الدفع. يرجى المحاولة مرة أخرى",
+      "toastNoProduct": "لم يتم اختيار منتج",
+      "toastInvalidProduct": "معرف المنتج غير صحيح",
+      "toastCouponComing": "سيتم تطبيق منطق كود الخصم لاحقاً"
     },
     "p2p": {
       "bankDetailsTitle": "بيانات التحويل البنكي",
@@ -224,7 +261,12 @@
       "notesLabel": "ملاحظات (اختياري)",
       "notesPlaceholder": "أضف أي ملاحظات إضافية...",
       "submitButton": "إتمام الدفع المباشر",
-      "submittedButton": "تم الإرسال"
+      "submittedButton": "تم الإرسال",
+      "toastSuccess": "تم إرسال إثبات الدفع بنجاح",
+      "toastError": "حدث خطأ أثناء إرسال إثبات الدفع",
+      "toastNoProduct": "لم يتم اختيار منتج",
+      "toastProofRequired": "يرجى رفع إثبات الدفع",
+      "toastUploadFailed": "تعذر رفع الملف"
     }
   },
   "profile": {

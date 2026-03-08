@@ -1,4 +1,5 @@
 import Header from "@/components/layout/header";
+import SalesBanner from "@/components/sales-banner";
 import { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { getTenantWebsite, validateTenant } from "@/actions/tanant";
@@ -10,6 +11,8 @@ import { PaymentProvider } from "@/modules/payments/context/payments-provider";
 import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import Footer from "@/components/layout/footer";
+import { VisitTracker } from "@/components/visit-tracker";
+import { FacebookPixel } from "@/components/facebook-pixel";
 interface TenantLayoutProps {
   children: ReactNode;
   params: Promise<{
@@ -24,16 +27,24 @@ export async function generateMetadata({
   const tenant = `${tenantKey}.cravvelo.com`;
   const websiteData = await getTenantWebsite(tenant);
 
-  const favicon = (websiteData as any)?.favicon as string | undefined | null;
-  if (!favicon) return {};
+  const title =
+    (websiteData as any)?.name ??
+    (websiteData as any)?.Account?.user_name ??
+    "Academy";
 
-  return {
-    icons: {
+  const favicon = (websiteData as any)?.favicon as string | undefined | null;
+
+  const metadata: Metadata = { title };
+
+  if (favicon) {
+    metadata.icons = {
       icon: favicon,
       shortcut: favicon,
       apple: favicon,
-    },
-  };
+    };
+  }
+
+  return metadata;
 }
 
 export default async function TenantLayout({
@@ -67,8 +78,11 @@ export default async function TenantLayout({
         } as React.CSSProperties
       }
     >
+      <VisitTracker tenant={tenant} />
+      <FacebookPixel pixelId={websiteData.facebookPixelId ?? null} />
       <TenantProvider website={websiteData} tenant={tenant} user={user}>
         <PaymentProvider>
+          <SalesBanner />
           <Header />
           <MaxWidthWrapper className="flex flex-col min-h-[calc(100vh-70px)]">
             <main className="flex-1">{children}</main>

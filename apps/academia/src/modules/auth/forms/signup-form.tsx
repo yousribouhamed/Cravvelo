@@ -46,15 +46,16 @@ export default function SignUpForm() {
         full_name: data.name,
         email: data.email,
         password: data.password,
+        remember: true,
       });
     },
     onSuccess: (res) => {
       setSubmitMessage(res.message || t("successMessage"));
       form.reset();
 
-      // Redirect to email confirmation page with the user's email
-      const email = encodeURIComponent(form.values.email);
-      router.push(`/register/confirm?email=${email}`);
+      // Redirect to home so user is visibly logged in (cookie already set by server)
+      router.push("/?welcome=1");
+      router.refresh();
     },
     onError: (error: any) => {
       setSubmitMessage(error.message || t("errorMessage"));
@@ -95,7 +96,7 @@ export default function SignUpForm() {
               className={`pl-10 ${
                 form.errors.name ? "border-red-500 focus:ring-red-500" : ""
               }`}
-              disabled={mutation.isPending}
+              disabled={mutation.isLoading}
             />
           </div>
           {form.errors.name && (
@@ -119,7 +120,7 @@ export default function SignUpForm() {
               className={`pl-10 ${
                 form.errors.email ? "border-red-500 focus:ring-red-500" : ""
               }`}
-              disabled={mutation.isPending}
+              disabled={mutation.isLoading}
             />
           </div>
           {form.errors.email && (
@@ -143,13 +144,13 @@ export default function SignUpForm() {
               className={`pl-10 pr-10 ${
                 form.errors.password ? "border-red-500 focus:ring-red-500" : ""
               }`}
-              disabled={mutation.isPending}
+              disabled={mutation.isLoading}
             />
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
               className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 focus:outline-none"
-              disabled={mutation.isPending}
+              disabled={mutation.isLoading}
               tabIndex={-1}
             >
               {showPassword ? (
@@ -180,7 +181,7 @@ export default function SignUpForm() {
                 ? "border-red-500 focus:ring-red-500"
                 : ""
             }`}
-            disabled={mutation.isPending}
+            disabled={mutation.isLoading}
           />
           {form.errors.confirmPassword && (
             <p className="text-sm text-red-500">
@@ -197,7 +198,7 @@ export default function SignUpForm() {
             onCheckedChange={(checked) =>
               form.setValue("terms", checked as boolean)
             }
-            disabled={mutation.isPending}
+            disabled={mutation.isLoading}
           />
           <Label htmlFor="terms" className="text-sm text-gray-600">
             {t("termsLabel")}
@@ -234,10 +235,10 @@ export default function SignUpForm() {
           type="button"
           onClick={handleSubmit}
           className="w-full"
-          disabled={mutation.isPending}
-          loading={mutation.isPending}
+          disabled={mutation.isLoading}
+          loading={mutation.isLoading}
         >
-          {mutation.isPending ? t("loading") : t("button")}
+          {mutation.isLoading ? t("loading") : t("button")}
         </BrandButton>
       </CardFooter>
     </Card>

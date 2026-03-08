@@ -181,15 +181,52 @@ export const getCoursePricingPlans = withTenant({
   },
 });
 
+const courseListInputSchema = z
+  .object({
+    search: z.string().optional(),
+    level: z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]).optional(),
+    sort: z
+      .enum(["newest", "price_asc", "price_desc", "rating", "students"])
+      .optional(),
+  })
+  .optional();
+
 // Helper function to get courses with their default pricing only
 export const getCoursesWithDefaultPricing = withTenant({
-  handler: async ({ db, accountId }) => {
+  input: courseListInputSchema,
+  handler: async ({ db, accountId, input }) => {
     try {
+      const where: {
+        accountId: string;
+        status: string;
+        title?: { contains: string; mode: "insensitive" };
+        level?: string;
+      } = {
+        accountId,
+        status: "PUBLISHED",
+      };
+      if (input?.search?.trim()) {
+        where.title = {
+          contains: input.search.trim(),
+          mode: "insensitive",
+        };
+      }
+      if (input?.level) {
+        where.level = input.level;
+      }
+
+      const sort = input?.sort ?? "newest";
+      const orderBy =
+        sort === "newest"
+          ? { createdAt: "desc" as const }
+          : sort === "rating"
+            ? { rating: "desc" as const }
+            : sort === "students"
+              ? { Sale: { _count: "desc" as const } }
+              : { createdAt: "desc" as const };
+
       const courses = await db.course.findMany({
-        where: {
-          accountId,
-          status: "PUBLISHED", // Only get published courses
-        },
+        where,
         include: {
           CoursePricingPlans: {
             where: {
@@ -217,13 +254,23 @@ export const getCoursesWithDefaultPricing = withTenant({
             },
           },
         },
-        orderBy: {
-          createdAt: "desc",
-        },
+        orderBy,
       });
 
+      let result = courses as CourseWithDefaultPricing[];
+      if (sort === "price_asc" || sort === "price_desc") {
+        const dir = sort === "price_asc" ? 1 : -1;
+        result = [...result].sort((a, b) => {
+          const priceA =
+            a.CoursePricingPlans?.[0]?.PricingPlan?.price ?? Infinity;
+          const priceB =
+            b.CoursePricingPlans?.[0]?.PricingPlan?.price ?? Infinity;
+          return (priceA - priceB) * dir;
+        });
+      }
+
       return {
-        data: courses as CourseWithDefaultPricing[],
+        data: result,
         success: true,
         message: "Courses with default pricing retrieved successfully",
       };

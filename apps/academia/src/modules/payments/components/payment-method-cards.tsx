@@ -1,16 +1,11 @@
 import { CreditCard, Smartphone, Check } from "lucide-react";
 import { usePaymentContext } from "../context/payments-provider";
-
-interface PaymentConnection {
-  provider: string;
-  isActive: boolean;
-}
+import { useTranslations } from "next-intl";
 
 export function PaymentMethodCards() {
   const { activeConnections, paymentMethod, setPaymentMethod } =
     usePaymentContext();
-  // Debug: Log the connections to see what we're working with
-  console.log("Active connections:", activeConnections);
+  const t = useTranslations("payments");
 
   const hasChargily = activeConnections.some(
     (conn) => conn.provider === "CHARGILY" && conn.isActive
@@ -20,13 +15,10 @@ export function PaymentMethodCards() {
     (conn) => conn.provider === "P2P" && conn.isActive
   );
 
-  console.log("Has Chargily:", hasChargily);
-  console.log("Has P2P:", hasP2P);
-
   if (activeConnections.length === 0) {
     return (
       <div className="col-span-2 text-center py-8 text-muted-foreground">
-        لا توجد طرق دفع متاحة حالياً
+        {t("noPaymentMethods")}
       </div>
     );
   }
@@ -36,7 +28,7 @@ export function PaymentMethodCards() {
       {/* Chargily Payment Method */}
       {hasChargily && (
         <div
-          className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
+          className={`border-2 rounded-lg p-4 min-h-[72px] cursor-pointer transition-all active:scale-[0.98] ${
             paymentMethod === "chargily"
               ? "border-blue-500 bg-blue-50 dark:bg-blue-950/30 dark:border-blue-400"
               : "border-border hover:border-muted-foreground/50 bg-card"
@@ -58,10 +50,10 @@ export function PaymentMethodCards() {
             <CreditCard className="w-8 h-8 text-blue-600 dark:text-blue-400" />
             <div className="space-y-1">
               <div className="font-medium text-foreground">
-                شارجيلي - Chargily
+                {t("chargilyTitle")}
               </div>
               <div className="text-sm text-muted-foreground">
-                دفع آمن بالبطاقة البنكية
+                {t("chargilyDescription")}
               </div>
             </div>
           </div>
@@ -71,7 +63,7 @@ export function PaymentMethodCards() {
       {/* P2P Payment Method */}
       {hasP2P && (
         <div
-          className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
+          className={`border-2 rounded-lg p-4 min-h-[72px] cursor-pointer transition-all active:scale-[0.98] ${
             paymentMethod === "p2p"
               ? "border-green-500 bg-green-50 dark:bg-green-950/30 dark:border-green-400"
               : "border-border hover:border-muted-foreground/50 bg-card"
@@ -93,10 +85,10 @@ export function PaymentMethodCards() {
             <Smartphone className="w-8 h-8 text-green-600 dark:text-green-400" />
             <div className="space-y-1">
               <div className="font-medium text-foreground">
-                التحويل المباشر - P2P
+                {t("p2pTitle")}
               </div>
               <div className="text-sm text-muted-foreground">
-                تحويل مباشر عبر الهاتف المحمول
+                {t("p2pDescription")}
               </div>
             </div>
           </div>
@@ -107,11 +99,12 @@ export function PaymentMethodCards() {
       {!hasChargily && !hasP2P && (
         <div className="col-span-2 text-center py-8">
           <div className="text-muted-foreground">
-            لا توجد طرق دفع نشطة متاحة حالياً
+            {t("noActivePaymentMethods")}
           </div>
           <div className="text-sm text-muted-foreground mt-2">
-            تم العثور على {activeConnections.length} اتصال(ات) ولكن لا يوجد منها
-            نشط
+            {t("noActivePaymentMethodsHint", {
+              count: activeConnections.length,
+            })}
           </div>
         </div>
       )}

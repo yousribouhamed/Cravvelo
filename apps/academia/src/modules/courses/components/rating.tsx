@@ -432,10 +432,10 @@ const Ratings: React.FC<RatingsProps> = ({
           <DialogFooter className="flex-row gap-3 rtl:flex-row-reverse sm:justify-end">
             <Button
               onClick={() => createMutation.mutate()}
-              disabled={createMutation.isPending || !newReview.content.trim() || !allowComment || !allowRating}
+              disabled={createMutation.isLoading || !newReview.content.trim() || !allowComment || !allowRating}
               className="flex-1 sm:flex-initial"
             >
-              {createMutation.isPending ? t("submitting") : t("submit")}
+              {createMutation.isLoading ? t("submitting") : t("submit")}
             </Button>
             <Button
               onClick={() => setShowAddReview(false)}

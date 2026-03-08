@@ -48,31 +48,35 @@ function SheetContent({
   className,
   children,
   side = "right",
+  dir,
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
   side?: "top" | "right" | "bottom" | "left";
+  /** Direction for RTL-aware close button position (start = left in LTR, right in RTL) */
+  dir?: "ltr" | "rtl";
 }) {
   return (
     <SheetPortal>
       <SheetOverlay />
       <SheetPrimitive.Content
         data-slot="sheet-content"
+        dir={dir}
         className={cn(
-          "bg-card data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
+          "bg-card data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 overflow-hidden pt-[env(safe-area-inset-top)]",
           side === "right" &&
-            "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-4 right-4 h-full w-3/4 rounded-2xl sm:max-w-2xl",
+            "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-4 right-4 h-full w-3/4 rounded-2xl sm:max-w-2xl pl-[env(safe-area-inset-left)]",
           side === "left" &&
-            "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left inset-y-4 left-4 bottom-4 h-[95%] w-3/4  rounded-2xl sm:max-w-5xl",
+            "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left inset-y-4 left-4 bottom-4 h-[95%] w-3/4 rounded-2xl sm:max-w-5xl pl-[env(safe-area-inset-left)] pb-[env(safe-area-inset-bottom)]",
           side === "top" &&
             "data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top inset-x-0 top-0 h-auto border-b",
           side === "bottom" &&
-            "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 h-auto border-t",
+            "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 left-0 right-0 w-full h-[90vh] max-h-[90vh] rounded-t-2xl border-t pb-[env(safe-area-inset-bottom)]",
           className
         )}
         {...props}
       >
         {children}
-        <SheetPrimitive.Close className="ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute top-4 left-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none">
+        <SheetPrimitive.Close className="ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute top-4 inset-s-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none">
           <XIcon className="size-4" />
           <span className="sr-only">Close</span>
         </SheetPrimitive.Close>

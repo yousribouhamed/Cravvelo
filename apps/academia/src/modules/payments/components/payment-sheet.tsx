@@ -18,22 +18,25 @@ import {
   PaymentPricingOption,
 } from "@/modules/payments/types/index";
 import React from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useTenantCurrency } from "@/hooks/use-tenant";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 export function PaymentSheet() {
   const {
     isSheetOpen,
     setSheetOpen,
     selectedProduct,
-    connections,
     activeConnections,
     isConnectionsLoading,
   } = usePaymentContext();
   const t = useTranslations("payments");
   const { formatPrice } = useTenantCurrency();
-
-  console.log(selectedProduct);
+  const locale = useLocale();
+  const dir = locale === "ar" ? "rtl" : "ltr";
+  const isRTL = locale === "ar";
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const sheetSide = isDesktop ? "left" : "bottom";
 
   const getCurrentPrice = (product: PaymentProduct | null): number => {
     if (!product) return 0;
@@ -86,12 +89,12 @@ export function PaymentSheet() {
 
   return (
     <Sheet open={isSheetOpen} onOpenChange={handleSheetOpenChange}>
-      <SheetContent side="left">
+      <SheetContent side={sheetSide} dir={dir}>
         {isConnectionsLoading ? (
           <PaymentSheetSkeleton />
         ) : !selectedProduct ? (
           // Show error state if no product selected (fallback)
-          <div className="h-full flex items-center justify-center" dir="rtl">
+          <div className="h-full flex items-center justify-center" dir={dir}>
             <div className="text-center space-y-4">
               <AlertCircle className="w-12 h-12 text-muted-foreground mx-auto" />
               <div>
@@ -105,8 +108,10 @@ export function PaymentSheet() {
             </div>
           </div>
         ) : (
-          <div className="h-full flex flex-col" dir="rtl">
-            <SheetHeader className="text-right pb-6 flex-shrink-0">
+          <div className="h-full flex flex-col" dir={dir}>
+            <SheetHeader
+              className={`pb-6 shrink-0 ${isRTL ? "text-right" : "text-left"}`}
+            >
               <SheetTitle className="text-2xl font-bold text-foreground">
                 {t("title")}
               </SheetTitle>
@@ -120,16 +125,18 @@ export function PaymentSheet() {
                 <div className="p-4">
                   {/* Two Column Layout */}
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Order Summary */}
-                    <div className="lg:sticky lg:top-0">
-                      <div dir="rtl" className="space-y-4">
+                    {/* Order Summary - right in LTR, left in RTL (via order) */}
+                    <div
+                      className={`lg:sticky lg:top-0 ${isRTL ? "lg:order-1" : "lg:order-2"}`}
+                    >
+                      <div dir={dir} className="space-y-4">
                         <div className="space-y-4">
                           <h3 className="text-lg font-semibold text-foreground">
                             {t("summary")}
                           </h3>
                           <div className="bg-muted/50 rounded-lg p-4 border my-4">
                             <div className="flex items-center gap-4">
-                              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shrink-0">
                                 {selectedProduct.image ? (
                                   <img
                                     src={selectedProduct.image}
@@ -194,8 +201,7 @@ export function PaymentSheet() {
                                 </span>
                                 {currentPrice > 0 ? (
                                   <span className="text-xl font-bold text-green-600 dark:text-green-400">
-                                    {currentPrice.toLocaleString()}{" "}
-                                    {selectedProduct.currency}
+                                    {formatPrice(currentPrice)}
                                   </span>
                                 ) : (
                                   <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
@@ -213,13 +219,15 @@ export function PaymentSheet() {
                                     "UNLIMITED" && t("unlimitedAccess")}
                                   {selectedPricing.accessDuration ===
                                     "LIMITED" &&
-                                    selectedPricing.accessDurationDays &&
+                                    selectedPricing.accessDurationDays != null &&
+                                    selectedPricing.accessDurationDays > 0 &&
                                     t("limitedAccess", {
                                       days: selectedPricing.accessDurationDays,
                                     })}
                                   {selectedPricing.pricingType ===
                                     "RECURRING" &&
                                     selectedPricing.recurringDays &&
+                                    selectedPricing.recurringDays > 0 &&
                                     ` • ${t("recurringAccess", {
                                       days: selectedPricing.recurringDays,
                                     })}`}
@@ -233,7 +241,9 @@ export function PaymentSheet() {
                         {currentPrice > 0 && (
                           <div className="bg-muted/50 rounded-lg p-4 border">
                             <div className="flex items-start gap-3">
-                              <div className="text-right text-sm text-muted-foreground flex-1">
+                              <div
+                                className={`text-sm text-muted-foreground flex-1 ${isRTL ? "text-right" : "text-left"}`}
+                              >
                                 <div className="font-medium mb-1 text-foreground">
                                   {t("securePayment")}
                                 </div>
@@ -241,28 +251,18 @@ export function PaymentSheet() {
                                   {t("securePaymentMessage")}
                                 </div>
                               </div>
-                              <Lock className="w-5 h-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                              <Lock className="w-5 h-5 text-muted-foreground mt-0.5 shrink-0" />
                             </div>
                           </div>
                         )}
                       </div>
                     </div>
 
-                    {/* Payment Methods & Form */}
-                    <div className="space-y-6 col-span-2" dir="rtl">
-                      {/* Debug Info (remove in production) */}
-                      {process.env.NODE_ENV === "development" && (
-                        <div className="bg-yellow-50 dark:bg-yellow-950/30 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
-                          <div className="text-xs text-yellow-700 dark:text-yellow-300">
-                            Debug: {connections?.length || 0} total connections,{" "}
-                            {activeConnections?.length || 0} active | Price:{" "}
-                            {formatPrice(currentPrice)}
-                            {selectedPricing &&
-                              ` | Pricing: ${selectedPricing.name}`}
-                          </div>
-                        </div>
-                      )}
-
+                    {/* Payment Methods & Form - left in LTR, right in RTL (via order) */}
+                    <div
+                      className={`space-y-6 col-span-2 ${isRTL ? "lg:order-2" : "lg:order-1"}`}
+                      dir={dir}
+                    >
                       {/* Only show payment methods for paid products */}
                       {currentPrice > 0 ? (
                         <>

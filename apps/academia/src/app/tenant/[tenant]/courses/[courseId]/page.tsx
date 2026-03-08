@@ -37,7 +37,7 @@ export default async function Page({ params }: PageProps) {
         <div
           className="w-full min-h-screen h-fit grid grid-cols-1 lg:grid-cols-3 gap-4 p-4 my-8"
         >
-          <div className="w-full col-span-1 lg:col-span-2 h-fit min-h-[400px]">
+          <div className="w-full col-span-1 lg:col-span-2 min-h-[400px]">
             <h1 className="text-2xl font-bold text-start text-foreground mb-4">
               {course?.title}
             </h1>
@@ -65,7 +65,9 @@ export default async function Page({ params }: PageProps) {
             </div>
           </div>
 
-          <CourseBuyCard course={course} isOwned={isOwned} courseId={courseId} />
+          <div className="w-full lg:w-auto">
+            <CourseBuyCard course={course} isOwned={isOwned} courseId={courseId} />
+          </div>
         </div>
 
         <PaymentSheet />
