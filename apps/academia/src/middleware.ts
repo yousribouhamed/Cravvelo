@@ -19,7 +19,6 @@ const protectedRoutePrefixes = [
   "/dashboard",
   "/profile",
   "/settings",
-  "/courses",
   "/admin",
 ];
 

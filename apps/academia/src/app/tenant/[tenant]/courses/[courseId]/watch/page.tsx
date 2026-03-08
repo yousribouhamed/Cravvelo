@@ -1,5 +1,8 @@
+import { redirect } from "next/navigation";
 import { getCourseWithChapters } from "@/modules/profile/actions/course.actions";
 import { CourseWatchClient } from "@/modules/courses/components/course-watch-client";
+import { checkCourseOwnership } from "@/modules/courses/actions/check-ownership";
+import { getCurrentUser } from "@/modules/auth/lib/utils";
 import { getTranslations } from "next-intl/server";
 
 interface PageProps {
@@ -12,6 +15,18 @@ interface PageProps {
 export default async function Page({ params }: PageProps) {
   const { courseId } = await params;
   const t = await getTranslations("watch");
+
+  const user = await getCurrentUser();
+  if (!user) {
+    redirect(
+      "/login?redirect=" + encodeURIComponent("/courses/" + courseId + "/watch")
+    );
+  }
+
+  const ownershipRes = await checkCourseOwnership({ courseId });
+  if (!ownershipRes.data) {
+    redirect("/courses/" + courseId);
+  }
 
   const res = await getCourseWithChapters({ courseId });
 

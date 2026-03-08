@@ -130,6 +130,7 @@
     "buyCard": {
       "freeBadge": "مجانا",
       "buyNow": "شراء الآن",
+      "loginToPurchase": "سجّل الدخول للشراء",
       "accessCourse": "الوصول إلى الكورس",
       "watchNow": "شاهد الآن",
       "positiveReviews": "{percentage}% تقييمات إيجابية ({count})",
@@ -199,6 +200,7 @@
       "title": "المنتج",
       "description": "وصف المنتج",
       "buy": "شراء الآن",
+      "loginToPurchase": "سجّل الدخول للشراء",
       "buyHint": "أكمل الدفع لفتح التحميل.",
       "download": "تحميل",
       "downloadHint": "رابط التحميل آمن وينتهي خلال وقت قصير.",

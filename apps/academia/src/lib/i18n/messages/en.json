@@ -130,6 +130,7 @@
     "buyCard": {
       "freeBadge": "Free",
       "buyNow": "Buy Now",
+      "loginToPurchase": "Log in to purchase",
       "accessCourse": "Access Course",
       "watchNow": "Watch Now",
       "positiveReviews": "{percentage}% positive reviews ({count})",
@@ -199,6 +200,7 @@
       "title": "Product",
       "description": "Product Description",
       "buy": "Buy Now",
+      "loginToPurchase": "Log in to purchase",
       "buyHint": "Complete checkout to unlock your download.",
       "download": "Download",
       "downloadHint": "Your download link is secure and expires shortly.",
