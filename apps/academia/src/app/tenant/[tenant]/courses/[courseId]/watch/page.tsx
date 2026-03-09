@@ -22,7 +22,7 @@ function getFirstValidChapterModule(
 ): { chapterId: string; moduleId: string } | null {
   const visible = chapters
     .filter((c) => c.isVisible !== false)
-    .sort((a, b) => (a as { orderNumber?: number }).orderNumber - (b as { orderNumber?: number }).orderNumber);
+    .sort((a, b) => ((a as { orderNumber?: number }).orderNumber ?? 0) - ((b as { orderNumber?: number }).orderNumber ?? 0));
   for (const ch of visible) {
     const mods = Array.isArray(ch.modules)
       ? ch.modules

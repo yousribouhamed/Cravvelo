@@ -15,7 +15,7 @@ const ALLOWED_HTML_TAGS =
 /** Sanitize HTML: allow only safe tags and strip script/event handlers to prevent XSS */
 function sanitizeModuleHtml(html: string): string {
   if (typeof html !== "string") return "";
-  let s = html
+  const s = html
     .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
     .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, "")
     .replace(/<iframe\b[^>]*>[\s\S]*?<\/iframe>/gi, "")
