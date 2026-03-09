@@ -27,8 +27,8 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
     nameKey: "subscription.plans.basic.name",
     tagline: "For beginners.",
     taglineKey: "subscription.plans.basic.tagline",
-    priceMonthly: 1000,
-    priceYearly: 10000,
+    priceMonthly: 100,
+    priceYearly: 1000,
     currency: "DZD",
     features: [
       { text: "1 workspace", i18nKey: "subscription.features.workspace1" },

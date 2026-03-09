@@ -5,10 +5,13 @@ import type { ChargilyApiResponse } from "@/src/modules/payments/types";
 import { SUBSCRIPTION_PLANS } from "@/src/constants/subscription-plans";
 import z from "zod";
 
-const CHARGILY_BASE_URL =
-  process.env.NODE_ENV === "production"
+function getChargilyCheckoutUrl() {
+  const key = process.env.CHARGILY_SECRET_KEY ?? "";
+  const isTestKey = key.startsWith("test_");
+  return isTestKey
     ? "https://pay.chargily.net/test/api/v2/checkouts"
     : "https://pay.chargily.net/api/v2/checkouts";
+}
 
 const APP_BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ||
@@ -66,7 +69,7 @@ export const createSubscriptionCheckout = withAuth({
     };
 
     try {
-      const response = await fetch(CHARGILY_BASE_URL, {
+      const response = await fetch(getChargilyCheckoutUrl(), {
         method: "POST",
         headers: {
           Authorization: `Bearer ${process.env.CHARGILY_SECRET_KEY!}`,
