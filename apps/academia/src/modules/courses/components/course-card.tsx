@@ -6,6 +6,7 @@ import { CourseWithPricing } from "../types";
 import { Rating } from "@smastrom/react-rating";
 import { BookOpen, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { InitialAvatar } from "@/components/initial-avatar";
 import { useLocale, useTranslations } from "next-intl";
 import { useTenantCurrency } from "@/hooks/use-tenant";
 
@@ -112,8 +113,9 @@ export default function CourseCard({
               className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-200"
             />
           ) : (
-            <div className="w-full h-56 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center">
-              <BookOpen className="w-12 h-12 text-gray-400 dark:text-gray-600" />
+            <div className="w-full h-56 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 flex flex-col items-center justify-center gap-3">
+              <InitialAvatar letter={title} size="lg" className="!bg-primary/20 !text-primary dark:!bg-primary/30 dark:!text-white" />
+              <BookOpen className="w-10 h-10 text-gray-400 dark:text-gray-600" />
             </div>
           )}
 

@@ -3,6 +3,11 @@
     "appName": "كرافيلو",
     "mainDomain": "هذا هو النطاق الرئيسي الموجود لدينا"
   },
+  "notFound": {
+    "title": "الصفحة غير موجودة",
+    "description": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
+    "backHome": "العودة للرئيسية"
+  },
   "salesBanner": {
     "message": "هذا السعر لن يدوم طويلاً...",
     "hours": "ساعات",
@@ -268,7 +273,14 @@
       "toastError": "حدث خطأ أثناء إرسال إثبات الدفع",
       "toastNoProduct": "لم يتم اختيار منتج",
       "toastProofRequired": "يرجى رفع إثبات الدفع",
-      "toastUploadFailed": "تعذر رفع الملف"
+      "toastUploadFailed": "تعذر رفع الملف",
+      "toastPendingValidation": "سيقوم صاحب الأكاديمية بالتحقق من دفعتك خلال 24 ساعة."
+    },
+    "pending": {
+      "title": "تم إرسال الدفع",
+      "message": "سيقوم صاحب الأكاديمية بالتحقق من دفعتك خلال 24 ساعة. سيتم إشعارك عند التأكيد.",
+      "backHome": "العودة للرئيسية",
+      "viewPayments": "عرض مدفوعاتي"
     }
   },
   "profile": {
@@ -326,12 +338,18 @@
         "courseName": "اسم الدورة",
         "amount": "المبلغ",
         "status": "الحالة",
-        "purchaseDate": "تاريخ الشراء"
+        "purchaseDate": "تاريخ الشراء",
+        "actions": "إجراءات"
       },
       "status": {
         "CREATED": "تم الإنشاء",
+        "PROCESSING": "قيد المعالجة",
         "COMPLETED": "مكتمل",
-        "CANCELLED": "ملغي"
+        "CANCELLED": "ملغي",
+        "REFUNDED": "مسترد"
+      },
+      "actions": {
+        "watch": "شاهد"
       }
     },
     "products": {
@@ -342,7 +360,24 @@
       "purchaseDate": "تاريخ الشراء",
       "status": "الحالة",
       "amount": "المبلغ",
-      "currency": "دج"
+      "currency": "دج",
+      "columns": {
+        "productName": "اسم المنتج",
+        "amount": "المبلغ",
+        "status": "الحالة",
+        "purchaseDate": "تاريخ الشراء",
+        "actions": "إجراءات"
+      },
+      "status": {
+        "CREATED": "تم الإنشاء",
+        "PROCESSING": "قيد المعالجة",
+        "COMPLETED": "مكتمل",
+        "CANCELLED": "ملغي",
+        "REFUNDED": "مسترد"
+      },
+      "actions": {
+        "download": "تحميل"
+      }
     },
     "payments": {
       "title": "سجل المدفوعات",
@@ -358,6 +393,14 @@
         "BANK_TRANSFER": "تحويل بنكي",
         "CASH": "نقدي",
         "CREDIT_CARD": "بطاقة ائتمانية"
+      },
+      "statusValues": {
+        "PENDING": "قيد الانتظار",
+        "PROCESSING": "قيد المعالجة",
+        "COMPLETED": "مكتمل",
+        "FAILED": "فشل",
+        "CANCELLED": "ملغي",
+        "REFUNDED": "مسترد"
       }
     },
     "settings": {
@@ -406,13 +449,16 @@
     "welcome": "مرحباً بك في آكاديمية"
   },
   "home": {
+    "welcomeTo": "مرحباً بك في {name}",
     "courses": {
       "title": "الدورات",
-      "subtitle": "استكشف أحدث الكورسات المنشورة"
+      "subtitle": "استكشف أحدث الكورسات المنشورة",
+      "viewAll": "عرض كل الدورات"
     },
     "products": {
       "title": "المنتجات",
-      "subtitle": "استكشف أحدث المنتجات الرقمية"
+      "subtitle": "استكشف أحدث المنتجات الرقمية",
+      "viewAll": "عرض كل المنتجات"
     }
   },
   "watch": {
@@ -420,6 +466,10 @@
     "failedToLoad": "فشل تحميل الكورس",
     "noModuleSelected": "لم يتم اختيار وحدة",
     "selectModule": "اختر وحدة من الشريط الجانبي للبدء في التعلم",
+    "backToCourse": "العودة للدورة",
+    "openMenuToSelect": "افتح القائمة لاختيار وحدة",
+    "openMenu": "فتح القائمة",
+    "closeMenu": "إغلاق القائمة",
     "courseContent": "محتوى الدورة",
     "chapters": "فصول",
     "chapter": "فصل",
@@ -427,6 +477,13 @@
     "module": "وحدة",
     "previous": "السابق",
     "next": "التالي",
-    "of": "من"
+    "of": "من",
+    "video": {
+      "configMissing": "إعدادات مكتبة الفيديو مفقودة. يرجى التحقق من متغيرات البيئة.",
+      "videoIdRequired": "معرف الفيديو مطلوب لعرض الفيديو.",
+      "loadError": "فشل تحميل الفيديو. يرجى التحقق من الاتصال والمحاولة مرة أخرى.",
+      "retry": "إعادة المحاولة",
+      "loading": "جاري تحميل الفيديو..."
+    }
   }
 }

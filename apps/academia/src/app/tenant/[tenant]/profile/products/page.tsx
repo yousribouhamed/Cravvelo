@@ -1,6 +1,5 @@
 import { getStudentProducts } from "@/modules/profile/actions/products.actions";
-import { ProductColumns } from "@/modules/profile/components/columns/products";
-import { DataTable } from "@/modules/profile/components/data-table";
+import ProductsTable from "@/modules/profile/components/products-table";
 import { getTranslations } from "next-intl/server";
 
 export default async function Page() {
@@ -11,7 +10,7 @@ export default async function Page() {
     return (
       <div className="bg-card h-full rounded-2xl flex flex-col gap-y-4 p-4 border">
         <h2 className="font-bold text-xl">{t("title")}</h2>
-        <DataTable columns={ProductColumns} data={res.data} />
+        <ProductsTable data={res.data} />
       </div>
     );
   }

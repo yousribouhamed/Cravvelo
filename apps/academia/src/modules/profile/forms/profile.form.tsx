@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { StudentProfile } from "../types";
 import { Button } from "@/components/ui/button";
+import BrandButton from "@/components/brand-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -20,6 +21,7 @@ import { updateStudentProfile } from "../actions/profile.actions";
 import { uploadImageToS3, deleteImageFromS3 } from "@/modules/aws/s3";
 import { getKeyFromUrl } from "@/modules/aws/utils";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 interface Props {
   profileData: StudentProfile;
@@ -106,17 +108,15 @@ export default function ProfileForm({ profileData }: Props) {
       });
 
       if (result.success) {
-        // Update form values with the new image URL
         setFormValues((prev) => ({ ...prev, photo_url: imageUrl }));
         setIsEditing(false);
-        console.log(t("saveSuccess"));
+        toast.success(t("saveSuccess"));
       } else {
         throw new Error(result.message || "Failed to update profile");
       }
     } catch (error) {
       console.error(t("saveError"), error);
-      // You might want to show a toast notification here
-      alert(t("saveError"));
+      toast.error(t("saveError"));
     } finally {
       setIsLoading(false);
     }
@@ -135,13 +135,13 @@ export default function ProfileForm({ profileData }: Props) {
 
   return (
     <Card className="w-full h-full">
-      <CardHeader>
+      <CardHeader className="px-4 md:px-6">
         <CardTitle className="text-xl font-bold">{t("myProfile")}</CardTitle>
       </CardHeader>
 
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-6 px-4 md:px-6">
         {/* Profile Picture */}
-        <div className="flex items-center space-x-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <ProfileImageInput
             value={formValues.photo_url}
             onChange={(url) => handleChange("photo_url", url)}
@@ -196,7 +196,7 @@ export default function ProfileForm({ profileData }: Props) {
         </div>
       </CardContent>
 
-      <CardFooter className="flex justify-end space-x-4">
+      <CardFooter className="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-4 px-4 md:px-6">
         {isEditing ? (
           <>
             <Button
@@ -206,12 +206,12 @@ export default function ProfileForm({ profileData }: Props) {
             >
               {t("cancel")}
             </Button>
-            <Button onClick={handleSave} disabled={isLoading}>
+            <BrandButton onClick={handleSave} disabled={isLoading}>
               {isLoading ? t("saving") : t("save")}
-            </Button>
+            </BrandButton>
           </>
         ) : (
-          <Button onClick={() => setIsEditing(true)}>{t("edit")}</Button>
+          <BrandButton onClick={() => setIsEditing(true)}>{t("edit")}</BrandButton>
         )}
       </CardFooter>
     </Card>

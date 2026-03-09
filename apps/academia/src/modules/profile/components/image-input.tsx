@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import ReactCrop, { Crop, PixelCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { Button } from "@/components/ui/button";
+import BrandButton from "@/components/brand-button";
 import { Input } from "@/components/ui/input";
 import {
   Dialog,
@@ -146,7 +147,7 @@ export default function ProfileImageInput({
           </AvatarFallback>
         </Avatar>
 
-        {/* زر قص الصورة إذا موجودة */}
+        {/* Crop button when photo exists */}
         {value && !disabled && (
           <Button
             size="sm"
@@ -161,7 +162,7 @@ export default function ProfileImageInput({
 
       {!disabled && (
         <div className="flex gap-2">
-          {/* رفع صورة */}
+          {/* Upload photo */}
           <Button variant="outline" className="relative">
             <Upload className="w-4 h-4 mr-2" />
             {value ? tImage("change") : tImage("upload")}
@@ -173,7 +174,7 @@ export default function ProfileImageInput({
             />
           </Button>
 
-          {/* قص صورة موجودة */}
+          {/* Crop existing photo */}
           {value && (
             <Button variant="outline" onClick={handleCropExisting}>
               <CropIcon className="w-4 h-4 mr-2" />
@@ -183,7 +184,7 @@ export default function ProfileImageInput({
         </div>
       )}
 
-      {/* نافذة القص */}
+      {/* Crop dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
@@ -215,9 +216,9 @@ export default function ProfileImageInput({
             <Button variant="outline" onClick={handleCancel}>
               {tProfile("cancel")}
             </Button>
-            <Button onClick={handleSave} disabled={!completedCrop}>
+            <BrandButton onClick={handleSave} disabled={!completedCrop}>
               {tProfile("save")}
-            </Button>
+            </BrandButton>
           </DialogFooter>
         </DialogContent>
       </Dialog>

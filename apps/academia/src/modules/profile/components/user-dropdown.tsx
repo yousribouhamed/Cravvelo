@@ -4,12 +4,10 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import {
   User,
-  Users,
   Award,
   BookOpen,
   Package,
   CreditCard,
-  Settings,
   LogOut,
   Moon,
   Sun,
@@ -24,7 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 interface ProfileDropdownProps {
   onLogout?: () => void;
@@ -32,8 +30,10 @@ interface ProfileDropdownProps {
 
 export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
   const { theme, setTheme } = useTheme();
+  const locale = useLocale();
   const tProfile = useTranslations("profile");
   const tMenu = useTranslations("profile.menu");
+  const dropdownAlign = locale === "ar" ? "start" : "end";
 
   const toggleDarkMode = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -41,12 +41,10 @@ export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
 
   const ProfileLinks = [
     { url: "/profile", name: tMenu("profile"), icon: User },
-    { url: "/profile/affiliates", name: tMenu("affiliates"), icon: Users },
     { url: "/profile/certificate", name: tMenu("certificates"), icon: Award },
     { url: "/profile/courses", name: tMenu("courses"), icon: BookOpen },
     { url: "/profile/products", name: tMenu("products"), icon: Package },
     { url: "/profile/payments", name: tMenu("payments"), icon: CreditCard },
-    { url: "/profile/settings", name: tMenu("settings"), icon: Settings },
   ];
 
   return (
@@ -63,7 +61,7 @@ export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
       </DropdownMenuTrigger>
 
       {/* Dropdown Content */}
-      <DropdownMenuContent align="start" className="w-56">
+      <DropdownMenuContent align={dropdownAlign} className="w-56">
         <DropdownMenuLabel>{tProfile("accountSettings")}</DropdownMenuLabel>
         <DropdownMenuSeparator />
 

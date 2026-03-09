@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import BrandButton from "@/components/brand-button";
 import {
   ExternalLink,
   User,
@@ -103,15 +103,14 @@ export function CertificateColumns(): ColumnDef<Certificate>[] {
         }
 
         return (
-          <Button
-            variant="outline"
+          <BrandButton
             size="sm"
-            className="h-8 px-3 text-blue-600 hover:text-blue-700 hover:bg-blue-50 border-blue-200 hover:border-blue-300 transition-all duration-200"
+            className="h-8 px-3 gap-1"
             onClick={() => window.open(url, "_blank", "noopener,noreferrer")}
           >
-            <ExternalLink className="h-3 w-3 mr-1" />
+            <ExternalLink className="h-3 w-3" />
             {t("actions.viewCertificate")}
-          </Button>
+          </BrandButton>
         );
       },
     },

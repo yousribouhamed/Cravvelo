@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -30,7 +31,8 @@ interface P2PFormProps {
 }
 
 export function P2PForm({ isLoading = false }: P2PFormProps) {
-  const { selectedProduct } = usePaymentContext();
+  const router = useRouter();
+  const { selectedProduct, closeSheet } = usePaymentContext();
   const t = useTranslations("payments.p2p");
   const locale = useLocale();
   const dir = locale === "ar" ? "rtl" : "ltr";
@@ -79,9 +81,11 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
       return response;
     },
     onSuccess: () => {
-      toast.success(t("toastSuccess"));
+      closeSheet();
+      toast.success(t("toastPendingValidation"));
       setFormData({ paymentProof: null, notes: "" });
-      setIsLocked(true); // keep locked to prevent re-submission
+      setIsLocked(true);
+      router.push("/payment-pending");
     },
     onError: (error) => {
       console.error(error);

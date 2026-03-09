@@ -5,64 +5,38 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   User,
-  Users,
   Award,
   BookOpen,
   Package,
   CreditCard,
-  Settings,
 } from "lucide-react";
 import { useTenantBranding } from "@/hooks/use-tenant";
 import { useTranslations } from "next-intl";
 
-interface SidebarProps {}
+export interface ProfileSidebarNavContentProps {
+  /** Called when a nav link is clicked (e.g. to close mobile Sheet) */
+  onLinkClick?: () => void;
+}
 
-export default function ProfileSidebar({}: SidebarProps) {
+/** Shared nav links + user block; used by desktop sidebar and mobile Sheet */
+export function ProfileSidebarNavContent({
+  onLinkClick,
+}: ProfileSidebarNavContentProps) {
   const pathname = usePathname();
-  const { primaryColor, primaryColorDark } = useTenantBranding();
+  const { primaryColor } = useTenantBranding();
   const tProfile = useTranslations("profile");
   const tMenu = useTranslations("profile.menu");
 
   const Links = [
-    {
-      url: "/profile",
-      name: tMenu("profile"),
-      icon: User,
-    },
-    {
-      url: "/profile/affiliates",
-      name: tMenu("affiliates"),
-      icon: Users,
-    },
-    {
-      url: "/profile/certificate",
-      name: tMenu("certificates"),
-      icon: Award,
-    },
-    {
-      url: "/profile/courses",
-      name: tMenu("courses"),
-      icon: BookOpen,
-    },
-    {
-      url: "/profile/products",
-      name: tMenu("products"),
-      icon: Package,
-    },
-    {
-      url: "/profile/payments",
-      name: tMenu("payments"),
-      icon: CreditCard,
-    },
-    {
-      url: "/profile/settings",
-      name: tMenu("settings"),
-      icon: Settings,
-    },
+    { url: "/profile", name: tMenu("profile"), icon: User },
+    { url: "/profile/certificate", name: tMenu("certificates"), icon: Award },
+    { url: "/profile/courses", name: tMenu("courses"), icon: BookOpen },
+    { url: "/profile/products", name: tMenu("products"), icon: Package },
+    { url: "/profile/payments", name: tMenu("payments"), icon: CreditCard },
   ];
 
   return (
-    <div className="w-full bg-card text-card-foreground border border-gray-200/80 dark:border-[#1A1A1D] rounded-2xl p-6 shadow-sm">
+    <>
       <div className="mb-6">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
           {tProfile("dashboard")}
@@ -81,6 +55,7 @@ export default function ProfileSidebar({}: SidebarProps) {
             <Link
               key={link.url}
               href={link.url}
+              onClick={onLinkClick}
               className={`
                 group relative flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200
                 ${
@@ -91,9 +66,7 @@ export default function ProfileSidebar({}: SidebarProps) {
               `}
               style={
                 isActive
-                  ? {
-                      backgroundColor: primaryColor,
-                    }
+                  ? { backgroundColor: primaryColor }
                   : undefined
               }
             >
@@ -104,7 +77,6 @@ export default function ProfileSidebar({}: SidebarProps) {
                     : "text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300"
                 }`}
               />
-
               <span className="font-medium">{link.name}</span>
             </Link>
           );
@@ -129,6 +101,16 @@ export default function ProfileSidebar({}: SidebarProps) {
           </div>
         </div>
       </div>
+    </>
+  );
+}
+
+interface SidebarProps {}
+
+export default function ProfileSidebar({}: SidebarProps) {
+  return (
+    <div className="w-full bg-card text-card-foreground border border-gray-200/80 dark:border-[#1A1A1D] rounded-2xl p-6 shadow-sm">
+      <ProfileSidebarNavContent />
     </div>
   );
 }

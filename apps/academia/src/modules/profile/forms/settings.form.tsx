@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import BrandButton from "@/components/brand-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -17,6 +18,7 @@ import {
   getStudentSettings,
 } from "../actions/settings.actions";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 interface SettingsData {
   preferredLanguage: string | null;
@@ -80,15 +82,13 @@ export default function SettingsForm() {
       });
 
       if (result.success) {
-        console.log(t("saveSuccess"));
-        // You might want to show a toast notification here
-        alert(t("saveSuccess"));
+        toast.success(t("saveSuccess"));
       } else {
         throw new Error(result.message || "Failed to update settings");
       }
     } catch (error) {
       console.error(t("saveError"), error);
-      alert(t("saveError"));
+      toast.error(t("saveError"));
     } finally {
       setIsLoading(false);
     }
@@ -192,9 +192,9 @@ export default function SettingsForm() {
       </CardContent>
 
       <CardFooter className="flex justify-end">
-        <Button onClick={handleSave} disabled={isLoading}>
+        <BrandButton onClick={handleSave} disabled={isLoading}>
           {isLoading ? t("saving") : t("save")}
-        </Button>
+        </BrandButton>
       </CardFooter>
     </Card>
   );

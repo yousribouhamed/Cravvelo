@@ -72,7 +72,7 @@ export const CourseControls: React.FC<CourseControlsProps> = ({
     const params = new URLSearchParams();
     params.set("chapter", chapterId);
     params.set("module", moduleId);
-    router.push(`?${params.toString()}`);
+    router.replace(`?${params.toString()}`);
   };
 
   const goToPrevious = () => {
@@ -101,60 +101,51 @@ export const CourseControls: React.FC<CourseControlsProps> = ({
   return (
     <div
       className={cn(
-        "flex items-center justify-between p-4 bg-background border rounded-lg",
+        "flex items-center justify-between gap-3 border-t border-border bg-background px-3 py-2 sm:px-4 sm:py-2.5 rounded-b-md",
         className
       )}
     >
-      {/* Previous Button */}
       <button
+        type="button"
         onClick={goToPrevious}
         disabled={!canGoPrevious}
         className={cn(
-          "flex items-center px-4 py-2 rounded-md transition-colors",
-          isRTL ? "space-x-reverse space-x-2" : "space-x-2",
+          "flex items-center gap-1.5 px-3 py-2 text-sm font-medium min-h-[40px] touch-manipulation border border-border rounded-md",
+          isRTL ? "flex-row-reverse" : "",
           canGoPrevious
-            ? "bg-primary text-primary-foreground hover:bg-primary/90"
-            : "bg-muted text-muted-foreground cursor-not-allowed"
+            ? "text-foreground hover:bg-muted/80"
+            : "text-muted-foreground cursor-not-allowed opacity-60"
         )}
       >
-        {isRTL ? (
-          <ChevronRight className="h-4 w-4" />
-        ) : (
-          <ChevronLeft className="h-4 w-4" />
-        )}
+        {isRTL ? <ChevronRight className="h-4 w-4 shrink-0" /> : <ChevronLeft className="h-4 w-4 shrink-0" />}
         <span className="hidden sm:inline">{t("previous")}</span>
       </button>
 
-      {/* Current Module Info */}
       {currentInfo && (
-        <div className="flex-1 text-center px-4">
-          <p className="text-sm font-medium truncate">
+        <div className="flex-1 min-w-0 text-center px-2">
+          <p className="text-sm font-medium truncate text-foreground">
             {currentInfo.module.title}
           </p>
           <p className="text-xs text-muted-foreground">
-            {currentModuleIndex + 1} {t("of")} {allModules.length} {t("modules")}
+            {currentModuleIndex + 1} / {allModules.length}
           </p>
         </div>
       )}
 
-      {/* Next Button */}
       <button
+        type="button"
         onClick={goToNext}
         disabled={!canGoNext}
         className={cn(
-          "flex items-center px-4 py-2 rounded-md transition-colors",
-          isRTL ? "space-x-reverse space-x-2" : "space-x-2",
+          "flex items-center gap-1.5 px-3 py-2 text-sm font-medium min-h-[40px] touch-manipulation border border-border rounded-md",
+          isRTL ? "flex-row-reverse" : "",
           canGoNext
-            ? "bg-primary text-primary-foreground hover:bg-primary/90"
-            : "bg-muted text-muted-foreground cursor-not-allowed"
+            ? "text-foreground hover:bg-muted/80"
+            : "text-muted-foreground cursor-not-allowed opacity-60"
         )}
       >
         <span className="hidden sm:inline">{t("next")}</span>
-        {isRTL ? (
-          <ChevronLeft className="h-4 w-4" />
-        ) : (
-          <ChevronRight className="h-4 w-4" />
-        )}
+        {isRTL ? <ChevronLeft className="h-4 w-4 shrink-0" /> : <ChevronRight className="h-4 w-4 shrink-0" />}
       </button>
     </div>
   );

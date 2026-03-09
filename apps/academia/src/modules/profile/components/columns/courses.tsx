@@ -1,17 +1,11 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
+import BrandButton from "@/components/brand-button";
 import Image from "next/image";
+import Link from "next/link";
 import { useMemo } from "react";
-import {
-  BookOpen,
-  Calendar,
-  DollarSign,
-  CheckCircle,
-  Clock,
-  XCircle,
-} from "lucide-react";
+import { BookOpen, Calendar, Play } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 export type CourseSale = {
@@ -27,12 +21,6 @@ export type CourseSale = {
   } | null;
 };
 
-type StatusConfig = {
-  label: string;
-  variant: "default" | "secondary" | "destructive" | "outline";
-  icon: React.ComponentType<{ className?: string }>;
-};
-
 export function useCourseColumns(): ColumnDef<CourseSale>[] {
   const t = useTranslations("profile.courses");
   const locale = useLocale();
@@ -40,24 +28,6 @@ export function useCourseColumns(): ColumnDef<CourseSale>[] {
   const dateLocale = locale === "ar" ? "ar-DZ" : "en-US";
 
   return useMemo(() => {
-    const statusMap: Record<string, StatusConfig> = {
-      CREATED: {
-        label: t("status.CREATED"),
-        variant: "secondary",
-        icon: Clock,
-      },
-      COMPLETED: {
-        label: t("status.COMPLETED"),
-        variant: "default",
-        icon: CheckCircle,
-      },
-      CANCELLED: {
-        label: t("status.CANCELLED"),
-        variant: "destructive",
-        icon: XCircle,
-      },
-    };
-
     const formatAmount = (amount: number) => {
       const formatted = new Intl.NumberFormat(dateLocale).format(amount);
       return `${formatted} ${t("currency")}`;
@@ -120,45 +90,12 @@ export function useCourseColumns(): ColumnDef<CourseSale>[] {
       {
         accessorKey: "amount",
         header: () => (
-          <div className="flex items-center gap-2 font-semibold">
-            <DollarSign className="h-4 w-4" />
-            {t("columns.amount")}
-          </div>
+          <div className="font-semibold">{t("columns.amount")}</div>
         ),
         cell: ({ row }) => {
           const amountRaw = row.getValue("amount");
           const amount = typeof amountRaw === "number" ? amountRaw : Number(amountRaw);
           return <span className="font-medium">{formatAmount(amount)}</span>;
-        },
-      },
-      {
-        accessorKey: "status",
-        header: () => (
-          <div className="flex items-center gap-2 font-semibold">
-            {t("columns.status")}
-          </div>
-        ),
-        cell: ({ row }) => {
-          const status = String(row.getValue("status") ?? "");
-          const statusConfig =
-            statusMap[status] ||
-            ({
-              label: status,
-              variant: "outline",
-              icon: Clock,
-            } satisfies StatusConfig);
-
-          const { label, variant, icon: Icon } = statusConfig;
-
-          return (
-            <Badge
-              variant={variant}
-              className="flex items-center gap-1 px-2 py-1 text-xs font-medium w-fit"
-            >
-              <Icon className="h-3 w-3" />
-              {label}
-            </Badge>
-          );
         },
       },
       {
@@ -182,6 +119,25 @@ export function useCourseColumns(): ColumnDef<CourseSale>[] {
               <span className="text-sm font-medium">{formatted.date}</span>
               <span className="text-xs text-gray-500">{formatted.weekday}</span>
             </div>
+          );
+        },
+      },
+      {
+        id: "actions",
+        header: () => (
+          <div className="font-semibold">{t("columns.actions")}</div>
+        ),
+        cell: ({ row }) => {
+          const courseId = row.original.Course?.id;
+          if (!courseId) return <span className="text-gray-400 text-sm">—</span>;
+
+          return (
+            <BrandButton size="sm" className="gap-1.5" asChild>
+              <Link href={`/courses/${courseId}/watch`}>
+                <Play className="h-3.5 w-3.5" />
+                {t("actions.watch")}
+              </Link>
+            </BrandButton>
           );
         },
       },

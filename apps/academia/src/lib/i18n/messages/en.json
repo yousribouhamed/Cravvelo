@@ -3,6 +3,11 @@
     "appName": "Cravvelo",
     "mainDomain": "This is our existing main domain"
   },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you're looking for doesn't exist or has been moved.",
+    "backHome": "Back to home"
+  },
   "salesBanner": {
     "message": "This price won't last long...",
     "hours": "hours",
@@ -268,7 +273,14 @@
       "toastError": "An error occurred while submitting payment proof",
       "toastNoProduct": "No product selected",
       "toastProofRequired": "Please upload payment proof",
-      "toastUploadFailed": "File upload failed"
+      "toastUploadFailed": "File upload failed",
+      "toastPendingValidation": "The academy owner will validate your payment within 24 hours."
+    },
+    "pending": {
+      "title": "Payment submitted",
+      "message": "The academy owner will validate your payment within 24 hours. You will be notified once it is confirmed.",
+      "backHome": "Back to home",
+      "viewPayments": "View my payments"
     }
   },
   "profile": {
@@ -326,12 +338,18 @@
         "courseName": "Course Name",
         "amount": "Amount",
         "status": "Status",
-        "purchaseDate": "Purchase Date"
+        "purchaseDate": "Purchase Date",
+        "actions": "Actions"
       },
       "status": {
         "CREATED": "Created",
+        "PROCESSING": "Processing",
         "COMPLETED": "Completed",
-        "CANCELLED": "Cancelled"
+        "CANCELLED": "Cancelled",
+        "REFUNDED": "Refunded"
+      },
+      "actions": {
+        "watch": "Watch"
       }
     },
     "products": {
@@ -342,7 +360,24 @@
       "purchaseDate": "Purchase Date",
       "status": "Status",
       "amount": "Amount",
-      "currency": "DZD"
+      "currency": "DZD",
+      "columns": {
+        "productName": "Product Name",
+        "amount": "Amount",
+        "status": "Status",
+        "purchaseDate": "Purchase Date",
+        "actions": "Actions"
+      },
+      "status": {
+        "CREATED": "Created",
+        "PROCESSING": "Processing",
+        "COMPLETED": "Completed",
+        "CANCELLED": "Cancelled",
+        "REFUNDED": "Refunded"
+      },
+      "actions": {
+        "download": "Download"
+      }
     },
     "payments": {
       "title": "Payment History",
@@ -358,6 +393,14 @@
         "BANK_TRANSFER": "Bank Transfer",
         "CASH": "Cash",
         "CREDIT_CARD": "Credit Card"
+      },
+      "statusValues": {
+        "PENDING": "Pending",
+        "PROCESSING": "Processing",
+        "COMPLETED": "Completed",
+        "FAILED": "Failed",
+        "CANCELLED": "Cancelled",
+        "REFUNDED": "Refunded"
       }
     },
     "settings": {
@@ -406,13 +449,16 @@
     "welcome": "Welcome to Academy"
   },
   "home": {
+    "welcomeTo": "Welcome to {name}",
     "courses": {
       "title": "Courses",
-      "subtitle": "Explore the latest published courses"
+      "subtitle": "Explore the latest published courses",
+      "viewAll": "View all courses"
     },
     "products": {
       "title": "Products",
-      "subtitle": "Explore the latest digital products"
+      "subtitle": "Explore the latest digital products",
+      "viewAll": "View all products"
     }
   },
   "watch": {
@@ -420,6 +466,10 @@
     "failedToLoad": "Failed to load course",
     "noModuleSelected": "No module selected",
     "selectModule": "Select a module from the sidebar to start learning",
+    "backToCourse": "Back to course",
+    "openMenuToSelect": "Open menu to choose a module",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
     "courseContent": "Course Content",
     "chapters": "chapters",
     "chapter": "chapter",
@@ -427,6 +477,13 @@
     "module": "module",
     "previous": "Previous",
     "next": "Next",
-    "of": "of"
+    "of": "of",
+    "video": {
+      "configMissing": "Video library configuration is missing. Please check your environment variables.",
+      "videoIdRequired": "Video ID is required to display the video.",
+      "loadError": "Failed to load video. Please check your connection and try again.",
+      "retry": "Retry",
+      "loading": "Loading video..."
+    }
   }
 }

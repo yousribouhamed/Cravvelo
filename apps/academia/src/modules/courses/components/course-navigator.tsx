@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Play, Lock } from "lucide-react";
+import { Play, Lock, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   Accordion,
@@ -12,17 +12,21 @@ import {
 } from "@/components/ui/accordion";
 import { ChapterType } from "../types";
 import { useTranslations, useLocale } from "next-intl";
+import { useTenantBranding } from "@/hooks/use-tenant";
 
 interface CourseNavigatorProps {
   chapters: ChapterType[];
   courseId: string;
   className?: string;
+  /** Called when a module is selected (e.g. to close mobile sidebar) */
+  onModuleSelect?: () => void;
 }
 
 export const CourseNavigator: React.FC<CourseNavigatorProps> = ({
   chapters,
   courseId,
   className = "",
+  onModuleSelect,
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -30,6 +34,7 @@ export const CourseNavigator: React.FC<CourseNavigatorProps> = ({
   const currentModuleId = searchParams.get("module");
   const t = useTranslations("watch");
   const locale = useLocale();
+  const { primaryColor } = useTenantBranding();
   const dir = locale === "ar" ? "rtl" : "ltr";
   const isRTL = locale === "ar";
 
@@ -51,6 +56,7 @@ export const CourseNavigator: React.FC<CourseNavigatorProps> = ({
     params.set("chapter", chapterId);
     params.set("module", moduleId);
     router.replace(`?${params.toString()}`);
+    onModuleSelect?.();
   };
 
   const formatDuration = (duration: number) => {
@@ -62,24 +68,39 @@ export const CourseNavigator: React.FC<CourseNavigatorProps> = ({
   return (
     <div
       className={cn(
-        "w-full max-w-md bg-background border rounded-lg",
+        "w-full max-w-md rounded-md border border-border bg-card overflow-hidden",
         isRTL ? "text-right" : "text-left",
         className
       )}
       dir={dir}
     >
-      <div className="p-4 border-b">
-        <h3 className="text-lg font-semibold">{t("courseContent")}</h3>
-        <p className="text-sm text-muted-foreground">
-          {parsedChapters.length} {parsedChapters.length === 1 ? t("chapter") : t("chapters")}
-        </p>
+      {/* Header */}
+      <div className="rounded-t-md px-4 py-3 border-b border-border bg-muted/30">
+        <div className={cn("flex items-center gap-3", isRTL && "flex-row-reverse")}>
+          <div
+            className="flex h-9 w-9 shrink-0 items-center justify-center"
+            style={{ backgroundColor: primaryColor ? `${primaryColor}20` : "var(--primary)" }}
+          >
+            <BookOpen
+              className="h-4 w-4"
+              style={{ color: primaryColor || "var(--primary)" }}
+            />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h3 className="text-sm font-semibold text-foreground">{t("courseContent")}</h3>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              {parsedChapters.length} {parsedChapters.length === 1 ? t("chapter") : t("chapters")}
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="max-h-[600px] overflow-y-auto p-2">
+      {/* Chapters list */}
+      <div className="max-h-[calc(100vh-220px)] min-h-[200px] overflow-y-auto p-2">
         <Accordion
           type="multiple"
           defaultValue={currentChapterId ? [currentChapterId] : []}
-          className="space-y-3"
+          className="space-y-1.5"
         >
           {parsedChapters.map((chapter) => {
             const modules = chapter.modules.sort(
@@ -91,73 +112,83 @@ export const CourseNavigator: React.FC<CourseNavigatorProps> = ({
               <AccordionItem
                 key={chapter.id}
                 value={chapter.id}
-                className="border rounded-lg bg-card"
+                className="rounded-md border border-border bg-background overflow-hidden data-[state=open]:border-border"
               >
-                <AccordionTrigger className="px-4 py-3 hover:bg-muted/50 rounded-t-lg [&[data-state=open]]:border-b">
+                <AccordionTrigger className="rounded-t-md px-3 py-2.5 hover:bg-muted/40 data-[state=open]:border-b border-transparent data-[state=open]:border-border [&>svg]:shrink-0">
                   <div className={cn(
-                    "flex items-center",
-                    isRTL ? "space-x-reverse space-x-3" : "space-x-3"
+                    "flex items-center w-full min-w-0",
+                    isRTL && "flex-row-reverse"
                   )}>
-                    <div className={isRTL ? "text-right" : "text-left"}>
-                      <p className="font-medium text-sm">{chapter.title}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {modules.length}{" "}
-                        {modules.length === 1 ? t("module") : t("modules")}
+                    <div className={cn("flex-1 min-w-0", isRTL ? "text-right" : "text-left")}>
+                      <p className="font-medium text-sm text-foreground">{chapter.title}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {modules.length} {modules.length === 1 ? t("module") : t("modules")}
                       </p>
                     </div>
                   </div>
                 </AccordionTrigger>
 
-                <AccordionContent className="pb-0">
-                  <div className="bg-muted/25">
+                <AccordionContent className="pb-0 pt-0">
+                  <div className="rounded-b-md bg-muted/20 overflow-hidden">
                     {/* @ts-expect-error */}
-                    {modules.map((module, index) => {
+                    {modules.map((module) => {
                       const isCurrentModule = currentModuleId === module.id;
-                      const isVideo = module.type === "VIDEO";
+                      const isLocked = !module.isFree;
 
                       return (
                         <button
                           key={module.id}
-                          onClick={() =>
-                            navigateToModule(chapter.id, module.id)
-                          }
+                          type="button"
+                          onClick={() => navigateToModule(chapter.id, module.id)}
                           className={cn(
-                            "w-full flex items-center p-3 hover:bg-muted/75 transition-colors",
-                            isRTL ? "space-x-reverse space-x-3 pr-8 text-right" : "space-x-3 pl-8 text-left",
+                            "w-full flex items-center gap-2.5 px-3 py-2.5 text-left transition-colors hover:bg-muted/50 min-h-[44px]",
+                            isRTL && "text-right flex-row-reverse",
                             isCurrentModule &&
-                              (isRTL ? "bg-primary/10 border-r-2 border-primary" : "bg-primary/10 border-l-2 border-primary"),
-                            index === modules.length - 1 && "rounded-b-lg"
+                              (isRTL
+                                ? "bg-primary/10 border-r-2 border-primary"
+                                : "bg-primary/10 border-l-2 border-primary")
                           )}
+                          style={
+                            isCurrentModule && primaryColor
+                              ? { borderColor: primaryColor }
+                              : undefined
+                          }
                         >
-                          <div className="flex-shrink-0">
-                            {isVideo ? (
-                              <Play className={cn(
-                                "h-4 w-4 text-primary",
-                                isRTL && "scale-x-[-1]"
-                              )} />
-                            ) : module.isFree ? (
-                              <div className="h-4 w-4 rounded border border-muted-foreground/50" />
+                          <div
+                            className={cn(
+                              "flex h-7 w-7 shrink-0 items-center justify-center",
+                              isCurrentModule
+                                ? primaryColor
+                                  ? "text-white"
+                                  : "bg-primary text-primary-foreground"
+                                : "bg-muted/80 text-muted-foreground"
+                            )}
+                            style={
+                              isCurrentModule && primaryColor
+                                ? { backgroundColor: primaryColor }
+                                : undefined
+                            }
+                          >
+                            {isLocked ? (
+                              <Lock className={cn("h-3.5 w-3.5", isRTL && "scale-x-[-1]")} />
                             ) : (
-                              <Lock className="h-4 w-4 text-muted-foreground" />
+                              <Play className={cn("h-3.5 w-3.5", isRTL && "scale-x-[-1]")} />
                             )}
                           </div>
 
-                          <div className="flex-1 min-w-0">
+                          <div className={cn("flex-1 min-w-0", isRTL && "text-right")}>
                             <p
                               className={cn(
                                 "text-sm font-medium truncate",
-                                isRTL ? "text-right" : "text-left",
                                 isCurrentModule && "text-primary"
                               )}
+                              style={isCurrentModule && primaryColor ? { color: primaryColor } : undefined}
                             >
                               {module.title}
                             </p>
-                            <div className={cn(
-                              "flex items-center text-xs text-muted-foreground",
-                              isRTL ? "justify-end space-x-reverse space-x-2" : "justify-start space-x-2"
-                            )}>
-                              <span>{formatDuration(module.duration)}</span>
-                            </div>
+                            <p className="text-xs text-muted-foreground mt-0.5">
+                              {formatDuration(module.duration)}
+                            </p>
                           </div>
                         </button>
                       );

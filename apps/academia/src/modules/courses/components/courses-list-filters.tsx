@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Search, ChevronDown, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,8 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu";
+
+const SEARCH_DEBOUNCE_MS = 300;
 
 const SORT_VALUES = [
   "newest",
@@ -32,6 +34,8 @@ export function CoursesListFilters() {
 
   const searchParam = searchParams.get("search") ?? "";
   const [searchInput, setSearchInput] = useState(searchParam);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
     setSearchInput(searchParam);
   }, [searchParam]);
@@ -58,12 +62,23 @@ export function CoursesListFilters() {
     [pathname, router, searchParams]
   );
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    updateParams({ search: searchInput });
-  };
+  useEffect(() => {
+    if (searchInput === searchParam) return;
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      debounceRef.current = null;
+      updateParams({ search: searchInput });
+    }, SEARCH_DEBOUNCE_MS);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [searchInput, searchParam, updateParams]);
 
   const handleClearSearch = () => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+      debounceRef.current = null;
+    }
     setSearchInput("");
     updateParams({ search: "" });
   };
@@ -87,11 +102,8 @@ export function CoursesListFilters() {
   const sortLabel = sortLabels[sortParam as (typeof SORT_VALUES)[number]] ?? t("sortNewest");
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-wrap items-center gap-3 mb-6"
-    >
-      {/* Search bar */}
+    <div className="flex flex-wrap items-center gap-3 mb-6">
+      {/* Search bar (debounced) */}
       <div className="relative flex-1 min-w-[200px] max-w-md">
         <span className="absolute start-3 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground">
           <Search className="size-4" />
@@ -102,7 +114,7 @@ export function CoursesListFilters() {
           placeholder={t("searchPlaceholder")}
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          className="h-10 ps-10 pe-10 rounded-lg border border-input bg-muted/30 focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-10 ps-10 pe-10 rounded-lg border border-input bg-white dark:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
         />
         {searchInput.length > 0 && (
           <button
@@ -115,9 +127,6 @@ export function CoursesListFilters() {
           </button>
         )}
       </div>
-      <Button type="submit" variant="secondary" size="default" className="h-10 rounded-lg">
-        {t("searchButton")}
-      </Button>
 
       {/* Level dropdown */}
       <DropdownMenu>
@@ -177,6 +186,6 @@ export function CoursesListFilters() {
           </DropdownMenuRadioGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-    </form>
+    </div>
   );
 }

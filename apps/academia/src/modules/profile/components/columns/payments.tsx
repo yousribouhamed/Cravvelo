@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import {
   CreditCard,
   Calendar,
@@ -37,48 +37,27 @@ type Payment = {
   } | null;
 };
 
-const statusMap: Record<
+const statusVariantMap: Record<
   string,
   {
-    label: string;
     variant: "default" | "secondary" | "destructive" | "outline";
     icon: React.ComponentType<{ className?: string }>;
   }
 > = {
-  PENDING: {
-    label: "قيد الانتظار",
-    variant: "secondary",
-    icon: Clock,
-  },
-  PROCESSING: {
-    label: "قيد المعالجة",
-    variant: "secondary",
-    icon: Clock,
-  },
-  COMPLETED: {
-    label: "مكتمل",
-    variant: "default",
-    icon: CheckCircle,
-  },
-  FAILED: {
-    label: "فشل",
-    variant: "destructive",
-    icon: XCircle,
-  },
-  CANCELLED: {
-    label: "ملغي",
-    variant: "destructive",
-    icon: XCircle,
-  },
-  REFUNDED: {
-    label: "مسترد",
-    variant: "outline",
-    icon: XCircle,
-  },
+  PENDING: { variant: "secondary", icon: Clock },
+  PROCESSING: { variant: "secondary", icon: Clock },
+  COMPLETED: { variant: "default", icon: CheckCircle },
+  FAILED: { variant: "destructive", icon: XCircle },
+  CANCELLED: { variant: "destructive", icon: XCircle },
+  REFUNDED: { variant: "outline", icon: XCircle },
 };
 
 export function PaymentColumns(): ColumnDef<Payment>[] {
-  const t = useTranslations("profile.payments.methods");
+  const t = useTranslations("profile.payments");
+  const tMethods = useTranslations("profile.payments.methods");
+  const tStatus = useTranslations("profile.payments.statusValues");
+  const locale = useLocale();
+  const dateLocale = locale === "ar" ? "ar-DZ" : "en-US";
 
   return [
     {
@@ -86,7 +65,7 @@ export function PaymentColumns(): ColumnDef<Payment>[] {
       header: () => (
         <div className="flex items-center gap-2 font-semibold">
           <Hash className="h-4 w-4" />
-          رقم الدفع
+          {t("paymentId")}
         </div>
       ),
       cell: ({ row }) => {
@@ -101,7 +80,7 @@ export function PaymentColumns(): ColumnDef<Payment>[] {
     {
       accessorKey: "Sale",
       header: () => (
-        <div className="flex items-center gap-2 font-semibold">العنصر</div>
+        <div className="flex items-center gap-2 font-semibold">{t("item")}</div>
       ),
       cell: ({ row }) => {
         const sale = row.original.Sale;
@@ -138,7 +117,7 @@ export function PaymentColumns(): ColumnDef<Payment>[] {
       header: () => (
         <div className="flex items-center gap-2 font-semibold">
           <DollarSign className="h-4 w-4" />
-          المبلغ
+          {t("amount")}
         </div>
       ),
       cell: ({ row }) => {
@@ -154,22 +133,23 @@ export function PaymentColumns(): ColumnDef<Payment>[] {
     {
       accessorKey: "status",
       header: () => (
-        <div className="flex items-center gap-2 font-semibold">الحالة</div>
+        <div className="flex items-center gap-2 font-semibold">{t("status")}</div>
       ),
       cell: ({ row }) => {
         const status = row.getValue("status") as string;
-        const statusConfig =
-          statusMap[status] ||
-          statusMap.PENDING || {
-            label: status,
+        const config =
+          statusVariantMap[status] ||
+          statusVariantMap.PENDING || {
             variant: "outline" as const,
             icon: Clock,
           };
-        const { label, variant, icon: Icon } = statusConfig;
+        const Icon = config.icon;
+        const label =
+          (status && (tStatus as (key: string) => string)(status)) || status;
 
         return (
           <Badge
-            variant={variant}
+            variant={config.variant}
             className="flex items-center gap-1 px-2 py-1 text-xs font-medium w-fit"
           >
             <Icon className="h-3 w-3" />
@@ -183,7 +163,7 @@ export function PaymentColumns(): ColumnDef<Payment>[] {
       header: () => (
         <div className="flex items-center gap-2 font-semibold">
           <CreditCard className="h-4 w-4" />
-          طريقة الدفع
+          {t("method")}
         </div>
       ),
       cell: ({ row }) => {
@@ -193,7 +173,7 @@ export function PaymentColumns(): ColumnDef<Payment>[] {
         }
         return (
           <span className="text-sm">
-            {t(method as any) || method}
+            {tMethods(method as "CHARGILY" | "BANK_TRANSFER" | "CASH" | "CREDIT_CARD") || method}
           </span>
         );
       },
@@ -203,7 +183,7 @@ export function PaymentColumns(): ColumnDef<Payment>[] {
       header: () => (
         <div className="flex items-center gap-2 font-semibold">
           <Calendar className="h-4 w-4" />
-          التاريخ
+          {t("date")}
         </div>
       ),
       cell: ({ row }) => {
@@ -212,14 +192,14 @@ export function PaymentColumns(): ColumnDef<Payment>[] {
         return (
           <div className="flex flex-col">
             <span className="text-sm font-medium">
-              {new Date(date).toLocaleDateString("ar-DZ", {
+              {new Date(date).toLocaleDateString(dateLocale, {
                 year: "numeric",
                 month: "short",
                 day: "numeric",
               })}
             </span>
             <span className="text-xs text-gray-500">
-              {new Date(date).toLocaleDateString("en-US", {
+              {new Date(date).toLocaleDateString(dateLocale, {
                 weekday: "short",
               })}
             </span>

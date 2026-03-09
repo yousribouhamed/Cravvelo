@@ -3,6 +3,7 @@
 import React, { useState, useCallback } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlertTriangle, RefreshCw } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface VideoPlayerProps {
   videoId: string;
@@ -14,15 +15,23 @@ interface VideoPlayerProps {
   onError?: (error: string) => void;
 }
 
+const SAFE_VIDEO_ID_REGEX = /^[a-zA-Z0-9_-]+$/;
+
 export const VideoPlayer: React.FC<VideoPlayerProps> = ({
-  videoId,
+  videoId: rawVideoId,
   title,
   className = "",
-  height = 500,
+  height,
   autoplay = false,
   onLoad,
   onError,
 }) => {
+  const t = useTranslations("watch.video");
+  const fillContainer = height === undefined;
+  const containerHeight = fillContainer ? "100%" : (height ?? 500);
+  const videoId = typeof rawVideoId === "string" && SAFE_VIDEO_ID_REGEX.test(rawVideoId)
+    ? rawVideoId
+    : "";
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
@@ -34,12 +43,11 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   }, [onLoad]);
 
   const handleError = useCallback(() => {
-    const errorMessage =
-      "Failed to load video. Please check your connection and try again.";
+    const errorMessage = t("loadError");
     setLoading(false);
     setError(errorMessage);
     onError?.(errorMessage);
-  }, [onError]);
+  }, [onError, t]);
 
   const handleRetry = useCallback(() => {
     setError(null);
@@ -52,15 +60,12 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   if (!videoLibrary) {
     return (
       <div
-        className={`w-full ${className} flex items-center justify-center bg-muted rounded-lg`}
-        style={{ height }}
+        className={`w-full ${className} ${fillContainer ? "h-full" : ""} flex items-center justify-center bg-muted rounded-lg`}
+        style={fillContainer ? undefined : { height: containerHeight }}
       >
         <div className="text-center p-6">
           <AlertTriangle className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
-          <p className="text-sm text-muted-foreground">
-            Video library configuration is missing. Please check your
-            environment variables.
-          </p>
+          <p className="text-sm text-muted-foreground">{t("configMissing")}</p>
         </div>
       </div>
     );
@@ -69,32 +74,36 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   if (!videoId) {
     return (
       <div
-        className={`w-full ${className} flex items-center justify-center bg-muted rounded-lg`}
-        style={{ height }}
+        className={`w-full ${className} ${fillContainer ? "h-full" : ""} flex items-center justify-center bg-muted rounded-lg`}
+        style={fillContainer ? undefined : { height: containerHeight }}
       >
         <div className="text-center p-6">
           <AlertTriangle className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
-          <p className="text-sm text-muted-foreground">
-            Video ID is required to display the video.
-          </p>
+          <p className="text-sm text-muted-foreground">{t("videoIdRequired")}</p>
         </div>
       </div>
     );
   }
 
+  const blockContextMenu = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+  }, []);
+
   return (
-    <div className="w-full">
-      {/* Video Title */}
-      {title && (
+    <div
+      className={fillContainer ? "w-full h-full" : "w-full"}
+      onContextMenu={blockContextMenu}
+      style={{ userSelect: "none", WebkitUserDrag: "none" } as React.CSSProperties}
+    >
+      {title && !fillContainer && (
         <div className="mb-4">
           <h2 className="text-xl font-semibold text-foreground">{title}</h2>
         </div>
       )}
 
-      {/* Video Container */}
       <div
         className={`w-full relative ${className} rounded-lg overflow-hidden`}
-        style={{ height }}
+        style={{ height: containerHeight }}
       >
         {/* Loading Skeleton */}
         {loading && (
@@ -104,9 +113,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
               <div className="bg-background/80 backdrop-blur-sm rounded-lg p-4">
                 <div className="flex items-center space-x-2">
                   <RefreshCw className="h-4 w-4 animate-spin" />
-                  <span className="text-sm text-muted-foreground">
-                    Loading video...
-                  </span>
+                  <span className="text-sm text-muted-foreground">{t("loading")}</span>
                 </div>
               </div>
             </div>
@@ -124,7 +131,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
                 className="inline-flex items-center space-x-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm"
               >
                 <RefreshCw className="h-4 w-4" />
-                <span>Retry</span>
+                <span>{t("retry")}</span>
               </button>
             </div>
           </div>
@@ -143,7 +150,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             opacity: loading ? 0 : 1,
             transition: "opacity 0.3s ease-in-out",
           }}
-          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+          allow="accelerometer; gyroscope; autoplay; encrypted-media"
+          sandbox="allow-scripts allow-same-origin"
+          referrerPolicy="no-referrer"
           allowFullScreen={true}
           onLoad={handleLoad}
           onError={handleError}

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { useTenantSettings, useTenantBranding } from "@/hooks/use-tenant";
+import { useTenantSettings } from "@/hooks/use-tenant";
 import MaxWidthWrapper from "./max-with-wrapper";
 
 const STORAGE_KEY = "academia-sales-banner-dismissed";
@@ -40,7 +40,6 @@ function useCountdown(endTimeMs: number) {
 
 export default function SalesBanner() {
   const { enableSalesBanner } = useTenantSettings();
-  const { primaryColor } = useTenantBranding();
   const t = useTranslations("salesBanner");
 
   const [dismissed, setDismissed] = useState<boolean | null>(null);
@@ -71,49 +70,50 @@ export default function SalesBanner() {
 
   return (
     <div
-      className="relative w-full text-white shrink-0"
-      style={{ backgroundColor: primaryColor || "#DC2626" }}
+      className="w-full text-white shrink-0 bg-red-600"
       role="banner"
     >
-      <MaxWidthWrapper className="flex flex-wrap items-center justify-between gap-3 py-2.5 px-2.5 md:px-8 pr-10 md:pr-8">
-        <div className="flex items-center gap-2 min-w-0">
-          <span className="text-sm font-medium whitespace-nowrap">{t("message")}</span>
+      <MaxWidthWrapper className="flex flex-wrap items-center justify-between gap-2 sm:gap-3 py-2.5 px-2.5 md:px-8">
+        <div className="flex items-center gap-2 min-w-0 flex-1">
+          <span className="text-sm font-medium truncate">{t("message")}</span>
         </div>
-        {!done && (
-          <div className="flex items-center gap-1 sm:gap-3">
-            <div className="flex flex-col items-center">
-              <span className="text-lg font-bold tabular-nums leading-tight">
-                {String(hours).padStart(2, "0")}
-              </span>
-              <span className="text-[10px] sm:text-xs opacity-90">{t("hours")}</span>
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {!done && (
+            <div className="flex items-center gap-0.5 sm:gap-1">
+              <div className="flex flex-col items-center">
+                <span className="text-sm sm:text-base font-bold tabular-nums leading-tight">
+                  {String(hours).padStart(2, "0")}
+                </span>
+                <span className="text-[10px] sm:text-xs opacity-90">{t("hours")}</span>
+              </div>
+              <span className="text-sm sm:text-base font-bold opacity-80">:</span>
+              <div className="flex flex-col items-center">
+                <span className="text-sm sm:text-base font-bold tabular-nums leading-tight">
+                  {String(mins).padStart(2, "0")}
+                </span>
+                <span className="text-[10px] sm:text-xs opacity-90">{t("mins")}</span>
+              </div>
+              <span className="text-sm sm:text-base font-bold opacity-80">:</span>
+              <div className="flex flex-col items-center">
+                <span className="text-sm sm:text-base font-bold tabular-nums leading-tight">
+                  {String(secs).padStart(2, "0")}
+                </span>
+                <span className="text-[10px] sm:text-xs opacity-90">{t("secs")}</span>
+              </div>
             </div>
-            <span className="text-lg font-bold opacity-80">:</span>
-            <div className="flex flex-col items-center">
-              <span className="text-lg font-bold tabular-nums leading-tight">
-                {String(mins).padStart(2, "0")}
-              </span>
-              <span className="text-[10px] sm:text-xs opacity-90">{t("mins")}</span>
-            </div>
-            <span className="text-lg font-bold opacity-80">:</span>
-            <div className="flex flex-col items-center">
-              <span className="text-lg font-bold tabular-nums leading-tight">
-                {String(secs).padStart(2, "0")}
-              </span>
-              <span className="text-[10px] sm:text-xs opacity-90">{t("secs")}</span>
-            </div>
-          </div>
-        )}
+          )}
+          <button
+            type="button"
+            onClick={handleDismiss}
+            className="p-1.5 rounded hover:bg-white/20 transition-colors touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center"
+            aria-label={t("dismissLabel")}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
       </MaxWidthWrapper>
-      <button
-        type="button"
-        onClick={handleDismiss}
-        className="absolute top-2 right-2 p-1.5 rounded hover:bg-white/20 transition-colors"
-        aria-label={t("dismissLabel")}
-      >
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
     </div>
   );
 }
