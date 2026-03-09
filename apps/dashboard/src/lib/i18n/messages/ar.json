@@ -161,6 +161,7 @@
     "verificationComplete": "تم التوثيق بنجاح",
     "startVerification": "ابدأ التوثيق الآن",
     "profile": "الملف الشخصي",
+    "subscription": "الاشتراك",
     "academyPreview": "معاينة الأكاديمية",
     "academy": "اكاديمية"
   },
@@ -319,7 +320,8 @@
     "applications": "التطبيقات",
     "settings": "الإعدادات",
     "account": "الحساب",
-    "websiteSettings": "إعدادات الموقع"
+    "websiteSettings": "إعدادات الموقع",
+    "subscribeToAcceptStudents": "اشترك لقبول الطلاب"
   },
   "pages": {
     "dashboard": "لوحة التحكم",
@@ -335,6 +337,7 @@
     "productPricing": "تسعير المنتج",
     "productPublishing": "نشر المنتج",
     "profile": "الملف الشخصي",
+    "subscription": "الاشتراك",
     "billing": "الفواتير",
     "invoices": "الفواتير",
     "websiteSettings": "إعدادات الموقع",
@@ -344,6 +347,23 @@
     "domain": "النطاق",
     "general": "عام",
     "balance": "الرصيد"
+  },
+  "subscription": {
+    "monthly": "شهري",
+    "yearly": "سنوي",
+    "getStarted": "ابدأ الآن",
+    "mostPopular": "الأكثر شعبية",
+    "growthCtaSubtext": "هذا هو محرك الإيرادات الأساسي.",
+    "perMonth": "/شهر",
+    "perYear": "/سنة",
+    "billingCycleHint": "اختر دورة الفوترة",
+    "yearlySaveHint": "وفر مع الفوترة السنوية",
+    "chooseBilling": "اختر دورة الفوترة",
+    "proceedToPayment": "متابعة إلى الدفع",
+    "redirecting": "جاري التحويل…",
+    "checkoutError": "فشل بدء الدفع. يرجى المحاولة مرة أخرى.",
+    "paymentSuccess": "اشتراكك مفعّل. شكراً لك!",
+    "paymentFailed": "تعذّر إتمام الدفع. يمكنك المحاولة مرة أخرى من هذه الصفحة."
   },
   "createAcademia": {
     "heading": "يجب عليك إنشاء أكاديمية حتى تتمكن من رؤية تحليلات لوحة المعلومات واستخدام النظام الأساسي",

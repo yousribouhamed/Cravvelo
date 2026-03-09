@@ -161,6 +161,7 @@
     "verificationComplete": "Verification completed successfully",
     "startVerification": "Start verification now",
     "profile": "Profile",
+    "subscription": "Subscription",
     "academyPreview": "Academy Preview",
     "academy": "Academy"
   },
@@ -319,7 +320,8 @@
     "applications": "Applications",
     "settings": "Settings",
     "account": "Account",
-    "websiteSettings": "Website Settings"
+    "websiteSettings": "Website Settings",
+    "subscribeToAcceptStudents": "Subscribe to accept students"
   },
   "pages": {
     "dashboard": "Dashboard",
@@ -335,6 +337,7 @@
     "productPricing": "Product Pricing",
     "productPublishing": "Publish Product",
     "profile": "Profile",
+    "subscription": "Subscription",
     "billing": "Billing",
     "invoices": "Invoices",
     "websiteSettings": "Website Settings",
@@ -344,6 +347,23 @@
     "domain": "Domain",
     "general": "General",
     "balance": "Balance"
+  },
+  "subscription": {
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "getStarted": "Get started",
+    "mostPopular": "Most Popular",
+    "growthCtaSubtext": "This is your core revenue driver.",
+    "perMonth": "/month",
+    "perYear": "/year",
+    "billingCycleHint": "Choose your billing cycle",
+    "yearlySaveHint": "Save with yearly billing",
+    "chooseBilling": "Choose billing cycle",
+    "proceedToPayment": "Proceed to payment",
+    "redirecting": "Redirecting…",
+    "checkoutError": "Failed to start checkout. Please try again.",
+    "paymentSuccess": "Your subscription is active. Thank you!",
+    "paymentFailed": "Payment could not be completed. You can try again from this page."
   },
   "createAcademia": {
     "heading": "You need to create an academy to view dashboard analytics and use the platform.",

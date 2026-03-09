@@ -23,6 +23,10 @@ function GeneralSettingsHeader({ className, ...props }: ExamplesNavProps) {
         href: `/settings/profile`,
       },
       {
+        name: t("subscription"),
+        href: `/settings/subscription`,
+      },
+      {
         name: t("invoices"),
         href: `/settings/invoices`,
       },
@@ -35,6 +39,10 @@ function GeneralSettingsHeader({ className, ...props }: ExamplesNavProps) {
     if (pathname === href) return true;
     // For invoices, also match invoice detail pages
     if (href === "/settings/invoices" && pathname.startsWith("/settings/invoices")) {
+      return true;
+    }
+    // Subscription
+    if (href === "/settings/subscription" && pathname.startsWith("/settings/subscription")) {
       return true;
     }
     return false;

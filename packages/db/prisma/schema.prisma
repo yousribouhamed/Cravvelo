@@ -120,6 +120,18 @@ enum PurchaseStatus {
   REFUNDED
 }
 
+enum SubscriptionBillingCycle {
+  MONTHLY
+  YEARLY
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+  PAST_DUE
+}
+
 model Account {
   id                 String            @id @unique @default(cuid())
   userId             String            @unique
@@ -179,6 +191,29 @@ model Account {
   PricingPlans       Pricing[]
   Invoices           Invoice[]
   AppInstall            AppInstall[]
+  AccountSubscription  AccountSubscription[]
+}
+
+model AccountSubscription {
+  id                   String                   @id @default(cuid())
+  accountId            String
+  planCode             String                   // BASIC | STARTER | GROWTH | SCALE
+  billingCycle         SubscriptionBillingCycle
+  status               SubscriptionStatus       @default(ACTIVE)
+  currentPeriodStart   DateTime
+  currentPeriodEnd     DateTime
+  chargilyCheckoutId   String?
+  paymentId            String?                  @unique
+
+  createdAt            DateTime                 @default(now())
+  updatedAt            DateTime                 @updatedAt
+
+  Account              Account                  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  Payment              Payment?                  @relation(fields: [paymentId], references: [id], onDelete: SetNull)
+
+  @@index([accountId])
+  @@index([status])
+  @@index([paymentId])
 }
 
 model Pricing {
@@ -658,6 +693,7 @@ model Payment {
   Transactions      Transaction[]
   Invoices          Invoice[]
   AppInstall        AppInstall[]
+  AccountSubscription AccountSubscription?
 
   @@index([accountId])
   @@index([studentId])

@@ -8,6 +8,7 @@ import {
   Eye,
   ArrowUpLeft,
   ArrowUpRight,
+  CreditCard,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@ui/components/ui/avatar";
 import { Button, buttonVariants } from "@ui/components/ui/button";
@@ -78,6 +79,12 @@ export default function UserNav({ user }: UserNavProps) {
         href: "/settings/profile",
         icon: User,
         label: t("profile"),
+        external: false,
+      },
+      {
+        href: "/settings/subscription",
+        icon: CreditCard,
+        label: t("subscription"),
         external: false,
       },
     ],

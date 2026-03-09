@@ -3,10 +3,15 @@
 import { cn } from "@ui/lib/utils";
 import SideBarMenu from "./menu";
 import AddNew from "../models/add-new-modal";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Sparkles } from "lucide-react";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function Sidebar({ className }: SidebarProps) {
+  const t = useTranslations("sidebar");
+
   return (
     <div
       className={cn(
@@ -22,6 +27,15 @@ export function Sidebar({ className }: SidebarProps) {
           <div className="space-y-2 mt-5">
             <SideBarMenu />
           </div>
+          <Link
+            href="/settings/subscription"
+            className={cn(
+              "mt-4 flex items-center gap-2 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2.5 text-sm font-medium text-amber-700 dark:text-amber-400 hover:bg-amber-500/20 transition-colors"
+            )}
+          >
+            <Sparkles className="h-4 w-4 shrink-0" />
+            <span>{t("subscribeToAcceptStudents")}</span>
+          </Link>
         </div>
       </div>
     </div>
