@@ -1,6 +1,88 @@
 "use server";
 
 import { withAuth } from "@/_internals/with-auth";
+import { ROLES } from "@/_internals/auth-types";
+import { z } from "zod";
+import type { WebsiteListItem, WebsitesPagination } from "../types";
+
+const getWebsitesQuerySchema = z.object({
+  page: z.number().min(1).default(1),
+  limit: z.number().min(1).max(100).default(10),
+  search: z.string().optional(),
+});
+
+export const getAllWebsitesPaginated = withAuth({
+  input: getWebsitesQuerySchema,
+  auth: {
+    roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN],
+  },
+  handler: async ({ input, db }) => {
+    const { page = 1, limit = 10, search } = input;
+    const skip = (page - 1) * limit;
+
+    const where: {
+      OR?: Array<
+        | { name: { contains: string; mode: "insensitive" } }
+        | { subdomain: { contains: string; mode: "insensitive" } }
+        | { customDomain: { contains: string; mode: "insensitive" } }
+        | { Account: { user_name: { contains: string; mode: "insensitive" } } }
+        | { Account: { support_email: { contains: string; mode: "insensitive" } } }
+      >;
+    } = {};
+
+    if (search && search.trim()) {
+      const term = search.trim();
+      where.OR = [
+        { name: { contains: term, mode: "insensitive" } },
+        { subdomain: { contains: term, mode: "insensitive" } },
+        { customDomain: { contains: term, mode: "insensitive" } },
+        { Account: { user_name: { contains: term, mode: "insensitive" } } },
+        { Account: { support_email: { contains: term, mode: "insensitive" } } },
+      ];
+    }
+
+    const [websites, totalCount] = await Promise.all([
+      db.website.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { updatedAt: "desc" },
+        include: {
+          Account: {
+            select: {
+              user_name: true,
+            },
+          },
+        },
+      }),
+      db.website.count({ where }),
+    ]);
+
+    const totalPages = Math.ceil(totalCount / limit);
+    const items: WebsiteListItem[] = websites.map((w) => ({
+      id: w.id,
+      name: w.name || "Unnamed Website",
+      subdomain: w.subdomain,
+      customDomain: w.customDomain,
+      ownerName: w.Account.user_name || "Unknown",
+      suspended: w.suspended,
+      createdAt: w.createdAt,
+      updatedAt: w.updatedAt,
+    }));
+
+    return {
+      websites: items,
+      pagination: {
+        page,
+        limit,
+        totalCount,
+        totalPages,
+        hasNext: page * limit < totalCount,
+        hasPrev: page > 1,
+      } satisfies WebsitesPagination,
+    };
+  },
+});
 
 export const getAllWebsites = withAuth({
   handler: async ({ db }) => {

@@ -248,6 +248,7 @@ export function DatePickerWithRange({
             "shadow-lg"
           )} 
           align={isRTL ? "end" : "start"}
+          side={isRTL ? "left" : "right"}
         >
           <div dir="ltr">
             <Calendar

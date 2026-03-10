@@ -2,6 +2,7 @@ import {
   LayoutDashboard,
   CreditCard,
   AppWindow,
+  Globe,
   Users,
   ShieldCheck,
   BarChart3,
@@ -28,6 +29,12 @@ export const SIDEBAR_ITEMS = [
     name: "Apps",
     slug: "/applications",
     icon: <AppWindow className="w-5 h-5" />,
+    enabled: true,
+  },
+  {
+    name: "Websites",
+    slug: "/websites",
+    icon: <Globe className="w-5 h-5" />,
     enabled: true,
   },
   {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
@@ -87,6 +88,7 @@ export default function UpdateAppForm({ appId }: UpdateAppProps) {
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
 
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const form = useForm<UpdateAppForm>({
     resolver: zodResolver(updateAppSchema),
@@ -365,7 +367,7 @@ export default function UpdateAppForm({ appId }: UpdateAppProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["apps"] });
       queryClient.invalidateQueries({ queryKey: ["app", appId] });
-      // You might want to redirect or show a success message here
+      router.push("/applications");
     },
   });
 
@@ -402,7 +404,7 @@ export default function UpdateAppForm({ appId }: UpdateAppProps) {
   return (
     <div className="w-full mx-auto p-4 space-y-6">
       <Form {...form}>
-        <div onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Basic Information */}
             <Card>
@@ -766,7 +768,7 @@ export default function UpdateAppForm({ appId }: UpdateAppProps) {
               </Button>
             </Link>
             <Button
-              onClick={handleSubmit}
+              type="submit"
               disabled={
                 updateAppMutation.isPending || logoUploading || imageUploading
               }
@@ -782,7 +784,7 @@ export default function UpdateAppForm({ appId }: UpdateAppProps) {
               )}
             </Button>
           </div>
-        </div>
+        </form>
       </Form>
     </div>
   );

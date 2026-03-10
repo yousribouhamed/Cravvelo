@@ -1,43 +1,38 @@
 "use client";
 
 import { DataTable } from "@/components/data-table";
-import { getUsersColumns } from "../columns/users-columns";
-import type { UserListItem, UsersPagination } from "../types";
+import { WebsiteColumns } from "../columns/websites-columns";
+import type { WebsiteListItem, WebsitesPagination } from "../types";
 import { useQuery } from "@tanstack/react-query";
-import { getAllUsers } from "../actions/users.actions";
-import { useState, useCallback, useMemo } from "react";
+import { getAllWebsitesPaginated } from "../actions";
+import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Download, Search } from "lucide-react";
 import { AdminPageShell } from "@/components/admin-page-shell";
 import { downloadCSV } from "@/lib/export-csv";
-import { ChangePlanModal } from "../components/change-plan-modal";
-import { useQueryClient } from "@tanstack/react-query";
 
-export type UsersInitialData = {
-  accounts: UserListItem[];
-  pagination: UsersPagination;
+export type WebsitesInitialData = {
+  websites: WebsiteListItem[];
+  pagination: WebsitesPagination;
 };
 
 interface Props {
-  initialData: UsersInitialData;
+  initialData: WebsitesInitialData;
 }
 
-export default function UsersListingPage({ initialData }: Props) {
-  const queryClient = useQueryClient();
+export default function WebsitesListingPage({ initialData }: Props) {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [changePlanAccountId, setChangePlanAccountId] = useState<string | null>(null);
 
-  const columns = useMemo(
-    () => getUsersColumns((accountId) => setChangePlanAccountId(accountId)),
-    []
-  );
-
-  const { data, isLoading, error } = useQuery<UsersInitialData>({
-    queryKey: ["users", page, search],
+  const { data, isLoading, error } = useQuery<WebsitesInitialData>({
+    queryKey: ["websites", page, search],
     queryFn: async () => {
-      const res = await getAllUsers({ page, limit: 10, search: search || undefined });
-      if (!res.success || !res.data) throw new Error(res.error ?? "Failed to load users");
+      const res = await getAllWebsitesPaginated({
+        page,
+        limit: 10,
+        search: search || undefined,
+      });
+      if (!res.success || !res.data) throw new Error(res.error ?? "Failed to load websites");
       return res.data;
     },
     initialData: page === 1 && !search ? initialData : undefined,
@@ -46,7 +41,7 @@ export default function UsersListingPage({ initialData }: Props) {
     refetchOnWindowFocus: false,
   });
 
-  const accounts = data?.accounts ?? [];
+  const websites = data?.websites ?? [];
   const pagination = data?.pagination;
 
   const handlePageChange = useCallback((newPage: number) => {
@@ -59,29 +54,27 @@ export default function UsersListingPage({ initialData }: Props) {
   }, []);
 
   const handleExportCSV = useCallback(() => {
-    const cols: { key: keyof UserListItem; label: string }[] = [
-      { key: "user_name", label: "Name" },
-      { key: "support_email", label: "Email" },
-      { key: "userId", label: "User ID" },
+    const cols: { key: keyof WebsiteListItem; label: string }[] = [
+      { key: "name", label: "Name" },
+      { key: "subdomain", label: "Subdomain" },
+      { key: "customDomain", label: "Custom domain" },
+      { key: "ownerName", label: "Owner" },
+      { key: "suspended", label: "Suspended" },
       { key: "createdAt", label: "Created" },
     ];
-    const rows = (data?.accounts ?? []).map((a) => ({
-      ...a,
-      user_name: (a.user_name ?? ([a.firstName, a.lastName].filter(Boolean).join(" ") || a.userId)),
-    }));
-    downloadCSV(rows, cols, "users-export");
-  }, [data?.accounts]);
+    downloadCSV(data?.websites ?? [], cols, "websites-export");
+  }, [data?.websites]);
 
   if (error) {
     return (
-      <AdminPageShell title="Users">
+      <AdminPageShell title="Websites">
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
             <h2 className="text-xl font-semibold text-red-600 mb-2">
-              Error loading users
+              Error loading websites
             </h2>
             <p className="text-gray-600 mb-4">
-              {error.message || "Failed to load users. Please try again."}
+              {error.message || "Failed to load websites. Please try again."}
             </p>
           </div>
         </div>
@@ -91,8 +84,8 @@ export default function UsersListingPage({ initialData }: Props) {
 
   return (
     <AdminPageShell
-      title="Users"
-      description="Manage platform accounts and creators."
+      title="Websites"
+      description="All creator websites on the platform."
     >
       <div className="w-full flex flex-col gap-4">
         <div className="flex flex-wrap gap-3 items-center">
@@ -100,7 +93,7 @@ export default function UsersListingPage({ initialData }: Props) {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 pointer-events-none" />
             <input
               type="text"
-              placeholder="Search by name or email..."
+              placeholder="Search by name, subdomain, or owner..."
               value={search}
               onChange={(e) => handleSearch(e.target.value)}
               className="h-10 pl-10 pr-4 py-2 w-72 rounded-lg border border-zinc-200 bg-zinc-50/50 text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-zinc-300 focus:bg-white transition-colors"
@@ -115,20 +108,11 @@ export default function UsersListingPage({ initialData }: Props) {
         <div className="relative">
           {isLoading && (
             <div className="absolute inset-0 bg-white/80 flex items-center justify-center z-10 rounded-lg">
-              <div className="text-zinc-600">Loading users...</div>
+              <div className="text-zinc-600">Loading websites...</div>
             </div>
           )}
-          <DataTable columns={columns} data={accounts} />
+          <DataTable columns={WebsiteColumns} data={websites} />
         </div>
-
-        <ChangePlanModal
-          accountId={changePlanAccountId}
-          onClose={() => setChangePlanAccountId(null)}
-          onSuccess={() => {
-            setChangePlanAccountId(null);
-            void queryClient.invalidateQueries({ queryKey: ["users"] });
-          }}
-        />
 
         {pagination && pagination.totalCount > 0 && (
           <div className="flex items-center justify-between gap-4 mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-700">

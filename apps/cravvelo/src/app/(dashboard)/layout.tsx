@@ -10,9 +10,9 @@ interface LayoutProps {
 export default async function DashboardLayout({ children }: LayoutProps) {
   const admin = await getCurrentAdmin();
   return (
-    <div className="bg-background w-full h-screen flex overflow-hidden ">
+    <div className="bg-zinc-100 w-full h-screen flex overflow-hidden">
       <MainSidebar admin={admin} />
-      <div className="flex-1 w-full h-[97%] overflow-y-scroll bg-card rounded-2xl m-2 border">
+      <div className="flex-1 w-full h-[97%] overflow-y-scroll bg-white rounded-xl m-2 border border-zinc-200 shadow-sm">
         {children}
       </div>
 

@@ -48,12 +48,12 @@ export default function MainSidebar({ admin }: MainSidebarProps) {
   return (
     <div
       className={cn(
-        "bg-background  transition-all duration-300 ease-in-out h-full flex flex-col relative",
+        "bg-white border-r border-zinc-200 transition-all duration-300 ease-in-out h-full flex flex-col relative",
         sidebarWidth
       )}
     >
       {/* Header Section */}
-      <div className="p-4  flex items-center justify-between">
+      <div className="p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="flex-shrink-0">
             <Image
@@ -66,10 +66,10 @@ export default function MainSidebar({ admin }: MainSidebarProps) {
           </div>
           {!isCollapsed && (
             <div className="overflow-hidden">
-              <h1 className="text-lg font-semibold text-foreground truncate">
+              <h1 className="text-lg font-semibold text-zinc-900 truncate">
                 Cravvelo
               </h1>
-              <p className="text-xs text-muted-foreground truncate">
+              <p className="text-xs text-zinc-500 truncate">
                 Admin Dashboard
               </p>
             </div>
@@ -79,7 +79,7 @@ export default function MainSidebar({ admin }: MainSidebarProps) {
         {/* Toggle Button */}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="p-1.5 rounded-lg hover:bg-accent transition-colors duration-200 flex-shrink-0"
+          className="p-1.5 rounded-lg hover:bg-zinc-100 text-zinc-700 transition-colors duration-200 flex-shrink-0"
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {isCollapsed ? (
@@ -104,11 +104,11 @@ export default function MainSidebar({ admin }: MainSidebarProps) {
                 const content = (
                   <div
                     className={cn(
-                      "flex items-center justify-center rounded-xl transition-all duration-200 group",
+                      "flex items-center justify-center rounded-xl transition-all duration-200 group text-zinc-600",
                       iconSize,
                       "p-3",
                       isEnabled
-                        ? "hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                        ? "hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:ring-offset-2"
                         : disabledStyles
                     )}
                   >
@@ -152,9 +152,9 @@ export default function MainSidebar({ admin }: MainSidebarProps) {
               const content = (
                 <div
                   className={cn(
-                    "flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group",
+                    "flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group text-zinc-600",
                     isEnabled
-                      ? "hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                      ? "hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:ring-offset-2"
                       : disabledStyles
                   )}
                 >

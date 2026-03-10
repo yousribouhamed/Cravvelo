@@ -62,7 +62,7 @@ export default function WebsiteCard({
   };
 
   return (
-    <div className="bg-white dark:bg-muted border rounded-xl p-6 shadow-sm hover:shadow-md dark:hover:shadow-zinc-900/20 transition-shadow duration-200 max-w-md">
+    <div className="bg-white border border-zinc-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200 max-w-md">
       <div className="w-full grid grid-cols-3 gap-4 mb-4">
         {/* Logo and Name */}
         <div className="col-span-2 flex items-start gap-3">
@@ -86,7 +86,7 @@ export default function WebsiteCard({
             </div>
           </div>
           <div className="min-w-0">
-            <h3 className="font-semibold text-zinc-900 dark:text-zinc-100 text-lg truncate">
+            <h3 className="font-semibold text-zinc-900 text-lg truncate">
               {name}
             </h3>
           </div>
@@ -94,17 +94,17 @@ export default function WebsiteCard({
 
         {/* Revenue */}
         <div className="text-right">
-          <div className="text-xs text-zinc-500 dark:text-zinc-400 uppercase tracking-wide">
+          <div className="text-xs text-zinc-500 uppercase tracking-wide">
             Revenue
           </div>
-          <div className="font-bold text-green-600 dark:text-green-500 text-lg">
+          <div className="font-bold text-green-600 text-lg">
             {formatRevenue(revenue)}
           </div>
         </div>
       </div>
 
       {/* Description */}
-      <p className="text-zinc-600 dark:text-zinc-300 text-sm mb-4 line-clamp-2 leading-relaxed">
+      <p className="text-zinc-600 text-sm mb-4 line-clamp-2 leading-relaxed">
         {description}
       </p>
 
@@ -127,11 +127,11 @@ export default function WebsiteCard({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-0.5">{renderStars(rating)}</div>
-          <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          <span className="text-sm font-medium text-zinc-700">
             {rating}
           </span>
         </div>
-        <div className="text-xs text-zinc-500 dark:text-zinc-400">
+        <div className="text-xs text-zinc-500">
           Based on reviews
         </div>
       </div>

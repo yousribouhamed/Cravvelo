@@ -39,7 +39,7 @@ export const getAllUsers = withAuth({
       ];
     }
 
-    const [accounts, totalCount] = await Promise.all([
+    const [accountsRaw, totalCount] = await Promise.all([
       db.account.findMany({
         where,
         skip,
@@ -55,15 +55,47 @@ export const getAllUsers = withAuth({
           isActive: true,
           isSuspended: true,
           createdAt: true,
+          AccountSubscription: {
+            orderBy: { updatedAt: "desc" },
+            take: 1,
+            select: {
+              planCode: true,
+              billingCycle: true,
+              status: true,
+              currentPeriodEnd: true,
+            },
+          },
         },
       }),
       db.account.count({ where }),
     ]);
 
     const totalPages = Math.ceil(totalCount / limit);
+    const accounts: UserListItem[] = accountsRaw.map((a) => {
+      const sub = a.AccountSubscription?.[0];
+      return {
+        id: a.id,
+        userId: a.userId,
+        user_name: a.user_name,
+        firstName: a.firstName,
+        lastName: a.lastName,
+        support_email: a.support_email,
+        isActive: a.isActive,
+        isSuspended: a.isSuspended,
+        createdAt: a.createdAt,
+        subscription: sub
+          ? {
+              planCode: sub.planCode,
+              billingCycle: sub.billingCycle,
+              status: sub.status,
+              currentPeriodEnd: sub.currentPeriodEnd,
+            }
+          : null,
+      };
+    });
 
     return {
-      accounts: accounts as unknown as UserListItem[],
+      accounts,
       pagination: {
         page,
         limit,
@@ -75,4 +107,14 @@ export const getAllUsers = withAuth({
     };
   },
   action: "VIEW_USERS",
+});
+
+export const getAccountCount = withAuth({
+  auth: {
+    roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN],
+  },
+  handler: async ({ db }) => {
+    const count = await db.account.count();
+    return { count };
+  },
 });

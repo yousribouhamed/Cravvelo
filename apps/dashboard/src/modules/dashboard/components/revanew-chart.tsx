@@ -8,8 +8,6 @@ import {
   CardTitle,
 } from "@ui/components/ui/card";
 import {
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   ResponsiveContainer,
@@ -31,7 +29,8 @@ import {
   CreditCard, 
   Users, 
   ShoppingCart,
-  RefreshCcw
+  RefreshCcw,
+  Eye
 } from "lucide-react";
 
 interface RevenueChartProps {
@@ -61,6 +60,7 @@ interface RevenueChartProps {
     walletBalance: number;
     walletCurrency: string;
     currencySymbol: string;
+    totalVisits?: number;
   };
 }
 
@@ -130,6 +130,7 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
   const successfulPayments = data?.successfulPayments || 0;
   const newCustomers = data?.newCustomers || 0;
   const averageOrderValue = data?.averageOrderValue || 0;
+  const totalVisits = data?.totalVisits ?? 0;
   const refunds = data?.refunds || { count: 0, amount: 0 };
   const changes = data?.changes || {
     volumeChange: 0,
@@ -149,11 +150,17 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
     });
   };
 
-  // Custom tooltip component for chart
+  // Custom tooltip component for chart (RTL-aware text position)
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white dark:bg-card p-3 rounded-lg shadow-lg border border-gray-200 dark:border-border">
+        <div
+          dir={isRTL ? "rtl" : "ltr"}
+          className={cn(
+            "bg-white dark:bg-card p-3 rounded-lg shadow-lg border border-gray-200 dark:border-border",
+            isRTL ? "text-right" : "text-left"
+          )}
+        >
           <p className="text-sm text-gray-600 dark:text-muted-foreground">
             {new Date(label).toLocaleDateString(locale === "ar" ? "ar-DZ" : "en-US", {
               month: "short",
@@ -175,19 +182,26 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
   const revenueSparkline = allChartData.map(d => ({ value: d.value }));
 
   return (
-    <div className="space-y-6 max-w-full">
-      {/* Date Range Picker with Presets */}
-      <div className={cn("flex flex-wrap items-center gap-4", isRTL ? "flex-row-reverse" : "")}>
+    <div className="space-y-4 sm:space-y-6 w-full max-w-full min-w-0 overflow-x-hidden">
+      {/* Date Range Picker with Presets - RTL: align to end so filter sits on the right */}
+      <div
+        dir={isRTL ? "rtl" : "ltr"}
+        className={cn(
+          "flex flex-wrap items-center gap-2 sm:gap-4 w-full min-w-0",
+          isRTL ? "flex-row-reverse justify-end" : "justify-start"
+        )}
+      >
         <DatePickerWithRange
           dateRange={dateRange}
           showPresets={true}
         />
       </div>
 
-      {/* Loading State - full layout skeleton */}
+      {/* Loading State - full layout skeleton (matches loaded: 5 stats + chart + 2 cards) */}
       {(isLoading || currencyLoading) && !data && (
         <>
           <StatsGrid>
+            <StatsCard title="" value="" isLoading />
             <StatsCard title="" value="" isLoading />
             <StatsCard title="" value="" isLoading />
             <StatsCard title="" value="" isLoading />
@@ -227,9 +241,16 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
         </>
       )}
 
-      {/* Stats Cards Row - Stripe-like metrics */}
+      {/* Stats Cards Row - simple metrics including total visits */}
       {data && (
         <StatsGrid>
+          <StatsCard
+            title={t("totalVisits")}
+            value={totalVisits.toLocaleString()}
+            icon={<Eye className="h-4 w-4" />}
+            isRTL={isRTL}
+            className="border-sky-200 dark:border-sky-800"
+          />
           <StatsCard
             title={t("grossVolume")}
             value={formatPrice(grossRevenue)}
@@ -287,25 +308,35 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
         </Card>
       )}
 
-      {/* Main Revenue Chart */}
-      <Card className="border border-gray-200 dark:border-border" dir={isRTL ? "rtl" : "ltr"}>
+      {/* Main Revenue Chart - RTL: title (نظرة عامة على الإيرادات) on the right, total on the left */}
+      <Card className="border border-gray-200 dark:border-border w-full min-w-0 overflow-hidden" dir={isRTL ? "rtl" : "ltr"}>
         <CardHeader className="pb-4 px-4 sm:px-6">
-          <div className={cn("flex items-center justify-between", isRTL && "flex-row-reverse")}>
-            <CardTitle className={cn("text-lg font-semibold text-foreground", isRTL ? "text-right" : "text-left")} dir={isRTL ? "rtl" : "ltr"}>
-              {t("revenueOverview")}
+          <div className={cn("flex items-center justify-between gap-4 flex-wrap", isRTL && "flex-row-reverse")}>
+            <CardTitle
+              className={cn(
+                "text-base sm:text-lg font-semibold text-foreground flex-1 min-w-0",
+                isRTL ? "text-right" : "text-left"
+              )}
+              dir={isRTL ? "rtl" : "ltr"}
+            >
+              <span className={cn("block w-full", isRTL && "text-right")}>{t("revenueOverview")}</span>
             </CardTitle>
-            <div className={cn("text-2xl font-bold text-foreground", isRTL ? "text-left" : "text-right")}>
+            <div className={cn("text-xl sm:text-2xl font-bold text-foreground shrink-0", isRTL ? "text-left" : "text-right")} dir="ltr">
               {formatPrice(grossRevenue)}
             </div>
           </div>
         </CardHeader>
-        <CardContent className="px-4 sm:px-6 pb-6">
-          <div className="h-64 sm:h-80 w-full">
+        <CardContent className="px-3 sm:px-6 pb-4 sm:pb-6">
+          <div className="h-56 sm:h-64 md:h-80 w-full min-h-[200px]">
             {allChartData && allChartData.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart
                   data={allChartData}
-                  margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+                  margin={
+                    isRTL
+                      ? { top: 10, right: 0, left: 50, bottom: 0 }
+                      : { top: 10, right: 10, left: 0, bottom: 0 }
+                  }
                 >
                   <defs>
                     <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
@@ -317,7 +348,12 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
                     dataKey="time"
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fontSize: 11, fill: "#6b7280" }}
+                    reversed={isRTL}
+                    tick={{
+                      fontSize: 11,
+                      fill: "#6b7280",
+                      textAnchor: isRTL ? "end" : "start",
+                    }}
                     tickFormatter={(value) => {
                       const date = new Date(value);
                       return date.toLocaleDateString(locale === "ar" ? "ar-DZ" : "en-US", {
@@ -328,15 +364,16 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
                     dy={10}
                   />
                   <YAxis
+                    orientation={isRTL ? "right" : "left"}
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fontSize: 11, fill: "#6b7280" }}
+                    tick={{ fontSize: 11, fill: "#6b7280", textAnchor: isRTL ? "start" : "end" }}
                     tickFormatter={(value) => {
                       if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`;
                       if (value >= 1000) return `${(value / 1000).toFixed(1)}K`;
                       return value.toString();
                     }}
-                    dx={-10}
+                    dx={isRTL ? 10 : -10}
                     width={50}
                   />
                   <Tooltip content={<CustomTooltip />} />
@@ -365,7 +402,7 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
       </Card>
 
       {/* Today vs Yesterday Comparison */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Today's Revenue */}
         <Card className="border border-gray-200 dark:border-border" dir={isRTL ? "rtl" : "ltr"}>
           <CardHeader className="pb-2 px-4 sm:px-6">
@@ -380,15 +417,22 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
             <div className="h-16">
               {todayData && todayData.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={todayData}>
-                    <Line
+                  <AreaChart data={todayData} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="colorToday" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <Area
                       type="monotone"
                       dataKey="value"
                       stroke="#22c55e"
                       strokeWidth={2}
+                      fill="url(#colorToday)"
                       dot={false}
                     />
-                  </LineChart>
+                  </AreaChart>
                 </ResponsiveContainer>
               ) : (
                 <div className="flex items-center justify-center h-full text-muted-foreground text-xs">
@@ -413,15 +457,22 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
             <div className="h-16">
               {yesterdayData && yesterdayData.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={yesterdayData}>
-                    <Line
+                  <AreaChart data={yesterdayData} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="colorYesterday" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#6b7280" stopOpacity={0.2} />
+                        <stop offset="95%" stopColor="#6b7280" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <Area
                       type="monotone"
                       dataKey="value"
                       stroke="#6b7280"
                       strokeWidth={2}
+                      fill="url(#colorYesterday)"
                       dot={false}
                     />
-                  </LineChart>
+                  </AreaChart>
                 </ResponsiveContainer>
               ) : (
                 <div className="flex items-center justify-center h-full text-muted-foreground text-xs">

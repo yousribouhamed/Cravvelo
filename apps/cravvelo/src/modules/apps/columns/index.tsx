@@ -2,21 +2,24 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { AppType } from "../types";
-import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 import Link from "next/link";
+
+const sortableHeaderClass =
+  "inline-flex items-center gap-1.5 rounded px-1 -mx-1 py-0.5 text-zinc-900 font-semibold bg-transparent hover:bg-zinc-200 transition-colors cursor-pointer";
 
 export const AppColumns: ColumnDef<AppType>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => (
-      <Button
-        variant="ghost"
+      <button
+        type="button"
+        className={sortableHeaderClass}
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
         Name
         <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
+      </button>
     ),
     cell: ({ row }) => (
       <div className="flex items-center justify-start gap-x-4">
@@ -25,7 +28,7 @@ export const AppColumns: ColumnDef<AppType>[] = [
           alt={row.original.name}
           className="w-10 h-10 rounded-xl shadow border shrink-0"
         />
-        <p className="text-gray-500 dark:text-gray-50 font-bold">
+        <p className="text-[#18181b] dark:text-zinc-100 font-bold">
           {row.getValue("name")}
         </p>
       </div>
@@ -49,13 +52,14 @@ export const AppColumns: ColumnDef<AppType>[] = [
   {
     accessorKey: "installationsCount",
     header: ({ column }) => (
-      <Button
-        variant="ghost"
+      <button
+        type="button"
+        className={sortableHeaderClass}
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
         Installations
         <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
+      </button>
     ),
     cell: ({ row }) => <span>{row.getValue("installationsCount")}</span>,
   },
@@ -77,17 +81,15 @@ export const AppColumns: ColumnDef<AppType>[] = [
   },
 
   {
-    accessorKey: "updatedAt",
-    header: "Updated At",
-    cell: ({ row }) => {
-      return (
-        <Link
-          href={`/applications/${row.original.id}`}
-          className="underline text-blue hover:cursor-pointer text-blue-500"
-        >
-          view
-        </Link>
-      );
-    },
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => (
+      <Link
+        href={`/applications/${row.original.id}`}
+        className="underline text-blue hover:cursor-pointer text-blue-500"
+      >
+        view
+      </Link>
+    ),
   },
 ];

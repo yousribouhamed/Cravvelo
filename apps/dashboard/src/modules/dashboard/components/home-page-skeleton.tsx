@@ -10,7 +10,7 @@ import { StatsCard, StatsGrid } from "@/src/components/stats-card";
 
 export function HomePageSkeleton() {
   return (
-    <div className="space-y-6 max-w-full my-4 mx-auto">
+    <div className="space-y-6 w-full min-w-0">
       {/* Date picker row */}
       <div className="flex flex-wrap items-center gap-4">
         <Skeleton className="h-10 w-16 rounded-lg" />
@@ -22,8 +22,9 @@ export function HomePageSkeleton() {
         <Skeleton className="h-10 w-32 rounded-lg" />
       </div>
 
-      {/* Four metric cards */}
+      {/* Five metric cards: Total Visits + Gross Volume, Successful Payments, New Customers, Average Order */}
       <StatsGrid>
+        <StatsCard title="" value="" isLoading />
         <StatsCard title="" value="" isLoading />
         <StatsCard title="" value="" isLoading />
         <StatsCard title="" value="" isLoading />

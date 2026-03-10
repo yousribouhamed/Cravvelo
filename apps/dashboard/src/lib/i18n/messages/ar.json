@@ -587,10 +587,11 @@
     "noDataAvailable": "لا توجد بيانات متاحة",
     "loading": "جاري التحميل...",
     "dateRange": "اختر التاريخ",
-    "grossVolume": "إجمالي الحجم",
+    "totalVisits": "إجمالي الزيارات",
+    "grossVolume": "مجموع الإيرادات",
     "successfulPayments": "المدفوعات الناجحة",
     "newCustomers": "عملاء جدد",
-    "averageOrder": "متوسط الطلب",
+    "averageOrder": "متوسط قيمة الطلب",
     "refunds": "المبالغ المستردة",
     "comparedTo": "مقارنة بالفترة السابقة",
     "presets": {

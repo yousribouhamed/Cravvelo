@@ -1,3 +1,10 @@
+export type UserSubscriptionInfo = {
+  planCode: string;
+  billingCycle: string;
+  status: string;
+  currentPeriodEnd: Date;
+};
+
 export type UserListItem = {
   id: string;
   userId: string;
@@ -8,6 +15,7 @@ export type UserListItem = {
   isActive: boolean;
   isSuspended: boolean;
   createdAt: Date;
+  subscription: UserSubscriptionInfo | null;
 };
 
 export type UsersPagination = {

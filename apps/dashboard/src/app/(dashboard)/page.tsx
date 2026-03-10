@@ -27,7 +27,7 @@ export default async function Page() {
       <main>
         <Header notifications={notifications} user={user} title={t("home")} />
 
-        <div dir={dir} className="my-4 mx-auto space-y-6">
+        <div dir={dir} className="my-4 w-full min-w-0 space-y-4 sm:space-y-6">
           <RevenueChart
             initialData={revenueData.success ? revenueData.data : undefined}
           />

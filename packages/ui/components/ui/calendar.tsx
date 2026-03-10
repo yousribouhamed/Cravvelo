@@ -43,13 +43,15 @@ function Calendar({
         ),
         day_range_end: "day-range-end",
         day_selected:
-          "bg-[#FC6B00] text-white hover:bg-[#FC6B00] hover:text-white focus:bg-[#FC6B00] focus:text-white",
+          "!bg-[#FC6B00] !text-white hover:!bg-[#FC6B00] hover:!text-white focus:!bg-[#FC6B00] focus:!text-white",
         day_today: "bg-accent text-accent-foreground",
         day_outside:
           "day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30",
         day_disabled: "text-muted-foreground opacity-50",
         day_range_middle:
-          "aria-selected:bg-accent aria-selected:text-accent-foreground",
+          "aria-selected:bg-[#FC6B00]/20 aria-selected:!text-foreground",
+        day_range_start: "!bg-[#FC6B00] !text-white",
+        day_range_end: "day-range-end !bg-[#FC6B00] !text-white",
         day_hidden: "invisible",
         ...classNames,
       }}

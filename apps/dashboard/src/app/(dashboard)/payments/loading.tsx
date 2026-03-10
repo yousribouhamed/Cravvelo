@@ -25,7 +25,7 @@ export default function Loading() {
             </Card>
           ))}
         </div>
-        <DataTableLoading columnCount={6} />
+        <DataTableLoading hideSearch columnCount={6} />
       </main>
     </MaxWidthWrapper>
   );

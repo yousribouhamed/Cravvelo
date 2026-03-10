@@ -151,16 +151,27 @@ export const getMainRevenueData = withAuth({
         },
       });
 
-      // Get website currency settings
+      // Get website currency settings and id for analytics
       const website = await db.website.findFirst({
         where: {
           accountId: account.id,
         },
         select: {
+          id: true,
           currency: true,
           currencySymbol: true,
         },
       });
+
+      // Total website visits (all time) for analytics
+      let totalVisits = 0;
+      if (website?.id) {
+        const visitsAgg = await db.websiteAnalytics.aggregate({
+          where: { websiteId: website.id },
+          _sum: { visits: true },
+        });
+        totalVisits = visitsAgg._sum?.visits ?? 0;
+      }
 
       // Calculate today's date boundaries
       const today = new Date();
@@ -245,6 +256,41 @@ export const getMainRevenueData = withAuth({
           .sort((a, b) => a.time.localeCompare(b.time));
       };
 
+      // Fill all 24 hours for a day so the chart shows a continuous line (no single dot)
+      const fillHourlyForDay = (
+        dayStart: Date,
+        hourlyPoints: Array<{ time: string; value: number }>
+      ): Array<{ time: string; value: number }> => {
+        const valueByHour = new Map<string, number>();
+        hourlyPoints.forEach(({ time, value }) => {
+          const d = new Date(time);
+          const key = new Date(
+            d.getFullYear(),
+            d.getMonth(),
+            d.getDate(),
+            d.getHours()
+          ).toISOString();
+          valueByHour.set(key, (valueByHour.get(key) || 0) + value);
+        });
+        const result: Array<{ time: string; value: number }> = [];
+        const isToday =
+          dayStart.toDateString() === new Date().toDateString();
+        const maxHour = isToday
+          ? Math.max(2, new Date().getHours() + 1)
+          : 24;
+        for (let h = 0; h < maxHour; h++) {
+          const t = new Date(
+            dayStart.getFullYear(),
+            dayStart.getMonth(),
+            dayStart.getDate(),
+            h
+          );
+          const key = t.toISOString();
+          result.push({ time: key, value: valueByHour.get(key) || 0 });
+        }
+        return result;
+      };
+
       // Helper function to group data by day
       const groupByDay = (paymentList: typeof payments) => {
         const grouped = new Map<string, number>();
@@ -276,9 +322,9 @@ export const getMainRevenueData = withAuth({
           ? groupByDay(payments)
           : groupByHour(payments);
 
-      // Group today and yesterday data by hour
-      const todayData = groupByHour(todayPayments);
-      const yesterdayData = groupByHour(yesterdayPayments);
+      // Group today and yesterday by hour, then fill all hours for a continuous chart (no single dot)
+      const todayData = fillHourlyForDay(today, groupByHour(todayPayments));
+      const yesterdayData = fillHourlyForDay(yesterday, groupByHour(yesterdayPayments));
 
       return {
         success: true,
@@ -321,6 +367,7 @@ export const getMainRevenueData = withAuth({
           walletCurrency: website?.currency || wallet?.currency || "DZD",
           currencySymbol: website?.currencySymbol || "DA",
           totalTransactions: payments.length,
+          totalVisits,
         },
       };
     } catch (err) {
@@ -355,6 +402,7 @@ export const getMainRevenueData = withAuth({
           walletCurrency: "DZD",
           currencySymbol: "DA",
           totalTransactions: 0,
+          totalVisits: 0,
         },
       };
     }

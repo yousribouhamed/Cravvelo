@@ -587,6 +587,7 @@
     "noDataAvailable": "No data available",
     "loading": "Loading...",
     "dateRange": "Select Date",
+    "totalVisits": "Total Visits",
     "grossVolume": "Gross Volume",
     "successfulPayments": "Successful Payments",
     "newCustomers": "New Customers",

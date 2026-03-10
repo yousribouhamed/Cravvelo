@@ -7,9 +7,11 @@ import { HomePageSkeleton } from "@/src/modules/dashboard/components/home-page-s
 const Page = () => {
   return (
     <MaxWidthWrapper>
-      <main className="w-full flex flex-col overflow-y-hidden h-fit justify-start">
+      <main className="w-full">
         <HeaderLoading />
-        <HomePageSkeleton />
+        <div className="my-4 w-full min-w-0 space-y-4 sm:space-y-6">
+          <HomePageSkeleton />
+        </div>
       </main>
     </MaxWidthWrapper>
   );

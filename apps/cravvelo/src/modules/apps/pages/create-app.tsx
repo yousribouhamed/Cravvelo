@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
+import Link from "next/link";
 import { X, Upload, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -75,6 +77,7 @@ export default function CreateAppForm({}: CreateAppProps) {
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
 
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const form = useForm<CreateAppForm>({
     resolver: zodResolver(createAppSchema),
@@ -266,6 +269,7 @@ export default function CreateAppForm({}: CreateAppProps) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["apps"] });
+      router.push("/applications");
     },
 
     onError: (error) => {
@@ -282,7 +286,7 @@ export default function CreateAppForm({}: CreateAppProps) {
   return (
     <div className="w-full mx-auto p-4 space-y-6">
       <Form {...form}>
-        <div onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Basic Information */}
             <Card>
@@ -601,11 +605,11 @@ export default function CreateAppForm({}: CreateAppProps) {
 
           {/* Submit */}
           <div className="flex justify-end gap-4">
-            <Button type="button" variant="outline">
-              Cancel
+            <Button type="button" variant="outline" asChild>
+              <Link href="/applications">Cancel</Link>
             </Button>
             <Button
-              onClick={handleSubmit}
+              type="submit"
               disabled={
                 createAppMutation.isPending || logoUploading || imageUploading
               }
@@ -621,7 +625,7 @@ export default function CreateAppForm({}: CreateAppProps) {
               )}
             </Button>
           </div>
-        </div>
+        </form>
       </Form>
     </div>
   );
