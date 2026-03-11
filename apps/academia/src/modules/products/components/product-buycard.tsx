@@ -3,7 +3,7 @@
 import BrandButton from "@/components/brand-button";
 import { usePaymentIntent } from "@/modules/payments/hooks/use-paymentIntent";
 import { productToPaymentProduct } from "@/modules/payments/utils";
-import { useTenantCurrency, useIsAuthenticated } from "@/hooks/use-tenant";
+import { useTenantCurrency } from "@/hooks/use-tenant";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { getProductDownloadUrl } from "../actions/download";
@@ -17,7 +17,6 @@ export default function ProductBuyCard({
   isOwned: boolean;
 }) {
   const t = useTranslations("products.landing");
-  const isAuthenticated = useIsAuthenticated();
   const { currency } = useTenantCurrency();
 
   const { invokePaymentIntent } = usePaymentIntent(
@@ -32,7 +31,7 @@ export default function ProductBuyCard({
         return;
       }
       window.location.href = res.data.url;
-    } catch (e) {
+    } catch {
       toast.error(t("downloadError"));
     }
   };
@@ -50,10 +49,6 @@ export default function ProductBuyCard({
             {t("downloadHint")}
           </p>
         </>
-      ) : !isAuthenticated ? (
-        <Link href={`/login?redirect=${encodeURIComponent("/products/" + product.id)}`}>
-          <BrandButton className="w-full">{t("loginToPurchase")}</BrandButton>
-        </Link>
       ) : (
         <>
           <BrandButton onClick={invokePaymentIntent} className="w-full">

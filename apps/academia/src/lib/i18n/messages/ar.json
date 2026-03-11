@@ -136,6 +136,7 @@
       "freeBadge": "مجانا",
       "buyNow": "شراء الآن",
       "loginToPurchase": "سجّل الدخول للشراء",
+      "alreadyHaveAccount": "لديك حساب بالفعل؟ سجّل الدخول",
       "accessCourse": "الوصول إلى الكورس",
       "watchNow": "شاهد الآن",
       "positiveReviews": "{percentage}% تقييمات إيجابية ({count})",
@@ -226,6 +227,7 @@
     "free": "مجاني",
     "selectPaymentMethod": "طرق الدفع",
     "paymentDetails": "تفاصيل الدفع",
+    "guestAuthSectionTitle": "أنشئ حسابك للمتابعة",
     "loadingConnections": "جاري تحميل طرق الدفع...",
     "chargilyTitle": "شارجيلي - Chargily",
     "chargilyDescription": "دفع آمن بالبطاقة البنكية",
@@ -252,7 +254,25 @@
       "toastError": "حدث خطأ في إنشاء رابط الدفع. يرجى المحاولة مرة أخرى",
       "toastNoProduct": "لم يتم اختيار منتج",
       "toastInvalidProduct": "معرف المنتج غير صحيح",
-      "toastCouponComing": "سيتم تطبيق منطق كود الخصم لاحقاً"
+      "toastCouponComing": "سيتم تطبيق منطق كود الخصم لاحقاً",
+      "toastAuthRequired": "يرجى إنشاء حساب أو تسجيل الدخول قبل الدفع"
+    },
+    "guestAuth": {
+      "title": "أنشئ حسابك لإكمال عملية الدفع",
+      "description": "استخدم الاسم والبريد الإلكتروني وكلمة المرور. إذا كان البريد مسجلاً بالفعل فسنقوم بتسجيل دخولك مباشرة.",
+      "fullNameLabel": "الاسم الكامل",
+      "fullNamePlaceholder": "أدخل اسمك الكامل",
+      "emailLabel": "البريد الإلكتروني",
+      "emailPlaceholder": "أدخل بريدك الإلكتروني",
+      "passwordLabel": "كلمة المرور",
+      "passwordPlaceholder": "أدخل كلمة المرور",
+      "passwordHint": "8 أحرف على الأقل وتتضمن حرفًا كبيرًا وصغيرًا ورقمًا.",
+      "submitButton": "المتابعة إلى الدفع",
+      "toastMissingFields": "يرجى تعبئة جميع الحقول المطلوبة",
+      "toastAccountCreated": "تم إنشاء الحساب بنجاح. تابع عملية الدفع.",
+      "toastLoggedIn": "مرحباً بعودتك. تابع عملية الدفع.",
+      "toastInvalidCredentials": "كلمة المرور غير صحيحة لهذا البريد الإلكتروني",
+      "toastGenericError": "تعذر المتابعة. يرجى المحاولة مرة أخرى."
     },
     "p2p": {
       "bankDetailsTitle": "بيانات التحويل البنكي",
@@ -272,9 +292,22 @@
       "toastSuccess": "تم إرسال إثبات الدفع بنجاح",
       "toastError": "حدث خطأ أثناء إرسال إثبات الدفع",
       "toastNoProduct": "لم يتم اختيار منتج",
+      "toastAuthRequired": "يرجى إنشاء حساب أو تسجيل الدخول قبل الدفع",
       "toastProofRequired": "يرجى رفع إثبات الدفع",
       "toastUploadFailed": "تعذر رفع الملف",
       "toastPendingValidation": "سيقوم صاحب الأكاديمية بالتحقق من دفعتك خلال 24 ساعة."
+    },
+    "success": {
+      "title": "تمت عملية الدفع بنجاح",
+      "message": "تمت معالجة دفعتك بنجاح. يمكنك الآن الوصول إلى العنصر الذي اشتريته.",
+      "backHome": "العودة للرئيسية",
+      "viewPayments": "عرض مدفوعاتي"
+    },
+    "failure": {
+      "title": "فشل الدفع",
+      "message": "تعذر إتمام عملية الدفع. يرجى المحاولة مرة أخرى أو اختيار طريقة دفع أخرى.",
+      "backHome": "العودة للرئيسية",
+      "viewPayments": "عرض مدفوعاتي"
     },
     "pending": {
       "title": "تم إرسال الدفع",

@@ -33,16 +33,16 @@ export async function generateMetadata({
     "Academy";
 
   const favicon = (websiteData as any)?.favicon as string | undefined | null;
+  const iconUrl = favicon || "/default-favicon.svg";
 
-  const metadata: Metadata = { title };
-
-  if (favicon) {
-    metadata.icons = {
-      icon: favicon,
-      shortcut: favicon,
-      apple: favicon,
-    };
-  }
+  const metadata: Metadata = {
+    title,
+    icons: {
+      icon: iconUrl,
+      shortcut: iconUrl,
+      apple: iconUrl,
+    },
+  };
 
   return metadata;
 }

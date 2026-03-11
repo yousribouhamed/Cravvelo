@@ -15,13 +15,14 @@ export const getProductsWithDefaultPricing = withTenant({
   input: productListInputSchema,
   handler: async ({ db, accountId, input }) => {
     try {
+      // Dashboard may store published status as "PUBLISED" (legacy); accept both
       const where: {
         accountId: string;
-        status: string;
+        status: { in: string[] };
         title?: { contains: string; mode: "insensitive" };
       } = {
         accountId,
-        status: "PUBLISHED",
+        status: { in: ["PUBLISHED", "PUBLISED"] },
       };
       if (input?.search?.trim()) {
         where.title = {
@@ -99,7 +100,7 @@ export const getProductById = withTenant({
         where: {
           id: input.productId,
           accountId,
-          status: "PUBLISHED",
+          status: { in: ["PUBLISHED", "PUBLISED"] },
           isVisible: true,
         },
         include: {

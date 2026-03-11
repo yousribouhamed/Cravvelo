@@ -16,7 +16,6 @@ export const getTenantPaymentConnections = withTenant({
         },
       });
 
-      console.log(connections);
       return {
         data: connections ?? [],
         success: true,

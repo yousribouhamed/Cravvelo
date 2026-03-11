@@ -47,7 +47,7 @@ export const createChargilyCheckout = withTenant({
   handler: async ({ tenant, website, input, accountId, db }) => {
     try {
       const tenantCurrency = (website?.currency || "DZD").toLowerCase();
-      const amount = Math.round(Number(input.totalPrice) * 1); // convert DZD → centimes
+      const amount = Math.round(Number(input.totalPrice));
       const payload = {
         amount,
         currency: tenantCurrency,

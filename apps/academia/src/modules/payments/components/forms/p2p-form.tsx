@@ -13,6 +13,7 @@ import { createP2pPaymentIntent } from "../../actions/p2p.actions";
 import { uploadImageToS3 } from "@/modules/aws/s3";
 import { usePaymentContext } from "../../context/payments-provider";
 import { useTranslations, useLocale } from "next-intl";
+import { useIsAuthenticated } from "@/hooks/use-tenant";
 
 interface P2PFormData {
   paymentProof: File | null;
@@ -34,6 +35,7 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
   const router = useRouter();
   const { selectedProduct, closeSheet } = usePaymentContext();
   const t = useTranslations("payments.p2p");
+  const isAuthenticated = useIsAuthenticated();
   const locale = useLocale();
   const dir = locale === "ar" ? "rtl" : "ltr";
   const [formData, setFormData] = useState<P2PFormData>({
@@ -89,7 +91,13 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
     },
     onError: (error) => {
       console.error(error);
-      toast.error(t("toastError"));
+      const message =
+        error instanceof Error ? error.message.toLowerCase() : "unknown";
+      if (message.includes("unauthorized")) {
+        toast.error(t("toastAuthRequired"));
+      } else {
+        toast.error(t("toastError"));
+      }
       setIsLocked(false);
     },
   });
@@ -147,6 +155,11 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
 
     if (!selectedProduct) {
       toast.error(t("toastNoProduct"));
+      return;
+    }
+
+    if (!isAuthenticated) {
+      toast.error(t("toastAuthRequired"));
       return;
     }
 

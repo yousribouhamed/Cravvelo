@@ -6,31 +6,64 @@ import {
 import { prisma } from "database/src";
 import { PurchaseStatus } from "@prisma/client";
 
-// Your Chargily Pay Secret key
-const apiSecretKey =
-  process.env.CHARGILY_SECRET_KEY ||
-  "test_sk_Fje5EhFwyGTGqk4M6et3Jxxxxxxxxxxxxxxxxxxxx";
+function normalizeChargilyConfig(config: unknown): { secretKey?: string } {
+  if (!config) return {};
+  if (typeof config === "string") {
+    try {
+      const parsed = JSON.parse(config) as any;
+      return { secretKey: parsed?.secretKey };
+    } catch {
+      return {};
+    }
+  }
+  if (typeof config === "object") {
+    return { secretKey: (config as any)?.secretKey };
+  }
+  return {};
+}
+
+async function resolveSecretKey(host: string | null): Promise<string | null> {
+  const subdomain = host?.split(".")?.[0];
+  if (subdomain) {
+    const fullDomain = `${subdomain}.cravvelo.com`;
+    const website = await prisma.website.findUnique({
+      where: { subdomain: fullDomain },
+      select: { accountId: true },
+    });
+    if (website) {
+      const connection = await prisma.paymentMethodConfig.findFirst({
+        where: { accountId: website.accountId, provider: "CHARGILY", isActive: true },
+        select: { config: true },
+      });
+      const tenantKey = normalizeChargilyConfig(connection?.config)?.secretKey;
+      if (tenantKey) return tenantKey;
+    }
+  }
+  return process.env.CHARGILY_SECRET_KEY || null;
+}
 
 export async function POST(request: NextRequest) {
   try {
-    // Get the signature from headers
     const signature = request.headers.get("signature");
-
-    // Get the raw body
     const body = await request.text();
 
-    // If there is no signature, ignore the request
     if (!signature) {
       return NextResponse.json({ error: "Missing signature" }, { status: 400 });
     }
 
-    // Calculate the signature
+    const host = request.headers.get("host");
+    const apiSecretKey = await resolveSecretKey(host);
+
+    if (!apiSecretKey) {
+      console.error("Chargily webhook: no secret key configured for host:", host);
+      return NextResponse.json({ error: "Payment provider not configured" }, { status: 500 });
+    }
+
     const computedSignature = crypto
       .createHmac("sha256", apiSecretKey)
       .update(body)
       .digest("hex");
 
-    // If the calculated signature doesn't match the received signature, ignore the request
     if (computedSignature !== signature) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 403 });
     }

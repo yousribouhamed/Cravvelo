@@ -136,6 +136,7 @@
       "freeBadge": "Free",
       "buyNow": "Buy Now",
       "loginToPurchase": "Log in to purchase",
+      "alreadyHaveAccount": "Already have an account? Sign in",
       "accessCourse": "Access Course",
       "watchNow": "Watch Now",
       "positiveReviews": "{percentage}% positive reviews ({count})",
@@ -226,6 +227,7 @@
     "free": "Free",
     "selectPaymentMethod": "Payment Methods",
     "paymentDetails": "Payment Details",
+    "guestAuthSectionTitle": "Create account to continue",
     "loadingConnections": "Loading payment methods...",
     "chargilyTitle": "Chargily",
     "chargilyDescription": "Secure payment by bank card",
@@ -252,7 +254,25 @@
       "toastError": "Failed to create payment link. Please try again.",
       "toastNoProduct": "No product selected",
       "toastInvalidProduct": "Invalid product ID",
-      "toastCouponComing": "Coupon logic will be applied later"
+      "toastCouponComing": "Coupon logic will be applied later",
+      "toastAuthRequired": "Please create or sign in to your account before payment"
+    },
+    "guestAuth": {
+      "title": "Create your account to continue checkout",
+      "description": "Use your name, email, and password. If your email already exists, we will sign you in automatically.",
+      "fullNameLabel": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "passwordHint": "At least 8 characters with uppercase, lowercase, and a number.",
+      "submitButton": "Continue to payment",
+      "toastMissingFields": "Please fill in all required fields",
+      "toastAccountCreated": "Account created successfully. Continue with payment.",
+      "toastLoggedIn": "Welcome back. Continue with payment.",
+      "toastInvalidCredentials": "Incorrect password for this email",
+      "toastGenericError": "Unable to continue. Please try again."
     },
     "p2p": {
       "bankDetailsTitle": "Bank transfer details",
@@ -272,9 +292,22 @@
       "toastSuccess": "Payment proof submitted successfully",
       "toastError": "An error occurred while submitting payment proof",
       "toastNoProduct": "No product selected",
+      "toastAuthRequired": "Please create or sign in to your account before payment",
       "toastProofRequired": "Please upload payment proof",
       "toastUploadFailed": "File upload failed",
       "toastPendingValidation": "The academy owner will validate your payment within 24 hours."
+    },
+    "success": {
+      "title": "Payment successful",
+      "message": "Your payment has been processed successfully. You now have access to your purchased item.",
+      "backHome": "Back to home",
+      "viewPayments": "View my payments"
+    },
+    "failure": {
+      "title": "Payment failed",
+      "message": "Your payment could not be completed. Please try again or choose a different payment method.",
+      "backHome": "Back to home",
+      "viewPayments": "View my payments"
     },
     "pending": {
       "title": "Payment submitted",

@@ -9,6 +9,7 @@ import BrandButton from "@/components/brand-button";
 import { createChargilyPaymentIntent } from "../../actions/chargily.actions";
 import { usePaymentContext } from "../../context/payments-provider";
 import { useTranslations, useLocale } from "next-intl";
+import { useIsAuthenticated } from "@/hooks/use-tenant";
 
 interface ChargilyFormProps {
   isLoading?: boolean;
@@ -31,6 +32,7 @@ interface PaymentResponse {
 export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
   const { selectedProduct } = usePaymentContext();
   const t = useTranslations("payments.chargily");
+  const isAuthenticated = useIsAuthenticated();
   const locale = useLocale();
   const dir = locale === "ar" ? "rtl" : "ltr";
   const [formData, setFormData] = useState<ChargilyFormData>({
@@ -57,6 +59,10 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
     },
     onError: (error) => {
       console.error("Payment creation error:", error);
+      if (error.message.toLowerCase().includes("unauthorized")) {
+        toast.error(t("toastAuthRequired"));
+        return;
+      }
       toast.error(t("toastError"));
     },
   });
@@ -78,6 +84,11 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
 
     if (!selectedProduct) {
       toast.error(t("toastNoProduct"));
+      return;
+    }
+
+    if (!isAuthenticated) {
+      toast.error(t("toastAuthRequired"));
       return;
     }
 

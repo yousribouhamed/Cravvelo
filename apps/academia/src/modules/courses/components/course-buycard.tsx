@@ -16,7 +16,7 @@ import { usePaymentIntent } from "@/modules/payments/hooks/use-paymentIntent";
 import { courseToPaymentProduct } from "@/modules/payments/utils";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useTenantCurrency, useIsAuthenticated } from "@/hooks/use-tenant";
+import { useTenantCurrency } from "@/hooks/use-tenant";
 
 interface CourseCardProps {
   course: CourseWithPricing;
@@ -53,7 +53,6 @@ export default function CourseBuyCard({
   courseId,
 }: CourseCardProps) {
   const t = useTranslations("courses");
-  const isAuthenticated = useIsAuthenticated();
   const { formatPrice, currency } = useTenantCurrency();
   const { invokePaymentIntent } = usePaymentIntent(
     courseToPaymentProduct({
@@ -105,12 +104,17 @@ export default function CourseBuyCard({
         <Link href={`/courses/${courseId}/watch`}>
           <BrandButton className="w-full">{t("buyCard.watchNow")}</BrandButton>
         </Link>
-      ) : !isAuthenticated ? (
-        <Link href={`/login?redirect=${encodeURIComponent("/courses/" + courseId)}`}>
-          <BrandButton className="w-full">{t("buyCard.loginToPurchase")}</BrandButton>
-        </Link>
       ) : (
-        <BrandButton onClick={invokePaymentIntent}>{t("buyCard.buyNow")}</BrandButton>
+        <>
+          <BrandButton onClick={invokePaymentIntent}>
+            {t("buyCard.buyNow")}
+          </BrandButton>
+          <Link href={`/login?redirect=/courses/${courseId}`}>
+            <button className="text-sm underline text-muted-foreground hover:text-foreground text-right w-full">
+              {t("buyCard.alreadyHaveAccount")}
+            </button>
+          </Link>
+        </>
       )}
 
       <div className="border-b w-full h-1 my-1 dark:border-gray-700" />

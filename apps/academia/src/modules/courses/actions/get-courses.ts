@@ -196,14 +196,15 @@ export const getCoursesWithDefaultPricing = withTenant({
   input: courseListInputSchema,
   handler: async ({ db, accountId, input }) => {
     try {
+      // Dashboard stores published status as "PUBLISED" (legacy typo); accept both
       const where: {
         accountId: string;
-        status: string;
+        status: { in: string[] };
         title?: { contains: string; mode: "insensitive" };
         level?: string;
       } = {
         accountId,
-        status: "PUBLISHED",
+        status: { in: ["PUBLISHED", "PUBLISED"] },
       };
       if (input?.search?.trim()) {
         where.title = {

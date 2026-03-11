@@ -152,7 +152,7 @@ export const getPublicCourseWithChapters = withTenant({
         where: {
           id: input.courseId,
           accountId,
-          status: "PUBLISHED", // Only get published courses
+          status: { in: ["PUBLISHED", "PUBLISED"] }, // Dashboard uses "PUBLISED" when publishing
           suspended: false,
         },
         select: {

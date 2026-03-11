@@ -19,8 +19,9 @@ import {
 } from "@/modules/payments/types/index";
 import React from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { useTenantCurrency } from "@/hooks/use-tenant";
+import { useTenantCurrency, useIsAuthenticated } from "@/hooks/use-tenant";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { GuestAuthForm } from "./guest-auth-form";
 
 export function PaymentSheet() {
   const {
@@ -32,6 +33,7 @@ export function PaymentSheet() {
   } = usePaymentContext();
   const t = useTranslations("payments");
   const { formatPrice } = useTenantCurrency();
+  const isAuthenticated = useIsAuthenticated();
   const locale = useLocale();
   const dir = locale === "ar" ? "rtl" : "ltr";
   const isRTL = locale === "ar";
@@ -279,11 +281,21 @@ export function PaymentSheet() {
                           {activeConnections &&
                             activeConnections.length > 0 && (
                               <div className="space-y-4">
-                                <h3 className="text-lg font-semibold text-foreground">
-                                  {t("paymentDetails")}
-                                </h3>
-
-                                <PaymentForms />
+                                {!isAuthenticated ? (
+                                  <>
+                                    <h3 className="text-lg font-semibold text-foreground">
+                                      {t("guestAuthSectionTitle")}
+                                    </h3>
+                                    <GuestAuthForm />
+                                  </>
+                                ) : (
+                                  <>
+                                    <h3 className="text-lg font-semibold text-foreground">
+                                      {t("paymentDetails")}
+                                    </h3>
+                                    <PaymentForms />
+                                  </>
+                                )}
                               </div>
                             )}
                         </>

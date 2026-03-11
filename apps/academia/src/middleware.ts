@@ -12,6 +12,8 @@ const publicRoutes = [
   "/register",
   "/forgot-password",
   "/reset-password",
+  "/payments/success",
+  "/payments/failure",
 ];
 
 // Protected route prefixes (routes that require authentication)

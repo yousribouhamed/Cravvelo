@@ -45,7 +45,7 @@ export const getTenantCourses = cache(
       const courses = await prisma.course.findMany({
         where: {
           accountId: website.accountId,
-          status: "PUBLISHED", // Assuming you only want published courses
+          status: { in: ["PUBLISHED", "PUBLISED"] }, // Dashboard uses "PUBLISED" when publishing
           suspended: false,
         },
         select: {
@@ -91,7 +91,7 @@ export const getTenantProducts = cache(
       const products = await prisma.product.findMany({
         where: {
           accountId: website.accountId,
-          status: "PUBLISHED", // Assuming you only want published products
+          status: { in: ["PUBLISHED", "PUBLISED"] }, // Dashboard may use either when publishing
           isVisible: true,
         },
         select: {
@@ -137,14 +137,14 @@ export const getTenantStats = cache(async (tenant: string) => {
       prisma.course.count({
         where: {
           accountId: website.accountId,
-          status: "PUBLISHED",
+          status: { in: ["PUBLISHED", "PUBLISED"] },
           suspended: false,
         },
       }),
       prisma.product.count({
         where: {
           accountId: website.accountId,
-          status: "PUBLISHED",
+          status: { in: ["PUBLISHED", "PUBLISED"] },
           isVisible: true,
         },
       }),
@@ -207,7 +207,7 @@ export const getTenantCourse = cache(
         where: {
           id: courseId,
           accountId: website.accountId,
-          status: "PUBLISHED",
+          status: { in: ["PUBLISHED", "PUBLISED"] },
           suspended: false,
         },
         include: {
@@ -256,7 +256,7 @@ export const getTenantProduct = cache(
         where: {
           id: productId,
           accountId: website.accountId,
-          status: "PUBLISHED",
+          status: { in: ["PUBLISHED", "PUBLISED"] },
           isVisible: true,
         },
       });

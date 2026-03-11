@@ -1,5 +1,11 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Environment variables
+
+For course landing pages to show uploaded **Bunny** preview videos (instead of falling back to YouTube or "not configured"), set:
+
+- **`NEXT_PUBLIC_VIDEO_LIBRARY`** – Your Bunny Stream library ID. Use the same value as in the dashboard app so course preview videos display correctly.
+
 ## Getting Started
 
 First, run the development server:
