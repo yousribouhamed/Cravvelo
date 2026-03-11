@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Account" ADD COLUMN IF NOT EXISTS "storageUsedBytes" INTEGER NOT NULL DEFAULT 0;

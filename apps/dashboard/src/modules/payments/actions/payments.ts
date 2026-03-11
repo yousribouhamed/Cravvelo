@@ -16,7 +16,6 @@ export const getAllPayments = withAuth({
       const payments = await db.payment.findMany({
         where: {
           accountId: account.id,
-          type: { not: "SUBSCRIPTION" }, // Exclude app subscription payments, only show student payments
         },
         include: {
           Student: {

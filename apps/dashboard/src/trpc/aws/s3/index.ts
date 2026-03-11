@@ -1,10 +1,17 @@
 import { privateProcedure } from "../../trpc";
-import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import {
+  DeleteObjectCommand,
+  HeadObjectCommand,
+  PutObjectCommand,
+} from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { z } from "zod";
 import crypto from "crypto";
 import { TRPCError } from "@trpc/server";
 import { s3 } from "@/src/lib/s3";
+import { prisma } from "database/src";
+import { getLimitsForPlanCode } from "@/src/constants/plan-limits";
+import type { SubscriptionPlanCode } from "@/src/constants/subscription-plans";
 
 const allowedFileTypes = ["image/jpeg", "image/png", "application/pdf"];
 
@@ -38,6 +45,32 @@ export const s3_bucket = {
             code: "BAD_REQUEST",
             message: "File size too large",
           });
+        }
+
+        const account = await prisma.account.findUnique({
+          where: { id: ctx.account!.id },
+          select: {
+            storageUsedBytes: true,
+            AccountSubscription: {
+              where: { status: "ACTIVE" },
+              orderBy: { updatedAt: "desc" },
+              take: 1,
+              select: { planCode: true },
+            },
+          },
+        });
+        if (account) {
+          const planCode = account.AccountSubscription?.[0]?.planCode as
+            | SubscriptionPlanCode
+            | undefined;
+          const limits = getLimitsForPlanCode(planCode ?? null);
+          if (account.storageUsedBytes + input.fileSize > limits.storageBytes) {
+            throw new TRPCError({
+              code: "FORBIDDEN",
+              message:
+                "Storage limit reached. Please upgrade your plan to upload more files.",
+            });
+          }
         }
 
         if (!bucketName) {
@@ -89,6 +122,20 @@ export const s3_bucket = {
       }
     }),
 };
+
+/** Get object size in bytes from S3 (for storage accounting on delete). Returns 0 if not found. */
+export async function getS3ObjectSize(fileName: string): Promise<number> {
+  const bucketName = process.env.S3_BUCKET_NAME;
+  if (!bucketName) return 0;
+  try {
+    const res = await s3.send(
+      new HeadObjectCommand({ Bucket: bucketName, Key: fileName })
+    );
+    return res.ContentLength ?? 0;
+  } catch {
+    return 0;
+  }
+}
 
 export const deleteFileFromS3Bucket = async ({
   fileName,

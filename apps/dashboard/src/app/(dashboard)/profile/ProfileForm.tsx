@@ -27,6 +27,7 @@ import {
 import { computeSHA256 } from "@/src/lib/utils";
 import { maketoast } from "@/src/components/toasts";
 import { trpc } from "@/src/app/_trpc/client";
+import { recordStorageUsed } from "@/src/actions/storage.actions";
 import { useUser } from "@clerk/nextjs";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
@@ -224,6 +225,7 @@ const UserProfileForm: FC<ProfileFormProps> = ({ enhancedUserData }) => {
         // Extract public URL using proper URL parsing
         const signedUrlObj = new URL(result.success.url);
         avatarUrl = `${signedUrlObj.origin}${signedUrlObj.pathname}`;
+        await recordStorageUsed({ fileSizeInBytes: selectedFile.size });
       }
 
       // Prepare Clerk updates - only update firstName and username

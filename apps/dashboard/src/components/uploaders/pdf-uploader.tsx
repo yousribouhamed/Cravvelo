@@ -13,6 +13,7 @@ import Image from "next/image";
 import { computeSHA256 } from "@/src/lib/utils";
 import { trpc } from "@/src/app/_trpc/client";
 import { useTranslations } from "next-intl";
+import { recordStorageUsed } from "@/src/actions/storage.actions";
 
 export const PdfUploaderS3 = ({
   onChnage,
@@ -70,6 +71,7 @@ export const PdfUploaderS3 = ({
         onChnage(publicUrl);
         setProgress(100);
         setStatus("COMPLETE");
+        await recordStorageUsed({ fileSizeInBytes: selectedFile.size });
       } catch (error: any) {
         console.error("Upload error:", error);
         

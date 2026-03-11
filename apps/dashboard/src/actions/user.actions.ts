@@ -55,12 +55,30 @@ export const getMyUserAction = cache(async () => {
     },
     include: {
       Website: true,
+      AccountSubscription: {
+        where: { status: "ACTIVE" },
+        orderBy: { updatedAt: "desc" },
+        take: 1,
+        select: {
+          planCode: true,
+          billingCycle: true,
+          currentPeriodEnd: true,
+        },
+      },
     },
   });
 
   if (!account) {
     redirect("/auth-callback");
   }
+
+  const subscription = account.AccountSubscription?.[0]
+    ? {
+        planCode: account.AccountSubscription[0].planCode,
+        billingCycle: account.AccountSubscription[0].billingCycle,
+        currentPeriodEnd: account.AccountSubscription[0].currentPeriodEnd,
+      }
+    : null;
 
   return {
     userId: user.id,
@@ -76,6 +94,7 @@ export const getMyUserAction = cache(async () => {
     createdAt: account.createdAt,
     verified: account.verified,
     verification_steps: account.verification_steps,
+    subscription,
   };
 });
 

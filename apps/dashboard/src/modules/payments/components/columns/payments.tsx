@@ -202,6 +202,12 @@ const getItemInfo = (payment: Payment, t: (key: string) => string) => {
       title: payment.Subscription.plan,
       thumbnail: null,
     };
+  } else if (payment.type === "SUBSCRIPTION") {
+    return {
+      type: t("payments.types.subscription"),
+      title: payment.description ?? t("payments.types.SUBSCRIPTION"),
+      thumbnail: null,
+    };
   }
   return null;
 };

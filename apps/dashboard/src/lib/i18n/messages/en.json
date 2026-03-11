@@ -163,7 +163,9 @@
     "profile": "Profile",
     "subscription": "Subscription",
     "academyPreview": "Academy Preview",
-    "academy": "Academy"
+    "academy": "Academy",
+    "freePlan": "Free plan",
+    "currentPlan": "Current plan"
   },
   "notifications": {
     "ui": {
@@ -351,6 +353,12 @@
   "subscription": {
     "monthly": "Monthly",
     "yearly": "Yearly",
+    "plans": {
+      "basic": { "name": "Basic" },
+      "starter": { "name": "Starter" },
+      "growth": { "name": "Growth" },
+      "scale": { "name": "Scale" }
+    },
     "getStarted": "Get started",
     "mostPopular": "Most Popular",
     "growthCtaSubtext": "This is your core revenue driver.",
@@ -363,7 +371,12 @@
     "redirecting": "Redirecting…",
     "checkoutError": "Failed to start checkout. Please try again.",
     "paymentSuccess": "Your subscription is active. Thank you!",
-    "paymentFailed": "Payment could not be completed. You can try again from this page."
+    "paymentFailed": "Payment could not be completed. You can try again from this page.",
+    "usage": {
+      "members": "Members",
+      "storage": "Storage",
+      "upgradePlan": "Upgrade plan"
+    }
   },
   "createAcademia": {
     "heading": "You need to create an academy to view dashboard analytics and use the platform.",

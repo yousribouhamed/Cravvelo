@@ -1,7 +1,11 @@
 import { z } from "zod";
 import { privateProcedure } from "../../trpc";
 import { TRPCError } from "@trpc/server";
-import { deleteFileFromS3Bucket, getKeyFromUrl } from "../../aws/s3";
+import {
+  deleteFileFromS3Bucket,
+  getKeyFromUrl,
+  getS3ObjectSize,
+} from "../../aws/s3";
 
 export const course = {
   createCourse: privateProcedure
@@ -319,9 +323,22 @@ export const course = {
         // Delete thumbnail from S3 if it exists
         if (course.thumbnailUrl) {
           try {
-            await deleteFileFromS3Bucket({
-              fileName: getKeyFromUrl(course.thumbnailUrl),
-            });
+            const key = getKeyFromUrl(course.thumbnailUrl);
+            const size = await getS3ObjectSize(key);
+            await deleteFileFromS3Bucket({ fileName: key });
+            if (size > 0) {
+              const acc = await ctx.prisma.account.findUnique({
+                where: { id: ctx.account.id },
+                select: { storageUsedBytes: true },
+              });
+              if (acc) {
+                const next = Math.max(0, acc.storageUsedBytes - size);
+                await ctx.prisma.account.update({
+                  where: { id: ctx.account.id },
+                  data: { storageUsedBytes: next },
+                });
+              }
+            }
           } catch (s3Error) {
             console.error("Error deleting thumbnail from S3:", s3Error);
             // Continue with course deletion even if S3 deletion fails

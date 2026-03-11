@@ -163,7 +163,9 @@
     "profile": "الملف الشخصي",
     "subscription": "الاشتراك",
     "academyPreview": "معاينة الأكاديمية",
-    "academy": "اكاديمية"
+    "academy": "اكاديمية",
+    "freePlan": "الخطة المجانية",
+    "currentPlan": "الخطة الحالية"
   },
   "notifications": {
     "ui": {
@@ -351,6 +353,12 @@
   "subscription": {
     "monthly": "شهري",
     "yearly": "سنوي",
+    "plans": {
+      "basic": { "name": "أساسي" },
+      "starter": { "name": "المبتدئ" },
+      "growth": { "name": "النمو" },
+      "scale": { "name": "المقياس" }
+    },
     "getStarted": "ابدأ الآن",
     "mostPopular": "الأكثر شعبية",
     "growthCtaSubtext": "هذا هو محرك الإيرادات الأساسي.",
@@ -363,7 +371,12 @@
     "redirecting": "جاري التحويل…",
     "checkoutError": "فشل بدء الدفع. يرجى المحاولة مرة أخرى.",
     "paymentSuccess": "اشتراكك مفعّل. شكراً لك!",
-    "paymentFailed": "تعذّر إتمام الدفع. يمكنك المحاولة مرة أخرى من هذه الصفحة."
+    "paymentFailed": "تعذّر إتمام الدفع. يمكنك المحاولة مرة أخرى من هذه الصفحة.",
+    "usage": {
+      "members": "الأعضاء",
+      "storage": "التخزين",
+      "upgradePlan": "ترقية الخطة"
+    }
   },
   "createAcademia": {
     "heading": "يجب عليك إنشاء أكاديمية حتى تتمكن من رؤية تحليلات لوحة المعلومات واستخدام النظام الأساسي",

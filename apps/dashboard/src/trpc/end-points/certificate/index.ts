@@ -3,7 +3,11 @@ import { privateProcedure } from "../../trpc";
 import { designO1 } from "./certificate-templates/design-01";
 import { design02 } from "./certificate-templates/design-02";
 import { designO3 } from "./certificate-templates/design-03";
-import { deleteFileFromS3Bucket, getKeyFromUrl } from "../../aws/s3";
+import {
+  deleteFileFromS3Bucket,
+  getKeyFromUrl,
+  getS3ObjectSize,
+} from "../../aws/s3";
 import { generatePdf } from "./generatePDF";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3 } from "@/src/lib/s3";
@@ -116,15 +120,32 @@ export const cetificate = {
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const certificate = await ctx.prisma.certificate.delete({
-          where: {
-            id: input.id,
-          },
+        const certificate = await ctx.prisma.certificate.findUnique({
+          where: { id: input.id },
+        });
+        if (!certificate) return null;
+
+        const key = getKeyFromUrl(certificate.fileUrl);
+        const size = await getS3ObjectSize(key);
+        await deleteFileFromS3Bucket({ fileName: key });
+
+        await ctx.prisma.certificate.delete({
+          where: { id: input.id },
         });
 
-        await deleteFileFromS3Bucket({
-          fileName: getKeyFromUrl(certificate.fileUrl),
-        });
+        if (size > 0) {
+          const acc = await ctx.prisma.account.findUnique({
+            where: { id: ctx.account.id },
+            select: { storageUsedBytes: true },
+          });
+          if (acc) {
+            const next = Math.max(0, acc.storageUsedBytes - size);
+            await ctx.prisma.account.update({
+              where: { id: ctx.account.id },
+              data: { storageUsedBytes: next },
+            });
+          }
+        }
 
         return certificate;
       } catch (err) {

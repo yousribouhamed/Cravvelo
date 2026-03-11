@@ -73,6 +73,16 @@ export default function UserNav({ user }: UserNavProps) {
       : t("startVerification");
   }, [user?.verification_steps, t]);
 
+  const planLabel = useMemo(() => {
+    if (!user?.subscription) return t("freePlan");
+    const sub = user.subscription;
+    const planNameKey = `subscription.plans.${sub.planCode.toLowerCase()}.name` as const;
+    const planName = t(planNameKey);
+    const cycleKey =
+      sub.billingCycle === "YEARLY" ? "subscription.yearly" : "subscription.monthly";
+    return `${planName} (${t(cycleKey)})`;
+  }, [user?.subscription, t]);
+
   const navigationItems = useMemo(
     () => [
       {
@@ -192,6 +202,19 @@ export default function UserNav({ user }: UserNavProps) {
               className="h-1.5 w-full bg-muted"
             />
           </div>
+        </div>
+
+        <DropdownMenuSeparator className="bg-border" />
+
+        {/* Current plan */}
+        <div
+          className={cn(
+            "w-full px-3 py-2 flex items-center justify-between text-sm text-muted-foreground",
+            isRTL ? "flex-row-reverse" : "flex-row"
+          )}
+        >
+          <span>{t("currentPlan")}</span>
+          <span className="font-medium text-foreground">{planLabel}</span>
         </div>
 
         <DropdownMenuSeparator className="bg-border" />

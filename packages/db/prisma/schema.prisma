@@ -172,6 +172,9 @@ model Account {
   isActive           Boolean           @default(true)
   isSuspended        Boolean           @default(false)
   suspensionReason   String?           @db.Text
+
+  // Plan usage (for limits and progress)
+  storageUsedBytes   Int               @default(0)
   
   createdAt          DateTime          @default(now())
   updatedAt          DateTime          @updatedAt

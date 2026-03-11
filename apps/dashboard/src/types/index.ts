@@ -27,6 +27,12 @@ export type WebsiteAssets = {
   fileUrl: string;
 };
 
+export type UserSubscriptionSnapshot = {
+  planCode: string;
+  billingCycle: string;
+  currentPeriodEnd: Date;
+};
+
 export type UserData = {
   userId: string;
   accountId: string;
@@ -40,6 +46,7 @@ export type UserData = {
   createdAt: Date;
   verified: boolean;
   verification_steps: number;
+  subscription?: UserSubscriptionSnapshot | null;
 };
 
 export interface Product {
