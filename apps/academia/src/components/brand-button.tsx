@@ -17,16 +17,7 @@ interface BrandButtonProps
 
 const BrandButton = forwardRef<HTMLButtonElement, BrandButtonProps>(
   (
-    {
-      className,
-      children,
-      variant = "default",
-      size = "default",
-      asChild = false,
-      style,
-      loading = false,
-      ...props
-    },
+    { className, children, variant = "default", loading = false, ...props },
     ref
   ) => {
     const { primaryColor, primaryColorDark } = useTenantBranding();

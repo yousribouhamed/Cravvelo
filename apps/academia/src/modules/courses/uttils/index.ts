@@ -1,5 +1,3 @@
-import z from "zod";
-
 export function getTimeAgo(date: Date): string {
   const now = new Date();
   const diffInMs = now.getTime() - date.getTime();

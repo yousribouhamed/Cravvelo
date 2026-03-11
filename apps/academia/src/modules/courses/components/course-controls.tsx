@@ -48,7 +48,7 @@ export const CourseControls: React.FC<CourseControlsProps> = ({
         (a, b) => a.orderNumber - b.orderNumber
       );
       //@ts-expect-error
-      sortedModules.forEach((module, moduleIndex) => {
+      sortedModules.forEach((module) => {
         modulesList.push({
           module,
           chapter,

@@ -18,6 +18,7 @@ import {
   PaymentPricingOption,
 } from "@/modules/payments/types/index";
 import React from "react";
+import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import { useTenantCurrency, useIsAuthenticated } from "@/hooks/use-tenant";
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -140,10 +141,13 @@ export function PaymentSheet() {
                             <div className="flex items-center gap-4">
                               <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shrink-0">
                                 {selectedProduct.image ? (
-                                  <img
+                                  <Image
                                     src={selectedProduct.image}
                                     alt={selectedProduct.name}
+                                    width={64}
+                                    height={64}
                                     className="w-full h-full object-cover rounded-lg"
+                                    unoptimized
                                   />
                                 ) : (
                                   <div className="w-8 h-8 bg-white/20 rounded backdrop-blur-sm"></div>

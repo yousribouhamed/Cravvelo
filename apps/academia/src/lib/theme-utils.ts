@@ -29,11 +29,14 @@ function buttonRadiusFromStyle(style: string | undefined, explicitRadius: string
   }
 }
 
+/** CSSProperties plus custom CSS variables (string values) */
+type ThemeStyle = React.CSSProperties & Record<string, string | undefined>;
+
 export function buildThemeStyleAndData(theme: ThemeCustomization | null | undefined): {
-  style: React.CSSProperties;
+  style: ThemeStyle;
   dataAttributes: Record<string, string>;
 } {
-  const style: React.CSSProperties = {};
+  const style: ThemeStyle = {};
   const dataAttributes: Record<string, string> = {};
 
   if (!theme || typeof theme !== "object") {
@@ -44,7 +47,7 @@ export function buildThemeStyleAndData(theme: ThemeCustomization | null | undefi
 
   if (t.cardRadius !== undefined && t.cardRadius !== "") {
     const v = radiusValue(t.cardRadius as string);
-    if (v !== undefined) style["--academia-card-radius" as keyof React.CSSProperties] = v;
+    if (v !== undefined) style["--academia-card-radius"] = v;
   }
   if (t.cardShadow !== undefined && t.cardShadow !== "") {
     dataAttributes["data-card-shadow"] = String(t.cardShadow);
@@ -55,7 +58,7 @@ export function buildThemeStyleAndData(theme: ThemeCustomization | null | undefi
     t.buttonRadius as string | undefined
   );
   if (buttonRad !== undefined) {
-    style["--academia-button-radius" as keyof React.CSSProperties] = buttonRad;
+    style["--academia-button-radius"] = buttonRad;
   }
   if (t.buttonStyle !== undefined && t.buttonStyle !== "") {
     dataAttributes["data-button-style"] = String(t.buttonStyle);
@@ -68,17 +71,17 @@ export function buildThemeStyleAndData(theme: ThemeCustomization | null | undefi
     dataAttributes["data-navbar-height"] = String(t.navbarHeight);
   }
   if (t.navbarBackgroundLight !== undefined && String(t.navbarBackgroundLight).trim() !== "") {
-    style["--academia-navbar-bg-light" as keyof React.CSSProperties] = String(t.navbarBackgroundLight);
+    style["--academia-navbar-bg-light"] = String(t.navbarBackgroundLight);
   }
   if (t.navbarBackgroundDark !== undefined && String(t.navbarBackgroundDark).trim() !== "") {
-    style["--academia-navbar-bg-dark" as keyof React.CSSProperties] = String(t.navbarBackgroundDark);
+    style["--academia-navbar-bg-dark"] = String(t.navbarBackgroundDark);
   }
 
   if (t.pageBackgroundLight !== undefined && String(t.pageBackgroundLight).trim() !== "") {
-    style["--academia-page-bg-light" as keyof React.CSSProperties] = String(t.pageBackgroundLight);
+    style["--academia-page-bg-light"] = String(t.pageBackgroundLight);
   }
   if (t.pageBackgroundDark !== undefined && String(t.pageBackgroundDark).trim() !== "") {
-    style["--academia-page-bg-dark" as keyof React.CSSProperties] = String(t.pageBackgroundDark);
+    style["--academia-page-bg-dark"] = String(t.pageBackgroundDark);
   }
 
   if (t.contentMaxWidth !== undefined && t.contentMaxWidth !== "") {
@@ -86,32 +89,32 @@ export function buildThemeStyleAndData(theme: ThemeCustomization | null | undefi
   }
 
   if (t.footerBackgroundLight !== undefined && String(t.footerBackgroundLight).trim() !== "") {
-    style["--academia-footer-bg-light" as keyof React.CSSProperties] = String(t.footerBackgroundLight);
+    style["--academia-footer-bg-light"] = String(t.footerBackgroundLight);
   }
   if (t.footerBackgroundDark !== undefined && String(t.footerBackgroundDark).trim() !== "") {
-    style["--academia-footer-bg-dark" as keyof React.CSSProperties] = String(t.footerBackgroundDark);
+    style["--academia-footer-bg-dark"] = String(t.footerBackgroundDark);
   }
 
   if (t.inputRadius !== undefined && t.inputRadius !== "") {
     const v = radiusValue(t.inputRadius as string) ?? (t.inputRadius === "pill" ? "9999px" : undefined);
-    if (v !== undefined) style["--academia-input-radius" as keyof React.CSSProperties] = v;
+    if (v !== undefined) style["--academia-input-radius"] = v;
   }
 
   if (t.imageRadius !== undefined && t.imageRadius !== "") {
     const v = radiusValue(t.imageRadius as string) ?? (t.imageRadius === "full" ? "9999px" : undefined);
-    if (v !== undefined) style["--academia-image-radius" as keyof React.CSSProperties] = v;
+    if (v !== undefined) style["--academia-image-radius"] = v;
   }
 
   if (t.modalRadius !== undefined && t.modalRadius !== "") {
     const v = radiusValue(t.modalRadius as string);
-    if (v !== undefined) style["--academia-modal-radius" as keyof React.CSSProperties] = v;
+    if (v !== undefined) style["--academia-modal-radius"] = v;
   }
 
   if (t.sidebarRadius !== undefined && String(t.sidebarRadius).trim() !== "") {
-    style["--academia-sidebar-radius" as keyof React.CSSProperties] = String(t.sidebarRadius);
+    style["--academia-sidebar-radius"] = String(t.sidebarRadius);
   }
   if (t.sidebarItemRadius !== undefined && String(t.sidebarItemRadius).trim() !== "") {
-    style["--academia-sidebar-item-radius" as keyof React.CSSProperties] = String(t.sidebarItemRadius);
+    style["--academia-sidebar-item-radius"] = String(t.sidebarItemRadius);
   }
 
   return { style, dataAttributes };

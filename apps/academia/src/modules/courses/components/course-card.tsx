@@ -7,7 +7,7 @@ import { Rating } from "@smastrom/react-rating";
 import { BookOpen, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { InitialAvatar } from "@/components/initial-avatar";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useTenantCurrency } from "@/hooks/use-tenant";
 
 interface CourseCardProps {
@@ -19,7 +19,6 @@ export default function CourseCard({
   course,
   isOwned = false,
 }: CourseCardProps) {
-  const locale = useLocale();
   const t = useTranslations("courses");
   const { formatPrice } = useTenantCurrency();
   const {

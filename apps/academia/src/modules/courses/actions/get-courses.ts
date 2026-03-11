@@ -33,9 +33,6 @@ export const getAllCourses = withTenant({
         },
       });
 
-      const websites = await db.website.findMany();
-
-
       console.log(courses)
 
      

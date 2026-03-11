@@ -24,7 +24,6 @@ interface CourseNavigatorProps {
 
 export const CourseNavigator: React.FC<CourseNavigatorProps> = ({
   chapters,
-  courseId,
   className = "",
   onModuleSelect,
 }) => {

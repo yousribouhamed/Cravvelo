@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { Star, Plus } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
@@ -217,13 +218,16 @@ const Ratings: React.FC<RatingsProps> = ({
   const Avatar: React.FC<AvatarProps> = ({ src, alt, fallback }) => (
     <div className="w-10 h-10 rounded-full overflow-hidden bg-muted flex-shrink-0">
       {src ? (
-        <img
+        <Image
           src={src}
           alt={alt}
+          width={40}
+          height={40}
           className="w-full h-full object-cover"
           onError={(e) => {
             (e.target as HTMLImageElement).style.display = "none";
           }}
+          unoptimized
         />
       ) : (
         <div
@@ -303,7 +307,7 @@ const Ratings: React.FC<RatingsProps> = ({
                 )}
                 {comments.slice(0, 3).map((comment, index) => (
                   comment.studentImage ? (
-                    <img
+                    <Image
                       key={index}
                       width={32}
                       height={32}
@@ -313,6 +317,7 @@ const Ratings: React.FC<RatingsProps> = ({
                       onError={(e) => {
                         (e.target as HTMLImageElement).style.display = "none";
                       }}
+                      unoptimized
                     />
                   ) : (
                     <div

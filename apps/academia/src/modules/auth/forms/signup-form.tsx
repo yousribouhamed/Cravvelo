@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import { Eye, EyeOff, Mail, Lock, User, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import BrandButton from "@/components/brand-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
