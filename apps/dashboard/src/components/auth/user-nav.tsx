@@ -9,6 +9,8 @@ import {
   ArrowUpLeft,
   ArrowUpRight,
   CreditCard,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@ui/components/ui/avatar";
 import { Button, buttonVariants } from "@ui/components/ui/button";
@@ -21,12 +23,14 @@ import {
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
 import { Progress } from "@ui/components/ui/progress";
+import { Switch } from "@ui/components/ui/switch";
 import Image from "next/image";
 import Link from "next/link";
 import LogoutButton from "./logout-button";
 import { UserData } from "@/src/types";
 import { useTranslations, useLocale } from "next-intl";
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
+import { useTheme } from "next-themes";
 import { cn } from "@ui/lib/utils";
 
 interface UserNavProps {
@@ -52,8 +56,17 @@ const getVerificationProgress = (steps: number | undefined): number => {
 
 export default function UserNav({ user }: UserNavProps) {
   const t = useTranslations("userNav");
+  const tTheme = useTranslations("settings.theme");
   const locale = useLocale();
   const isRTL = locale === "ar";
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [themeMounted, setThemeMounted] = useState(false);
+
+  useEffect(() => {
+    setThemeMounted(true);
+  }, []);
+
+  const isDark = themeMounted && resolvedTheme === "dark";
 
   const VerificationDirectionIcon = isRTL ? ArrowLeft : ArrowRight;
   const ExternalLinkDirectionIcon = isRTL ? ArrowUpLeft : ArrowUpRight;
@@ -280,6 +293,43 @@ export default function UserNav({ user }: UserNavProps) {
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
+
+        <DropdownMenuSeparator className="bg-border" />
+
+        {/* Theme switcher - prevent dropdown close when toggling */}
+        <div
+          role="presentation"
+          className={cn(
+            "flex items-center justify-between gap-2 px-3 py-2.5 text-sm",
+            isRTL ? "flex-row-reverse" : "flex-row"
+          )}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div
+            className={cn(
+              "flex items-center gap-2 min-w-0 flex-1",
+              isRTL ? "flex-row-reverse" : "flex-row"
+            )}
+          >
+            {isDark ? (
+              <Moon className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+            ) : (
+              <Sun className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+            )}
+            <span className="font-medium text-foreground">
+              {tTheme("label")}
+            </span>
+          </div>
+          {themeMounted && (
+            <div dir="ltr">
+              <Switch
+                checked={isDark}
+                onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+                aria-label={tTheme("description")}
+              />
+            </div>
+          )}
+        </div>
 
         <DropdownMenuSeparator className="bg-border" />
 

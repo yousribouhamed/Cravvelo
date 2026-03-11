@@ -27,6 +27,7 @@ import { VideoPlayer } from "@/src/components/models/video-player";
 import { maketoast } from "@/src/components/toasts";
 import { trpc } from "@/src/app/_trpc/client";
 import axios from "axios";
+import { UpgradePlanModal } from "@/src/components/models/upgrade-plan-modal";
 
 interface AddVideoFormProps {
   chapterID: string;
@@ -36,6 +37,7 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
   const t = useTranslations("courses.addVideoForm");
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
+  const [upgradePlanModalOpen, setUpgradePlanModalOpen] = React.useState(false);
   const [selectedVideo, setSelectedVideo] = React.useState<File | null>(null);
   const [videoDuration, setVideoDuration] = React.useState<number>(0);
   const [videoId, setVideoId] = React.useState<string>("");
@@ -49,6 +51,7 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
     reset: resetProgress,
   } = useUploadProgress();
 
+  const checkVideoUploadAllowed = trpc.checkVideoUploadAllowed.useMutation();
   const createModuleMutation = trpc.createModuleWithVideo.useMutation();
 
   const addVideoSchema = z.object({
@@ -209,6 +212,21 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
     try {
       clearError();
       resetProgress();
+
+      // Check plan storage limit before uploading
+      try {
+        await checkVideoUploadAllowed.mutateAsync({
+          fileSize: selectedVideo.size,
+        });
+      } catch (checkErr: unknown) {
+        const err = checkErr as { data?: { code?: string } };
+        if (err?.data?.code === "FORBIDDEN") {
+          setUpgradePlanModalOpen(true);
+          return;
+        }
+        throw checkErr;
+      }
+
       setUploadStatus("uploading");
 
       console.log("Starting direct video upload...");
@@ -222,7 +240,7 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
       console.log("Video uploaded successfully, creating module...");
       updateProgress(95);
 
-      // Create module in database
+      // Create module in database and record storage usage
       await createModuleMutation.mutateAsync({
         chapterID: chapterID,
         content: JSON.stringify(values.content || {}),
@@ -230,6 +248,7 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
         videoId: uploadedVideoId,
         title: values.title,
         duration: videoDuration,
+        fileSizeInBytes: selectedVideo.size,
       });
 
       updateProgress(100);
@@ -273,6 +292,10 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
 
   return (
     <>
+      <UpgradePlanModal
+        open={upgradePlanModalOpen}
+        onOpenChange={setUpgradePlanModalOpen}
+      />
       <VideoPlayer isOpen={open} setIsOpen={setOpen} videoId={videoId} />
 
       <div className="w-full grid grid-cols-3 gap-x-8">

@@ -218,18 +218,14 @@ export const course = {
     .input(
       z.object({
         courseId: z.string(),
-        courseResume: z.string(),
         courseDescription: z.any(),
         courseUrl: z.string(),
         seoDescription: z.string(),
         seoTitle: z.string(),
         thumnailUrl: z.string(),
         title: z.string(),
-        youtubeUrl: z.string().optional(),
         level: z.string(),
-        preview_video: z.string().optional(),
-        courseWhatYouWillLearn: z.string().optional(),
-        courseRequirements: z.string().optional(),
+        preview_video: z.string().optional().nullable(),
         sound: z.string().optional(),
       })
     )
@@ -241,17 +237,17 @@ export const course = {
           },
           data: {
             courseDescription: JSON.stringify(input.courseDescription),
-            courseResume: input?.courseResume,
+            courseResume: null,
             courseUrl: input?.courseUrl,
             seoDescription: input?.seoDescription,
             seoTitle: input?.seoTitle,
             thumbnailUrl: input?.thumnailUrl,
             title: input?.title,
-            youtubeUrl: input?.youtubeUrl ?? null,
+            youtubeUrl: null,
             level: input?.level,
             preview_video: input?.preview_video ?? null,
-            courseWhatYouWillLearn: input?.courseWhatYouWillLearn ?? null,
-            courseRequirements: input?.courseRequirements ?? null,
+            courseWhatYouWillLearn: null,
+            courseRequirements: null,
             sound: input.sound ?? null,
           },
         })
@@ -276,14 +272,16 @@ export const course = {
       })
     )
     .mutation(async ({ input, ctx }) => {
+      // Normalize PUBLISHED -> PUBLISED to match DB convention used elsewhere
+      const status = input.status === "PUBLISHED" ? "PUBLISED" : input.status;
+
       const course = await ctx.prisma.course
         .update({
           where: {
             id: input.courseId,
           },
           data: {
-            status: input.status,
-            
+            status,
           },
         })
         .catch((err) => {

@@ -1,7 +1,7 @@
 import { getCourseById } from "@/modules/courses/actions/get-courses";
 import CourseBuyCard from "@/modules/courses/components/course-buycard";
+import { CoursePreviewVideo } from "@/modules/courses/components/course-preview-video";
 import Ratings from "@/modules/courses/components/rating";
-import EmbedYouTubeVideo from "@/modules/courses/components/yotube-player";
 import { CravveloEditor } from "@cravvelo/editor";
 import { PaymentSheet } from "@/modules/payments/components/payment-sheet";
 import { checkCourseOwnership } from "@/modules/courses/actions/check-ownership";
@@ -42,7 +42,10 @@ export default async function Page({ params }: PageProps) {
               {course?.title}
             </h1>
             <div className="my-8 flex flex-col gap-y-4">
-              <EmbedYouTubeVideo url={course.youtubeUrl} />
+              <CoursePreviewVideo
+                previewVideo={course.preview_video}
+                youtubeUrl={course.youtubeUrl}
+              />
 
               {/* Course Description Section */}
               <div className="bg-card text-card-foreground rounded-lg border border-border">

@@ -5,15 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { Button } from "@ui/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@ui/components/ui/form";
-import { Input } from "@ui/components/ui/input";
+import { Form, FormLabel } from "@ui/components/ui/form";
 import { Card, CardContent } from "@ui/components/ui/card";
 import * as React from "react";
 import { trpc } from "@/src/app/_trpc/client";
@@ -22,27 +14,66 @@ import { usePathname, useRouter } from "next/navigation";
 import { getValueFromUrl } from "@/src/lib/utils";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { Chapter, Course } from "database";
-// import CourseContent from "@/src/app/(academy)/_components/course-component/course-content";
+import Image from "next/image";
+import { useCurrency } from "@/src/hooks/use-currency";
+import { CoursePreviewCard } from "./course-preview-card";
+
+export type CourseWithPricingForPublish = Course & {
+  CoursePricingPlans?: Array<{
+    isDefault: boolean;
+    PricingPlan: {
+      price: number | null;
+      compareAtPrice: number | null;
+      pricingType: string;
+      accessDuration: string | null;
+      accessDurationDays: number | null;
+      currency?: string;
+    };
+  }>;
+  _count?: { Sale: number };
+};
 
 interface PublishCourseFormProps {
-  course: Course;
+  course: CourseWithPricingForPublish;
   chapters: Chapter[];
+}
+
+function getLevelLabel(level: string | null, tLevel: (key: string) => string): string {
+  if (!level) return "—";
+  switch (level) {
+    case "BEGINNER":
+      return tLevel("beginner");
+    case "INTERMEDIATE":
+      return tLevel("intermediate");
+    case "ADVANCED":
+      return tLevel("advanced");
+    default:
+      return level;
+  }
 }
 
 function PublishCourseForm({ course, chapters }: PublishCourseFormProps) {
   const t = useTranslations("courses.publishCourse");
+  const tLevel = useTranslations("courses.courseSettings.levels");
+  const { formatPrice } = useCurrency();
   const router = useRouter();
   const path = usePathname();
+
+  const defaultPlan = course.CoursePricingPlans?.find((p) => p.isDefault)?.PricingPlan;
+  const isFree = defaultPlan?.pricingType === "FREE" || (defaultPlan?.price ?? 0) === 0;
+  const accessLabel =
+    defaultPlan?.pricingType === "ONE_TIME" && defaultPlan?.accessDuration === "LIMITED" && defaultPlan?.accessDurationDays
+      ? t("limitedDays", { days: defaultPlan.accessDurationDays })
+      : defaultPlan?.pricingType === "ONE_TIME"
+        ? t("unlimited")
+        : null;
   const courseID = getValueFromUrl(path, 2);
 
   const [selectedItem, setSelectedItem] = React.useState<
-    "DRAFT" | "PUBLISED" | "EARLY_ACCESS" | "PRIVATE"
-  >("PUBLISED");
+    "DRAFT" | "PUBLISHED" | "PUBLISED" | "EARLY_ACCESS" | "PRIVATE"
+  >("PUBLISHED");
 
-  const addTextSchema = z.object({
-    title: z.string({ required_error: t("validation.requiredField") }).min(2).max(50),
-    content: z.any(),
-  });
+  const addTextSchema = z.object({});
 
   const selectionButtoms = [
     {
@@ -58,11 +89,7 @@ function PublishCourseForm({ course, chapters }: PublishCourseFormProps) {
   ];
 
   const form = useForm<z.infer<typeof addTextSchema>>({
-    mode: "onChange",
     resolver: zodResolver(addTextSchema),
-    defaultValues: {
-      title: course.title ?? "",
-    },
   });
 
   const mutation = trpc.course.launchCourse.useMutation({
@@ -75,7 +102,7 @@ function PublishCourseForm({ course, chapters }: PublishCourseFormProps) {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof addTextSchema>) {
+  async function onSubmit() {
     await mutation.mutateAsync({
       courseId: courseID,
       status: selectedItem,
@@ -98,47 +125,45 @@ function PublishCourseForm({ course, chapters }: PublishCourseFormProps) {
               Finalize and publish your course
             </FormLabel>
 
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    {t("courseTitle")} <span className="text-red-600 text-xl">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input placeholder={t("courseTitlePlaceholder")} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Save Actions */}
-            <Card>
-              <CardContent className="w-full h-fit flex justify-end items-center p-6 gap-x-4">
-                <Button
-                  onClick={() => router.back()}
-                  className="rounded-xl"
-                  variant="secondary"
-                  type="button"
-                >
-                  {t("cancelAndGoBack")}
-                </Button>
-                <Button
-                  disabled={mutation.isLoading}
-                  type="submit"
-                  className="flex items-center gap-x-2 rounded-xl"
-                >
-                  {mutation.isLoading ? <LoadingSpinner /> : null}
-                  {t("publishCourse")}
-                </Button>
+            {/* Course summary */}
+            <Card className="bg-card border-border">
+              <CardContent className="p-4 space-y-3">
+                <FormLabel className="text-sm font-semibold text-foreground">
+                  {t("courseSummary")}
+                </FormLabel>
+                <div className="flex gap-4 flex-wrap items-start">
+                  {course.thumbnailUrl ? (
+                    <div className="relative w-24 h-16 rounded-md overflow-hidden border border-border shrink-0">
+                      <Image
+                        src={course.thumbnailUrl}
+                        alt={course.title ?? ""}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-24 h-16 rounded-md bg-muted border border-border shrink-0" />
+                  )}
+                  <div className="flex flex-col gap-1 text-sm text-muted-foreground">
+                    <span><strong className="text-foreground">{t("level")}:</strong> {getLevelLabel(course.level, tLevel)}</span>
+                    <span><strong className="text-foreground">{t("chaptersCount")}:</strong> {chapters.length}</span>
+                    <span>
+                      <strong className="text-foreground">{t("pricing")}:</strong>{" "}
+                      {isFree ? t("free") : `${formatPrice(defaultPlan?.price ?? 0)} ${defaultPlan?.currency ?? "DZD"}`}
+                    </span>
+                    {accessLabel && (
+                      <span><strong className="text-foreground">{t("accessDuration")}:</strong> {accessLabel}</span>
+                    )}
+                  </div>
+                </div>
               </CardContent>
             </Card>
+
+            <CoursePreviewCard course={course} />
           </form>
         </Form>
       </div>
-      <div className="col-span-1 w-full h-full hidden md:block">
+      <div className="col-span-1 w-full h-full hidden md:block space-y-4">
         <Card>
           <CardContent className="w-full h-fit flex flex-col p-6 space-y-4">
             <div className="space-y-2">
@@ -146,7 +171,7 @@ function PublishCourseForm({ course, chapters }: PublishCourseFormProps) {
                 <Button
                   key={item.value}
                   type="button"
-                  onClick={() => setSelectedItem(item.value as "DRAFT" | "PUBLISED")}
+                  onClick={() => setSelectedItem(item.value as "DRAFT" | "PUBLISHED")}
                   variant="secondary"
                   size="lg"
                   className={`bg-card flex items-start justify-start flex-col gap-y-1 text-lg border border-border text-foreground min-h-[80px] w-full ${

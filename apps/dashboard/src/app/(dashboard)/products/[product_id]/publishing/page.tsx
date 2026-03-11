@@ -7,6 +7,8 @@ import { prisma } from "database/src";
 import { notFound } from "next/navigation";
 import { getServerTranslations } from "@/src/lib/i18n/utils";
 
+export const fetchCache = "force-no-store";
+
 const getAllNotifications = async ({ accountId }: { accountId: string }) => {
   const notifications = await prisma.notification.findMany({
     where: {
@@ -21,6 +23,13 @@ const getData = async ({ id }: { id: string }) => {
     const data = await prisma.product.findFirst({
       where: {
         id,
+      },
+      include: {
+        ProductPricingPlans: {
+          include: { PricingPlan: true },
+          orderBy: { isDefault: "desc" },
+        },
+        _count: { select: { Sale: true } },
       },
     });
 
@@ -59,7 +68,7 @@ export default async function Page({ params }: PageProps) {
           title={t("productPublishing")}
         />
         <ProductsHeader />
-        <div className="w-full pt-8 min-h-[100px] ">
+        <div className="w-full pt-2 min-h-[100px]">
           <ProductPublishingForm product={product} />
         </div>
       </main>

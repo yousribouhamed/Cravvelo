@@ -68,8 +68,6 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
     priceMonthly: 13570,
     priceYearly: 135700,
     currency: "DZD",
-    highlight: true,
-    highlightLabelKey: "mostPopular",
     features: [
       { text: "1 workspace", i18nKey: "subscription.features.workspace1" },
       { text: "Up to 5,000 members", i18nKey: "subscription.features.members5000" },

@@ -25,7 +25,7 @@ export const NewVideoUploader = ({
   initialVideoId?: string;
   setVideoSize?: React.Dispatch<React.SetStateAction<number>>;
 }) => {
-  const t = useTranslations("courses.chapters.videoUploader");
+  const t = useTranslations("courses.videoUploader");
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
   const [progress, setProgress] = React.useState<number>(0);
 
@@ -139,7 +139,7 @@ export const NewVideoUploader = ({
         <div
           {...getRootProps()}
           className={cn(
-            "group relative  my-8 grid h-[250px]  w-full cursor-pointer  place-items-center rounded-lg border-2 border-dashed border-muted-foreground/25 px-5 py-2.5 text-center transition bg-white hover:bg-muted/25",
+            "group relative my-8 grid h-[250px] w-full cursor-pointer place-items-center rounded-lg border-2 border-dashed border-muted-foreground/25 px-5 py-2.5 text-center transition bg-card hover:bg-muted/25",
             "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all duration-300",
             isDragActive && "border-muted-foreground/50",
             isFocused && "border-primary",
@@ -191,7 +191,7 @@ export const NewVideoUploader = ({
                       <p className="text-xl font-bold ">جاري رفع الفيديو...</p>
                       <Progress
                         value={progress}
-                        className="h-1 w-full bg-[#EFEFEF]"
+                        className="h-1 w-full bg-muted"
                       />
                       {progress === 95 && (
                         <p> يمكن ان يستغرق رفع الفيديو بعض الوقت </p>
@@ -204,13 +204,13 @@ export const NewVideoUploader = ({
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="absolute top-0 right-0 text-black rounded-[50%] bg-white shadow border  cursor-pointer "
+                        className="absolute top-0 right-0 rounded-[50%] bg-muted hover:bg-muted/80 text-foreground border border-border shadow cursor-pointer"
                         onClick={(e: React.MouseEvent) => {
                           e.stopPropagation();
                           setStatus("WAITING");
                         }}
                       >
-                        <Trash2 className="w-4 h-4 text-black" />
+                        <Trash2 className="w-4 h-4" />
                       </Button>
                       <Image
                         width={100}

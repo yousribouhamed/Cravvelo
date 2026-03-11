@@ -375,7 +375,9 @@
     "usage": {
       "members": "الأعضاء",
       "storage": "التخزين",
-      "upgradePlan": "ترقية الخطة"
+      "upgradePlan": "ترقية الخطة",
+      "storageLimitModalTitle": "تم الوصول إلى حد التخزين",
+      "storageLimitModalDescription": "الملف يتجاوز حد التخزين في خطتك. قم بترقية خطتك لرفع المزيد من الملفات والفيديوهات."
     }
   },
   "createAcademia": {
@@ -1317,6 +1319,7 @@
         "courseTitle": "عنوان الدورة",
         "courseTitlePlaceholder": "ادخل عنوان الدورة هنا",
         "thumbnail": "الصورة البارزة لدورة",
+        "previewVideo": "الفيديو الدعائي",
         "youtubeUrl": "أو يمكنك إضافة عنوان URL لفيديو يوتيوب",
         "youtubeUrlPlaceholder": "https://youtu.be/",
         "courseResume": "ملخص الدورة",
@@ -1387,6 +1390,19 @@
     "publishCourse": {
       "courseTitle": "عنوان الدورة",
       "courseTitlePlaceholder": "عنوان الدورة",
+      "courseSummary": "ملخص الدورة",
+      "level": "المستوى",
+      "chaptersCount": "الفصول",
+      "pricing": "السعر",
+      "accessDuration": "الوصول",
+      "free": "مجاني",
+      "limitedDays": "محدود ({days} يوم)",
+      "unlimited": "غير محدود",
+      "previewOnAcademy": "معاينة على الأكاديمية",
+      "trainerLabel": "المدرب",
+      "studentCount": "طلاب",
+      "paid": "مدفوع",
+      "discount": "خصم",
       "selectionButtons": {
         "draft": "مسودة",
         "draftDescription": "سيتم عرضها لفريقك فقط",
@@ -1487,6 +1503,17 @@
     "publishingForm": {
       "productTitle": "عنوان المنتج",
       "productTitlePlaceholder": "عنوان المنتج",
+      "productSummary": "ملخص المنتج",
+      "pricing": "السعر",
+      "sales": "المبيعات",
+      "free": "مجاني",
+      "paid": "مدفوع",
+      "discount": "خصم",
+      "previewOnAcademy": "معاينة على الأكاديمية",
+      "salesCount": "مبيعات",
+      "publishProductHeading": "نشر المنتج",
+      "publishProductDescription": "أكمل ونشر منتجك",
+      "productPublished": "تم نشر المنتج بنجاح",
       "draft": "مسودة",
       "draftDescription": "سيتم عرضها لك فقط",
       "availableToAll": "متاح للجميع",

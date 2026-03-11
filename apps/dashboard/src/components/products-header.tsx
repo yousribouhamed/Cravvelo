@@ -27,10 +27,10 @@ function ProductsHeader({ className, ...props }: ExamplesNavProps) {
   ];
 
   return (
-    <div className="relative w-full my-4 h-[60px]">
+    <div className="relative w-full my-2 h-[60px]">
       <div
         className={cn(
-          "mb-4 w-full flex items-center justify-start rounded-lg h-full border",
+          "mb-2 w-full flex items-center justify-start rounded-lg h-full border",
           "bg-card border-border"
         )}
       >

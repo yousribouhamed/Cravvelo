@@ -375,7 +375,9 @@
     "usage": {
       "members": "Members",
       "storage": "Storage",
-      "upgradePlan": "Upgrade plan"
+      "upgradePlan": "Upgrade plan",
+      "storageLimitModalTitle": "Storage limit reached",
+      "storageLimitModalDescription": "Your upload exceeds your plan's storage limit. Upgrade your plan to upload more files and videos."
     }
   },
   "createAcademia": {
@@ -1317,6 +1319,7 @@
         "courseTitle": "Course Title",
         "courseTitlePlaceholder": "Enter course title here",
         "thumbnail": "Course Thumbnail",
+        "previewVideo": "Preview video",
         "youtubeUrl": "Or you can add a YouTube video URL",
         "youtubeUrlPlaceholder": "https://youtu.be/",
         "courseResume": "Course Summary",
@@ -1387,6 +1390,19 @@
     "publishCourse": {
       "courseTitle": "Course Title",
       "courseTitlePlaceholder": "Course title",
+      "courseSummary": "Course summary",
+      "level": "Level",
+      "chaptersCount": "Chapters",
+      "pricing": "Pricing",
+      "accessDuration": "Access",
+      "free": "Free",
+      "limitedDays": "Limited ({days} days)",
+      "unlimited": "Unlimited",
+      "previewOnAcademy": "Preview on academy",
+      "trainerLabel": "Trainer",
+      "studentCount": "students",
+      "paid": "Paid",
+      "discount": "Discount",
       "selectionButtons": {
         "draft": "Draft",
         "draftDescription": "Will be shown to your team only",
@@ -1487,6 +1503,17 @@
     "publishingForm": {
       "productTitle": "Product Title",
       "productTitlePlaceholder": "Product title",
+      "productSummary": "Product summary",
+      "pricing": "Pricing",
+      "sales": "Sales",
+      "free": "Free",
+      "paid": "Paid",
+      "discount": "Discount",
+      "previewOnAcademy": "Preview on academy",
+      "salesCount": "sales",
+      "publishProductHeading": "Publish product",
+      "publishProductDescription": "Finalize and publish your product",
+      "productPublished": "Product published successfully",
       "draft": "Draft",
       "draftDescription": "Will be shown to you only",
       "availableToAll": "Available to All",

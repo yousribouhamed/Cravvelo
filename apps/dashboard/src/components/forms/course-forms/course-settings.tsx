@@ -33,34 +33,19 @@ import {
   SelectValue,
 } from "@ui/components/ui/select";
 import { ImageUploaderS3 } from "../../uploaders/image-uploader";
-
-const youtubeUrlRegex =
-  /^(https:\/\/www\.youtube\.com\/watch\?v=|https:\/\/youtu\.be\/)[\w-]+(&\S*)?(\?\S*)?$/;
+import { NewVideoUploader } from "../../uploaders/NewVideoUploader";
 
 interface ComponentProps {
   course: Course;
 }
 
 const getFormSchema = (t: (key: string) => string) => z.object({
-  courseResume: z.string({ required_error: t("validation.requiredField") }),
   courseDescription: z.any(),
   sound: z.string(),
   seoDescription: z.string({ required_error: t("validation.requiredField") }),
   seoTitle: z.string({ required_error: t("validation.requiredField") }),
   thumnailUrl: z.string({ required_error: t("validation.requiredField") }),
   title: z.string({ required_error: t("validation.requiredField") }),
-  youtubeUrl: z
-    .string()
-    .optional()
-    .refine(
-      (val) => {
-        if (!val) return true;
-        return youtubeUrlRegex.test(val);
-      },
-      { message: t("validation.invalidYoutubeUrl") }
-    ),
-  courseRequirements: z.string({ required_error: t("validation.requiredField") }),
-  courseWhatYouWillLearn: z.string({ required_error: t("validation.requiredField") }),
   level: z.string({ required_error: t("validation.requiredField") }),
   preview_video: z.string().optional(),
 });
@@ -109,14 +94,10 @@ export function CourseSettingsForm({ course }: ComponentProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      courseResume: course.courseResume ?? "",
       title: course.title ?? "",
       thumnailUrl: course.thumbnailUrl ?? "",
-      youtubeUrl: course.youtubeUrl ?? "",
       seoDescription: course.seoDescription ?? "",
       seoTitle: course.seoTitle ?? "",
-      courseRequirements: course.courseRequirements ?? "",
-      courseWhatYouWillLearn: course.courseWhatYouWillLearn ?? "",
       level: course.level ?? "",
       sound: course.sound ?? "",
       courseDescription: parseJSONSafely(
@@ -141,18 +122,14 @@ export function CourseSettingsForm({ course }: ComponentProps) {
     mutation.mutate({
       courseDescription: values.courseDescription,
       courseId: course.id,
-      courseResume: values.courseResume,
       courseUrl: "",
-      courseRequirements: values.courseRequirements,
-      courseWhatYouWillLearn: values.courseWhatYouWillLearn,
       seoDescription: values?.seoDescription,
       seoTitle: values.seoTitle,
       thumnailUrl: values.thumnailUrl,
       title: values.title,
-      youtubeUrl: values.youtubeUrl,
       level: values.level,
       sound: values.sound,
-      preview_video: values.preview_video,
+      preview_video: values.preview_video || null,
     });
   }
 
@@ -161,7 +138,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
       <VideoPlayer
         isOpen={open}
         setIsOpen={setOpen}
-        videoId={form?.watch("youtubeUrl") ?? ""}
+        videoId={form?.watch("preview_video") ?? ""}
       />
 
       <div className="w-full  h-fit grid grid-cols-2 md:grid-cols-3 mt-4 gap-x-8 ">
@@ -186,7 +163,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                   <FormItem>
                     <FormLabel>
                       {t("fields.courseTitle")}{" "}
-                      <span className="text-red-600 text-xl">*</span>
+                      <span className="text-destructive text-xl">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input placeholder={t("fields.courseTitlePlaceholder")} {...field} />
@@ -197,11 +174,11 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 )}
               />
 
-              <div className="w-full h-0.5 bg-gray-500 " />
-              <FormLabel className="text-xl  block font-bold text-black">
+              <div className="w-full h-0.5 bg-border" />
+              <FormLabel className="text-xl block font-bold text-foreground">
                 {t("sections.courseDetails")}
               </FormLabel>
-              <FormLabel className="text-md block  text-gray-600">
+              <FormLabel className="text-md block text-muted-foreground">
                 {t("sections.courseDetailsDescription")}
               </FormLabel>
 
@@ -212,7 +189,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                   <FormItem className="w-full ">
                     <FormLabel>
                       {t("fields.thumbnail")}{" "}
-                      <span className="text-red-600 text-xl">*</span>
+                      <span className="text-destructive text-xl">*</span>
                     </FormLabel>
                     <FormControl>
                       <ImageUploaderS3
@@ -225,98 +202,18 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 )}
               />
 
-              {/* <FormField
+              <FormField
                 control={form.control}
                 name="preview_video"
                 render={({ field }) => (
                   <FormItem className="w-full ">
-                    <FormLabel>الفيديو الدعائي </FormLabel>
-
+                    <FormLabel>{t("fields.previewVideo")}</FormLabel>
                     <FormControl>
                       <NewVideoUploader
                         open={open}
                         setOpen={setOpen}
-                        onChange={field?.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
-
-              <FormField
-                control={form.control}
-                name="youtubeUrl"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      {t("fields.youtubeUrl")}
-                    </FormLabel>
-                    <FormControl>
-                      <Input placeholder={t("fields.youtubeUrlPlaceholder")} {...field} />
-                    </FormControl>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="courseResume"
-                render={({ field }) => (
-                  <FormItem className="w-full ">
-                    <FormLabel>
-                      {t("fields.courseResume")}{" "}
-                      <span className="text-red-600 text-xl">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea
-                        id="courseResume"
-                        rows={3}
-                        className="min-h-[100px]"
-                        placeholder={t("fields.courseResumePlaceholder")}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="courseWhatYouWillLearn"
-                render={({ field }) => (
-                  <FormItem className="w-full ">
-                    <FormLabel>{t("fields.whatYouWillLearn")}</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        id="what they will learn"
-                        rows={3}
-                        className="min-h-[100px]"
-                        placeholder={t("fields.courseResumePlaceholder")}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="courseRequirements"
-                render={({ field }) => (
-                  <FormItem className="w-full ">
-                    <FormLabel>{t("fields.courseRequirements")}</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        id="course requirements"
-                        rows={3}
-                        className="min-h-[100px]"
-                        placeholder={t("fields.courseResumePlaceholder")}
-                        {...field}
+                        onChange={field.onChange}
+                        initialVideoId={field.value || undefined}
                       />
                     </FormControl>
                     <FormMessage />
@@ -331,7 +228,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                   <FormItem className="w-full ">
                     <FormLabel>
                       {t("fields.fullDescription")}{" "}
-                      <span className="text-red-600 text-xl">*</span>
+                      <span className="text-destructive text-xl">*</span>
                     </FormLabel>
                     <FormControl>
                       <CravveloEditor
@@ -446,7 +343,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                           {t("seo.edit")}
                         </Button>
                       </div>
-                      <h1 className="text-indigo-600 text-xl font-bold text-start">
+                      <h1 className="text-indigo-600 dark:text-indigo-400 text-xl font-bold text-start">
                         {t("seo.yourCourseAtSearch")}
                       </h1>
                       <p className="text-muted-foreground text-md text-start">

@@ -2,6 +2,8 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { privateProcedure } from "@/src/trpc/trpc";
 import axios from "axios";
+import { getLimitsForPlanCode } from "@/src/constants/plan-limits";
+import type { SubscriptionPlanCode } from "@/src/constants/subscription-plans";
 
 async function getVideoInfo(
   libraryId: string,
@@ -55,7 +57,50 @@ async function waitForVideoProcessing(
   return 0; // Return 0 if we couldn't get the length
 }
 
+const STORAGE_LIMIT_MESSAGE =
+  "Storage limit reached. Please upgrade your plan to upload more files.";
+
 export const videoMutations = {
+  checkVideoUploadAllowed: privateProcedure
+    .input(z.object({ fileSize: z.number().min(0) }))
+    .mutation(async ({ input, ctx }) => {
+      if (!ctx.account?.id) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Account not found",
+        });
+      }
+      const account = await ctx.prisma.account.findUnique({
+        where: { id: ctx.account.id },
+        select: {
+          storageUsedBytes: true,
+          AccountSubscription: {
+            where: { status: "ACTIVE" },
+            orderBy: { updatedAt: "desc" },
+            take: 1,
+            select: { planCode: true },
+          },
+        },
+      });
+      if (!account) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Account not found",
+        });
+      }
+      const planCode = account.AccountSubscription?.[0]?.planCode as
+        | SubscriptionPlanCode
+        | undefined;
+      const limits = getLimitsForPlanCode(planCode ?? null);
+      if (account.storageUsedBytes + input.fileSize > limits.storageBytes) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: STORAGE_LIMIT_MESSAGE,
+        });
+      }
+      return { allowed: true };
+    }),
+
   // Simplified create module - assumes video is already uploaded directly
   createModuleWithVideo: privateProcedure
     .input(
@@ -66,6 +111,7 @@ export const videoMutations = {
         duration: z.number().min(0),
         fileType: z.enum(["VIDEO", "DOCUMENT", "QUIZ"]),
         videoId: z.string(),
+        fileSizeInBytes: z.number().min(0).optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -180,6 +226,19 @@ export const videoMutations = {
 
           return { chapter: updatedChapter, moduleId };
         });
+
+        if (
+          typeof input.fileSizeInBytes === "number" &&
+          input.fileSizeInBytes > 0 &&
+          ctx.account?.id
+        ) {
+          await ctx.prisma.account.update({
+            where: { id: ctx.account.id },
+            data: {
+              storageUsedBytes: { increment: input.fileSizeInBytes },
+            },
+          });
+        }
 
         return {
           success: true,

@@ -55,7 +55,6 @@ const prepareDataForCsv = (data: any[]) => {
     Certificate: course.certificate,
     "Compare At Price": course.compareAtPrice,
     "Course Description": course.courseDescription,
-    "Course Requirements": course.courseRequirements,
     "Course Resume": course.courseResume,
     "Course URL": course.courseUrl,
     "What You Will Learn": course.courseWhatYouWillLearn,

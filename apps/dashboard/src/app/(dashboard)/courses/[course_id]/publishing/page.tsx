@@ -48,8 +48,13 @@ export default async function Page({ params }: PageProps) {
   const [user, course, chapters] = await Promise.all([
     useHaveAccess(),
     prisma.course.findUnique({
-      where: {
-        id: course_id,
+      where: { id: course_id },
+      include: {
+        CoursePricingPlans: {
+          include: { PricingPlan: true },
+          orderBy: { isDefault: "desc" },
+        },
+        _count: { select: { Sale: true } },
       },
     }),
     getChapters({ courseId: course_id }),
