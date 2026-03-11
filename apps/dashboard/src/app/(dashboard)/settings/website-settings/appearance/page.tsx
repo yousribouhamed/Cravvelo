@@ -1,39 +1,45 @@
 import AddColorFrom from "@/src/modules/settings/components/forms/add-color-fomr";
 import { prisma } from "database/src";
-import AddLogoForm from "@/src/modules/settings/components/forms/add-logo-form";
-import AddFavIconForm from "@/src/modules/settings/components/forms/add-favicon-form";
 import AddSeoForm from "@/src/modules/settings/components/forms/add-seo-form";
 import WebsiteLayoutForm from "@/src/modules/settings/components/forms/layout-form";
-import UploadStampForm from "@/src/modules/settings/components/forms/upload-stamp-form";
+import ThemeCustomizationForm from "@/src/modules/settings/components/forms/theme-customization-form";
 import { getMyUserAction } from "@/src/actions/user.actions";
+import type { ThemeCustomization } from "database";
 
-const Page = async ({}) => {
+const Page = async () => {
   const user = await getMyUserAction();
 
-  const [website] = await Promise.all([
-    prisma.website.findFirst({
-      where: {
-        accountId: user.accountId,
-      },
-    }),
-  ]);
+  const website = await prisma.website.findFirst({
+    where: { accountId: user.accountId },
+  });
 
   return (
-    <div className="w-full h-fit grid grid-cols-1 lg:grid-cols-2   my-8 gap-4">
-      <AddLogoForm logoUrl={website?.logo} />
+    <div className="w-full h-fit my-8 space-y-4">
+      <div className="rounded-xl border bg-card p-4">
+        <h2 className="text-base font-semibold">Appearance studio</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Update branding, layout, and theme in one place. Changes here control how your academy looks for visitors.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <WebsiteLayoutForm
-        dCoursesHomeScreen={website?.dCoursesHomeScreen}
-        dDigitalProductsHomeScreen={website?.dDigitalProductsHomeScreen}
-        enableSalesBanner={website?.enableSalesBanner}
-        itemsAlignment={website?.itemsAlignment}
+        dCoursesHomeScreen={website?.dCoursesHomeScreen ?? true}
+        dDigitalProductsHomeScreen={website?.dDigitalProductsHomeScreen ?? false}
+        enableSalesBanner={website?.enableSalesBanner ?? false}
+        itemsAlignment={website?.itemsAlignment ?? false}
       />
-      <AddFavIconForm logoUrl={website?.favicon} />
-      <AddSeoForm description={website?.description} title={website?.name} />
+      <AddSeoForm description={website?.description ?? null} title={website?.name ?? null} />
       <AddColorFrom
-        darkPrimaryColor={website.primaryColorDark}
-        primaryColor={website?.primaryColor}
+        darkPrimaryColor={website?.primaryColorDark ?? null}
+        primaryColor={website?.primaryColor ?? null}
       />
-      <UploadStampForm stempUrl={website?.stamp} />
+      <div className="lg:col-span-2">
+        <ThemeCustomizationForm
+          initialTheme={(website?.themeCustomization as ThemeCustomization) ?? undefined}
+        />
+      </div>
+      </div>
     </div>
   );
 };

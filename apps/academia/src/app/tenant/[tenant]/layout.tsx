@@ -13,6 +13,7 @@ import type { Metadata } from "next";
 import Footer from "@/components/layout/footer";
 import { VisitTracker } from "@/components/visit-tracker";
 import { FacebookPixel } from "@/components/facebook-pixel";
+import { buildThemeStyleAndData } from "@/lib/theme-utils";
 interface TenantLayoutProps {
   children: ReactNode;
   params: Promise<{
@@ -68,14 +69,24 @@ export default async function TenantLayout({
     notFound();
   }
 
+  const theme = websiteData.themeCustomization as Record<string, unknown> | null | undefined;
+  const { style: themeStyle, dataAttributes: themeData } = buildThemeStyleAndData(theme as import("database").ThemeCustomization);
+  const hasPageBg =
+    theme &&
+    typeof theme === "object" &&
+    ((theme as Record<string, unknown>).pageBackgroundLight != null ||
+      (theme as Record<string, unknown>).pageBackgroundDark != null);
+
+  const layoutStyle = {
+    "--primary-color": websiteData.primaryColor || "#7C3AED",
+    ...themeStyle,
+  } as React.CSSProperties;
+
   return (
     <div
-      className="min-h-screen h-fit bg-neutral-50 dark:bg-[#0E0E10] text-neutral-900 dark:text-neutral-200"
-      style={
-        {
-          "--primary-color": websiteData.primaryColor || "#7C3AED",
-        } as React.CSSProperties
-      }
+      className={`min-h-screen h-fit text-neutral-900 dark:text-neutral-200 ${hasPageBg ? "academia-theme-page-bg" : "bg-neutral-50 dark:bg-[#0E0E10]"}`}
+      style={layoutStyle}
+      {...themeData}
     >
       <VisitTracker tenant={tenant} />
       <FacebookPixel pixelId={websiteData.facebookPixelId ?? null} />

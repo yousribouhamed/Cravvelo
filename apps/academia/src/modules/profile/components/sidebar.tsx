@@ -56,19 +56,15 @@ export function ProfileSidebarNavContent({
               key={link.url}
               href={link.url}
               onClick={onLinkClick}
-              className={`
-                group relative flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200
-                ${
-                  isActive
-                    ? "text-white"
-                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1A1A1D] hover:text-gray-900 dark:hover:text-white"
-                }
-              `}
-              style={
+              className={`group relative flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all duration-200 ${
                 isActive
-                  ? { backgroundColor: primaryColor }
-                  : undefined
-              }
+                  ? "text-white"
+                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1A1A1D] hover:text-gray-900 dark:hover:text-white"
+              }`}
+              style={{
+                borderRadius: "var(--academia-sidebar-item-radius, 0.75rem)",
+                ...(isActive ? { backgroundColor: primaryColor } : {}),
+              }}
             >
               <Icon
                 className={`w-5 h-5 transition-all duration-200 ${
@@ -109,7 +105,10 @@ interface SidebarProps {}
 
 export default function ProfileSidebar({}: SidebarProps) {
   return (
-    <div className="w-full bg-card text-card-foreground border border-gray-200/80 dark:border-[#1A1A1D] rounded-2xl p-6 shadow-sm">
+    <div
+      className="w-full bg-card text-card-foreground border border-gray-200/80 dark:border-[#1A1A1D] p-6 shadow-sm"
+      style={{ borderRadius: "var(--academia-sidebar-radius, 1rem)" }}
+    >
       <ProfileSidebarNavContent />
     </div>
   );

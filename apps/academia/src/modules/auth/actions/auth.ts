@@ -3,7 +3,6 @@
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { withTenant } from "@/_internals/with-tenant";
 import { signJWT } from "../lib/jwt";
 
@@ -99,5 +98,5 @@ export const loginUser = withTenant({
 export const logoutUser = async () => {
   const cookieStore = await cookies();
   cookieStore.delete("auth-token");
-  redirect("/login");
+  return { success: true };
 };

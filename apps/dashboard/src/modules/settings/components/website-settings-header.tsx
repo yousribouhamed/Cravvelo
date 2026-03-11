@@ -19,6 +19,10 @@ function WebsiteSettingsHeader({ className, ...props }: ExamplesNavProps) {
         href: `/settings/website-settings/appearance`,
       },
       {
+        name: t("assets"),
+        href: `/settings/website-settings/assets`,
+      },
+      {
         name: t("domain"),
         href: `/settings/website-settings`,
       },

@@ -46,7 +46,7 @@ export function PaymentProvider({
   );
 
   // Payment method state
-  const [paymentMethod, setPaymentMethod] = useState("CHARGILY");
+  const [paymentMethod, setPaymentMethod] = useState("chargily");
 
   // Loading states
   const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
@@ -90,6 +90,10 @@ export function PaymentProvider({
 
   const setFormSubmitting = useCallback((submitting: boolean) => {
     setIsFormSubmitting(submitting);
+  }, []);
+
+  const setNormalizedPaymentMethod = useCallback((method: string) => {
+    setPaymentMethod(method.toLowerCase());
   }, []);
 
   // Helper methods
@@ -154,7 +158,7 @@ export function PaymentProvider({
 
     // Payment method state
     paymentMethod,
-    setPaymentMethod,
+    setPaymentMethod: setNormalizedPaymentMethod,
 
     // Loading states
     isCheckoutLoading,

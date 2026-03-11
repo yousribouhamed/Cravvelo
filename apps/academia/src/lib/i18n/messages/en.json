@@ -269,6 +269,7 @@
       "passwordHint": "At least 8 characters with uppercase, lowercase, and a number.",
       "submitButton": "Continue to payment",
       "toastMissingFields": "Please fill in all required fields",
+      "toastWeakPassword": "Password must be at least 8 characters and include uppercase, lowercase, and a number.",
       "toastAccountCreated": "Account created successfully. Continue with payment.",
       "toastLoggedIn": "Welcome back. Continue with payment.",
       "toastInvalidCredentials": "Incorrect password for this email",

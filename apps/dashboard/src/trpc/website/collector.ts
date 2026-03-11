@@ -348,4 +348,25 @@ export const collector = {
         throw err;
       }
     }),
+
+  updateWebsiteTheme: privateProcedure
+    .input(z.record(z.string(), z.unknown()))
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const site = await ctx.prisma.website.findFirst({
+          where: { accountId: ctx.account.id },
+          select: { themeCustomization: true },
+        });
+        const existing = (site?.themeCustomization as Record<string, unknown>) ?? {};
+        const merged = { ...existing, ...input };
+        const updated = await ctx.prisma.website.update({
+          where: { accountId: ctx.account.id },
+          data: { themeCustomization: merged },
+        });
+        return updated;
+      } catch (err) {
+        console.error(err);
+        throw err;
+      }
+    }),
 };

@@ -101,7 +101,10 @@ export default function CourseCard({
       href={isOwned ? `/courses/${id}/watch` : `/courses/${id}`}
       className="block"
     >
-      <div className="group w-full min-h-[400px] flex flex-col bg-white dark:bg-[#0A0A0C] rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-200 hover:shadow-xl hover:ring-2 hover:ring-primary/10 overflow-hidden">
+      <div
+        className="group w-full min-h-[400px] flex flex-col bg-white dark:bg-[#0A0A0C] border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-200 hover:shadow-xl hover:ring-2 hover:ring-primary/10 overflow-hidden"
+        style={{ borderRadius: "var(--academia-card-radius, 1rem)" }}
+      >
         {/* Thumbnail Section */}
         <div className="relative overflow-hidden shrink-0">
           {thumbnailUrl ? (

@@ -112,6 +112,50 @@
   --sidebar-ring: oklch(0.552 0.016 285.938);
 }
 
+/* Theme-driven page background (set by tenant layout when theme has pageBackgroundLight/Dark) */
+.academia-theme-page-bg {
+  background-color: var(--academia-page-bg-light, rgb(250 250 250));
+}
+.dark .academia-theme-page-bg {
+  background-color: var(--academia-page-bg-dark, #0e0e10);
+}
+
+/* Navbar theme: style and height (parent has data-navbar-style / data-navbar-height) */
+[data-navbar-style="MINIMAL"] [data-academia-header] {
+  border-bottom-width: 0;
+}
+[data-navbar-style="BLUR"] [data-academia-header] {
+  background-color: transparent;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+[data-navbar-style="BLUR"] .dark [data-academia-header] {
+  background-color: transparent;
+}
+[data-navbar-height="compact"] [data-academia-header] {
+  height: 56px;
+}
+[data-navbar-height="tall"] [data-academia-header] {
+  height: 80px;
+}
+[style*="--academia-navbar-bg-light"] [data-academia-header] {
+  background-color: var(--academia-navbar-bg-light, var(--color-card));
+}
+.dark [style*="--academia-navbar-bg-dark"] [data-academia-header] {
+  background-color: var(--academia-navbar-bg-dark, var(--color-card));
+}
+
+/* Content max width (theme contentMaxWidth) */
+[data-content-max-width="narrow"] [data-academia-max-width] {
+  max-width: 42rem;
+}
+[data-content-max-width="wide"] [data-academia-max-width] {
+  max-width: 80rem;
+}
+[data-content-max-width="full"] [data-academia-max-width] {
+  max-width: none;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

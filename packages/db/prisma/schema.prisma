@@ -522,15 +522,18 @@ model Website {
   // Custom CSS and JavaScript
   customCSS                       String?  @db.Text
   customJS                        String?  @db.Text
-  
+
+  // Theme customization (cards, buttons, navbar, page, footer, inputs, images, modals, typography, links, profile)
+  themeCustomization              Json?
+
   // Timestamps
   createdAt                       DateTime @default(now())
   updatedAt                       DateTime @updatedAt
-  
+
   // Relations
   Account                         Account           @relation(fields: [accountId], references: [id], onDelete: Cascade)
   WebsiteAnalytics                WebsiteAnalytics[]
-  
+
   @@index([accountId])
   @@index([subdomain])
   @@index([customDomain])

@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import MaxWidthWrapper from "../max-with-wrapper";
 import NavigationLink from "../navigation-link";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import {
   useTenantBranding,
   useTenantSettings,
@@ -17,7 +18,7 @@ import { logoutUser } from "@/modules/auth/actions/auth";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [, startTransition] = useTransition();
+  const router = useRouter();
   const { logo, name, primaryColor } = useTenantBranding();
   const { userName, avatarUrl } = useTenantAccount();
   const { showCoursesOnHome, showProductsOnHome } = useTenantSettings();
@@ -32,8 +33,17 @@ export default function Header() {
   const isAuthenticated = useIsAuthenticated();
   const displayName = name || userName || "Academy";
 
+  const handleLogout = async () => {
+    await logoutUser();
+    router.replace("/login");
+    router.refresh();
+  };
+
   return (
-    <div className="w-full h-[70px] border-b bg-card text-card-foreground sticky top-0 z-50">
+    <div
+      data-academia-header
+      className="w-full h-[70px] border-b bg-card text-card-foreground sticky top-0 z-50"
+    >
       <MaxWidthWrapper className="h-full flex items-center justify-between relative">
         {/* Left: Logo + Desktop Nav */}
         <div className="h-full flex items-center justify-start gap-x-6 md:gap-x-8 min-w-0">
@@ -78,9 +88,7 @@ export default function Header() {
           {isAuthenticated ? (
             <ProfileDropdown
               onLogout={() => {
-                startTransition(() => {
-                  logoutUser();
-                });
+                void handleLogout();
               }}
             />
           ) : (

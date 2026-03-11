@@ -17,10 +17,16 @@ interface GuestAuthFormData {
   password: string;
 }
 
+const PASSWORD_POLICY_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
+
 function isExistingUserError(error: unknown) {
   if (!(error instanceof Error)) return false;
   const message = error.message.toLowerCase();
   return message.includes("already exists");
+}
+
+function hasValidPassword(password: string) {
+  return password.length >= 8 && PASSWORD_POLICY_REGEX.test(password);
 }
 
 export function GuestAuthForm() {
@@ -57,12 +63,18 @@ export function GuestAuthForm() {
       return;
     }
 
+    if (!hasValidPassword(payload.password)) {
+      toast.error(t("toastWeakPassword"));
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
       await createUser(payload);
       toast.success(t("toastAccountCreated"));
       router.refresh();
+      setIsSubmitting(false);
       return;
     } catch (error) {
       if (!isExistingUserError(error)) {
