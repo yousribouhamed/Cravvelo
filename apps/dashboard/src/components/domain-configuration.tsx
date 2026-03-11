@@ -205,8 +205,8 @@ export default function DomainConfiguration({
   const status = providedStatus ?? hookData.status;
   const domainJson = providedDomainJson ?? hookData.domainJson;
 
-  // Don't show anything if domain is valid or we don't have data
-  if (!status || status === "Valid Configuration" || !domainJson) return null;
+  // Keep DNS instructions visible even after successful verification so users can still copy records.
+  if (!status || !domainJson) return null;
 
   const subdomain = getSubdomain(domainJson.name, domainJson.apexName);
   const isSubdomain = !!subdomain;

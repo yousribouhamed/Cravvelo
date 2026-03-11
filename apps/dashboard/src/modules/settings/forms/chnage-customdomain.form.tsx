@@ -1,6 +1,6 @@
 "use client";
 
-import type { FC } from "react";
+import { useState, type FC } from "react";
 import {
   Card,
   CardContent,
@@ -75,13 +75,15 @@ const AddCustomDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
 
   const watchedDomain = form.watch("cutomedomain");
   const normalizedWatchedDomain = normalizeDomainInput(watchedDomain || "");
+  const [pinnedDomain, setPinnedDomain] = useState<string | null>(null);
   const isDomainValid =
     normalizedWatchedDomain.length > 0 &&
     /^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/.test(
       normalizedWatchedDomain
     );
+  const activeDomain = pinnedDomain || (isDomainValid ? normalizedWatchedDomain : "");
   const { status, domainJson, loading } = useDomainStatus({
-    domain: isDomainValid ? normalizedWatchedDomain : "",
+    domain: activeDomain,
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
@@ -130,13 +132,41 @@ const AddCustomDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
                   <p className="text-sm text-muted-foreground mt-2" dir={isRTL ? "rtl" : "ltr"}>
                     {t("description")}
                   </p>
+                  <p className="text-xs text-muted-foreground mt-1" dir={isRTL ? "rtl" : "ltr"}>
+                    Supports both apex domains (example.com) and subdomains
+                    (academy.example.com).
+                  </p>
+                  <div className="mt-3 flex items-center gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={!isDomainValid && !pinnedDomain}
+                      onClick={() => {
+                        if (pinnedDomain) {
+                          setPinnedDomain(null);
+                          return;
+                        }
+                        if (isDomainValid) {
+                          setPinnedDomain(normalizedWatchedDomain);
+                        }
+                      }}
+                    >
+                      {pinnedDomain ? "Unpin DNS instructions" : "Pin DNS instructions"}
+                    </Button>
+                    {pinnedDomain && (
+                      <span className="text-xs text-muted-foreground">
+                        Pinned: {pinnedDomain}
+                      </span>
+                    )}
+                  </div>
                 </FormItem>
               )}
             />
-            {isDomainValid && (
+            {activeDomain && (
               <div dir="ltr" className="w-full min-h-[300px] h-fit">
                 <DomainConfiguration
-                  domain={normalizedWatchedDomain}
+                  domain={activeDomain}
                   status={status}
                   domainJson={domainJson}
                   disablePolling
