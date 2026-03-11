@@ -14,13 +14,14 @@ interface TenantPageProps {
 }
 
 export default async function TenantPage({ params }: TenantPageProps) {
-  const { tenant } = await params;
+  const { tenant: tenantKey } = await params;
+  const tenant = decodeURIComponent(tenantKey);
   const tHome = await getTranslations("home");
 
   const coursesRes = await getCoursesWithDefaultPricing();
   const courses = coursesRes.success ? coursesRes.data ?? [] : [];
 
-  const website = await getTenantWebsite(`${tenant}.cravvelo.com`);
+  const website = await getTenantWebsite(tenant);
   const showProductsOnHome = (website as any)?.dDigitalProductsHomeScreen ?? false;
   const displayName =
     (website as any)?.name ?? (website as any)?.Account?.user_name ?? tenant;

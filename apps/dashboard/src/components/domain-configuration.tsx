@@ -12,6 +12,10 @@ import {
   Info,
 } from "lucide-react";
 import { cn } from "@ui/lib/utils";
+import {
+  DomainResponse,
+  DomainVerificationStatusProps,
+} from "@/src/types/domain-types";
 
 export const CodeBlock = ({
   className,
@@ -183,9 +187,23 @@ const HelpCard = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default function DomainConfiguration({ domain }: { domain: string }) {
+interface DomainConfigurationProps {
+  domain: string;
+  status?: DomainVerificationStatusProps;
+  domainJson?: DomainResponse & { error?: { code: string; message: string } };
+  disablePolling?: boolean;
+}
+
+export default function DomainConfiguration({
+  domain,
+  status: providedStatus,
+  domainJson: providedDomainJson,
+  disablePolling = false,
+}: DomainConfigurationProps) {
   const [recordType, setRecordType] = useState<"A" | "CNAME">("A");
-  const { status, domainJson } = useDomainStatus({ domain });
+  const hookData = useDomainStatus({ domain: disablePolling ? "" : domain });
+  const status = providedStatus ?? hookData.status;
+  const domainJson = providedDomainJson ?? hookData.domainJson;
 
   // Don't show anything if domain is valid or we don't have data
   if (!status || status === "Valid Configuration" || !domainJson) return null;
@@ -288,7 +306,7 @@ export default function DomainConfiguration({ domain }: { domain: string }) {
             value={
               recordType === "A"
                 ? "76.76.21.21"
-                : `cname.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`
+                : "cname.vercel-dns.com"
             }
             ttl="86400"
             description={`Configure your ${

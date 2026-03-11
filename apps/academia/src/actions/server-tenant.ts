@@ -14,17 +14,37 @@ export interface TenantData {
 export async function getTenantFromRequest(): Promise<string | null> {
   try {
     const headersList = await headers();
-    const host = headersList.get("host");
-
-    if (!host) return null;
-
-    // Extract subdomain from host (e.g., "tenant.cravvelo.com" -> "tenant")
-    const parts = host.split(".");
-    if (parts.length >= 3 && parts[1] === "cravvelo" && parts[2] === "com") {
-      return parts[0];
+    const forwardedTenant = headersList.get("x-tenant");
+    if (forwardedTenant) {
+      return forwardedTenant.toLowerCase();
     }
 
-    return null;
+    const host =
+      headersList.get("x-forwarded-host") ?? headersList.get("host");
+
+    if (!host) return null;
+    const normalizedHost = host.toLowerCase().split(":")[0];
+
+    if (normalizedHost.includes("localhost")) {
+      if (process.env.NODE_ENV !== "development") return null;
+
+      if (normalizedHost === "localhost") {
+        return "twice.cravvelo.com";
+      }
+
+      if (normalizedHost.endsWith(".localhost")) {
+        const localSubdomain = normalizedHost.replace(".localhost", "");
+        const sanitizedSubdomain = localSubdomain.replace(/[^a-zA-Z0-9-]/g, "");
+        if (sanitizedSubdomain) {
+          return `${sanitizedSubdomain}.cravvelo.com`;
+        }
+      }
+
+      return "twice.cravvelo.com";
+    }
+
+    // Full host is the tenant key in production (subdomain or custom domain)
+    return normalizedHost;
   } catch (error) {
     console.error("Error extracting tenant from request:", error);
     return null;
@@ -35,12 +55,12 @@ export async function getTenantFromRequest(): Promise<string | null> {
  * Get tenant website and account data from subdomain
  */
 export async function getTenantData(
-  subdomain: string
+  tenantKey: string
 ): Promise<TenantData | null> {
   try {
     const website = await prisma.website.findFirst({
       where: {
-        subdomain: subdomain,
+        OR: [{ subdomain: tenantKey }, { customDomain: tenantKey }],
         suspended: false,
       },
       include: {
@@ -96,7 +116,7 @@ export async function getTenantAccount(subdomain: string) {
   try {
     const website = await prisma.website.findFirst({
       where: {
-        subdomain: subdomain,
+        OR: [{ subdomain: subdomain }, { customDomain: subdomain }],
         suspended: false,
       },
       include: {

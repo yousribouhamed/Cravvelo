@@ -24,7 +24,7 @@ export async function generateMetadata({
   params,
 }: Pick<TenantLayoutProps, "params">): Promise<Metadata> {
   const { tenant: tenantKey } = await params;
-  const tenant = `${tenantKey}.cravvelo.com`;
+  const tenant = decodeURIComponent(tenantKey);
   const websiteData = await getTenantWebsite(tenant);
 
   const title =
@@ -52,8 +52,7 @@ export default async function TenantLayout({
   params,
 }: TenantLayoutProps) {
   const { tenant: tenantKey } = await params;
-
-  const tenant = `${tenantKey}.cravvelo.com`;
+  const tenant = decodeURIComponent(tenantKey);
 
   const [{ isValid }, websiteData, user] = await Promise.all([
     validateTenant(tenant),

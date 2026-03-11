@@ -47,14 +47,16 @@ export const createChargilyCheckout = withTenant({
   handler: async ({ tenant, website, input, accountId, db }) => {
     try {
       const tenantCurrency = (website?.currency || "DZD").toLowerCase();
+      const canonicalHost =
+        website?.customDomain || website?.subdomain || tenant;
       const amount = Math.round(Number(input.totalPrice));
       const payload = {
         amount,
         currency: tenantCurrency,
         payment_method: "EDAHABIA",
-        success_url: `https://${tenant}.cravvelo.com/payments/success`,
-        failure_url: `https://${tenant}.cravvelo.com/payments/failure`,
-        webhook_endpoint: `https://${tenant}.cravvelo.com/api/webhooks/chargily`,
+        success_url: `https://${canonicalHost}/payments/success`,
+        failure_url: `https://${canonicalHost}/payments/failure`,
+        webhook_endpoint: `https://${canonicalHost}/api/webhooks/chargily`,
         metadata: [{ paymentId: input.paymentId }],
         description: `Payment for order ${input.paymentId}`,
         locale: "ar",
@@ -116,7 +118,7 @@ export const createChargilyPaymentIntent = withTenant({
     type: z.enum(["COURSE", "PRODUCT"]),
   }),
 
-  handler: async ({ accountId, tenant, website, input, db }) => {
+  handler: async ({ accountId, website, input, db }) => {
     const user = await getCurrentUser();
     if (!user) throw new Error("Unauthorized");
 

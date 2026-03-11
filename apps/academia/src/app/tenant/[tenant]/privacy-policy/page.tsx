@@ -36,10 +36,11 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps) {
-  const { tenant } = await params;
+  const { tenant: tenantKey } = await params;
+  const tenant = decodeURIComponent(tenantKey);
   const t = await getTranslations("legal");
 
-  const website = await getTenantWebsite(`${tenant}.cravvelo.com`);
+  const website = await getTenantWebsite(tenant);
   const html = normalizeRichText((website as any)?.privacy_policy);
 
   return (

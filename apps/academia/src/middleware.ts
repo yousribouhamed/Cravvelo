@@ -27,62 +27,111 @@ const protectedRoutePrefixes = [
 // Auth routes (login/register) that authenticated users should be redirected away from
 const authRoutes = ["/login", "/register", "/register/confirm"];
 
+const ROOT_DOMAIN = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "cravvelo.com";
+
+function normalizeHost(host: string | null): string {
+  if (!host) return "";
+  return host.toLowerCase().split(":")[0];
+}
+
+function isRootOrWwwHost(host: string): boolean {
+  return host === ROOT_DOMAIN || host === `www.${ROOT_DOMAIN}`;
+}
+
+function isPlatformSubdomainHost(host: string): boolean {
+  return host.endsWith(`.${ROOT_DOMAIN}`) && !isRootOrWwwHost(host);
+}
+
+async function getCanonicalHost(
+  request: NextRequest,
+  host: string
+): Promise<string | null> {
+  if (!isPlatformSubdomainHost(host)) {
+    return null;
+  }
+
+  try {
+    const lookupUrl = new URL("/api/tenant/canonical", request.url);
+    lookupUrl.searchParams.set("host", host);
+
+    const response = await fetch(lookupUrl.toString(), {
+      headers: {
+        "x-canonical-lookup": "1",
+      },
+    });
+
+    if (!response.ok) return null;
+
+    const data = (await response.json()) as { canonicalHost?: string | null };
+    return data.canonicalHost || null;
+  } catch {
+    return null;
+  }
+}
+
 export async function middleware(request: NextRequest) {
-  const hostname = request.headers.get("host") || "";
+  const hostname = normalizeHost(
+    request.headers.get("x-forwarded-host") || request.headers.get("host")
+  );
   const { pathname } = request.nextUrl;
 
   // ========================================
   // 1. TENANT ROUTING LOGIC
   // ========================================
 
-  // Extract subdomain
-  const subdomain = hostname.split(".")[0];
-  const isLocalhost = hostname.startsWith("localhost:");
+  const isLocalhost =
+    hostname === "localhost" || hostname.endsWith(".localhost");
 
   let response: NextResponse;
-  let tenant: string | null = null;
+  let tenantKey: string | null = null;
   let rewrittenUrl: URL | null = null;
 
   // Handle localhost (development environment)
   if (isLocalhost) {
-    // Check if there's an explicit subdomain (e.g., "twice.localhost:3001")
-    if (hostname.includes(".") && subdomain !== "localhost") {
-      // Extract tenant from subdomain (e.g., "twice" from "twice.localhost:3001")
-      tenant = subdomain.replace(/[^a-zA-Z0-9]/g, "");
+    // Check if there's an explicit subdomain (e.g., "twice.localhost")
+    if (hostname.endsWith(".localhost")) {
+      const localSubdomain = hostname.replace(".localhost", "");
+      const sanitizedSubdomain = localSubdomain.replace(/[^a-zA-Z0-9-]/g, "");
+      if (sanitizedSubdomain) {
+        tenantKey = `${sanitizedSubdomain}.${ROOT_DOMAIN}`;
+      }
     } else {
       // No subdomain: use default tenant for development
-      tenant = process.env.NODE_ENV === "development" ? "twice" : null;
+      tenantKey =
+        process.env.NODE_ENV === "development" ? `twice.${ROOT_DOMAIN}` : null;
     }
 
-    if (tenant) {
+    if (tenantKey) {
       // Rewrite to the tenant-specific path (URL stays the same in browser)
       const url = request.nextUrl.clone();
-      url.pathname = `/tenant/${tenant}${url.pathname}`;
+      url.pathname = `/tenant/${tenantKey}${url.pathname}`;
       rewrittenUrl = url;
       response = NextResponse.rewrite(url);
     } else {
       response = NextResponse.next();
     }
-  } else if (hostname.startsWith("www.")) {
-    // Skip tenant routing for www subdomain
+  } else if (isRootOrWwwHost(hostname)) {
+    // Root marketing/auth app (non-tenant host)
     const isPublicRoute = isRoutePublic(pathname);
     if (!isPublicRoute && !pathname.startsWith("/api")) {
       return handleAuthentication(request);
     }
     return NextResponse.next();
   } else {
-    // Production: extract tenant from subdomain (e.g., "tenant.cravvelo.com")
-    const isSubdomain =
-      subdomain &&
-      subdomain !== "localhost" &&
-      hostname.includes(".");
+    const canonicalHost = await getCanonicalHost(request, hostname);
+    if (canonicalHost && canonicalHost !== hostname) {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.protocol = "https:";
+      redirectUrl.host = canonicalHost;
+      return NextResponse.redirect(redirectUrl, 308);
+    }
 
-    if (isSubdomain) {
-      tenant = subdomain;
-
+    // Any non-root production host is treated as tenant host (subdomain or custom domain)
+    if (hostname) {
+      tenantKey = hostname;
       // Rewrite to the tenant-specific path
       const url = request.nextUrl.clone();
-      url.pathname = `/tenant/${tenant}${url.pathname}`;
+      url.pathname = `/tenant/${tenantKey}${url.pathname}`;
       rewrittenUrl = url;
       response = NextResponse.rewrite(url);
     } else {
@@ -91,10 +140,10 @@ export async function middleware(request: NextRequest) {
   }
 
   // Prepare base headers for server components (e.g., locale resolution).
-  // IMPORTANT: tenant lookups in DB expect a full domain-like key (e.g. "tenant.cravvelo.com").
+  // Tenant lookups in DB use a full host key (subdomain or custom domain).
   const baseRequestHeaders = new Headers(request.headers);
-  if (tenant) {
-    baseRequestHeaders.set("x-tenant", `${tenant}.cravvelo.com`);
+  if (tenantKey) {
+    baseRequestHeaders.set("x-tenant", tenantKey);
   }
 
   // ========================================
@@ -150,7 +199,7 @@ export async function middleware(request: NextRequest) {
     try {
       payload = await verifyJWT(token);
       isAuthenticated = !!payload;
-    } catch (error) {
+    } catch {
       // Token is invalid, treat as unauthenticated
       isAuthenticated = false;
       payload = null;
@@ -179,7 +228,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Add user info and tenant info to headers for server components
-  if (payload || tenant) {
+  if (payload || tenantKey) {
     const requestHeaders = new Headers(baseRequestHeaders);
 
     if (payload) {
@@ -189,9 +238,9 @@ export async function middleware(request: NextRequest) {
     }
 
     // For tenant routes, create proper rewrite with headers
-    if (tenant) {
+    if (tenantKey) {
       const url = request.nextUrl.clone();
-      url.pathname = `/tenant/${tenant}${pathname}`;
+      url.pathname = `/tenant/${tenantKey}${pathname}`;
       return NextResponse.rewrite(url, {
         request: { headers: requestHeaders },
       });
@@ -251,7 +300,7 @@ async function handleAuthentication(
     try {
       payload = await verifyJWT(token);
       isAuthenticated = !!payload;
-    } catch (error) {
+    } catch {
       // Token is invalid, treat as unauthenticated
       isAuthenticated = false;
       payload = null;

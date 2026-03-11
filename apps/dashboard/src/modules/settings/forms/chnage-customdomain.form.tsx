@@ -27,14 +27,29 @@ import { maketoast } from "@/src/components/toasts";
 import { useTranslations, useLocale } from "next-intl";
 import DomainStatus from "@/src/components/domain-status";
 import DomainConfiguration from "@/src/components/domain-configuration";
+import { useDomainStatus } from "@/src/hooks/use-domain-status";
 
 interface AddCustomDomain {
   customDomain: string | null;
 }
 
 const formSchema = z.object({
-  cutomedomain: z.string(),
+  cutomedomain: z.string().trim().toLowerCase().refine(
+    (value) =>
+      value === "" ||
+      /^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/.test(
+        value
+      ),
+    {
+      message: "Please enter a valid domain like yourdomain.com",
+    }
+  ),
 });
+
+function normalizeDomainInput(value: string): string {
+  const normalized = value.trim().toLowerCase();
+  return normalized.replace(/^https?:\/\//, "").split("/")[0] || "";
+}
 
 const AddCustomDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
   const t = useTranslations("websiteSettings.forms.customDomain");
@@ -59,11 +74,22 @@ const AddCustomDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
   });
 
   const watchedDomain = form.watch("cutomedomain");
+  const normalizedWatchedDomain = normalizeDomainInput(watchedDomain || "");
+  const isDomainValid =
+    normalizedWatchedDomain.length > 0 &&
+    /^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/.test(
+      normalizedWatchedDomain
+    );
+  const { status, domainJson, loading } = useDomainStatus({
+    domain: isDomainValid ? normalizedWatchedDomain : "",
+  });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    const normalizedDomain = normalizeDomainInput(data.cutomedomain);
     await mutation.mutateAsync({
-      customdomain: data?.cutomedomain,
+      customdomain: normalizedDomain,
     });
+    form.setValue("cutomedomain", normalizedDomain);
   }
 
   return (
@@ -90,7 +116,14 @@ const AddCustomDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
                       />
                     </FormControl>
                     <div className="absolute left-3 z-10 flex h-full items-center">
-                      {watchedDomain && <DomainStatus domain={watchedDomain} />}
+                      {isDomainValid && (
+                        <DomainStatus
+                          domain={normalizedWatchedDomain}
+                          status={status}
+                          loading={loading}
+                          disablePolling
+                        />
+                      )}
                     </div>
                   </div>
                   <FormMessage />
@@ -100,9 +133,14 @@ const AddCustomDomainForm: FC<AddCustomDomain> = ({ customDomain }) => {
                 </FormItem>
               )}
             />
-            {watchedDomain && (
+            {isDomainValid && (
               <div dir="ltr" className="w-full min-h-[300px] h-fit">
-                <DomainConfiguration domain={watchedDomain} />
+                <DomainConfiguration
+                  domain={normalizedWatchedDomain}
+                  status={status}
+                  domainJson={domainJson}
+                  disablePolling
+                />
               </div>
             )}
           </CardContent>

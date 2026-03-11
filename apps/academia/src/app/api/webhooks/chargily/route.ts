@@ -23,16 +23,21 @@ function normalizeChargilyConfig(config: unknown): { secretKey?: string } {
 }
 
 async function resolveSecretKey(host: string | null): Promise<string | null> {
-  const subdomain = host?.split(".")?.[0];
-  if (subdomain) {
-    const fullDomain = `${subdomain}.cravvelo.com`;
-    const website = await prisma.website.findUnique({
-      where: { subdomain: fullDomain },
+  const normalizedHost = host?.toLowerCase().split(":")[0];
+  if (normalizedHost) {
+    const website = await prisma.website.findFirst({
+      where: {
+        OR: [{ subdomain: normalizedHost }, { customDomain: normalizedHost }],
+      },
       select: { accountId: true },
     });
     if (website) {
       const connection = await prisma.paymentMethodConfig.findFirst({
-        where: { accountId: website.accountId, provider: "CHARGILY", isActive: true },
+        where: {
+          accountId: website.accountId,
+          provider: "CHARGILY",
+          isActive: true,
+        },
         select: { config: true },
       });
       const tenantKey = normalizeChargilyConfig(connection?.config)?.secretKey;
@@ -51,7 +56,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Missing signature" }, { status: 400 });
     }
 
-    const host = request.headers.get("host");
+    const host =
+      request.headers.get("x-forwarded-host") ?? request.headers.get("host");
     const apiSecretKey = await resolveSecretKey(host);
 
     if (!apiSecretKey) {

@@ -2,26 +2,16 @@
 
 import { AlertCircle, CheckCircle2, XCircle } from "lucide-react";
 import {
-  LoadingSpinner,
   OrangeLoadingSpinner,
 } from "@ui/icons/loading-spinner";
 import { useDomainStatus } from "../hooks/use-domain-status";
-import {
-  DomainResponse,
-  DomainVerificationStatusProps,
-} from "../types/domain-types";
-import { useEffect, useState } from "react";
+import { DomainVerificationStatusProps } from "../types/domain-types";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@ui/components/ui/tooltip";
-
-type Response = {
-  status: DomainVerificationStatusProps;
-  domainJson: DomainResponse & { error: { code: string; message: string } };
-};
 
 const statusConfig = {
   "Valid Configuration": {
@@ -56,33 +46,22 @@ const statusConfig = {
   },
 };
 
-export default function DomainStatus({ domain }: { domain: string }) {
-  const [loading, setLoading] = useState(false);
+interface DomainStatusProps {
+  domain: string;
+  status?: DomainVerificationStatusProps;
+  loading?: boolean;
+  disablePolling?: boolean;
+}
 
-  const [status, setStatus] = useState<DomainVerificationStatusProps>(
-    "Pending Verification"
-  );
-
-  useEffect(() => {
-    function verifyCustomDomain() {
-      const interval = setInterval(async () => {
-        try {
-          setLoading(true);
-          const response = await fetch(`/api/domain/${domain}/verify`);
-          const values: Response = (await response.json()) as Response;
-          setStatus(values.status);
-          setLoading(false);
-        } catch (error) {
-          console.error("There was a problem with the fetch operation:", error);
-          setLoading(false);
-        }
-      }, 5000);
-
-      return () => clearInterval(interval);
-    }
-
-    verifyCustomDomain();
-  }, [domain]);
+export default function DomainStatus({
+  domain,
+  status: providedStatus,
+  loading: providedLoading,
+  disablePolling = false,
+}: DomainStatusProps) {
+  const hookData = useDomainStatus({ domain: disablePolling ? "" : domain });
+  const status = providedStatus ?? hookData.status;
+  const loading = providedLoading ?? hookData.loading;
 
   if (loading) {
     return <OrangeLoadingSpinner />;

@@ -7,50 +7,84 @@ import {
 import { DomainVerificationStatusProps } from "@/src/types/domain-types";
 import { NextResponse } from "next/server";
 
+const domainRegex =
+  /^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
+
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
-  // Await the params object in Next.js 15
-  const resolvedParams = await params;
+  try {
+    const resolvedParams = await params;
+    const domain = decodeURIComponent(resolvedParams.slug)
+      .trim()
+      .toLowerCase();
 
-  const domain =
-    process.env.NODE_ENV === "production"
-      ? decodeURIComponent(resolvedParams.slug)
-      : resolvedParams.slug;
+    if (!domainRegex.test(domain)) {
+      return NextResponse.json(
+        {
+          status: "Unknown Error",
+          domainJson: {
+            name: domain,
+            apexName: domain,
+            verified: false,
+            verification: [],
+            error: {
+              code: "invalid_domain",
+              message: "Invalid domain format",
+            },
+          },
+        },
+        { status: 400 }
+      );
+    }
 
-  let status: DomainVerificationStatusProps = "Valid Configuration";
+    let status: DomainVerificationStatusProps = "Valid Configuration";
 
-  const [domainJson, configJson] = await Promise.all([
-    getDomainResponse(domain),
-    getConfigResponse(domain),
-  ]);
+    const [domainJson, configJson] = await Promise.all([
+      getDomainResponse(domain),
+      getConfigResponse(domain),
+    ]);
 
-  if (domainJson?.error?.code === "not_found") {
-    // domain not found on Vercel project
-    status = "Domain Not Found";
+    if (domainJson?.error?.code === "not_found") {
+      status = "Domain Not Found";
+    } else if (domainJson.error) {
+      status = "Unknown Error";
+    } else if (!domainJson.verified) {
+      status = "Pending Verification";
+      const verificationJson = await verifyDomain(domain);
 
-    // unknown error
-  } else if (domainJson.error) {
-    status = "Unknown Error";
-
-    // if domain is not verified, we try to verify now
-  } else if (!domainJson.verified) {
-    status = "Pending Verification";
-    const verificationJson = await verifyDomain(domain);
-
-    // domain was just verified
-    if (verificationJson && verificationJson.verified) {
+      if (verificationJson && verificationJson.verified) {
+        status = "Valid Configuration";
+      }
+    } else if (configJson.misconfigured) {
+      status = "Invalid Configuration";
+    } else {
       status = "Valid Configuration";
     }
-  } else if (configJson.misconfigured) {
-    status = "Invalid Configuration";
-  } else {
-    status = "Valid Configuration";
-  }
 
-  return NextResponse.json({
-    status,
-    domainJson,
-  });
+    return NextResponse.json({
+      status,
+      domainJson,
+    });
+  } catch (error) {
+    console.error("Domain verification route failed:", error);
+    return NextResponse.json(
+      {
+        status: "Unknown Error",
+        domainJson: {
+          name: "",
+          apexName: "",
+          verified: false,
+          verification: [],
+          error: {
+            code: "verification_failed",
+            message:
+              "Unable to verify domain right now. Please try again in a moment.",
+          },
+        },
+      },
+      { status: 500 }
+    );
+  }
 }

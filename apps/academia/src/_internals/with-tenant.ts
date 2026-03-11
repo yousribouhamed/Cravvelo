@@ -3,7 +3,6 @@ import { prisma } from "database/src";
 import {
   TenantError,
   ValidationError,
-  WebsiteWithAccount,
   WithTenantOptions,
 } from "./errors";
 
@@ -14,32 +13,34 @@ import {
 async function getTenantFromRequest(): Promise<string | null> {
   try {
     const headersList = await headers();
-    const host = headersList.get("host");
+    const forwardedTenant = headersList.get("x-tenant");
+    if (forwardedTenant) {
+      return forwardedTenant.toLowerCase();
+    }
+
+    const host =
+      headersList.get("x-forwarded-host") ?? headersList.get("host");
 
     if (!host) return null;
+    const normalizedHost = host.toLowerCase().split(":")[0];
 
     // Development environment - any host containing localhost (e.g. localhost:3001 or twice.localhost:3001)
-    if (host.includes("localhost")) {
+    if (normalizedHost.includes("localhost")) {
       if (process.env.NODE_ENV !== "development") return null;
       // Plain localhost:<port> -> default tenant
-      if (host.startsWith("localhost:")) {
-        return "twice";
+      if (normalizedHost === "localhost") {
+        return "twice.cravvelo.com";
       }
       // Subdomain.localhost:<port> (e.g. twice.localhost:3001) -> extract subdomain
-      const subdomain = host.split(".")[0];
+      const subdomain = normalizedHost.split(".")[0];
       if (subdomain && subdomain !== "localhost") {
-        return subdomain.replace(/[^a-zA-Z0-9]/g, "");
+        return `${subdomain.replace(/[^a-zA-Z0-9-]/g, "")}.cravvelo.com`;
       }
-      return "twice";
+      return "twice.cravvelo.com";
     }
 
-    // Production environment - extract subdomain from host (e.g. tenant.cravvelo.com)
-    const parts = host.split(".");
-    if (parts.length >= 3 && parts[1] === "cravvelo" && parts[2] === "com") {
-      return parts[0];
-    }
-
-    return null;
+    // Production environment - use full host as tenant key (subdomain or custom domain)
+    return normalizedHost;
   } catch (error) {
     console.error("Error extracting tenant from request:", error);
     return null;
@@ -109,9 +110,9 @@ export function withTenant<TInput = void, TOutput = void>(
       }
 
       // Fetch website with account data
-      const website = await prisma.website.findUnique({
+      const website = await prisma.website.findFirst({
         where: {
-          subdomain: `${tenant}.cravvelo.com`,
+          OR: [{ subdomain: tenant }, { customDomain: tenant }],
         },
         include: {
           Account: {
