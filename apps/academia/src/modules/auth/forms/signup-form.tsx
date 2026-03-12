@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
-import BrandButton from "@/components/brand-button";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -231,7 +231,7 @@ export default function SignUpForm() {
       </CardContent>
 
       <CardFooter className="flex flex-col space-y-4">
-        <BrandButton
+        <Button
           type="button"
           onClick={handleSubmit}
           className="w-full"
@@ -239,7 +239,7 @@ export default function SignUpForm() {
           loading={mutation.isLoading}
         >
           {mutation.isLoading ? t("loading") : t("button")}
-        </BrandButton>
+        </Button>
       </CardFooter>
     </Card>
   );

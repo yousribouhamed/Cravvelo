@@ -6,6 +6,8 @@ import { getTranslations } from "next-intl/server";
 import { getProductsWithDefaultPricing } from "@/modules/products/actions/get-products";
 import ProductCard from "@/modules/products/components/product-card";
 import { getTenantWebsite } from "@/actions/tanant";
+import { ContactCard } from "@/components/contact-card";
+import { TestimonialsSection } from "@/components/testimonials-section";
 
 interface TenantPageProps {
   params: Promise<{
@@ -18,13 +20,17 @@ export default async function TenantPage({ params }: TenantPageProps) {
   const tenant = decodeURIComponent(tenantKey);
   const tHome = await getTranslations("home");
 
-  const coursesRes = await getCoursesWithDefaultPricing();
-  const courses = coursesRes.success ? coursesRes.data ?? [] : [];
-
   const website = await getTenantWebsite(tenant);
+  const showCoursesOnHome = (website as any)?.dCoursesHomeScreen ?? true;
   const showProductsOnHome = (website as any)?.dDigitalProductsHomeScreen ?? false;
+  const enableWelcomeBanner = (website as any)?.enableWelcomeBanner ?? true;
+  const enableTestimonials = (website as any)?.enableTestimonials ?? true;
+  const enableContactForm = (website as any)?.enableContactForm ?? true;
   const displayName =
     (website as any)?.name ?? (website as any)?.Account?.user_name ?? tenant;
+
+  const coursesRes = showCoursesOnHome ? await getCoursesWithDefaultPricing() : null;
+  const courses = coursesRes?.success ? coursesRes.data ?? [] : [];
 
   const productsRes = showProductsOnHome
     ? await getProductsWithDefaultPricing()
@@ -37,28 +43,30 @@ export default async function TenantPage({ params }: TenantPageProps) {
         {tHome("welcomeTo", { name: displayName })}
       </h1>
 
-      <Banner />
+      {enableWelcomeBanner && <Banner />}
 
-      <div className="mt-10">
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-6">
-          <div>
-            <h2 className="text-3xl font-bold">{tHome("courses.title")}</h2>
-            <p className="text-muted-foreground">{tHome("courses.subtitle")}</p>
+      {showCoursesOnHome && (
+        <div className="mt-10">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-6">
+            <div>
+              <h2 className="text-3xl font-bold">{tHome("courses.title")}</h2>
+              <p className="text-muted-foreground">{tHome("courses.subtitle")}</p>
+            </div>
+            <Link
+              href="/courses"
+              className="text-sm font-medium text-primary hover:underline shrink-0"
+            >
+              {tHome("courses.viewAll")}
+            </Link>
           </div>
-          <Link
-            href="/courses"
-            className="text-sm font-medium text-primary hover:underline shrink-0"
-          >
-            {tHome("courses.viewAll")}
-          </Link>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
-          {courses.slice(0, 6).map((course) => (
-            <CourseCard key={course.id} course={course as any} />
-          ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
+            {courses.slice(0, 6).map((course) => (
+              <CourseCard key={course.id} course={course as any} />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {showProductsOnHome && (
         <div className="mt-12">
@@ -84,14 +92,23 @@ export default async function TenantPage({ params }: TenantPageProps) {
           </div>
         </div>
       )}
+
+      {enableTestimonials && <TestimonialsSection tenant={tenant} />}
+      {enableContactForm && <ContactCard />}
     </div>
   );
 }
 
 export async function generateMetadata({ params }: TenantPageProps) {
-  const awaitedParams = await params;
+  const { tenant: tenantKey } = await params;
+  const tenant = decodeURIComponent(tenantKey);
+  const website = await getTenantWebsite(tenant);
+  const tenantDisplayName =
+    (website as any)?.name ?? (website as any)?.Account?.user_name ?? tenant;
+  const tNav = await getTranslations("nav");
+  const pageTitle = tNav("home");
   return {
-    title: `${awaitedParams.tenant} - Multi-tenant App`,
-    description: `Welcome to ${awaitedParams.tenant}'s space`,
+    title: `${pageTitle} – ${tenantDisplayName}`,
+    description: `Welcome to ${tenantDisplayName}'s space`,
   };
 }

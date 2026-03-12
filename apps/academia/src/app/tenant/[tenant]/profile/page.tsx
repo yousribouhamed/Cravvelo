@@ -8,13 +8,13 @@ export default async function Page() {
 
   if (profile?.data) {
     return (
-      <div className="w-full h-full flex flex-col gap-y-4 bg-white dark:bg-[#0A0A0C] dark:border-[#1F1F23]">
+      <div className="w-full h-full flex flex-col gap-y-4 bg-card border border-border">
         <ProfileForm profileData={profile.data} />
       </div>
     );
   } else {
     return (
-      <div className="w-full min-h-[200px] flex flex-col gap-y-4 bg-white dark:bg-[#0A0A0C] dark:border border-gray-200/80 dark:border-[#1F1F23] rounded-2xl">
+      <div className="w-full min-h-[200px] flex flex-col gap-y-4 bg-card border border-border rounded-2xl">
         <div className="flex items-center justify-center flex-1 py-12 px-4">
           <p className="text-muted-foreground text-center">{t("errorLoading")}</p>
         </div>

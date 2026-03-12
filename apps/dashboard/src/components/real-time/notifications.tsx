@@ -1,29 +1,33 @@
 "use client";
 
-import { useEffect, useState, useCallback, type FC } from "react";
-import Link from "next/link";
+import {
+  useEffect,
+  useState,
+  useCallback,
+  type FC,
+  type ComponentProps,
+} from "react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@ui/components/ui/popover";
+import { Sheet, SheetContent, SheetTrigger } from "@ui/components/ui/sheet";
 import { Button } from "@ui/components/ui/button";
 import { Icons } from "../my-icons";
 import { useMounted } from "@/src/hooks/use-mounted";
 import { pusherClient } from "@/src/lib/pusher";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
 import { Notification } from "database";
-import { Archive, MailWarning } from "lucide-react";
+import { Archive, MailWarning, Package } from "lucide-react";
 import { trpc } from "@/src/app/_trpc/client";
 import { Badge } from "@ui/components/ui/badge";
-
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@ui/components/ui/tabs";
-import { Package } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -51,6 +55,8 @@ const Notifications: FC<NotificationsProps> = ({
   const locale = useLocale();
   const isRTL = locale === "ar";
   const router = useRouter();
+  const [desktopOpen, setDesktopOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const { data: ourNotifications = [], refetch } =
     trpc.getAllNotifications.useQuery(undefined, {
@@ -217,297 +223,294 @@ const Notifications: FC<NotificationsProps> = ({
     }
   };
 
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          size="icon"
-          className=" !bg-card dark:bg-card border border-border rounded-xl w-10 h-10 relative hover:bg-accent transition-colors"
-          aria-label={
-            isNewNotifications > 0
-              ? t("notifications.ui.ariaLabelWithNew", { count: isNewNotifications })
-              : t("notifications.ui.ariaLabel", { count: isNewNotifications })
+  const handleItemClick = async (item: Notification) => {
+    if (!item.isRead) {
+      await handleMarkAsRead(item.id);
+    }
+    if (item.actionUrl) {
+      router.push(item.actionUrl);
+      setDesktopOpen(false);
+      setMobileOpen(false);
+    }
+  };
+
+  const NotificationRow = ({
+    item,
+    archived = false,
+  }: {
+    item: Notification;
+    archived?: boolean;
+  }) => {
+    const canArchive = !archived && !item.isArchived;
+    const isUnread = !archived && !item.isRead;
+    return (
+      <div
+        key={item.id}
+        className={cn(
+          "group w-full min-h-[86px] border-b border-border px-3 sm:px-4 py-3 transition-colors",
+          "flex items-start gap-3",
+          isRTL ? "flex-row-reverse text-right" : "text-left",
+          isUnread
+            ? "bg-primary/5 hover:bg-primary/10 cursor-pointer"
+            : "hover:bg-muted/30"
+        )}
+        onClick={() => void handleItemClick(item)}
+        role={!item.isRead ? "button" : undefined}
+        tabIndex={!item.isRead ? 0 : undefined}
+        onKeyDown={(e) => {
+          if (!item.isRead && (e.key === "Enter" || e.key === " ")) {
+            e.preventDefault();
+            void handleItemClick(item);
           }
-        >
-          {isNewNotifications > 0 && (
-            <span
-              className={cn(
-                "rounded-full w-5 h-5 text-white flex items-center justify-center bg-red-500 absolute -top-1 font-bold text-xs shadow-lg",
-                isRTL ? "-left-1" : "-right-1"
-              )}
-            >
-              {isNewNotifications > 99 ? "99+" : isNewNotifications}
-            </span>
-          )}
-          <Icons.bell className="w-4 h-4 text-foreground" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent
-        align={isRTL ? "start" : "end"}
-        className="p-0 border-none ring-none shadow-none w-screen h-screen sm:w-[500px] sm:h-[450px]"
+        }}
       >
-        <div
-          dir={isRTL ? "rtl" : "ltr"}
-          className="shadow-lg bg-popover border border-border rounded-xl"
-        >
+        <div className="shrink-0 pt-0.5">
           <div
             className={cn(
-              "w-full h-[50px] flex items-center p-4 border-b border-border",
+              "flex items-center justify-center h-10 w-10 rounded-lg",
+              archived ? "bg-muted/40" : "bg-primary/15"
+            )}
+          >
+            <MailWarning
+              className={cn(
+                "h-5 w-5",
+                archived ? "text-muted-foreground" : "text-primary"
+              )}
+            />
+          </div>
+        </div>
+
+        <div className="min-w-0 flex-1">
+          <p
+            className={cn(
+              "text-sm leading-6 break-words",
+              archived ? "text-muted-foreground" : "text-foreground",
+              !archived && !item.isRead && "font-semibold"
+            )}
+          >
+            {getDisplayText(item)}
+          </p>
+          <div
+            className={cn(
+              "mt-2 flex items-center gap-2",
               isRTL ? "justify-end" : "justify-start"
             )}
           >
-            <p className="text-lg font-bold text-foreground">
-              {t("notifications.ui.title")}
-            </p>
+            <span className="text-xs text-muted-foreground">
+              {timeSince(item.createdAt, isRTL ? "ar" : "en")}
+            </span>
+            {!archived && !item.isRead && (
+              <Badge className="bg-green-500 hover:bg-green-600 text-white">
+                {t("notifications.ui.badge.new")}
+              </Badge>
+            )}
           </div>
-
-          <Tabs defaultValue="all" className="w-full">
-            <TabsList
-              className={cn(
-                "w-full flex items-center h-[50px] border-b border-border bg-muted/30",
-                isRTL ? "justify-start" : "justify-end"
-              )}
-            >
-              <TabsTrigger
-                value="archived"
-                className="data-[state=active]:bg-background data-[state=active]:text-foreground"
-              >
-                {t("notifications.ui.tabs.archived")}
-                <Package className={cn("w-4 h-4", isRTL ? "mr-2" : "ml-2")} />
-              </TabsTrigger>
-              <TabsTrigger
-                value="all"
-                className="data-[state=active]:bg-background data-[state=active]:text-foreground"
-              >
-                {t("notifications.ui.tabs.all")}
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="all">
-              <ScrollArea className="h-[330px] w-full flex flex-col gap-y-2">
-                {unarchivedNotifications.length === 0 ? (
-                  <div className="w-full h-[330px] flex flex-col justify-center items-center gap-y-5">
-                    <Image
-                      loading="eager"
-                      alt={t("notifications.ui.emptyStates.noNotificationsAlt")}
-                      src="/empty-box.svg"
-                      width={150}
-                      height={150}
-                      className="dark:opacity-80"
-                    />
-                    <p className="text-md text-center text-muted-foreground">
-                      {t("notifications.ui.emptyStates.noUnread")}
-                    </p>
-                  </div>
-                ) : (
-                  unarchivedNotifications.map((item) => (
-                    <div
-                      key={item.id}
-                      className={`w-full h-[75px] flex items-center justify-between border-b border-border p-4 gap-x-4 transition-colors ${
-                        !item.isRead
-                          ? "bg-primary/5 hover:bg-primary/10 cursor-pointer"
-                          : "hover:bg-muted/30"
-                      }`}
-                      onClick={() => {
-                        if (!item.isRead) {
-                          handleMarkAsRead(item.id);
-                        }
-                        if (item.actionUrl) {
-                          router.push(item.actionUrl);
-                        }
-                      }}
-                      role={!item.isRead ? "button" : undefined}
-                      tabIndex={!item.isRead ? 0 : undefined}
-                      onKeyDown={(e) => {
-                        if (
-                          !item.isRead &&
-                          (e.key === "Enter" || e.key === " ")
-                        ) {
-                          e.preventDefault();
-                          handleMarkAsRead(item.id);
-                        }
-                      }}
-                    >
-                      <div className="w-[50px] h-full flex items-center justify-center gap-x-2">
-                        <TooltipProvider>
-                          <Tooltip delayDuration={0}>
-                            <TooltipTrigger asChild>
-                              <Button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  if (!item.isArchived) {
-                                    handleArchive(item.id);
-                                  }
-                                }}
-                                variant="ghost"
-                                size="icon"
-                                disabled={
-                                  item.isArchived ||
-                                  archiveNotification.isLoading
-                                }
-                                aria-label={t("notifications.ui.actions.archive")}
-                                className="hover:bg-accent transition-colors"
-                              >
-                                <Archive className="w-4 h-4 text-muted-foreground hover:text-foreground transition-colors" />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>{t("notifications.ui.actions.archive")}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </div>
-                      <div
-                        className={cn(
-                          "flex items-center gap-x-3",
-                          isRTL ? "justify-start" : "justify-end"
-                        )}
-                      >
-                        <div
-                          className={cn(
-                            "flex flex-col h-full w-fit justify-between gap-2",
-                            isRTL ? "items-end" : "items-start"
-                          )}
-                        >
-                          <div
-                            className={cn(
-                              "w-full h-[90%] flex items-start",
-                              isRTL ? "justify-end" : "justify-start"
-                            )}
-                          >
-                            <span className="text-md font-medium text-foreground">
-                              {item.actionUrl ? (
-                                <Link
-                                  href={item.actionUrl}
-                                  onClick={(e) => e.stopPropagation()}
-                                  className="hover:underline underline-offset-4"
-                                >
-                                  {getDisplayText(item)}
-                                </Link>
-                              ) : (
-                                getDisplayText(item)
-                              )}
-                            </span>
-                          </div>
-                          <div
-                            className={cn(
-                              "flex w-full h-[10%] items-center gap-x-3",
-                              isRTL ? "justify-start" : "justify-end"
-                            )}
-                          >
-                            <span className="text-xs text-muted-foreground">
-                              {timeSince(item.createdAt, isRTL ? "ar" : "en")}
-                            </span>
-                            {!item.isRead && (
-                              <Badge
-                                variant="default"
-                                className="bg-green-500 hover:bg-green-600 text-white"
-                              >
-                                {t("notifications.ui.badge.new")}
-                              </Badge>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className="bg-primary/20 flex items-center justify-center w-[50px] h-[50px] rounded-xl">
-                          <MailWarning className="w-6 h-6 text-primary" />
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </ScrollArea>
-            </TabsContent>
-
-            <TabsContent value="archived">
-              <ScrollArea className="h-[330px] w-full flex flex-col gap-y-2">
-                {archivedNotifications.length === 0 ? (
-                  <div className="w-full h-[330px] flex flex-col justify-center items-center gap-y-5">
-                    <Image
-                      loading="eager"
-                      alt={t("notifications.ui.emptyStates.noArchivedAlt")}
-                      src="/empty-box.svg"
-                      width={150}
-                      height={150}
-                      className="dark:opacity-80"
-                    />
-                    <p className="text-md text-center text-muted-foreground">
-                      {t("notifications.ui.emptyStates.noArchived")}
-                    </p>
-                  </div>
-                ) : (
-                  archivedNotifications.map((item) => (
-                    <div
-                      key={item.id}
-                      className="w-full h-[75px] flex items-center justify-between border-b border-border p-4 gap-x-4 hover:bg-muted/30 transition-colors"
-                    >
-                      <div className="w-[50px] h-full flex items-center justify-center gap-x-2">
-                        <TooltipProvider>
-                          <Tooltip delayDuration={0}>
-                            <TooltipTrigger asChild>
-                              <Button
-                                disabled
-                                variant="ghost"
-                                size="icon"
-                                aria-label={t("notifications.ui.actions.archived")}
-                                className="opacity-50"
-                              >
-                                <Archive className="w-4 h-4 text-muted-foreground" />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>{t("notifications.ui.actions.archived")}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </div>
-                      <div
-                        className={cn(
-                          "flex items-center gap-x-3",
-                          isRTL ? "justify-start" : "justify-end"
-                        )}
-                      >
-                        <div
-                          className={cn(
-                            "flex flex-col h-full w-fit justify-between gap-2",
-                            isRTL ? "items-end" : "items-start"
-                          )}
-                        >
-                          <div
-                            className={cn(
-                              "w-full h-[90%] flex items-start",
-                              isRTL ? "justify-end" : "justify-start"
-                            )}
-                          >
-                            <span className="text-md font-medium text-muted-foreground">
-                              {getDisplayText(item)}
-                            </span>
-                          </div>
-                          <div
-                            className={cn(
-                              "flex w-full h-[10%] items-center gap-x-3",
-                              isRTL ? "justify-start" : "justify-end"
-                            )}
-                          >
-                            <span className="text-xs text-muted-foreground">
-                              {timeSince(item.createdAt, isRTL ? "ar" : "en")}
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="bg-muted/50 flex items-center justify-center w-[50px] h-[50px] rounded-xl">
-                          <MailWarning className="w-6 h-6 text-muted-foreground" />
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </ScrollArea>
-            </TabsContent>
-          </Tabs>
         </div>
-      </PopoverContent>
-    </Popover>
+
+        <div className="shrink-0">
+          <TooltipProvider>
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (canArchive) {
+                      void handleArchive(item.id);
+                    }
+                  }}
+                  variant="ghost"
+                  size="icon"
+                  disabled={!canArchive || archiveNotification.isLoading}
+                  aria-label={
+                    canArchive
+                      ? t("notifications.ui.actions.archive")
+                      : t("notifications.ui.actions.archived")
+                  }
+                  className={cn(
+                    "transition-colors",
+                    !canArchive && "opacity-50 cursor-not-allowed"
+                  )}
+                >
+                  <Archive className="h-4 w-4 text-muted-foreground group-hover:text-foreground" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>
+                  {canArchive
+                    ? t("notifications.ui.actions.archive")
+                    : t("notifications.ui.actions.archived")}
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      </div>
+    );
+  };
+
+  const NotificationsPanel = ({
+    mobile = false,
+  }: {
+    mobile?: boolean;
+  }) => (
+    <div
+      dir={isRTL ? "rtl" : "ltr"}
+      className={cn(
+        "bg-popover border border-border overflow-hidden",
+        mobile ? "h-full rounded-none" : "rounded-xl shadow-xl"
+      )}
+    >
+      <div className="h-14 border-b border-border px-4 flex items-center justify-between bg-card/80 backdrop-blur">
+        <p className="text-lg font-semibold text-foreground">
+          {t("notifications.ui.title")}
+        </p>
+        {isNewNotifications > 0 && (
+          <Badge variant="secondary" className="text-xs">
+            {isNewNotifications}
+          </Badge>
+        )}
+      </div>
+
+      <Tabs defaultValue="all" className="w-full">
+        <div className="border-b border-border px-2 py-2 bg-muted/20">
+          <TabsList
+            className={cn(
+              "grid h-10 w-full grid-cols-2 bg-background/70",
+              isRTL && "[&>*]:flex-row-reverse"
+            )}
+          >
+            <TabsTrigger
+              value="all"
+              className="data-[state=active]:bg-card data-[state=active]:text-foreground"
+            >
+              {t("notifications.ui.tabs.all")}
+            </TabsTrigger>
+            <TabsTrigger
+              value="archived"
+              className="data-[state=active]:bg-card data-[state=active]:text-foreground gap-2"
+            >
+              <Package className="h-4 w-4" />
+              {t("notifications.ui.tabs.archived")}
+            </TabsTrigger>
+          </TabsList>
+        </div>
+
+        <TabsContent value="all" className="m-0">
+          <ScrollArea className={cn(mobile ? "h-[calc(100vh-7.5rem)]" : "h-[360px]")}>
+            {unarchivedNotifications.length === 0 ? (
+              <div className="w-full h-[320px] flex flex-col justify-center items-center gap-y-4 px-4">
+                <Image
+                  loading="eager"
+                  alt={t("notifications.ui.emptyStates.noNotificationsAlt")}
+                  src="/empty-box.svg"
+                  width={130}
+                  height={130}
+                  className="dark:opacity-80"
+                />
+                <p className="text-sm text-center text-muted-foreground">
+                  {t("notifications.ui.emptyStates.noUnread")}
+                </p>
+              </div>
+            ) : (
+              unarchivedNotifications.map((item) => (
+                <NotificationRow key={item.id} item={item} />
+              ))
+            )}
+          </ScrollArea>
+        </TabsContent>
+
+        <TabsContent value="archived" className="m-0">
+          <ScrollArea className={cn(mobile ? "h-[calc(100vh-7.5rem)]" : "h-[360px]")}>
+            {archivedNotifications.length === 0 ? (
+              <div className="w-full h-[320px] flex flex-col justify-center items-center gap-y-4 px-4">
+                <Image
+                  loading="eager"
+                  alt={t("notifications.ui.emptyStates.noArchivedAlt")}
+                  src="/empty-box.svg"
+                  width={130}
+                  height={130}
+                  className="dark:opacity-80"
+                />
+                <p className="text-sm text-center text-muted-foreground">
+                  {t("notifications.ui.emptyStates.noArchived")}
+                </p>
+              </div>
+            ) : (
+              archivedNotifications.map((item) => (
+                <NotificationRow key={item.id} item={item} archived />
+              ))
+            )}
+          </ScrollArea>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+
+  const NotificationTrigger = ({
+    className = "",
+    ...props
+  }: ComponentProps<typeof Button>) => (
+    <Button
+      size="icon"
+      className={cn(
+        "!bg-card dark:bg-card border border-border rounded-xl w-10 h-10 relative hover:bg-accent transition-colors",
+        className
+      )}
+      aria-label={
+        isNewNotifications > 0
+          ? t("notifications.ui.ariaLabelWithNew", { count: isNewNotifications })
+          : t("notifications.ui.ariaLabel", { count: isNewNotifications })
+      }
+      {...props}
+    >
+      {isNewNotifications > 0 && (
+        <span
+          className={cn(
+            "rounded-full min-w-5 h-5 px-1 text-white flex items-center justify-center bg-red-500 absolute -top-1 font-bold text-xs shadow-lg",
+            isRTL ? "-left-1" : "-right-1"
+          )}
+        >
+          {isNewNotifications > 99 ? "99+" : isNewNotifications}
+        </span>
+      )}
+      <Icons.bell className="w-4 h-4 text-foreground" />
+    </Button>
+  );
+
+  return (
+    <>
+      <div className="hidden sm:block">
+        <Popover open={desktopOpen} onOpenChange={setDesktopOpen}>
+          <PopoverTrigger asChild>
+            <NotificationTrigger />
+          </PopoverTrigger>
+          <PopoverContent
+            align={isRTL ? "end" : "start"}
+            alignOffset={isRTL ? 8 : -8}
+            sideOffset={10}
+            avoidCollisions={false}
+            dir={isRTL ? "rtl" : "ltr"}
+            className="p-0 w-[460px] border-none shadow-none"
+          >
+            <NotificationsPanel />
+          </PopoverContent>
+        </Popover>
+      </div>
+
+      <div className="sm:hidden">
+        <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+          <SheetTrigger asChild>
+            <NotificationTrigger />
+          </SheetTrigger>
+          <SheetContent
+            side={isRTL ? "right" : "left"}
+            className="p-0 w-screen max-w-none h-screen border-none"
+          >
+            <NotificationsPanel mobile />
+          </SheetContent>
+        </Sheet>
+      </div>
+    </>
   );
 };
 

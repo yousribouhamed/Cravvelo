@@ -26,20 +26,24 @@ import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 import { useTranslations, useLocale } from "next-intl";
+import { Icons } from "@/src/components/my-icons";
 
 const formSchema = z.object({
   googleAnalyticsId: z.string().optional(),
   facebookPixelId: z.string().optional(),
+  tiktokPixelId: z.string().optional(),
 });
 
 interface AnalyticsFormProps {
   googleAnalyticsId: string | null;
   facebookPixelId: string | null;
+  tiktokPixelId: string | null;
 }
 
 const AnalyticsForm: FC<AnalyticsFormProps> = ({
   googleAnalyticsId,
   facebookPixelId,
+  tiktokPixelId,
 }) => {
   const t = useTranslations("websiteSettings.forms.analytics");
   const locale = useLocale();
@@ -59,6 +63,7 @@ const AnalyticsForm: FC<AnalyticsFormProps> = ({
     defaultValues: {
       googleAnalyticsId: googleAnalyticsId ?? "",
       facebookPixelId: facebookPixelId ?? "",
+      tiktokPixelId: tiktokPixelId ?? "",
     },
   });
 
@@ -66,8 +71,11 @@ const AnalyticsForm: FC<AnalyticsFormProps> = ({
     await mutation.mutateAsync({
       googleAnalyticsId: data.googleAnalyticsId,
       facebookPixelId: data.facebookPixelId,
+      tiktokPixelId: data.tiktokPixelId,
     });
   }
+
+  const iconClass = "h-5 w-5 shrink-0 text-muted-foreground";
 
   return (
     <Form {...form}>
@@ -82,7 +90,11 @@ const AnalyticsForm: FC<AnalyticsFormProps> = ({
               name="googleAnalyticsId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel dir={isRTL ? "rtl" : "ltr"}>
+                  <FormLabel
+                    dir={isRTL ? "rtl" : "ltr"}
+                    className="flex items-center gap-2"
+                  >
+                    <Icons.google className={iconClass} />
                     {t("googleAnalyticsId")}
                   </FormLabel>
                   <FormControl>
@@ -104,7 +116,11 @@ const AnalyticsForm: FC<AnalyticsFormProps> = ({
               name="facebookPixelId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel dir={isRTL ? "rtl" : "ltr"}>
+                  <FormLabel
+                    dir={isRTL ? "rtl" : "ltr"}
+                    className="flex items-center gap-2"
+                  >
+                    <Icons.facebook className={iconClass} />
                     {t("facebookPixelId")}
                   </FormLabel>
                   <FormControl>
@@ -116,6 +132,32 @@ const AnalyticsForm: FC<AnalyticsFormProps> = ({
                   </FormControl>
                   <FormDescription dir={isRTL ? "rtl" : "ltr"}>
                     {t("facebookPixelIdDescription")}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="tiktokPixelId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel
+                    dir={isRTL ? "rtl" : "ltr"}
+                    className="flex items-center gap-2"
+                  >
+                    <Icons.tiktok className={iconClass} />
+                    {t("tiktokPixelId")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      dir="ltr"
+                      placeholder="CXXXXXXXXXXXXXXX"
+                    />
+                  </FormControl>
+                  <FormDescription dir={isRTL ? "rtl" : "ltr"}>
+                    {t("tiktokPixelIdDescription")}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

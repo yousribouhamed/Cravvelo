@@ -120,10 +120,22 @@ export function DatePickerWithRange({
     return [fromDay, toDay];
   }, [dateRange, dayCount]);
 
-  const [date, setDate] = React.useState<DateRange | undefined>({ from, to });
-  const [activePreset, setActivePreset] = React.useState<PresetKey | null>(null);
+  // Use URL/props as single source of truth so chart and picker stay in sync when filter changes
+  const date: DateRange | undefined = from !== undefined || to !== undefined ? { from, to } : undefined;
 
   const presets = React.useMemo(() => getPresets(), []);
+  const activePreset = React.useMemo((): PresetKey | null => {
+    if (from == null && to == null) return "allTime";
+    const fromStr = from ? format(from, "yyyy-MM-dd") : null;
+    const toStr = to ? format(to, "yyyy-MM-dd") : null;
+    for (const preset of presets) {
+      const r = preset.getRange();
+      const pFrom = r.from ? format(r.from, "yyyy-MM-dd") : null;
+      const pTo = r.to ? format(r.to, "yyyy-MM-dd") : null;
+      if (fromStr === pFrom && toStr === pTo) return preset.key;
+    }
+    return null;
+  }, [from?.getTime(), to?.getTime(), presets]);
 
   // Create query string
   const createQueryString = React.useCallback(
@@ -143,25 +155,22 @@ export function DatePickerWithRange({
     [searchParams]
   );
 
-  // Update query string
+  // On mount: if URL has no from/to but we have a range from props (e.g. default 12 months), write to URL so chart refetches
   React.useEffect(() => {
-    router.push(
-      `${pathname}?${createQueryString({
-        from: date?.from ? format(date.from, "yyyy-MM-dd") : null,
-        to: date?.to ? format(date.to, "yyyy-MM-dd") : null,
-      })}`,
-      {
-        scroll: false,
-      }
-    );
+    if (!searchParams?.get("from") && !searchParams?.get("to") && (from || to)) {
+      const fromStr = from ? format(from, "yyyy-MM-dd") : null;
+      const toStr = to ? format(to, "yyyy-MM-dd") : null;
+      router.replace(`${pathname}?${createQueryString({ from: fromStr, to: toStr })}`, { scroll: false });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [date?.from, date?.to]);
+  }, []);
 
-  // Handle preset click
+  // Handle preset click: update URL so chart refetches with new range
   const handlePresetClick = (preset: DatePreset) => {
     const range = preset.getRange();
-    setDate(range);
-    setActivePreset(preset.key);
+    const fromStr = range.from ? format(range.from, "yyyy-MM-dd") : null;
+    const toStr = range.to ? format(range.to, "yyyy-MM-dd") : null;
+    router.replace(`${pathname}?${createQueryString({ from: fromStr, to: toStr })}`, { scroll: false });
   };
 
   // Preset labels
@@ -191,7 +200,7 @@ export function DatePickerWithRange({
               className={cn(
                 "h-8 px-3 text-xs font-medium transition-colors",
                 activePreset === preset.key
-                  ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                  ? "bg-primary text-white hover:bg-primary/90"
                   : "bg-white dark:bg-card border-gray-200 dark:border-border text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-accent"
               )}
             >
@@ -257,13 +266,18 @@ export function DatePickerWithRange({
               defaultMonth={date?.from}
               selected={date}
               onSelect={(newDate) => {
-                setDate(newDate);
-                setActivePreset(null); // Clear preset when custom date is selected
+                if (newDate?.from) {
+                  const fromStr = format(newDate.from, "yyyy-MM-dd");
+                  const toStr = newDate.to ? format(newDate.to, "yyyy-MM-dd") : fromStr;
+                  router.replace(`${pathname}?${createQueryString({ from: fromStr, to: toStr })}`, { scroll: false });
+                }
               }}
               numberOfMonths={2}
               locale={isRTL ? ar : enUS}
               className={cn(
                 "bg-white dark:bg-card",
+                "[&_.rdp-day_selected]:bg-primary [&_.rdp-day_selected]:text-white [&_.rdp-day_selected:hover]:bg-primary/90",
+                "[&_.rdp-day_range_middle]:bg-primary/15 [&_.rdp-day_range_middle]:text-foreground",
                 "[&_.rdp-day_button]:dark:text-foreground",
                 "[&_.rdp-day_button:hover]:dark:bg-accent",
                 "[&_.rdp-day_button.rdp-day_selected]:dark:bg-primary",
@@ -319,7 +333,7 @@ export function DatePresets({ onPresetSelect, activePreset, className }: DatePre
           className={cn(
             "h-8 px-3 text-xs font-medium transition-colors",
             activePreset === preset.key
-              ? "bg-primary text-primary-foreground hover:bg-primary/90"
+              ? "bg-primary text-white hover:bg-primary/90"
               : "bg-white dark:bg-card border-gray-200 dark:border-border text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-accent"
           )}
         >

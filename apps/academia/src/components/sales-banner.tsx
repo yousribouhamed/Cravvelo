@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { useTenant } from "@/contexts/tenant";
 import { useTenantSettings } from "@/hooks/use-tenant";
 import MaxWidthWrapper from "./max-with-wrapper";
 
-const STORAGE_KEY = "academia-sales-banner-dismissed";
+const STORAGE_KEY_PREFIX = "academia-sales-banner-dismissed";
 const DISMISS_EXPIRY_MS = 24 * 60 * 60 * 1000;
 
 function getEndOfToday(): Date {
@@ -39,13 +40,16 @@ function useCountdown(endTimeMs: number) {
 }
 
 export default function SalesBanner() {
+  const { tenant } = useTenant();
   const { enableSalesBanner } = useTenantSettings();
   const t = useTranslations("salesBanner");
+
+  const storageKey = `${STORAGE_KEY_PREFIX}-${tenant}`;
 
   const [dismissed, setDismissed] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(storageKey);
     if (raw) {
       const timestamp = parseInt(raw, 10);
       if (!isNaN(timestamp) && Date.now() - timestamp < DISMISS_EXPIRY_MS) {
@@ -54,10 +58,10 @@ export default function SalesBanner() {
       }
     }
     setDismissed(false);
-  }, []);
+  }, [storageKey]);
 
   const handleDismiss = () => {
-    localStorage.setItem(STORAGE_KEY, Date.now().toString());
+    localStorage.setItem(storageKey, Date.now().toString());
     setDismissed(true);
   };
 

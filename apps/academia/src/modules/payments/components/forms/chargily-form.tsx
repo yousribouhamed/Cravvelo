@@ -5,7 +5,6 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
-import BrandButton from "@/components/brand-button";
 import { createChargilyPaymentIntent } from "../../actions/chargily.actions";
 import { usePaymentContext } from "../../context/payments-provider";
 import { useTranslations, useLocale } from "next-intl";
@@ -135,7 +134,7 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
                   onClick={handleCouponApply}
                   disabled={true} // Disabled until coupon logic is implemented
                   size="sm"
-                  className="px-4 bg-blue-600 hover:bg-blue-700 text-white shrink-0"
+                  className="px-4 shrink-0"
                 >
                   {couponApplied ? t("couponApplied") : t("couponApply")}
                 </Button>
@@ -150,7 +149,7 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
 
       {/* Fixed Bottom Button - sticky on mobile for always-visible CTA */}
       <div className="sticky bottom-0 z-10 bg-card pt-4 pb-[env(safe-area-inset-bottom)] md:static md:my-4 md:pb-4 flex items-center justify-center p-4">
-        <BrandButton
+        <Button
           size="lg"
           type="submit"
           className="w-full min-h-11 sm:h-10"
@@ -158,7 +157,7 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
           disabled={!selectedProduct || isSubmitLoading}
         >
           {t("submitButton")}
-        </BrandButton>
+        </Button>
       </div>
     </form>
   );

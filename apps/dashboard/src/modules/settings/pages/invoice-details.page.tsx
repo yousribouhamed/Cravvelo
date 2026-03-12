@@ -12,9 +12,25 @@ import {
   CardTitle,
 } from "@ui/components/ui/card";
 import { Separator } from "@ui/components/ui/separator";
-import { CalendarDays, CreditCard, Package, User, Globe } from "lucide-react";
-import { formatCurrency } from "../../payments/utils";
+import { CalendarDays, CreditCard, Package } from "lucide-react";
+import { formatCurrencyCompact } from "../../payments/utils";
 import { useRouter } from "next/navigation";
+
+const getPaymentMethodBadgeClass = (method: string | null) => {
+  if (!method) return "bg-muted text-muted-foreground border-border";
+  switch (method) {
+    case "CHARGILY":
+      return "bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-500/30";
+    case "BANK_TRANSFER":
+      return "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30";
+    case "CASH":
+      return "bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30";
+    case "CREDIT_CARD":
+      return "bg-violet-500/15 text-violet-700 dark:text-violet-400 border-violet-500/30";
+    default:
+      return "bg-muted text-muted-foreground border-border";
+  }
+};
 import { ar, enUS } from "date-fns/locale";
 import { format } from "date-fns";
 import { useLocale, useTranslations } from "next-intl";
@@ -44,47 +60,37 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
 
   if (isLoading || isFetching) {
     return (
-      <div className="p-4 space-y-4">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div className="space-y-2">
-            <Skeleton className="h-8 w-48 rounded-md" />
-            <Skeleton className="h-4 w-32 rounded-md" />
-          </div>
-          <Skeleton className="h-10 w-40 rounded-md" />
-        </div>
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
+      <div className="p-4 md:p-6 flex flex-col gap-6 max-w-4xl">
+        <Skeleton className="h-4 w-48 rounded-md" />
+        <Card className="rounded-xl">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between gap-2">
               <Skeleton className="h-6 w-24 rounded-md" />
               <Skeleton className="h-6 w-20 rounded-full" />
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <CardContent className="flex flex-col gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="flex items-center space-x-3">
+                <div key={i} className="flex items-center gap-3">
                   <Skeleton className="h-5 w-5 rounded shrink-0" />
-                  <div className="space-y-2 flex-1">
+                  <div className="flex flex-col gap-2 flex-1 min-w-0">
                     <Skeleton className="h-4 w-16 rounded-md" />
                     <Skeleton className="h-5 w-24 rounded-md" />
                   </div>
                 </div>
               ))}
             </div>
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-full rounded-md" />
-              <Skeleton className="h-4 w-3/4 rounded-md" />
-            </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="rounded-xl">
           <CardHeader>
             <Skeleton className="h-6 w-32 rounded-md" />
           </CardHeader>
           <CardContent>
-            <div className="flex items-start space-x-4">
+            <div className="flex items-start gap-4">
               <Skeleton className="w-16 h-16 rounded-lg shrink-0" />
-              <div className="flex-1 space-y-2">
+              <div className="flex-1 flex flex-col gap-2">
                 <Skeleton className="h-5 w-48 rounded-md" />
                 <Skeleton className="h-4 w-full rounded-md" />
                 <Skeleton className="h-4 w-24 rounded-md" />
@@ -98,16 +104,16 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
 
   if (isError) {
     return (
-      <div className="w-full min-h-[300px] flex items-center justify-center p-6">
-        <Card className="w-full max-w-lg">
+      <div className="w-full min-h-[300px] flex items-center justify-center p-4 md:p-6">
+        <Card className="w-full max-w-lg rounded-xl border bg-card">
           <CardHeader>
-            <CardTitle>{t("notFound")}</CardTitle>
+            <CardTitle className="text-start">{t("notFound")}</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm text-gray-600">
+          <CardContent className="flex flex-col gap-4">
+            <p className="text-sm text-muted-foreground text-start">
               {error instanceof Error ? error.message : t("notFoundDescription")}
             </p>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <Button onClick={() => refetch()}>{retryLabel}</Button>
               <Button variant="secondary" onClick={() => router.push("/settings/invoices")}>
                 {backToInvoicesLabel}
@@ -121,14 +127,10 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
 
   if (!data?.invoice) {
     return (
-      <div className="w-full h-[400px] flex items-center justify-center">
+      <div className="w-full min-h-[300px] flex items-center justify-center p-4">
         <div className="text-center">
-          <h3 className="text-lg font-medium text-gray-900">
-            {t("notFound")}
-          </h3>
-          <p className="text-sm text-gray-500">
-            {t("notFoundDescription")}
-          </p>
+          <h3 className="text-lg font-medium text-foreground">{t("notFound")}</h3>
+          <p className="text-sm text-muted-foreground mt-1">{t("notFoundDescription")}</p>
         </div>
       </div>
     );
@@ -136,25 +138,23 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
 
   const { invoice, purchasedItem, seller, paymentHistory } = data;
 
-  const handlePayInvoice = () => {
-    // // Add your payment logic here
-    // console.log("Processing payment for invoice:", invoice.id);
-
-    router.push(`/checkout?paymentId=${invoice.Payment.id}`);
-  };
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case "PENDING":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+        return "bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30";
       case "PAID":
-        return "bg-green-100 text-green-800 border-green-200";
+      case "COMPLETED":
+        return "bg-green-500/15 text-green-700 dark:text-green-400 border-green-500/30";
       case "FAILED":
-        return "bg-red-100 text-red-800 border-red-200";
+        return "bg-red-500/15 text-red-700 dark:text-red-400 border-red-500/30";
       case "CANCELLED":
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return "bg-gray-500/15 text-gray-700 dark:text-gray-400 border-gray-500/30";
+      case "REFUNDED":
+        return "bg-purple-500/15 text-purple-700 dark:text-purple-400 border-purple-500/30";
+      case "PROCESSING":
+        return "bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-500/30";
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return "bg-gray-500/15 text-gray-700 dark:text-gray-400 border-gray-500/30";
     }
   };
 
@@ -179,78 +179,63 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
   };
 
   return (
-    <div className="  p-4 space-y-4">
-      {/* Header with Pay Button */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">{t("title")}</h1>
-          <p className="text-sm text-gray-500">
-            {t("invoiceNumber")}: {invoice.id}
-          </p>
-        </div>
-        {invoice.status === "PENDING" && (
-          <Button
-            onClick={handlePayInvoice}
-            size="lg"
-            className="w-full sm:w-auto"
-          >
-            <CreditCard className="w-4 h-4 mr-2" />
-            {t("payInvoice")} -{" "}
-            {formatCurrency({
-              amount: invoice.amount,
-              currency: invoice.currency as "DZD",
-            })}
-          </Button>
-        )}
-      </div>
+    <div className="p-4 md:p-6 flex flex-col gap-6 max-w-4xl">
+      {/* Invoice reference (RTL-aware) */}
+      <p className="text-sm text-muted-foreground text-start">
+        {t("invoiceNumber")}: {invoice.id}
+      </p>
 
       {/* Invoice Summary Card */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            {t("summary")}
-            <Badge className={getStatusColor(invoice.status)}>
+      <Card className="rounded-xl border bg-card">
+        <CardHeader className="pb-2">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <CardTitle className="text-lg">{t("summary")}</CardTitle>
+            <Badge
+              variant="secondary"
+              className={`border ${getStatusColor(invoice.status)}`}
+            >
               {translateStatus(invoice.status)}
             </Badge>
-          </CardTitle>
+          </div>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="flex items-center space-x-3">
-              <CreditCard className="w-5 h-5 text-gray-400" />
-              <div>
-                <p className="text-sm font-medium text-gray-500">{t("amount")}</p>
-                <p className="text-lg font-semibold">
-                  {formatCurrency({
+        <CardContent className="flex flex-col gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="flex items-center gap-3 rtl:flex-row-reverse">
+              <CreditCard className="w-5 h-5 shrink-0 text-muted-foreground" />
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-muted-foreground">{t("amount")}</p>
+                <p className="text-lg font-semibold text-foreground truncate">
+                  {formatCurrencyCompact({
                     amount: invoice.amount,
-                    currency: invoice.currency as "DZD",
+                    currency: invoice.currency ?? "DZD",
                   })}
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-3">
-              <CalendarDays className="w-5 h-5 text-gray-400" />
-              <div>
-                <p className="text-sm font-medium text-gray-500">{t("createdAt")}</p>
-                <p className="text-sm">
-                  {formatDate(invoice.createdAt)}
-                </p>
+            <div className="flex items-center gap-3 rtl:flex-row-reverse">
+              <CalendarDays className="w-5 h-5 shrink-0 text-muted-foreground" />
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-muted-foreground">{t("createdAt")}</p>
+                <p className="text-sm text-foreground">{formatDate(invoice.createdAt)}</p>
               </div>
             </div>
-            <div className="flex items-center space-x-3">
-              <Package className="w-5 h-5 text-gray-400" />
-              <div>
-                <p className="text-sm font-medium text-gray-500">{t("paymentType")}</p>
-                <p className="text-sm">{invoice.Payment.type}</p>
+            <div className="flex items-center gap-3 rtl:flex-row-reverse">
+              <Package className="w-5 h-5 shrink-0 text-muted-foreground" />
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-muted-foreground">{t("paymentType")}</p>
+                <Badge
+                  variant="secondary"
+                  className={`mt-1 border ${getPaymentMethodBadgeClass(invoice.Payment.method)}`}
+                >
+                  {invoice.Payment.method?.replace("_", " ") ?? invoice.Payment.type}
+                </Badge>
               </div>
             </div>
           </div>
           {invoice.description && (
-            <div>
-              <p className="text-sm font-medium text-gray-500 mb-1">
-                {t("description")}
-              </p>
-              <p className="text-sm">{invoice.description}</p>
+            <div className="pt-2 border-t border-border">
+              <p className="text-sm font-medium text-muted-foreground mb-1">{t("description")}</p>
+              <p className="text-sm text-foreground">{invoice.description}</p>
             </div>
           )}
         </CardContent>
@@ -258,34 +243,34 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
 
       {/* Purchased Item Details */}
       {purchasedItem && (
-        <Card>
+        <Card className="rounded-xl border bg-card">
           <CardHeader>
-            <CardTitle>{t("purchasedItem")}</CardTitle>
+            <CardTitle className="text-lg">{t("purchasedItem")}</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex items-start space-x-4">
+            <div className="flex items-start gap-4 rtl:flex-row-reverse">
               {purchasedItem.item.logoUrl && (
                 <img
                   src={purchasedItem.item.logoUrl}
                   alt={purchasedItem.item.name}
-                  className="w-16 h-16 rounded-lg object-cover border"
+                  className="w-16 h-16 rounded-lg object-cover border shrink-0"
                 />
               )}
-              <div className="flex-1">
-                <h3 className="font-semibold text-lg">
+              <div className="flex-1 min-w-0">
+                <h3 className="font-semibold text-lg text-foreground">
                   {purchasedItem.item.name}
                 </h3>
-                <p className="text-gray-600 text-sm mb-2">
+                <p className="text-muted-foreground text-sm mt-1 mb-2">
                   {purchasedItem.item.shortDesc}
                 </p>
-                <div className="flex flex-wrap gap-4 text-sm">
+                <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
                   <div>
-                    <span className="font-medium">{t("plan")}:</span>{" "}
-                    {purchasedItem.planName}
+                    <span className="font-medium text-foreground">{t("plan")}:</span>{" "}
+                    <span className="text-muted-foreground">{purchasedItem.planName}</span>
                   </div>
                   <div>
-                    <span className="font-medium">{t("category")}:</span>{" "}
-                    {purchasedItem.item.category}
+                    <span className="font-medium text-foreground">{t("category")}:</span>{" "}
+                    <span className="text-muted-foreground">{purchasedItem.item.category}</span>
                   </div>
                   {purchasedItem.isRecurring && (
                     <Badge variant="outline">{t("recurringSubscription")}</Badge>
@@ -298,44 +283,45 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
       )}
 
       {/* Payment History */}
-      <Card>
+      <Card className="rounded-xl border bg-card">
         <CardHeader>
-          <CardTitle>{t("paymentHistory")}</CardTitle>
+          <CardTitle className="text-lg">{t("paymentHistory")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <p className="text-sm font-medium text-gray-500">
-                {t("totalAttempts")}
-              </p>
-              <p className="font-medium">{paymentHistory.totalAttempts}</p>
+              <p className="text-sm font-medium text-muted-foreground">{t("totalAttempts")}</p>
+              <p className="font-medium text-foreground mt-0.5">{paymentHistory.totalAttempts}</p>
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500">
-                {t("paymentMethod")}
-              </p>
-              <p className="font-medium">
-                {paymentHistory.method || t("notSpecified")}
-              </p>
+              <p className="text-sm font-medium text-muted-foreground">{t("paymentMethod")}</p>
+              <div className="font-medium mt-0.5">
+                {paymentHistory.method ? (
+                  <Badge
+                    variant="secondary"
+                    className={`border ${getPaymentMethodBadgeClass(paymentHistory.method)}`}
+                  >
+                    {paymentHistory.method.replace("_", " ")}
+                  </Badge>
+                ) : (
+                  <span className="text-foreground">{t("notSpecified")}</span>
+                )}
+              </div>
             </div>
             {paymentHistory.refundAmount > 0 && (
               <>
                 <div>
-                  <p className="text-sm font-medium text-gray-500">
-                    {t("refundAmount")}
-                  </p>
-                  <p className="font-medium">
-                    {formatCurrency({
+                  <p className="text-sm font-medium text-muted-foreground">{t("refundAmount")}</p>
+                  <p className="font-medium text-foreground mt-0.5">
+                    {formatCurrencyCompact({
                       amount: invoice.amount,
-                      currency: invoice.currency as "DZD",
+                      currency: invoice.currency ?? "DZD",
                     })}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500">
-                    {t("refundReason")}
-                  </p>
-                  <p className="font-medium">
+                  <p className="text-sm font-medium text-muted-foreground">{t("refundReason")}</p>
+                  <p className="font-medium text-foreground mt-0.5">
                     {paymentHistory.refundReason || t("notAvailable")}
                   </p>
                 </div>
@@ -347,31 +333,33 @@ export const InvoiceDetailsPage = ({ invoiceId }: PageProps) => {
 
       {/* App Installation Details */}
       {invoice.Payment.AppInstall && invoice.Payment.AppInstall.length > 0 && (
-        <Card>
+        <Card className="rounded-xl border bg-card">
           <CardHeader>
-            <CardTitle>{t("appInstallation")}</CardTitle>
+            <CardTitle className="text-lg">{t("appInstallation")}</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex flex-col gap-4">
             {invoice.Payment.AppInstall.map((install) => (
-              <div key={install.id} className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-medium">{t("status")}</span>
-                  <Badge className={getStatusColor(install.status)}>
+              <div key={install.id} className="flex flex-col gap-3 rounded-lg border border-border p-4">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="font-medium text-foreground">{t("status")}</span>
+                  <Badge variant="secondary" className={`border ${getStatusColor(install.status)}`}>
                     {translateStatus(install.status)}
                   </Badge>
                 </div>
                 <Separator />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="font-medium">{t("installedAt")}:</span>{" "}
-                    {formatDate(install.installedAt)}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                  <div className="text-start">
+                    <span className="font-medium text-foreground">{t("installedAt")}:</span>{" "}
+                    <span className="text-muted-foreground">{formatDate(install.installedAt)}</span>
                   </div>
-                  <div>
-                    <span className="font-medium">{t("subscriptionAmount")}:</span>{" "}
-                    {formatCurrency({
-                      amount: invoice.amount,
-                      currency: invoice.currency as "DZD",
-                    })}
+                  <div className="text-start">
+                    <span className="font-medium text-foreground">{t("subscriptionAmount")}:</span>{" "}
+                    <span className="text-muted-foreground">
+                      {formatCurrencyCompact({
+                        amount: invoice.amount,
+                        currency: invoice.currency ?? "DZD",
+                      })}
+                    </span>
                   </div>
                 </div>
               </div>

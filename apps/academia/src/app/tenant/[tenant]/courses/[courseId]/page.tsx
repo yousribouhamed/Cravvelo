@@ -6,12 +6,35 @@ import { CravveloEditor } from "@cravvelo/editor";
 import { PaymentSheet } from "@/modules/payments/components/payment-sheet";
 import { checkCourseOwnership } from "@/modules/courses/actions/check-ownership";
 import { getTranslations } from "next-intl/server";
+import { getTenantWebsite } from "@/actions/tanant";
+import type { Metadata } from "next";
 
 interface PageProps {
   params: Promise<{
     tenant: string;
     courseId: string;
   }>;
+}
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { tenant: tenantKey, courseId } = await params;
+  const tenant = decodeURIComponent(tenantKey);
+  const [courseRes, website] = await Promise.all([
+    getCourseById({ courseId }),
+    getTenantWebsite(tenant),
+  ]);
+  const course = courseRes.success ? courseRes.data : null;
+  const tenantDisplayName =
+    (website as any)?.name ?? (website as any)?.Account?.user_name ?? tenant;
+  const pageTitle =
+    course?.seoTitle ?? course?.title ?? "Course";
+  const description = course?.seoDescription ?? undefined;
+  return {
+    title: `${pageTitle} – ${tenantDisplayName}`,
+    ...(description && { description }),
+  };
 }
 
 export default async function Page({ params }: PageProps) {

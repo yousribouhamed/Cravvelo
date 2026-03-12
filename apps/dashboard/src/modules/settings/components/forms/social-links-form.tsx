@@ -26,6 +26,7 @@ import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
 import { useTranslations, useLocale } from "next-intl";
+import { Icons } from "@/src/components/my-icons";
 
 const formSchema = z.object({
   facebookUrl: z.string().optional(),
@@ -97,7 +98,8 @@ const SocialLinksForm: FC<SocialLinksFormProps> = ({
               name="facebookUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel dir={isRTL ? "rtl" : "ltr"}>
+                  <FormLabel dir={isRTL ? "rtl" : "ltr"} className="flex items-center gap-2">
+                    <Icons.facebook className="h-4 w-4 shrink-0" />
                     {t("facebookUrl")}
                   </FormLabel>
                   <FormControl>
@@ -116,7 +118,8 @@ const SocialLinksForm: FC<SocialLinksFormProps> = ({
               name="twitterUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel dir={isRTL ? "rtl" : "ltr"}>
+                  <FormLabel dir={isRTL ? "rtl" : "ltr"} className="flex items-center gap-2">
+                    <Icons.twitter className="h-4 w-4 shrink-0" />
                     {t("twitterUrl")}
                   </FormLabel>
                   <FormControl>
@@ -135,7 +138,8 @@ const SocialLinksForm: FC<SocialLinksFormProps> = ({
               name="instagramUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel dir={isRTL ? "rtl" : "ltr"}>
+                  <FormLabel dir={isRTL ? "rtl" : "ltr"} className="flex items-center gap-2">
+                    <Icons.instagram className="h-4 w-4 shrink-0" />
                     {t("instagramUrl")}
                   </FormLabel>
                   <FormControl>
@@ -154,7 +158,8 @@ const SocialLinksForm: FC<SocialLinksFormProps> = ({
               name="linkedinUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel dir={isRTL ? "rtl" : "ltr"}>
+                  <FormLabel dir={isRTL ? "rtl" : "ltr"} className="flex items-center gap-2">
+                    <Icons.linkedin className="h-4 w-4 shrink-0" />
                     {t("linkedinUrl")}
                   </FormLabel>
                   <FormControl>
@@ -173,7 +178,8 @@ const SocialLinksForm: FC<SocialLinksFormProps> = ({
               name="youtubeUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel dir={isRTL ? "rtl" : "ltr"}>
+                  <FormLabel dir={isRTL ? "rtl" : "ltr"} className="flex items-center gap-2">
+                    <Icons.youtube className="h-4 w-4 shrink-0" />
                     {t("youtubeUrl")}
                   </FormLabel>
                   <FormControl>

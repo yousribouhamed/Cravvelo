@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/accordion";
 import { ChapterType } from "../types";
 import { useTranslations, useLocale } from "next-intl";
-import { useTenantBranding } from "@/hooks/use-tenant";
 
 interface CourseNavigatorProps {
   chapters: ChapterType[];
@@ -33,7 +32,6 @@ export const CourseNavigator: React.FC<CourseNavigatorProps> = ({
   const currentModuleId = searchParams.get("module");
   const t = useTranslations("watch");
   const locale = useLocale();
-  const { primaryColor } = useTenantBranding();
   const dir = locale === "ar" ? "rtl" : "ltr";
   const isRTL = locale === "ar";
 
@@ -76,14 +74,8 @@ export const CourseNavigator: React.FC<CourseNavigatorProps> = ({
       {/* Header */}
       <div className="rounded-t-md px-4 py-3 border-b border-border bg-muted/30">
         <div className={cn("flex items-center gap-3", isRTL && "flex-row-reverse")}>
-          <div
-            className="flex h-9 w-9 shrink-0 items-center justify-center"
-            style={{ backgroundColor: primaryColor ? `${primaryColor}20` : "var(--primary)" }}
-          >
-            <BookOpen
-              className="h-4 w-4"
-              style={{ color: primaryColor || "var(--primary)" }}
-            />
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/20 text-primary">
+            <BookOpen className="h-4 w-4 text-current" />
           </div>
           <div className="min-w-0 flex-1">
             <h3 className="text-sm font-semibold text-foreground">{t("courseContent")}</h3>
@@ -147,31 +139,19 @@ export const CourseNavigator: React.FC<CourseNavigatorProps> = ({
                                 ? "bg-primary/10 border-r-2 border-primary"
                                 : "bg-primary/10 border-l-2 border-primary")
                           )}
-                          style={
-                            isCurrentModule && primaryColor
-                              ? { borderColor: primaryColor }
-                              : undefined
-                          }
                         >
                           <div
                             className={cn(
-                              "flex h-7 w-7 shrink-0 items-center justify-center",
+                              "flex h-7 w-7 shrink-0 items-center justify-center rounded-sm",
                               isCurrentModule
-                                ? primaryColor
-                                  ? "text-white"
-                                  : "bg-primary text-primary-foreground"
+                                ? "bg-primary text-primary-foreground"
                                 : "bg-muted/80 text-muted-foreground"
                             )}
-                            style={
-                              isCurrentModule && primaryColor
-                                ? { backgroundColor: primaryColor }
-                                : undefined
-                            }
                           >
                             {isLocked ? (
-                              <Lock className={cn("h-3.5 w-3.5", isRTL && "scale-x-[-1]")} />
+                              <Lock className={cn("h-3.5 w-3.5 text-current", isRTL && "scale-x-[-1]")} />
                             ) : (
-                              <Play className={cn("h-3.5 w-3.5", isRTL && "scale-x-[-1]")} />
+                              <Play className={cn("h-3.5 w-3.5 text-current", isRTL && "scale-x-[-1]")} />
                             )}
                           </div>
 
@@ -181,7 +161,6 @@ export const CourseNavigator: React.FC<CourseNavigatorProps> = ({
                                 "text-sm font-medium truncate",
                                 isCurrentModule && "text-primary"
                               )}
-                              style={isCurrentModule && primaryColor ? { color: primaryColor } : undefined}
                             >
                               {module.title}
                             </p>

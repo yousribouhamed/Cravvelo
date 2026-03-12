@@ -32,6 +32,7 @@ interface DisableSalesFormProps {
   dDigitalProductsHomeScreen: boolean;
   itemsAlignment: boolean;
   enableSalesBanner: boolean;
+  enableWelcomeBanner: boolean;
 }
 
 const formSchema = z.object({
@@ -39,12 +40,14 @@ const formSchema = z.object({
   dDigitalProductsHomeScreen: z.boolean(),
   itemsAlignment: z.boolean(),
   enableSalesBanner: z.boolean(),
+  enableWelcomeBanner: z.boolean(),
 });
 
 const WebsiteLayoutForm: FC<DisableSalesFormProps> = ({
   dCoursesHomeScreen,
   dDigitalProductsHomeScreen,
   enableSalesBanner,
+  enableWelcomeBanner,
   itemsAlignment,
 }) => {
   const t = useTranslations("websiteSettings.forms.layout");
@@ -66,6 +69,7 @@ const WebsiteLayoutForm: FC<DisableSalesFormProps> = ({
       dCoursesHomeScreen,
       dDigitalProductsHomeScreen,
       enableSalesBanner,
+      enableWelcomeBanner,
       itemsAlignment,
     },
   });
@@ -75,6 +79,7 @@ const WebsiteLayoutForm: FC<DisableSalesFormProps> = ({
       dCoursesHomeScreen: data.dCoursesHomeScreen,
       dDigitalProductsHomeScreen: data.dDigitalProductsHomeScreen,
       enableSalesBanner: data.enableSalesBanner,
+      enableWelcomeBanner: data.enableWelcomeBanner,
       itemsAlignment: data.itemsAlignment,
     });
   }
@@ -134,6 +139,25 @@ const WebsiteLayoutForm: FC<DisableSalesFormProps> = ({
                 <FormItem className="flex flex-row items-center justify-between rounded-lg  p-3">
                   <div className="space-y-0.5">
                     <FormLabel dir={isRTL ? "rtl" : "ltr"}>{t("showSalesBanner")}</FormLabel>
+                  </div>
+                  <FormControl>
+                    <div dir="ltr">
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </div>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="enableWelcomeBanner"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg  p-3">
+                  <div className="space-y-0.5">
+                    <FormLabel dir={isRTL ? "rtl" : "ltr"}>{t("showWelcomeBanner")}</FormLabel>
                   </div>
                   <FormControl>
                     <div dir="ltr">

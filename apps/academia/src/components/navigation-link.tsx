@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTenantBranding } from "@/hooks/use-tenant";
 
 interface NavigationLinkProps {
   href: string;
@@ -18,7 +17,6 @@ export default function NavigationLink({
   onClick,
 }: NavigationLinkProps) {
   const pathname = usePathname();
-  const { primaryColor } = useTenantBranding();
   // Exact match, or prefix match so /courses and /products stay active on detail pages
   const isActive =
     pathname === href ||
@@ -33,10 +31,7 @@ export default function NavigationLink({
     <Link href={href} className={combinedClasses} onClick={onClick}>
       {label}
       {isActive && (
-        <span
-          className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
-          style={{ backgroundColor: primaryColor }}
-        />
+        <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-primary" />
       )}
     </Link>
   );

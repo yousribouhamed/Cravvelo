@@ -12,8 +12,11 @@ import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import Footer from "@/components/layout/footer";
 import { VisitTracker } from "@/components/visit-tracker";
-import { FacebookPixel } from "@/components/facebook-pixel";
+import { TrackingPixels } from "@/components/tracking-pixels";
 import { buildThemeStyleAndData } from "@/lib/theme-utils";
+
+export const dynamic = "force-dynamic";
+
 interface TenantLayoutProps {
   children: ReactNode;
   params: Promise<{
@@ -70,7 +73,7 @@ export default async function TenantLayout({
   }
 
   const theme = websiteData.themeCustomization as Record<string, unknown> | null | undefined;
-  const { style: themeStyle, dataAttributes: themeData } = buildThemeStyleAndData(theme as import("database").ThemeCustomization);
+  const { style: themeStyle, dataAttributes: themeData, cssOverrides } = buildThemeStyleAndData(theme as import("database").ThemeCustomization);
   const hasPageBg =
     theme &&
     typeof theme === "object" &&
@@ -82,14 +85,23 @@ export default async function TenantLayout({
     ...themeStyle,
   } as React.CSSProperties;
 
+  const primaryFallback =
+    websiteData.primaryColor &&
+    `.academia-theme-root { --primary: ${websiteData.primaryColor}; } .dark .academia-theme-root { --primary: ${websiteData.primaryColor}; }`;
+
   return (
     <div
-      className={`min-h-screen h-fit text-neutral-900 dark:text-neutral-200 ${hasPageBg ? "academia-theme-page-bg" : "bg-neutral-50 dark:bg-[#0E0E10]"}`}
+      className={`academia-theme-root min-h-screen h-fit text-neutral-900 dark:text-neutral-200 ${hasPageBg ? "academia-theme-page-bg" : "bg-neutral-50 dark:bg-[#0E0E10]"}`}
       style={layoutStyle}
       {...themeData}
     >
+      {primaryFallback ? <style dangerouslySetInnerHTML={{ __html: primaryFallback }} /> : null}
+      {cssOverrides ? <style dangerouslySetInnerHTML={{ __html: cssOverrides }} /> : null}
       <VisitTracker tenant={tenant} />
-      <FacebookPixel pixelId={websiteData.facebookPixelId ?? null} />
+      <TrackingPixels
+        facebookPixelId={websiteData.facebookPixelId ?? null}
+        tiktokPixelId={websiteData.tiktokPixelId ?? null}
+      />
       <TenantProvider website={websiteData} tenant={tenant} user={user}>
         <PaymentProvider>
           <SalesBanner />
@@ -102,6 +114,13 @@ export default async function TenantLayout({
                 privacyPolicy: (websiteData as any)?.privacy_policy,
                 termsOfService: (websiteData as any)?.terms_of_service,
                 refundPolicy: (websiteData as any)?.refund_policy,
+              }}
+              social={{
+                facebookUrl: (websiteData as any)?.facebookUrl ?? null,
+                twitterUrl: (websiteData as any)?.twitterUrl ?? null,
+                instagramUrl: (websiteData as any)?.instagramUrl ?? null,
+                linkedinUrl: (websiteData as any)?.linkedinUrl ?? null,
+                youtubeUrl: (websiteData as any)?.youtubeUrl ?? null,
               }}
             />
 

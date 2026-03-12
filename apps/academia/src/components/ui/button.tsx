@@ -83,6 +83,9 @@ function Button({
   return (
     <Comp
       data-slot="button"
+      data-academia-button="true"
+      data-variant={variant ?? "default"}
+      data-size={size ?? "default"}
       className={cn(buttonVariants({ variant, size, className }))}
       disabled={disabled || loading}
       {...props}

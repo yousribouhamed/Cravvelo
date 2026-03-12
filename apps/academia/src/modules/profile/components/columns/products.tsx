@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import BrandButton from "@/components/brand-button";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useMemo } from "react";
 import {
@@ -191,7 +191,7 @@ export function useProductColumns(): ColumnDef<ProductSale>[] {
           if (!productId) return <span className="text-gray-400 text-sm">—</span>;
 
           return (
-            <BrandButton
+            <Button
               size="sm"
               className="gap-1.5"
               onClick={() => handleDownload(productId)}
@@ -199,7 +199,7 @@ export function useProductColumns(): ColumnDef<ProductSale>[] {
             >
               <Download className="h-3.5 w-3.5" />
               {t("actions.download")}
-            </BrandButton>
+            </Button>
           );
         },
       },

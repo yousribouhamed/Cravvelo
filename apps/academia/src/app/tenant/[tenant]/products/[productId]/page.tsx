@@ -5,12 +5,35 @@ import ProductBuyCard from "@/modules/products/components/product-buycard";
 import Image from "next/image";
 import { CravveloEditor } from "@cravvelo/editor";
 import { getTranslations } from "next-intl/server";
+import { getTenantWebsite } from "@/actions/tanant";
+import type { Metadata } from "next";
 
 interface PageProps {
   params: Promise<{
     tenant: string;
     productId: string;
   }>;
+}
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { tenant: tenantKey, productId } = await params;
+  const tenant = decodeURIComponent(tenantKey);
+  const [productRes, website] = await Promise.all([
+    getProductById({ productId }),
+    getTenantWebsite(tenant),
+  ]);
+  const product = productRes.success ? productRes.data : null;
+  const tenantDisplayName =
+    (website as any)?.name ?? (website as any)?.Account?.user_name ?? tenant;
+  const pageTitle =
+    (product as any)?.SeoTitle ?? (product as any)?.title ?? "Product";
+  const description = (product as any)?.SeoDescription as string | undefined;
+  return {
+    title: `${pageTitle} – ${tenantDisplayName}`,
+    ...(description && { description }),
+  };
 }
 
 export default async function Page({ params }: PageProps) {

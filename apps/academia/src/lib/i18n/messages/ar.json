@@ -8,6 +8,11 @@
     "description": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
     "backHome": "العودة للرئيسية"
   },
+  "error": {
+    "title": "حدث خطأ ما",
+    "description": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.",
+    "tryAgain": "حاول مرة أخرى"
+  },
   "salesBanner": {
     "message": "هذا السعر لن يدوم طويلاً...",
     "hours": "ساعات",
@@ -29,7 +34,8 @@
     "termsOfService": "شروط الخدمة",
     "refundPolicy": "سياسة الاسترداد",
     "defaultBrandName": "الأكاديمية",
-    "rightsReserved": "© {year} {name}. جميع الحقوق محفوظة."
+    "rightsReserved": "© {year} {name}. جميع الحقوق محفوظة.",
+    "followUs": "تابعنا"
   },
   "legal": {
     "privacyPolicy": {
@@ -493,6 +499,18 @@
       "title": "المنتجات",
       "subtitle": "استكشف أحدث المنتجات الرقمية",
       "viewAll": "عرض كل المنتجات"
+    },
+    "sections": {
+      "testimonials": "الشهادات",
+      "testimonialsSubtitle": "ماذا يقول طلابنا",
+      "contactForm": "اتصل بنا",
+      "contactFormSubtitle": "تواصل معنا",
+      "contactEmail": "البريد الإلكتروني",
+      "contactPhone": "الهاتف",
+      "contactAddress": "العنوان",
+      "noContactConfigured": "لم يتم تكوين معلومات الاتصال بعد.",
+      "noReviewsYet": "لا توجد تقييمات بعد لهذه الأكاديمية.",
+      "comingSoon": "قريباً"
     }
   },
   "watch": {

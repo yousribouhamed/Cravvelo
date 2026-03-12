@@ -19,7 +19,7 @@ import { logoutUser } from "@/modules/auth/actions/auth";
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
-  const { logo, name, primaryColor } = useTenantBranding();
+  const { logo, name } = useTenantBranding();
   const { userName, avatarUrl } = useTenantAccount();
   const { showCoursesOnHome, showProductsOnHome } = useTenantSettings();
   const tNav = useTranslations("nav");
@@ -99,10 +99,7 @@ export default function Header() {
                 </button>
               </Link>
               <Link href={`/register`}>
-                <button
-                  className="px-4 py-2 cursor-pointer text-white font-medium rounded-lg hover:opacity-90 transition-opacity"
-                  style={{ backgroundColor: primaryColor }}
-                >
+                <button className="px-4 py-2 cursor-pointer bg-primary text-primary-foreground font-medium rounded-lg hover:opacity-90 transition-opacity">
                   {tNav("signUp")}
                 </button>
               </Link>
@@ -165,8 +162,7 @@ export default function Header() {
                 <Link href="/register" className="block">
                   <button
                     type="button"
-                    className="w-full px-4 py-3 min-h-[44px] text-white font-medium rounded-lg hover:opacity-90 transition-opacity text-center"
-                    style={{ backgroundColor: primaryColor }}
+                    className="w-full px-4 py-3 min-h-[44px] bg-primary text-primary-foreground font-medium rounded-lg hover:opacity-90 transition-opacity text-center"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {tNav("signUp")}

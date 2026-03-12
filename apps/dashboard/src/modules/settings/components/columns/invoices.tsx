@@ -8,34 +8,43 @@ import { format } from "date-fns";
 import type { InvoiceWithDetails } from "../../actions/invoices.actions";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { formatCurrencyCompact } from "@/src/modules/payments/utils";
 
-// Status color mapping
+// Colorful status badge classes (light and dark)
 const getStatusColor = (status: string) => {
   switch (status) {
     case "COMPLETED":
-      return "bg-green-100 text-green-800 hover:bg-green-200";
+      return "bg-green-500/15 text-green-700 dark:text-green-400 border-green-500/30";
     case "PENDING":
-      return "bg-yellow-100 text-yellow-800 hover:bg-yellow-200";
+      return "bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30";
     case "PROCESSING":
-      return "bg-blue-100 text-blue-800 hover:bg-blue-200";
+      return "bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-500/30";
     case "FAILED":
-      return "bg-red-100 text-red-800 hover:bg-red-200";
+      return "bg-red-500/15 text-red-700 dark:text-red-400 border-red-500/30";
     case "CANCELLED":
-      return "bg-gray-100 text-gray-800 hover:bg-gray-200";
+      return "bg-gray-500/15 text-gray-700 dark:text-gray-400 border-gray-500/30";
     case "REFUNDED":
-      return "bg-purple-100 text-purple-800 hover:bg-purple-200";
+      return "bg-purple-500/15 text-purple-700 dark:text-purple-400 border-purple-500/30";
     default:
-      return "bg-gray-100 text-gray-800 hover:bg-gray-200";
+      return "bg-gray-500/15 text-gray-700 dark:text-gray-400 border-gray-500/30";
   }
 };
 
-// Format currency
-const formatCurrency = (amount: number, currency: string = "DZD") => {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: currency === "DZD" ? "DZD" : currency,
-    minimumFractionDigits: 2,
-  }).format(amount);
+// Payment method badge colors
+const getPaymentMethodColor = (method: string | null) => {
+  if (!method) return "bg-muted text-muted-foreground border-border";
+  switch (method) {
+    case "CHARGILY":
+      return "bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-500/30";
+    case "BANK_TRANSFER":
+      return "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30";
+    case "CASH":
+      return "bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30";
+    case "CREDIT_CARD":
+      return "bg-violet-500/15 text-violet-700 dark:text-violet-400 border-violet-500/30";
+    default:
+      return "bg-muted text-muted-foreground border-border";
+  }
 };
 
 // Get customer initials for avatar fallback
@@ -93,9 +102,11 @@ export const useInvoiceColumns = (): ColumnDef<InvoiceWithDetails>[] => {
     },
     cell: ({ row }) => {
       const amount = row.getValue("amount") as number;
-      const currency = row.original.currency;
+      const currency = row.original.currency ?? "DZD";
       return (
-        <div className="font-semibold">{formatCurrency(amount, currency)}</div>
+        <div className="font-semibold">
+          {formatCurrencyCompact({ amount, currency })}
+        </div>
       );
     },
   },
@@ -105,7 +116,10 @@ export const useInvoiceColumns = (): ColumnDef<InvoiceWithDetails>[] => {
     cell: ({ row }) => {
       const status = row.getValue("status") as string;
       return (
-        <Badge className={getStatusColor(status)} variant="secondary">
+        <Badge
+          className={`border ${getStatusColor(status)}`}
+          variant="secondary"
+        >
           {translateStatus(status)}
         </Badge>
       );
@@ -139,9 +153,12 @@ export const useInvoiceColumns = (): ColumnDef<InvoiceWithDetails>[] => {
           </span>
           <span className="text-xs text-muted-foreground">{itemType}</span>
           {payment?.method && (
-            <span className="text-xs text-muted-foreground">
-              {t("payment.via")} {payment.method.toLowerCase().replace("_", " ")}
-            </span>
+            <Badge
+              variant="secondary"
+              className={`border text-xs font-medium ${getPaymentMethodColor(payment.method)}`}
+            >
+              {payment.method.replace("_", " ")}
+            </Badge>
           )}
         </div>
       );

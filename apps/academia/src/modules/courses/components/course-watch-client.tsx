@@ -8,6 +8,8 @@ import { CourseControls } from "./course-controls";
 import { Menu, X } from "lucide-react";
 import { ChapterType, Course } from "../types";
 import { useTranslations } from "next-intl";
+import { useTenantThemeStyles } from "@/hooks/use-tenant";
+import { cn } from "@/lib/utils";
 
 const ALLOWED_HTML_TAGS =
   /^(p|br|strong|em|b|i|u|h1|h2|h3|h4|h5|h6|ul|ol|li|a|span|div|hr|blockquote|pre|code|sub|sup)$/i;
@@ -89,6 +91,9 @@ export const CourseWatchClient: React.FC<CourseWatchClientProps> = ({
   const currentChapterId = searchParams.get("chapter");
   const currentModuleId = searchParams.get("module");
   const t = useTranslations("watch");
+  const { coursePlayerStyle } = useTenantThemeStyles();
+  const isMinimal = coursePlayerStyle === "MINIMAL";
+  const isTheater = coursePlayerStyle === "THEATER";
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -145,9 +150,12 @@ export const CourseWatchClient: React.FC<CourseWatchClientProps> = ({
   const currentModule = getCurrentModule();
 
   return (
-    <div className="min-h-screen overflow-x-hidden">
+    <div
+      className="min-h-screen overflow-x-hidden"
+      data-course-player-style={coursePlayerStyle}
+    >
       {/* Mobile Header - only on mobile; desktop has no top bar so sidebar and main align */}
-      <div className="lg:hidden flex items-center justify-between p-4 border-b">
+      <div className={cn("lg:hidden flex items-center justify-between border-b", isTheater ? "p-2" : "p-4")}>
         <h1 className="text-lg font-semibold truncate min-w-0 flex-1">{course.title}</h1>
         <button
           type="button"
@@ -159,11 +167,13 @@ export const CourseWatchClient: React.FC<CourseWatchClientProps> = ({
         </button>
       </div>
 
-      <div className="flex gap-x-4 min-w-0 pt-6 lg:pt-8">
-        {/* Sidebar - Desktop: course content panel */}
-        <div className="hidden lg:block w-80 shrink-0">
+      <div className={cn("flex min-w-0", isTheater ? "gap-x-0 pt-2 lg:pt-4" : "gap-x-4 pt-6 lg:pt-8")}>
+        {/* Sidebar - Desktop: course content panel; hidden in THEATER */}
+        {!isTheater && (
+        <div className={cn("hidden lg:block shrink-0", isMinimal ? "w-64" : "w-80")}>
           <CourseNavigator chapters={chapters} courseId={course.id} />
         </div>
+        )}
 
         {/* Mobile Sidebar Overlay */}
         {sidebarOpen && (
@@ -204,12 +214,22 @@ export const CourseWatchClient: React.FC<CourseWatchClientProps> = ({
 
         {/* Main Content - same top alignment as sidebar via parent pt-6/pt-8 */}
         <div className="flex-1 min-h-screen min-w-0">
-          <div className="pt-0 pl-4 pr-0 pb-4 lg:pl-6 lg:pr-0 lg:pb-6">
+          <div className={cn("pt-0 pr-0 pb-4", isTheater ? "pl-0 lg:pl-0 lg:pb-4" : "pl-4 lg:pl-6 lg:pr-0 lg:pb-6")}>
             {currentModule ? (
-              <div className="space-y-4">
+              <div className={cn("space-y-4", isTheater && "space-y-2")}>
                 {/* Video + prev/next in one block */}
-                <div className="rounded-md border border-border bg-muted/50 overflow-hidden min-h-[200px]">
-                  <div className="relative w-full aspect-video max-h-[min(70vh,520px)] bg-black/5 rounded-t-md overflow-hidden">
+                <div
+                  className={cn(
+                    "rounded-md border border-border bg-muted/50 overflow-hidden min-h-[200px]",
+                    isTheater && "border-0 rounded-none",
+                  )}
+                >
+                  <div
+                    className={cn(
+                      "relative w-full aspect-video bg-black/5 rounded-t-md overflow-hidden",
+                      isTheater ? "max-h-[85vh] rounded-none" : "max-h-[min(70vh,520px)]",
+                    )}
+                  >
                     <VideoPlayer
                       key={currentModule.fileUrl}
                       videoId={currentModule.fileUrl}
@@ -220,7 +240,8 @@ export const CourseWatchClient: React.FC<CourseWatchClientProps> = ({
                   <CourseControls chapters={chapters} />
                 </div>
 
-                {/* Module title + content */}
+                {/* Module title + content - hidden in THEATER to focus on video */}
+                {!isTheater && (
                 <div className="rounded-md border border-border bg-background p-5">
                   <h2 className="text-lg font-semibold mb-1">
                     {currentModule.title}
@@ -233,6 +254,7 @@ export const CourseWatchClient: React.FC<CourseWatchClientProps> = ({
                     <ModuleContent content={currentModule.content} />
                   )}
                 </div>
+                )}
               </div>
             ) : (
               <div className="flex items-center justify-center min-h-[300px] sm:min-h-[400px]">

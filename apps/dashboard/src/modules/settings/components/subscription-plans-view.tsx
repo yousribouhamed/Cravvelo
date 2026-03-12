@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Button } from "@ui/components/ui/button";
@@ -24,23 +23,10 @@ type BillingCycle = "MONTHLY" | "YEARLY";
 
 export function SubscriptionPlansView() {
   const t = useTranslations("subscription");
-  const searchParams = useSearchParams();
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlan | null>(null);
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("MONTHLY");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  useEffect(() => {
-    const success = searchParams.get("success");
-    const failed = searchParams.get("failed");
-    if (success === "1") {
-      maketoast.successWithText({ text: t("paymentSuccess") });
-      window.history.replaceState({}, "", "/settings/subscription");
-    } else if (failed === "1") {
-      maketoast.errorWithText({ text: t("paymentFailed") });
-      window.history.replaceState({}, "", "/settings/subscription");
-    }
-  }, [searchParams, t]);
 
   const openModal = (plan: SubscriptionPlan) => {
     setSelectedPlan(plan);

@@ -2,23 +2,42 @@
 
 import { useEffect } from "react";
 
+function getOrCreateSessionId(tenant: string): string {
+  if (typeof window === "undefined") return "";
+  const key = `academia_session_${tenant}`;
+  try {
+    let id = localStorage.getItem(key);
+    if (!id) {
+      id = crypto.randomUUID?.() ?? `s${Date.now()}-${Math.random().toString(36).slice(2, 12)}`;
+      localStorage.setItem(key, id);
+    }
+    return id;
+  } catch {
+    return "";
+  }
+}
+
 interface VisitTrackerProps {
   tenant: string;
 }
 
 /**
- * Fires a single request to /api/track-visit on mount to increment
- * WebsiteAnalytics visits/pageViews for the current tenant and date.
+ * Sends one request per session to /api/track-visit with a stable sessionId.
+ * Backend counts at most one visit per (website, sessionId); refreshes do not add visits.
  */
 export function VisitTracker({ tenant }: VisitTrackerProps) {
   useEffect(() => {
     if (!tenant) return;
-    fetch(`/api/track-visit?tenant=${encodeURIComponent(tenant)}`, {
+    const sessionId = getOrCreateSessionId(tenant);
+    if (!sessionId) return;
+    const params = new URLSearchParams({
+      tenant,
+      sessionId,
+    });
+    fetch(`/api/track-visit?${params.toString()}`, {
       method: "GET",
       keepalive: true,
-    }).catch(() => {
-      // Fire-and-forget; ignore errors (e.g. network, 4xx/5xx)
-    });
+    }).catch(() => {});
   }, [tenant]);
 
   return null;

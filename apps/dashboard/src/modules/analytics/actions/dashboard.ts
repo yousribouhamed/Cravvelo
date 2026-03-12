@@ -317,10 +317,70 @@ export const getMainRevenueData = withAuth({
         : null;
 
       // Group chart data (by day if range > 7 days, by hour otherwise)
-      const chartData =
+      const rawChartData =
         dateRangeDays && dateRangeDays > 7
           ? groupByDay(payments)
           : groupByHour(payments);
+
+      // Fill the full range so the chart shows all months/days (with 0 where no data)
+      const fillChartDataByRange = (
+        start: Date,
+        end: Date,
+        raw: Array<{ time: string; value: number }>,
+        byMonth: boolean
+      ): Array<{ time: string; value: number }> => {
+        const valueByKey = new Map<string, number>();
+        raw.forEach(({ time, value }) => {
+          const d = new Date(time);
+          if (byMonth) {
+            const key = `${d.getFullYear()}-${d.getMonth()}`;
+            valueByKey.set(key, (valueByKey.get(key) || 0) + value);
+          } else {
+            const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+            valueByKey.set(key, (valueByKey.get(key) || 0) + value);
+          }
+        });
+        const result: Array<{ time: string; value: number }> = [];
+        if (byMonth) {
+          const cur = new Date(start.getFullYear(), start.getMonth(), 1);
+          const endMonth = new Date(end.getFullYear(), end.getMonth(), 1);
+          while (cur <= endMonth) {
+            const key = `${cur.getFullYear()}-${cur.getMonth()}`;
+            result.push({
+              time: new Date(cur.getFullYear(), cur.getMonth(), 1).toISOString(),
+              value: valueByKey.get(key) || 0,
+            });
+            cur.setMonth(cur.getMonth() + 1);
+          }
+        } else {
+          const cur = new Date(start);
+          cur.setHours(0, 0, 0, 0);
+          const endDay = new Date(end);
+          endDay.setHours(0, 0, 0, 0);
+          while (cur <= endDay) {
+            const dayKey = `${cur.getFullYear()}-${String(cur.getMonth() + 1).padStart(2, "0")}-${String(cur.getDate()).padStart(2, "0")}`;
+            result.push({
+              time: new Date(cur.getFullYear(), cur.getMonth(), cur.getDate()).toISOString(),
+              value: valueByKey.get(dayKey) || 0,
+            });
+            cur.setDate(cur.getDate() + 1);
+          }
+        }
+        return result;
+      };
+
+      let chartData = rawChartData;
+      if (startDate && endDate) {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const useMonthly = (dateRangeDays ?? 0) > 31;
+        chartData = fillChartDataByRange(start, end, rawChartData, useMonthly);
+        // Avoid single-dot chart: duplicate the point so we have at least two
+        if (chartData.length === 1) {
+          const pt = chartData[0]!;
+          chartData = [pt, { ...pt, time: end.toISOString() }];
+        }
+      }
 
       // Group today and yesterday by hour, then fill all hours for a continuous chart (no single dot)
       const todayData = fillHourlyForDay(today, groupByHour(todayPayments));

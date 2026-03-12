@@ -8,6 +8,11 @@
     "description": "The page you're looking for doesn't exist or has been moved.",
     "backHome": "Back to home"
   },
+  "error": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred. Please try again.",
+    "tryAgain": "Try again"
+  },
   "salesBanner": {
     "message": "This price won't last long...",
     "hours": "hours",
@@ -29,7 +34,8 @@
     "termsOfService": "Terms of Service",
     "refundPolicy": "Refund Policy",
     "defaultBrandName": "Academy",
-    "rightsReserved": "© {year} {name}. All rights reserved."
+    "rightsReserved": "© {year} {name}. All rights reserved.",
+    "followUs": "Follow us"
   },
   "legal": {
     "privacyPolicy": {
@@ -493,6 +499,18 @@
       "title": "Products",
       "subtitle": "Explore the latest digital products",
       "viewAll": "View all products"
+    },
+    "sections": {
+      "testimonials": "Testimonials",
+      "testimonialsSubtitle": "What our students say",
+      "contactForm": "Contact us",
+      "contactFormSubtitle": "Get in touch",
+      "contactEmail": "Email",
+      "contactPhone": "Phone",
+      "contactAddress": "Address",
+      "noContactConfigured": "No contact information configured yet.",
+      "noReviewsYet": "No reviews yet for this academy.",
+      "comingSoon": "Coming soon"
     }
   },
   "watch": {

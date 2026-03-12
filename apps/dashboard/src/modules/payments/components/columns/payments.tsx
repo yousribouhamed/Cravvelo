@@ -16,8 +16,7 @@ import {
 import { approvePayment, rejectPayment } from "../../actions/payments";
 import { useConfirmation } from "@/src/hooks/use-confirmation";
 import { useTranslations, useLocale } from "next-intl";
-import { useCurrency } from "@/src/hooks/use-currency";
-import { useTheme } from "next-themes";
+import { formatCurrencyCompact } from "../../utils";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { maketoast } from "@/src/components/toasts";
@@ -94,73 +93,41 @@ const formatDate = (date: Date, locale: string) => {
   }).format(new Date(date));
 };
 
-// Status badge colors - theme-aware function
-const getStatusBadgeVariant = (status: string, isDark: boolean) => {
-  if (isDark) {
-    switch (status) {
-      case "COMPLETED":
-        return "!border-green-700 !bg-green-900/40 !text-green-200";
-      case "PENDING":
-        return "!border-yellow-700 !bg-yellow-900/40 !text-yellow-200";
-      case "PROCESSING":
-        return "!border-blue-700 !bg-blue-900/40 !text-blue-200";
-      case "FAILED":
-        return "!border-red-700 !bg-red-900/40 !text-red-200";
-      case "CANCELLED":
-        return "!border-gray-700 !bg-gray-800 !text-gray-200";
-      case "REFUNDED":
-        return "!border-purple-700 !bg-purple-900/40 !text-purple-200";
-      default:
-        return "!border-gray-700 !bg-gray-800 !text-gray-200";
-    }
-  } else {
-    switch (status) {
-      case "COMPLETED":
-        return "!border-green-200 !bg-green-100 !text-green-800";
-      case "PENDING":
-        return "!border-yellow-200 !bg-yellow-100 !text-yellow-800";
-      case "PROCESSING":
-        return "!border-blue-200 !bg-blue-100 !text-blue-800";
-      case "FAILED":
-        return "!border-red-200 !bg-red-100 !text-red-800";
-      case "CANCELLED":
-        return "!border-gray-200 !bg-gray-100 !text-gray-800";
-      case "REFUNDED":
-        return "!border-purple-200 !bg-purple-100 !text-purple-800";
-      default:
-        return "!border-gray-200 !bg-gray-100 !text-gray-800";
-    }
+// Colorful status badges (light and dark)
+const getStatusBadgeVariant = (status: string) => {
+  switch (status) {
+    case "COMPLETED":
+      return "border border-green-500/30 bg-green-500/15 text-green-700 dark:text-green-400";
+    case "PENDING":
+      return "border border-amber-500/30 bg-amber-500/15 text-amber-700 dark:text-amber-400";
+    case "PROCESSING":
+      return "border border-blue-500/30 bg-blue-500/15 text-blue-700 dark:text-blue-400";
+    case "FAILED":
+      return "border border-red-500/30 bg-red-500/15 text-red-700 dark:text-red-400";
+    case "CANCELLED":
+      return "border border-gray-500/30 bg-gray-500/15 text-gray-700 dark:text-gray-400";
+    case "REFUNDED":
+      return "border border-purple-500/30 bg-purple-500/15 text-purple-700 dark:text-purple-400";
+    default:
+      return "border border-gray-500/30 bg-gray-500/15 text-gray-700 dark:text-gray-400";
   }
 };
 
-// Payment method badge colors - theme-aware function
-const getMethodBadgeVariant = (method: string, isDark: boolean) => {
-  if (isDark) {
-    switch (method) {
-      case "BANK_TRANSFER":
-        return "!border-indigo-700 !bg-indigo-900/40 !text-indigo-200";
-      case "CASH":
-        return "!border-emerald-700 !bg-emerald-900/40 !text-emerald-200";
-      case "CHARGILY":
-        return "!border-orange-700 !bg-orange-900/40 !text-orange-200";
-      case "CREDIT_CARD":
-        return "!border-cyan-700 !bg-cyan-900/40 !text-cyan-200";
-      default:
-        return "!border-gray-700 !bg-gray-800 !text-gray-200";
-    }
-  } else {
-    switch (method) {
-      case "BANK_TRANSFER":
-        return "!border-indigo-200 !bg-indigo-100 !text-indigo-800";
-      case "CASH":
-        return "!border-emerald-200 !bg-emerald-100 !text-emerald-800";
-      case "CHARGILY":
-        return "!border-orange-200 !bg-orange-100 !text-orange-800";
-      case "CREDIT_CARD":
-        return "!border-cyan-200 !bg-cyan-100 !text-cyan-800";
-      default:
-        return "!border-gray-200 !bg-gray-100 !text-gray-800";
-    }
+// Colorful payment method badges (force override Badge variant)
+const getMethodBadgeVariant = (method: string) => {
+  const normalized = method?.toUpperCase().replace(/-/g, "_");
+  switch (normalized) {
+    case "CHARGILY":
+      return "!border-blue-500/40 !bg-blue-500/20 !text-blue-700 dark:!text-blue-300 dark:!bg-blue-500/25";
+    case "BANK_TRANSFER":
+    case "P2P":
+      return "!border-emerald-500/40 !bg-emerald-500/20 !text-emerald-700 dark:!text-emerald-300 dark:!bg-emerald-500/25";
+    case "CASH":
+      return "!border-amber-500/40 !bg-amber-500/20 !text-amber-700 dark:!text-amber-300 dark:!bg-amber-500/25";
+    case "CREDIT_CARD":
+      return "!border-violet-500/40 !bg-violet-500/20 !text-violet-700 dark:!text-violet-300 dark:!bg-violet-500/25";
+    default:
+      return "!border-border !bg-muted/80 !text-muted-foreground";
   }
 };
 
@@ -212,21 +179,24 @@ const getItemInfo = (payment: Payment, t: (key: string) => string) => {
   return null;
 };
 
-// Amount Cell Component that uses the currency hook
-const AmountCell = ({ amount }: { amount: number }) => {
-  const { formatPrice } = useCurrency();
-  return <div className="font-semibold">{formatPrice(amount)}</div>;
-};
+// Amount Cell: no decimals, with currency symbol
+const AmountCell = ({ amount, currency = "DZD" }: { amount: number; currency?: string }) => (
+  <div className="font-semibold">
+    {formatCurrencyCompact({ amount, currency })}
+  </div>
+);
 
 // Actions Cell Component
 const ActionsCell = ({ payment }: { payment: Payment }) => {
   const t = useTranslations();
   const locale = useLocale();
   const router = useRouter();
-  const { formatPrice } = useCurrency();
   const isRTL = locale === "ar";
   const isBankTransfer = payment.method === "BANK_TRANSFER" || payment.MethodConfig?.provider === "P2P";
-  const formattedAmount = formatPrice(payment.amount);
+  const formattedAmount = formatCurrencyCompact({
+    amount: payment.amount,
+    currency: payment.currency ?? "DZD",
+  });
   const [isProofModalOpen, setIsProofModalOpen] = useState(false);
 
   // Copy to clipboard function with error handling and fallback
@@ -474,15 +444,11 @@ const ItemCell = ({ payment }: { payment: Payment }) => {
 
 const StatusCell = ({ status }: { status: string | null }) => {
   const t = useTranslations();
-  const { resolvedTheme } = useTheme();
-  // resolvedTheme will be "dark" or "light" (or undefined during SSR)
-  const isDark = resolvedTheme === "dark";
-  
   if (!status) {
     return <span className="text-muted-foreground text-sm">{t("payments.emptyStates.noItem")}</span>;
   }
   return (
-    <Badge variant="outline" className={getStatusBadgeVariant(status, isDark)}>
+    <Badge variant="secondary" className={getStatusBadgeVariant(status)}>
       {t(`payments.status.${status}`)}
     </Badge>
   );
@@ -490,17 +456,17 @@ const StatusCell = ({ status }: { status: string | null }) => {
 
 const PaymentMethodCell = ({ method }: { method: string | null | undefined }) => {
   const t = useTranslations();
-  const { resolvedTheme } = useTheme();
-  // resolvedTheme will be "dark" or "light" (or undefined during SSR)
-  const isDark = resolvedTheme === "dark";
-  
   if (!method || method === "-") {
-    return <Badge variant="outline" className={getMethodBadgeVariant("", isDark)}>{t("payments.emptyStates.noMethod")}</Badge>;
+    return (
+      <Badge variant="secondary" className={getMethodBadgeVariant("")}>
+        {t("payments.emptyStates.noMethod")}
+      </Badge>
+    );
   }
   const methodKey = method.toUpperCase().replace(/-/g, "_") as "CASH" | "CHARGILY" | "BANK_TRANSFER" | "CREDIT_CARD";
   const translatedMethod = t(`payments.methods.${methodKey}`) || method;
   return (
-    <Badge variant="outline" className={getMethodBadgeVariant(method, isDark)}>
+    <Badge variant="secondary" className={getMethodBadgeVariant(method)}>
       {translatedMethod}
     </Badge>
   );
@@ -551,7 +517,12 @@ export const usePaymentColumns = (): ColumnDef<Payment>[] => {
       accessorKey: "amount",
       header: t("payments.columns.amount"),
       cell: ({ row }) => {
-        return <AmountCell amount={row.original.amount} />;
+        return (
+          <AmountCell
+            amount={row.original.amount}
+            currency={row.original.currency ?? "DZD"}
+          />
+        );
       },
     },
     {
@@ -622,7 +593,12 @@ export const paymentColumns: ColumnDef<Payment>[] = [
     accessorKey: "amount",
     header: "Amount",
     cell: ({ row }) => {
-      return <AmountCell amount={row.original.amount} />;
+      return (
+        <AmountCell
+          amount={row.original.amount}
+          currency={row.original.currency ?? "DZD"}
+        />
+      );
     },
   },
   {

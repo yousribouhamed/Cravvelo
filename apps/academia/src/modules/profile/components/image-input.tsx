@@ -4,7 +4,6 @@ import { useState, useRef } from "react";
 import ReactCrop, { Crop, PixelCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { Button } from "@/components/ui/button";
-import BrandButton from "@/components/brand-button";
 import { Input } from "@/components/ui/input";
 import {
   Dialog,
@@ -216,9 +215,9 @@ export default function ProfileImageInput({
             <Button variant="outline" onClick={handleCancel}>
               {tProfile("cancel")}
             </Button>
-            <BrandButton onClick={handleSave} disabled={!completedCrop}>
+            <Button onClick={handleSave} disabled={!completedCrop}>
               {tProfile("save")}
-            </BrandButton>
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

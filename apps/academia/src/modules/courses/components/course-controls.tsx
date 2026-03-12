@@ -110,10 +110,10 @@ export const CourseControls: React.FC<CourseControlsProps> = ({
         onClick={goToPrevious}
         disabled={!canGoPrevious}
         className={cn(
-          "flex items-center gap-1.5 px-3 py-2 text-sm font-medium min-h-[40px] touch-manipulation border border-border rounded-md",
+          "flex items-center gap-1.5 px-3 py-2 text-sm font-medium min-h-[40px] touch-manipulation border border-border rounded-md transition-colors",
           isRTL ? "flex-row-reverse" : "",
           canGoPrevious
-            ? "text-foreground hover:bg-muted/80"
+            ? "text-primary hover:bg-primary/10 border-primary/50"
             : "text-muted-foreground cursor-not-allowed opacity-60"
         )}
       >
@@ -137,10 +137,10 @@ export const CourseControls: React.FC<CourseControlsProps> = ({
         onClick={goToNext}
         disabled={!canGoNext}
         className={cn(
-          "flex items-center gap-1.5 px-3 py-2 text-sm font-medium min-h-[40px] touch-manipulation border border-border rounded-md",
+          "flex items-center gap-1.5 px-3 py-2 text-sm font-medium min-h-[40px] touch-manipulation border border-border rounded-md transition-colors",
           isRTL ? "flex-row-reverse" : "",
           canGoNext
-            ? "text-foreground hover:bg-muted/80"
+            ? "text-primary hover:bg-primary/10 border-primary/50"
             : "text-muted-foreground cursor-not-allowed opacity-60"
         )}
       >

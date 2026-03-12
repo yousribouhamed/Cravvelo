@@ -1,76 +1,72 @@
 "use client";
 
-import { useTenantBranding } from "@/hooks/use-tenant";
-import Image from "next/image";
+import { useTenantBranding, useTenantThemeStyles } from "@/hooks/use-tenant";
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
-import { useMemo } from "react";
-
-/** Returns true if the hex color is light (needs dark text for contrast). */
-function isLightBackground(hex: string | null | undefined): boolean {
-  if (!hex || typeof hex !== "string") return false;
-  const cleaned = hex.replace(/^#/, "");
-  if (!/^[0-9A-Fa-f]{3}$|^[0-9A-Fa-f]{6}$/.test(cleaned)) return false;
-  let r: number, g: number, b: number;
-  if (cleaned.length === 3) {
-    r = parseInt(cleaned[0] + cleaned[0], 16) / 255;
-    g = parseInt(cleaned[1] + cleaned[1], 16) / 255;
-    b = parseInt(cleaned[2] + cleaned[2], 16) / 255;
-  } else {
-    r = parseInt(cleaned.slice(0, 2), 16) / 255;
-    g = parseInt(cleaned.slice(2, 4), 16) / 255;
-    b = parseInt(cleaned.slice(4, 6), 16) / 255;
-  }
-  const toLinear = (c: number) =>
-    c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  const L =
-    0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
-  return L > 0.5;
-}
+import { cn } from "@/lib/utils";
 
 const Banner: FC = () => {
-  const { primaryColor, name: websiteName, logo } = useTenantBranding();
+  const { name: websiteName } = useTenantBranding();
+  const { bannerStyle } = useTenantThemeStyles();
   const t = useTranslations("banner");
-
-  const isLight = useMemo(
-    () => isLightBackground(primaryColor ?? undefined),
-    [primaryColor]
-  );
-  const textClass = isLight
-    ? "text-neutral-900"
-    : "text-white";
   const displayName = websiteName || "Academy";
 
+  const isMinimal = bannerStyle === "MINIMAL";
+  const isCentered = bannerStyle === "CENTERED";
+  const isIllustrationLeft = bannerStyle === "ILLUSTRATION_LEFT";
+
+  const wrapperClass = cn(
+    "w-full my-6 md:my-10 text-primary-foreground",
+    isMinimal &&
+      "min-h-[100px] h-[120px] md:h-[140px] rounded-lg border-2 border-primary/30 bg-primary/10 text-foreground dark:bg-primary/5",
+    isCentered &&
+      "min-h-[200px] md:min-h-[280px] rounded-2xl grid grid-cols-1 flex flex-col items-center justify-center text-center bg-gradient-to-b from-primary via-primary/90 to-transparent",
+    !isMinimal && !isCentered && "rounded-xl bg-primary min-h-[180px] h-[200px] md:h-[250px] grid grid-cols-1 md:grid-cols-2",
+    isIllustrationLeft && "md:grid-flow-dense",
+  );
+
+  const contentOrder = isIllustrationLeft ? "md:col-start-2" : "";
+  const decorativeOrder = isIllustrationLeft ? "md:col-start-1 md:row-start-1" : "";
+
   return (
-    <div
-      className="w-full min-h-[180px] h-[200px] md:h-[250px] rounded-xl my-6 md:my-10 grid grid-cols-1 md:grid-cols-2"
-      style={{
-        backgroundColor: primaryColor ?? "#FC6B00",
-      }}
-    >
-      <div className="w-full flex flex-col gap-y-2 justify-center md:justify-between items-start p-4 md:p-6">
-        <div className="flex flex-col gap-y-3 md:gap-y-4">
-          {logo ? (
-            <div className="relative w-28 h-14 sm:w-32 sm:h-16 shrink-0">
-              <Image
-                src={logo}
-                alt={displayName}
-                fill
-                className="object-contain object-left"
-              />
-            </div>
-          ) : null}
-          <span className={`text-lg sm:text-xl md:text-2xl ${textClass}`}>
+    <div className={wrapperClass} data-banner-style={bannerStyle}>
+      <div
+        className={cn(
+          "w-full flex flex-col gap-y-2 justify-center md:justify-between items-start p-4 md:p-6",
+          isCentered && "items-center text-center",
+          contentOrder,
+        )}
+      >
+        <div className={cn("flex flex-col gap-y-3 md:gap-y-4", isMinimal && "gap-y-1 md:gap-y-2")}>
+          <span
+            className={cn(
+              "text-lg sm:text-xl md:text-2xl",
+              isMinimal && "text-base sm:text-lg md:text-xl text-muted-foreground",
+              isCentered && "text-xl md:text-2xl opacity-90",
+            )}
+          >
             {t("welcome")}
           </span>
-          <h2 className={`text-xl sm:text-2xl md:text-4xl font-bold ${textClass}`}>
+          <h2
+            className={cn(
+              "text-xl sm:text-2xl md:text-4xl font-bold",
+              isMinimal && "text-lg sm:text-xl md:text-2xl text-foreground",
+              isCentered && "text-3xl sm:text-4xl md:text-5xl lg:text-6xl",
+            )}
+          >
             {displayName}
           </h2>
         </div>
       </div>
 
-      {/* Decorative column: hidden on mobile */}
-      <div className={`hidden md:flex w-full h-full relative items-center justify-center overflow-hidden min-h-[120px] ${textClass}`}>
+      {/* Decorative column: hidden on mobile and in MINIMAL/CENTERED */}
+      {!isMinimal && !isCentered && (
+      <div
+        className={cn(
+          "hidden md:flex w-full h-full relative items-center justify-center overflow-hidden min-h-[120px]",
+          decorativeOrder,
+        )}
+      >
         <div className="absolute top-0 left-4">
           <svg
             width="81"
@@ -148,6 +144,7 @@ const Banner: FC = () => {
           </svg>
         </div>
       </div>
+      )}
     </div>
   );
 };

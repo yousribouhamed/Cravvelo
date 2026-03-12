@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import BrandButton from "@/components/brand-button";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { createUser } from "@/modules/auth/actions/user";
 import { loginUser } from "@/modules/auth/actions/auth";
@@ -156,14 +156,14 @@ export function GuestAuthForm() {
             <p className="text-xs text-muted-foreground">{t("passwordHint")}</p>
           </div>
 
-          <BrandButton
+          <Button
             type="submit"
             className="w-full min-h-11 sm:h-10"
             loading={isSubmitting}
             disabled={isSubmitting}
           >
             {t("submitButton")}
-          </BrandButton>
+          </Button>
         </form>
       </CardContent>
     </Card>

@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import BrandButton from "@/components/brand-button";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
@@ -132,12 +132,12 @@ export function useCourseColumns(): ColumnDef<CourseSale>[] {
           if (!courseId) return <span className="text-gray-400 text-sm">—</span>;
 
           return (
-            <BrandButton size="sm" className="gap-1.5" asChild>
+            <Button size="sm" className="gap-1.5" asChild>
               <Link href={`/courses/${courseId}/watch`}>
                 <Play className="h-3.5 w-3.5" />
                 {t("actions.watch")}
               </Link>
-            </BrandButton>
+            </Button>
           );
         },
       },

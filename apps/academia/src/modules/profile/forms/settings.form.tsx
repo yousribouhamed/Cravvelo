@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import BrandButton from "@/components/brand-button";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -191,9 +191,9 @@ export default function SettingsForm() {
       </CardContent>
 
       <CardFooter className="flex justify-end">
-        <BrandButton onClick={handleSave} disabled={isLoading}>
+        <Button onClick={handleSave} disabled={isLoading} loading={isLoading}>
           {isLoading ? t("saving") : t("save")}
-        </BrandButton>
+        </Button>
       </CardFooter>
     </Card>
   );

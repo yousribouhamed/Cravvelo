@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/components/ui/card";
-import { formatCurrency } from "../utils";
+import { formatCurrencyCompact } from "../utils";
 import { useTranslations } from "next-intl";
 import { 
   DollarSign, 
@@ -59,7 +59,7 @@ export function PaymentAnalytics({ stats }: PaymentAnalyticsProps) {
   const analyticsCards = [
     {
       title: t("payments.analytics.totalRevenue"),
-      value: formatCurrency({ amount: completedAmount, currency: "DZD" }),
+      value: formatCurrencyCompact({ amount: completedAmount, currency: "DZD" }),
       icon: DollarSign,
       description: t("payments.analytics.totalRevenueDescription"),
       className: "border-green-200 dark:border-green-800",
@@ -67,7 +67,7 @@ export function PaymentAnalytics({ stats }: PaymentAnalyticsProps) {
     {
       title: t("payments.analytics.pendingPayments"),
       value: `${pendingCount} ${t("payments.analytics.payments")}`,
-      amount: formatCurrency({ amount: pendingAmount, currency: "DZD" }),
+      amount: formatCurrencyCompact({ amount: pendingAmount, currency: "DZD" }),
       icon: Clock,
       description: t("payments.analytics.pendingPaymentsDescription"),
       className: "border-yellow-200 dark:border-yellow-800",
@@ -75,7 +75,7 @@ export function PaymentAnalytics({ stats }: PaymentAnalyticsProps) {
     {
       title: t("payments.analytics.completedPayments"),
       value: `${completedCount} ${t("payments.analytics.payments")}`,
-      amount: formatCurrency({ amount: completedAmount, currency: "DZD" }),
+      amount: formatCurrencyCompact({ amount: completedAmount, currency: "DZD" }),
       icon: CheckCircle2,
       description: t("payments.analytics.completedPaymentsDescription"),
       className: "border-blue-200 dark:border-blue-800",
@@ -83,7 +83,7 @@ export function PaymentAnalytics({ stats }: PaymentAnalyticsProps) {
     {
       title: t("payments.analytics.totalPayments"),
       value: `${stats.totalPayments} ${t("payments.analytics.payments")}`,
-      amount: formatCurrency({ amount: stats.totalAmount, currency: "DZD" }),
+      amount: formatCurrencyCompact({ amount: stats.totalAmount, currency: "DZD" }),
       icon: TrendingUp,
       description: t("payments.analytics.totalPaymentsDescription"),
       className: "border-purple-200 dark:border-purple-800",

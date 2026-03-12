@@ -10,7 +10,6 @@ import {
   Package,
   CreditCard,
 } from "lucide-react";
-import { useTenantBranding } from "@/hooks/use-tenant";
 import { useTranslations } from "next-intl";
 
 export interface ProfileSidebarNavContentProps {
@@ -23,7 +22,6 @@ export function ProfileSidebarNavContent({
   onLinkClick,
 }: ProfileSidebarNavContentProps) {
   const pathname = usePathname();
-  const { primaryColor } = useTenantBranding();
   const tProfile = useTranslations("profile");
   const tMenu = useTranslations("profile.menu");
 
@@ -38,10 +36,10 @@ export function ProfileSidebarNavContent({
   return (
     <>
       <div className="mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+        <h2 className="text-lg font-semibold text-sidebar-foreground mb-2">
           {tProfile("dashboard")}
         </h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+        <p className="text-sm text-muted-foreground">
           {tProfile("manageAccount")}
         </p>
       </div>
@@ -56,21 +54,17 @@ export function ProfileSidebarNavContent({
               key={link.url}
               href={link.url}
               onClick={onLinkClick}
-              className={`group relative flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all duration-200 ${
+              className={`group relative flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all duration-200 rounded-[var(--academia-sidebar-item-radius,0.75rem)] ${
                 isActive
-                  ? "text-white"
-                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1A1A1D] hover:text-gray-900 dark:hover:text-white"
+                  ? "bg-sidebar-primary text-sidebar-primary-foreground"
+                  : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
               }`}
-              style={{
-                borderRadius: "var(--academia-sidebar-item-radius, 0.75rem)",
-                ...(isActive ? { backgroundColor: primaryColor } : {}),
-              }}
             >
               <Icon
-                className={`w-5 h-5 transition-all duration-200 ${
+                className={`w-5 h-5 transition-all duration-200 shrink-0 ${
                   isActive
-                    ? "text-white"
-                    : "text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300"
+                    ? "text-sidebar-primary-foreground"
+                    : "text-muted-foreground group-hover:text-sidebar-accent-foreground"
                 }`}
               />
               <span className="font-medium">{link.name}</span>
@@ -79,19 +73,16 @@ export function ProfileSidebarNavContent({
         })}
       </nav>
 
-      <div className="mt-8 pt-6 border-t border-gray-200/60 dark:border-[#1A1A1D]">
-        <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 dark:from-[#1A1A1D] dark:to-[#1F1F23]">
-          <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center"
-            style={{ backgroundColor: primaryColor }}
-          >
-            <User className="w-4 h-4 text-white" />
+      <div className="mt-8 pt-6 border-t border-sidebar-border">
+        <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-sidebar-accent text-sidebar-accent-foreground">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-sidebar-primary text-sidebar-primary-foreground shrink-0">
+            <User className="w-4 h-4" />
           </div>
-          <div>
-            <p className="text-sm font-medium text-gray-900 dark:text-white">
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-sidebar-foreground">
               {tProfile("user")}
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-xs text-muted-foreground">
               {tProfile("premiumMember")}
             </p>
           </div>
@@ -106,7 +97,7 @@ interface SidebarProps {}
 export default function ProfileSidebar({}: SidebarProps) {
   return (
     <div
-      className="w-full bg-card text-card-foreground border border-gray-200/80 dark:border-[#1A1A1D] p-6 shadow-sm"
+      className="w-full bg-sidebar text-sidebar-foreground border border-sidebar-border p-6 shadow-sm"
       style={{ borderRadius: "var(--academia-sidebar-radius, 1rem)" }}
     >
       <ProfileSidebarNavContent />

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { StudentProfile } from "../types";
 import { Button } from "@/components/ui/button";
-import BrandButton from "@/components/brand-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -206,12 +205,12 @@ export default function ProfileForm({ profileData }: Props) {
             >
               {t("cancel")}
             </Button>
-            <BrandButton onClick={handleSave} disabled={isLoading}>
+            <Button onClick={handleSave} disabled={isLoading} loading={isLoading}>
               {isLoading ? t("saving") : t("save")}
-            </BrandButton>
+            </Button>
           </>
         ) : (
-          <BrandButton onClick={() => setIsEditing(true)}>{t("edit")}</BrandButton>
+          <Button onClick={() => setIsEditing(true)}>{t("edit")}</Button>
         )}
       </CardFooter>
     </Card>

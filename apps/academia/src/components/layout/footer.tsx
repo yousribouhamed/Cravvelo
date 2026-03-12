@@ -1,10 +1,25 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import {
+  Facebook,
+  Twitter,
+  Instagram,
+  Linkedin,
+  Youtube,
+} from "lucide-react";
 
 type LegalContent = {
   privacyPolicy?: unknown;
   termsOfService?: unknown;
   refundPolicy?: unknown;
+};
+
+export type FooterSocialLinks = {
+  facebookUrl?: string | null;
+  twitterUrl?: string | null;
+  instagramUrl?: string | null;
+  linkedinUrl?: string | null;
+  youtubeUrl?: string | null;
 };
 
 function normalizeRichText(value: unknown): string {
@@ -41,12 +56,18 @@ function isRichTextEmpty(html: string): boolean {
   return normalized.length === 0;
 }
 
+function isSocialUrlSet(url: string | null | undefined): url is string {
+  return typeof url === "string" && url.trim().length > 0;
+}
+
 export default async function Footer({
   legal,
   brandName,
+  social,
 }: {
   legal: LegalContent;
   brandName?: string | null;
+  social?: FooterSocialLinks;
 }) {
   const t = await getTranslations("footer");
   const year = new Date().getFullYear();
@@ -59,6 +80,16 @@ export default async function Footer({
   const showPrivacy = !isRichTextEmpty(privacy);
   const showTerms = !isRichTextEmpty(terms);
   const showRefund = !isRichTextEmpty(refund);
+
+  const hasSocial =
+    social &&
+    (isSocialUrlSet(social.facebookUrl) ||
+      isSocialUrlSet(social.twitterUrl) ||
+      isSocialUrlSet(social.instagramUrl) ||
+      isSocialUrlSet(social.linkedinUrl) ||
+      isSocialUrlSet(social.youtubeUrl));
+
+  const iconClass = "h-5 w-5 shrink-0";
 
   return (
     <footer className="w-full border-t border-border mt-10 py-6 text-sm text-muted-foreground">
@@ -93,6 +124,71 @@ export default async function Footer({
                 {t("refundPolicy")}
               </Link>
             )}
+          </div>
+        )}
+
+        {hasSocial && (
+          <div className="flex flex-col items-center justify-center gap-2">
+            <span className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
+              {t("followUs")}
+            </span>
+            <div className="flex items-center justify-center gap-4" role="list">
+            {isSocialUrlSet(social?.facebookUrl) && (
+              <Link
+                href={social!.facebookUrl!}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground transition-colors"
+                aria-label="Facebook"
+              >
+                <Facebook className={iconClass} />
+              </Link>
+            )}
+            {isSocialUrlSet(social?.twitterUrl) && (
+              <Link
+                href={social!.twitterUrl!}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground transition-colors"
+                aria-label="Twitter"
+              >
+                <Twitter className={iconClass} />
+              </Link>
+            )}
+            {isSocialUrlSet(social?.instagramUrl) && (
+              <Link
+                href={social!.instagramUrl!}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground transition-colors"
+                aria-label="Instagram"
+              >
+                <Instagram className={iconClass} />
+              </Link>
+            )}
+            {isSocialUrlSet(social?.linkedinUrl) && (
+              <Link
+                href={social!.linkedinUrl!}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground transition-colors"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className={iconClass} />
+              </Link>
+            )}
+            {isSocialUrlSet(social?.youtubeUrl) && (
+              <Link
+                href={social!.youtubeUrl!}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground transition-colors"
+                aria-label="YouTube"
+              >
+                <Youtube className={iconClass} />
+              </Link>
+            )}
+            </div>
           </div>
         )}
       </div>

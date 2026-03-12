@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import BrandButton from "@/components/brand-button";
+import { Button } from "@/components/ui/button";
 import {
   ExternalLink,
   User,
@@ -58,7 +58,7 @@ export function CertificateColumns(): ColumnDef<Certificate>[] {
         const name = row.getValue("studentName") as string;
         return (
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-sm font-medium">
+            <div className="h-8 w-8 rounded-full bg-linear-to-br from-primary to-accent flex items-center justify-center text-primary-foreground text-sm font-medium">
               {name.charAt(0).toUpperCase()}
             </div>
             <span className="font-medium">{name}</span>
@@ -103,14 +103,14 @@ export function CertificateColumns(): ColumnDef<Certificate>[] {
         }
 
         return (
-          <BrandButton
+          <Button
             size="sm"
             className="h-8 px-3 gap-1"
             onClick={() => window.open(url, "_blank", "noopener,noreferrer")}
           >
             <ExternalLink className="h-3 w-3" />
             {t("actions.viewCertificate")}
-          </BrandButton>
+          </Button>
         );
       },
     },

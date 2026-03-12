@@ -26,8 +26,68 @@ export const createSubscriptionCheckout = withAuth({
       return { success: false, checkoutUrl: null, error: "Invalid plan" };
     }
 
-    const amount =
+    const activeSubscription = await db.accountSubscription.findFirst({
+      where: {
+        accountId: account.id,
+        status: "ACTIVE",
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+      select: {
+        planCode: true,
+        billingCycle: true,
+      },
+    });
+
+    let amount =
       input.billingCycle === "MONTHLY" ? plan.priceMonthly : plan.priceYearly;
+    let isUpgrade = false;
+
+    if (activeSubscription) {
+      isUpgrade = true;
+
+      if (
+        activeSubscription.billingCycle === "YEARLY" &&
+        input.billingCycle !== "YEARLY"
+      ) {
+        return {
+          success: false,
+          checkoutUrl: null,
+          error: "Yearly subscriptions can only be upgraded to yearly billing.",
+        };
+      }
+
+      const currentPlan = SUBSCRIPTION_PLANS.find(
+        (p) => p.planCode === activeSubscription.planCode
+      );
+
+      if (!currentPlan) {
+        return {
+          success: false,
+          checkoutUrl: null,
+          error: "Current subscription plan is invalid.",
+        };
+      }
+
+      const currentPrice =
+        activeSubscription.billingCycle === "YEARLY"
+          ? currentPlan.priceYearly
+          : currentPlan.priceMonthly;
+      const targetPrice =
+        input.billingCycle === "YEARLY" ? plan.priceYearly : plan.priceMonthly;
+      const upgradeAmount = targetPrice - currentPrice;
+
+      if (upgradeAmount <= 0) {
+        return {
+          success: false,
+          checkoutUrl: null,
+          error: "Please choose a higher plan to upgrade.",
+        };
+      }
+
+      amount = upgradeAmount;
+    }
 
     const payment = await db.payment.create({
       data: {
@@ -37,10 +97,13 @@ export const createSubscriptionCheckout = withAuth({
         status: "PENDING",
         method: "CHARGILY",
         accountId: account.id,
-        description: `Subscription: ${plan.name} (${input.billingCycle})`,
+        description: isUpgrade
+          ? `Subscription upgrade: ${plan.name} (${input.billingCycle})`
+          : `Subscription: ${plan.name} (${input.billingCycle})`,
         metadata: {
           planCode: input.planCode,
           billingCycle: input.billingCycle,
+          isUpgrade,
         },
       },
     });
@@ -51,6 +114,7 @@ export const createSubscriptionCheckout = withAuth({
         plan: input.planCode,
         billingCycle: input.billingCycle,
         paymentId: payment.id,
+        isUpgrade,
       },
     ];
 
@@ -62,7 +126,9 @@ export const createSubscriptionCheckout = withAuth({
       failure_url: `${appBaseUrl}/settings/subscription?failed=1`,
       webhook_endpoint: `${appBaseUrl}/api/webhooks/chargily/upgrade`,
       metadata,
-      description: `Subscription ${plan.name} - ${input.billingCycle}`,
+      description: isUpgrade
+        ? `Subscription upgrade difference - ${plan.name} (${input.billingCycle})`
+        : `Subscription ${plan.name} - ${input.billingCycle}`,
       locale: "ar",
     };
 

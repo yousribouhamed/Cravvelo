@@ -30,7 +30,7 @@ export function PaymentMethodCards() {
         <div
           className={`border-2 rounded-lg p-4 min-h-[72px] cursor-pointer transition-all active:scale-[0.98] ${
             paymentMethod === "chargily"
-              ? "border-blue-500 bg-blue-50 dark:bg-blue-950/30 dark:border-blue-400"
+              ? "border-primary bg-primary/10"
               : "border-border hover:border-muted-foreground/50 bg-card"
           }`}
           onClick={() => setPaymentMethod("chargily")}
@@ -39,7 +39,7 @@ export function PaymentMethodCards() {
             <div
               className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                 paymentMethod === "chargily"
-                  ? "border-blue-500 bg-blue-500 dark:border-blue-400 dark:bg-blue-400"
+                  ? "border-primary bg-primary"
                   : "border-muted-foreground/50"
               }`}
             >
@@ -47,7 +47,7 @@ export function PaymentMethodCards() {
                 <Check className="w-3 h-3 text-white" />
               )}
             </div>
-            <CreditCard className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+            <CreditCard className="w-8 h-8 text-primary" />
             <div className="space-y-1">
               <div className="font-medium text-foreground">
                 {t("chargilyTitle")}
@@ -65,7 +65,7 @@ export function PaymentMethodCards() {
         <div
           className={`border-2 rounded-lg p-4 min-h-[72px] cursor-pointer transition-all active:scale-[0.98] ${
             paymentMethod === "p2p"
-              ? "border-green-500 bg-green-50 dark:bg-green-950/30 dark:border-green-400"
+              ? "border-primary bg-primary/10"
               : "border-border hover:border-muted-foreground/50 bg-card"
           }`}
           onClick={() => setPaymentMethod("p2p")}
@@ -74,7 +74,7 @@ export function PaymentMethodCards() {
             <div
               className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                 paymentMethod === "p2p"
-                  ? "border-green-500 bg-green-500 dark:border-green-400 dark:bg-green-400"
+                  ? "border-primary bg-primary"
                   : "border-muted-foreground/50"
               }`}
             >
@@ -82,7 +82,7 @@ export function PaymentMethodCards() {
                 <Check className="w-3 h-3 text-white" />
               )}
             </div>
-            <Smartphone className="w-8 h-8 text-green-600 dark:text-green-400" />
+            <Smartphone className="w-8 h-8 text-primary" />
             <div className="space-y-1">
               <div className="font-medium text-foreground">
                 {t("p2pTitle")}

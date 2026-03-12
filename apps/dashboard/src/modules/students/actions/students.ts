@@ -1,6 +1,8 @@
 "use server";
 
 import { withAuth } from "@/src/_internals/with-auth";
+import z from "zod";
+import bcrypt from "bcryptjs";
 
 export const getStudentStats = withAuth({
   handler: async ({ account, db }) => {
@@ -79,6 +81,57 @@ export const getStudentStats = withAuth({
         data: null,
         success: false,
         message: "Something went wrong while fetching student statistics",
+      };
+    }
+  },
+});
+
+export const updateStudentPassword = withAuth({
+  input: z.object({
+    studentId: z.string().min(1),
+    newPassword: z.string().min(8),
+  }),
+  handler: async ({ input, account, db }) => {
+    try {
+      const student = await db.student.findFirst({
+        where: {
+          id: input.studentId,
+          accountId: account.id,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      if (!student) {
+        return {
+          data: null,
+          success: false,
+          message: "Student not found",
+        };
+      }
+
+      const hashedPassword = await bcrypt.hash(input.newPassword, 10);
+
+      await db.student.update({
+        where: { id: student.id },
+        data: { password: hashedPassword },
+      });
+
+      return {
+        data: { id: student.id },
+        success: true,
+        message: "Student password updated successfully",
+      };
+    } catch (error) {
+      console.error("Error updating student password:", error);
+      return {
+        data: null,
+        success: false,
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to update student password",
       };
     }
   },

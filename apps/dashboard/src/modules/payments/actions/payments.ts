@@ -16,6 +16,7 @@ export const getAllPayments = withAuth({
       const payments = await db.payment.findMany({
         where: {
           accountId: account.id,
+          type: { not: "SUBSCRIPTION" },
         },
         include: {
           Student: {

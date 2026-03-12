@@ -36,8 +36,12 @@ function DropdownMenuContent({
   sideOffset = 4,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Content>) {
+  const [themeRoot, setThemeRoot] = React.useState<HTMLElement | null>(null);
+  React.useEffect(() => {
+    setThemeRoot(document.querySelector<HTMLElement>(".academia-theme-root") ?? null);
+  }, []);
   return (
-    <DropdownMenuPrimitive.Portal>
+    <DropdownMenuPrimitive.Portal container={themeRoot ?? undefined}>
       <DropdownMenuPrimitive.Content
         data-slot="dropdown-menu-content"
         sideOffset={sideOffset}

@@ -467,6 +467,7 @@ model Website {
   itemsAlignment                  Boolean  @default(false)
   enableReferral                  Boolean  @default(false)
   enableSalesBanner               Boolean  @default(false)
+  enableWelcomeBanner             Boolean  @default(true)
   enableBlog                      Boolean  @default(false)
   enableTestimonials              Boolean  @default(true)
   enableContactForm               Boolean  @default(true)
@@ -478,6 +479,7 @@ model Website {
   metaKeywords                    String?  @db.Text
   googleAnalyticsId               String?
   facebookPixelId                 String?
+  tiktokPixelId                   String?
   
   // Legal and contact info
   privacy_policy                  Json?
@@ -533,6 +535,7 @@ model Website {
   // Relations
   Account                         Account           @relation(fields: [accountId], references: [id], onDelete: Cascade)
   WebsiteAnalytics                WebsiteAnalytics[]
+  VisitorSession                  VisitorSession[]
 
   @@index([accountId])
   @@index([subdomain])
@@ -561,6 +564,18 @@ model WebsiteAnalytics {
   @@unique([websiteId, date])
   @@index([websiteId])
   @@index([date])
+}
+
+model VisitorSession {
+  id         String   @id @unique @default(cuid())
+  websiteId  String
+  sessionId  String
+  createdAt  DateTime @default(now())
+
+  Website    Website  @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  @@unique([websiteId, sessionId])
+  @@index([websiteId])
 }
 
 model Coupon {

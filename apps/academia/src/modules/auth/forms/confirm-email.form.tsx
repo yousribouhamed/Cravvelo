@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { Mail, Loader2, CheckCircle } from "lucide-react";
-import BrandButton from "@/components/brand-button";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
   Card,
@@ -190,7 +190,7 @@ export default function ConfirmEmailForm() {
       </CardContent>
 
       <CardFooter className="flex flex-col space-y-4">
-        <BrandButton
+        <Button
           type="button"
           onClick={handleSubmit}
           className="w-full"
@@ -198,7 +198,7 @@ export default function ConfirmEmailForm() {
           loading={mutation.isLoading}
         >
           {mutation.isLoading ? t("verifying") : t("button")}
-        </BrandButton>
+        </Button>
 
         {/* Resend Token */}
         <div className="text-center">

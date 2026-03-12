@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Upload, X } from "lucide-react";
-import BrandButton from "@/components/brand-button";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { createP2pPaymentIntent } from "../../actions/p2p.actions";
 import { uploadImageToS3 } from "@/modules/aws/s3";
@@ -269,30 +269,30 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
               <div
                 className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
                   isDragActive
-                    ? "border-green-500 bg-green-50 dark:bg-green-950/50"
-                    : "border-gray-300 dark:border-gray-600"
+                    ? "border-primary bg-primary/10"
+                    : "border-border"
                 }`}
                 onDrop={isDisabled ? undefined : handleDrop}
                 onDragOver={isDisabled ? undefined : handleDragOver}
                 onDragLeave={isDisabled ? undefined : handleDragLeave}
               >
                 {formData.paymentProof ? (
-                  <div className="flex items-center justify-between bg-green-100 dark:bg-green-900/30 rounded-md p-3">
+                  <div className="flex items-center justify-between bg-muted/50 rounded-md p-3 border border-border">
                     <button
                       type="button"
                       onClick={removeFile}
                       disabled={isDisabled}
-                      className="text-red-600 hover:text-red-700 p-1"
+                      className="text-destructive hover:opacity-90 p-1"
                     >
                       <X className="w-4 h-4" />
                     </button>
                     <div
                       className={dir === "rtl" ? "text-right" : "text-left"}
                     >
-                      <p className="text-sm font-medium text-green-700 dark:text-green-300">
+                      <p className="text-sm font-medium text-foreground">
                         {formData.paymentProof.name}
                       </p>
-                      <p className="text-xs text-green-600 dark:text-green-400">
+                      <p className="text-xs text-muted-foreground">
                         {(formData.paymentProof.size / 1024 / 1024).toFixed(2)}{" "}
                         MB
                       </p>
@@ -300,13 +300,13 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    <Upload className="w-8 h-8 mx-auto text-gray-400" />
+                    <Upload className="w-8 h-8 mx-auto text-muted-foreground" />
                     <div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                      <p className="text-sm text-muted-foreground">
                         {t("dragDropText")}
                       </p>
-                      <label className="cursor-pointer inline-flex items-center justify-center min-h-11 px-4 rounded-md bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900/40 transition-colors">
-                        <span className="text-green-600 hover:text-green-700 font-medium">
+                      <label className="cursor-pointer inline-flex items-center justify-center min-h-11 px-4 rounded-md bg-muted/50 border border-border hover:bg-muted transition-colors">
+                        <span className="text-foreground font-medium">
                           {t("chooseFile")}
                         </span>
                         <input
@@ -318,7 +318,7 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
                         />
                       </label>
                     </div>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-muted-foreground">
                       {t("fileTypesHint")}
                     </p>
                   </div>
@@ -351,7 +351,7 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
 
       {/* Fixed Bottom Button - sticky on mobile for always-visible CTA */}
       <div className="sticky bottom-0 z-10 bg-card pt-4 pb-[env(safe-area-inset-bottom)] md:static md:my-4 md:pb-4 flex items-center justify-center p-4">
-        <BrandButton
+        <Button
           size="lg"
           type="submit"
           className="w-full min-h-11 sm:h-10"
@@ -359,7 +359,7 @@ export function P2PForm({ isLoading = false }: P2PFormProps) {
           loading={isSubmitLoading}
         >
           {isLocked && !isSubmitLoading ? t("submittedButton") : t("submitButton")}
-        </BrandButton>
+        </Button>
       </div>
     </form>
   );

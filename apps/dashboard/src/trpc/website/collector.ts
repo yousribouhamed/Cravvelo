@@ -330,6 +330,7 @@ export const collector = {
       z.object({
         googleAnalyticsId: z.string().optional(),
         facebookPixelId: z.string().optional(),
+        tiktokPixelId: z.string().optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -339,6 +340,7 @@ export const collector = {
           data: {
             googleAnalyticsId: input.googleAnalyticsId,
             facebookPixelId: input.facebookPixelId,
+            tiktokPixelId: input.tiktokPixelId,
           },
         });
 

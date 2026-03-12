@@ -71,18 +71,19 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
   const searchParams = useSearchParams();
   const { formatPrice, currencySymbol, isLoading: currencyLoading } = useCurrency();
 
-  // Read date range from URL params
+  const fromParam = searchParams?.get("from");
+  const toParam = searchParams?.get("to");
+
+  // Read date range from URL params. Missing params means "all time".
   const dateRange = useMemo(() => {
-    const from = searchParams?.get("from");
-    const to = searchParams?.get("to");
-    if (from && to) {
+    if (fromParam && toParam) {
       return {
-        from: new Date(from),
-        to: new Date(to),
+        from: new Date(fromParam),
+        to: new Date(toParam),
       } as DateRange;
     }
     return undefined;
-  }, [searchParams]);
+  }, [fromParam, toParam]);
 
   // Prepare query params for tRPC
   const queryParams = useMemo(() => {
@@ -99,16 +100,15 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
     return undefined;
   }, [dateRange]);
 
-  // Fetch revenue data via tRPC
+  const hasUrlRange = Boolean(fromParam && toParam);
+
+  // Fetch revenue data via tRPC (query key includes queryParams so changing date range refetches)
   const { data: revenueData, isLoading } = trpc.dashboard.getRevenueData.useQuery(
-    queryParams,
+    queryParams ?? undefined,
     {
-      initialData: initialData
-        ? {
-            success: true,
-            data: initialData,
-          }
-        : undefined,
+      // initialData is all-time from server page render; don't apply it for filtered ranges
+      initialData:
+        !hasUrlRange && initialData ? { success: true, data: initialData } : undefined,
       refetchOnMount: false,
       staleTime: 1000 * 60 * 2, // Cache for 2 minutes
     }
@@ -120,7 +120,24 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
   // Use data from backend or fallback to empty
   const todayData = data?.todayData || [];
   const yesterdayData = data?.yesterdayData || [];
-  const allChartData = data?.chartData || [];
+  const rawChartData = data?.chartData || [];
+  // Avoid single-dot chart: pad to two points so a line is drawn
+  const allChartData = useMemo(() => {
+    if (rawChartData.length <= 1) {
+      if (rawChartData.length === 0) return [];
+      const first = rawChartData[0]!;
+      const endTime =
+        dateRange?.to != null
+          ? new Date(dateRange.to).toISOString()
+          : (() => {
+              const d = new Date(first.time);
+              d.setDate(d.getDate() + 1);
+              return d.toISOString();
+            })();
+      return [first, { ...first, time: endTime }];
+    }
+    return rawChartData;
+  }, [rawChartData, dateRange?.to]);
 
   const grossRevenue = data?.grossRevenue || 0;
   const todayRevenue = data?.todayRevenue || 0;
@@ -241,51 +258,49 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
         </>
       )}
 
-      {/* Stats Cards Row - simple metrics including total visits */}
-      {data && (
-        <StatsGrid>
-          <StatsCard
-            title={t("totalVisits")}
-            value={totalVisits.toLocaleString()}
-            icon={<Eye className="h-4 w-4" />}
-            isRTL={isRTL}
-            className="border-sky-200 dark:border-sky-800"
-          />
-          <StatsCard
-            title={t("grossVolume")}
-            value={formatPrice(grossRevenue)}
-            change={changes.volumeChange}
-            changeLabel={t("comparedTo")}
-            icon={<DollarSign className="h-4 w-4" />}
-            sparklineData={revenueSparkline}
-            isRTL={isRTL}
-          />
-          <StatsCard
-            title={t("successfulPayments")}
-            value={successfulPayments.toLocaleString()}
-            change={changes.paymentsChange}
-            changeLabel={t("comparedTo")}
-            icon={<CreditCard className="h-4 w-4" />}
-            isRTL={isRTL}
-          />
-          <StatsCard
-            title={t("newCustomers")}
-            value={newCustomers.toLocaleString()}
-            change={changes.customersChange}
-            changeLabel={t("comparedTo")}
-            icon={<Users className="h-4 w-4" />}
-            isRTL={isRTL}
-          />
-          <StatsCard
-            title={t("averageOrder")}
-            value={formatPrice(averageOrderValue)}
-            change={changes.avgOrderChange}
-            changeLabel={t("comparedTo")}
-            icon={<ShoppingCart className="h-4 w-4" />}
-            isRTL={isRTL}
-          />
-        </StatsGrid>
-      )}
+      {/* Stats Cards Row - always visible, even when no data */}
+      <StatsGrid>
+        <StatsCard
+          title={t("totalVisits")}
+          value={totalVisits.toLocaleString()}
+          icon={<Eye className="h-4 w-4" />}
+          isRTL={isRTL}
+          className="border-sky-200 dark:border-sky-800"
+        />
+        <StatsCard
+          title={t("grossVolume")}
+          value={formatPrice(grossRevenue)}
+          change={changes.volumeChange}
+          changeLabel={t("comparedTo")}
+          icon={<DollarSign className="h-4 w-4" />}
+          sparklineData={revenueSparkline}
+          isRTL={isRTL}
+        />
+        <StatsCard
+          title={t("successfulPayments")}
+          value={successfulPayments.toLocaleString()}
+          change={changes.paymentsChange}
+          changeLabel={t("comparedTo")}
+          icon={<CreditCard className="h-4 w-4" />}
+          isRTL={isRTL}
+        />
+        <StatsCard
+          title={t("newCustomers")}
+          value={newCustomers.toLocaleString()}
+          change={changes.customersChange}
+          changeLabel={t("comparedTo")}
+          icon={<Users className="h-4 w-4" />}
+          isRTL={isRTL}
+        />
+        <StatsCard
+          title={t("averageOrder")}
+          value={formatPrice(averageOrderValue)}
+          change={changes.avgOrderChange}
+          changeLabel={t("comparedTo")}
+          icon={<ShoppingCart className="h-4 w-4" />}
+          isRTL={isRTL}
+        />
+      </StatsGrid>
 
       {/* Refunds card (if any) */}
       {data && refunds.count > 0 && (
@@ -308,10 +323,10 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
         </Card>
       )}
 
-      {/* Main Revenue Chart - RTL: title (نظرة عامة على الإيرادات) on the right, total on the left */}
+      {/* Main Revenue Chart - RTL: title first (right), number second (left) for correct Arabic order */}
       <Card className="border border-gray-200 dark:border-border w-full min-w-0 overflow-hidden" dir={isRTL ? "rtl" : "ltr"}>
         <CardHeader className="pb-4 px-4 sm:px-6">
-          <div className={cn("flex items-center justify-between gap-4 flex-wrap", isRTL && "flex-row-reverse")}>
+          <div className="flex items-center justify-between gap-4 flex-wrap">
             <CardTitle
               className={cn(
                 "text-base sm:text-lg font-semibold text-foreground flex-1 min-w-0",

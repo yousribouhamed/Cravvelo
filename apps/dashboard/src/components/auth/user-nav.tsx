@@ -56,6 +56,7 @@ const getVerificationProgress = (steps: number | undefined): number => {
 
 export default function UserNav({ user }: UserNavProps) {
   const t = useTranslations("userNav");
+  const tSubscription = useTranslations("subscription");
   const tTheme = useTranslations("settings.theme");
   const locale = useLocale();
   const isRTL = locale === "ar";
@@ -89,12 +90,11 @@ export default function UserNav({ user }: UserNavProps) {
   const planLabel = useMemo(() => {
     if (!user?.subscription) return t("freePlan");
     const sub = user.subscription;
-    const planNameKey = `subscription.plans.${sub.planCode.toLowerCase()}.name` as const;
-    const planName = t(planNameKey);
-    const cycleKey =
-      sub.billingCycle === "YEARLY" ? "subscription.yearly" : "subscription.monthly";
-    return `${planName} (${t(cycleKey)})`;
-  }, [user?.subscription, t]);
+    const planNameKey = `plans.${sub.planCode.toLowerCase()}.name` as const;
+    const planName = tSubscription(planNameKey);
+    const cycleKey = sub.billingCycle === "YEARLY" ? "yearly" : "monthly";
+    return `${planName} (${tSubscription(cycleKey)})`;
+  }, [user?.subscription, t, tSubscription]);
 
   const navigationItems = useMemo(
     () => [
@@ -107,7 +107,7 @@ export default function UserNav({ user }: UserNavProps) {
       {
         href: "/settings/subscription",
         icon: CreditCard,
-        label: t("subscription"),
+        label: t("subscription.label"),
         external: false,
       },
     ],
@@ -143,7 +143,7 @@ export default function UserNav({ user }: UserNavProps) {
       <DropdownMenuContent
         align={isRTL ? "start" : "end"}
         dir={isRTL ? "rtl" : "ltr"}
-        className="w-60 bg-popover border-border text-base antialiased"
+        className="z-[100] w-60 bg-popover border-border text-base antialiased"
       >
         {/* User Profile Header */}
         <div
@@ -238,12 +238,13 @@ export default function UserNav({ user }: UserNavProps) {
             <DropdownMenuItem
               key={item.href}
               className="hover:bg-accent focus:bg-accent transition-colors p-0"
+              asChild
             >
               <Link
                 href={item.href}
                 target={item.external ? "_blank" : undefined}
                 className={cn(
-                  "w-full flex items-center gap-2 px-3 py-2.5 text-foreground hover:text-foreground transition-colors",
+                  "w-full flex items-center gap-2 px-3 py-2.5 text-foreground hover:text-foreground transition-colors cursor-pointer",
                   isRTL ? "flex-row-reverse justify-between" : "flex-row justify-between"
                 )}
               >
@@ -262,36 +263,59 @@ export default function UserNav({ user }: UserNavProps) {
             </DropdownMenuItem>
           ))}
 
-          {/* Academy Preview - English: label first then icon; Arabic: icon first then label */}
-          <DropdownMenuItem
-            disabled={!user?.subdomain}
-            className="hover:bg-accent focus:bg-accent transition-colors p-0 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed"
-          >
-            <Link
-              href={user?.subdomain ? `https://${user.subdomain}` : "#"}
-              target="_blank"
-              onClick={!user?.subdomain ? (e) => e.preventDefault() : undefined}
-              className={cn(
-                "w-full flex items-center gap-2 px-3 py-2.5 transition-colors",
-                isRTL ? "flex-row-reverse justify-between" : "flex-row justify-between",
-                user?.subdomain
-                  ? "text-foreground hover:text-foreground/90"
-                  : "cursor-not-allowed opacity-50 text-foreground"
-              )}
+          {/* Academy Preview - use asChild so Link receives click on all pages */}
+          {user?.subdomain ? (
+            <DropdownMenuItem
+              className="hover:bg-accent focus:bg-accent transition-colors p-0"
+              asChild
             >
-              {isRTL ? (
-                <>
-                  <ExternalLinkDirectionIcon className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
-                  <span className="font-medium text-sm">{t("academyPreview")}</span>
-                </>
-              ) : (
-                <>
-                  <span className="font-medium text-sm">{t("academyPreview")}</span>
-                  <ExternalLinkDirectionIcon className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
-                </>
-              )}
-            </Link>
-          </DropdownMenuItem>
+              <Link
+                href={`https://${user.subdomain}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  "w-full flex items-center gap-2 px-3 py-2.5 text-foreground hover:text-foreground/90 transition-colors cursor-pointer",
+                  isRTL ? "flex-row-reverse justify-between" : "flex-row justify-between"
+                )}
+              >
+                {isRTL ? (
+                  <>
+                    <ExternalLinkDirectionIcon className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                    <span className="font-medium text-sm">{t("academyPreview")}</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="font-medium text-sm">{t("academyPreview")}</span>
+                    <ExternalLinkDirectionIcon className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                  </>
+                )}
+              </Link>
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem
+              disabled
+              className="opacity-50 cursor-not-allowed p-0"
+            >
+              <span
+                className={cn(
+                  "w-full flex items-center gap-2 px-3 py-2.5 text-foreground",
+                  isRTL ? "flex-row-reverse justify-between" : "flex-row justify-between"
+                )}
+              >
+                {isRTL ? (
+                  <>
+                    <ExternalLinkDirectionIcon className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                    <span className="font-medium text-sm">{t("academyPreview")}</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="font-medium text-sm">{t("academyPreview")}</span>
+                    <ExternalLinkDirectionIcon className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                  </>
+                )}
+              </span>
+            </DropdownMenuItem>
+          )}
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator className="bg-border" />

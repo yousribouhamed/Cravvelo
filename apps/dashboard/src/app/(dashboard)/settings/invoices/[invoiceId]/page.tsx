@@ -14,7 +14,7 @@ interface PageProps {
 
 export default async function Page({ params }: PageProps) {
   const { invoiceId } = await params;
-  const t = await getServerTranslations("pages");
+  const t = await getServerTranslations("invoices");
   const user = await getMyUserAction();
 
   const notifications = await getAllNotifications({
@@ -24,7 +24,12 @@ export default async function Page({ params }: PageProps) {
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
-        <Header notifications={notifications} user={user} title={t("invoices")} />
+        <Header
+          notifications={notifications}
+          user={user}
+          title={t("details.title")}
+          goBack
+        />
 
         <GeneralSettingsHeader />
 

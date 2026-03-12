@@ -2,6 +2,7 @@ import { prisma } from "database/src";
 import AddLogoForm from "@/src/modules/settings/components/forms/add-logo-form";
 import AddFavIconForm from "@/src/modules/settings/components/forms/add-favicon-form";
 import UploadStampForm from "@/src/modules/settings/components/forms/upload-stamp-form";
+import FontSettingsForm from "@/src/modules/settings/components/forms/font-settings-form";
 import { getMyUserAction } from "@/src/actions/user.actions";
 
 export default async function AssetsPage() {
@@ -16,6 +17,12 @@ export default async function AssetsPage() {
       <AddLogoForm logoUrl={website?.logo ?? undefined} />
       <AddFavIconForm logoUrl={website?.favicon ?? undefined} />
       <UploadStampForm stempUrl={website?.stamp ?? undefined} />
+      <FontSettingsForm
+        initialTheme={
+          (website?.themeCustomization as import("database").ThemeCustomization) ??
+          undefined
+        }
+      />
     </div>
   );
 }

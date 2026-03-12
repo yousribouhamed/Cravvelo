@@ -5,10 +5,9 @@ import {
   getMyUserAction,
 } from "@/src/actions/user.actions";
 import GeneralSettingsHeader from "@/src/modules/settings/components/general-settings-header";
-import { SubscriptionPlansView } from "@/src/modules/settings/components/subscription-plans-view";
-import { CurrentPlanUsageView } from "@/src/modules/settings/components/current-plan-usage-view";
 import { getSubscriptionPageData } from "@/src/modules/settings/actions/subscription-page.actions";
 import { getServerTranslations } from "@/src/lib/i18n/utils";
+import { SubscriptionSettingsContent } from "@/src/modules/settings/components/subscription-settings-content";
 
 export default async function SubscriptionSettingsPage() {
   const [user, subscriptionData] = await Promise.all([
@@ -21,8 +20,6 @@ export default async function SubscriptionSettingsPage() {
     accountId: user?.accountId,
   });
 
-  const hasPlan = !!subscriptionData.subscription;
-
   return (
     <MaxWidthWrapper>
       <main className="w-full flex flex-col justify-start ">
@@ -33,15 +30,7 @@ export default async function SubscriptionSettingsPage() {
         />
 
         <GeneralSettingsHeader />
-
-        <div className="w-full py-6 space-y-8">
-          {hasPlan && (
-            <CurrentPlanUsageView data={subscriptionData} />
-          )}
-          <div id="plans">
-            <SubscriptionPlansView />
-          </div>
-        </div>
+        <SubscriptionSettingsContent data={subscriptionData} />
       </main>
     </MaxWidthWrapper>
   );

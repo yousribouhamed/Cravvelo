@@ -1,6 +1,6 @@
 "use client";
 
-import BrandButton from "@/components/brand-button";
+import { Button } from "@/components/ui/button";
 import { usePaymentIntent } from "@/modules/payments/hooks/use-paymentIntent";
 import { productToPaymentProduct } from "@/modules/payments/utils";
 import { useTenantCurrency } from "@/hooks/use-tenant";
@@ -42,18 +42,18 @@ export default function ProductBuyCard({
 
       {isOwned ? (
         <>
-          <BrandButton onClick={handleDownload} className="w-full">
+          <Button onClick={handleDownload} className="w-full">
             {t("download")}
-          </BrandButton>
+          </Button>
           <p className="text-xs text-muted-foreground text-right">
             {t("downloadHint")}
           </p>
         </>
       ) : (
         <>
-          <BrandButton onClick={invokePaymentIntent} className="w-full">
+          <Button onClick={invokePaymentIntent} className="w-full">
             {t("buy")}
-          </BrandButton>
+          </Button>
 
           <p className="text-xs text-muted-foreground text-right">
             {t("buyHint")}

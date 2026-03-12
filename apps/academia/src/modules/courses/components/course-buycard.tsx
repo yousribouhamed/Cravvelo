@@ -1,6 +1,6 @@
 "use client";
 
-import BrandButton from "@/components/brand-button";
+import { Button } from "@/components/ui/button";
 import {
   Star,
   User,
@@ -101,14 +101,14 @@ export default function CourseBuyCard({
         )}
 
       {isOwned ? (
-        <Link href={`/courses/${courseId}/watch`}>
-          <BrandButton className="w-full">{t("buyCard.watchNow")}</BrandButton>
-        </Link>
+        <Button className="w-full" asChild>
+          <Link href={`/courses/${courseId}/watch`}>{t("buyCard.watchNow")}</Link>
+        </Button>
       ) : (
         <>
-          <BrandButton onClick={invokePaymentIntent}>
+          <Button onClick={invokePaymentIntent} className="w-full">
             {t("buyCard.buyNow")}
-          </BrandButton>
+          </Button>
           <Link href={`/login?redirect=/courses/${courseId}`}>
             <button className="text-sm underline text-muted-foreground hover:text-foreground text-right w-full">
               {t("buyCard.alreadyHaveAccount")}

@@ -1,7 +1,7 @@
 "use client";
 
+import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@ui/components/ui/checkbox";
 import { Student } from "database";
 import { DataTableColumnHeader } from "../table-helpers/data-table-head";
 import {
@@ -14,11 +14,21 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@ui/components/ui/avatar";
 import { maketoast } from "../../toasts";
 import { Button } from "@ui/components/ui/button";
-import { MoreHorizontal, Info, CheckCircle2, XCircle } from "lucide-react";
+import { MoreHorizontal, Info, KeyRound } from "lucide-react";
 import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
 import { Badge } from "@ui/components/ui/badge";
 import { useTheme } from "next-themes";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@ui/components/ui/dialog";
+import { PasswordInput } from "../../password-input";
+import { updateStudentPassword } from "@/src/modules/students/actions/students";
 
 // Date formatter
 const formatDate = (date: Date, locale: string) => {
@@ -54,40 +64,9 @@ const StatusCell = ({ isActive }: { isActive: boolean }) => {
   );
 };
 
-// Email verified badge component
-const EmailVerifiedCell = ({ emailVerified }: { emailVerified: boolean }) => {
-  const t = useTranslations("students");
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === "dark";
-
-  return (
-    <Badge
-      variant="outline"
-      className={
-        emailVerified
-          ? "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900 dark:text-blue-100 dark:border-blue-800"
-          : "bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600"
-      }
-    >
-      {emailVerified ? (
-        <div className="flex items-center gap-1">
-          <CheckCircle2 className="h-3 w-3" />
-          {t("filters.verified")}
-        </div>
-      ) : (
-        <div className="flex items-center gap-1">
-          <XCircle className="h-3 w-3" />
-          {t("filters.notVerified")}
-        </div>
-      )}
-    </Badge>
-  );
-};
-
 export const useStudentsColumns = (): ColumnDef<Student & { _count?: { Sales: number; Certificates: number } }>[] => {
   const t = useTranslations("students");
   const locale = useLocale();
-  const isRTL = locale === "ar";
 
   return [
   // {
@@ -138,9 +117,16 @@ export const useStudentsColumns = (): ColumnDef<Student & { _count?: { Sales: nu
         <DataTableColumnHeader column={column} title={t("columns.fullName")} />
       ),
       cell: ({ row }) => {
+        const studentId = row.original?.id;
+        const fullName = row.original?.full_name ?? "";
         return (
-          <div className="flex flex-col gap-y-2 justify-center items-start ">
-            <p className="font-bold text-[15px] text-foreground">{row.original?.full_name}</p>
+          <div className="flex flex-col gap-y-2 justify-center items-start">
+            <Link
+              href={studentId ? `/students/${studentId}` : "#"}
+              className="font-bold text-[15px] text-foreground hover:text-primary hover:underline underline-offset-2 cursor-pointer"
+            >
+              {fullName}
+            </Link>
           </div>
         );
       },
@@ -240,24 +226,6 @@ export const useStudentsColumns = (): ColumnDef<Student & { _count?: { Sales: nu
       },
     },
     {
-      accessorKey: "emailVerified",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("columns.emailVerified")} />
-      ),
-      cell: ({ row }) => {
-        return <EmailVerifiedCell emailVerified={row.original.emailVerified ?? false} />;
-      },
-      filterFn: (row, id, value) => {
-        const rowValue = String(row.getValue(id) as boolean);
-        const filterValues = Array.isArray(value) ? value : [value];
-        if (filterValues.length === 0) return true;
-        return filterValues.some((val) => {
-          const boolVal = String(val === "true" || val === true);
-          return rowValue === boolVal;
-        });
-      },
-    },
-    {
       accessorKey: "lastVisitedAt",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("columns.lastVisited")} />
@@ -278,9 +246,127 @@ export const useStudentsColumns = (): ColumnDef<Student & { _count?: { Sales: nu
       id: "actions",
       cell: ({ row }) => {
         const student = row.original;
+        const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+        const [newPassword, setNewPassword] = useState("");
+        const [confirmPassword, setConfirmPassword] = useState("");
+        const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+
+        const handleChangePassword = async () => {
+          if (!newPassword || !confirmPassword) {
+            maketoast.errorWithText({
+              text: t("changePassword.validation.required"),
+            });
+            return;
+          }
+
+          if (newPassword.length < 8) {
+            maketoast.errorWithText({
+              text: t("changePassword.validation.minLength"),
+            });
+            return;
+          }
+
+          if (newPassword !== confirmPassword) {
+            maketoast.errorWithText({
+              text: t("changePassword.validation.mismatch"),
+            });
+            return;
+          }
+
+          setIsUpdatingPassword(true);
+          try {
+            const result = await updateStudentPassword({
+              studentId: student.id,
+              newPassword,
+            });
+
+            if (!result?.success) {
+              maketoast.errorWithText({
+                text: result?.message || t("changePassword.messages.failed"),
+              });
+              return;
+            }
+
+            maketoast.successWithText({
+              text: t("changePassword.messages.success"),
+            });
+            setIsChangePasswordOpen(false);
+            setNewPassword("");
+            setConfirmPassword("");
+          } catch (error) {
+            maketoast.errorWithText({
+              text: t("changePassword.messages.failed"),
+            });
+          } finally {
+            setIsUpdatingPassword(false);
+          }
+        };
 
         return (
           <div className="w-full h-10 flex items-center justify-end gap-x-4">
+            <Dialog
+              open={isChangePasswordOpen}
+              onOpenChange={(open) => {
+                setIsChangePasswordOpen(open);
+                if (!open) {
+                  setNewPassword("");
+                  setConfirmPassword("");
+                }
+              }}
+            >
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>{t("changePassword.title")}</DialogTitle>
+                  <DialogDescription>
+                    {t("changePassword.description", {
+                      name: student.full_name,
+                    })}
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="space-y-3">
+                  <div className="space-y-1.5">
+                    <p className="text-sm font-medium text-foreground">
+                      {t("changePassword.newPassword")}
+                    </p>
+                    <PasswordInput
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder={t("changePassword.newPasswordPlaceholder")}
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <p className="text-sm font-medium text-foreground">
+                      {t("changePassword.confirmPassword")}
+                    </p>
+                    <PasswordInput
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder={t("changePassword.confirmPasswordPlaceholder")}
+                    />
+                  </div>
+                </div>
+
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsChangePasswordOpen(false)}
+                    disabled={isUpdatingPassword}
+                  >
+                    {t("changePassword.cancel")}
+                  </Button>
+                  <Button
+                    onClick={handleChangePassword}
+                    disabled={isUpdatingPassword}
+                  >
+                    {isUpdatingPassword
+                      ? t("changePassword.saving")
+                      : t("changePassword.submit")}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -316,6 +402,14 @@ export const useStudentsColumns = (): ColumnDef<Student & { _count?: { Sales: nu
                     />
                   </svg>
                   {t("actions.copyEmail")}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => setIsChangePasswordOpen(true)}
+                  className="w-full h-full flex justify-between items-center gap-x-2 p-2"
+                >
+                  <KeyRound className="w-4 h-4" />
+                  {t("actions.changePassword")}
                 </DropdownMenuItem>
                 <Link href={`/students/${row.original.id}`}>
                   <DropdownMenuItem

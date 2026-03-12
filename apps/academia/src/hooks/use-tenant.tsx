@@ -55,10 +55,29 @@ export function useTenantSettings() {
     itemsAlignment: website?.itemsAlignment ?? false,
     enableReferral: website?.enableReferral ?? false,
     enableSalesBanner: website?.enableSalesBanner ?? false,
+    enableWelcomeBanner: website?.enableWelcomeBanner ?? true,
+    enableTestimonials: website?.enableTestimonials ?? true,
+    enableContactForm: website?.enableContactForm ?? true,
+    enableNewsletterSignup: website?.enableNewsletterSignup ?? false,
+    enableBlog: website?.enableBlog ?? false,
     phoneNumber: website?.phoneNumber,
     supportEmail: website?.supportEmail,
+    address: website?.address,
     privacyPolicy: website?.privacy_policy,
     stamp: website?.stamp,
+  };
+}
+
+export function useTenantThemeStyles() {
+  const { website } = useTenant();
+  const theme = (website?.themeCustomization ?? {}) as Record<string, string | undefined>;
+  return {
+    bannerStyle: theme.bannerStyle ?? "DEFAULT",
+    courseCardStyle: theme.courseCardStyle ?? "DEFAULT",
+    productCardStyle: theme.productCardStyle ?? "DEFAULT",
+    coursePlayerStyle: theme.coursePlayerStyle ?? "DEFAULT",
+    authFormStyle: theme.authFormStyle ?? "DEFAULT",
+    profileStyle: theme.profileStyle ?? "DEFAULT",
   };
 }
 

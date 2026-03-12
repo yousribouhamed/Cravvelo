@@ -53,7 +53,7 @@ export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="flex cursor-pointer items-center gap-2 text-gray-800 dark:text-gray-200"
+          className="flex cursor-pointer items-center gap-2 text-card-foreground"
         >
           <User className="w-5 h-5" />
           {tProfile("account")}

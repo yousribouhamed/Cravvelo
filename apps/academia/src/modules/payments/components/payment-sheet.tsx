@@ -139,7 +139,7 @@ export function PaymentSheet() {
                           </h3>
                           <div className="bg-muted/50 rounded-lg p-4 border my-4">
                             <div className="flex items-center gap-4">
-                              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shrink-0">
+                              <div className="w-16 h-16 bg-primary/15 rounded-lg flex items-center justify-center shrink-0 border border-border">
                                 {selectedProduct.image ? (
                                   <Image
                                     src={selectedProduct.image}
@@ -150,7 +150,7 @@ export function PaymentSheet() {
                                     unoptimized
                                   />
                                 ) : (
-                                  <div className="w-8 h-8 bg-white/20 rounded backdrop-blur-sm"></div>
+                                  <div className="w-8 h-8 bg-primary/20 rounded" />
                                 )}
                               </div>
                               <div className="flex-1 min-w-0">
@@ -173,15 +173,11 @@ export function PaymentSheet() {
                                 )}
 
                                 <div className="flex items-center justify-between">
-                                  {currentPrice > 0 ? (
-                                    <span className="text-lg font-bold text-green-600 dark:text-green-400">
-                                      {formatPrice(currentPrice)}
-                                    </span>
-                                  ) : (
-                                    <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
-                                      {t("free")}
-                                    </span>
-                                  )}
+                                  <span className="text-lg font-bold text-primary">
+                                    {currentPrice > 0
+                                      ? formatPrice(currentPrice)
+                                      : t("free")}
+                                  </span>
                                   <span className="text-sm text-muted-foreground">
                                     1 ×
                                   </span>
@@ -205,15 +201,11 @@ export function PaymentSheet() {
                                 <span className="text-sm font-bold text-foreground">
                                   {t("total")}
                                 </span>
-                                {currentPrice > 0 ? (
-                                  <span className="text-xl font-bold text-green-600 dark:text-green-400">
-                                    {formatPrice(currentPrice)}
-                                  </span>
-                                ) : (
-                                  <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
-                                    {t("free")}
-                                  </span>
-                                )}
+                                <span className="text-xl font-bold text-primary">
+                                  {currentPrice > 0
+                                    ? formatPrice(currentPrice)
+                                    : t("free")}
+                                </span>
                               </div>
                             </div>
 
@@ -306,11 +298,11 @@ export function PaymentSheet() {
                       ) : (
                         /* Free Product Message */
                         <div className="text-center py-8">
-                          <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
-                            <h3 className="text-lg font-semibold text-blue-700 dark:text-blue-300 mb-2">
+                          <div className="bg-muted/50 border border-border rounded-lg p-6">
+                            <h3 className="text-lg font-semibold text-foreground mb-2">
                               {t("freeProduct")}
                             </h3>
-                            <p className="text-blue-600 dark:text-blue-400">
+                            <p className="text-muted-foreground">
                               {t("freeProductMessage")}
                             </p>
                           </div>

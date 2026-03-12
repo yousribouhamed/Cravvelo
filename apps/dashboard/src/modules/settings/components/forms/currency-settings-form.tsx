@@ -27,7 +27,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ui/components/ui/select";
-import { Input } from "@ui/components/ui/input";
 import { trpc } from "@/src/app/_trpc/client";
 import { LoadingSpinner } from "@ui/icons/loading-spinner";
 import { maketoast } from "@/src/components/toasts";
@@ -35,10 +34,22 @@ import { useTranslations, useLocale } from "next-intl";
 
 const formSchema = z.object({
   currency: z.string().min(1),
-  currencySymbol: z.string().min(1),
   language: z.string().min(1),
   timezone: z.string().min(1),
 });
+
+/** Currency code -> symbol (we set symbol from selection to avoid conflicts) */
+const CURRENCY_SYMBOLS: Record<string, string> = {
+  DZD: "د.ج",
+  USD: "$",
+  EUR: "€",
+  GBP: "£",
+  SAR: "ر.س",
+  AED: "د.إ",
+  MAD: "د.م.",
+  TND: "د.ت",
+  EGP: "£",
+};
 
 const currencies = [
   { code: "DZD", name: "Algerian Dinar" },
@@ -100,16 +111,16 @@ const CurrencySettingsForm: FC<CurrencySettingsFormProps> = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       currency: currency ?? "DZD",
-      currencySymbol: currencySymbol ?? "DA",
       language: language ?? "ARABIC",
       timezone: timezone ?? "Africa/Algiers",
     },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    const currencySymbol = CURRENCY_SYMBOLS[data.currency] ?? data.currency;
     await mutation.mutateAsync({
       currency: data.currency,
-      currencySymbol: data.currencySymbol,
+      currencySymbol,
       language: data.language,
       timezone: data.timezone,
     });
@@ -144,29 +155,16 @@ const CurrencySettingsForm: FC<CurrencySettingsFormProps> = ({
                       {currencies.map((curr) => (
                         <SelectItem key={curr.code} value={curr.code}>
                           {curr.code} - {curr.name}
+                          {CURRENCY_SYMBOLS[curr.code] != null
+                            ? ` (${CURRENCY_SYMBOLS[curr.code]})`
+                            : ""}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="currencySymbol"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel dir={isRTL ? "rtl" : "ltr"}>
-                    {t("currencySymbol")}
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      dir="ltr"
-                      placeholder="DA, $, €, etc."
-                    />
-                  </FormControl>
+                  <p className="text-sm text-muted-foreground">
+                    {t("currencySymbolAuto")}
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}

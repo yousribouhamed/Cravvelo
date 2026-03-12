@@ -184,6 +184,18 @@ async function handleCheckoutPaid({
     });
   }
 
+  await prisma.invoice.create({
+    data: {
+      paymentId,
+      accountId,
+      amount: payment.amount,
+      currency: payment.currency ?? "DZD",
+      status: "COMPLETED",
+      paidAt: new Date(),
+      description: `Subscription: ${planCode} (${normalizedBillingCycle})`,
+    },
+  });
+
   const notification = await prisma.notification.create({
     data: {
       accountId,

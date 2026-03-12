@@ -33,22 +33,49 @@ export const useCommentColumns = (
   };
 
   const getStatusBadge = (status: string) => {
+    const normalized = (status ?? "").toLowerCase();
     const statusConfig: Record<
       string,
-      { variant: "default" | "secondary" | "destructive" | "outline"; className: string }
+      { className: string }
     > = {
-      approved: { variant: "default", className: "bg-green-500 text-white" },
-      pending: { variant: "secondary", className: "bg-yellow-500 text-white" },
-      rejected: { variant: "destructive", className: "bg-red-500 text-white" },
-      verification_pending: { variant: "outline", className: "bg-gray-500 text-white" },
+      approved: {
+        className:
+          "border border-green-500/30 bg-green-500/20 text-green-700 dark:text-green-300 dark:bg-green-500/25",
+      },
+      pending: {
+        className:
+          "border border-amber-500/30 bg-amber-500/20 text-amber-700 dark:text-amber-300 dark:bg-amber-500/25",
+      },
+      rejected: {
+        className:
+          "border border-red-500/30 bg-red-500/20 text-red-700 dark:text-red-300 dark:bg-red-500/25",
+      },
+      verification_pending: {
+        className:
+          "border border-gray-500/30 bg-gray-500/20 text-gray-700 dark:text-gray-300 dark:bg-gray-500/25",
+      },
     };
 
-    const config = statusConfig[status] || statusConfig.verification_pending;
-    const statusKey = status as keyof typeof statusConfig;
-    const translatedStatus = t(`status.${statusKey}`) || status;
+    const config =
+      statusConfig[normalized] || statusConfig.verification_pending;
+    const statusKeys = [
+      "approved",
+      "pending",
+      "rejected",
+      "verification_pending",
+    ];
+    const translatedStatus = statusKeys.includes(normalized)
+      ? t(
+          (`status.${normalized}`) as
+            | "status.approved"
+            | "status.pending"
+            | "status.rejected"
+            | "status.verification_pending"
+        )
+      : status;
 
     return (
-      <Badge variant={config.variant} className={config.className}>
+      <Badge variant="secondary" className={config.className}>
         {translatedStatus}
       </Badge>
     );
@@ -98,7 +125,12 @@ export const useCommentColumns = (
         return getStatusBadge(row.original.status);
       },
       filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
+        const rowStatus = String(row.getValue(id) ?? "").toLowerCase();
+        const values = (value as string[]).map((v) =>
+          String(v).toLowerCase()
+        );
+        if (values.length === 0) return true;
+        return values.includes(rowStatus);
       },
     },
 

@@ -31,12 +31,20 @@ function WebsiteSettingsHeader({ className, ...props }: ExamplesNavProps) {
         href: `/settings/website-settings/general`,
       },
       {
+        name: t("layout"),
+        href: `/settings/website-settings/layout`,
+      },
+      {
         name: t("legal"),
         href: `/settings/website-settings/legal`,
       },
       {
         name: t("marketing"),
         href: `/settings/website-settings/marketing`,
+      },
+      {
+        name: t("seo"),
+        href: `/settings/website-settings/seo`,
       },
     ],
     [t]
