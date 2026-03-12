@@ -485,8 +485,8 @@ const Notifications: FC<NotificationsProps> = ({
             <NotificationTrigger />
           </PopoverTrigger>
           <PopoverContent
-            align={isRTL ? "end" : "start"}
-            alignOffset={isRTL ? 8 : -8}
+            align="end"
+            alignOffset={8}
             sideOffset={10}
             avoidCollisions={false}
             dir={isRTL ? "rtl" : "ltr"}
@@ -503,7 +503,7 @@ const Notifications: FC<NotificationsProps> = ({
             <NotificationTrigger />
           </SheetTrigger>
           <SheetContent
-            side={isRTL ? "right" : "left"}
+            side="right"
             className="p-0 w-screen max-w-none h-screen border-none"
           >
             <NotificationsPanel mobile />

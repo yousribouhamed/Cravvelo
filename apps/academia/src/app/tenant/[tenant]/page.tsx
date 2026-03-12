@@ -24,8 +24,9 @@ export default async function TenantPage({ params }: TenantPageProps) {
   const showCoursesOnHome = (website as any)?.dCoursesHomeScreen ?? true;
   const showProductsOnHome = (website as any)?.dDigitalProductsHomeScreen ?? false;
   const enableWelcomeBanner = (website as any)?.enableWelcomeBanner ?? true;
-  const enableTestimonials = (website as any)?.enableTestimonials ?? true;
-  const enableContactForm = (website as any)?.enableContactForm ?? true;
+  // By default, do not show testimonials or contact form
+  const enableTestimonials = (website as any)?.enableTestimonials ?? false;
+  const enableContactForm = (website as any)?.enableContactForm ?? false;
   const displayName =
     (website as any)?.name ?? (website as any)?.Account?.user_name ?? tenant;
 

@@ -17,14 +17,14 @@ const MobildSideBard: FC = ({}) => {
         <Button
           size="icon"
           variant="secondary"
-          className="rounded-2xl bg-white  text-black"
+          className="rounded-2xl"
         >
           <Menu />
         </Button>
       </SheetTrigger>
       <SheetContent
         className={cn(
-          `pb-12  bg-primary h-full   ${isOpen ? "block" : "hidden"}`
+          `pb-12 h-full bg-card text-card-foreground border-l border-border shadow-lg ${isOpen ? "block" : "hidden"}`
         )}
       >
         <div className="space-y-4 py-2   ">

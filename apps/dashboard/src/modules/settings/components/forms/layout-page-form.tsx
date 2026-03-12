@@ -133,7 +133,7 @@ const LayoutPageForm: FC<LayoutPageFormProps> = ({ website }) => {
     }
   }
 
-  const isPending = layoutMutation.isPending || themeMutation.isPending;
+  const isLoading = layoutMutation.isLoading || themeMutation.isLoading;
 
   const styleLabel = (key: string) => {
     const map: Record<string, string> = {
@@ -407,10 +407,10 @@ const LayoutPageForm: FC<LayoutPageFormProps> = ({ website }) => {
           <CardFooter>
             <Button
               className="flex items-center gap-x-2"
-              disabled={isPending}
+              disabled={isLoading}
               type="submit"
             >
-              {isPending ? <LoadingSpinner /> : null}
+              {isLoading ? <LoadingSpinner /> : null}
               {t("confirm")}
             </Button>
           </CardFooter>

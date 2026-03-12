@@ -60,7 +60,7 @@ export function SubscriptionPlansView() {
 
   return (
     <div className="w-full">
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto pb-2">
         <div className="flex flex-row items-stretch gap-3">
           {SUBSCRIPTION_PLANS.map((plan) => {
             const price = plan.priceMonthly;
@@ -69,14 +69,14 @@ export function SubscriptionPlansView() {
               <Card
                 key={plan.planCode}
                 className={cn(
-                  "relative flex min-w-[14rem] flex-1 flex-col overflow-hidden transition-all duration-200",
+                  "relative flex min-w-[14rem] max-w-xs flex-1 flex-col overflow-hidden transition-all duration-200",
                   plan.highlight
-                    ? "scale-[1.02] border-2 border-amber-500 bg-gradient-to-b from-amber-500/5 to-transparent shadow-lg shadow-amber-500/10"
+                    ? "scale-[1.02] border-2 border-primary bg-gradient-to-b from-primary/5 to-transparent shadow-lg shadow-primary/10"
                     : "border-border hover:border-muted-foreground/20 hover:shadow-md"
                 )}
               >
                 {plan.highlight && plan.highlightLabelKey && (
-                  <div className="absolute left-0 right-0 top-0 bg-amber-500 py-1.5 text-center text-xs font-semibold text-white">
+                  <div className="absolute left-0 right-0 top-0 bg-primary py-1.5 text-center text-xs font-semibold text-primary-foreground">
                     {t(plan.highlightLabelKey)}
                   </div>
                 )}
@@ -110,7 +110,7 @@ export function SubscriptionPlansView() {
                     {t("getStarted")}
                   </Button>
                   {plan.ctaSubtextKey && (
-                    <p className="text-center text-xs text-amber-600 dark:text-amber-400">
+                    <p className="text-center text-xs text-primary">
                       {t(plan.ctaSubtextKey)}
                     </p>
                   )}
@@ -148,7 +148,7 @@ export function SubscriptionPlansView() {
               <p className="text-sm text-muted-foreground">
                 {selectedPlan.name} — {t("billingCycleHint")}
               </p>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button
                   type="button"
                   onClick={() => setBillingCycle("MONTHLY")}

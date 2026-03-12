@@ -12,6 +12,11 @@ import {
   DomainResponse,
   DomainVerificationStatusProps,
 } from "@/src/types/domain-types";
+import {
+  sanitizeSubdomain,
+  validateSubdomain,
+} from "@/src/modules/settings/utils/wordsFilter";
+import { prisma } from "database/src";
 
 type Response = {
   status: DomainVerificationStatusProps;
@@ -286,6 +291,73 @@ export const domain = {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to check domain status",
+        });
+      }
+    }),
+
+  checkSubdomain: privateProcedure
+    .input(
+      z.object({
+        subdomain: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      try {
+        const cleaned = sanitizeSubdomain(input.subdomain);
+
+        if (!cleaned) {
+          return {
+            isValid: false,
+            message: "Subdomain is required",
+          };
+        }
+
+        const localValidation = validateSubdomain(cleaned);
+        if (!localValidation.isValid) {
+          return {
+            isValid: false,
+            message: localValidation.message,
+            suggestion: localValidation.suggestion,
+          };
+        }
+
+        // Additional regex and reserved-name checks for safety
+        if (!subdomainRegex.test(cleaned)) {
+          return {
+            isValid: false,
+            message:
+              "Subdomain must be 3-32 characters long and contain only letters, numbers, and hyphens",
+          };
+        }
+
+        if (restrictedSubdomains.includes(cleaned)) {
+          return {
+            isValid: false,
+            message: "This subdomain is reserved and cannot be used",
+          };
+        }
+
+        const existingWebsite = await prisma.website.findFirst({
+          where: {
+            subdomain: `${cleaned}.cravvelo.com`,
+          },
+        });
+
+        if (existingWebsite) {
+          return {
+            isValid: false,
+            message: "This subdomain is already taken. Please choose another.",
+          };
+        }
+
+        return {
+          isValid: true,
+        };
+      } catch (err) {
+        console.error("Error checking subdomain:", err);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to validate subdomain",
         });
       }
     }),

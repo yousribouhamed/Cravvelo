@@ -327,6 +327,17 @@ export const validateTenant = cache(async (tenant: string) => {
           select: {
             id: true,
             verified: true,
+            isActive: true,
+            isSuspended: true,
+            AccountSubscription: {
+              orderBy: {
+                updatedAt: "desc",
+              },
+              take: 1,
+              select: {
+                status: true,
+              },
+            },
           },
         },
       },
@@ -353,15 +364,30 @@ export const validateTenant = cache(async (tenant: string) => {
     console.log(website2);
     console.log(website);
 
+    const latestSubscription =
+      website?.Account?.AccountSubscription &&
+      website.Account.AccountSubscription[0]
+        ? website.Account.AccountSubscription[0]
+        : null;
+
+    const hasActiveSubscription =
+      latestSubscription?.status === "ACTIVE";
+
+    const isAccountSuspended = website?.Account?.isSuspended ?? false;
+
     return {
       isValid: !!website && !website.suspended,
       website,
+      hasActiveSubscription,
+      isAccountSuspended,
     };
   } catch (error) {
     console.error("Error validating tenant:", error);
     return {
       isValid: false,
       website: null,
+      hasActiveSubscription: false,
+      isAccountSuspended: false,
     };
   }
 });

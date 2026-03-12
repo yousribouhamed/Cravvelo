@@ -7,7 +7,7 @@ export const builder = {
     .input(
       z.object({
         name: z.string(),
-        description: z.string(),
+        description: z.string().optional().default(""),
         subdomain: z.string(),
         pages: z.any(),
       })
@@ -23,7 +23,7 @@ export const builder = {
           data: {
             accountId: account.id,
             name: input.name,
-            description: input.description,
+            description: input.description ?? "",
             subdomain: input.subdomain + ".cravvelo.com",
           },
         });

@@ -14,6 +14,7 @@ import Footer from "@/components/layout/footer";
 import { VisitTracker } from "@/components/visit-tracker";
 import { TrackingPixels } from "@/components/tracking-pixels";
 import { buildThemeStyleAndData } from "@/lib/theme-utils";
+import { AcademiaUnavailable } from "@/components/academia-unavailable";
 
 export const dynamic = "force-dynamic";
 
@@ -58,7 +59,7 @@ export default async function TenantLayout({
   const { tenant: tenantKey } = await params;
   const tenant = decodeURIComponent(tenantKey);
 
-  const [{ isValid }, websiteData, user] = await Promise.all([
+  const [{ isValid, hasActiveSubscription, isAccountSuspended }, websiteData, user] = await Promise.all([
     validateTenant(tenant),
     getTenantWebsite(tenant),
     getCurrentUser(),
@@ -89,6 +90,8 @@ export default async function TenantLayout({
     websiteData.primaryColor &&
     `.academia-theme-root { --primary: ${websiteData.primaryColor}; } .dark .academia-theme-root { --primary: ${websiteData.primaryColor}; }`;
 
+  const isBlocked = isAccountSuspended || !hasActiveSubscription;
+
   return (
     <div
       className={`academia-theme-root min-h-screen h-fit text-neutral-900 dark:text-neutral-200 ${hasPageBg ? "academia-theme-page-bg" : "bg-neutral-50 dark:bg-[#0E0E10]"}`}
@@ -107,7 +110,15 @@ export default async function TenantLayout({
           <SalesBanner />
           <Header />
           <MaxWidthWrapper className="flex flex-col min-h-[calc(100vh-70px)]">
-            <main className="flex-1">{children}</main>
+            <main className="flex-1">
+              {isBlocked ? (
+                <AcademiaUnavailable
+                  reason={isAccountSuspended ? "suspended" : "no-subscription"}
+                />
+              ) : (
+                children
+              )}
+            </main>
             <Footer
               brandName={(websiteData as any)?.name || (websiteData as any)?.Account?.user_name}
               legal={{

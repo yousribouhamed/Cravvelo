@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { isAuthenticationError } from "@/src/lib/auth-error-utils";
+import { useTranslations } from "next-intl";
 
 export default function StoreCheckoutError({
   error,
@@ -15,6 +16,7 @@ export default function StoreCheckoutError({
   reset: () => void;
 }) {
   const router = useRouter();
+  const t = useTranslations("dashboardError");
 
   React.useEffect(() => {
     console.error(error);
@@ -44,20 +46,20 @@ export default function StoreCheckoutError({
       </div>
       <div className="w-[600px] h-[300px]">
         <h1 className="text-xl font-bold text-center">
-          {error?.name
-            ? error?.name
-            : "هناك خطأ يرجى الاتصال بالدعم إذا استمرت المشكلة"}
+          {t("title")}
         </h1>
-        <p className="text-xl text-gray-600 text-center">{error?.message}</p>
+        <p className="text-xl text-gray-600 text-center">
+          {t("description")}
+        </p>
         <div className="w-full h-[100px] flex items-center justify-center gap-x-8">
           <Button size="lg" onClick={() => window.location.reload()}>
-            إعادة المحاولة
+            {t("retry")}
           </Button>
           <Link
             href={"/"}
             className={buttonVariants({ variant: "secondary", size: "lg" })}
           >
-            الذهاب إلى الصفحة الرئيسية
+            {t("backHome")}
           </Link>
         </div>
       </div>

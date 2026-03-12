@@ -31,9 +31,9 @@ export default async function AdminLayout({
     <ConnectionStatusAlert>
       <div className="flex w-full min-h-screen gap-x-2 bg-[#FAFAFA] dark:bg-black ">
         <Sidebar className={`lg:block lg:w-[250px] lg:fixed ${sidebarPosition} top-0 bottom-0`} />
-        <main className={`w-full lg:w-[calc(100%-250px)] ${mainMargin} px-4 md:px-10`}>
+        <main className={`w-full min-w-0 lg:w-[calc(100%-250px)] ${mainMargin} px-4 md:px-10`}>
           <MaxWidthWrapper>
-            <main className="w-full flex flex-col justify-start">
+            <main className="w-full flex flex-col justify-start min-w-0">
               {children}
             </main>
           </MaxWidthWrapper>

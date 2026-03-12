@@ -3,6 +3,14 @@
     "appName": "Cravvelo",
     "mainDomain": "This is our existing main domain"
   },
+  "academiaUnavailable": {
+    "title": "This academy is unavailable",
+    "description": {
+      "noSubscription": "The academy owner does not have an active subscription at the moment.",
+      "suspended": "This academy has been temporarily suspended."
+    },
+    "backHome": "Back to home"
+  },
   "notFound": {
     "title": "Page not found",
     "description": "The page you're looking for doesn't exist or has been moved.",

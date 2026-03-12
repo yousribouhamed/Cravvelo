@@ -9,7 +9,7 @@ const CreateAcademiaSection: FC = () => {
   const t = useTranslations("createAcademia");
 
   return (
-    <div className="w-full h-[500px] my-8 shadow border rounded-xl bg-white dark:bg-[#0E0E10] flex flex-col items-center justify-center gap-y-4">
+    <div className="w-full h-[500px] my-8 shadow border rounded-xl bg-card dark:bg-card text-foreground flex flex-col items-center justify-center gap-y-4">
       <Image
         src="/academia/welcome.svg"
         alt={t("imageAlt")}

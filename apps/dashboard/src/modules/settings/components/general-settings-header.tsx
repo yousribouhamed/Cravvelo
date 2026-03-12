@@ -52,7 +52,7 @@ function GeneralSettingsHeader({ className, ...props }: ExamplesNavProps) {
     <div className="relative w-full my-4 h-[60px]">
       <div
         className={cn(
-          "mb-4 w-full flex items-center justify-start rounded-lg h-full border border-border",
+          "mb-4 w-full flex items-center justify-start rounded-lg h-full border border-border overflow-x-auto",
           "bg-card text-foreground"
         )}
       >
@@ -61,10 +61,10 @@ function GeneralSettingsHeader({ className, ...props }: ExamplesNavProps) {
             key={item.href}
             href={item.href}
             className={cn(
-              "flex h-[60px] items-center justify-center px-4 text-center text-sm transition-colors",
+              "flex h-[60px] items-center justify-center px-4 text-center text-sm transition-colors shrink-0",
               "hover:text-primary",
               isActive(item.href)
-                ? "border-b-2 border-[#F0B110] font-semibold text-foreground"
+                ? "border-b-2 border-primary font-semibold text-foreground"
                 : "text-muted-foreground"
             )}
           >

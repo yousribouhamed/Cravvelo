@@ -8,8 +8,8 @@ export default function AppCardSkeleton() {
       <div className="flex items-center gap-3">
         <Skeleton className="h-12 w-12 rounded-xl" />
         <div className="flex-1 space-y-2">
-          <Skeleton className="h-4 w-40" />
-          <Skeleton className="h-3 w-28" />
+          <Skeleton className="h-4 w-full max-w-[160px]" />
+          <Skeleton className="h-3 w-full max-w-[120px]" />
         </div>
       </div>
 

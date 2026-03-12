@@ -172,10 +172,15 @@ export const validateSubdomain = (
     };
   }
 
-  // Check if subdomain contains restricted words as substrings
-  const containsRestrictedWord = restrictedWords.some((word) =>
-    normalizedSubdomain.includes(word.toLowerCase())
-  );
+  // Check restricted words as substrings, but ignore very short tokens
+  // (e.g. "a", "i", "1") to avoid false positives on almost all names.
+  const containsRestrictedWord = restrictedWords.some((word) => {
+    const normalizedWord = word.toLowerCase();
+    if (normalizedWord.length < 4) {
+      return false;
+    }
+    return normalizedSubdomain.includes(normalizedWord);
+  });
 
   if (containsRestrictedWord) {
     return {
@@ -186,6 +191,36 @@ export const validateSubdomain = (
   }
 
   return { isValid: true };
+};
+
+const isCandidateAllowed = (candidate: string): boolean => {
+  const normalized = candidate.toLowerCase().trim();
+
+  if (normalized.length < 3 || normalized.length > 32) {
+    return false;
+  }
+
+  if (!/^[a-zA-Z0-9-]+$/.test(normalized)) {
+    return false;
+  }
+
+  for (const pattern of restrictedPatterns) {
+    if (pattern.test(normalized)) {
+      return false;
+    }
+  }
+
+  if (restrictedWords.includes(normalized)) {
+    return false;
+  }
+
+  return !restrictedWords.some((word) => {
+    const normalizedWord = word.toLowerCase();
+    if (normalizedWord.length < 4) {
+      return false;
+    }
+    return normalized.includes(normalizedWord);
+  });
 };
 
 /**
@@ -204,9 +239,9 @@ const generateSuggestion = (originalSubdomain: string): string => {
     `${base}pro`,
   ];
 
-  // Return the first suggestion that doesn't conflict with restricted words
+  // Return the first lightweight-safe suggestion (non-recursive).
   for (const suggestion of suggestions) {
-    if (validateSubdomain(suggestion).isValid) {
+    if (isCandidateAllowed(suggestion)) {
       return suggestion;
     }
   }

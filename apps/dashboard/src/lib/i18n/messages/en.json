@@ -67,6 +67,12 @@
       "updated": "Item updated successfully."
     }
   },
+  "dashboardError": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred. Please try again.",
+    "retry": "Retry",
+    "backHome": "Go to home"
+  },
   "toasts": {
     "generic": {
       "success": "Success",
@@ -404,9 +410,27 @@
     }
   },
   "createAcademia": {
-    "heading": "You need to create an academy to view dashboard analytics and use the platform.",
-    "imageAlt": "Create your academy"
-  },
+      "heading": "You need to create an academy to view dashboard analytics and use the platform.",
+      "imageAlt": "Create your academy",
+      "button": "Create academy",
+      "dialogTitle": "Create your website",
+      "fields": {
+        "titleLabel": "Academy name",
+        "titlePlaceholder": "Website title",
+        "descriptionLabel": "Short description (optional)",
+        "descriptionPlaceholder": "Write a short summary about your website (optional)",
+        "subdomainLabel": "Choose your domain name",
+        "subdomainPlaceholder": "Type your desired subdomain",
+        "subdomainHelper": "Don't worry too much about this, you can add your custom domain later."
+      },
+      "actions": {
+        "submit": "Launch my website",
+        "submitting": "Launching..."
+      },
+      "errors": {
+        "createFailed": "We failed to create your website. Please try again."
+      }
+    },
   "addNew": {
     "button": "Add New",
     "dialogTitle": "Add New",

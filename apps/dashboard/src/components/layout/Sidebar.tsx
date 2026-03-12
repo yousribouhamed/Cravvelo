@@ -30,7 +30,7 @@ export function Sidebar({ className }: SidebarProps) {
           <Link
             href="/settings/subscription"
             className={cn(
-              "mt-4 flex items-center gap-2 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2.5 text-sm font-medium text-amber-700 dark:text-amber-400 hover:bg-amber-500/20 transition-colors"
+              "mt-4 flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/10 px-3 py-2.5 text-sm font-medium text-primary hover:bg-primary/15 dark:hover:bg-primary/20 transition-colors"
             )}
           >
             <Sparkles className="h-4 w-4 shrink-0" />
