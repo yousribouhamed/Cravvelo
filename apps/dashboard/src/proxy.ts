@@ -7,6 +7,7 @@ const isPublicRoute = createRouteMatcher([
   '/sso-callback(.*)',
   '/auth-callback(.*)',
   '/reset-password(.*)',
+  '/api/webhooks/chargily(.*)',
 ]);
 
 export default clerkMiddleware(async (auth, req) => {

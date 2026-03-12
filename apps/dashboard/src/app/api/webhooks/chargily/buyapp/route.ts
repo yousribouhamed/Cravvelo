@@ -2,10 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "database/src";
 import { ChargilyWebhookEvent } from "@/src/modules/payments/types";
 
-const apiSecretKey =
-  process.env.CHARGILY_SECRET_KEY ||
-  "test_sk_Fje5EhFwyGTGqk4M6et3Jxxxxxxxxxxxxxxxxxxxx";
-
 export async function POST(request: NextRequest) {
   try {
     const body = await request.text();
@@ -15,14 +11,24 @@ export async function POST(request: NextRequest) {
     switch (event.type) {
       case "checkout.paid": {
         const paymentId = event.data.metadata?.[0]?.paymentId;
-        if (!paymentId) throw new Error("Missing paymentId in metadata");
+        if (!paymentId) {
+          return NextResponse.json(
+            { error: "Missing paymentId in metadata" },
+            { status: 400 }
+          );
+        }
         await handleSuccessfulPayment(paymentId, event);
         break;
       }
 
       case "checkout.failed": {
         const paymentId = event.data.metadata?.[0]?.paymentId;
-        if (!paymentId) throw new Error("Missing paymentId in metadata");
+        if (!paymentId) {
+          return NextResponse.json(
+            { error: "Missing paymentId in metadata" },
+            { status: 400 }
+          );
+        }
         await handleFailedPayment(paymentId);
         break;
       }

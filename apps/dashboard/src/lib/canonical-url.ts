@@ -1,4 +1,5 @@
 const DEFAULT_DASHBOARD_BASE_URL = "https://app.cravvelo.com";
+let hasWarnedAboutFallback = false;
 
 function normalizeUrl(input: string): string | null {
   const value = input.trim();
@@ -22,6 +23,13 @@ export function resolveCanonicalDashboardBaseUrl(): string {
     process.env.NEXT_PUBLIC_APP_URL ?? process.env.APP_URL ?? "";
   const normalizedExplicit = normalizeUrl(explicitBaseUrl);
   if (normalizedExplicit) return normalizedExplicit;
+
+  if (!hasWarnedAboutFallback) {
+    hasWarnedAboutFallback = true;
+    console.warn(
+      "resolveCanonicalDashboardBaseUrl: NEXT_PUBLIC_APP_URL/APP_URL not set or invalid. Falling back to https://app.cravvelo.com"
+    );
+  }
 
   const normalizedDefault = normalizeUrl(DEFAULT_DASHBOARD_BASE_URL);
   if (normalizedDefault) return normalizedDefault;

@@ -1,65 +1,41 @@
-import { NextRequest } from "next/server";
-import { prisma } from "database/src";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
-  const payload = await request.json();
+  try {
+    const payload = (await request.json()) as Event;
+    if (!payload?.type) {
+      return NextResponse.json({ error: "Invalid webhook payload" }, { status: 400 });
+    }
 
-  // Switch based on the event type
-  switch (payload.type) {
-    case "checkout.paid":
-      const accountId = payload.data.metadata[0]?.accountId;
+    switch (payload.type) {
+      case "checkout.paid": {
+        const metadata = payload.data?.metadata?.[0];
+        const accountId = metadata?.accountId;
+        const paymentId = metadata?.paymentId;
 
-      const plan_code = payload.data.metadata[0]?.plan;
+        if (!accountId || !paymentId) {
+          return NextResponse.json(
+            { error: "Missing accountId or paymentId in metadata" },
+            { status: 400 }
+          );
+        }
 
-      const paymentId = payload.data.metadata[0]?.paymentId;
+        // Legacy endpoint: acknowledge event to avoid Chargily retries.
+        console.log(
+          `Chargily webhook received on legacy endpoint for account ${accountId}, payment ${paymentId}`
+        );
+        break;
+      }
+      case "checkout.failed":
+        break;
+      default:
+        console.log("⚠️ Unknown event type:", payload.type);
+    }
 
-      const account = await prisma.account.findFirst({
-        where: {
-          id: accountId,
-        },
-      });
-
-      // if (account.plan !== null) {
-      //   return;
-      // }
-
-      // update the account status
-      // await prisma.account.update({
-      //   where: {
-      //     id: accountId,
-      //   },
-      //   data: {
-      //     plan:
-      //       plan_code === "ADVANCED"
-      //         ? "ADVANCED"
-      //         : plan_code === "PRO"
-      //         ? "PRO"
-      //         : "BASIC",
-      //   },
-      // });
-
-      // await prisma.payments.update({
-      //   where: {
-      //     id: paymentId,
-      //   },
-      //   data: {
-      //     status: "SUCCESS",
-      //   },
-      // });
-
-      //  update the payment in the database
-
-      break;
-    case "checkout.failed":
-      // await prisma.payments.update({
-      //   where: {
-      //     id: paymentId,
-      //   },
-      //   data: {
-      //     status: "FAILD",
-      //   },
-      // });
-      break;
+    return NextResponse.json({ received: true }, { status: 200 });
+  } catch (error) {
+    console.error("❌ Chargily legacy webhook processing error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 

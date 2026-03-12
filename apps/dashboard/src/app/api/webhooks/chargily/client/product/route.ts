@@ -1,87 +1,97 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "database/src";
 import { StudentBag } from "@/src/types";
 // import { create_product_sale } from "@/src/app/(academy)/_actions/sales";
 
 export async function POST(request: NextRequest) {
-  const payload = (await request.json()) as Event;
+  try {
+    const payload = (await request.json()) as Event;
 
-  switch (payload.type) {
-    case "checkout.paid":
-      const studentId = payload.data.metadata[0]?.studentId;
-      const productId = payload.data.metadata[0]?.productId;
-      if (!studentId || !productId) return;
-
-      const student = await prisma.student.findFirst({
-        where: {
-          id: studentId,
-        },
-      });
-
-      if (!student) return;
-
-      const defaultBag: StudentBag = { courses: [], products: [], certificates: [] };
-      const studentbag: StudentBag = (() => {
-        const bag = (student as any)?.bag as unknown;
-        if (!bag) return defaultBag;
-        if (typeof bag === "string") {
-          try {
-            const parsed = JSON.parse(bag);
-            return parsed && typeof parsed === "object"
-              ? (parsed as StudentBag)
-              : defaultBag;
-          } catch {
-            return defaultBag;
-          }
+    switch (payload.type) {
+      case "checkout.paid": {
+        const studentId = payload.data.metadata[0]?.studentId;
+        const productId = payload.data.metadata[0]?.productId;
+        if (!studentId || !productId) {
+          return NextResponse.json(
+            { error: "Missing studentId or productId in metadata" },
+            { status: 400 }
+          );
         }
-        return typeof bag === "object" ? (bag as StudentBag) : defaultBag;
-      })();
 
-      const product = await prisma.product.findFirst({
-        where: {
-          id: productId,
-        },
-      });
-      if (!product) return;
+        const student = await prisma.student.findFirst({
+          where: {
+            id: studentId,
+          },
+        });
 
-      // Check if the course already exists in the student's bag.
-      const theCourseExists =
-        studentbag?.products &&
-        studentbag?.products?.find((item) => item.id === product.id);
+        if (!student) {
+          return NextResponse.json({ received: true, ignored: "student_not_found" });
+        }
 
-      // If the course already exists, return the current bag without modification.
-      if (theCourseExists) {
-        return;
+        const defaultBag: StudentBag = { courses: [], products: [], certificates: [] };
+        const studentbag: StudentBag = (() => {
+          const bag = (student as any)?.bag as unknown;
+          if (!bag) return defaultBag;
+          if (typeof bag === "string") {
+            try {
+              const parsed = JSON.parse(bag);
+              return parsed && typeof parsed === "object"
+                ? (parsed as StudentBag)
+                : defaultBag;
+            } catch {
+              return defaultBag;
+            }
+          }
+          return typeof bag === "object" ? (bag as StudentBag) : defaultBag;
+        })();
+
+        const product = await prisma.product.findFirst({
+          where: {
+            id: productId,
+          },
+        });
+        if (!product) {
+          return NextResponse.json({ received: true, ignored: "product_not_found" });
+        }
+
+        const theCourseExists =
+          studentbag?.products &&
+          studentbag?.products?.find((item) => item.id === product.id);
+
+        if (theCourseExists) {
+          return NextResponse.json({ received: true, ignored: "already_exists" });
+        }
+
+        const oldData =
+          studentbag.products && studentbag.products.length > 0
+            ? [...studentbag.products]
+            : [];
+
+        const newStudentBag = {
+          ...studentbag,
+          products: [...oldData, JSON.parse(JSON.stringify(product))],
+        } as StudentBag;
+
+        await prisma.student.update({
+          where: {
+            id: student.id,
+          },
+          data: {
+            bag: JSON.parse(JSON.stringify(newStudentBag)),
+          },
+        });
+        break;
       }
+      case "checkout.failed":
+        break;
+      default:
+        console.log("⚠️ Unknown event type:", payload.type);
+    }
 
-      // If the course doesn't exist, create a new student bag with the added course.
-      const oldData =
-        studentbag.products && studentbag.products.length > 0
-          ? [...studentbag.products]
-          : [];
-
-      const newStudentBag = {
-        ...studentbag,
-        products: [...oldData, JSON.parse(JSON.stringify(product))],
-      } as StudentBag;
-
-      await prisma.student.update({
-        where: {
-          id: student.id,
-        },
-        data: {
-          bag: JSON.parse(JSON.stringify(newStudentBag)),
-        },
-      });
-      // await create_product_sale({
-      //   accountId: product.accountId,
-      //   product,
-      //   studentId: student.id,
-      // });
-
-      break;
-    case "checkout.failed":
-      break;
+    return NextResponse.json({ received: true }, { status: 200 });
+  } catch (error) {
+    console.error("❌ Chargily client product webhook processing error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
