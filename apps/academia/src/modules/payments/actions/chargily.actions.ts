@@ -5,6 +5,7 @@ import type { ChargilyApiResponse } from "../types";
 import z from "zod";
 import { getCurrentUser } from "@/modules/auth/lib/utils";
 import { triggerNotificationEvent } from "@/lib/notify";
+import { resolveCanonicalTenantHost } from "@/lib/canonical-url";
 
 const CHARGILY_LIVE_CHECKOUT_URL = "https://pay.chargily.net/api/v2/checkouts";
 const CHARGILY_TEST_CHECKOUT_URL =
@@ -47,8 +48,11 @@ export const createChargilyCheckout = withTenant({
   handler: async ({ tenant, website, input, accountId, db }) => {
     try {
       const tenantCurrency = (website?.currency || "DZD").toLowerCase();
-      const canonicalHost =
-        website?.customDomain || website?.subdomain || tenant;
+      const canonicalHost = resolveCanonicalTenantHost({
+        tenant,
+        customDomain: website?.customDomain,
+        subdomain: website?.subdomain,
+      });
       const amount = Math.round(Number(input.totalPrice));
       const payload = {
         amount,
@@ -61,6 +65,8 @@ export const createChargilyCheckout = withTenant({
         description: `Payment for order ${input.paymentId}`,
         locale: "ar",
       };
+
+      console.info("Academia Chargily checkout host:", canonicalHost);
 
       const connection = await db.paymentMethodConfig.findFirst({
         where: { accountId, provider: "CHARGILY", isActive: true },

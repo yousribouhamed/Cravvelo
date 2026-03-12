@@ -5,6 +5,7 @@ import {
 } from "@/modules/payments/types";
 import { prisma } from "database/src";
 import { PurchaseStatus } from "@prisma/client";
+import { normalizeHost } from "@/lib/canonical-url";
 
 function normalizeChargilyConfig(config: unknown): { secretKey?: string } {
   if (!config) return {};
@@ -23,7 +24,7 @@ function normalizeChargilyConfig(config: unknown): { secretKey?: string } {
 }
 
 async function resolveSecretKey(host: string | null): Promise<string | null> {
-  const normalizedHost = host?.toLowerCase().split(":")[0];
+  const normalizedHost = normalizeHost(host);
   if (normalizedHost) {
     const website = await prisma.website.findFirst({
       where: {
@@ -42,6 +43,15 @@ async function resolveSecretKey(host: string | null): Promise<string | null> {
       });
       const tenantKey = normalizeChargilyConfig(connection?.config)?.secretKey;
       if (tenantKey) return tenantKey;
+      console.warn(
+        "Chargily webhook: tenant config found but no tenant key, falling back to env key",
+        normalizedHost
+      );
+    } else {
+      console.warn(
+        "Chargily webhook: host not mapped to tenant, falling back to env key",
+        normalizedHost
+      );
     }
   }
   return process.env.CHARGILY_SECRET_KEY || null;
@@ -56,8 +66,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Missing signature" }, { status: 400 });
     }
 
-    const host =
+    const rawHost =
       request.headers.get("x-forwarded-host") ?? request.headers.get("host");
+    const host = normalizeHost(rawHost);
     const apiSecretKey = await resolveSecretKey(host);
 
     if (!apiSecretKey) {

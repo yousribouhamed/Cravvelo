@@ -3,6 +3,7 @@
 import { withAuth } from "@/src/_internals/with-auth";
 import type { ChargilyApiResponse } from "@/src/modules/payments/types";
 import { SUBSCRIPTION_PLANS } from "@/src/constants/subscription-plans";
+import { resolveCanonicalDashboardBaseUrl } from "@/src/lib/canonical-url";
 import z from "zod";
 
 function getChargilyCheckoutUrl() {
@@ -13,16 +14,13 @@ function getChargilyCheckoutUrl() {
     : "https://pay.chargily.net/api/v2/checkouts";
 }
 
-const APP_BASE_URL =
-  process.env.NEXT_PUBLIC_APP_URL ||
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://app.cravvelo.com");
-
 export const createSubscriptionCheckout = withAuth({
   input: z.object({
     planCode: z.enum(["BASIC", "STARTER", "GROWTH", "SCALE"]),
     billingCycle: z.enum(["MONTHLY", "YEARLY"]),
   }),
   handler: async ({ account, input, db }) => {
+    const appBaseUrl = resolveCanonicalDashboardBaseUrl();
     const plan = SUBSCRIPTION_PLANS.find((p) => p.planCode === input.planCode);
     if (!plan) {
       return { success: false, checkoutUrl: null, error: "Invalid plan" };
@@ -60,13 +58,15 @@ export const createSubscriptionCheckout = withAuth({
       amount: Math.round(amount),
       currency: "dzd",
       payment_method: "EDAHABIA",
-      success_url: `${APP_BASE_URL}/settings/subscription?success=1`,
-      failure_url: `${APP_BASE_URL}/settings/subscription?failed=1`,
-      webhook_endpoint: `${APP_BASE_URL}/api/webhooks/chargily/upgrade`,
+      success_url: `${appBaseUrl}/settings/subscription?success=1`,
+      failure_url: `${appBaseUrl}/settings/subscription?failed=1`,
+      webhook_endpoint: `${appBaseUrl}/api/webhooks/chargily/upgrade`,
       metadata,
       description: `Subscription ${plan.name} - ${input.billingCycle}`,
       locale: "ar",
     };
+
+    console.info("Chargily subscription checkout base URL:", appBaseUrl);
 
     try {
       const response = await fetch(getChargilyCheckoutUrl(), {

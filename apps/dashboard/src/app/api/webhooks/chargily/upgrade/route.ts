@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
 import { prisma } from "database/src";
 import { clerkClient } from "@clerk/nextjs/server";
 import { ChargilyWebhookEvent } from "@/src/modules/payments/types";
@@ -8,10 +7,11 @@ import {
   sendSubscriptionSuccessEmail,
   sendSubscriptionFailedEmail,
 } from "@/src/lib/resend";
-
-const apiSecretKey =
-  process.env.CHARGILY_SECRET_KEY ||
-  "test_sk_Fje5EhFwyGTGqk4M6et3Jxxxxxxxxxxxxxxxxxxxx";
+import {
+  getSubscriptionPeriod,
+  isValidUpgradeWebhookMetadata,
+  verifyChargilySignature,
+} from "@/src/modules/payments/lib/chargily-upgrade-webhook";
 
 const PUSHER_NOTIFICATION_EVENT = "incomming-notifications";
 
@@ -52,19 +52,24 @@ async function getUserEmailForAccount(accountId: string): Promise<string | null>
 
 export async function POST(request: NextRequest) {
   try {
+    const apiSecretKey = process.env.CHARGILY_SECRET_KEY;
     const signature = request.headers.get("signature");
     const body = await request.text();
+
+    if (!apiSecretKey) {
+      console.error("Chargily upgrade webhook rejected: missing CHARGILY_SECRET_KEY");
+      return NextResponse.json(
+        { error: "Webhook secret is not configured" },
+        { status: 500 }
+      );
+    }
 
     if (!signature) {
       return NextResponse.json({ error: "Missing signature" }, { status: 400 });
     }
 
-    const computedSignature = crypto
-      .createHmac("sha256", apiSecretKey)
-      .update(body)
-      .digest("hex");
-
-    if (computedSignature !== signature) {
+    if (!verifyChargilySignature({ body, signature, secretKey: apiSecretKey })) {
+      console.warn("Chargily upgrade webhook rejected: invalid signature");
       return NextResponse.json({ error: "Invalid signature" }, { status: 403 });
     }
 
@@ -84,17 +89,27 @@ export async function POST(request: NextRequest) {
 
     switch (event.type) {
       case "checkout.paid": {
-        if (!accountId || !planCode) {
+        const metadata = {
+          accountId,
+          planCode,
+          billingCycle,
+          paymentId: meta.paymentId,
+        };
+        if (!isValidUpgradeWebhookMetadata(metadata)) {
+          console.warn(
+            "Chargily upgrade webhook rejected: invalid metadata",
+            JSON.stringify(metadata)
+          );
           return NextResponse.json(
-            { error: "Missing accountId or plan in metadata" },
+            { error: "Invalid metadata for subscription upgrade" },
             { status: 400 }
           );
         }
         await handleCheckoutPaid({
-          paymentId: meta.paymentId,
-          accountId,
-          planCode,
-          billingCycle,
+          paymentId: metadata.paymentId,
+          accountId: metadata.accountId,
+          planCode: metadata.planCode,
+          billingCycle: metadata.billingCycle,
           chargilyCheckoutId: event.data?.id ?? null,
         });
         break;
@@ -147,14 +162,9 @@ async function handleCheckoutPaid({
     return;
   }
 
-  const now = new Date();
-  const isYearly = billingCycle === "YEARLY";
-  const periodEnd = new Date(now);
-  if (isYearly) {
-    periodEnd.setFullYear(periodEnd.getFullYear() + 1);
-  } else {
-    periodEnd.setMonth(periodEnd.getMonth() + 1);
-  }
+  const normalizedBillingCycle = billingCycle === "YEARLY" ? "YEARLY" : "MONTHLY";
+  const { currentPeriodStart, currentPeriodEnd } =
+    getSubscriptionPeriod(normalizedBillingCycle);
 
   await prisma.payment.update({
     where: { id: paymentId },
@@ -171,10 +181,10 @@ async function handleCheckoutPaid({
       where: { id: existing.id },
       data: {
         planCode,
-        billingCycle: isYearly ? "YEARLY" : "MONTHLY",
+        billingCycle: normalizedBillingCycle,
         status: "ACTIVE",
-        currentPeriodStart: now,
-        currentPeriodEnd: periodEnd,
+        currentPeriodStart,
+        currentPeriodEnd,
         chargilyCheckoutId,
         paymentId,
       },
@@ -184,10 +194,10 @@ async function handleCheckoutPaid({
       data: {
         accountId,
         planCode,
-        billingCycle: isYearly ? "YEARLY" : "MONTHLY",
+        billingCycle: normalizedBillingCycle,
         status: "ACTIVE",
-        currentPeriodStart: now,
-        currentPeriodEnd: periodEnd,
+        currentPeriodStart,
+        currentPeriodEnd,
         chargilyCheckoutId,
         paymentId,
       },
@@ -220,7 +230,7 @@ async function handleCheckoutPaid({
     await sendSubscriptionSuccessEmail({
       email,
       planName: planCode,
-      periodEnd: periodEnd.toISOString().split("T")[0],
+      periodEnd: currentPeriodEnd.toISOString().split("T")[0],
     });
   }
 

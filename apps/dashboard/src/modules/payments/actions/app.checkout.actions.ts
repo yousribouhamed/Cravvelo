@@ -2,12 +2,16 @@
 
 import { withAuth } from "@/src/_internals/with-auth";
 import type { ChargilyApiResponse } from "../types";
+import { resolveCanonicalDashboardBaseUrl } from "@/src/lib/canonical-url";
 import z from "zod";
 
-const BASE_URL =
-  process.env.NODE_ENV === "production"
+function getChargilyCheckoutUrl() {
+  const key = process.env.CHARGILY_SECRET_KEY ?? "";
+  const isTestKey = key.startsWith("test_");
+  return isTestKey
     ? "https://pay.chargily.net/test/api/v2/checkouts"
     : "https://pay.chargily.net/api/v2/checkouts";
+}
 
 export const createChargilyCheckout = withAuth({
   input: z.object({
@@ -16,20 +20,23 @@ export const createChargilyCheckout = withAuth({
   }),
   handler: async ({ input }) => {
     try {
+      const appBaseUrl = resolveCanonicalDashboardBaseUrl();
       const amount = Math.round(Number(input.totalPrice) * 1); // convert DZD → centimes
       const payload = {
         amount,
         currency: "dzd",
         payment_method: "EDAHABIA",
-        success_url: `https://app.cravvelo.com/checkout/success`,
-        failure_url: `https://app.cravvelo.com/checkout/failure`,
-        webhook_endpoint: `https://app.cravvelo.com/api/webhooks/chargily/buyapp`,
+        success_url: `${appBaseUrl}/checkout/success`,
+        failure_url: `${appBaseUrl}/checkout/failure`,
+        webhook_endpoint: `${appBaseUrl}/api/webhooks/chargily/buyapp`,
         metadata: [{ paymentId: input.paymentId }],
         description: `Payment for order ${input.paymentId}`,
         locale: "ar",
       };
 
-      const response = await fetch(BASE_URL, {
+      console.info("Chargily app checkout base URL:", appBaseUrl);
+
+      const response = await fetch(getChargilyCheckoutUrl(), {
         method: "POST",
         headers: {
           Authorization: `Bearer ${process.env.CHARGILY_SECRET_KEY!}`,
