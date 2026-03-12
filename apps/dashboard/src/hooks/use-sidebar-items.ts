@@ -14,9 +14,9 @@ import {
   Receipt,
   Wallet,
   Ticket,
-  Award,
+  // Award,
   MessageSquare,
-  Share2,
+  // Share2,
   BookOpen,
   Package,
 } from "lucide-react";
@@ -76,11 +76,11 @@ export function useSidebarItems(): SidebarItem[] {
             icon: Ticket,
             slug: "/payments/coupons",
           },
-          {
-            title: t("affiliateMarketing"),
-            icon: Share2,
-            slug: "/payments/affiliate-marketing",
-          },
+          // {
+          //   title: t("affiliateMarketing"),
+          //   icon: Share2,
+          //   slug: "/payments/affiliate-marketing",
+          // },
         ],
       },
       {
@@ -93,11 +93,11 @@ export function useSidebarItems(): SidebarItem[] {
             icon: GraduationCap,
             slug: "/students",
           },
-          {
-            title: t("certificates"),
-            icon: Award,
-            slug: "/students/certificates",
-          },
+          // {
+          //   title: t("certificates"),
+          //   icon: Award,
+          //   slug: "/students/certificates",
+          // },
           {
             title: t("reviews"),
             icon: MessageSquare,
