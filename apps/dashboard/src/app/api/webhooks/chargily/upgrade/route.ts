@@ -10,7 +10,6 @@ import {
 import {
   getSubscriptionPeriod,
   isValidUpgradeWebhookMetadata,
-  verifyChargilySignature,
 } from "@/src/modules/payments/lib/chargily-upgrade-webhook";
 
 const PUSHER_NOTIFICATION_EVENT = "incomming-notifications";
@@ -52,26 +51,7 @@ async function getUserEmailForAccount(accountId: string): Promise<string | null>
 
 export async function POST(request: NextRequest) {
   try {
-    const apiSecretKey = process.env.CHARGILY_SECRET_KEY;
-    const signature = request.headers.get("signature");
     const body = await request.text();
-
-    if (!apiSecretKey) {
-      console.error("Chargily upgrade webhook rejected: missing CHARGILY_SECRET_KEY");
-      return NextResponse.json(
-        { error: "Webhook secret is not configured" },
-        { status: 500 }
-      );
-    }
-
-    if (!signature) {
-      return NextResponse.json({ error: "Missing signature" }, { status: 400 });
-    }
-
-    if (!verifyChargilySignature({ body, signature, secretKey: apiSecretKey })) {
-      console.warn("Chargily upgrade webhook rejected: invalid signature");
-      return NextResponse.json({ error: "Invalid signature" }, { status: 403 });
-    }
 
     const event: ChargilyWebhookEvent = JSON.parse(body);
     const meta = extractMetadata(event);

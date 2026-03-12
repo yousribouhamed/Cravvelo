@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
 import { prisma } from "database/src";
 import { ChargilyWebhookEvent } from "@/src/modules/payments/types";
 
@@ -9,21 +8,7 @@ const apiSecretKey =
 
 export async function POST(request: NextRequest) {
   try {
-    const signature = request.headers.get("signature");
     const body = await request.text();
-
-    if (!signature) {
-      return NextResponse.json({ error: "Missing signature" }, { status: 400 });
-    }
-
-    const computedSignature = crypto
-      .createHmac("sha256", apiSecretKey)
-      .update(body)
-      .digest("hex");
-
-    if (computedSignature !== signature) {
-      return NextResponse.json({ error: "Invalid signature" }, { status: 403 });
-    }
 
     const event: ChargilyWebhookEvent = JSON.parse(body);
 
