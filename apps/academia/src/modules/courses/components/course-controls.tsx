@@ -24,30 +24,18 @@ export const CourseControls: React.FC<CourseControlsProps> = ({
   const locale = useLocale();
   const isRTL = locale === "ar";
 
-  // Parse modules from JSON strings and create flat list
+  // Chapters/modules are normalized by parent; only flatten them here.
   const allModules = React.useMemo(() => {
-    const parsedChapters = chapters
-      .map((chapter) => ({
-        ...chapter,
-        modules:
-          typeof chapter.modules === "string"
-            ? JSON.parse(chapter.modules)
-            : chapter.modules,
-      }))
-      .sort((a, b) => a.orderNumber - b.orderNumber);
-
     const modulesList: Array<{
       module: ModuleType;
       chapter: ChapterType;
       index: number;
     }> = [];
 
-    parsedChapters.forEach((chapter) => {
-      const sortedModules = chapter.modules.sort(
-        //@ts-expect-error
-        (a, b) => a.orderNumber - b.orderNumber
+    chapters.forEach((chapter) => {
+      const sortedModules = [...chapter.modules].sort(
+        (a, b) => (a.orderNumber || 0) - (b.orderNumber || 0)
       );
-      //@ts-expect-error
       sortedModules.forEach((module) => {
         modulesList.push({
           module,

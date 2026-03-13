@@ -51,7 +51,6 @@ export function TestimonialsSection({ tenant }: TestimonialsSectionProps) {
   const [loading, setLoading] = useState(true);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- getSource bug when analyzing useCallback deps
   const loadMore = useCallback(async () => {
     if (nextCursor === null || !tenant) return;
     setLoading(true);
@@ -68,7 +67,6 @@ export function TestimonialsSection({ tenant }: TestimonialsSectionProps) {
     loadMore();
   }, [tenant]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- IntersectionObserver deps; exhaustive-deps can trigger getSource bug
   useEffect(() => {
     if (nextCursor === null || nextCursor === undefined || loading) return;
     const el = sentinelRef.current;

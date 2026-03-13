@@ -44,7 +44,7 @@ export function PaymentMethodCards() {
               }`}
             >
               {paymentMethod === "chargily" && (
-                <Check className="w-3 h-3 text-white" />
+                <Check className="w-3 h-3 text-primary-foreground" />
               )}
             </div>
             <CreditCard className="w-8 h-8 text-primary" />
@@ -79,7 +79,7 @@ export function PaymentMethodCards() {
               }`}
             >
               {paymentMethod === "p2p" && (
-                <Check className="w-3 h-3 text-white" />
+                <Check className="w-3 h-3 text-primary-foreground" />
               )}
             </div>
             <Smartphone className="w-8 h-8 text-primary" />

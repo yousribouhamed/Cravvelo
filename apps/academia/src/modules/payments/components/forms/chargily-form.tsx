@@ -67,7 +67,7 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
         toast.error(t("toastAuthRequired"));
         return;
       }
-      toast.error(error.message || t("toastError"));
+      toast.error(t("toastError"));
     },
   });
 

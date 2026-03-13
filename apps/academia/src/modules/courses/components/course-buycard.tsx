@@ -16,7 +16,11 @@ import { usePaymentIntent } from "@/modules/payments/hooks/use-paymentIntent";
 import { courseToPaymentProduct } from "@/modules/payments/utils";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useTenantCurrency } from "@/hooks/use-tenant";
+import { useIsAuthenticated, useTenantCurrency } from "@/hooks/use-tenant";
+import { claimFreeItemAccess } from "@/modules/payments/actions/free-access.actions";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface CourseCardProps {
   course: CourseWithPricing;
@@ -52,8 +56,11 @@ export default function CourseBuyCard({
   isOwned = false,
   courseId,
 }: CourseCardProps) {
+  const router = useRouter();
   const t = useTranslations("courses");
   const { formatPrice, currency } = useTenantCurrency();
+  const isAuthenticated = useIsAuthenticated();
+  const [isClaimingFree, setIsClaimingFree] = useState(false);
   const { invokePaymentIntent } = usePaymentIntent(
     courseToPaymentProduct({
       course,
@@ -80,6 +87,39 @@ export default function CourseBuyCard({
   // Get actual ratings from comments
   const ratings = course.Comment?.map((comment) => comment.rating) || [];
 
+  const handlePrimaryAction = async () => {
+    if (isFree) {
+      if (!isAuthenticated) {
+        router.push(`/login?redirect=/courses/${courseId}`);
+        return;
+      }
+
+      try {
+        setIsClaimingFree(true);
+        const result = await claimFreeItemAccess({
+          productId: courseId,
+          type: "COURSE",
+        });
+
+        if (!result.success) {
+          toast.error(result.message || "Failed to unlock free course");
+          return;
+        }
+
+        toast.success(t("buyCard.watchNow"));
+        router.push(`/courses/${courseId}/watch`);
+      } catch (error) {
+        console.error(error);
+        toast.error("Failed to unlock free course");
+      } finally {
+        setIsClaimingFree(false);
+      }
+      return;
+    }
+
+    invokePaymentIntent();
+  };
+
   return (
     <div className="w-full bg-card text-card-foreground min-h-0 md:min-h-[500px] h-fit rounded-xl border p-4 flex flex-col gap-y-4 mt-6 md:sticky md:top-[86px]">
       {/* Free Badge */}
@@ -95,7 +135,7 @@ export default function CourseBuyCard({
         defaultPricingPlan &&
         defaultPricingPlan.price !== null &&
         defaultPricingPlan.price !== undefined && (
-          <p className="text-2xl font-bold text-start text-black dark:text-white">
+          <p className="text-2xl font-bold text-start text-foreground">
             {formatPrice(Number(defaultPricingPlan.price))}
           </p>
         )}
@@ -106,7 +146,12 @@ export default function CourseBuyCard({
         </Button>
       ) : (
         <>
-          <Button onClick={invokePaymentIntent} className="w-full">
+          <Button
+            onClick={handlePrimaryAction}
+            className="w-full"
+            loading={isClaimingFree}
+            disabled={isClaimingFree}
+          >
             {t("buyCard.buyNow")}
           </Button>
           <Link href={`/login?redirect=/courses/${courseId}`}>
@@ -123,8 +168,8 @@ export default function CourseBuyCard({
       <div className="flex flex-col gap-y-4">
         {/* Reviews */}
         <div className="w-full flex items-center justify-start gap-x-4">
-          <Star className="w-5 h-5 text-black dark:text-white" />
-          <span className="text-black dark:text-white">
+          <Star className="w-5 h-5 text-foreground" />
+          <span className="text-foreground">
             {t("buyCard.positiveReviews", {
               percentage: calculatePositiveReviewPercentage(ratings),
               count: ratings.length,
@@ -134,16 +179,16 @@ export default function CourseBuyCard({
 
         {/* Students */}
         <div className="w-full flex items-center justify-start gap-x-4">
-          <User className="w-5 h-5 text-black dark:text-white" />
-          <span className="text-black dark:text-white">
+          <User className="w-5 h-5 text-foreground" />
+          <span className="text-foreground">
             {t("buyCard.students", { count: course?.studentsNbr || 0 })}
           </span>
         </div>
 
         {/* Duration */}
         <div className="w-full flex items-center justify-start gap-x-4">
-          <Clock className="w-5 h-5 text-black dark:text-white" />
-          <span className="text-black dark:text-white">
+          <Clock className="w-5 h-5 text-foreground" />
+          <span className="text-foreground">
             {t("buyCard.duration", {
               chapters: course?.nbrChapters || 0,
               length: course?.length ? ` (${formatVideoLength(course.length, t)})` : "",
@@ -153,16 +198,16 @@ export default function CourseBuyCard({
 
         {/* Online Access */}
         <div className="w-full flex items-center justify-start gap-x-4">
-          <Globe className="w-5 h-5 text-black dark:text-white" />
-          <span className="text-black dark:text-white">
+          <Globe className="w-5 h-5 text-foreground" />
+          <span className="text-foreground">
             {t("buyCard.onlineAccess")}
           </span>
         </div>
 
         {/* Language */}
         <div className="w-full flex items-center justify-start gap-x-4">
-          <Headphones className="w-5 h-5 text-black dark:text-white" />
-          <span className="text-black dark:text-white">
+          <Headphones className="w-5 h-5 text-foreground" />
+          <span className="text-foreground">
             {t("buyCard.language")}:{" "}
             {course?.sound === "ARABIC"
               ? t("buyCard.languageArabic")
@@ -174,8 +219,8 @@ export default function CourseBuyCard({
 
         {/* Level */}
         <div className="w-full flex items-center justify-start gap-x-4">
-          <ArrowBigUp className="w-5 h-5 text-black dark:text-white" />
-          <span className="text-black dark:text-white">
+          <ArrowBigUp className="w-5 h-5 text-foreground" />
+          <span className="text-foreground">
             {t("buyCard.level")}:{" "}
             {course?.level === "BEGINNER"
               ? t("level.beginner")
@@ -187,8 +232,8 @@ export default function CourseBuyCard({
 
         {/* Access Type */}
         <div className="w-full flex items-center justify-start gap-x-4">
-          <Infinity className="w-5 h-5 text-black dark:text-white" />
-          <span className="text-black dark:text-white">
+          <Infinity className="w-5 h-5 text-foreground" />
+          <span className="text-foreground">
             {!defaultPricingPlan
               ? t("buyCard.accessUnlimited")
               : defaultPricingPlan.pricingType === "FREE"
@@ -211,8 +256,8 @@ export default function CourseBuyCard({
         {/* Certificate */}
         {course?.certificate && (
           <div className="w-full flex items-center justify-start gap-x-4">
-            <GraduationCap className="w-5 h-5 text-black dark:text-white" />
-            <span className="text-black dark:text-white">
+            <GraduationCap className="w-5 h-5 text-foreground" />
+            <span className="text-foreground">
               {t("buyCard.certificate")}
             </span>
           </div>

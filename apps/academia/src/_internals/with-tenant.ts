@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { prisma } from "database/src";
+import { cache } from "react";
 import {
   TenantError,
   ValidationError,
@@ -10,7 +11,7 @@ import {
  * Extract tenant subdomain from request headers
  * Handles both development (localhost:3000) and production (tenant.cravvelo.com) environments
  */
-async function getTenantFromRequest(): Promise<string | null> {
+const getTenantFromRequest = cache(async (): Promise<string | null> => {
   try {
     const headersList = await headers();
     const forwardedTenant = headersList.get("x-tenant");
@@ -45,7 +46,40 @@ async function getTenantFromRequest(): Promise<string | null> {
     console.error("Error extracting tenant from request:", error);
     return null;
   }
-}
+});
+
+const getWebsiteForTenant = cache(async (tenant: string) => {
+  return prisma.website.findFirst({
+    where: {
+      OR: [{ subdomain: tenant }, { customDomain: tenant }],
+    },
+    include: {
+      Account: {
+        select: {
+          id: true,
+          user_name: true,
+          user_bio: true,
+          avatarUrl: true,
+          verified: true,
+          firstName: true,
+          lastName: true,
+          profession: true,
+          company: true,
+          preferredLanguage: true,
+          profileVisibility: true,
+        },
+      },
+    },
+  });
+});
+
+const PUBLIC_ERROR_MESSAGES = {
+  tenantUnavailable: "Unable to resolve tenant context",
+  websiteNotFound: "Academy website not found",
+  accountNotFound: "Academy account not found",
+  websiteSuspended: "Academy website is not available",
+  actionFailed: "Request failed. Please try again.",
+} as const;
 
 /**
  * Higher-order function that wraps server actions with tenant data fetching
@@ -106,44 +140,23 @@ export function withTenant<TInput = void, TOutput = void>(
       const tenant = await getTenantFromRequest();
 
       if (!tenant) {
-        throw new TenantError("Could not determine tenant from request");
+        throw new TenantError(PUBLIC_ERROR_MESSAGES.tenantUnavailable);
       }
 
       // Fetch website with account data
-      const website = await prisma.website.findFirst({
-        where: {
-          OR: [{ subdomain: tenant }, { customDomain: tenant }],
-        },
-        include: {
-          Account: {
-            select: {
-              id: true,
-              user_name: true,
-              user_bio: true,
-              avatarUrl: true,
-              verified: true,
-              firstName: true,
-              lastName: true,
-              profession: true,
-              company: true,
-              preferredLanguage: true,
-              profileVisibility: true,
-            },
-          },
-        },
-      });
+      const website = await getWebsiteForTenant(tenant);
 
       if (!website) {
-        throw new TenantError(`Website not found for tenant: ${tenant}`);
+        throw new TenantError(PUBLIC_ERROR_MESSAGES.websiteNotFound);
       }
 
       if (!website.Account) {
-        throw new TenantError(`Account not found for tenant: ${tenant}`);
+        throw new TenantError(PUBLIC_ERROR_MESSAGES.accountNotFound);
       }
 
       // Check if website is suspended
       if (checkSuspended && website.suspended) {
-        throw new TenantError(`Website is suspended for tenant: ${tenant}`);
+        throw new TenantError(PUBLIC_ERROR_MESSAGES.websiteSuspended);
       }
 
       // Execute handler with validated input and tenant data
@@ -163,11 +176,7 @@ export function withTenant<TInput = void, TOutput = void>(
 
       // Handle unexpected errors
       console.error("Unexpected error in withTenant:", error);
-      throw new Error(
-        `Tenant action failed: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      );
+      throw new Error(PUBLIC_ERROR_MESSAGES.actionFailed);
     }
   };
 }

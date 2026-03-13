@@ -6,6 +6,11 @@ import { cookies } from "next/headers";
 import { withTenant } from "@/_internals/with-tenant";
 import { signJWT } from "../lib/jwt";
 
+const AUTH_MESSAGES = {
+  invalidCredentials: "Invalid email or password",
+  loginFailed: "Unable to sign in right now",
+} as const;
+
 export const loginUser = withTenant({
   input: z.object({
     email: z
@@ -38,7 +43,7 @@ export const loginUser = withTenant({
       });
 
       if (!user) {
-        throw new Error("Invalid email or password");
+        throw new Error(AUTH_MESSAGES.invalidCredentials);
       }
 
       // Verify password
@@ -48,7 +53,7 @@ export const loginUser = withTenant({
       );
 
       if (!isPasswordValid) {
-        throw new Error("Invalid email or password");
+        throw new Error(AUTH_MESSAGES.invalidCredentials);
       }
 
       // Create JWT token
@@ -87,10 +92,16 @@ export const loginUser = withTenant({
       console.error("Login error:", error);
 
       if (error instanceof Error) {
-        throw new Error(error.message);
+        const message = error.message.toLowerCase();
+        if (
+          message.includes("invalid email or password") ||
+          message.includes("invalid credentials")
+        ) {
+          throw new Error(AUTH_MESSAGES.invalidCredentials);
+        }
       }
 
-      throw new Error("Login failed");
+      throw new Error(AUTH_MESSAGES.loginFailed);
     }
   },
 });

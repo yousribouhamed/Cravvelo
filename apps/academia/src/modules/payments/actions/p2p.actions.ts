@@ -4,6 +4,7 @@ import { withTenant } from "@/_internals/with-tenant";
 import { getCurrentUser } from "@/modules/auth/lib/utils";
 import z from "zod";
 import { triggerNotificationEvent } from "@/lib/notify";
+import { grantFreeItemAccessTx } from "./free-access.actions";
 
 export const createP2pPaymentIntent = withTenant({
   input: z.object({
@@ -53,6 +54,28 @@ export const createP2pPaymentIntent = withTenant({
         throw new Error("No active pricing plan found");
 
       const price = pricingPlan.PricingPlan.price ?? 0;
+      const isFree =
+        pricingPlan.PricingPlan.pricingType === "FREE" || Number(price) <= 0;
+
+      if (isFree) {
+        await grantFreeItemAccessTx({
+          tx,
+          accountId,
+          studentId: user.userId,
+          itemId: item.id,
+          type,
+          tenantCurrency,
+        });
+
+        return {
+          success: true,
+          message: "Free access granted successfully.",
+          freeAccess: true,
+          redirectPath:
+            type === "COURSE" ? `/courses/${item.id}/watch` : `/products/${item.id}`,
+          notificationId: null,
+        };
+      }
 
       // 2. Create Sale
       const sale = await tx.sale.create({

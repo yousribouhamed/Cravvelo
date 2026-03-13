@@ -16,8 +16,6 @@ import { TrackingPixels } from "@/components/tracking-pixels";
 import { buildThemeStyleAndData } from "@/lib/theme-utils";
 import { AcademiaUnavailable } from "@/components/academia-unavailable";
 
-export const dynamic = "force-dynamic";
-
 interface TenantLayoutProps {
   children: ReactNode;
   params: Promise<{

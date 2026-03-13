@@ -22,6 +22,11 @@ const eslintConfig = [
       "@next/next/no-assign-module-variable": "off",
     },
   },
+  // Avoid getSource bug when linting testimonials-section (react-hooks/exhaustive-deps)
+  {
+    files: ["src/components/testimonials-section.tsx"],
+    rules: { "react-hooks/exhaustive-deps": "off" },
+  },
 ];
 
 export default eslintConfig;

@@ -31,9 +31,10 @@ interface ProfileDropdownProps {
 export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
   const { theme, setTheme } = useTheme();
   const locale = useLocale();
+  const isRTL = locale === "ar";
   const tProfile = useTranslations("profile");
   const tMenu = useTranslations("profile.menu");
-  const dropdownAlign = locale === "ar" ? "start" : "end";
+  const dropdownAlign = isRTL ? "start" : "end";
 
   const toggleDarkMode = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -61,7 +62,10 @@ export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
       </DropdownMenuTrigger>
 
       {/* Dropdown Content */}
-      <DropdownMenuContent align={dropdownAlign} className="w-56">
+      <DropdownMenuContent
+        align={dropdownAlign}
+        className={`w-56 ${isRTL ? "text-right" : "text-left"}`}
+      >
         <DropdownMenuLabel>{tProfile("accountSettings")}</DropdownMenuLabel>
         <DropdownMenuSeparator />
 
@@ -71,7 +75,7 @@ export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
             <DropdownMenuItem key={link.url} asChild>
               <Link
                 href={link.url}
-                className="flex items-center justify-start gap-2 w-full"
+                className={`flex items-center gap-2 w-full ${isRTL ? "flex-row-reverse justify-end text-right" : "justify-start text-left"}`}
               >
                 <Icon className="w-4 h-4" />
                 {link.name}
@@ -85,7 +89,7 @@ export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
         {/* Dark Mode Toggle */}
         <DropdownMenuItem
           onClick={toggleDarkMode}
-          className="flex items-center justify-start gap-2 cursor-pointer"
+          className={`flex items-center gap-2 cursor-pointer ${isRTL ? "flex-row-reverse justify-end text-right" : "justify-start text-left"}`}
         >
           {theme === "dark" ? (
             <Sun className="w-4 h-4" />
@@ -98,9 +102,9 @@ export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={onLogout}
-          className="text-red-600 focus:text-red-700"
+          className={`text-red-600 focus:text-red-700 ${isRTL ? "flex-row-reverse justify-end text-right" : ""}`}
         >
-          <LogOut className="w-4 h-4 mr-2" />
+          <LogOut className="w-4 h-4" />
           {tProfile("logout")}
         </DropdownMenuItem>
       </DropdownMenuContent>

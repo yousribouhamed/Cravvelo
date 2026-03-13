@@ -35,18 +35,8 @@ export const CourseNavigator: React.FC<CourseNavigatorProps> = ({
   const dir = locale === "ar" ? "rtl" : "ltr";
   const isRTL = locale === "ar";
 
-  // Parse modules from JSON strings and sort chapters
-  const parsedChapters = React.useMemo(() => {
-    return chapters
-      .map((chapter) => ({
-        ...chapter,
-        modules:
-          typeof chapter.modules === "string"
-            ? JSON.parse(chapter.modules)
-            : chapter.modules,
-      }))
-      .sort((a, b) => a.orderNumber - b.orderNumber);
-  }, [chapters]);
+  // Chapters are already normalized/sorted by parent.
+  const parsedChapters = React.useMemo(() => chapters, [chapters]);
 
   const navigateToModule = (chapterId: string, moduleId: string) => {
     const params = new URLSearchParams();
@@ -94,9 +84,8 @@ export const CourseNavigator: React.FC<CourseNavigatorProps> = ({
           className="space-y-1.5"
         >
           {parsedChapters.map((chapter) => {
-            const modules = chapter.modules.sort(
-              //@ts-expect-error
-              (a, b) => a.orderNumber - b.orderNumber
+            const modules = [...chapter.modules].sort(
+              (a, b) => (a.orderNumber || 0) - (b.orderNumber || 0)
             );
 
             return (
@@ -121,7 +110,6 @@ export const CourseNavigator: React.FC<CourseNavigatorProps> = ({
 
                 <AccordionContent className="pb-0 pt-0">
                   <div className="rounded-b-md bg-muted/20 overflow-hidden">
-                    {/* @ts-expect-error */}
                     {modules.map((module) => {
                       const isCurrentModule = currentModuleId === module.id;
                       const isLocked = !module.isFree;

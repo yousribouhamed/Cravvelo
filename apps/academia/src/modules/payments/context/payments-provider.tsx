@@ -14,15 +14,6 @@ import {
   PaymentProduct,
 } from "@/modules/payments/types/index";
 
-const DEFAULT_PRODUCT: PaymentProduct = {
-  id: "course-1",
-  name: "دورة البرمجة الشاملة",
-  description: "دورة متكاملة لتعلم البرمجة من الصفر",
-  price: 5000,
-  currency: "د.ج",
-  type: "COURSE",
-};
-
 const PaymentContext = createContext<PaymentContextState | undefined>(
   undefined
 );
@@ -35,14 +26,14 @@ interface PaymentProviderProps {
 
 export function PaymentProvider({
   children,
-  defaultProduct = DEFAULT_PRODUCT,
+  defaultProduct,
 }: PaymentProviderProps) {
   // Sheet state
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   // Product state
   const [selectedProduct, setSelectedProduct] = useState<PaymentProduct | null>(
-    defaultProduct
+    defaultProduct ?? null
   );
 
   // Payment method state
@@ -71,6 +62,7 @@ export function PaymentProvider({
     },
     staleTime: 5 * 60 * 1000,
     retry: 2,
+    enabled: isSheetOpen,
   });
 
   // Filter active connections

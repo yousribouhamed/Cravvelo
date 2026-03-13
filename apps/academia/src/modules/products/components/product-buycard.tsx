@@ -2,12 +2,18 @@
 
 import { Button } from "@/components/ui/button";
 import { usePaymentIntent } from "@/modules/payments/hooks/use-paymentIntent";
-import { productToPaymentProduct } from "@/modules/payments/utils";
-import { useTenantCurrency } from "@/hooks/use-tenant";
+import {
+  isProductFree,
+  productToPaymentProduct,
+} from "@/modules/payments/utils";
+import { useIsAuthenticated, useTenantCurrency } from "@/hooks/use-tenant";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { getProductDownloadUrl } from "../actions/download";
 import Link from "next/link";
+import { claimFreeItemAccess } from "@/modules/payments/actions/free-access.actions";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function ProductBuyCard({
   product,
@@ -16,12 +22,18 @@ export default function ProductBuyCard({
   product: any;
   isOwned: boolean;
 }) {
+  const router = useRouter();
   const t = useTranslations("products.landing");
   const { currency } = useTenantCurrency();
+  const isAuthenticated = useIsAuthenticated();
+  const [isClaimingFree, setIsClaimingFree] = useState(false);
+  const paymentProduct = productToPaymentProduct({
+    product,
+    tenantCurrency: currency,
+  });
+  const isFree = isProductFree(paymentProduct);
 
-  const { invokePaymentIntent } = usePaymentIntent(
-    productToPaymentProduct({ product, tenantCurrency: currency })
-  );
+  const { invokePaymentIntent } = usePaymentIntent(paymentProduct);
 
   const handleDownload = async () => {
     try {
@@ -33,6 +45,36 @@ export default function ProductBuyCard({
       window.location.href = res.data.url;
     } catch {
       toast.error(t("downloadError"));
+    }
+  };
+
+  const handlePrimaryAction = async () => {
+    if (!isFree) {
+      invokePaymentIntent();
+      return;
+    }
+
+    if (!isAuthenticated) {
+      router.push(`/login?redirect=/products/${product.id}`);
+      return;
+    }
+
+    try {
+      setIsClaimingFree(true);
+      const result = await claimFreeItemAccess({
+        productId: product.id,
+        type: "PRODUCT",
+      });
+      if (!result.success) {
+        toast.error(result.message || "Failed to unlock free product");
+        return;
+      }
+      await handleDownload();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to unlock free product");
+    } finally {
+      setIsClaimingFree(false);
     }
   };
 
@@ -51,7 +93,12 @@ export default function ProductBuyCard({
         </>
       ) : (
         <>
-          <Button onClick={invokePaymentIntent} className="w-full">
+          <Button
+            onClick={handlePrimaryAction}
+            className="w-full"
+            loading={isClaimingFree}
+            disabled={isClaimingFree}
+          >
             {t("buy")}
           </Button>
 

@@ -19,14 +19,17 @@ interface GuestAuthFormData {
 
 const PASSWORD_POLICY_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
 
-function isExistingUserError(error: unknown) {
-  if (!(error instanceof Error)) return false;
-  const message = error.message.toLowerCase();
-  return message.includes("already exists");
-}
-
 function hasValidPassword(password: string) {
   return password.length >= 8 && PASSWORD_POLICY_REGEX.test(password);
+}
+
+function isInvalidCredentialsError(error: unknown) {
+  if (!(error instanceof Error)) return false;
+  const message = error.message.toLowerCase();
+  return (
+    message.includes("invalid email or password") ||
+    message.includes("invalid credentials")
+  );
 }
 
 export function GuestAuthForm() {
@@ -70,22 +73,20 @@ export function GuestAuthForm() {
 
     setIsSubmitting(true);
 
+    let accountCreated = false;
     try {
       await createUser(payload);
+      accountCreated = true;
       toast.success(t("toastAccountCreated"));
       router.refresh();
+    } catch {
+      // If account already exists, we proceed with login below.
+      // Any other create failure will naturally fail login and show a safe generic error.
+    }
+
+    if (accountCreated) {
       setIsSubmitting(false);
       return;
-    } catch (error) {
-      if (!isExistingUserError(error)) {
-        const message =
-          error instanceof Error && error.message
-            ? error.message
-            : t("toastGenericError");
-        toast.error(message);
-        setIsSubmitting(false);
-        return;
-      }
     }
 
     try {
@@ -96,8 +97,12 @@ export function GuestAuthForm() {
       });
       toast.success(t("toastLoggedIn"));
       router.refresh();
-    } catch {
-      toast.error(t("toastInvalidCredentials"));
+    } catch (error) {
+      if (isInvalidCredentialsError(error)) {
+        toast.error(t("toastInvalidCredentials"));
+      } else {
+        toast.error(t("toastGenericError"));
+      }
     } finally {
       setIsSubmitting(false);
     }

@@ -5,6 +5,7 @@ import type { ChargilyApiResponse } from "../types";
 import z from "zod";
 import { getCurrentUser } from "@/modules/auth/lib/utils";
 import { resolveCanonicalTenantHost } from "@/lib/canonical-url";
+import { grantFreeItemAccessTx } from "./free-access.actions";
 
 const CHARGILY_LIVE_CHECKOUT_URL = "https://pay.chargily.net/api/v2/checkouts";
 const CHARGILY_TEST_CHECKOUT_URL =
@@ -186,6 +187,28 @@ export const createChargilyPaymentIntent = withTenant({
         throw new Error("No active pricing plan found");
 
       const price = pricingPlan.PricingPlan.price ?? 0;
+      const isFree =
+        pricingPlan.PricingPlan.pricingType === "FREE" || Number(price) <= 0;
+
+      if (isFree) {
+        await grantFreeItemAccessTx({
+          tx,
+          accountId,
+          studentId: user.userId,
+          itemId: item.id,
+          type: input.type,
+          tenantCurrency,
+        });
+
+        return {
+          success: true,
+          checkoutUrl:
+            input.type === "COURSE"
+              ? `/courses/${item.id}/watch`
+              : `/products/${item.id}`,
+          freeAccess: true,
+        };
+      }
 
       // 2. Create Sale
       const sale = await tx.sale.create({

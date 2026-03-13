@@ -6,6 +6,11 @@ import { cookies } from "next/headers";
 import { withTenant } from "@/_internals/with-tenant";
 import { signJWT } from "../lib/jwt";
 
+const AUTH_MESSAGES = {
+  userAlreadyExists: "User already exists with this email",
+  createFailed: "Unable to create account right now",
+} as const;
+
 export const createUser = withTenant({
   input: z.object({
     full_name: z.string(),
@@ -104,10 +109,16 @@ export const createUser = withTenant({
       console.error("Error creating user:", error);
 
       if (error instanceof Error) {
-        throw new Error(error.message);
+        const message = error.message.toLowerCase();
+        if (
+          message.includes("already exists") ||
+          message.includes("unique constraint")
+        ) {
+          throw new Error(AUTH_MESSAGES.userAlreadyExists);
+        }
       }
 
-      throw new Error("Failed to create user");
+      throw new Error(AUTH_MESSAGES.createFailed);
     }
   },
 });

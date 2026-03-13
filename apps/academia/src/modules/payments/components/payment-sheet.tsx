@@ -23,8 +23,14 @@ import { useTranslations, useLocale } from "next-intl";
 import { useTenantCurrency, useIsAuthenticated } from "@/hooks/use-tenant";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { GuestAuthForm } from "./guest-auth-form";
+import { claimFreeItemAccess } from "../actions/free-access.actions";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { getProductDownloadUrl } from "@/modules/products/actions/download";
+import { Button } from "@/components/ui/button";
 
 export function PaymentSheet() {
+  const router = useRouter();
   const {
     isSheetOpen,
     setSheetOpen,
@@ -40,6 +46,8 @@ export function PaymentSheet() {
   const isRTL = locale === "ar";
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const sheetSide = isDesktop ? "left" : "bottom";
+  const [portalContainer, setPortalContainer] = React.useState<HTMLElement | null>(null);
+  const [isClaimingFree, setIsClaimingFree] = React.useState(false);
 
   const getCurrentPrice = (product: PaymentProduct | null): number => {
     if (!product) return 0;
@@ -90,9 +98,62 @@ export function PaymentSheet() {
     }
   }, [selectedProduct, isSheetOpen, setSheetOpen]);
 
+  React.useEffect(() => {
+    if (typeof document === "undefined") return;
+    setPortalContainer(document.querySelector(".academia-theme-root") as HTMLElement | null);
+  }, []);
+
+  const handleClaimFreeAccess = async () => {
+    if (!selectedProduct) return;
+
+    const redirectPath =
+      selectedProduct.type === "COURSE"
+        ? `/courses/${selectedProduct.id}/watch`
+        : `/products/${selectedProduct.id}`;
+
+    if (!isAuthenticated) {
+      router.push(`/login?redirect=${redirectPath}`);
+      return;
+    }
+
+    try {
+      setIsClaimingFree(true);
+      const result = await claimFreeItemAccess({
+        productId: selectedProduct.id,
+        type: selectedProduct.type as "COURSE" | "PRODUCT",
+      });
+      if (!result.success) {
+        toast.error(result.message || t("freeProductMessage"));
+        return;
+      }
+
+      if (selectedProduct.type === "COURSE") {
+        setSheetOpen(false);
+        router.push(redirectPath);
+        return;
+      }
+
+      const download = await getProductDownloadUrl({
+        productId: selectedProduct.id,
+      });
+      if (!download.success || !download.data?.url) {
+        toast.error(t("freeProductMessage"));
+        return;
+      }
+
+      setSheetOpen(false);
+      window.location.href = download.data.url;
+    } catch (error) {
+      console.error(error);
+      toast.error(t("freeProductMessage"));
+    } finally {
+      setIsClaimingFree(false);
+    }
+  };
+
   return (
     <Sheet open={isSheetOpen} onOpenChange={handleSheetOpenChange}>
-      <SheetContent side={sheetSide} dir={dir}>
+      <SheetContent side={sheetSide} dir={dir} container={portalContainer}>
         {isConnectionsLoading ? (
           <PaymentSheetSkeleton />
         ) : !selectedProduct ? (
@@ -305,6 +366,16 @@ export function PaymentSheet() {
                             <p className="text-muted-foreground">
                               {t("freeProductMessage")}
                             </p>
+                            <Button
+                              className="mt-4 w-full sm:w-auto"
+                              onClick={handleClaimFreeAccess}
+                              loading={isClaimingFree}
+                              disabled={isClaimingFree}
+                            >
+                              {selectedProduct?.type === "COURSE"
+                                ? "Access now"
+                                : "Download now"}
+                            </Button>
                           </div>
                         </div>
                       )}

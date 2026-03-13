@@ -36,7 +36,7 @@ function SheetOverlay({
     <SheetPrimitive.Overlay
       data-slot="sheet-overlay"
       className={cn(
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-background/80 backdrop-blur-[1px]",
         className
       )}
       {...props}
@@ -49,14 +49,17 @@ function SheetContent({
   children,
   side = "right",
   dir,
+  container,
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
   side?: "top" | "right" | "bottom" | "left";
   /** Direction for RTL-aware close button position (start = left in LTR, right in RTL) */
   dir?: "ltr" | "rtl";
+  /** Optional portal container to preserve theme scope */
+  container?: HTMLElement | null;
 }) {
   return (
-    <SheetPortal>
+    <SheetPortal container={container ?? undefined}>
       <SheetOverlay />
       <SheetPrimitive.Content
         data-slot="sheet-content"

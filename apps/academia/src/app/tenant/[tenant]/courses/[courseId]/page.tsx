@@ -6,7 +6,6 @@ import { CravveloEditor } from "@cravvelo/editor";
 import { PaymentSheet } from "@/modules/payments/components/payment-sheet";
 import { checkCourseOwnership } from "@/modules/courses/actions/check-ownership";
 import { getTranslations } from "next-intl/server";
-import { getTenantWebsite } from "@/actions/tanant";
 import type { Metadata } from "next";
 
 interface PageProps {
@@ -21,13 +20,9 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { tenant: tenantKey, courseId } = await params;
   const tenant = decodeURIComponent(tenantKey);
-  const [courseRes, website] = await Promise.all([
-    getCourseById({ courseId }),
-    getTenantWebsite(tenant),
-  ]);
+  const courseRes = await getCourseById({ courseId });
   const course = courseRes.success ? courseRes.data : null;
-  const tenantDisplayName =
-    (website as any)?.name ?? (website as any)?.Account?.user_name ?? tenant;
+  const tenantDisplayName = tenant;
   const pageTitle =
     course?.seoTitle ?? course?.title ?? "Course";
   const description = course?.seoDescription ?? undefined;
@@ -72,7 +67,7 @@ export default async function Page({ params }: PageProps) {
 
               {/* Course Description - header and text area share same card background */}
               <div className="bg-card text-card-foreground rounded-lg border border-border overflow-hidden">
-                <div className="p-4 border-b border-border bg-card">
+                <div className="p-4 border-b border-border bg-muted/30">
                   <h2 className="text-lg font-semibold text-start">
                     {t("description")}
                   </h2>

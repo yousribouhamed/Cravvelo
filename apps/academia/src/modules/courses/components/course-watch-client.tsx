@@ -10,6 +10,7 @@ import { ChapterType, Course } from "../types";
 import { useTranslations } from "next-intl";
 import { useTenantThemeStyles } from "@/hooks/use-tenant";
 import { cn } from "@/lib/utils";
+import { ModuleType } from "../types";
 
 const ALLOWED_HTML_TAGS =
   /^(p|br|strong|em|b|i|u|h1|h2|h3|h4|h5|h6|ul|ol|li|a|span|div|hr|blockquote|pre|code|sub|sup)$/i;
@@ -99,17 +100,25 @@ export const CourseWatchClient: React.FC<CourseWatchClientProps> = ({
 
   const chapters: ChapterType[] = useMemo(
     () =>
-      course.Chapter.map((chapter: any) => ({
-        ...chapter,
-        modules:
-          chapter.modules === null || chapter.modules === undefined
-            ? []
-            : typeof chapter.modules === "string"
-            ? JSON.parse(chapter.modules)
-            : Array.isArray(chapter.modules)
-            ? chapter.modules
-            : [],
-      })),
+      course.Chapter
+        .map((chapter: any) => {
+          const modules =
+            chapter.modules === null || chapter.modules === undefined
+              ? []
+              : typeof chapter.modules === "string"
+                ? JSON.parse(chapter.modules)
+                : Array.isArray(chapter.modules)
+                  ? chapter.modules
+                  : [];
+          return {
+            ...chapter,
+            modules: [...modules].sort(
+              (a: ModuleType, b: ModuleType) =>
+                (a?.orderNumber || 0) - (b?.orderNumber || 0)
+            ),
+          };
+        })
+        .sort((a, b) => (a.orderNumber || 0) - (b.orderNumber || 0)),
     [course.Chapter]
   );
 
@@ -122,7 +131,7 @@ export const CourseWatchClient: React.FC<CourseWatchClientProps> = ({
         Array.isArray(firstChapter.modules) &&
         firstChapter.modules.length > 0
       ) {
-        const firstModule = firstChapter.modules
+        const firstModule = [...firstChapter.modules]
           .filter((m) => m != null)
           .sort((a, b) => (a.orderNumber || 0) - (b.orderNumber || 0))[0];
         if (firstModule) {
@@ -243,7 +252,7 @@ export const CourseWatchClient: React.FC<CourseWatchClientProps> = ({
 
                 {/* Module title + content - hidden in THEATER to focus on video */}
                 {!isTheater && (
-                <div className="rounded-md border border-border bg-background p-5">
+                <div className="rounded-md border border-border bg-card p-5">
                   <h2 className="text-lg font-semibold mb-1">
                     {currentModule.title}
                   </h2>
