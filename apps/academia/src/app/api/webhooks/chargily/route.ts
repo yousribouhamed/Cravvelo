@@ -131,10 +131,16 @@ export async function POST(request: NextRequest) {
 
 function extractPaymentId(event: ChargilyWebhookEvent): string | null {
   const metadata: any = (event as any)?.data?.metadata;
-  // Chargily commonly sends metadata as an array of objects.
-  const fromArray = Array.isArray(metadata) ? metadata?.[0]?.paymentId : null;
-  const fromObject = !Array.isArray(metadata) ? metadata?.paymentId : null;
-  return (fromArray || fromObject || null) as string | null;
+  if (Array.isArray(metadata)) {
+    const withPaymentId = metadata.find(
+      (entry: any) => entry && typeof entry.paymentId === "string"
+    );
+    return (withPaymentId?.paymentId ?? null) as string | null;
+  }
+  if (metadata && typeof metadata === "object") {
+    return (metadata?.paymentId ?? null) as string | null;
+  }
+  return null;
 }
 
 async function handleSuccessfulPayment(paymentId: string) {

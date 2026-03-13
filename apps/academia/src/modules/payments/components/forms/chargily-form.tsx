@@ -25,7 +25,8 @@ interface PaymentIntentPayload {
 
 interface PaymentResponse {
   success: boolean;
-  checkoutUrl: string;
+  checkoutUrl?: string;
+  message?: string;
 }
 
 export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
@@ -48,11 +49,15 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
     mutationFn: async (payload: PaymentIntentPayload) => {
       const response = await createChargilyPaymentIntent(payload);
       if (!response.success) {
-        throw new Error("Failed to create payment intent");
+        throw new Error(response.message || "Failed to create payment intent");
       }
       return response;
     },
     onSuccess: (data) => {
+      if (!data.checkoutUrl) {
+        toast.error(t("toastError"));
+        return;
+      }
       toast.success(t("toastSuccess"));
       window.location.href = data.checkoutUrl;
     },
@@ -62,7 +67,7 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
         toast.error(t("toastAuthRequired"));
         return;
       }
-      toast.error(t("toastError"));
+      toast.error(error.message || t("toastError"));
     },
   });
 

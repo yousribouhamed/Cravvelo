@@ -11,6 +11,8 @@ const CHARGILY_LIVE_CHECKOUT_URL = "https://pay.chargily.net/api/v2/checkouts";
 const CHARGILY_TEST_CHECKOUT_URL =
   "https://pay.chargily.net/test/api/v2/checkouts";
 
+type ChargilyCheckoutMode = "test" | "live" | "unknown";
+
 function normalizeChargilyConfig(config: unknown): { secretKey?: string } {
   // `PaymentMethodConfig.config` is Prisma `Json`, but some code stores it as a stringified JSON.
   // Handle both shapes safely.
@@ -33,21 +35,35 @@ function normalizeChargilyConfig(config: unknown): { secretKey?: string } {
   return {};
 }
 
+function getChargilyKeyMode(secretKey: string): ChargilyCheckoutMode {
+  if (!secretKey) return "unknown";
+  const key = secretKey.trim().toLowerCase();
+  if (key.startsWith("test_") || key.startsWith("test_sk_")) return "test";
+  if (key.startsWith("live_") || key.startsWith("live_sk_")) return "live";
+  return "unknown";
+}
+
 function getChargilyCheckoutBaseUrl(secretKey: string) {
-  // Chargily keys typically look like `test_sk_...` for test mode.
-  // Selecting the endpoint based on the key avoids common prod/dev mismatches.
-  const isTestKey = secretKey.startsWith("test_") || secretKey.startsWith("test_sk_");
-  return isTestKey ? CHARGILY_TEST_CHECKOUT_URL : CHARGILY_LIVE_CHECKOUT_URL;
+  const mode = getChargilyKeyMode(secretKey);
+  if (mode === "test") return CHARGILY_TEST_CHECKOUT_URL;
+  if (mode === "unknown") {
+    console.warn(
+      "Chargily key mode is unknown; defaulting to live endpoint. Ensure key prefix matches test_/test_sk_ or live_/live_sk_."
+    );
+  }
+  return CHARGILY_LIVE_CHECKOUT_URL;
 }
 
 export const createChargilyCheckout = withTenant({
   input: z.object({
     totalPrice: z.string(),
     paymentId: z.string(),
+    itemId: z.string(),
+    itemType: z.enum(["COURSE", "PRODUCT"]),
+    itemTitle: z.string(),
   }),
   handler: async ({ tenant, website, input, accountId, db }) => {
     try {
-      const tenantCurrency = (website?.currency || "DZD").toLowerCase();
       const canonicalHost = resolveCanonicalTenantHost({
         tenant,
         customDomain: website?.customDomain,
@@ -56,13 +72,20 @@ export const createChargilyCheckout = withTenant({
       const amount = Math.round(Number(input.totalPrice));
       const payload = {
         amount,
-        currency: tenantCurrency,
+        currency: "dzd",
         payment_method: "EDAHABIA",
         success_url: `https://${canonicalHost}/payments/success`,
         failure_url: `https://${canonicalHost}/payments/failure`,
         webhook_endpoint: `https://${canonicalHost}/api/webhooks/chargily`,
-        metadata: [{ paymentId: input.paymentId }],
-        description: `Payment for order ${input.paymentId}`,
+        metadata: [
+          {
+            paymentId: input.paymentId,
+            accountId,
+            itemType: input.itemType,
+            itemId: input.itemId,
+          },
+        ],
+        description: `${input.itemType} purchase - ${input.itemTitle}`,
         locale: "ar",
       };
 
@@ -84,6 +107,7 @@ export const createChargilyCheckout = withTenant({
       }
 
       const baseUrl = getChargilyCheckoutBaseUrl(secretKey);
+      console.info("Academia Chargily checkout mode:", getChargilyKeyMode(secretKey));
 
       const response = await fetch(baseUrl, {
         method: "POST",
@@ -225,10 +249,13 @@ export const createChargilyPaymentIntent = withTenant({
       const checkout = await createChargilyCheckout({
         totalPrice: price.toString(),
         paymentId: payment.id,
+        itemType: input.type,
+        itemId: item.id,
+        itemTitle: item.title,
       });
 
       if (!checkout.data?.checkout_url)
-        throw new Error("Failed to create Chargily checkout");
+        throw new Error(checkout.message || "Failed to create Chargily checkout");
 
       // Trigger realtime after we know we’re returning success
       return {
