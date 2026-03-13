@@ -65,16 +65,12 @@ export default async function Page({ params }: PageProps) {
                 youtubeUrl={course.youtubeUrl}
               />
 
-              {/* Course Description - header and text area share same card background */}
-              <div className="bg-card text-card-foreground rounded-lg border border-border overflow-hidden">
-                <div className="p-4 border-b border-border bg-muted/30">
-                  <h2 className="text-lg font-semibold text-start">
-                    {t("description")}
-                  </h2>
-                </div>
-                <div className="p-4 bg-card">
-                  <CravveloEditor readOnly value={cleanDescription} />
-                </div>
+              {/* Course Description */}
+              <div className="mt-6">
+                <h2 className="text-lg font-semibold text-foreground mb-3">
+                  {t("description")}
+                </h2>
+                <CravveloEditor readOnly value={cleanDescription} />
               </div>
 
               <Ratings

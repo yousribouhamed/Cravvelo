@@ -5,19 +5,19 @@
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
-/* Color scheme detection */
+/* Color scheme detection - use theme card when available */
 @media (prefers-color-scheme: dark) {
   .tiptap-editor:not([data-theme="light"]) {
-    background-color: #111827;
-    color: #f9fafb;
+    background-color: var(--card, #111827);
+    color: var(--card-foreground, #f9fafb);
   }
 }
 
-/* Explicit dark mode class */
+/* Explicit dark mode - match app card background */
 .tiptap-editor[data-theme="dark"],
 .dark .tiptap-editor {
-  background-color: #0a0a0c;
-  color: #f9fafb;
+  background-color: var(--card, #0a0a0c);
+  color: var(--card-foreground, #f9fafb);
 }
 
 /* Explicit light mode class */

@@ -88,7 +88,9 @@ export default async function TenantLayout({
     websiteData.primaryColor &&
     `.academia-theme-root { --primary: ${websiteData.primaryColor}; } .dark .academia-theme-root { --primary: ${websiteData.primaryColor}; }`;
 
-  const isBlocked = isAccountSuspended || !hasActiveSubscription;
+  const isBlocked =
+    process.env.NODE_ENV === "production" &&
+    (isAccountSuspended || !hasActiveSubscription);
 
   return (
     <div

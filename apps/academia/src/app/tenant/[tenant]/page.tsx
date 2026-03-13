@@ -27,8 +27,6 @@ export default async function TenantPage({ params }: TenantPageProps) {
   // By default, do not show testimonials or contact form
   const enableTestimonials = (website as any)?.enableTestimonials ?? false;
   const enableContactForm = (website as any)?.enableContactForm ?? false;
-  const displayName =
-    (website as any)?.name ?? (website as any)?.Account?.user_name ?? tenant;
 
   const coursesRes = showCoursesOnHome ? await getCoursesWithDefaultPricing() : null;
   const courses = coursesRes?.success ? coursesRes.data ?? [] : [];
@@ -40,10 +38,6 @@ export default async function TenantPage({ params }: TenantPageProps) {
 
   return (
     <div className="py-6 sm:py-8">
-      <h1 className="text-3xl font-bold mb-4">
-        {tHome("welcomeTo", { name: displayName })}
-      </h1>
-
       {enableWelcomeBanner && <Banner />}
 
       {showCoursesOnHome && (

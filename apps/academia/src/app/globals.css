@@ -242,10 +242,12 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  .academia-theme-root {
     --font-sans: var(--academia-font-en, var(--font-geist-sans), sans-serif);
     font-family: var(--academia-font-en, var(--font-geist-sans), sans-serif);
   }
-  html[lang="ar"] body {
+  html[lang="ar"] .academia-theme-root {
     --font-sans: var(--academia-font-ar, "Tajawal", var(--font-geist-sans), sans-serif);
     font-family: var(--academia-font-ar, "Tajawal", var(--font-geist-sans), sans-serif);
   }

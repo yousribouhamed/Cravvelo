@@ -54,19 +54,32 @@ export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
+          dir={isRTL ? "rtl" : "ltr"}
           className="flex cursor-pointer items-center gap-2 text-card-foreground"
         >
-          <User className="w-5 h-5" />
-          {tProfile("account")}
+          {isRTL ? (
+            <>
+              <span>{tProfile("account")}</span>
+              <User className="w-5 h-5 shrink-0" />
+            </>
+          ) : (
+            <>
+              <User className="w-5 h-5 shrink-0" />
+              <span>{tProfile("account")}</span>
+            </>
+          )}
         </Button>
       </DropdownMenuTrigger>
 
       {/* Dropdown Content */}
       <DropdownMenuContent
+        dir={isRTL ? "rtl" : "ltr"}
         align={dropdownAlign}
         className={`w-56 ${isRTL ? "text-right" : "text-left"}`}
       >
-        <DropdownMenuLabel>{tProfile("accountSettings")}</DropdownMenuLabel>
+        <DropdownMenuLabel className={isRTL ? "text-right" : "text-left"}>
+          {tProfile("accountSettings")}
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
 
         {ProfileLinks.map((link) => {
@@ -75,10 +88,19 @@ export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
             <DropdownMenuItem key={link.url} asChild>
               <Link
                 href={link.url}
-                className={`flex items-center gap-2 w-full ${isRTL ? "flex-row-reverse justify-end text-right" : "justify-start text-left"}`}
+                className={`flex items-center gap-2 w-full ${isRTL ? "justify-start text-right" : "justify-start text-left"}`}
               >
-                <Icon className="w-4 h-4" />
-                {link.name}
+                {isRTL ? (
+                  <>
+                    <span>{link.name}</span>
+                    <Icon className="w-4 h-4 shrink-0" />
+                  </>
+                ) : (
+                  <>
+                    <Icon className="w-4 h-4 shrink-0" />
+                    <span>{link.name}</span>
+                  </>
+                )}
               </Link>
             </DropdownMenuItem>
           );
@@ -89,23 +111,45 @@ export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
         {/* Dark Mode Toggle */}
         <DropdownMenuItem
           onClick={toggleDarkMode}
-          className={`flex items-center gap-2 cursor-pointer ${isRTL ? "flex-row-reverse justify-end text-right" : "justify-start text-left"}`}
+          className={`flex items-center gap-2 cursor-pointer ${isRTL ? "justify-start text-right" : "justify-start text-left"}`}
         >
-          {theme === "dark" ? (
-            <Sun className="w-4 h-4" />
+          {isRTL ? (
+            <>
+              <span>{theme === "dark" ? tProfile("lightMode") : tProfile("darkMode")}</span>
+              {theme === "dark" ? (
+                <Sun className="w-4 h-4 shrink-0" />
+              ) : (
+                <Moon className="w-4 h-4 shrink-0" />
+              )}
+            </>
           ) : (
-            <Moon className="w-4 h-4" />
+            <>
+              {theme === "dark" ? (
+                <Sun className="w-4 h-4 shrink-0" />
+              ) : (
+                <Moon className="w-4 h-4 shrink-0" />
+              )}
+              <span>{theme === "dark" ? tProfile("lightMode") : tProfile("darkMode")}</span>
+            </>
           )}
-          {theme === "dark" ? tProfile("lightMode") : tProfile("darkMode")}
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={onLogout}
-          className={`text-red-600 focus:text-red-700 ${isRTL ? "flex-row-reverse justify-end text-right" : ""}`}
+          className={`flex items-center gap-2 text-red-600 focus:text-red-700 ${isRTL ? "justify-start text-right" : "justify-start text-left"}`}
         >
-          <LogOut className="w-4 h-4" />
-          {tProfile("logout")}
+          {isRTL ? (
+            <>
+              <span>{tProfile("logout")}</span>
+              <LogOut className="w-4 h-4 shrink-0" />
+            </>
+          ) : (
+            <>
+              <LogOut className="w-4 h-4 shrink-0" />
+              <span>{tProfile("logout")}</span>
+            </>
+          )}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

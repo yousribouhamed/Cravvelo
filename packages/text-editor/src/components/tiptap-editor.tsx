@@ -355,7 +355,7 @@ export const CravveloEditor: React.FC<TiptapEditorProps> = ({
     <div
       className={`border border-border rounded-lg overflow-hidden bg-card ${
         isFullscreen ? "fixed inset-4 z-50 rounded-lg" : ""
-      } ${readOnly ? "bg-muted/50" : ""}`}
+      }`}
       dir={textDirection}
     >
       {!readOnly && (
@@ -389,7 +389,7 @@ export const CravveloEditor: React.FC<TiptapEditorProps> = ({
         editor={editor}
         className={`bg-card overflow-y-auto tiptap-content ${
           textDirection === "rtl" ? "rtl" : "ltr"
-        } ${readOnly ? "bg-muted/50" : ""}`}
+        }`}
       />
     </div>
   );
