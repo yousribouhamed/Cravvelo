@@ -47,9 +47,9 @@ export function ChargilyForm({ isLoading = false }: ChargilyFormProps) {
     PaymentIntentPayload
   >({
     mutationFn: async (payload: PaymentIntentPayload) => {
-      const response = await createChargilyPaymentIntent(payload);
+      const response = (await createChargilyPaymentIntent(payload)) as PaymentResponse;
       if (!response.success) {
-        throw new Error(response.message || "Failed to create payment intent");
+        throw new Error(response.message ?? "Failed to create payment intent");
       }
       return response;
     },
