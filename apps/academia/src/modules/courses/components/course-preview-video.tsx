@@ -18,9 +18,9 @@ export function CoursePreviewVideo({
     return (
       <div className={className}>
         <iframe
-          src={`https://iframe.mediadelivery.net/embed/${videoLibrary}/${previewVideo}`}
+          src={`https://iframe.mediadelivery.net/embed/${videoLibrary}/${previewVideo}?autoplay=false`}
           className="w-full h-full rounded-lg border-0"
-          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+          allow="accelerometer; gyroscope; encrypted-media; picture-in-picture"
           allowFullScreen
           title="Course preview"
         />

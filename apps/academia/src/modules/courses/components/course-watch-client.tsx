@@ -235,6 +235,7 @@ export const CourseWatchClient: React.FC<CourseWatchClientProps> = ({
                       videoId={currentModule.fileUrl}
                       title={undefined}
                       className="w-full h-full overflow-hidden rounded-t-md"
+                      autoplay={false}
                     />
                   </div>
                   <CourseControls chapters={chapters} />

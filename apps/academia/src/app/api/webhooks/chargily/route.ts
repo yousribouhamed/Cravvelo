@@ -6,6 +6,7 @@ import {
 import { prisma } from "database/src";
 import { PurchaseStatus } from "@prisma/client";
 import { normalizeHost } from "@/lib/canonical-url";
+import { triggerNotificationEvent } from "@/lib/notify";
 
 function normalizeChargilyConfig(config: unknown): { secretKey?: string } {
   if (!config) return {};
@@ -166,7 +167,7 @@ async function handleSuccessfulPayment(paymentId: string) {
 
     const sale = payment.Sale;
 
-    await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx) => {
       await tx.payment.update({
         where: { id: paymentId },
         data: { status: "COMPLETED" },
@@ -178,7 +179,7 @@ async function handleSuccessfulPayment(paymentId: string) {
       });
 
       // Grant access by creating ItemPurchase (idempotent)
-      if (!payment.Student) return;
+      if (!payment.Student) return { notificationId: null as string | null, accountId: null as string | null };
 
       const existingPurchase = await tx.itemPurchase.findFirst({
         where: {
@@ -188,10 +189,11 @@ async function handleSuccessfulPayment(paymentId: string) {
           status: PurchaseStatus.ACTIVE,
         },
       });
-      if (existingPurchase) return;
+      if (existingPurchase) return { notificationId: null, accountId: null };
 
       // Resolve default pricing plan for this item
       let plan: any = null;
+      let itemTitle: string | null = null;
 
       if (sale.itemType === "COURSE") {
         const course = await tx.course.findUnique({
@@ -200,6 +202,7 @@ async function handleSuccessfulPayment(paymentId: string) {
             CoursePricingPlans: { include: { PricingPlan: true } },
           },
         });
+        itemTitle = course?.title ?? null;
         const pricingPlan =
           course?.CoursePricingPlans?.find((p: any) => p.isDefault) ??
           course?.CoursePricingPlans?.[0];
@@ -213,6 +216,7 @@ async function handleSuccessfulPayment(paymentId: string) {
             ProductPricingPlans: { include: { PricingPlan: true } },
           },
         });
+        itemTitle = product?.title ?? null;
         const pricingPlan =
           product?.ProductPricingPlans?.find((p: any) => p.isDefault) ??
           product?.ProductPricingPlans?.[0];
@@ -221,7 +225,7 @@ async function handleSuccessfulPayment(paymentId: string) {
 
       if (!plan?.id) {
         console.warn("No pricing plan found for sale:", sale.id);
-        return;
+        return { notificationId: null, accountId: null };
       }
 
       const accessStartDate = new Date();
@@ -261,7 +265,51 @@ async function handleSuccessfulPayment(paymentId: string) {
               : null,
         },
       });
+
+      // Only when payment is confirmed: increment course students count
+      if (sale.itemType === "COURSE") {
+        await tx.course.update({
+          where: { id: sale.itemId },
+          data: { studentsNbr: { increment: 1 } },
+        });
+      }
+
+      // Store-owner notification (dashboard) - sale completed / payment confirmed
+      const notification = await tx.notification.create({
+        data: {
+          accountId: sale.accountId,
+          type: "SUCCESS",
+          title: "Payment received",
+          content: "A sale was completed and payment was confirmed.",
+          actionUrl: "/payments",
+          metadata: {
+            source: "academia",
+            i18nKey: "notifications.events.sale_completed",
+            values: {
+              method: "CHARGILY",
+              itemTitle: itemTitle ?? "Item",
+              amount: payment.amount,
+              currency: payment.currency || "DZD",
+              itemType: sale.itemType,
+            },
+            entity: {
+              saleId: sale.id,
+              paymentId: payment.id,
+              itemId: sale.itemId,
+            },
+          },
+        },
+      });
+
+      return { notificationId: notification.id, accountId: sale.accountId };
     });
+
+    if (result?.notificationId && result?.accountId) {
+      await triggerNotificationEvent({
+        accountId: result.accountId,
+        payload: { id: result.notificationId, type: "sale_completed" },
+      });
+    }
   } catch (error) {
     console.error("Error handling successful payment:", error);
     throw error;

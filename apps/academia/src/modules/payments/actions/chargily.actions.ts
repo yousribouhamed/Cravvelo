@@ -4,7 +4,6 @@ import { withTenant } from "@/_internals/with-tenant";
 import type { ChargilyApiResponse } from "../types";
 import z from "zod";
 import { getCurrentUser } from "@/modules/auth/lib/utils";
-import { triggerNotificationEvent } from "@/lib/notify";
 import { resolveCanonicalTenantHost } from "@/lib/canonical-url";
 
 const CHARGILY_LIVE_CHECKOUT_URL = "https://pay.chargily.net/api/v2/checkouts";
@@ -219,33 +218,6 @@ export const createChargilyPaymentIntent = withTenant({
         },
       });
 
-      // Store-owner notification (dashboard) - sale intent created
-      const notification = await tx.notification.create({
-        data: {
-          accountId,
-          type: "INFO",
-          title: "New sale",
-          content: "A new sale was created.",
-          actionUrl: "/payments",
-          metadata: {
-            source: "academia",
-            i18nKey: "notifications.events.sale_created",
-            values: {
-              method: "CHARGILY",
-              itemTitle: item.title,
-              amount: price,
-              currency: tenantCurrency,
-              itemType: input.type,
-            },
-            entity: {
-              saleId: sale.id,
-              paymentId: payment.id,
-              itemId: item.id,
-            },
-          },
-        },
-      });
-
       const checkout = await createChargilyCheckout({
         totalPrice: price.toString(),
         paymentId: payment.id,
@@ -263,21 +235,9 @@ export const createChargilyPaymentIntent = withTenant({
         checkoutUrl: checkout.data?.checkout_url,
         paymentId: payment.id,
         saleId: sale.id,
-        notificationId: notification.id,
       };
     });
 
-    if (result?.success && result.notificationId) {
-      await triggerNotificationEvent({
-        accountId,
-        payload: { id: result.notificationId, type: "sale_created" },
-      });
-    }
-
-    // Do not leak internal notificationId to clients unless needed.
-    // We keep it internal for realtime only.
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { notificationId, ...publicResult } = result as any;
-    return publicResult;
+    return result;
   },
 });
