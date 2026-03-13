@@ -52,7 +52,7 @@ export const checkVideoPlaybackAllowed = withTenant({
 
     const planCode = account.AccountSubscription?.[0]?.planCode ?? null;
     const limits = getLimitsForPlanCode(planCode);
-    const usage = account.videoBandwidthUsedBytes ?? 0n;
+    const usage = account.videoBandwidthUsedBytes ?? BigInt(0);
 
     if (usage >= BigInt(limits.videoBandwidthBytes)) {
       return {

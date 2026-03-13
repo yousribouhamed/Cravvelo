@@ -51,6 +51,7 @@ export function TestimonialsSection({ tenant }: TestimonialsSectionProps) {
   const [loading, setLoading] = useState(true);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- getSource bug when analyzing useCallback deps
   const loadMore = useCallback(async () => {
     if (nextCursor === null || !tenant) return;
     setLoading(true);
