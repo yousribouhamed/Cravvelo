@@ -73,6 +73,7 @@ export default function ProfileDropdown({ onLogout }: ProfileDropdownProps) {
 
       {/* Dropdown Content */}
       <DropdownMenuContent
+        // @ts-expect-error - dir is valid for RTL but not in DropdownMenuContentProps
         dir={isRTL ? "rtl" : "ltr"}
         align={dropdownAlign}
         className={`w-56 ${isRTL ? "text-right" : "text-left"}`}
