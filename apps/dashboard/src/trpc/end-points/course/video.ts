@@ -2,8 +2,13 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { privateProcedure } from "@/src/trpc/trpc";
 import axios from "axios";
-import { getLimitsForPlanCode } from "@/src/constants/plan-limits";
-import type { SubscriptionPlanCode } from "@/src/constants/subscription-plans";
+import {
+  assertBandwidthAvailable,
+  assertStorageAvailable,
+  decrementStorageUsage,
+  incrementStorageUsage,
+  upsertVideoAsset,
+} from "@/src/server/services/video-usage";
 
 async function getVideoInfo(
   libraryId: string,
@@ -57,8 +62,60 @@ async function waitForVideoProcessing(
   return 0; // Return 0 if we couldn't get the length
 }
 
-const STORAGE_LIMIT_MESSAGE =
-  "Storage limit reached. Please upgrade your plan to upload more files.";
+const BUNNY_VIDEO_ID_REGEX = /^[a-zA-Z0-9_-]+$/;
+
+function parseModules(modulesRaw: unknown): any[] {
+  if (!modulesRaw) return [];
+  if (Array.isArray(modulesRaw)) return modulesRaw;
+  if (typeof modulesRaw === "string") {
+    try {
+      const parsed = JSON.parse(modulesRaw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
+
+async function deleteVideoFromBunny(videoId: string) {
+  const libraryId = process.env["NEXT_PUBLIC_VIDEO_LIBRARY"];
+  const apiKey = process.env["NEXT_PUBLIC_BUNNY_API_KEY"];
+
+  if (!libraryId || !apiKey) {
+    return;
+  }
+
+  try {
+    await axios.delete(
+      `https://video.bunnycdn.com/library/${libraryId}/videos/${videoId}`,
+      {
+        headers: {
+          AccessKey: apiKey,
+        },
+      }
+    );
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
+      return;
+    }
+    console.warn(`Failed to delete Bunny video ${videoId}:`, error);
+  }
+}
+
+function getVideoAssetDelegate(prismaLike: unknown) {
+  const delegate = (prismaLike as { videoAsset?: unknown })?.videoAsset;
+  if (
+    delegate &&
+    typeof (delegate as { findUnique?: unknown }).findUnique === "function"
+  ) {
+    return delegate as {
+      findUnique: (...args: any[]) => Promise<any>;
+      deleteMany: (...args: any[]) => Promise<any>;
+    };
+  }
+  return null;
+}
 
 export const videoMutations = {
   checkVideoUploadAllowed: privateProcedure
@@ -70,34 +127,7 @@ export const videoMutations = {
           message: "Account not found",
         });
       }
-      const account = await ctx.prisma.account.findUnique({
-        where: { id: ctx.account.id },
-        select: {
-          storageUsedBytes: true,
-          AccountSubscription: {
-            where: { status: "ACTIVE" },
-            orderBy: { updatedAt: "desc" },
-            take: 1,
-            select: { planCode: true },
-          },
-        },
-      });
-      if (!account) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Account not found",
-        });
-      }
-      const planCode = account.AccountSubscription?.[0]?.planCode as
-        | SubscriptionPlanCode
-        | undefined;
-      const limits = getLimitsForPlanCode(planCode ?? null);
-      if (account.storageUsedBytes + input.fileSize > limits.storageBytes) {
-        throw new TRPCError({
-          code: "FORBIDDEN",
-          message: STORAGE_LIMIT_MESSAGE,
-        });
-      }
+      await assertStorageAvailable(ctx.prisma, ctx.account.id, input.fileSize);
       return { allowed: true };
     }),
 
@@ -110,8 +140,9 @@ export const videoMutations = {
         content: z.string(),
         duration: z.number().min(0),
         fileType: z.enum(["VIDEO", "DOCUMENT", "QUIZ"]),
-        videoId: z.string(),
+        videoId: z.string().regex(BUNNY_VIDEO_ID_REGEX, "Invalid video id"),
         fileSizeInBytes: z.number().min(0).optional(),
+        idempotencyKey: z.string().min(8).max(128).optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -152,7 +183,22 @@ export const videoMutations = {
           // Use the duration calculated on client side
         }
 
-        // Find the chapter
+        if (!ctx.account?.id) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Account not found",
+          });
+        }
+
+        if (input.fileSizeInBytes && input.fileSizeInBytes > 0) {
+          await assertStorageAvailable(
+            ctx.prisma,
+            ctx.account.id,
+            input.fileSizeInBytes
+          );
+        }
+
+        // Find the chapter and verify ownership
         const chapter = await ctx.prisma.chapter.findUnique({
           where: { id: input.chapterID },
           include: {
@@ -167,10 +213,31 @@ export const videoMutations = {
           });
         }
 
+        if (chapter.Course.accountId !== ctx.account.id) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "You do not have access to this chapter",
+          });
+        }
+
         // Parse existing modules
-        const modules = chapter.modules
-          ? (JSON.parse(chapter.modules as string) as any[])
-          : [];
+        const modules = parseModules(chapter.modules);
+
+        if (input.idempotencyKey) {
+          const existingModule = modules.find(
+            (module) => module?.idempotencyKey === input.idempotencyKey
+          );
+          if (existingModule) {
+            return {
+              success: true,
+              idempotent: true,
+              moduleId: existingModule.id,
+              chapterId: chapter.id,
+              courseId: chapter.courseId,
+              videoLength: existingModule.duration || existingModule.length || 0,
+            };
+          }
+        }
 
         // Generate unique ID for the new module
         const moduleId = `module_${Date.now()}_${Math.random()
@@ -184,13 +251,15 @@ export const videoMutations = {
           length: videoLength,
           duration: videoLength,
           fileType: input.fileType,
-          fileUrl: input.videoId, // This is the video ID used for direct upload
+          fileUrl: input.videoId,
+          size: input.fileSizeInBytes || 0,
           orderNumber: modules.length + 1,
           position: modules.length,
           title: input.title,
           isPublished: true,
           isFree: false,
           type: input.fileType,
+          idempotencyKey: input.idempotencyKey,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         };
@@ -224,24 +293,27 @@ export const videoMutations = {
             });
           }
 
+          if (typeof input.fileSizeInBytes === "number" && input.fileSizeInBytes > 0) {
+            await incrementStorageUsage(tx, ctx.account.id, input.fileSizeInBytes);
+          }
+
+          await upsertVideoAsset(tx, {
+            accountId: ctx.account.id,
+            courseId: chapter.courseId,
+            chapterId: chapter.id,
+            moduleId,
+            videoId: input.videoId,
+            sizeBytes: input.fileSizeInBytes || 0,
+            source: "COURSE_MODULE",
+            status: "ACTIVE",
+          });
+
           return { chapter: updatedChapter, moduleId };
         });
 
-        if (
-          typeof input.fileSizeInBytes === "number" &&
-          input.fileSizeInBytes > 0 &&
-          ctx.account?.id
-        ) {
-          await ctx.prisma.account.update({
-            where: { id: ctx.account.id },
-            data: {
-              storageUsedBytes: { increment: input.fileSizeInBytes },
-            },
-          });
-        }
-
         return {
           success: true,
+          idempotent: false,
           moduleId: result.moduleId,
           chapterId: result.chapter.id,
           courseId: chapter.courseId,
@@ -297,6 +369,39 @@ export const videoMutations = {
       }
     }),
 
+  checkVideoPlaybackAllowed: privateProcedure
+    .input(
+      z.object({
+        videoId: z.string().regex(BUNNY_VIDEO_ID_REGEX, "Invalid video id"),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      if (!ctx.account?.id) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Account not found",
+        });
+      }
+
+      const videoAssetDelegate = getVideoAssetDelegate(ctx.prisma);
+      const asset = videoAssetDelegate
+        ? await videoAssetDelegate.findUnique({
+            where: { videoId: input.videoId },
+            select: { accountId: true },
+          })
+        : null;
+
+      if (asset && asset.accountId !== ctx.account.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You do not have access to this video",
+        });
+      }
+
+      await assertBandwidthAvailable(ctx.prisma, ctx.account.id);
+      return { allowed: true };
+    }),
+
   // Delete video mutation (cleanup)
   deleteVideo: privateProcedure
     .input(
@@ -304,38 +409,47 @@ export const videoMutations = {
         videoId: z.string(),
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       try {
-        const libraryId = process.env["NEXT_PUBLIC_VIDEO_LIBRARY"];
-        const apiKey = process.env["NEXT_PUBLIC_BUNNY_API_KEY"];
-
-        if (!libraryId || !apiKey) {
+        if (!ctx.account?.id) {
           throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: "Missing Bunny CDN configuration",
+            code: "UNAUTHORIZED",
+            message: "Account not found",
           });
         }
 
-        await axios.delete(
-          `https://video.bunnycdn.com/library/${libraryId}/videos/${input.videoId}`,
-          {
-            headers: {
-              AccessKey: apiKey,
-            },
+        const videoAssetDelegate = getVideoAssetDelegate(ctx.prisma);
+        const asset = videoAssetDelegate
+          ? await videoAssetDelegate.findUnique({
+              where: { videoId: input.videoId },
+              select: { accountId: true, sizeBytes: true },
+            })
+          : null;
+
+        if (asset && asset.accountId !== ctx.account.id) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "You do not have access to this video",
+          });
+        }
+
+        await deleteVideoFromBunny(input.videoId);
+
+        await ctx.prisma.$transaction(async (tx) => {
+          if (asset) {
+            await decrementStorageUsage(tx, ctx.account.id, asset.sizeBytes);
           }
-        );
+          const txVideoAssetDelegate = getVideoAssetDelegate(tx);
+          if (txVideoAssetDelegate) {
+            await txVideoAssetDelegate.deleteMany({
+              where: { videoId: input.videoId, accountId: ctx.account.id },
+            });
+          }
+        });
 
         return { success: true };
       } catch (error) {
         console.error("Error deleting video:", error);
-
-        // Don't throw error if video doesn't exist
-        if (axios.isAxiosError(error) && error.response?.status === 404) {
-          return {
-            success: true,
-            message: "Video already deleted or does not exist",
-          };
-        }
 
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -349,10 +463,11 @@ export const videoMutations = {
       z.object({
         chapterID: z.string(),
         moduleId: z.string(),
-        newVideoId: z.string(),
+        newVideoId: z.string().regex(BUNNY_VIDEO_ID_REGEX, "Invalid video id"),
         title: z.string().min(1, "العنوان مطلوب").optional(),
         content: z.string().optional(),
         duration: z.number().min(0).optional(),
+        newVideoSizeInBytes: z.number().min(0).optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -367,7 +482,14 @@ export const videoMutations = {
           });
         }
 
-        // Find the chapter
+        if (!ctx.account?.id) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Account not found",
+          });
+        }
+
+        // Find the chapter and verify ownership
         const chapter = await ctx.prisma.chapter.findUnique({
           where: { id: input.chapterID },
           include: {
@@ -382,10 +504,15 @@ export const videoMutations = {
           });
         }
 
+        if (chapter.Course.accountId !== ctx.account.id) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "You do not have access to this chapter",
+          });
+        }
+
         // Parse existing modules
-        const modules = chapter.modules
-          ? (JSON.parse(chapter.modules as string) as any[])
-          : [];
+        const modules = parseModules(chapter.modules);
 
         // Find the module to update
         const moduleIndex = modules.findIndex(
@@ -400,7 +527,26 @@ export const videoMutations = {
         }
 
         const existingModule = modules[moduleIndex];
-        const oldVideoId = existingModule.fileUrl;
+        const oldVideoId = typeof existingModule.fileUrl === "string" ? existingModule.fileUrl : "";
+
+        const videoAssetDelegate = getVideoAssetDelegate(ctx.prisma);
+        const oldAsset =
+          oldVideoId && videoAssetDelegate
+            ? await videoAssetDelegate.findUnique({
+                where: { videoId: oldVideoId },
+                select: { sizeBytes: true },
+              })
+            : null;
+        const oldSizeBytes = oldAsset?.sizeBytes || Number(existingModule.size || 0);
+        const newSizeBytes =
+          typeof input.newVideoSizeInBytes === "number"
+            ? input.newVideoSizeInBytes
+            : oldSizeBytes;
+
+        const storageDelta = newSizeBytes - oldSizeBytes;
+        if (storageDelta > 0) {
+          await assertStorageAvailable(ctx.prisma, ctx.account.id, storageDelta);
+        }
 
         // Get new video length from Bunny CDN
         let newVideoLength = input.duration || existingModule.duration || 0;
@@ -433,9 +579,10 @@ export const videoMutations = {
             ...existingModule,
             ...(input.title && { title: input.title }),
             ...(input.content && { content: input.content }),
-            fileUrl: input.newVideoId, // New video ID
+            fileUrl: input.newVideoId,
             length: newVideoLength,
             duration: newVideoLength,
+            size: newSizeBytes,
             updatedAt: new Date().toISOString(),
           };
 
@@ -472,39 +619,42 @@ export const videoMutations = {
             }
           }
 
+          if (storageDelta > 0) {
+            await incrementStorageUsage(tx, ctx.account.id, storageDelta);
+          } else if (storageDelta < 0) {
+            await decrementStorageUsage(tx, ctx.account.id, Math.abs(storageDelta));
+          }
+
+          await upsertVideoAsset(tx, {
+            accountId: ctx.account.id,
+            courseId: chapter.courseId,
+            chapterId: chapter.id,
+            moduleId: input.moduleId,
+            videoId: input.newVideoId,
+            sizeBytes: newSizeBytes,
+            source: "COURSE_MODULE",
+            status: "ACTIVE",
+          });
+
+          if (oldVideoId && oldVideoId !== input.newVideoId) {
+            const txVideoAssetDelegate = getVideoAssetDelegate(tx);
+            if (txVideoAssetDelegate) {
+              await txVideoAssetDelegate.deleteMany({
+                where: {
+                  accountId: ctx.account.id,
+                  videoId: oldVideoId,
+                },
+              });
+            }
+          }
+
           return { chapter: updatedChapter, updatedModule };
         });
 
         // After successful database update, delete the old video from Bunny CDN
         // We do this after the transaction to avoid orphaned videos if DB update fails
         if (oldVideoId && oldVideoId !== input.newVideoId) {
-          try {
-            await axios.delete(
-              `https://video.bunnycdn.com/library/${libraryId}/videos/${oldVideoId}`,
-              {
-                headers: {
-                  AccessKey: apiKey,
-                },
-              }
-            );
-            console.log(`Successfully deleted old video: ${oldVideoId}`);
-          } catch (deleteError) {
-            // Log the error but don't fail the entire operation
-            // The video might already be deleted or not exist
-            console.warn(
-              `Failed to delete old video ${oldVideoId}:`,
-              deleteError
-            );
-
-            if (
-              axios.isAxiosError(deleteError) &&
-              deleteError.response?.status !== 404
-            ) {
-              // If it's not a 404 (video not found), log as warning
-              // but continue with the operation
-              console.error("Unexpected error deleting video:", deleteError);
-            }
-          }
+          await deleteVideoFromBunny(oldVideoId);
         }
 
         return {
@@ -516,6 +666,7 @@ export const videoMutations = {
           newVideoId: input.newVideoId,
           newVideoLength,
           lengthDifference,
+          storageDelta,
         };
       } catch (error) {
         console.error("Error updating module video:", error);

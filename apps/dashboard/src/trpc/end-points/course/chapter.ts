@@ -3,6 +3,8 @@ import { privateProcedure } from "../../trpc";
 import { TRPCError } from "@trpc/server";
 import { Module } from "@/src/types";
 import { prisma } from "database/src";
+import axios from "axios";
+import { decrementStorageUsage } from "@/src/server/services/video-usage";
 
 export const chapter = {
   createChapter: privateProcedure
@@ -254,17 +256,31 @@ export const chapter = {
   deleteMaterial: privateProcedure
     .input(
       z.object({
-        oldFileUrl: z.string(),
+        oldFileUrl: z.string().optional(),
         chapterID: z.string(),
-        fileUrl: z.string(),
+        fileUrl: z.string().optional(),
+        moduleId: z.string().optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      console.log("the function started...");
       try {
+        if (!ctx.account?.id) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Account not found",
+          });
+        }
+
         const targetChapter = await ctx.prisma.chapter.findFirst({
           where: {
             id: input.chapterID,
+          },
+          include: {
+            Course: {
+              select: {
+                accountId: true,
+              },
+            },
           },
         });
 
@@ -275,32 +291,111 @@ export const chapter = {
           });
         }
 
-        console.log("this is the target chapter");
-        console.log(targetChapter);
+        if (targetChapter.Course.accountId !== ctx.account.id) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "You do not have access to this chapter",
+          });
+        }
 
         const oldMaterials = JSON.parse(
           targetChapter.modules as string
         ) as Module[];
 
-        const newMaterial = oldMaterials.filter(
-          (item) => item.fileUrl !== input.oldFileUrl
-        );
-
-        console.log(
-          "this is the new material where the value should be deleted"
-        );
-        console.log(newMaterial);
-
-        const newChapter = await ctx.prisma.chapter.update({
-          where: {
-            id: input.chapterID,
-          },
-          data: {
-            modules: JSON.stringify(newMaterial),
-          },
+        const materialToDelete = oldMaterials.find((item) => {
+          if (input.moduleId) {
+            return item.id === input.moduleId;
+          }
+          if (input.oldFileUrl) {
+            return item.fileUrl === input.oldFileUrl;
+          }
+          if (input.fileUrl) {
+            return item.fileUrl === input.fileUrl;
+          }
+          return false;
         });
 
-        console.log("Material deleted successfully");
+        if (!materialToDelete) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Material not found",
+          });
+        }
+
+        const newMaterial = oldMaterials.filter(
+          (item) => item.id !== materialToDelete.id
+        );
+
+        await ctx.prisma.$transaction(async (tx) => {
+          await tx.chapter.update({
+            where: {
+              id: input.chapterID,
+            },
+            data: {
+              modules: JSON.stringify(newMaterial),
+            },
+          });
+
+          if (
+            materialToDelete.type === "VIDEO" ||
+            materialToDelete.fileType === "VIDEO"
+          ) {
+            const videoAssetDelegate = (
+              tx as unknown as { videoAsset?: { findUnique?: (...args: any[]) => Promise<any>; deleteMany?: (...args: any[]) => Promise<any> } }
+            ).videoAsset;
+            const asset =
+              videoAssetDelegate &&
+              typeof videoAssetDelegate.findUnique === "function"
+                ? await videoAssetDelegate.findUnique({
+                    where: { videoId: materialToDelete.fileUrl },
+                    select: { sizeBytes: true },
+                  })
+                : null;
+
+            if (asset) {
+              await decrementStorageUsage(tx, ctx.account.id, asset.sizeBytes);
+            }
+
+            if (
+              videoAssetDelegate &&
+              typeof videoAssetDelegate.deleteMany === "function"
+            ) {
+              await videoAssetDelegate.deleteMany({
+                where: {
+                  accountId: ctx.account.id,
+                  videoId: materialToDelete.fileUrl,
+                },
+              });
+            }
+          }
+        });
+
+        if (
+          materialToDelete.fileUrl &&
+          (materialToDelete.type === "VIDEO" ||
+            materialToDelete.fileType === "VIDEO")
+        ) {
+          const libraryId = process.env["NEXT_PUBLIC_VIDEO_LIBRARY"];
+          const apiKey = process.env["NEXT_PUBLIC_BUNNY_API_KEY"];
+          if (libraryId && apiKey) {
+            try {
+              await axios.delete(
+                `https://video.bunnycdn.com/library/${libraryId}/videos/${materialToDelete.fileUrl}`,
+                {
+                  headers: { AccessKey: apiKey },
+                }
+              );
+            } catch (error) {
+              if (
+                !axios.isAxiosError(error) ||
+                error.response?.status !== 404
+              ) {
+                console.warn("Failed to delete Bunny video during material delete", error);
+              }
+            }
+          }
+        }
+
         return { success: true };
       } catch (err) {
         console.error("Error deleting material:", err);

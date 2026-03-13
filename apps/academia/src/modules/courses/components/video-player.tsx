@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlertTriangle, RefreshCw } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -35,6 +35,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
+  const [isPlaybackAllowed, setIsPlaybackAllowed] = useState<boolean>(true);
 
   const handleLoad = useCallback(() => {
     setLoading(false);
@@ -54,6 +55,46 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     setLoading(true);
     setRetryCount((prev) => prev + 1);
   }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    const verifyPlaybackAccess = async () => {
+      if (!videoId) return;
+      try {
+        const response = await fetch("/api/video/playback-access", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ videoId }),
+        });
+
+        if (!active) return;
+        if (response.ok) {
+          setIsPlaybackAllowed(true);
+          return;
+        }
+
+        if (response.status === 403) {
+          setIsPlaybackAllowed(false);
+          setLoading(false);
+          setError(t("bandwidthLimitReached"));
+          return;
+        }
+
+        setIsPlaybackAllowed(true);
+      } catch (requestError) {
+        console.warn("Playback access validation failed", requestError);
+      }
+    };
+
+    void verifyPlaybackAccess();
+
+    return () => {
+      active = false;
+    };
+  }, [videoId, t]);
 
   const videoLibrary = process.env["NEXT_PUBLIC_VIDEO_LIBRARY"];
 
@@ -80,6 +121,20 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         <div className="text-center p-6">
           <AlertTriangle className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
           <p className="text-sm text-muted-foreground">{t("videoIdRequired")}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isPlaybackAllowed) {
+    return (
+      <div
+        className={`w-full ${className} ${fillContainer ? "h-full" : ""} flex items-center justify-center bg-muted rounded-lg`}
+        style={fillContainer ? undefined : { height: containerHeight }}
+      >
+        <div className="text-center p-6">
+          <AlertTriangle className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
+          <p className="text-sm text-muted-foreground">{t("bandwidthLimitReached")}</p>
         </div>
       </div>
     );

@@ -542,6 +542,7 @@
       "configMissing": "Video library configuration is missing. Please check your environment variables.",
       "videoIdRequired": "Video ID is required to display the video.",
       "loadError": "Failed to load video. Please check your connection and try again.",
+      "bandwidthLimitReached": "This creator reached their video bandwidth limit for the current billing period.",
       "retry": "Retry",
       "loading": "Loading video..."
     }

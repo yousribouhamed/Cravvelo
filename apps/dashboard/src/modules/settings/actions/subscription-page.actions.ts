@@ -15,10 +15,12 @@ export type SubscriptionPageData = {
   usage: {
     membersCount: number;
     storageUsedBytes: number;
+    videoBandwidthUsedBytes: number;
   };
   limits: {
     membersMax: number;
     storageBytes: number;
+    videoBandwidthBytes: number;
   };
 };
 
@@ -31,6 +33,7 @@ export async function getSubscriptionPageData(): Promise<SubscriptionPageData> {
     select: {
       id: true,
       storageUsedBytes: true,
+      videoBandwidthUsedBytes: true,
       AccountSubscription: {
         where: { status: "ACTIVE" },
         orderBy: { updatedAt: "desc" },
@@ -65,6 +68,7 @@ export async function getSubscriptionPageData(): Promise<SubscriptionPageData> {
     usage: {
       membersCount,
       storageUsedBytes: account.storageUsedBytes,
+      videoBandwidthUsedBytes: Number(account.videoBandwidthUsedBytes || 0n),
     },
     limits,
   };

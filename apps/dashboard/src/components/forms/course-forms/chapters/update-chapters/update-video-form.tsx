@@ -38,6 +38,7 @@ interface UpdateVedioFormProps {
 function UpdateVedioForm({ material }: UpdateVedioFormProps) {
   const t = useTranslations("common");
   const tCourses = useTranslations("courses");
+  const tProfile = useTranslations("profile.personalInfo");
   const router = useRouter();
   const path = usePathname();
   const chapterID = getValueFromUrl(path, 4);
@@ -217,7 +218,7 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
                 size="lg"
               >
                 {mutation.isLoading ? <LoadingSpinner /> : null}
-                {mutation.isLoading ? t("updating") : tCourses("profile.saveChanges")}
+                {mutation.isLoading ? t("updating") : tProfile("saveChanges")}
               </Button>
 
               <Button
@@ -233,9 +234,9 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
                   }
 
                   await delete_mutation.mutateAsync({
-                    oldFileUrl: material.fileUrl,
                     chapterID,
-                    fileUrl: form.watch("fileUrl"),
+                    oldFileUrl: material.fileUrl,
+                    moduleId: material.id,
                   });
                 }}
                 type="button"
@@ -243,7 +244,9 @@ function UpdateVedioForm({ material }: UpdateVedioFormProps) {
                 size="lg"
               >
                 {delete_mutation.isLoading ? <LoadingSpinner /> : null}
-                {delete_mutation.isLoading ? t("deleting") : tCourses("chapters.menu.deleteMaterial")}
+                {delete_mutation.isLoading
+                  ? t("deleting")
+                  : tCourses("modulesList.menu.deleteMaterial")}
               </Button>
 
               <Button

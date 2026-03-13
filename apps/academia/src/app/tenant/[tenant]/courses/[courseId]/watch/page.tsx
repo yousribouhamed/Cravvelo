@@ -4,6 +4,7 @@ import { CourseWatchClient } from "@/modules/courses/components/course-watch-cli
 import { checkCourseOwnership } from "@/modules/courses/actions/check-ownership";
 import { getCurrentUser } from "@/modules/auth/lib/utils";
 import { getTranslations } from "next-intl/server";
+import { checkVideoPlaybackAllowed } from "@/modules/courses/actions/check-video-playback";
 
 interface PageProps {
   params: Promise<{
@@ -66,6 +67,33 @@ function chapterModuleBelongsToCourse(
   return mods.some((m) => m && typeof m === "object" && (m as { id: string }).id === moduleId);
 }
 
+function getModuleByIds(
+  course: {
+    Chapter: Array<{ id: string; modules?: unknown }>;
+  },
+  chapterId: string,
+  moduleId: string
+): { id: string; fileUrl?: string; type?: string; fileType?: string } | null {
+  const chapter = course.Chapter.find((item) => item.id === chapterId);
+  if (!chapter) return null;
+  const modules = Array.isArray(chapter.modules)
+    ? chapter.modules
+    : typeof chapter.modules === "string"
+      ? (() => {
+          try {
+            return JSON.parse(chapter.modules) as Array<{ id: string }>;
+          } catch {
+            return [];
+          }
+        })()
+      : [];
+  return (
+    (modules.find(
+      (module) => module && typeof module === "object" && (module as { id: string }).id === moduleId
+    ) as { id: string; fileUrl?: string; type?: string; fileType?: string } | undefined) || null
+  );
+}
+
 export default async function Page({ params, searchParams }: PageProps) {
   const { courseId } = await params;
   const resolvedSearchParams = await searchParams;
@@ -118,6 +146,38 @@ export default async function Page({ params, searchParams }: PageProps) {
         );
       }
       redirect("/courses/" + courseId + "/watch");
+    }
+  }
+
+  if (chapterId && moduleId) {
+    const selectedModule = getModuleByIds(course, chapterId, moduleId);
+    const isVideoModule =
+      selectedModule &&
+      (selectedModule.type === "VIDEO" || selectedModule.fileType === "VIDEO");
+
+    if (selectedModule?.fileUrl && isVideoModule) {
+      const playbackAccess = await checkVideoPlaybackAllowed({
+        videoId: selectedModule.fileUrl,
+      });
+
+      if (!playbackAccess.allowed) {
+        return (
+          <div className="flex items-center justify-center min-h-[400px] px-4">
+            <div className="text-center">
+              <h1 className="text-2xl font-bold text-destructive mb-2">{t("error")}</h1>
+              <p className="text-muted-foreground mb-4">
+                {t("video.bandwidthLimitReached")}
+              </p>
+              <a
+                href={"/courses/" + courseId}
+                className="text-sm font-medium text-primary hover:underline"
+              >
+                {t("backToCourse")}
+              </a>
+            </div>
+          </div>
+        );
+      }
     }
   }
 

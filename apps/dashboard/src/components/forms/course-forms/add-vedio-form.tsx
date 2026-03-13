@@ -40,13 +40,20 @@ interface AddVideoFormProps {
 }
 
 function AddVideoForm({ chapterID, courseId }: AddVideoFormProps) {
-  const t = useTranslations("courses.chapters.video.buttonText");
+  const t = useTranslations("courses.addVideoForm");
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [upgradePlanModalOpen, setUpgradePlanModalOpen] = React.useState(false);
   const [selectedVideo, setSelectedVideo] = React.useState<File | null>(null);
   const [videoDuration, setVideoDuration] = React.useState<number>(0);
   const [videoId, setVideoId] = React.useState<string>("");
+  const createIdempotencyKey = React.useCallback(() => {
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+      return crypto.randomUUID();
+    }
+    return `video_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+  }, []);
+  const idempotencyKeyRef = React.useRef<string>(createIdempotencyKey());
 
   const { error: uploadError, handleError, clearError } = useVideoUploadError();
   const {
@@ -59,6 +66,7 @@ function AddVideoForm({ chapterID, courseId }: AddVideoFormProps) {
 
   const checkVideoUploadAllowed = trpc.checkVideoUploadAllowed.useMutation();
   const createModuleMutation = trpc.createModuleWithVideo.useMutation();
+  const deleteVideoMutation = trpc.deleteVideo.useMutation();
 
   const form = useForm<z.infer<typeof addVideoSchema>>({
     resolver: zodResolver(addVideoSchema),
@@ -75,7 +83,7 @@ function AddVideoForm({ chapterID, courseId }: AddVideoFormProps) {
       // Validate file
       const validation = VideoValidation.validateFile(file);
       if (!validation.valid) {
-        handleError(validation.error || "ملف غير صالح");
+        handleError(validation.error || t("validationErrors.invalidFile"));
         return;
       }
 
@@ -91,9 +99,37 @@ function AddVideoForm({ chapterID, courseId }: AddVideoFormProps) {
       setSelectedVideo(file);
       form.setValue("videoFile", file);
     } catch (error) {
-      handleError(error, "فشل في تحضير الفيديو");
-      maketoast.error("فشل في تحضير الفيديو");
+      handleError(error, t("validationErrors.prepareFailed"));
+      maketoast.error(t("validationErrors.prepareFailed"));
     }
+  };
+
+  const wait = (ms: number) =>
+    new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+
+  const withRetry = async <T,>(
+    action: () => Promise<T>,
+    retries: number,
+    delayMs: number
+  ): Promise<T> => {
+    let lastError: unknown;
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        return await action();
+      } catch (error) {
+        lastError = error;
+        const shouldRetry =
+          axios.isAxiosError(error) &&
+          (!error.response || error.response.status >= 500);
+        if (!shouldRetry || attempt === retries) {
+          throw error;
+        }
+        await wait(delayMs * (attempt + 1));
+      }
+    }
+    throw lastError;
   };
 
   const uploadVideoDirectly = async (
@@ -124,7 +160,11 @@ function AddVideoForm({ chapterID, courseId }: AddVideoFormProps) {
         data: JSON.stringify({ title: title }), // Use the actual title instead of hardcoded
       };
 
-      const createResponse = await axios.request(createOptions);
+      const createResponse = await withRetry(
+        () => axios.request(createOptions),
+        2,
+        1200
+      );
       const videoId = createResponse.data?.guid;
 
       if (!videoId) {
@@ -160,21 +200,26 @@ function AddVideoForm({ chapterID, courseId }: AddVideoFormProps) {
 
       const uploadUrl = `https://video.bunnycdn.com/library/${libraryId}/videos/${videoId}`;
 
-      const uploadResponse = await axios.put(uploadUrl, fileBinaryData, {
-        headers: {
-          "Content-Type": "application/octet-stream",
-          AccessKey: apiKey,
-        },
-        onUploadProgress: (progressEvent) => {
-          if (progressEvent.total) {
-            const progress =
-              Math.round((progressEvent.loaded / progressEvent.total) * 80) +
-              15; // 15-95%
-            updateProgress(progress);
-          }
-        },
-        timeout: 30 * 60 * 1000, // 30 minutes timeout
-      });
+      const uploadResponse = await withRetry(
+        () =>
+          axios.put(uploadUrl, fileBinaryData, {
+            headers: {
+              "Content-Type": "application/octet-stream",
+              AccessKey: apiKey,
+            },
+            onUploadProgress: (progressEvent) => {
+              if (progressEvent.total) {
+                const progress =
+                  Math.round((progressEvent.loaded / progressEvent.total) * 80) +
+                  15; // 15-95%
+                updateProgress(progress);
+              }
+            },
+            timeout: 30 * 60 * 1000, // 30 minutes timeout
+          }),
+        2,
+        1500
+      );
 
       if (uploadResponse.status >= 200 && uploadResponse.status < 300) {
         console.log("Upload completed successfully");
@@ -205,10 +250,11 @@ function AddVideoForm({ chapterID, courseId }: AddVideoFormProps) {
   // Form submission with direct upload
   async function onSubmit(values: z.infer<typeof addVideoSchema>) {
     if (!selectedVideo) {
-      maketoast.error("يرجى اختيار ملف فيديو");
+      maketoast.error(t("validationErrors.selectVideo"));
       return;
     }
 
+    let uploadedVideoId: string | null = null;
     try {
       clearError();
       resetProgress();
@@ -232,7 +278,7 @@ function AddVideoForm({ chapterID, courseId }: AddVideoFormProps) {
       console.log("Starting direct video upload...");
 
       // Upload video directly to Bunny CDN
-      const uploadedVideoId = await uploadVideoDirectly(
+      uploadedVideoId = await uploadVideoDirectly(
         selectedVideo,
         values.title
       );
@@ -249,19 +295,29 @@ function AddVideoForm({ chapterID, courseId }: AddVideoFormProps) {
         title: values.title,
         duration: videoDuration,
         fileSizeInBytes: selectedVideo.size,
+        idempotencyKey: idempotencyKeyRef.current,
       });
 
       updateProgress(100);
       setUploadStatus("completed");
-      maketoast.success("تم رفع الفيديو وإنشاء الوحدة بنجاح");
+      maketoast.success(t("messages.uploadSuccess"));
+      idempotencyKeyRef.current = createIdempotencyKey();
 
       // Small delay to show completion before redirect
       router.push(`/courses/${courseId}/chapters`);
     } catch (error) {
       console.error("Upload error:", error);
       setUploadStatus("error");
-      handleError(error, "فشل في رفع الفيديو");
-      maketoast.error("فشل في رفع الفيديو");
+      handleError(error, t("validationErrors.uploadFailed"));
+      maketoast.error(t("validationErrors.uploadFailed"));
+
+      if (uploadedVideoId) {
+        try {
+          await deleteVideoMutation.mutateAsync({ videoId: uploadedVideoId });
+        } catch (cleanupError) {
+          console.warn("Failed to cleanup orphan uploaded video", cleanupError);
+        }
+      }
     }
   }
 
@@ -276,15 +332,15 @@ function AddVideoForm({ chapterID, courseId }: AddVideoFormProps) {
   const getUploadButtonText = () => {
     switch (uploadStatus) {
       case "uploading":
-        return t("uploading", { progress: uploadProgress });
+        return t("buttonText.uploading", { progress: uploadProgress });
 
       case "completed":
-        return t("completed");
+        return t("buttonText.completed");
       default:
         if (createModuleMutation.isLoading) {
-          return t("creating");
+          return t("buttonText.creating");
         }
-        return t("uploadAndSave");
+        return t("buttonText.uploadAndSave");
     }
   };
 
@@ -310,12 +366,12 @@ function AddVideoForm({ chapterID, courseId }: AddVideoFormProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      عنوان مقطع الفيديو{" "}
+                      {t("formTitle")}{" "}
                       <span className="text-red-600 text-xl">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="مثال : دورة في التصميم الجرافيكي للمبتدئين"
+                        placeholder={t("formPlaceholder")}
                         {...field}
                         disabled={uploadStatus === "uploading"}
                       />
@@ -331,7 +387,7 @@ function AddVideoForm({ chapterID, courseId }: AddVideoFormProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      إضافة ملف فيديو{" "}
+                      {t("addVideoFile")}{" "}
                       <span className="text-red-600 text-xl">*</span>
                     </FormLabel>
                     <FormControl>
@@ -380,7 +436,7 @@ function AddVideoForm({ chapterID, courseId }: AddVideoFormProps) {
                     type="button"
                     disabled={uploadStatus === "uploading"}
                   >
-                    إلغاء والعودة
+                    {t("cancelAndGoBack")}
                   </Button>
                   <Button
                     disabled={isSubmitDisabled}
@@ -418,7 +474,7 @@ function AddVideoForm({ chapterID, courseId }: AddVideoFormProps) {
                 size="lg"
                 disabled={uploadStatus === "uploading"}
               >
-                إلغاء والعودة
+                {t("cancelAndGoBack")}
               </Button>
             </CardContent>
           </Card>

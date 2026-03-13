@@ -1,7 +1,7 @@
 "use client";
 
 import { Dispatch, SetStateAction, type FC } from "react";
-import { Dialog, DialogContent } from "@ui/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@ui/components/ui/dialog";
 import { EmbeddedVideo } from "../video-player";
 
 interface VideoPlayerProps {
@@ -21,6 +21,7 @@ export const VideoPlayer: FC<VideoPlayerProps> = ({
         title={"مشغل فديوهات"}
         className="max-w-4xl min-h-[500px] h-fit  !p-0 "
       >
+        <DialogTitle className="sr-only">Video preview</DialogTitle>
         <div className="w-full h-[500px] flex items-center justify-between">
           <EmbeddedVideo videoId={videoId} />
         </div>

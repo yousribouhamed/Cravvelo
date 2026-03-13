@@ -6,6 +6,10 @@
   "scripts": {
     "db:format": "dotenv -e ../../.env prisma format",
     "db:generate": "dotenv -e ../../.env prisma generate",
+    "db:migrate:dev": "dotenv -e ../../.env prisma migrate dev",
+    "db:migrate:deploy": "dotenv -e ../../.env prisma migrate deploy",
+    "db:migrate:reset": "dotenv -e ../../.env prisma migrate reset --force",
+    "db:backfill:video-assets": "dotenv -e ../../.env node ./scripts/backfill-video-assets.mjs",
     "db:push": "dotenv -e ../../.env prisma db push",
     "db:reset": "dotenv -e ../../.env prisma db push -- --force-reset",
     "db:studio": "dotenv -e ../../.env prisma studio"

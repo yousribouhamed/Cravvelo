@@ -471,7 +471,8 @@ const ModulesList: FC<ModulesListProps> = ({
                                 onClick={() =>
                                   deleteModuleMutation.mutate({
                                     chapterID,
-                                    fileUrl: module.fileType,
+                                    oldFileUrl: module.fileUrl,
+                                    moduleId: module.id,
                                   })
                                 }
                                 className="text-red-600 hover:bg-red-50 flex items-center justify-end"

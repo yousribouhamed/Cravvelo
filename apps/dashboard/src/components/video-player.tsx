@@ -3,6 +3,7 @@
 import React, { useState, useCallback } from "react";
 import { Skeleton } from "@ui/components/ui/skeleton";
 import { AlertTriangle, RefreshCw } from "lucide-react";
+import { trpc } from "@/src/app/_trpc/client";
 
 interface EmbeddedVideoProps {
   videoId: string;
@@ -24,6 +25,10 @@ export const EmbeddedVideo: React.FC<EmbeddedVideoProps> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
+  const playbackAccessQuery = trpc.checkVideoPlaybackAllowed.useQuery(
+    { videoId },
+    { enabled: Boolean(videoId) }
+  );
 
   const handleLoad = useCallback(() => {
     setLoading(false);
@@ -80,10 +85,28 @@ export const EmbeddedVideo: React.FC<EmbeddedVideoProps> = ({
     );
   }
 
+  if (playbackAccessQuery.isError) {
+    const message =
+      playbackAccessQuery.error.data?.code === "FORBIDDEN"
+        ? playbackAccessQuery.error.message
+        : "Failed to verify video playback access.";
+    return (
+      <div
+        className={`w-full ${className} flex items-center justify-center bg-muted rounded-lg`}
+        style={{ height }}
+      >
+        <div className="text-center p-6">
+          <AlertTriangle className="h-8 w-8 mx-auto mb-3 text-destructive" />
+          <p className="text-sm text-muted-foreground">{message}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`w-full relative ${className}`} style={{ height }}>
       {/* Loading Skeleton */}
-      {loading && (
+      {(loading || playbackAccessQuery.isLoading) && (
         <div className="absolute inset-0 z-10">
           <Skeleton className="w-full h-full rounded-lg" />
           <div className="absolute inset-0 flex items-center justify-center">

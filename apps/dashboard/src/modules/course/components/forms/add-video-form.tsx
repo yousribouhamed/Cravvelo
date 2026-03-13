@@ -41,6 +41,13 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
   const [selectedVideo, setSelectedVideo] = React.useState<File | null>(null);
   const [videoDuration, setVideoDuration] = React.useState<number>(0);
   const [videoId, setVideoId] = React.useState<string>("");
+  const createIdempotencyKey = React.useCallback(() => {
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+      return crypto.randomUUID();
+    }
+    return `video_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+  }, []);
+  const idempotencyKeyRef = React.useRef<string>(createIdempotencyKey());
 
   const { error: uploadError, handleError, clearError } = useVideoUploadError();
   const {
@@ -53,6 +60,7 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
 
   const checkVideoUploadAllowed = trpc.checkVideoUploadAllowed.useMutation();
   const createModuleMutation = trpc.createModuleWithVideo.useMutation();
+  const deleteVideoMutation = trpc.deleteVideo.useMutation();
 
   const addVideoSchema = z.object({
     title: z.string().min(1, t("validationErrors.titleRequired")),
@@ -96,6 +104,34 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
     }
   };
 
+  const wait = (ms: number) =>
+    new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+
+  const withRetry = async <T,>(
+    action: () => Promise<T>,
+    retries: number,
+    delayMs: number
+  ): Promise<T> => {
+    let lastError: unknown;
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        return await action();
+      } catch (error) {
+        lastError = error;
+        const shouldRetry =
+          axios.isAxiosError(error) &&
+          (!error.response || error.response.status >= 500);
+        if (!shouldRetry || attempt === retries) {
+          throw error;
+        }
+        await wait(delayMs * (attempt + 1));
+      }
+    }
+    throw lastError;
+  };
+
   const uploadVideoDirectly = async (
     file: File,
     title: string
@@ -124,7 +160,11 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
         data: JSON.stringify({ title: title }), // Use the actual title instead of hardcoded
       };
 
-      const createResponse = await axios.request(createOptions);
+      const createResponse = await withRetry(
+        () => axios.request(createOptions),
+        2,
+        1200
+      );
       const videoId = createResponse.data?.guid;
 
       if (!videoId) {
@@ -160,21 +200,26 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
 
       const uploadUrl = `https://video.bunnycdn.com/library/${libraryId}/videos/${videoId}`;
 
-      const uploadResponse = await axios.put(uploadUrl, fileBinaryData, {
-        headers: {
-          "Content-Type": "application/octet-stream",
-          AccessKey: apiKey,
-        },
-        onUploadProgress: (progressEvent) => {
-          if (progressEvent.total) {
-            const progress =
-              Math.round((progressEvent.loaded / progressEvent.total) * 80) +
-              15; // 15-95%
-            updateProgress(progress);
-          }
-        },
-        timeout: 30 * 60 * 1000, // 30 minutes timeout
-      });
+      const uploadResponse = await withRetry(
+        () =>
+          axios.put(uploadUrl, fileBinaryData, {
+            headers: {
+              "Content-Type": "application/octet-stream",
+              AccessKey: apiKey,
+            },
+            onUploadProgress: (progressEvent) => {
+              if (progressEvent.total) {
+                const progress =
+                  Math.round((progressEvent.loaded / progressEvent.total) * 80) +
+                  15; // 15-95%
+                updateProgress(progress);
+              }
+            },
+            timeout: 30 * 60 * 1000, // 30 minutes timeout
+          }),
+        2,
+        1500
+      );
 
       if (uploadResponse.status >= 200 && uploadResponse.status < 300) {
         console.log("Upload completed successfully");
@@ -209,6 +254,7 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
       return;
     }
 
+    let uploadedVideoId: string | null = null;
     try {
       clearError();
       resetProgress();
@@ -232,7 +278,7 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
       console.log("Starting direct video upload...");
 
       // Upload video directly to Bunny CDN
-      const uploadedVideoId = await uploadVideoDirectly(
+      uploadedVideoId = await uploadVideoDirectly(
         selectedVideo,
         values.title
       );
@@ -249,11 +295,13 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
         title: values.title,
         duration: videoDuration,
         fileSizeInBytes: selectedVideo.size,
+        idempotencyKey: idempotencyKeyRef.current,
       });
 
       updateProgress(100);
       setUploadStatus("completed");
       maketoast.success(t("messages.uploadSuccess"));
+      idempotencyKeyRef.current = createIdempotencyKey();
 
       // Small delay to show completion before redirect
       setTimeout(() => {
@@ -264,6 +312,14 @@ function AddVideoForm({ chapterID }: AddVideoFormProps) {
       setUploadStatus("error");
       handleError(error, t("validationErrors.uploadFailed"));
       maketoast.error(t("validationErrors.uploadFailed"));
+
+      if (uploadedVideoId) {
+        try {
+          await deleteVideoMutation.mutateAsync({ videoId: uploadedVideoId });
+        } catch (cleanupError) {
+          console.warn("Failed to cleanup orphan uploaded video", cleanupError);
+        }
+      }
     }
   }
 

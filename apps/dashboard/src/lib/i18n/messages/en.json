@@ -404,6 +404,7 @@
     "usage": {
       "members": "Members",
       "storage": "Storage",
+      "videoBandwidth": "Video bandwidth",
       "upgradePlan": "Upgrade plan",
       "storageLimitModalTitle": "Storage limit reached",
       "storageLimitModalDescription": "Your upload exceeds your plan's storage limit. Upgrade your plan to upload more files and videos."
@@ -1511,6 +1512,22 @@
         "uploadAndSave": "Upload and Save"
       },
       "cancelAndGoBack": "Cancel and Go Back"
+    },
+    "chapters": {
+      "video": {
+        "buttonText": {
+          "uploading": "Uploading {progress}%",
+          "completed": "Completed ✓",
+          "creating": "Creating module...",
+          "uploadAndSave": "Upload and Save"
+        }
+      },
+      "menu": {
+        "deleteMaterial": "Delete material"
+      }
+    },
+    "profile": {
+      "saveChanges": "Save Changes"
     },
     "videoUploader": {
       "errors": {

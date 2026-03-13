@@ -43,8 +43,8 @@ interface UpdateVedioFormProps {
 
 function UpdateVedioForm({ material, courseId }: UpdateVedioFormProps) {
   const t = useTranslations("common");
-  const tBtn = useTranslations("courses.chapters.video.buttonText");
-  const tProfile = useTranslations("courses.profile");
+  const tBtn = useTranslations("courses.addVideoForm.buttonText");
+  const tProfile = useTranslations("profile.personalInfo");
   const router = useRouter();
   const path = usePathname();
   const chapterID = getValueFromUrl(path, 4);
@@ -88,6 +88,7 @@ function UpdateVedioForm({ material, courseId }: UpdateVedioFormProps) {
       console.error(error);
     },
   });
+  const checkVideoUploadAllowed = trpc.checkVideoUploadAllowed.useMutation();
 
   const form = useForm<z.infer<typeof updateVedioSchema>>({
     mode: "onChange",
@@ -128,6 +129,34 @@ function UpdateVedioForm({ material, courseId }: UpdateVedioFormProps) {
     }
   };
 
+  const wait = (ms: number) =>
+    new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+
+  const withRetry = async <T,>(
+    action: () => Promise<T>,
+    retries: number,
+    delayMs: number
+  ): Promise<T> => {
+    let lastError: unknown;
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        return await action();
+      } catch (error) {
+        lastError = error;
+        const shouldRetry =
+          axios.isAxiosError(error) &&
+          (!error.response || error.response.status >= 500);
+        if (!shouldRetry || attempt === retries) {
+          throw error;
+        }
+        await wait(delayMs * (attempt + 1));
+      }
+    }
+    throw lastError;
+  };
+
   const uploadVideoDirectly = async (
     file: File,
     title: string
@@ -156,7 +185,11 @@ function UpdateVedioForm({ material, courseId }: UpdateVedioFormProps) {
         data: JSON.stringify({ title: title }),
       };
 
-      const createResponse = await axios.request(createOptions);
+      const createResponse = await withRetry(
+        () => axios.request(createOptions),
+        2,
+        1200
+      );
       const videoId = createResponse.data?.guid;
 
       if (!videoId) {
@@ -192,21 +225,26 @@ function UpdateVedioForm({ material, courseId }: UpdateVedioFormProps) {
 
       const uploadUrl = `https://video.bunnycdn.com/library/${libraryId}/videos/${videoId}`;
 
-      const uploadResponse = await axios.put(uploadUrl, fileBinaryData, {
-        headers: {
-          "Content-Type": "application/octet-stream",
-          AccessKey: apiKey,
-        },
-        onUploadProgress: (progressEvent) => {
-          if (progressEvent.total) {
-            const progress =
-              Math.round((progressEvent.loaded / progressEvent.total) * 80) +
-              15; // 15-95%
-            updateProgress(progress);
-          }
-        },
-        timeout: 30 * 60 * 1000, // 30 minutes timeout
-      });
+      const uploadResponse = await withRetry(
+        () =>
+          axios.put(uploadUrl, fileBinaryData, {
+            headers: {
+              "Content-Type": "application/octet-stream",
+              AccessKey: apiKey,
+            },
+            onUploadProgress: (progressEvent) => {
+              if (progressEvent.total) {
+                const progress =
+                  Math.round((progressEvent.loaded / progressEvent.total) * 80) +
+                  15; // 15-95%
+                updateProgress(progress);
+              }
+            },
+            timeout: 30 * 60 * 1000, // 30 minutes timeout
+          }),
+        2,
+        1500
+      );
 
       if (uploadResponse.status >= 200 && uploadResponse.status < 300) {
         console.log("Upload completed successfully");
@@ -247,6 +285,9 @@ function UpdateVedioForm({ material, courseId }: UpdateVedioFormProps) {
 
       // If user selected a new video file, upload it first
       if (selectedVideo && isReplacingVideo) {
+        await checkVideoUploadAllowed.mutateAsync({
+          fileSize: selectedVideo.size,
+        });
         resetProgress();
         setUploadStatus("uploading");
         console.log("Uploading new video...");
@@ -262,6 +303,7 @@ function UpdateVedioForm({ material, courseId }: UpdateVedioFormProps) {
         title: values.title,
         content: JSON.stringify(values.content),
         duration: videoDuration || material.duration,
+        newVideoSizeInBytes: selectedVideo?.size,
       });
     } catch (error) {
       console.error("Update error:", error);
@@ -429,9 +471,9 @@ function UpdateVedioForm({ material, courseId }: UpdateVedioFormProps) {
                   console.log("here are the params");
                   console.log(material.fileUrl, chapterID);
                   await delete_mutation.mutateAsync({
-                    oldFileUrl: material.fileUrl,
                     chapterID,
-                    fileUrl: form.watch("fileUrl"),
+                    oldFileUrl: material.fileUrl,
+                    moduleId: material.id,
                   });
                 }}
                 type="button"

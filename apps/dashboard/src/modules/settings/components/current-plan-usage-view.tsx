@@ -37,6 +37,13 @@ export function CurrentPlanUsageView({
     limits.storageBytes > 0
       ? Math.min(100, (usage.storageUsedBytes / limits.storageBytes) * 100)
       : 0;
+  const bandwidthPercent =
+    limits.videoBandwidthBytes > 0
+      ? Math.min(
+          100,
+          (usage.videoBandwidthUsedBytes / limits.videoBandwidthBytes) * 100
+        )
+      : 0;
 
   return (
     <div className="w-full space-y-6">
@@ -68,6 +75,18 @@ export function CurrentPlanUsageView({
                 </span>
               </div>
               <Progress value={storagePercent} className="h-2" />
+            </div>
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span className="text-muted-foreground">
+                  {t("usage.videoBandwidth")}
+                </span>
+                <span>
+                  {formatBytes(usage.videoBandwidthUsedBytes)} /{" "}
+                  {formatBytes(limits.videoBandwidthBytes)}
+                </span>
+              </div>
+              <Progress value={bandwidthPercent} className="h-2" />
             </div>
           </div>
 

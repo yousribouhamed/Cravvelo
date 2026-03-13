@@ -132,6 +132,11 @@ enum SubscriptionStatus {
   PAST_DUE
 }
 
+enum VideoAssetSource {
+  COURSE_MODULE
+  COURSE_PREVIEW
+}
+
 model Account {
   id                 String            @id @unique @default(cuid())
   userId             String            @unique
@@ -175,6 +180,7 @@ model Account {
 
   // Plan usage (for limits and progress)
   storageUsedBytes   Int               @default(0)
+  videoBandwidthUsedBytes BigInt       @default(0)
   
   createdAt          DateTime          @default(now())
   updatedAt          DateTime          @updatedAt
@@ -195,6 +201,8 @@ model Account {
   Invoices           Invoice[]
   AppInstall            AppInstall[]
   AccountSubscription  AccountSubscription[]
+  VideoAsset           VideoAsset[]
+  VideoBandwidthEvent  VideoBandwidthEvent[]
 }
 
 model AccountSubscription {
@@ -217,6 +225,46 @@ model AccountSubscription {
   @@index([accountId])
   @@index([status])
   @@index([paymentId])
+}
+
+model VideoAsset {
+  id             String           @id @default(cuid())
+  accountId      String
+  videoId        String           @unique
+  source         VideoAssetSource @default(COURSE_MODULE)
+  courseId       String?
+  chapterId      String?
+  moduleId       String?
+  sizeBytes      Int              @default(0)
+  status         String           @default("ACTIVE")
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  Account        Account          @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId])
+  @@index([videoId])
+  @@index([courseId])
+  @@index([chapterId])
+  @@index([moduleId])
+}
+
+model VideoBandwidthEvent {
+  id             String           @id @default(cuid())
+  accountId      String
+  videoId        String
+  bytesUsed      BigInt           @default(0)
+  eventType      String
+  requestId      String?
+  occurredAt     DateTime         @default(now())
+  createdAt      DateTime         @default(now())
+
+  Account        Account          @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId])
+  @@index([videoId])
+  @@index([occurredAt])
+  @@unique([requestId])
 }
 
 model Pricing {
