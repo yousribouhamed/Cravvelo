@@ -19,7 +19,9 @@
   "error": {
     "title": "Something went wrong",
     "description": "An unexpected error occurred. Please try again.",
-    "tryAgain": "Try again"
+    "tryAgain": "Try again",
+    "databaseUnavailableTitle": "Database temporarily unavailable",
+    "databaseUnavailableDescription": "We couldn't reach the server. If you're using Neon, your database may be paused — open your Neon dashboard to wake it, then try again."
   },
   "salesBanner": {
     "message": "This price won't last long...",

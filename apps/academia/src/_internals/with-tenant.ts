@@ -6,6 +6,7 @@ import {
   ValidationError,
   WithTenantOptions,
 } from "./errors";
+import { DATABASE_UNAVAILABLE_MESSAGE } from "./tenant-errors";
 
 /**
  * Extract tenant subdomain from request headers
@@ -79,6 +80,7 @@ const PUBLIC_ERROR_MESSAGES = {
   accountNotFound: "Academy account not found",
   websiteSuspended: "Academy website is not available",
   actionFailed: "Request failed. Please try again.",
+  databaseUnavailable: DATABASE_UNAVAILABLE_MESSAGE,
 } as const;
 
 /**
@@ -174,7 +176,14 @@ export function withTenant<TInput = void, TOutput = void>(
         throw error;
       }
 
-      // Handle unexpected errors
+      // Prisma connectivity errors: DB unreachable (P1001) or connection pool timeout (P2024)
+      const prismaCode = (error as { code?: string })?.code;
+      if (prismaCode === "P1001" || prismaCode === "P2024") {
+        console.error("Database unreachable or pool timeout in withTenant:", error);
+        throw new TenantError(PUBLIC_ERROR_MESSAGES.databaseUnavailable);
+      }
+
+      // Handle other unexpected errors
       console.error("Unexpected error in withTenant:", error);
       throw new Error(PUBLIC_ERROR_MESSAGES.actionFailed);
     }

@@ -88,15 +88,17 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
   const updateMutation = trpc.updateChapters.useMutation({
     onSuccess: () => {
       maketoast.success(t("messages.updateOrderSuccess"));
-      refetch();
+      void refetch().catch((e) =>
+        console.error("Refetch after reorder failed", e)
+      );
     },
     onError: (error) => {
       console.error("Failed to update chapters:", error);
       maketoast.error(t("messages.updateOrderError"));
-      // Revert to previous state
-      if (data) {
-        setSections(data);
-      }
+      // Revert to previous state; never set sections to non-array to avoid render throw
+      setSections(
+        Array.isArray(data) ? data : sectionsRef.current ?? []
+      );
     },
   });
 
@@ -108,25 +110,23 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
     onError: (error) => {
       console.error("Failed to toggle visibility:", error);
       maketoast.error(t("messages.updateVisibilityError"));
-      // Revert visibility change
-      if (data) {
-        setSections(data);
-      }
+      // Revert visibility change; never set sections to non-array
+      setSections(
+        Array.isArray(data) ? data : sectionsRef.current ?? []
+      );
     },
   });
 
-  // Sync with server data
+  // Sync with server data; only set sections when we have a valid array
   useEffect(() => {
-    if (data && Array.isArray(data)) {
-      setSections(data);
-      // Changed: Auto-open the last chapter accordion using chapter ID
-      if (data.length > 0) {
-        const lastChapter = [...data].sort(
-          //@ts-expect-error
-          (a, b) => (a.position || 0) - (b.position || 0)
-        )[data.length - 1];
-        setOpenAccordions(new Set([lastChapter.id]));
-      }
+    const nextSections = Array.isArray(data) ? data : [];
+    setSections(nextSections);
+    if (nextSections.length > 0) {
+      const lastChapter = [...nextSections].sort(
+        //@ts-expect-error
+        (a, b) => (a.position || 0) - (b.position || 0)
+      )[nextSections.length - 1];
+      setOpenAccordions(new Set([lastChapter.id]));
     }
   }, [data]);
 
@@ -181,6 +181,11 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
         }
 
         updateTimeoutRef.current = setTimeout(() => {
+          if (!courseID?.trim()) {
+            maketoast.error(t("messages.updateOrderError"));
+            setSections(sectionsRef.current ?? []);
+            return;
+          }
           updateMutation.mutate({
             courseID,
             bulkUpdateData: updatedSections.map((section) => ({
@@ -194,7 +199,7 @@ const ChaptersBoard: FC<ChaptersBoardProps> = ({ initialData }) => {
         maketoast.error(t("messages.reorderError"));
       }
     },
-    [updateMutation, courseID]
+    [updateMutation, courseID, t]
   );
 
   const onDragStart = useCallback((start: any) => {

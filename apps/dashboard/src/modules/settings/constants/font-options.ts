@@ -37,69 +37,35 @@ export const PRESET_FONT_PAIRS: Record<
   string,
   { englishFontFamily: string; arabicFontFamily: string }
 > = {
-  sakura: {
-    englishFontFamily: "var(--font-poppins), 'Poppins', 'Segoe UI', sans-serif",
-    arabicFontFamily: "var(--font-cairo), 'Cairo', sans-serif",
-  },
-  crimson: {
-    englishFontFamily: "var(--font-montserrat), 'Montserrat', 'Segoe UI', sans-serif",
-    arabicFontFamily:
-      "var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif",
-  },
-  emerald: {
-    englishFontFamily: "var(--font-nunito), 'Nunito', 'Segoe UI', sans-serif",
+  foundation: {
+    englishFontFamily: "var(--font-inter), 'Inter', 'Segoe UI', sans-serif",
     arabicFontFamily: "var(--font-tajawal), 'Tajawal', sans-serif",
   },
-  oceanic: {
-    englishFontFamily: "var(--font-inter), 'Inter', 'Segoe UI', sans-serif",
-    arabicFontFamily: "var(--font-almarai), 'Almarai', sans-serif",
-  },
-  lavender: {
-    englishFontFamily: "var(--font-lora), 'Lora', Georgia, serif",
-    arabicFontFamily:
-      "var(--font-noto-naskh-arabic), 'Noto Naskh Arabic', serif",
-  },
-  "amber-dawn": {
-    englishFontFamily: "var(--font-lora), 'Lora', Georgia, serif",
-    arabicFontFamily: "var(--font-cairo), 'Cairo', sans-serif",
-  },
-  "midnight-blue": {
+  lattice: {
     englishFontFamily: "var(--font-inter), 'Inter', 'Segoe UI', sans-serif",
     arabicFontFamily:
       "var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif",
   },
-  "rose-gold": {
-    englishFontFamily: "var(--font-poppins), 'Poppins', 'Segoe UI', sans-serif",
-    arabicFontFamily: "var(--font-tajawal), 'Tajawal', sans-serif",
-  },
-  "forest-mist": {
+  meadow: {
     englishFontFamily: "var(--font-nunito), 'Nunito', 'Segoe UI', sans-serif",
-    arabicFontFamily: "var(--font-almarai), 'Almarai', sans-serif",
-  },
-  "sunset-peach": {
-    englishFontFamily: "var(--font-montserrat), 'Montserrat', 'Segoe UI', sans-serif",
     arabicFontFamily: "var(--font-cairo), 'Cairo', sans-serif",
   },
-  "nordic-frost": {
+  terminal: {
+    englishFontFamily: "var(--font-inter), 'Inter', 'Segoe UI', sans-serif",
+    arabicFontFamily: "var(--font-almarai), 'Almarai', sans-serif",
+  },
+  slate: {
     englishFontFamily: "var(--font-inter), 'Inter', 'Segoe UI', sans-serif",
     arabicFontFamily:
       "var(--font-noto-naskh-arabic), 'Noto Naskh Arabic', serif",
   },
-  "royal-violet": {
-    englishFontFamily: "var(--font-poppins), 'Poppins', 'Segoe UI', sans-serif",
-    arabicFontFamily:
-      "var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif",
-  },
-  "desert-sand": {
-    englishFontFamily: "var(--font-lora), 'Lora', Georgia, serif",
-    arabicFontFamily: "var(--font-tajawal), 'Tajawal', sans-serif",
-  },
-  "mono-ink": {
+  ink: {
     englishFontFamily: "var(--font-inter), 'Inter', 'Segoe UI', sans-serif",
     arabicFontFamily: "var(--font-almarai), 'Almarai', sans-serif",
   },
-  "neo-mint": {
-    englishFontFamily: "var(--font-nunito), 'Nunito', 'Segoe UI', sans-serif",
-    arabicFontFamily: "var(--font-cairo), 'Cairo', sans-serif",
+  midnight: {
+    englishFontFamily: "var(--font-inter), 'Inter', 'Segoe UI', sans-serif",
+    arabicFontFamily:
+      "var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif",
   },
 };

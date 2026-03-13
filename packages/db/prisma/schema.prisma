@@ -2,6 +2,8 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// For connection pool timeouts (P2024) or unreachable DB (P1001), add query params to DATABASE_URL:
+// e.g. postgresql://user:pass@host:5432/db?connection_limit=10&connect_timeout=30
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
