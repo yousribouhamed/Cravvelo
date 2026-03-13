@@ -34,10 +34,100 @@ export const checkCourseOwnership = withTenant({
         },
       });
 
+      if (itemPurchase) {
+        return {
+          data: true,
+          success: true,
+          message: "Course is owned",
+        };
+      }
+
+      // Fallback path: allow access for already completed course payments even if ItemPurchase is missing.
+      const completedPayment = await db.payment.findFirst({
+        where: {
+          studentId: user.userId,
+          status: "COMPLETED",
+          Sale: {
+            is: {
+              itemType: "COURSE",
+              itemId: input.courseId,
+              status: "COMPLETED",
+            },
+          },
+        },
+        include: {
+          Sale: true,
+        },
+        orderBy: {
+          updatedAt: "desc",
+        },
+      });
+
+      if (!completedPayment || !completedPayment.Sale) {
+        return {
+          data: false,
+          success: true,
+          message: "Course is not owned",
+        };
+      }
+
+      // Self-heal: create missing ItemPurchase from completed payment (idempotent).
+      const course = await db.course.findUnique({
+        where: { id: input.courseId },
+        include: {
+          CoursePricingPlans: { include: { PricingPlan: true } },
+        },
+      });
+
+      const pricingPlan =
+        course?.CoursePricingPlans?.find((p: any) => p.isDefault) ??
+        course?.CoursePricingPlans?.[0];
+      const plan = pricingPlan?.PricingPlan ?? null;
+
+      if (plan?.id) {
+        const accessStartDate = new Date();
+        let accessEndDate: Date | null = null;
+
+        if (plan.pricingType === "RECURRING" && plan.recurringDays) {
+          accessEndDate = new Date(accessStartDate);
+          accessEndDate.setDate(accessEndDate.getDate() + plan.recurringDays);
+        } else if (
+          plan.pricingType === "ONE_TIME" &&
+          plan.accessDuration === "LIMITED" &&
+          plan.accessDurationDays
+        ) {
+          accessEndDate = new Date(accessStartDate);
+          accessEndDate.setDate(accessEndDate.getDate() + plan.accessDurationDays);
+        }
+
+        await db.itemPurchase.create({
+          data: {
+            studentId: user.userId,
+            accountId: completedPayment.Sale.accountId,
+            pricingPlanId: plan.id,
+            itemType: "COURSE",
+            itemId: input.courseId,
+            purchaseAmount: completedPayment.amount,
+            currency: completedPayment.currency || "DZD",
+            status: PurchaseStatus.ACTIVE,
+            accessStartDate,
+            accessEndDate,
+            nextBillingDate:
+              plan.pricingType === "RECURRING" && plan.recurringDays
+                ? (() => {
+                    const next = new Date(accessStartDate);
+                    next.setDate(next.getDate() + plan.recurringDays);
+                    return next;
+                  })()
+                : null,
+          },
+        });
+      }
+
       return {
-        data: !!itemPurchase,
+        data: true,
         success: true,
-        message: itemPurchase ? "Course is owned" : "Course is not owned",
+        message: "Course is owned (payment fallback)",
       };
     } catch (error) {
       console.error("Error checking course ownership:", error);

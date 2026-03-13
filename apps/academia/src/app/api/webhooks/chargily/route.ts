@@ -148,7 +148,7 @@ async function handleSuccessfulPayment(paymentId: string) {
   try {
     const payment = await prisma.payment.findUnique({
       where: { id: paymentId },
-      include: { Sale: true, Student: true },
+      include: { Sale: true },
     });
 
     if (!payment) {
@@ -178,12 +178,19 @@ async function handleSuccessfulPayment(paymentId: string) {
         data: { status: "COMPLETED" },
       });
 
-      // Grant access by creating ItemPurchase (idempotent)
-      if (!payment.Student) return { notificationId: null as string | null, accountId: null as string | null };
+      // Grant access by creating ItemPurchase (idempotent).
+      // Use payment.studentId directly so we don't depend on relation hydration.
+      if (!payment.studentId) {
+        console.warn(
+          "Chargily webhook: payment completed without studentId, skipping ItemPurchase creation",
+          paymentId
+        );
+        return { notificationId: null as string | null, accountId: null as string | null };
+      }
 
       const existingPurchase = await tx.itemPurchase.findFirst({
         where: {
-          studentId: payment.Student.id,
+          studentId: payment.studentId,
           itemType: sale.itemType,
           itemId: sale.itemId,
           status: PurchaseStatus.ACTIVE,
@@ -245,7 +252,7 @@ async function handleSuccessfulPayment(paymentId: string) {
 
       await tx.itemPurchase.create({
         data: {
-          studentId: payment.Student.id,
+          studentId: payment.studentId,
           accountId: sale.accountId,
           pricingPlanId: plan.id,
           itemType: sale.itemType,
