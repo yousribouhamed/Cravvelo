@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 "use client";
 
 import { Chapter as ChapterType } from "database";
@@ -31,7 +29,7 @@ import AddChapter from "../../../components/models/create-chapter-modal";
 import { NotFoundCard } from "../../../components/not-found-card";
 import { cn } from "@ui/lib/utils";
 import { Button } from "@ui/components/ui/button";
-import { MoreHorizontal, ChevronDown } from "lucide-react";
+import { MoreHorizontal, ChevronDown, Loader2 } from "lucide-react";
 import DeleteChapter from "../../../components/models/delete-chapter-modal";
 import { useMounted } from "../../../hooks/use-mounted";
 import UpdateChapterModel from "../../../components/models/update-chapter-modal";
