@@ -1913,7 +1913,8 @@
     "createTitle": "Certificate Builder",
     "tabs": {
       "content": "Content",
-      "design": "Design"
+      "design": "Design",
+      "chooseTemplate": "Choose a template"
     },
     "form": {
       "certificateName": "Certificate Name",
@@ -1924,6 +1925,9 @@
       "studentNamePlaceholder": "Enter student name",
       "selectStudent": "Student for Certificate",
       "selectStudentPlaceholder": "Select a student",
+      "searchStudentPlaceholder": "Search students...",
+      "noStudentsFound": "No students found",
+      "studentsCount": "{count} students",
       "buildCertificate": "Build Certificate",
       "required": "*"
     },
@@ -1934,10 +1938,17 @@
       "certificateName": "Certificate Name",
       "studentName": "Student Name"
     },
+    "status": {
+      "PENDING": "Pending",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected"
+    },
     "actions": {
       "viewCertificate": "View Certificate",
       "deleteCertificate": "Delete Certificate",
-      "createNew": "Create New Certificate"
+      "createNew": "Create New Certificate",
+      "approveCertificate": "Approve",
+      "rejectCertificate": "Reject"
     },
     "table": {
       "noResults": "No results found",
@@ -1952,9 +1963,9 @@
       "success": "Certificate deleted successfully"
     },
     "variants": {
-      "deadDeer": "Dead Deer",
-      "partyUnderSun": "Party Under Sun",
-      "coldCertificate": "Cold Certificate"
+      "deadDeer": "Classic Gold",
+      "partyUnderSun": "Contemporary",
+      "coldCertificate": "Professional Blue"
     }
   },
   "comments": {

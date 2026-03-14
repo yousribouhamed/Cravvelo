@@ -13,7 +13,8 @@ const SunCertificateViewer: FC<sunCertificateViewerProps> = ({
   stamp,
 }) => {
   return (
-    <main className="w-[700px] h-[500px] mx-auto flex flex-col items-center relative justify-start pt-20 gap-y-4 bg-[#FAF5EC]">
+    <div className="w-full overflow-x-auto">
+      <main className="w-[700px] min-w-[320px] max-w-full h-[500px] min-h-[400px] mx-auto flex flex-col items-center relative justify-start pt-20 gap-y-4 bg-[#FAF5EC] rounded-lg shadow-inner border border-border">
       <img
         src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/%D8%B4%D9%87%D8%A7%D8%AF%D8%A9+%D9%85%D8%B4%D8%A7%D8%B1%D9%83%D8%A9.png"
         className="w-[350px] h-[60px] z-[4]"
@@ -57,6 +58,7 @@ const SunCertificateViewer: FC<sunCertificateViewerProps> = ({
         />
       )}
     </main>
+    </div>
   );
 };
 

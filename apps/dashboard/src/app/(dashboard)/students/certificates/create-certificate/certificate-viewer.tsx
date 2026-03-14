@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import type { FC } from "react";
 
 interface certificateViewerProps {
@@ -17,37 +16,40 @@ const CertificateViewer: FC<certificateViewerProps> = ({
   const { firstName, lastName } = splitName(student_name);
 
   return (
-    <div className="w-full h-full flex flex-col gap-y-4 ">
-      <div className="w-full relative  h-[500px] border rounded-xl bg-white p-8 shadow ">
-        <div className="absolute  inset-0 z-[90] flex flex-col  items-end pb-[7rem] pl-[19rem] justify-center ">
-          <span className="text-2xl font-extrabold  text-black ">
+    <div className="w-full overflow-x-auto">
+      <main className="w-[700px] min-w-[320px] max-w-full h-[500px] min-h-[400px] mx-auto relative rounded-lg shadow-inner border border-border overflow-hidden bg-white">
+        <img
+          src="/certificate/design-03/template.png"
+          alt="Professional Blue template"
+          className="w-full h-full absolute top-0 right-0 left-0 bottom-0 z-[1]"
+          loading="eager"
+          draggable={false}
+        />
+
+        <div className="absolute inset-0 z-[90] flex flex-col items-end pb-[7rem] pl-[12rem] sm:pl-[19rem] justify-center pointer-events-none">
+          <span className="text-xl sm:text-2xl font-extrabold text-[#1A3661]">
             {firstName}
           </span>
-          <span className="text-2xl mt-1 font-extrabold text-black ">
+          <span className="text-xl sm:text-2xl mt-1 font-extrabold text-[#1A3661]">
             {lastName}
           </span>
         </div>
-        <div className="absolute  inset-0 z-[90] flex flex-col  items-start pt-[7rem] mr-[4rem]  justify-center ">
-          <span className="text-sm max-w-md  text-black ">
+        <div className="absolute inset-0 z-[90] flex flex-col items-start pt-[7rem] mr-[2rem] sm:mr-[4rem] justify-center pointer-events-none">
+          <span className="text-xs sm:text-sm max-w-md text-[#1A3661]">
             تقديرًا لحضوره بنجاح دورة{" "}
             <span className="font-bold mx-2">{courseName}</span>
             واستكماله جميع المتطلبات.
           </span>
         </div>
-        <div className="w-full h-full relative">
-          <Image
-            loading="eager"
-            alt="ice "
-            fill
-            src="/certificate/design-03/template.png"
-          />
-        </div>
 
-       {stamp &&  <img
-          src={stamp}
-          className="w-[150px] h-[150px] absolute   left-[100px] bottom-[100px] z-[100]"
-        />}
-      </div>
+        {stamp && (
+          <img
+            src={stamp}
+            alt="Stamp"
+            className="w-[100px] h-[100px] sm:w-[150px] sm:h-[150px] absolute left-8 sm:left-[100px] bottom-8 sm:bottom-[100px] z-[100] pointer-events-none"
+          />
+        )}
+      </main>
     </div>
   );
 };

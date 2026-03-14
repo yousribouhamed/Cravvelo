@@ -1913,7 +1913,8 @@
     "createTitle": "باني الشهادة",
     "tabs": {
       "content": "المحتوى",
-      "design": "التصميم"
+      "design": "التصميم",
+      "chooseTemplate": "اختر قالباً"
     },
     "form": {
       "certificateName": "اسم الشهادة",
@@ -1924,6 +1925,9 @@
       "studentNamePlaceholder": "أدخل اسم الطالب",
       "selectStudent": "الطالب المعني بالشهادة",
       "selectStudentPlaceholder": "اختر طالب",
+      "searchStudentPlaceholder": "ابحث عن طالب...",
+      "noStudentsFound": "لم يتم العثور على طلاب",
+      "studentsCount": "{count} طالب",
       "buildCertificate": "بناء الشهادة",
       "required": "*"
     },
@@ -1934,10 +1938,17 @@
       "certificateName": "اسم الشهادة",
       "studentName": "اسم الطالب"
     },
+    "status": {
+      "PENDING": "قيد المراجعة",
+      "APPROVED": "مقبولة",
+      "REJECTED": "مرفوضة"
+    },
     "actions": {
       "viewCertificate": "عرض الشهادة",
       "deleteCertificate": "حذف الشهادة",
-      "createNew": "تصميم شهادة جديدة"
+      "createNew": "تصميم شهادة جديدة",
+      "approveCertificate": "موافقة",
+      "rejectCertificate": "رفض"
     },
     "table": {
       "noResults": "لم يتم العثور على نتائج",
@@ -1952,9 +1963,9 @@
       "success": "تم حذف الشهادة بنجاح"
     },
     "variants": {
-      "deadDeer": "الغزال الميت",
-      "partyUnderSun": "حفلة تحت الشمس",
-      "coldCertificate": "شهادة باردة"
+      "deadDeer": "الكلاسيكية الذهبية",
+      "partyUnderSun": "الحديثة",
+      "coldCertificate": "الأزرق الاحترافي"
     }
   },
   "comments": {

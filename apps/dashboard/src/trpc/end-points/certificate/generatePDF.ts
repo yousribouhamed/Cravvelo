@@ -1,3 +1,4 @@
+import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer";
 import hb from "handlebars";
 
@@ -6,42 +7,83 @@ export const generatePdf = async (pdfFileAsString: string) => {
   const template = hb?.compile(pdfFileAsString, { strict: true });
   const result = template(data);
   const html = result;
+  const isServerlessRuntime = Boolean(
+    process.env.VERCEL ||
+      process.env.AWS_EXECUTION_ENV ||
+      process.env.AWS_LAMBDA_FUNCTION_VERSION
+  );
 
-  // Launch Puppeteer with chrome-aws-lambda
-  const browser = await puppeteer.connect({
-    browserWSEndpoint:
-      "wss://chrome.browserless.io?token=c8dc96e8-a6c8-4b7c-97e3-5e7977f7389f",
-  });
+  const browser = isServerlessRuntime
+    ? await puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(),
+        headless: true,
+      })
+    : await launchLocalBrowser();
 
-  const page = await browser.newPage();
+  let page: Awaited<ReturnType<typeof browser.newPage>> | null = null;
 
-  // Add custom CSS to the page
-  await page.evaluate(() => {
-    const style = document.createElement("style");
-    style.textContent = `
-      body, html {
-        margin: 0;
-        padding: 0;
-        width: 700px;
-        height: 500px;
-      }
-    `;
-    document.head.appendChild(style);
-  });
+  try {
+    page = await browser.newPage();
+    page.setDefaultNavigationTimeout(30_000);
+    page.setDefaultTimeout(30_000);
 
-  // Set the content of the page
-  await page.setContent(html);
+    await page.setViewport({ width: 700, height: 500 });
+    await page.setContent(html, {
+      waitUntil: ["domcontentloaded", "networkidle0"],
+      timeout: 30_000,
+    });
 
-  // Generate the PDF with the specified width and height
-  const buffer = await page.pdf({
-    printBackground: true,
-    width: "700px",
-    height: "500px",
-    pageRanges: "1",
-  });
+    await page.addStyleTag({
+      content: `
+        body, html {
+          margin: 0;
+          padding: 0;
+          width: 700px;
+          height: 500px;
+        }
+      `,
+    });
 
-  // Close the browser
-  await browser.close();
+    return await page.pdf({
+      printBackground: true,
+      width: "700px",
+      height: "500px",
+      pageRanges: "1",
+      timeout: 30_000,
+    });
+  } finally {
+    if (page) {
+      await page.close();
+    }
+    await browser.close();
+  }
+};
 
-  return buffer;
+const launchLocalBrowser = async () => {
+  try {
+    // Prefer the locally installed Chrome app in development.
+    return await puppeteer.launch({
+      channel: "chrome",
+      headless: true,
+    });
+  } catch (channelError) {
+    try {
+      // Fallback to Puppeteer's managed browser cache when available.
+      return await puppeteer.launch({
+        headless: true,
+      });
+    } catch (defaultError) {
+      const primaryMessage =
+        channelError instanceof Error ? channelError.message : "Unknown error";
+      const fallbackMessage =
+        defaultError instanceof Error ? defaultError.message : "Unknown error";
+      throw new Error(
+        `Could not launch a local browser. Tried installed Chrome and Puppeteer cache. ` +
+          `Install Chrome or run 'npx puppeteer browsers install chrome'. ` +
+          `Primary: ${primaryMessage}. Fallback: ${fallbackMessage}`
+      );
+    }
+  }
 };

@@ -12,6 +12,7 @@ import { generatePdf } from "./generatePDF";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3 } from "@/src/lib/s3";
 import { sendCertififcateEmail } from "@/src/lib/resend";
+import { TRPCError } from "@trpc/server";
 
 export const cetificate = {
   getAllCertificates: privateProcedure.query(async ({ ctx }) => {
@@ -28,9 +29,9 @@ export const cetificate = {
       z.object({
         studentName: z.string(),
         courseName: z.string(),
-        cerrificateName: z.string(),
+        certificateName: z.string(),
         studentId: z.string(),
-        code: z.string(),
+        code: z.enum(["DEAD_DEER", "PARTY_UNDER_SUN", "COLD_CERTIFICATE"]),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -47,6 +48,13 @@ export const cetificate = {
             },
           }),
         ]);
+        if (!student?.email) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Student email was not found for certificate delivery.",
+          });
+        }
+
         let pdfAsString = "";
 
         if (input.code === "DEAD_DEER") {
@@ -59,14 +67,14 @@ export const cetificate = {
           pdfAsString = design02({
             courseName: input.courseName,
             studentName: input.studentName,
-            certificateName: input.cerrificateName,
+            certificateName: input.certificateName,
             stamp: website?.stamp,
           });
         } else {
           pdfAsString = designO3({
             courseName: input.courseName,
             studentName: input.studentName,
-            certificateName: input.cerrificateName,
+            certificateName: input.certificateName,
             stamp: website?.stamp,
           });
         }
@@ -97,10 +105,12 @@ export const cetificate = {
           data: {
             accountId: ctx.account.id,
             courseName: input.courseName,
-            name: input.cerrificateName,
+            name: input.certificateName,
             studentId: input.studentId,
             studentName: input.studentName,
             fileUrl: fileUrl,
+            issueDate: new Date(),
+            status: "APPROVED",
           },
         });
 
@@ -108,8 +118,44 @@ export const cetificate = {
           successs: true,
         };
       } catch (err) {
-        console.error(err);
+        const errorMessage =
+          err instanceof Error ? err.message : "Unknown certificate error";
+        console.error("Failed to create certificate", {
+          accountId: ctx.account.id,
+          studentId: input.studentId,
+          templateCode: input.code,
+          errorMessage,
+          error: err,
+        });
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Certificate creation failed. Please try again.",
+        });
       }
+    }),
+
+  updateCertificateStatus: privateProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        status: z.enum(["APPROVED", "REJECTED"]),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const certificate = await ctx.prisma.certificate.findFirst({
+        where: { id: input.id, accountId: ctx.account.id },
+      });
+      if (!certificate) return null;
+      const updateData: { status: "APPROVED" | "REJECTED"; issueDate?: Date } = {
+        status: input.status,
+      };
+      if (input.status === "APPROVED") {
+        updateData.issueDate = new Date();
+      }
+      return ctx.prisma.certificate.update({
+        where: { id: input.id },
+        data: updateData,
+      });
     }),
 
   deleteCertificate: privateProcedure
@@ -149,7 +195,11 @@ export const cetificate = {
 
         return certificate;
       } catch (err) {
-        console.error(err);
+        console.error("Failed to delete certificate:", err);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to delete certificate.",
+        });
       }
     }),
 };

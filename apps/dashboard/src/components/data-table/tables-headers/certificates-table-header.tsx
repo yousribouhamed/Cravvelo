@@ -21,7 +21,7 @@ const CertificateTableHeader: FC<TableHeaderProps> = ({
   const t = useTranslations("certificates");
 
   return (
-    <div className="w-full h-[70px] flex items-center justify-end">
+    <div className="w-full min-h-[70px] flex flex-wrap items-center justify-end gap-2 py-2">
       <Link
         href={"/students/certificates/create-certificate"}
         className={cn(buttonVariants(), "rounded-xl")}

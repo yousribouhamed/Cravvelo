@@ -14,7 +14,7 @@ import {
   Receipt,
   Wallet,
   Ticket,
-  // Award,
+  Award,
   MessageSquare,
   // Share2,
   BookOpen,
@@ -93,11 +93,11 @@ export function useSidebarItems(): SidebarItem[] {
             icon: GraduationCap,
             slug: "/students",
           },
-          // {
-          //   title: t("certificates"),
-          //   icon: Award,
-          //   slug: "/students/certificates",
-          // },
+          {
+            title: t("certificates"),
+            icon: Award,
+            slug: "/students/certificates",
+          },
           {
             title: t("reviews"),
             icon: MessageSquare,

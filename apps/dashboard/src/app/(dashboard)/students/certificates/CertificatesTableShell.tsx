@@ -26,7 +26,7 @@ const CertificateTableShell: FC<TableShellProps> = ({ initialData }) => {
   }
 
   return (
-    <div className="w-full min-h-[300px] my-4 h-fit flex flex-col ">
+    <div className="w-full min-h-[300px] my-4 h-fit flex flex-col min-w-0">
       <DeleteCertificateModel refetch={refetch} />
       <CertificateDataTable
         columns={columns}

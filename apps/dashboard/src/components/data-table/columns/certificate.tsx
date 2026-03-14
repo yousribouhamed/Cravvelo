@@ -1,7 +1,8 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ExternalLink, MoreHorizontal, Trash2 } from "lucide-react";
+import { CheckCircle, Clock, ExternalLink, MoreHorizontal, Trash2, XCircle } from "lucide-react";
+import { Badge } from "@ui/components/ui/badge";
 import { Button } from "@ui/components/ui/button";
 import {
   DropdownMenu,
@@ -11,21 +12,53 @@ import {
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
 import { Certificate } from "database";
+import type { CertificateStatus } from "database";
 import { DataTableColumnHeader } from "../table-helpers/data-table-head";
 import Link from "next/link";
 import { useOpenCertificateDeleteAction } from "@/src/lib/zustand/delete-actions";
 import { useTranslations, useLocale } from "next-intl";
 import { format } from "date-fns";
 import { ar, enUS } from "date-fns/locale";
+import { trpc } from "@/src/app/_trpc/client";
+import { maketoast } from "@/src/components/toasts";
 
 export const useCertificateColumns = (): ColumnDef<Certificate>[] => {
   const t = useTranslations("certificates");
   const locale = useLocale();
+  const utils = trpc.useUtils();
+  const updateStatusMutation = trpc.updateCertificateStatus.useMutation({
+    onSuccess: () => {
+      void utils.getAllCertificates.invalidate();
+      maketoast.success();
+    },
+    onError: () => maketoast.error(),
+  });
 
   const formatDate = (date: Date) => {
     return format(date, "dd MMMM yyyy", {
       locale: locale === "ar" ? ar : enUS,
     });
+  };
+
+  const statusMap: Record<
+    CertificateStatus,
+    { label: string; variant: "default" | "secondary" | "destructive" | "outline"; icon: typeof Clock }
+  > = {
+    PENDING: {
+      label: t("status.PENDING"),
+      variant: "secondary",
+      icon: Clock,
+    },
+    APPROVED: {
+      label: t("status.APPROVED"),
+      variant: "default",
+      icon: CheckCircle,
+    },
+    REJECTED: {
+      label: t("status.REJECTED"),
+      variant: "destructive",
+      icon: XCircle,
+    },
   };
 
   return [
@@ -34,12 +67,14 @@ export const useCertificateColumns = (): ColumnDef<Certificate>[] => {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("columns.status")} />
       ),
-      cell: () => {
+      cell: ({ row }) => {
+        const status = row.original.status as CertificateStatus;
+        const { label, variant, icon: Icon } = statusMap[status] ?? statusMap.PENDING;
         return (
-          <div className="flex items-center justify-start gap-x-2">
-            <div className="w-3 h-3 bg-green-500 rounded-full " />
-            <span className="text-gray-700 text-md">{t("columns.success")}</span>
-          </div>
+          <Badge variant={variant} className="flex items-center gap-1 w-fit">
+            <Icon className="h-3 w-3" />
+            {label}
+          </Badge>
         );
       },
     },
@@ -76,6 +111,8 @@ export const useCertificateColumns = (): ColumnDef<Certificate>[] => {
       cell: ({ row }) => {
         /* eslint-disable */
         const { setId, setIsOpen } = useOpenCertificateDeleteAction();
+        const isPending = row.original.status === "PENDING";
+        const isUpdating = updateStatusMutation.isPending;
 
         return (
           <div className="w-full h-10 flex items-center justify-end gap-x-4">
@@ -84,7 +121,7 @@ export const useCertificateColumns = (): ColumnDef<Certificate>[] => {
                 <Button
                   size="sm"
                   variant="secondary"
-                  className=" w-10 p-0 bg-white rounded-xl border"
+                  className=" w-10 p-0 bg-card rounded-xl border"
                 >
                   <span className="sr-only">Open menu</span>
                   <MoreHorizontal className="h-4 w-4" />
@@ -99,6 +136,37 @@ export const useCertificateColumns = (): ColumnDef<Certificate>[] => {
                     {t("actions.viewCertificate")}
                   </DropdownMenuItem>
                 </Link>
+
+                {isPending && (
+                  <>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        updateStatusMutation.mutate({
+                          id: row.original.id,
+                          status: "APPROVED",
+                        })
+                      }
+                      disabled={isUpdating}
+                      className="w-full h-full flex justify-between items-center px-2 text-green-600"
+                    >
+                      <CheckCircle className="w-4 h-4" />
+                      {t("actions.approveCertificate")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        updateStatusMutation.mutate({
+                          id: row.original.id,
+                          status: "REJECTED",
+                        })
+                      }
+                      disabled={isUpdating}
+                      className="w-full h-full flex justify-between items-center px-2 text-destructive"
+                    >
+                      <XCircle className="w-4 h-4" />
+                      {t("actions.rejectCertificate")}
+                    </DropdownMenuItem>
+                  </>
+                )}
 
                 <DropdownMenuItem
                   onClick={() => {

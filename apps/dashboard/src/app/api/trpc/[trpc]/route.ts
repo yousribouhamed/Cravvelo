@@ -1,6 +1,8 @@
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { appRouter } from "@/src/trpc/index";
 
+export const runtime = "nodejs";
+
 const handler = async (req: Request) => {
   return await fetchRequestHandler({
     endpoint: "/api/trpc",
