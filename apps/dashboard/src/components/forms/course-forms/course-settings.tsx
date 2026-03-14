@@ -396,7 +396,7 @@ export function CourseSettingsForm({ course }: ComponentProps) {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="md:hidden">
                 <CardContent className="w-full h-fit flex justify-end items-center p-6 gap-x-4 ">
                   <Button
                     onClick={() => router.back()}
@@ -420,8 +420,8 @@ export function CourseSettingsForm({ course }: ComponentProps) {
             </form>
           </Form>
         </div>
-        <div className="col-span-1 w-full h-full hidden md:block ">
-          <Card>
+        <div className="col-span-1 w-full h-fit self-start hidden md:block">
+          <Card className="sticky top-24">
             <CardContent className="w-full h-fit flex flex-col p-6  space-y-4">
               <Button
                 disabled={mutation.isLoading}

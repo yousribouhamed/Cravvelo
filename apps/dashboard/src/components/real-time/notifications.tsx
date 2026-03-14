@@ -2,8 +2,8 @@
 
 import {
   useEffect,
+  useMemo,
   useState,
-  useCallback,
   type FC,
   type ComponentProps,
 } from "react";
@@ -68,19 +68,15 @@ const Notifications: FC<NotificationsProps> = ({
     });
 
   const [data, setData] = useState<Notification[]>(ourNotifications);
-  const [isNewNotifications, setIsNewNotifications] = useState<number>(0);
-
-  // Memoized function to update new notifications count
-  const updateNewNotificationsCount = useCallback(() => {
-    const count = data.filter((item) => item.isRead !== true).length;
-    setIsNewNotifications(count);
-  }, [data]);
+  const unreadUnarchivedCount = useMemo(
+    () => data.filter((item) => !item.isRead && !item.isArchived).length,
+    [data]
+  );
 
   const readNotification = trpc.makeNotificationRead.useMutation({
     onSuccess: async () => {
       try {
         await refetch();
-        updateNewNotificationsCount();
       } catch (error) {
         console.error(
           "Failed to refetch notifications after marking as read:",
@@ -115,11 +111,6 @@ const Notifications: FC<NotificationsProps> = ({
   useEffect(() => {
     setData(ourNotifications);
   }, [ourNotifications]);
-
-  // Update notification count when data changes
-  useEffect(() => {
-    updateNewNotificationsCount();
-  }, [updateNewNotificationsCount]);
 
   // Pusher subscription effect
   useEffect(() => {
@@ -364,9 +355,9 @@ const Notifications: FC<NotificationsProps> = ({
         <p className="text-lg font-semibold text-foreground">
           {t("notifications.ui.title")}
         </p>
-        {isNewNotifications > 0 && (
+        {unreadUnarchivedCount > 0 && (
           <Badge variant="secondary" className="text-xs">
-            {isNewNotifications}
+            {unreadUnarchivedCount}
           </Badge>
         )}
       </div>
@@ -457,20 +448,20 @@ const Notifications: FC<NotificationsProps> = ({
         className
       )}
       aria-label={
-        isNewNotifications > 0
-          ? t("notifications.ui.ariaLabelWithNew", { count: isNewNotifications })
-          : t("notifications.ui.ariaLabel", { count: isNewNotifications })
+        unreadUnarchivedCount > 0
+          ? t("notifications.ui.ariaLabelWithNew", { count: unreadUnarchivedCount })
+          : t("notifications.ui.ariaLabel", { count: unreadUnarchivedCount })
       }
       {...props}
     >
-      {isNewNotifications > 0 && (
+      {unreadUnarchivedCount > 0 && (
         <span
           className={cn(
             "rounded-full min-w-5 h-5 px-1 text-white flex items-center justify-center bg-red-500 absolute -top-1 font-bold text-xs shadow-lg",
             isRTL ? "-left-1" : "-right-1"
           )}
         >
-          {isNewNotifications > 99 ? "99+" : isNewNotifications}
+          {unreadUnarchivedCount > 99 ? "99+" : unreadUnarchivedCount}
         </span>
       )}
       <Icons.bell className="w-4 h-4 text-foreground" />

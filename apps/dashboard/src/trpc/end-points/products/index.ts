@@ -16,10 +16,14 @@ const getAccount = async ({ userId }: { userId: string }) => {
 export const products = {
   getProducts: privateProcedure
     .input(
-      z.object({
-        search: z.string().optional(),
-        status: z.array(z.string()).optional(),
-      }).optional()
+      z
+        .object({
+          page: z.number().min(1).optional(),
+          limit: z.number().min(1).max(100).optional(),
+          search: z.string().optional(),
+          status: z.array(z.string()).optional(),
+        })
+        .optional()
     )
     .query(async ({ input, ctx }) => {
       try {
@@ -28,7 +32,6 @@ export const products = {
           accountId: account.id,
         };
 
-        // Add search filter
         if (input?.search && input.search.trim().length > 0) {
           whereClause.OR = [
             { title: { contains: input.search, mode: "insensitive" } },
@@ -36,19 +39,27 @@ export const products = {
           ];
         }
 
-        // Add status filter
         if (input?.status && input.status.length > 0) {
-          // Normalize PUBLISHED to PUBLISED (handle typo in database)
           const normalizedStatus = input.status.map(s => s === "PUBLISHED" ? "PUBLISED" : s);
           whereClause.status = { in: normalizedStatus };
         }
 
-        const products = await ctx.prisma.product.findMany({
-          where: whereClause,
-          orderBy: { createdAt: "desc" },
-        });
+        const page = input?.page ?? 1;
+        const limit = input?.limit ?? 10;
+        const skip = (page - 1) * limit;
 
-        return products;
+        const [productsList, totalCount] = await Promise.all([
+          ctx.prisma.product.findMany({
+            where: whereClause,
+            orderBy: { createdAt: "desc" },
+            skip,
+            take: limit,
+          }),
+          ctx.prisma.product.count({ where: whereClause }),
+        ]);
+
+        const pageCount = Math.ceil(totalCount / limit);
+        return { products: productsList, totalCount, pageCount, currentPage: page };
       } catch (err) {
         console.error(err);
         throw new TRPCError({

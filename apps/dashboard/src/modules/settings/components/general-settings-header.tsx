@@ -49,20 +49,20 @@ function GeneralSettingsHeader({ className, ...props }: ExamplesNavProps) {
   };
 
   return (
-    <div className="relative w-full my-4 h-[60px]">
+    <div className="relative w-full my-4 h-[60px] min-w-0">
       <div
         className={cn(
-          "mb-4 w-full flex items-center justify-start rounded-lg h-full border border-border overflow-x-auto",
-          "bg-card text-foreground"
+          "mb-4 w-full min-w-0 flex items-center justify-start rounded-lg h-full border border-border overflow-x-auto overscroll-x-contain",
+          "bg-card text-foreground scroll-snap-x scroll-snap-mandatory [scrollbar-gutter:stable]"
         )}
       >
-        {links.map((item, index) => (
+        {links.map((item) => (
           <Link
             key={item.href}
             href={item.href}
             className={cn(
-              "flex h-[60px] items-center justify-center px-4 text-center text-sm transition-colors shrink-0",
-              "hover:text-primary",
+              "flex h-[60px] min-w-[5.5rem] items-center justify-center px-4 text-center text-sm transition-colors shrink-0 snap-center snap-always",
+              "hover:text-primary whitespace-nowrap",
               isActive(item.href)
                 ? "border-b-2 border-primary font-semibold text-foreground"
                 : "text-muted-foreground"

@@ -9,8 +9,10 @@ import {
   BookOpen,
   Package,
   CreditCard,
+  Share2,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useTenantSettings } from "@/hooks/use-tenant";
 
 export interface ProfileSidebarNavContentProps {
   /** Called when a nav link is clicked (e.g. to close mobile Sheet) */
@@ -24,6 +26,8 @@ export function ProfileSidebarNavContent({
   const pathname = usePathname();
   const tProfile = useTranslations("profile");
   const tMenu = useTranslations("profile.menu");
+  const { enableReferral } = useTenantSettings();
+  const showAffiliateTab = enableReferral === true;
 
   const Links = [
     { url: "/profile", name: tMenu("profile"), icon: User },
@@ -31,6 +35,9 @@ export function ProfileSidebarNavContent({
     { url: "/profile/courses", name: tMenu("courses"), icon: BookOpen },
     { url: "/profile/products", name: tMenu("products"), icon: Package },
     { url: "/profile/payments", name: tMenu("payments"), icon: CreditCard },
+    ...(showAffiliateTab
+      ? [{ url: "/profile/affiliates" as const, name: tMenu("affiliates"), icon: Share2 }]
+      : []),
   ];
 
   return (

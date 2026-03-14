@@ -1,13 +1,10 @@
 import toast from "react-hot-toast";
 import { AlertTriangle, Check, Info, X, AlertCircle } from "lucide-react";
 
-// Check if dark mode is enabled
+// Check if dark mode is enabled (use only app theme so toasts match light/dark UI)
 const isDarkMode = () => {
   if (typeof window !== "undefined") {
-    return (
-      document.documentElement.classList.contains("dark") ||
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    );
+    return document.documentElement.classList.contains("dark");
   }
   return false;
 };

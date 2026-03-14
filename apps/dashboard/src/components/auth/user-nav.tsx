@@ -9,6 +9,7 @@ import {
   ArrowUpLeft,
   ArrowUpRight,
   CreditCard,
+  Lightbulb,
   Moon,
   Sun,
 } from "lucide-react";
@@ -316,6 +317,34 @@ export default function UserNav({ user }: UserNavProps) {
               </span>
             </DropdownMenuItem>
           )}
+
+          {/* Request feature - external link to Featurebase */}
+          <DropdownMenuItem
+            className="hover:bg-accent focus:bg-accent transition-colors p-0"
+            asChild
+          >
+            <Link
+              href="https://cravvelo.featurebase.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(
+                "w-full flex items-center gap-2 px-3 py-2.5 text-foreground hover:text-foreground/90 transition-colors cursor-pointer",
+                isRTL ? "flex-row-reverse justify-between" : "flex-row justify-between"
+              )}
+            >
+              {isRTL ? (
+                <>
+                  <Lightbulb className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                  <span className="font-medium text-sm">{t("requestFeature")}</span>
+                </>
+              ) : (
+                <>
+                  <span className="font-medium text-sm">{t("requestFeature")}</span>
+                  <Lightbulb className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                </>
+              )}
+            </Link>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator className="bg-border" />

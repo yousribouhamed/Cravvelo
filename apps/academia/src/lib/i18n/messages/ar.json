@@ -379,6 +379,27 @@
       "cropYourPhoto": "قص صورتك",
       "cropAlt": "قص الصورة"
     },
+    "affiliates": {
+      "title": "التسويق بالعمولة",
+      "notAvailable": "برنامج الشراكة غير متاح لهذه الأكاديمية.",
+      "joinTitle": "انضم لبرنامج الشراكة",
+      "joinDescription": "شارك رابط الإحالة واكسب عندما يسجل الآخرون أو يشترون.",
+      "ccpLabel": "رقم CCP (الحساب البنكي للصرف)",
+      "ccpPlaceholder": "اختياري – أضفه لاحقاً",
+      "joinButton": "انضم للبرنامج",
+      "joining": "جاري الانضمام...",
+      "yourLink": "رابط الإحالة الخاص بك",
+      "copyLink": "نسخ الرابط",
+      "copied": "تم النسخ",
+      "stats": "إحصائياتك",
+      "referralsCount": "الإحالات",
+      "totalEarnings": "إجمالي الأرباح",
+      "pendingPayout": "مبلغ معلق",
+      "totalPaidOut": "المدفوع",
+      "joinSuccess": "انضممت لبرنامج الشراكة بنجاح.",
+      "joinError": "فشل الانضمام. حاول مرة أخرى.",
+      "alreadyJoined": "أنت بالفعل في برنامج الشراكة."
+    },
     "courses": {
       "title": "دوراتي",
       "empty": "لا توجد دورات",

@@ -31,6 +31,9 @@ import { cn } from "@ui/lib/utils";
 import AddCourse from "@/src/components/models/create-course-modal";
 import AddProduct from "@/src/components/models/create-product-modal";
 import { Loader } from "@/src/components/loader-icon";
+import { BulkActionsBar, type BulkAction, type BulkActionDef } from "../table-helpers/bulk-actions-bar";
+
+export type { BulkActionDef } from "../table-helpers/bulk-actions-bar";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -45,6 +48,16 @@ interface DataTableProps<TData, TValue> {
   onLevelFilterChange?: (values: string[]) => void;
   serverSideFiltering?: boolean;
   isLoading?: boolean;
+  // Server-side pagination (when provided, overrides client pagination)
+  pageCount?: number;
+  totalCount?: number;
+  currentPage?: number;
+  onPageChange?: (page: number) => void;
+  pageSize?: number;
+  /** Controlled search value for server-side search (e.g. students table) */
+  searchValue?: string;
+  /** Bulk actions shown when one or more rows are selected */
+  bulkActions?: BulkActionDef<TData>[];
 }
 
 interface ColumnFilter {
@@ -67,6 +80,13 @@ export function DataTable<TData, TValue>({
   onLevelFilterChange,
   serverSideFiltering = false,
   isLoading = false,
+  pageCount,
+  totalCount = 0,
+  currentPage = 1,
+  onPageChange,
+  pageSize = 10,
+  searchValue: controlledSearchValue,
+  bulkActions,
 }: DataTableProps<TData, TValue>) {
   const t = useTranslations("dataTable");
   const tStudents = useTranslations("students");
@@ -79,25 +99,62 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-  const [searchValue, setSearchValue] = React.useState("");
+  const [internalSearchValue, setInternalSearchValue] = React.useState("");
+  const searchValue = controlledSearchValue ?? internalSearchValue;
+  const setSearchValue = (v: string) => {
+    if (controlledSearchValue === undefined) setInternalSearchValue(v);
+    else if (onSearchChange) onSearchChange(v);
+  };
 
+  const serverSidePagination = Boolean(onPageChange && pageCount != null);
 
   const table = useReactTable({
     data,
     columns,
+    getRowId: (row) => (row as { id: string }).id,
     getCoreRowModel: getCoreRowModel(),
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: serverSideFiltering && (tableType === "courses" || tableType === "products") ? undefined : getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    getPaginationRowModel: serverSidePagination ? undefined : getPaginationRowModel(),
+    manualPagination: serverSidePagination,
+    pageCount: serverSidePagination ? pageCount : undefined,
     state: {
       sorting,
       rowSelection,
       columnFilters,
+      ...(serverSidePagination && {
+        pagination: {
+          pageIndex: currentPage - 1,
+          pageSize,
+        },
+      }),
     },
   });
+
+  const selectedRows = table.getSelectedRowModel().rows.map((r) => r.original);
+  const selectedCount = selectedRows.length;
+  const barActions: BulkAction[] =
+    bulkActions?.map((ba) => ({
+      label: ba.label,
+      onClick: () => ba.onClick(selectedRows),
+      icon: ba.icon,
+      variant: ba.variant,
+      disabled: ba.disabled,
+    })) ?? [];
+
+  const canPreviousPage = serverSidePagination ? currentPage > 1 : table.getCanPreviousPage();
+  const canNextPage = serverSidePagination ? (currentPage < (pageCount ?? 1)) : table.getCanNextPage();
+  const handlePreviousPage = () => {
+    if (serverSidePagination && onPageChange) onPageChange(currentPage - 1);
+    else table.previousPage();
+  };
+  const handleNextPage = () => {
+    if (serverSidePagination && onPageChange) onPageChange(currentPage + 1);
+    else table.nextPage();
+  };
 
   return (
     <>
@@ -108,14 +165,14 @@ export function DataTable<TData, TValue>({
             <input
               className="border-none bg-transparent focus:outline-none focus:border-none focus:ring-0 flex-1 text-foreground placeholder:text-muted-foreground"
               placeholder={searchPlaceholder || (tableType === "courses" ? tCourses("search.placeholder") : tableType === "products" ? tProducts("search.placeholder") : tStudents("search.placeholder"))}
-              value={serverSideFiltering && (tableType === "courses" || tableType === "products") ? searchValue : (table.getColumn(searchColumns[0] || (tableType === "courses" || tableType === "products" ? "title" : "full_name"))?.getFilterValue() as string) ?? ""}
+              value={serverSideFiltering && (tableType === "courses" || tableType === "products") ? searchValue : serverSidePagination && tableType === "students" ? searchValue : (table.getColumn(searchColumns[0] || (tableType === "courses" || tableType === "products" ? "title" : "full_name"))?.getFilterValue() as string) ?? ""}
               onChange={(event) => {
                 const value = event.target.value;
                 if (serverSideFiltering && (tableType === "courses" || tableType === "products")) {
+                  setInternalSearchValue(value);
+                  if (onSearchChange) onSearchChange(value);
+                } else if (serverSidePagination && tableType === "students" && onSearchChange) {
                   setSearchValue(value);
-                  if (onSearchChange) {
-                    onSearchChange(value);
-                  }
                 } else {
                   table.getAllColumns().forEach((column) => {
                     if (searchColumns.length > 0 && searchColumns.includes(column.id as string)) {
@@ -160,6 +217,13 @@ export function DataTable<TData, TValue>({
           <StudentTableHeader data={data} table={table} setColumnFilters={setColumnFilters} />
         )}
       </div>
+      {selectedCount > 0 && (
+        <BulkActionsBar
+          selectedCount={selectedCount}
+          onClearSelection={() => setRowSelection({})}
+          actions={barActions}
+        />
+      )}
       <div className="rounded-md border my-4 bg-card text-card-foreground shadow-sm relative">
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm z-20 rounded-md">
@@ -173,17 +237,14 @@ export function DataTable<TData, TValue>({
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
-                      <Button
-                        variant="ghost"
-                        className="w-full h-[40px] flex justify-start items-center px-0"
-                      >
+                      <div className="w-full h-[40px] flex justify-start items-center px-0">
                         {header.isPlaceholder
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                      </Button>
+                      </div>
                     </TableHead>
                   );
                 })}
@@ -228,20 +289,20 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
         <div className={cn(
-          "w-full h-[60px] border-t flex items-center gap-x-6 p-2 bg-card",
+          "w-full h-[60px] border-t flex items-center gap-x-2 p-2 bg-card",
           isRTL ? "justify-start" : "justify-end"
         )}>
           <Button
-            disabled={!table.getCanPreviousPage()}
+            disabled={!canPreviousPage}
             aria-label="Go to previous page"
             className="rounded-xl border flex items-center gap-x-2"
-            onClick={() => table.previousPage()}
+            onClick={handlePreviousPage}
             variant="ghost"
           >
             {isRTL ? (
               <>
-                <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
                 {t("previous")}
+                <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
               </>
             ) : (
               <>
@@ -253,8 +314,8 @@ export function DataTable<TData, TValue>({
 
           <Button
             aria-label="Go to next page"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            onClick={handleNextPage}
+            disabled={!canNextPage}
             variant="ghost"
             className="rounded-xl border flex items-center gap-x-2"
           >

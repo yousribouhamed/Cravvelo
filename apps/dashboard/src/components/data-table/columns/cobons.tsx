@@ -18,6 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "../table-helpers/data-table-head";
+import { getSelectColumn } from "../table-helpers/select-column";
 import { Coupon } from "database";
 import { Badge } from "@ui/components/ui/badge";
 import { maketoast } from "../../toasts";
@@ -72,6 +73,7 @@ export const useCouponColumns = ({
   };
 
   return [
+    getSelectColumn<Coupon>(),
     {
       accessorKey: "code",
       header: ({ column }) => (

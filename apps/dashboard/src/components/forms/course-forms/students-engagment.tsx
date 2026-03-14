@@ -135,8 +135,8 @@ function StudentEngagment({ course }: StudentEngagmentProps) {
           </form>
         </Form>
       </div>
-      <div className="col-span-1 hidden md:block  w-full h-full ">
-        <Card>
+      <div className="col-span-1 hidden md:block w-full h-fit self-start">
+        <Card className="sticky top-24">
           <CardContent className="w-full h-fit flex flex-col p-6  space-y-4">
             <Button
               disabled={mutation.isLoading}

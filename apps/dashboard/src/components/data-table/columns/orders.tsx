@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
-import { Checkbox } from "@ui/components/ui/checkbox";
+import { getSelectColumn } from "../table-helpers/select-column";
 import { Sale } from "database";
 import { maketoast } from "../../toasts";
 import { DataTableColumnHeader } from "../table-helpers/data-table-head";
@@ -18,8 +18,7 @@ import { formatDateInArabic, formatDZD } from "@/src/lib/utils";
 import { Badge } from "@ui/components/ui/badge";
 
 export const OrderColumns: ColumnDef<Sale>[] = [
-  
-
+  getSelectColumn<Sale>(),
   {
     accessorKey: "createdAt",
     header: ({ column }) => (

@@ -24,7 +24,9 @@ import {
 import CouponsTableHeader from "@/src/components/data-table/tables-headers/coupons-table-header";
 import { ChevronRightIcon, ChevronLeftIcon, Loader2 } from "lucide-react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
+import { BulkActionsBar, type BulkAction, type BulkActionDef } from "../table-helpers/bulk-actions-bar";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -43,6 +45,7 @@ interface DataTableProps<TData, TValue> {
   // Loading state
   isLoading?: boolean;
   serverSideFiltering?: boolean;
+  bulkActions?: BulkActionDef<TData>[];
 }
 
 export function CouponDataTable<TData, TValue>({
@@ -59,8 +62,11 @@ export function CouponDataTable<TData, TValue>({
   onCreateCoupon,
   isLoading = false,
   serverSideFiltering = false,
+  bulkActions,
 }: DataTableProps<TData, TValue>) {
   const t = useTranslations("coupons");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
   const [rowSelection, setRowSelection] = React.useState({});
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -70,6 +76,7 @@ export function CouponDataTable<TData, TValue>({
   const table = useReactTable({
     data,
     columns,
+    getRowId: (row) => (row as { id: string }).id,
     getCoreRowModel: getCoreRowModel(),
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
@@ -115,8 +122,26 @@ export function CouponDataTable<TData, TValue>({
     }
   };
 
+  const selectedRows = table.getSelectedRowModel().rows.map((r) => r.original);
+  const selectedCount = selectedRows.length;
+  const barActions: BulkAction[] =
+    bulkActions?.map((ba) => ({
+      label: ba.label,
+      onClick: () => ba.onClick(selectedRows),
+      icon: ba.icon,
+      variant: ba.variant,
+      disabled: ba.disabled,
+    })) ?? [];
+
   return (
     <>
+      {selectedCount > 0 && (
+        <BulkActionsBar
+          selectedCount={selectedCount}
+          onClearSelection={() => setRowSelection({})}
+          actions={barActions}
+        />
+      )}
       <CouponsTableHeader
         setColumnFilters={setColumnFilters}
         data={data}
@@ -141,17 +166,14 @@ export function CouponDataTable<TData, TValue>({
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
-                      <Button
-                        variant="ghost"
-                        className="w-full h-[40px] flex justify-start items-center px-0"
-                      >
+                      <div className="w-full h-[40px] flex justify-start items-center px-0">
                         {header.isPlaceholder
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                      </Button>
+                      </div>
                     </TableHead>
                   );
                 })}
@@ -195,48 +217,51 @@ export function CouponDataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
-        <div className="w-full h-[60px] border-t flex items-center justify-between p-2">
-          <div className="flex items-center gap-x-2 text-sm text-muted-foreground">
-            {serverSideFiltering && (
-              <span>
-                {t("pagination.showing")} {(currentPage - 1) * 10 + 1}{" "}
-                {t("pagination.to")}{" "}
-                {Math.min(currentPage * 10, totalCount)} {t("pagination.of")}{" "}
-                {totalCount} {t("pagination.results")}
-              </span>
+        <div className={cn(
+          "w-full h-[60px] border-t flex items-center gap-x-2 p-2",
+          isRTL ? "justify-start" : "justify-end"
+        )}>
+          <Button
+            disabled={!canPreviousPage}
+            aria-label="Go to previous page"
+            onClick={handlePreviousPage}
+            className="bg-card rounded-xl border flex items-center gap-x-2"
+            variant="ghost"
+            size="sm"
+          >
+            {isRTL ? (
+              <>
+                {t("pagination.previous")}
+                <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+              </>
+            ) : (
+              <>
+                <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+                {t("pagination.previous")}
+              </>
             )}
-          </div>
-          <div className="flex items-center gap-x-2">
-            {serverSideFiltering && (
-              <span className="text-sm text-muted-foreground">
-                {t("pagination.page")} {currentPage} {t("pagination.of")}{" "}
-                {pageCount}
-              </span>
-            )}
-            <Button
-              disabled={!canPreviousPage}
-              aria-label="Go to previous page"
-              onClick={handlePreviousPage}
-              className="bg-card rounded-xl border flex items-center gap-x-2"
-              variant="ghost"
-              size="sm"
-            >
-              <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
-              {t("pagination.previous")}
-            </Button>
+          </Button>
 
-            <Button
-              aria-label="Go to next page"
-              onClick={handleNextPage}
-              disabled={!canNextPage}
-              className="bg-card rounded-xl border flex items-center gap-x-2"
-              variant="ghost"
-              size="sm"
-            >
-              {t("pagination.next")}
-              <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
-            </Button>
-          </div>
+          <Button
+            aria-label="Go to next page"
+            onClick={handleNextPage}
+            disabled={!canNextPage}
+            className="bg-card rounded-xl border flex items-center gap-x-2"
+            variant="ghost"
+            size="sm"
+          >
+            {isRTL ? (
+              <>
+                {t("pagination.next")}
+                <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+              </>
+            ) : (
+              <>
+                {t("pagination.next")}
+                <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+              </>
+            )}
+          </Button>
         </div>
       </div>
     </>

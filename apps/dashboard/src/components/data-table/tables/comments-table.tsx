@@ -24,17 +24,26 @@ import {
 import CommentsTableHeader from "../tables-headers/comments-table-header";
 import { ChevronRightIcon, ChevronLeftIcon, Loader2 } from "lucide-react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
+import { BulkActionsBar, type BulkAction, type BulkActionDef } from "../table-helpers/bulk-actions-bar";
+
+const PAGE_SIZE = 10;
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   refetch?: () => Promise<any>;
-  // Filter callbacks
   onSearchChange?: (value: string) => void;
   onStatusFilterChange?: (values: string[]) => void;
-  // Loading state
   isLoading?: boolean;
+  // Server-side pagination
+  pageCount?: number;
+  totalCount?: number;
+  currentPage?: number;
+  onPageChange?: (page: number) => void;
+  pageSize?: number;
+  bulkActions?: BulkActionDef<TData>[];
 }
 
 export function CommentsDataTable<TData, TValue>({
@@ -44,13 +53,23 @@ export function CommentsDataTable<TData, TValue>({
   onSearchChange,
   onStatusFilterChange,
   isLoading = false,
+  pageCount,
+  totalCount = 0,
+  currentPage = 1,
+  onPageChange,
+  pageSize = PAGE_SIZE,
+  bulkActions,
 }: DataTableProps<TData, TValue>) {
   const t = useTranslations("comments");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
   const [rowSelection, setRowSelection] = React.useState({});
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+
+  const serverSidePagination = Boolean(onPageChange && pageCount != null);
 
   const table = useReactTable({
     data,
@@ -62,13 +81,43 @@ export function CommentsDataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    getPaginationRowModel: serverSidePagination ? undefined : getPaginationRowModel(),
+    manualPagination: serverSidePagination,
+    pageCount: serverSidePagination ? pageCount : undefined,
     state: {
       sorting,
       rowSelection,
       columnFilters,
+      ...(serverSidePagination && {
+        pagination: {
+          pageIndex: currentPage - 1,
+          pageSize,
+        },
+      }),
     },
   });
+
+  const canPreviousPage = serverSidePagination ? currentPage > 1 : table.getCanPreviousPage();
+  const canNextPage = serverSidePagination ? (currentPage < (pageCount ?? 1)) : table.getCanNextPage();
+  const handlePreviousPage = () => {
+    if (serverSidePagination && onPageChange) onPageChange(currentPage - 1);
+    else table.previousPage();
+  };
+  const handleNextPage = () => {
+    if (serverSidePagination && onPageChange) onPageChange(currentPage + 1);
+    else table.nextPage();
+  };
+
+  const selectedRows = table.getSelectedRowModel().rows.map((r) => r.original);
+  const selectedCount = selectedRows.length;
+  const barActions: BulkAction[] =
+    bulkActions?.map((ba) => ({
+      label: ba.label,
+      onClick: () => ba.onClick(selectedRows),
+      icon: ba.icon,
+      variant: ba.variant,
+      disabled: ba.disabled,
+    })) ?? [];
 
   return (
     <>
@@ -80,6 +129,13 @@ export function CommentsDataTable<TData, TValue>({
         onSearchChange={onSearchChange}
         onStatusFilterChange={onStatusFilterChange}
       />
+      {selectedCount > 0 && (
+        <BulkActionsBar
+          selectedCount={selectedCount}
+          onClearSelection={() => setRowSelection({})}
+          actions={barActions}
+        />
+      )}
       <div className="rounded-md border bg-card relative">
         {isLoading && (
           <div className="absolute inset-0 bg-background/50 flex items-center justify-center z-10">
@@ -93,17 +149,14 @@ export function CommentsDataTable<TData, TValue>({
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
-                      <Button
-                        variant="ghost"
-                        className="w-full h-[40px] flex justify-start items-center px-0"
-                      >
+                      <div className="w-full h-[40px] flex justify-start items-center px-0">
                         {header.isPlaceholder
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                      </Button>
+                      </div>
                     </TableHead>
                   );
                 })}
@@ -147,43 +200,51 @@ export function CommentsDataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
-        <div className="w-full h-[60px] border-t flex items-center justify-between p-2">
-          <div className="flex items-center gap-x-2 text-sm text-muted-foreground">
-            <span>
-              {t("pagination.showing")} {table.getRowModel().rows.length}{" "}
-              {t("pagination.of")} {data.length} {t("pagination.results")}
-            </span>
-          </div>
-          <div className="flex items-center gap-x-2">
-            <span className="text-sm text-muted-foreground">
-              {t("pagination.page")}{" "}
-              {table.getState().pagination.pageIndex + 1} {t("pagination.of")}{" "}
-              {table.getPageCount()}
-            </span>
-            <Button
-              disabled={!table.getCanPreviousPage()}
-              aria-label="Go to previous page"
-              onClick={() => table.previousPage()}
-              className="bg-card rounded-xl border flex items-center gap-x-2"
-              variant="ghost"
-              size="sm"
-            >
-              <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
-              {t("pagination.previous")}
-            </Button>
+        <div className={cn(
+          "w-full h-[60px] border-t flex items-center gap-x-2 p-2",
+          isRTL ? "justify-start" : "justify-end"
+        )}>
+          <Button
+            disabled={!canPreviousPage}
+            aria-label="Go to previous page"
+            onClick={handlePreviousPage}
+            className="bg-card rounded-xl border flex items-center gap-x-2"
+            variant="ghost"
+            size="sm"
+          >
+            {isRTL ? (
+              <>
+                {t("pagination.previous")}
+                <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+              </>
+            ) : (
+              <>
+                <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+                {t("pagination.previous")}
+              </>
+            )}
+          </Button>
 
-            <Button
-              aria-label="Go to next page"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-              className="bg-card rounded-xl border flex items-center gap-x-2"
-              variant="ghost"
-              size="sm"
-            >
-              {t("pagination.next")}
-              <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
-            </Button>
-          </div>
+          <Button
+            aria-label="Go to next page"
+            onClick={handleNextPage}
+            disabled={!canNextPage}
+            className="bg-card rounded-xl border flex items-center gap-x-2"
+            variant="ghost"
+            size="sm"
+          >
+            {isRTL ? (
+              <>
+                {t("pagination.next")}
+                <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+              </>
+            ) : (
+              <>
+                {t("pagination.next")}
+                <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+              </>
+            )}
+          </Button>
         </div>
       </div>
     </>

@@ -14,6 +14,7 @@ import {
 import { Certificate } from "database";
 import type { CertificateStatus } from "database";
 import { DataTableColumnHeader } from "../table-helpers/data-table-head";
+import { getSelectColumn } from "../table-helpers/select-column";
 import Link from "next/link";
 import { useOpenCertificateDeleteAction } from "@/src/lib/zustand/delete-actions";
 import { useTranslations, useLocale } from "next-intl";
@@ -62,6 +63,7 @@ export const useCertificateColumns = (): ColumnDef<Certificate>[] => {
   };
 
   return [
+    getSelectColumn<Certificate>(),
     {
       accessorKey: "status",
       header: ({ column }) => (

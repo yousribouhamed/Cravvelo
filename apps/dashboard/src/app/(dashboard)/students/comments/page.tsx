@@ -6,20 +6,29 @@ import CommentsTableShell from "./CommentsTableShell";
 import useHaveAccess from "@/src/hooks/use-have-access";
 import { getServerTranslations } from "@/src/lib/i18n/utils";
 
+const PAGE_SIZE = 10;
+
 async function getData({
   accountId,
 }: {
   accountId: string;
-}): Promise<Comment[]> {
-  const data = await prisma.comment.findMany({
-    where: {
-      accountId,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-  return data;
+}): Promise<{
+  comments: Comment[];
+  totalCount: number;
+  pageCount: number;
+  currentPage: number;
+}> {
+  const [comments, totalCount] = await Promise.all([
+    prisma.comment.findMany({
+      where: { accountId },
+      orderBy: { createdAt: "desc" },
+      take: PAGE_SIZE,
+      skip: 0,
+    }),
+    prisma.comment.count({ where: { accountId } }),
+  ]);
+  const pageCount = Math.ceil(totalCount / PAGE_SIZE);
+  return { comments, totalCount, pageCount, currentPage: 1 };
 }
 
 const Page = async ({}) => {

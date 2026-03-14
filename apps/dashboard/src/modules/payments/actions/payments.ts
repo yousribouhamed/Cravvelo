@@ -10,58 +10,78 @@ import {
 import { StudentBag } from "@/src/types";
 import z from "zod";
 
-export const getAllPayments = withAuth({
-  handler: async ({ account, db }) => {
-    try {
-      const payments = await db.payment.findMany({
-        where: {
-          accountId: account.id,
-          type: { not: "SUBSCRIPTION" },
-        },
-        include: {
-          Student: {
-            select: {
-              id: true,
-              full_name: true,
-              email: true,
-              photo_url: true,
-            },
-          },
-          Sale: {
-            include: {
-              Course: {
-                select: {
-                  id: true,
-                  title: true,
-                  thumbnailUrl: true,
-                },
-              },
-              Product: {
-                select: {
-                  id: true,
-                  title: true,
-                  thumbnailUrl: true,
-                },
-              },
-            },
-          },
+const PAGE_SIZE = 10;
 
-          MethodConfig: {
-            select: {
-              id: true,
-              provider: true,
+export const getAllPayments = withAuth({
+  input: z
+    .object({
+      page: z.number().min(1).optional(),
+      limit: z.number().min(1).max(100).optional(),
+    })
+    .optional(),
+  handler: async ({ account, db, input }) => {
+    try {
+      const page = input?.page ?? 1;
+      const limit = input?.limit ?? PAGE_SIZE;
+      const skip = (page - 1) * limit;
+      const where = {
+        accountId: account.id,
+        type: { not: "SUBSCRIPTION" as const },
+      };
+
+      const [payments, totalCount] = await Promise.all([
+        db.payment.findMany({
+          where,
+          include: {
+            Student: {
+              select: {
+                id: true,
+                full_name: true,
+                email: true,
+                photo_url: true,
+              },
             },
+            Sale: {
+              include: {
+                Course: {
+                  select: {
+                    id: true,
+                    title: true,
+                    thumbnailUrl: true,
+                  },
+                },
+                Product: {
+                  select: {
+                    id: true,
+                    title: true,
+                    thumbnailUrl: true,
+                  },
+                },
+              },
+            },
+            MethodConfig: {
+              select: {
+                id: true,
+                provider: true,
+              },
+            },
+            Proofs: true,
+            Transactions: true,
           },
-          Proofs: true,
-          Transactions: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
+          orderBy: { createdAt: "desc" },
+          skip,
+          take: limit,
+        }),
+        db.payment.count({ where }),
+      ]);
+
+      const pageCount = Math.ceil(totalCount / limit);
 
       return {
         data: payments,
+        totalCount,
+        pageCount,
+        currentPage: page,
         success: true,
         message: "Successfully fetched all payments",
       };
@@ -69,6 +89,9 @@ export const getAllPayments = withAuth({
       console.error("Error fetching payments:", error);
       return {
         data: null,
+        totalCount: 0,
+        pageCount: 0,
+        currentPage: 1,
         success: false,
         message: "Something went wrong while fetching the payments",
       };

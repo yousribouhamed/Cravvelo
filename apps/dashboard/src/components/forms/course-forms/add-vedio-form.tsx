@@ -352,8 +352,8 @@ function AddVideoForm({ chapterID, courseId }: AddVideoFormProps) {
       />
       <VideoPlayer isOpen={open} setIsOpen={setOpen} videoId={videoId} />
 
-      <div className="w-full grid grid-cols-3 gap-x-8">
-        <div className="col-span-2 w-full h-full">
+      <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-x-8">
+        <div className="col-span-1 md:col-span-2 w-full h-full">
           <Form {...form}>
             <form
               id="add-video"
@@ -427,7 +427,7 @@ function AddVideoForm({ chapterID, courseId }: AddVideoFormProps) {
                 )}
               />
 
-              <Card>
+              <Card className="md:hidden">
                 <CardContent className="w-full h-fit flex justify-end items-center p-6 gap-x-4">
                   <Button
                     onClick={() => router.back()}
@@ -453,8 +453,8 @@ function AddVideoForm({ chapterID, courseId }: AddVideoFormProps) {
           </Form>
         </div>
 
-        <div className="col-span-1 w-full h-full">
-          <Card>
+        <div className="col-span-1 w-full h-fit self-start hidden md:block">
+          <Card className="sticky top-24">
             <CardContent className="w-full h-fit flex flex-col p-6 space-y-4">
               <Button
                 disabled={isSubmitDisabled}

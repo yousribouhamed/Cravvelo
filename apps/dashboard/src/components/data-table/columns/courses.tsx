@@ -128,8 +128,8 @@ export const columns: ColumnDef<Course>[] = [
   },
 
   {
-    id: "studenstNbr",
-    accessorKey: "studenstNbr",
+    id: "studentsNbr",
+    accessorKey: "studentsNbr",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="عدد الطلاب الملتحقين" />
     ),

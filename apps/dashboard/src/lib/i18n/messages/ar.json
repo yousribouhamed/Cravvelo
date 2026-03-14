@@ -30,6 +30,9 @@
   },
   "settings": {
     "title": "الإعدادات العامة",
+    "unavailableMessage": "تعذر تحميل الإعدادات. قد تكون قاعدة البيانات غير متاحة. يرجى المحاولة لاحقًا.",
+    "retry": "إعادة المحاولة",
+    "backHome": "الذهاب إلى الرئيسية",
     "checkingDomainStatus": "جاري فحص حالة النطاق...",
     "language": {
       "label": "اللغة",
@@ -124,6 +127,14 @@
     "of": "من",
     "previous": "سابق",
     "next": "التالي",
+    "showing": "عرض",
+    "to": "إلى",
+    "results": "نتيجة",
+    "bulkActions": {
+      "selectedCount": "{count} محددة",
+      "clearSelection": "مسح التحديد",
+      "exportSelected": "تصدير المحدد"
+    },
     "sort": {
       "ascending": "تصاعدي",
       "descending": "تنازلي",
@@ -181,7 +192,8 @@
     "academyPreview": "معاينة الأكاديمية",
     "academy": "اكاديمية",
     "freePlan": "الخطة المجانية",
-    "currentPlan": "الخطة الحالية"
+    "currentPlan": "الخطة الحالية",
+    "requestFeature": "طلب ميزة"
   },
   "notifications": {
     "ui": {
@@ -843,6 +855,8 @@
       "BUYPRODUCT": "شراء منتج",
       "BUYCOURSE": "شراء دورة",
       "SUBSCRIPTION": "اشتراك",
+      "REFERAL_WITHDRAWAL": "سحب الإحالة",
+      "REFUND": "استرداد",
       "course": "دورة",
       "product": "منتج",
       "subscription": "اشتراك"
@@ -946,6 +960,9 @@
     },
     "search": {
       "placeholder": "البحث عن القسائم..."
+    },
+    "bulkActions": {
+      "deactivateSelected": "إلغاء تفعيل المحدد"
     },
     "cancel": "إلغاء",
     "form": {
@@ -1238,6 +1255,15 @@
       }
     },
     "detail": {
+      "tabs": {
+        "overview": "نظرة عامة",
+        "activity": "النشاط",
+        "purchases": "المشتريات",
+        "certificates": "الشهادات",
+        "comments": "التعليقات",
+        "referrals": "الإحالات",
+        "paymentsInvoices": "المدفوعات والفواتير"
+      },
       "personalInfo": "المعلومات الشخصية",
       "name": "اسم",
       "email": "بريد إلكتروني",
@@ -1271,6 +1297,10 @@
       "amount": "المبلغ",
       "date": "التاريخ",
       "issuedDate": "تاريخ الإصدار",
+      "referralSingular": "إحالة",
+      "referralPlural": "إحالات",
+      "total": "الإجمالي",
+      "invoiceNumber": "فاتورة #{id}",
       "emptyStates": {
         "noPurchases": "لم يتم العثور على مشتريات",
         "noCertificates": "لم يتم العثور على شهادات",
@@ -1301,6 +1331,9 @@
     },
     "search": {
       "placeholder": "البحث عن الطلاب..."
+    },
+    "bulkActions": {
+      "exportSelected": "تصدير المحدد"
     }
   },
   "courses": {
@@ -1319,6 +1352,7 @@
       "draft": "مسودة",
       "published": "منشور",
       "archived": "مؤرشف",
+      "private": "خاص",
       "beginner": "مبتدئ",
       "intermediate": "متوسط",
       "advanced": "متقدم"
@@ -1343,6 +1377,9 @@
       "viewRatings": "عرض التقييمات",
       "delete": "حذف الدورة",
       "addNew": "أنشئ دورة جديدة"
+    },
+    "bulkActions": {
+      "deleteSelected": "حذف المحدد"
     },
     "modal": {
       "title": "إضافة دورة جديدة",
@@ -1678,6 +1715,9 @@
       "delete": "حذف المنتج",
       "addNew": "أنشئ منتج جديد"
     },
+    "bulkActions": {
+      "deleteSelected": "حذف المحدد"
+    },
     "modal": {
       "title": "إضافة منتج جديد",
       "productTitle": "عنوان المنتج",
@@ -1950,6 +1990,9 @@
       "approveCertificate": "موافقة",
       "rejectCertificate": "رفض"
     },
+    "bulkActions": {
+      "revokeSelected": "إبطال المحدد"
+    },
     "table": {
       "noResults": "لم يتم العثور على نتائج",
       "previous": "سابق",
@@ -2000,6 +2043,10 @@
       "delete": "حذف التعليق",
       "openMenu": "فتح القائمة"
     },
+    "bulkActions": {
+      "approveSelected": "موافقة على المحدد",
+      "rejectSelected": "رفض المحدد"
+    },
     "messages": {
       "approved": "تمت الموافقة على التعليق بنجاح",
       "rejected": "تم رفض التعليق بنجاح",
@@ -2044,6 +2091,11 @@
     "emptyState": {
       "title": "لم يتم العثور على إحالات",
       "description": "ستظهر إحالات برنامج التسويق بالعمولة هنا"
+    },
+    "disabledState": {
+      "title": "التسويق بالعمولة معطل",
+      "description": "فعّل التسويق بالعمولة من الإعدادات لإدارة الإحالات وعرض الجدول هنا.",
+      "goToSettings": "الذهاب إلى الإعدادات"
     },
     "search": {
       "placeholder": "البحث عن الإحالات..."

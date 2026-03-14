@@ -20,8 +20,17 @@ const ReferralTableShell: FC<ReferralTableShellProps> = ({ initialData }) => {
     initialData: initialData,
   });
 
-  if (!isMounted) {
+  const hasData =
+    (initialData?.length ?? 0) > 0 || (data?.length ?? 0) > 0;
+  if (!isMounted && !hasData) {
     return <DataTableLoading columnCount={6} />;
+  }
+  if (!isMounted && hasData) {
+    return (
+      <div className="w-full min-h-[300px] h-fit flex flex-col">
+        <DataTable columns={columns} data={data ?? initialData ?? []} refetch={refetch} />
+      </div>
+    );
   }
 
   return (

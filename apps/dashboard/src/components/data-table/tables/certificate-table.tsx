@@ -25,18 +25,22 @@ import { ChevronRightIcon } from "lucide-react";
 import { ChevronLeftIcon } from "lucide-react";
 import CertificateTableHeader from "../tables-headers/certificates-table-header";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@ui/lib/utils";
+import { BulkActionsBar, type BulkAction, type BulkActionDef } from "../table-helpers/bulk-actions-bar";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   refetch?: () => Promise<any>;
+  bulkActions?: BulkActionDef<TData>[];
 }
 
 export function CertificateDataTable<TData, TValue>({
   columns,
   data,
   refetch,
+  bulkActions,
 }: DataTableProps<TData, TValue>) {
   const t = useTranslations("certificates");
   const [rowSelection, setRowSelection] = React.useState({});
@@ -48,6 +52,7 @@ export function CertificateDataTable<TData, TValue>({
   const table = useReactTable({
     data,
     columns,
+    getRowId: (row) => (row as { id: string }).id,
     getCoreRowModel: getCoreRowModel(),
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
@@ -62,8 +67,26 @@ export function CertificateDataTable<TData, TValue>({
     },
   });
 
+  const selectedRows = table.getSelectedRowModel().rows.map((r) => r.original);
+  const selectedCount = selectedRows.length;
+  const barActions: BulkAction[] =
+    bulkActions?.map((ba) => ({
+      label: ba.label,
+      onClick: () => ba.onClick(selectedRows),
+      icon: ba.icon,
+      variant: ba.variant,
+      disabled: ba.disabled,
+    })) ?? [];
+
   return (
     <>
+      {selectedCount > 0 && (
+        <BulkActionsBar
+          selectedCount={selectedCount}
+          onClearSelection={() => setRowSelection({})}
+          actions={barActions}
+        />
+      )}
       <CertificateTableHeader data={data} refetch={refetch} table={table} />
       <div className="rounded-md border bg-card text-card-foreground overflow-x-auto">
         <Table>
@@ -73,17 +96,14 @@ export function CertificateDataTable<TData, TValue>({
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
-                      <Button
-                        variant="ghost"
-                        className="w-full h-[40px] flex justify-start items-center px-0"
-                      >
+                      <div className="w-full h-[40px] flex justify-start items-center px-0">
                         {header.isPlaceholder
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                      </Button>
+                      </div>
                     </TableHead>
                   );
                 })}
@@ -127,7 +147,10 @@ export function CertificateDataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
-        <div className="w-full min-h-[60px] border-t flex flex-wrap items-center justify-start gap-x-6 gap-y-2 p-2 bg-card">
+        <div className={cn(
+          "w-full min-h-[60px] border-t flex items-center gap-x-2 p-2 bg-card",
+          isRTL ? "justify-start" : "justify-end"
+        )}>
           <Button
             disabled={!table.getCanPreviousPage()}
             aria-label="Go to previous page"
@@ -135,8 +158,17 @@ export function CertificateDataTable<TData, TValue>({
             className="bg-card rounded-xl border flex items-center gap-x-2"
             variant="ghost"
           >
-            <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
-            {t("table.previous")}
+            {isRTL ? (
+              <>
+                {t("table.previous")}
+                <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+              </>
+            ) : (
+              <>
+                <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+                {t("table.previous")}
+              </>
+            )}
           </Button>
 
           <Button
@@ -146,8 +178,17 @@ export function CertificateDataTable<TData, TValue>({
             className="bg-card rounded-xl border flex items-center gap-x-2"
             variant="ghost"
           >
-            {t("table.next")}
-            <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+            {isRTL ? (
+              <>
+                {t("table.next")}
+                <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+              </>
+            ) : (
+              <>
+                {t("table.next")}
+                <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+              </>
+            )}
           </Button>
         </div>
       </div>

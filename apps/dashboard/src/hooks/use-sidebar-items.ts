@@ -16,7 +16,7 @@ import {
   Ticket,
   Award,
   MessageSquare,
-  // Share2,
+  Share2,
   BookOpen,
   Package,
 } from "lucide-react";
@@ -76,11 +76,11 @@ export function useSidebarItems(): SidebarItem[] {
             icon: Ticket,
             slug: "/payments/coupons",
           },
-          // {
-          //   title: t("affiliateMarketing"),
-          //   icon: Share2,
-          //   slug: "/payments/affiliate-marketing",
-          // },
+          {
+            title: t("affiliateMarketing"),
+            icon: Share2,
+            slug: "/payments/affiliate-marketing",
+          },
         ],
       },
       {

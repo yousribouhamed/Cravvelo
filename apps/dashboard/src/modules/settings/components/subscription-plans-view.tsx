@@ -59,9 +59,10 @@ export function SubscriptionPlansView() {
   };
 
   return (
-    <div className="w-full">
-      <div className="overflow-x-auto pb-2">
-        <div className="flex flex-row items-stretch gap-3">
+    <div className="w-full min-w-0">
+      {/* Mobile: vertical stack. md+: horizontal scroll */}
+      <div className="overflow-x-auto pb-2 min-w-0 md:overflow-x-auto">
+        <div className="flex flex-col items-stretch gap-4 md:flex-row md:flex-nowrap md:gap-3">
           {SUBSCRIPTION_PLANS.map((plan) => {
             const price = plan.priceMonthly;
 
@@ -69,7 +70,8 @@ export function SubscriptionPlansView() {
               <Card
                 key={plan.planCode}
                 className={cn(
-                  "relative flex min-w-[14rem] max-w-xs flex-1 flex-col overflow-hidden transition-all duration-200",
+                  "relative flex w-full flex-col overflow-hidden transition-all duration-200",
+                  "md:min-w-[280px] md:max-w-[320px] md:flex-1 md:w-auto",
                   plan.highlight
                     ? "scale-[1.02] border-2 border-primary bg-gradient-to-b from-primary/5 to-transparent shadow-lg shadow-primary/10"
                     : "border-border hover:border-muted-foreground/20 hover:shadow-md"
@@ -127,7 +129,7 @@ export function SubscriptionPlansView() {
                           height={20}
                           className="mt-0.5 h-5 w-5 shrink-0"
                         />
-                        <span>{feature.text}</span>
+                        <span className="break-words">{feature.text}</span>
                       </li>
                     ))}
                   </ul>

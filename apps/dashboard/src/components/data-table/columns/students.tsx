@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Student } from "database";
 import { DataTableColumnHeader } from "../table-helpers/data-table-head";
+import { getSelectColumn } from "../table-helpers/select-column";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -69,32 +70,7 @@ export const useStudentsColumns = (): ColumnDef<Student & { _count?: { Sales: nu
   const locale = useLocale();
 
   return [
-  // {
-  //   id: "select",
-  //   header: ({ table }) => (
-  //     <Checkbox
-  //       //@ts-ignore
-  //       checked={
-  //         table.getIsAllPageRowsSelected() ||
-  //         (table.getIsSomePageRowsSelected() && "indeterminate")
-  //       }
-  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-  //       aria-label="Select all"
-  //       className="!mr-4"
-  //     />
-  //   ),
-
-  //   cell: ({ row }) => (
-  //     <Checkbox
-  //       checked={row.getIsSelected()}
-  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-  //       aria-label="Select row"
-  //       className="!mr-4"
-  //     />
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // },
+    getSelectColumn<Student & { _count?: { Sales: number; Certificates: number } }>(),
     {
       accessorKey: "photo_url",
       header: ({ column }) => (

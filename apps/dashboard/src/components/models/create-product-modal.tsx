@@ -60,7 +60,13 @@ const AddProductModel: FC = ({}) => {
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(val) => {
+        setIsOpen(val);
+        if (!val) form.reset();
+      }}
+    >
       <DialogTrigger asChild>
         <Button
           data-ripple-light="true"
@@ -107,7 +113,12 @@ const AddProductModel: FC = ({}) => {
                 )}
               />
               <DialogFooter className="w-full h-[50px] flex items-center justify-end gap-x-4">
-                <Button data-ripple-light="true" variant="ghost">
+                <Button
+                  type="button"
+                  data-ripple-light="true"
+                  variant="ghost"
+                  onClick={() => setIsOpen(false)}
+                >
                   {t("modal.cancel")}
                 </Button>
                 <Button

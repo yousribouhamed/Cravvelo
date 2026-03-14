@@ -11,7 +11,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
-import { Checkbox } from "@ui/components/ui/checkbox";
 import Link from "next/link";
 import { cn } from "@ui/lib/utils";
 
@@ -21,6 +20,7 @@ import { maketoast } from "@/src/components/toasts";
 import { useOpenCourseDeleteAction } from "@/src/lib/zustand/delete-actions";
 import { timeSince } from "@/src/lib/utils";
 import { DataTableColumnHeader } from "@/src/components/data-table/table-helpers/data-table-head";
+import { getSelectColumn } from "@/src/components/data-table/table-helpers/select-column";
 import { useLocale, useTranslations } from "next-intl";
 import { useCurrency } from "@/src/hooks/use-currency";
 
@@ -34,7 +34,8 @@ export const useCoursesColumns = (): ColumnDef<Course>[] => {
   const isRTL = locale === "ar";
 
   return [
-  {
+    getSelectColumn<Course>(),
+    {
     id: "title",
     accessorKey: "title",
     header: ({ column }) => (
@@ -115,8 +116,8 @@ export const useCoursesColumns = (): ColumnDef<Course>[] => {
   },
 
   {
-    id: "studenstNbr",
-    accessorKey: "studenstNbr",
+    id: "studentsNbr",
+    accessorKey: "studentsNbr",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title={t("columns.studentsNbr")} />
     ),

@@ -1,10 +1,9 @@
 "use client";
 
-import { Button } from "@ui/components/ui/button";
 import type { FC } from "react";
 import { ColumnFiltersState, Table } from "@tanstack/react-table";
 import { FacetedFilter } from "../table-helpers/faceted-filter";
-import { UserCheck, XCircle, CheckCircle2 } from "lucide-react";
+import { UserCheck, XCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 interface StudentsTableHeaderProps {
@@ -26,19 +25,6 @@ const statusOptions = [
   },
 ];
 
-const emailVerifiedOptions = [
-  {
-    value: "true",
-    label: "Verified",
-    icon: CheckCircle2,
-  },
-  {
-    value: "false",
-    label: "Not Verified",
-    icon: XCircle,
-  },
-];
-
 const StudentTableHeader: FC<StudentsTableHeaderProps> = ({ table, data, setColumnFilters }) => {
   const t = useTranslations("students");
 
@@ -52,16 +38,6 @@ const StudentTableHeader: FC<StudentsTableHeaderProps> = ({ table, data, setColu
         options={statusOptions.map(opt => ({
           ...opt,
           label: t(`filters.${opt.label.toLowerCase()}`),
-        }))}
-      />
-      <FacetedFilter
-        table={table}
-        title={t("filters.emailVerified")}
-        id="emailVerified"
-        setColumnFilters={setColumnFilters}
-        options={emailVerifiedOptions.map(opt => ({
-          ...opt,
-          label: t(`filters.${opt.value === "true" ? "verified" : "notVerified"}`),
         }))}
       />
     </div>

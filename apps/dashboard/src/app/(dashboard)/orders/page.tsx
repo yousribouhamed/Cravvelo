@@ -14,13 +14,25 @@ const getAllNotifications = async ({ accountId }: { accountId: string }) => {
   return notifications;
 };
 
-async function getData(accountId: string): Promise<Sale[]> {
-  const data = await prisma.sale.findMany({
-    where: {
-      accountId,
-    },
-  });
-  return data;
+const PAGE_SIZE = 10;
+
+async function getData(accountId: string): Promise<{
+  orders: Sale[];
+  totalCount: number;
+  pageCount: number;
+  currentPage: number;
+}> {
+  const [orders, totalCount] = await Promise.all([
+    prisma.sale.findMany({
+      where: { accountId },
+      orderBy: { createdAt: "desc" },
+      take: PAGE_SIZE,
+      skip: 0,
+    }),
+    prisma.sale.count({ where: { accountId } }),
+  ]);
+  const pageCount = Math.ceil(totalCount / PAGE_SIZE);
+  return { orders, totalCount, pageCount, currentPage: 1 };
 }
 
 const Page = async ({}) => {

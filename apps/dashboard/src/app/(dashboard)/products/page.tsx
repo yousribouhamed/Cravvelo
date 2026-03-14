@@ -1,21 +1,27 @@
 import Header from "@/src/components/layout/header";
 import MaxWidthWrapper from "@/src/components/max-width-wrapper";
+import { Product } from "database";
 import { prisma } from "database/src";
 import ProductsTableShell from "./products-table-shell";
 import { getMyUserAction } from "@/src/actions/user.actions";
 import CreateAcademiaPage from "@/src/components/pages/create-academia.page";
 import { getServerTranslations } from "@/src/lib/i18n/utils";
 
+const PAGE_SIZE = 10;
+
 const getData = async ({ accountId }: { accountId: string }) => {
-  if (!accountId) {
-    return;
-  }
-  const products = await prisma.product.findMany({
-    where: {
-      accountId,
-    },
-  });
-  return products;
+  if (!accountId) return { products: [] as Product[], totalCount: 0, pageCount: 1, currentPage: 1 };
+  const [products, totalCount] = await Promise.all([
+    prisma.product.findMany({
+      where: { accountId },
+      orderBy: { createdAt: "desc" },
+      take: PAGE_SIZE,
+      skip: 0,
+    }),
+    prisma.product.count({ where: { accountId } }),
+  ]);
+  const pageCount = Math.ceil(totalCount / PAGE_SIZE);
+  return { products, totalCount, pageCount, currentPage: 1 };
 };
 
 const getAllNotifications = async ({ accountId }: { accountId: string }) => {

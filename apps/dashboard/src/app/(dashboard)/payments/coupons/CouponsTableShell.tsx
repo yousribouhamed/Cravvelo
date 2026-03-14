@@ -1,7 +1,7 @@
 "use client";
 
 import { Coupon } from "database";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import type { FC } from "react";
 import { trpc } from "@/src/app/_trpc/client";
 import { useCouponColumns } from "@/src/components/data-table/columns/cobons";
@@ -10,6 +10,8 @@ import { DataTableLoading } from "@/src/components/data-table/table-helpers/tabl
 import { CouponDataTable } from "@/src/components/data-table/tables/coupon-table";
 import { useDebounce } from "@/src/hooks/use-debounce";
 import { CouponSheet } from "@/src/modules/payments/components/coupon-sheet";
+import { useTranslations } from "next-intl";
+import { maketoast } from "@/src/components/toasts";
 
 interface CouponTableShellProps {
   initialData: {
@@ -21,7 +23,16 @@ interface CouponTableShellProps {
 }
 
 const CouponsTableShell: FC<CouponTableShellProps> = ({ initialData }) => {
+  const t = useTranslations("coupons.bulkActions");
   const isMounted = useMounted();
+  const utils = trpc.useUtils();
+  const toggleMutation = trpc.toggleCouponStatus.useMutation({
+    onSuccess: () => {
+      maketoast.success();
+      void utils.getAllCoupons.invalidate();
+    },
+    onError: () => maketoast.error(),
+  });
 
   // Pagination state
   const [page, setPage] = useState(1);
@@ -90,18 +101,67 @@ const CouponsTableShell: FC<CouponTableShellProps> = ({ initialData }) => {
     refetch();
   }, [refetch]);
 
+  const handleDeactivateSelected = useCallback(
+    (selected: Coupon[]) => {
+      const activeCoupons = selected.filter((c) => c.isActive);
+      if (activeCoupons.length === 0) return;
+      activeCoupons.forEach((c) => toggleMutation.mutate({ id: c.id }));
+    },
+    [toggleMutation]
+  );
+
+  const bulkActions = useMemo(
+    () => [
+      {
+        label: t("deactivateSelected"),
+        onClick: handleDeactivateSelected,
+        disabled: toggleMutation.isPending,
+      },
+    ],
+    [t, handleDeactivateSelected, toggleMutation.isPending]
+  );
+
   // Get columns with edit handler
   const columns = useCouponColumns({ onEdit: handleEditCoupon });
-
-  if (!isMounted) {
-    return <DataTableLoading columnCount={7} />;
-  }
 
   const coupons = data?.coupons ?? [];
   const totalCount = data?.totalCount ?? 0;
   const pageCount = data?.pageCount ?? 1;
-  const hasData = coupons.length > 0;
+  const hasData =
+    (initialData?.coupons?.length ?? 0) > 0 || coupons.length > 0;
   const showLoader = isLoading && !hasData;
+
+  if (!isMounted && !hasData) {
+    return <DataTableLoading columnCount={7} />;
+  }
+  if (!isMounted && hasData) {
+    return (
+      <div className="w-full min-h-[300px] h-fit flex flex-col">
+        <CouponDataTable
+          columns={columns}
+          data={coupons}
+          refetch={refetch}
+          pageCount={pageCount}
+          totalCount={totalCount}
+          currentPage={page}
+          onPageChange={handlePageChange}
+          onSearchChange={handleSearchChange}
+          onStatusFilterChange={handleStatusFilterChange}
+          onDiscountTypeFilterChange={handleDiscountTypeFilterChange}
+          onCreateCoupon={handleCreateCoupon}
+          isLoading={false}
+          serverSideFiltering={true}
+          bulkActions={bulkActions}
+        />
+        <CouponSheet
+          open={sheetOpen}
+          onOpenChange={setSheetOpen}
+          coupon={editingCoupon}
+          onSuccess={handleSheetSuccess}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full min-h-[300px] h-fit flex flex-col">
@@ -117,8 +177,9 @@ const CouponsTableShell: FC<CouponTableShellProps> = ({ initialData }) => {
         onStatusFilterChange={handleStatusFilterChange}
         onDiscountTypeFilterChange={handleDiscountTypeFilterChange}
         onCreateCoupon={handleCreateCoupon}
-        isLoading={showLoader || isFetching}
+        isLoading={showLoader}
         serverSideFiltering={true}
+        bulkActions={bulkActions}
       />
       
       <CouponSheet

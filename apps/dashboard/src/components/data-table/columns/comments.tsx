@@ -13,6 +13,7 @@ import {
 import { Comment } from "database";
 import { maketoast } from "../../toasts";
 import { DataTableColumnHeader } from "../table-helpers/data-table-head";
+import { getSelectColumn } from "../table-helpers/select-column";
 import StarRatings from "react-star-ratings";
 import { Badge } from "@ui/components/ui/badge";
 import { trpc } from "@/src/app/_trpc/client";
@@ -82,6 +83,7 @@ export const useCommentColumns = (
   };
 
   return [
+    getSelectColumn<Comment>(),
     {
       accessorKey: "content",
       header: ({ column }) => (

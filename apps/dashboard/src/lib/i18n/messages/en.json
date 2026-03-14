@@ -30,6 +30,9 @@
   },
   "settings": {
     "title": "General Settings",
+    "unavailableMessage": "Settings could not be loaded. The database may be unavailable. Please try again later.",
+    "retry": "Try again",
+    "backHome": "Go to home",
     "checkingDomainStatus": "Checking domain status...",
     "language": {
       "label": "Language",
@@ -124,6 +127,14 @@
     "of": "of",
     "previous": "Previous",
     "next": "Next",
+    "showing": "Showing",
+    "to": "to",
+    "results": "results",
+    "bulkActions": {
+      "selectedCount": "{count} selected",
+      "clearSelection": "Clear selection",
+      "exportSelected": "Export selected"
+    },
     "sort": {
       "ascending": "Ascending",
       "descending": "Descending",
@@ -181,7 +192,8 @@
     "academyPreview": "Academy Preview",
     "academy": "Academy",
     "freePlan": "Free plan",
-    "currentPlan": "Current plan"
+    "currentPlan": "Current plan",
+    "requestFeature": "Request feature"
   },
   "notifications": {
     "ui": {
@@ -843,6 +855,8 @@
       "BUYPRODUCT": "Buy Product",
       "BUYCOURSE": "Buy Course",
       "SUBSCRIPTION": "Subscription",
+      "REFERAL_WITHDRAWAL": "Referral Withdrawal",
+      "REFUND": "Refund",
       "course": "Course",
       "product": "Product",
       "subscription": "Subscription"
@@ -946,6 +960,9 @@
     },
     "search": {
       "placeholder": "Search coupons..."
+    },
+    "bulkActions": {
+      "deactivateSelected": "Deactivate selected"
     },
     "cancel": "Cancel",
     "form": {
@@ -1238,6 +1255,15 @@
       }
     },
     "detail": {
+      "tabs": {
+        "overview": "Overview",
+        "activity": "Activity",
+        "purchases": "Purchases",
+        "certificates": "Certificates",
+        "comments": "Comments",
+        "referrals": "Referrals",
+        "paymentsInvoices": "Payments & Invoices"
+      },
       "personalInfo": "Personal Information",
       "name": "Name",
       "email": "Email",
@@ -1271,6 +1297,10 @@
       "amount": "Amount",
       "date": "Date",
       "issuedDate": "Issued Date",
+      "referralSingular": "referral",
+      "referralPlural": "referrals",
+      "total": "Total",
+      "invoiceNumber": "Invoice #{id}",
       "emptyStates": {
         "noPurchases": "No purchases found",
         "noCertificates": "No certificates found",
@@ -1301,6 +1331,9 @@
     },
     "search": {
       "placeholder": "Search students..."
+    },
+    "bulkActions": {
+      "exportSelected": "Export selected"
     }
   },
   "courses": {
@@ -1319,6 +1352,7 @@
       "draft": "Draft",
       "published": "Published",
       "archived": "Archived",
+      "private": "Private",
       "beginner": "Beginner",
       "intermediate": "Intermediate",
       "advanced": "Advanced"
@@ -1343,6 +1377,9 @@
       "viewRatings": "View Ratings",
       "delete": "Delete Course",
       "addNew": "Add New Course"
+    },
+    "bulkActions": {
+      "deleteSelected": "Delete selected"
     },
     "modal": {
       "title": "Add New Course",
@@ -1678,6 +1715,9 @@
       "delete": "Delete Product",
       "addNew": "Add New Product"
     },
+    "bulkActions": {
+      "deleteSelected": "Delete selected"
+    },
     "modal": {
       "title": "Add New Product",
       "productTitle": "Product Title",
@@ -1950,6 +1990,9 @@
       "approveCertificate": "Approve",
       "rejectCertificate": "Reject"
     },
+    "bulkActions": {
+      "revokeSelected": "Revoke selected"
+    },
     "table": {
       "noResults": "No results found",
       "previous": "Previous",
@@ -2000,6 +2043,10 @@
       "delete": "Delete Comment",
       "openMenu": "Open menu"
     },
+    "bulkActions": {
+      "approveSelected": "Approve selected",
+      "rejectSelected": "Reject selected"
+    },
     "messages": {
       "approved": "Comment approved successfully",
       "rejected": "Comment rejected successfully",
@@ -2044,6 +2091,11 @@
     "emptyState": {
       "title": "No referrals found",
       "description": "Referrals from your affiliate program will appear here"
+    },
+    "disabledState": {
+      "title": "Affiliate marketing is disabled",
+      "description": "Enable affiliate marketing in Settings to manage referrals and see your affiliate table here.",
+      "goToSettings": "Go to Settings"
     },
     "search": {
       "placeholder": "Search referrals..."

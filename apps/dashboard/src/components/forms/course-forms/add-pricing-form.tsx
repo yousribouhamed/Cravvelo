@@ -92,7 +92,11 @@ function AddPricingForm({ course, pricingPlans }: AddPricingFormProps) {
       pricingType: values.pricingType,
       price: values.pricingType === "FREE" ? 0 : Number(values.price || 0),
       compareAtPrice:
-        values.pricingType === "FREE" ? 0 : Number(values.compareAtPrice || 0),
+        values.pricingType === "FREE"
+          ? undefined
+          : values.compareAtPrice != null && String(values.compareAtPrice).trim() !== ""
+            ? Number(values.compareAtPrice)
+            : undefined,
       accessDuration:
         values.pricingType === "ONE_TIME" ? values.accessDuration : undefined,
       accessDurationDays:
@@ -225,7 +229,7 @@ function AddPricingForm({ course, pricingPlans }: AddPricingFormProps) {
             )}
 
             {/* Save Actions */}
-            <Card>
+            <Card className="md:hidden">
               <CardContent className="w-full h-fit flex justify-end items-center p-6 gap-x-4">
                 <Button
                   onClick={() => router.back()}
@@ -248,8 +252,8 @@ function AddPricingForm({ course, pricingPlans }: AddPricingFormProps) {
           </form>
         </Form>
       </div>
-      <div className="col-span-1 w-full h-full hidden md:block">
-        <Card>
+      <div className="col-span-1 w-full h-fit self-start hidden md:block">
+        <Card className="sticky top-24">
           <CardContent className="w-full h-fit flex flex-col p-6 space-y-4">
             <Button
               disabled={mutation.isLoading}

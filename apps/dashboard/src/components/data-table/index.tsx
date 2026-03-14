@@ -100,57 +100,48 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      <div className="w-full h-[60px] border-t flex items-center justify-between gap-x-6 p-2 bg-card">
-        <div className="text-sm text-muted-foreground">
-          {t("page")} {table.getState().pagination.pageIndex + 1} {t("of")}{" "}
-          {table.getPageCount() || 1}
-        </div>
-        <div className="flex items-center gap-x-2">
-          <Button
-            disabled={!table.getCanPreviousPage()}
-            onClick={() => table.previousPage()}
-            variant="ghost"
-            className={cn(
-              "rounded-xl border flex items-center",
-              isRTL ? "gap-x-2" : "gap-x-2"
-            )}
-            aria-label="Go to previous page"
-          >
-            {isRTL ? (
-              <>
-                <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
-                {t("previous")}
-              </>
-            ) : (
-              <>
-                <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
-                {t("previous")}
-              </>
-            )}
-          </Button>
-          <Button
-            disabled={!table.getCanNextPage()}
-            onClick={() => table.nextPage()}
-            variant="ghost"
-            className={cn(
-              "rounded-xl border flex items-center",
-              isRTL ? "gap-x-2" : "gap-x-2"
-            )}
-            aria-label="Go to next page"
-          >
-            {isRTL ? (
-              <>
-                {t("next")}
-                <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
-              </>
-            ) : (
-              <>
-                {t("next")}
-                <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
-              </>
-            )}
-          </Button>
-        </div>
+      <div className={cn(
+        "w-full h-[60px] border-t flex items-center gap-x-2 p-2 bg-card",
+        isRTL ? "justify-start" : "justify-end"
+      )}>
+        <Button
+          disabled={!table.getCanPreviousPage()}
+          onClick={() => table.previousPage()}
+          variant="ghost"
+          className="rounded-xl border flex items-center gap-x-2"
+          aria-label="Go to previous page"
+        >
+          {isRTL ? (
+            <>
+              {t("previous")}
+              <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+            </>
+          ) : (
+            <>
+              <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+              {t("previous")}
+            </>
+          )}
+        </Button>
+        <Button
+          disabled={!table.getCanNextPage()}
+          onClick={() => table.nextPage()}
+          variant="ghost"
+          className="rounded-xl border flex items-center gap-x-2"
+          aria-label="Go to next page"
+        >
+          {isRTL ? (
+            <>
+              {t("next")}
+              <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+            </>
+          ) : (
+            <>
+              {t("next")}
+              <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+            </>
+          )}
+        </Button>
       </div>
     </div>
   );

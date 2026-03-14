@@ -49,7 +49,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@ui/components/ui/popover";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Separator } from "@ui/components/ui/separator";
 import { Badge } from "@ui/components/ui/badge";
 import { Column } from "@tanstack/react-table";
@@ -58,6 +58,7 @@ import { Pencil, ArrowUpCircle } from "lucide-react";
 import Image from "next/image";
 import { deleteCourseAction } from "@/src/actions/courses.actions";
 import { maketoast } from "../../toasts";
+import { BulkActionsBar, type BulkAction, type BulkActionDef } from "../table-helpers/bulk-actions-bar";
 
 export const levels = [
   {
@@ -91,15 +92,19 @@ interface DataTableProps<TData, TValue> {
   filterableColumns?: DataTableFilterableColumn<TData>[];
   data: TData[];
   academia_url: string;
+  bulkActions?: BulkActionDef<TData>[];
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-
   academia_url,
+  bulkActions,
 }: DataTableProps<TData, TValue>) {
   const t = useTranslations("common");
+  const tDataTable = useTranslations("dataTable");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
   const [rowSelection, setRowSelection] = React.useState({});
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -111,9 +116,8 @@ export function DataTable<TData, TValue>({
 
   const table = useReactTable({
     data,
-
     columns,
-
+    getRowId: (row) => (row as { id: string }).id,
     state: {
       sorting,
       rowSelection,
@@ -160,8 +164,26 @@ export function DataTable<TData, TValue>({
     }
   };
 
+  const selectedRows = table.getSelectedRowModel().rows.map((r) => r.original);
+  const selectedCount = selectedRows.length;
+  const barActions: BulkAction[] =
+    bulkActions?.map((ba) => ({
+      label: ba.label,
+      onClick: () => ba.onClick(selectedRows),
+      icon: ba.icon,
+      variant: ba.variant,
+      disabled: ba.disabled,
+    })) ?? [];
+
   return (
     <>
+      {selectedCount > 0 && (
+        <BulkActionsBar
+          selectedCount={selectedCount}
+          onClearSelection={() => setRowSelection({})}
+          actions={barActions}
+        />
+      )}
       <div className="flex items-center py-4   justify-start">
         <div className="w-full max-w-sm  h-[50px] p-4 rounded-xl bg-white border flex items-center justify-start gap-x-4">
           <Search className="text-black w-4 h-4" />
@@ -203,17 +225,14 @@ export function DataTable<TData, TValue>({
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
-                      <Button
-                        variant="ghost"
-                        className="w-full h-[40px] flex justify-start items-center px-0"
-                      >
+                      <div className="w-full h-[40px] flex justify-start items-center px-0">
                         {header.isPlaceholder
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                      </Button>
+                      </div>
                     </TableHead>
                   );
                 })}
@@ -258,7 +277,10 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
 
-        <div className="w-full h-[60px] border-t flex items-center justify-start gap-x-6 p-2">
+        <div className={cn(
+          "w-full h-[60px] border-t flex items-center gap-x-2 p-2",
+          isRTL ? "justify-start" : "justify-end"
+        )}>
           <Button
             disabled={!table.getCanPreviousPage()}
             aria-label="Go to previous page"
@@ -266,8 +288,17 @@ export function DataTable<TData, TValue>({
             className="bg-white rounded-xl border flex items-center gap-x-2"
             variant="ghost"
           >
-            <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
-            سابق
+            {isRTL ? (
+              <>
+                {tDataTable("previous")}
+                <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+              </>
+            ) : (
+              <>
+                <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+                {tDataTable("previous")}
+              </>
+            )}
           </Button>
 
           <Button
@@ -277,8 +308,17 @@ export function DataTable<TData, TValue>({
             className="bg-white rounded-xl border flex items-center gap-x-2"
             variant="ghost"
           >
-            التالي
-            <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+            {isRTL ? (
+              <>
+                {tDataTable("next")}
+                <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+              </>
+            ) : (
+              <>
+                {tDataTable("next")}
+                <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+              </>
+            )}
           </Button>
         </div>
       </div>

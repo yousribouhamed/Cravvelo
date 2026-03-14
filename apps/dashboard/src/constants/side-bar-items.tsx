@@ -9,6 +9,7 @@ import {
   Palette,
   Receipt,
   Wallet,
+  Share2,
 } from "lucide-react";
 
 export const SIDE_BAR_ITEMS = [
@@ -39,11 +40,11 @@ export const SIDE_BAR_ITEMS = [
       //   icon: Tag, // Perfect for coupons/vouchers
       //   slug: "/payments/coupons",
       // },
-      // {
-      //   title: "التسويق بالعمولة",
-      //   icon: Share2, // Great for affiliate marketing/sharing
-      //   slug: "/payments/affiliate-marketing",
-      // },
+      {
+        title: "التسويق بالعمولة",
+        icon: Share2, // Great for affiliate marketing/sharing
+        slug: "/payments/affiliate-marketing",
+      },
     ],
   },
 

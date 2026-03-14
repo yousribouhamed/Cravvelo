@@ -2,16 +2,37 @@ import { z } from "zod";
 import { privateProcedure } from "../../trpc";
 import { prisma } from "database/src";
 
-export const comments = {
-  getAllComments: privateProcedure.query(async ({ ctx, input }) => {
-    const allComments = await ctx.prisma.comment.findMany({
-      where: {
-        accountId: ctx.account.id,
-      },
-    });
+const PAGE_SIZE = 10;
 
-    return allComments;
-  }),
+export const comments = {
+  getAllComments: privateProcedure
+    .input(
+      z
+        .object({
+          page: z.number().min(1).optional(),
+          limit: z.number().min(1).max(100).optional(),
+        })
+        .optional()
+    )
+    .query(async ({ ctx, input }) => {
+      const page = input?.page ?? 1;
+      const limit = input?.limit ?? PAGE_SIZE;
+      const skip = (page - 1) * limit;
+      const where = { accountId: ctx.account.id };
+
+      const [commentsList, totalCount] = await Promise.all([
+        ctx.prisma.comment.findMany({
+          where,
+          orderBy: { createdAt: "desc" },
+          skip,
+          take: limit,
+        }),
+        ctx.prisma.comment.count({ where }),
+      ]);
+
+      const pageCount = Math.ceil(totalCount / limit);
+      return { comments: commentsList, totalCount, pageCount, currentPage: page };
+    }),
 
   rejectComment: privateProcedure
     .input(

@@ -163,8 +163,8 @@ function PublishCourseForm({ course, chapters }: PublishCourseFormProps) {
           </form>
         </Form>
       </div>
-      <div className="col-span-1 w-full h-full hidden md:block space-y-4">
-        <Card>
+      <div className="col-span-1 w-full h-fit self-start hidden md:block">
+        <Card className="sticky top-24">
           <CardContent className="w-full h-fit flex flex-col p-6 space-y-4">
             <div className="space-y-2">
               {selectionButtoms.map((item) => (

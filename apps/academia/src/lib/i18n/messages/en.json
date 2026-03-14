@@ -379,6 +379,27 @@
       "cropYourPhoto": "Crop your photo",
       "cropAlt": "Crop photo"
     },
+    "affiliates": {
+      "title": "Affiliate Marketing",
+      "notAvailable": "The affiliate program is not available for this academy.",
+      "joinTitle": "Join the affiliate program",
+      "joinDescription": "Share your referral link and earn when others sign up or purchase.",
+      "ccpLabel": "CCP (bank account for payouts)",
+      "ccpPlaceholder": "Optional – add later in settings",
+      "joinButton": "Join program",
+      "joining": "Joining...",
+      "yourLink": "Your referral link",
+      "copyLink": "Copy link",
+      "copied": "Link copied",
+      "stats": "Your stats",
+      "referralsCount": "Referrals",
+      "totalEarnings": "Total earnings",
+      "pendingPayout": "Pending payout",
+      "totalPaidOut": "Total paid out",
+      "joinSuccess": "You have joined the affiliate program.",
+      "joinError": "Failed to join. Try again.",
+      "alreadyJoined": "You are already in the affiliate program."
+    },
     "courses": {
       "title": "My Courses",
       "empty": "No courses found",

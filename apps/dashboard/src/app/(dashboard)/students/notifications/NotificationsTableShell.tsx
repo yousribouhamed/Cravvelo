@@ -19,11 +19,20 @@ const NotificationsTableShell: FC<TableShellProps> = ({ initialData }) => {
     initialData: initialData,
   });
 
-  if (!isMounted) {
+  const hasData =
+    (initialData?.length ?? 0) > 0 || (data?.length ?? 0) > 0;
+  if (!isMounted && !hasData) {
     return <DataTableLoading columnCount={6} />;
   }
+  if (!isMounted && hasData) {
+    return (
+      <div className="w-full min-h-[300px] h-fit flex flex-col ">
+        <DeleteCourseModel refetch={refetch} />
+        <DataTable columns={NotificationColumns} data={data ?? initialData ?? []} />
+      </div>
+    );
+  }
 
-  console.log(data);
   return (
     <div className="w-full min-h-[300px] h-fit flex flex-col ">
       <DeleteCourseModel refetch={refetch} />

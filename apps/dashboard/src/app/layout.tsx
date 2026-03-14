@@ -37,7 +37,15 @@ export default async function RootLayout({
 
           <Analytics />
 
-          <Toaster />
+          <Toaster
+            toastOptions={{
+              style: {
+                background: "hsl(var(--background))",
+                color: "hsl(var(--foreground))",
+                border: "1px solid hsl(var(--border))",
+              },
+            }}
+          />
         </ThemeProvider>
       </body>
     </html>

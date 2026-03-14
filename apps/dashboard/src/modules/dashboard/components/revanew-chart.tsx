@@ -214,8 +214,8 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
         />
       </div>
 
-      {/* Loading State - full layout skeleton (matches loaded: 5 stats + chart + 2 cards) */}
-      {(isLoading || currencyLoading) && !data && (
+      {/* Loading State - show only skeleton while loading (no charts/content underneath) */}
+      {(isLoading || currencyLoading) && !data ? (
         <>
           <StatsGrid>
             <StatsCard title="" value="" isLoading />
@@ -256,9 +256,9 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
             </Card>
           </div>
         </>
-      )}
-
-      {/* Stats Cards Row - always visible, even when no data */}
+      ) : (
+        <>
+      {/* Stats Cards Row - visible when not loading */}
       <StatsGrid>
         <StatsCard
           title={t("totalVisits")}
@@ -498,6 +498,8 @@ export const RevenueChart = ({ initialData }: RevenueChartProps) => {
           </CardContent>
         </Card>
       </div>
+        </>
+      )}
     </div>
   );
 };

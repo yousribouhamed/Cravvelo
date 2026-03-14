@@ -13,8 +13,8 @@ const Page = async () => {
   const user = await getMyUserAction();
   const t = await getServerTranslations("pages");
 
-  const [payments, notifications, stats] = await Promise.all([
-    getAllPayments(),
+  const [paymentsResult, notifications, stats] = await Promise.all([
+    getAllPayments({ page: 1, limit: 10 }),
     getAllNotifications({ accountId: user.accountId }),
     getPaymentStats(),
   ]);
@@ -23,10 +23,17 @@ const Page = async () => {
     return <CreateAcademiaPage notifications={notifications} user={user} />;
   }
 
+  const initialData = {
+    data: paymentsResult.data ?? [],
+    totalCount: paymentsResult.totalCount ?? 0,
+    pageCount: paymentsResult.pageCount ?? 1,
+    currentPage: paymentsResult.currentPage ?? 1,
+  };
+
   return (
     <AppShell title={t("payments")} user={user} notifications={notifications}>
       <PaymentAnalytics stats={stats.data} />
-      <PaymentsTable data={payments.data || []} />
+      <PaymentsTable initialData={initialData} fetchPage={getAllPayments} />
     </AppShell>
   );
 };
