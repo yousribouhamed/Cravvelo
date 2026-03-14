@@ -33,12 +33,12 @@ export function CertificateColumns(): ColumnDef<Certificate>[] {
       variant: "secondary",
       icon: Clock,
     },
-    APPROVED: {
+    ISSUED: {
       label: t("status.APPROVED"),
       variant: "default",
       icon: CheckCircle,
     },
-    REJECTED: {
+    REVOKED: {
       label: t("status.REJECTED"),
       variant: "destructive",
       icon: XCircle,

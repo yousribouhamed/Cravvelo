@@ -11,7 +11,7 @@ export const getStudentCertificates = withTenant({
       const certificates = await db.certificate.findMany({
         where: {
           studentId: user?.userId,
-          status: "APPROVED",
+          status: "ISSUED",
         },
       });
 

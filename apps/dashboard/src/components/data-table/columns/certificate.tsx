@@ -49,12 +49,12 @@ export const useCertificateColumns = (): ColumnDef<Certificate>[] => {
       variant: "secondary",
       icon: Clock,
     },
-    APPROVED: {
+    ISSUED: {
       label: t("status.APPROVED"),
       variant: "default",
       icon: CheckCircle,
     },
-    REJECTED: {
+    REVOKED: {
       label: t("status.REJECTED"),
       variant: "destructive",
       icon: XCircle,
@@ -143,7 +143,7 @@ export const useCertificateColumns = (): ColumnDef<Certificate>[] => {
                       onClick={() =>
                         updateStatusMutation.mutate({
                           id: row.original.id,
-                          status: "APPROVED",
+                          status: "ISSUED",
                         })
                       }
                       disabled={isUpdating}
@@ -156,7 +156,7 @@ export const useCertificateColumns = (): ColumnDef<Certificate>[] => {
                       onClick={() =>
                         updateStatusMutation.mutate({
                           id: row.original.id,
-                          status: "REJECTED",
+                          status: "REVOKED",
                         })
                       }
                       disabled={isUpdating}

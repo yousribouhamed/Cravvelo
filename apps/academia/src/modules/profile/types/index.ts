@@ -25,7 +25,7 @@ export type StudentProfile = {
   updatedAt: string; // ISO date string
 };
 
-export type CertificateStatus = "PENDING" | "APPROVED" | "REJECTED";
+export type CertificateStatus = "PENDING" | "ISSUED" | "REVOKED";
 
 export interface Certificate {
   id: string;

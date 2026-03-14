@@ -1,5 +1,6 @@
 import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer";
+import puppeteerCore from "puppeteer-core";
 import hb from "handlebars";
 
 export const generatePdf = async (pdfFileAsString: string) => {
@@ -14,12 +15,7 @@ export const generatePdf = async (pdfFileAsString: string) => {
   );
 
   const browser = isServerlessRuntime
-    ? await puppeteer.launch({
-        args: chromium.args,
-        defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath(),
-        headless: true,
-      })
+    ? await launchServerlessBrowser()
     : await launchLocalBrowser();
 
   let page: Awaited<ReturnType<typeof browser.newPage>> | null = null;
@@ -58,6 +54,24 @@ export const generatePdf = async (pdfFileAsString: string) => {
       await page.close();
     }
     await browser.close();
+  }
+};
+
+const launchServerlessBrowser = async () => {
+  try {
+    return await puppeteerCore.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath:
+        process.env.PUPPETEER_EXECUTABLE_PATH ?? (await chromium.executablePath()),
+      headless: chromium.headless,
+    });
+  } catch (error) {
+    const details = error instanceof Error ? error.message : "Unknown launch error";
+    throw new Error(
+      `Could not launch Chromium in serverless runtime. ${details}. ` +
+        `Make sure @sparticuz/chromium is installed and the function runs on Node.js runtime.`
+    );
   }
 };
 

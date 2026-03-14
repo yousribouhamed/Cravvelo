@@ -80,9 +80,7 @@ export const cetificate = {
         }
 
         const pdfBuffer = await generatePdf(pdfAsString);
-
         const buffer = Buffer.from(pdfBuffer);
-
         const bucketName = "cravvel-bucket";
         const key = `certificates/${Date.now()}.pdf`;
 
@@ -110,7 +108,7 @@ export const cetificate = {
             studentName: input.studentName,
             fileUrl: fileUrl,
             issueDate: new Date(),
-            status: "APPROVED",
+            status: "ISSUED",
           },
         });
 
@@ -138,7 +136,7 @@ export const cetificate = {
     .input(
       z.object({
         id: z.string(),
-        status: z.enum(["APPROVED", "REJECTED"]),
+        status: z.enum(["ISSUED", "REVOKED"]),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -146,10 +144,10 @@ export const cetificate = {
         where: { id: input.id, accountId: ctx.account.id },
       });
       if (!certificate) return null;
-      const updateData: { status: "APPROVED" | "REJECTED"; issueDate?: Date } = {
+      const updateData: { status: "ISSUED" | "REVOKED"; issueDate?: Date } = {
         status: input.status,
       };
-      if (input.status === "APPROVED") {
+      if (input.status === "ISSUED") {
         updateData.issueDate = new Date();
       }
       return ctx.prisma.certificate.update({
