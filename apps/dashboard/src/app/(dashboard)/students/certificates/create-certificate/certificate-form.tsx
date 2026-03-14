@@ -32,6 +32,9 @@ import SunCertificateViewer from "./sun-certificate-viewer";
 import DeerCertificateViewer from "./deer-certificate-viewer";
 import { Check, ChevronsUpDown, Hammer } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { computeSHA256 } from "@/src/lib/utils";
+import { generateCertificatePdfFromElement } from "@/src/lib/certificate-pdf";
+import { recordStorageUsed } from "@/src/actions/storage.actions";
 
 const FormSchema = z.object({
   studentName: z.string().min(1),
@@ -45,6 +48,11 @@ interface CertificateProps {
   students: Student[];
 }
 
+type CertificateThemeCode =
+  | "DEAD_DEER"
+  | "PARTY_UNDER_SUN"
+  | "COLD_CERTIFICATE";
+
 export default function CertificateForm({ students, stamp }: CertificateProps) {
   const router = useRouter();
   const t = useTranslations("certificates");
@@ -54,12 +62,13 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
   const [isCertificateSeen, setIsCertificateSeen] =
     React.useState<boolean>(false);
 
-  const [certificateTheme, setCertificateTheme] = React.useState<string>(
+  const [certificateTheme, setCertificateTheme] = React.useState<CertificateThemeCode>(
     CERTIFICATE_VARIANTS[0]?.code ?? "COLD_CERTIFICATE"
   );
   const [studentPickerOpen, setStudentPickerOpen] = React.useState(false);
   const [studentSearch, setStudentSearch] = React.useState("");
   const [studentPage, setStudentPage] = React.useState(1);
+  const previewContainerRef = React.useRef<HTMLDivElement | null>(null);
 
   React.useEffect(() => {
     CERTIFICATE_VARIANTS.forEach((variant) => {
@@ -78,6 +87,7 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
       console.error(err);
     },
   });
+  const getSignedUrlMutation = trpc.getSignedUrl.useMutation();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     mode: "onChange",
@@ -85,14 +95,62 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
   });
 
   async function onSubmit(values: z.infer<typeof FormSchema>) {
-    await mutation.mutateAsync({
-      certificateName: values.certificateName,
-      courseName: values.courseName,
-      studentId: values.studentId,
-      studentName: values.studentName,
-      code: certificateTheme,
-    });
+    try {
+      const previewElement = previewContainerRef.current?.querySelector("main");
+      if (!(previewElement instanceof HTMLElement)) {
+        throw new Error("Certificate preview is not ready yet.");
+      }
+
+      const fileName = `certificate-${values.studentId}-${Date.now()}.pdf`;
+      const generatedPdf = await generateCertificatePdfFromElement({
+        element: previewElement,
+        fileName,
+      });
+
+      const checksum = await computeSHA256(generatedPdf);
+      const signedUrlResponse = await getSignedUrlMutation.mutateAsync({
+        fileType: generatedPdf.type,
+        fileSize: generatedPdf.size,
+        checksum,
+      });
+      const signedUrl = signedUrlResponse?.success?.url;
+      if (!signedUrl) {
+        throw new Error("Could not get an upload URL for the generated certificate.");
+      }
+
+      const uploadResponse = await fetch(signedUrl, {
+        method: "PUT",
+        body: generatedPdf,
+        headers: {
+          "Content-Type": generatedPdf.type,
+        },
+      });
+      if (!uploadResponse.ok) {
+        throw new Error("Failed to upload certificate PDF to storage.");
+      }
+
+      const signedUrlObj = new URL(signedUrl);
+      const fileUrl = `${signedUrlObj.origin}${signedUrlObj.pathname}`;
+      await recordStorageUsed({ fileSizeInBytes: generatedPdf.size });
+
+      await mutation.mutateAsync({
+        certificateName: values.certificateName,
+        courseName: values.courseName,
+        studentId: values.studentId,
+        studentName: values.studentName,
+        code: certificateTheme,
+        fileUrl,
+      });
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Failed to issue certificate.";
+      maketoast.errorWithText({ text: message });
+      console.error(err);
+    }
   }
+
+  const isSubmitting =
+    mutation.isLoading || getSignedUrlMutation.isLoading;
 
   const studentName = form.watch("studentName");
 
@@ -169,7 +227,7 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
                   return (
                     <button
                       type="button"
-                      onClick={() => setCertificateTheme(item.code)}
+                      onClick={() => setCertificateTheme(item.code as CertificateThemeCode)}
                       key={item.code}
                       className={`flex hover:bg-accent/50 cursor-pointer p-2 transition-all duration-200 rounded-lg border text-left w-[130px] h-[130px] sm:w-[150px] sm:h-[150px] flex-col gap-y-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                         isSelected
@@ -372,11 +430,11 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
                   />
                   <div className="w-full min-h-[72px] flex items-center justify-end pt-4 mt-4 border-t border-border">
                     <Button
-                      disabled={mutation.isLoading}
+                      disabled={isSubmitting}
                       type="submit"
                       className="flex items-center gap-x-2 rounded-xl"
                     >
-                      {mutation.isLoading ? (
+                      {isSubmitting ? (
                         <LoadingSpinner />
                       ) : (
                         <Hammer className="w-4 h-4" />
@@ -391,7 +449,10 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
           </div>
         </div>
       </div>
-      <div className="lg:col-span-2 w-full h-full order-1 lg:order-2 min-w-0 overflow-x-auto">
+      <div
+        ref={previewContainerRef}
+        className="lg:col-span-2 w-full h-full order-1 lg:order-2 min-w-0 overflow-x-auto"
+      >
         {certificateTheme === "COLD_CERTIFICATE" ? (
           <CertificateViewer
             courseName={courseName}

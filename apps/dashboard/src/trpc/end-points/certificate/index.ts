@@ -1,16 +1,10 @@
 import { z } from "zod";
 import { privateProcedure } from "../../trpc";
-import { designO1 } from "./certificate-templates/design-01";
-import { design02 } from "./certificate-templates/design-02";
-import { designO3 } from "./certificate-templates/design-03";
 import {
   deleteFileFromS3Bucket,
   getKeyFromUrl,
   getS3ObjectSize,
 } from "../../aws/s3";
-import { generatePdf } from "./generatePDF";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { s3 } from "@/src/lib/s3";
 import { sendCertififcateEmail } from "@/src/lib/resend";
 import { TRPCError } from "@trpc/server";
 
@@ -32,22 +26,16 @@ export const cetificate = {
         certificateName: z.string(),
         studentId: z.string(),
         code: z.enum(["DEAD_DEER", "PARTY_UNDER_SUN", "COLD_CERTIFICATE"]),
+        fileUrl: z.string().url(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        const [website, student] = await Promise.all([
-          ctx.prisma.website.findFirst({
-            where: {
-              accountId: ctx.account.id,
-            },
-          }),
-          ctx.prisma.student.findFirst({
-            where: {
-              id: input.studentId,
-            },
-          }),
-        ]);
+        const student = await ctx.prisma.student.findFirst({
+          where: {
+            id: input.studentId,
+          },
+        });
         if (!student?.email) {
           throw new TRPCError({
             code: "NOT_FOUND",
@@ -55,49 +43,9 @@ export const cetificate = {
           });
         }
 
-        let pdfAsString = "";
-
-        if (input.code === "DEAD_DEER") {
-          pdfAsString = designO1({
-            courseName: input.courseName,
-            studentName: input.studentName,
-            stamp: website?.stamp,
-          });
-        } else if (input.code === "PARTY_UNDER_SUN") {
-          pdfAsString = design02({
-            courseName: input.courseName,
-            studentName: input.studentName,
-            certificateName: input.certificateName,
-            stamp: website?.stamp,
-          });
-        } else {
-          pdfAsString = designO3({
-            courseName: input.courseName,
-            studentName: input.studentName,
-            certificateName: input.certificateName,
-            stamp: website?.stamp,
-          });
-        }
-
-        const pdfBuffer = await generatePdf(pdfAsString);
-        const buffer = Buffer.from(pdfBuffer);
-        const bucketName = "cravvel-bucket";
-        const key = `certificates/${Date.now()}.pdf`;
-
-        const s3Params = {
-          Bucket: bucketName,
-          Key: key,
-          Body: buffer,
-          ContentType: "application/pdf",
-        };
-
-        const command = new PutObjectCommand(s3Params);
-        await s3.send(command);
-        const fileUrl = `https://cravvel-bucket.s3.${process.env.AWS_BUCKET_REGION}.amazonaws.com/${key}`;
-
         await sendCertififcateEmail({
           email: student.email,
-          url: fileUrl,
+          url: input.fileUrl,
         });
         await ctx.prisma.certificate.create({
           data: {
@@ -106,7 +54,7 @@ export const cetificate = {
             name: input.certificateName,
             studentId: input.studentId,
             studentName: input.studentName,
-            fileUrl: fileUrl,
+            fileUrl: input.fileUrl,
             issueDate: new Date(),
             status: "ISSUED",
           },
