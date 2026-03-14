@@ -1,5 +1,5 @@
 import { getCurrentDate } from "@/src/trpc/end-points/certificate/utils";
-import type { FC } from "react";
+import { useEffect, useState, type FC } from "react";
 
 interface DeerCertificateViewerProps {
   student_name: string;
@@ -12,13 +12,19 @@ const DeerCertificateViewer: FC<DeerCertificateViewerProps> = ({
   student_name,
   stamp,
 }) => {
+  const [isStampVisible, setIsStampVisible] = useState(Boolean(stamp));
+
+  useEffect(() => {
+    setIsStampVisible(Boolean(stamp));
+  }, [stamp]);
+
   return (
     <div className="w-full overflow-x-auto">
-      <main className="w-[700px] min-w-[320px] max-w-full h-[500px] min-h-[400px] mx-auto flex flex-col items-center relative justify-start pt-10 gap-y-4 bg-[#FAF5EC] rounded-lg shadow-inner border border-border">
-      <img
-        src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/%D8%B4%D9%87%D8%A7%D8%AF%D8%A9.png"
-        className="w-[150px] h-[60px] z-[4]"
-      />
+      <main
+        data-certificate-capture="true"
+        className="w-[700px] min-w-[320px] max-w-full h-[500px] min-h-[400px] mx-auto flex flex-col items-center relative justify-start pt-10 gap-y-4 bg-[#FAF5EC] rounded-lg shadow-inner border border-border"
+      >
+      <h2 className="z-[4] text-5xl font-black tracking-tight text-[#B78747]">شهادة</h2>
       <div className="flex items-center justify-center gap-x-2 z-[4]">
         <svg
           width="163"
@@ -67,37 +73,48 @@ const DeerCertificateViewer: FC<DeerCertificateViewerProps> = ({
         </span>
       </div>
 
-      {stamp && (
+      {stamp && isStampVisible && (
         <img
           src={stamp}
+          alt="Stamp"
+          onError={() => setIsStampVisible(false)}
           className="w-[150px] h-[150px] absolute   left-[100px] bottom-[100px] z-[100]"
         />
       )}
       <img
         src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/Group+(2).png"
+        alt="Certificate background layer 1"
         className="w-full h-full absolute top-0 right-0 left-0 bottom-0 z-[1]"
       />
 
       <img
         src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/Group-1.png"
+        alt="Certificate background layer 2"
         className="w-full h-full absolute top-0 right-0 left-0 bottom-0 z-[3]"
       />
 
       <img
         src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/Group-2.png"
+        alt="Certificate background layer 3"
         className="w-full h-full absolute top-0 right-0 left-0 bottom-0 z-[1]"
       />
 
       <img
         src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/Group.png"
+        alt="Certificate background layer 4"
         className="w-full h-full absolute top-0 right-0 left-0 bottom-0 z-[1]"
       />
       <img
         src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/working_by_crqvvelo.png"
-        className="w-[159px] h-[35px] absolute left-20 bottom-10 z-[5]"
+        alt="Powered by Cravvelo"
+        className="hidden"
       />
+      <div className="absolute left-20 bottom-10 z-[5] rounded-full border border-[#B78747] bg-white/85 px-3 py-1 text-xs text-[#8E5C2C]">
+        بواسطة Cravvelo
+      </div>
       <img
         src="https://cravvelo-bucket.s3.eu-west-1.amazonaws.com/Vector.png"
+        alt="Certificate border frame"
         className="w-full h-full absolute top-0 right-0 left-0 bottom-0 z-[1]"
       />
     </main>

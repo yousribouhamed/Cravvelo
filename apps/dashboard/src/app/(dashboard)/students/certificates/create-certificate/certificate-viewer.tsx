@@ -1,10 +1,10 @@
 "use client";
 
-import type { FC } from "react";
+import { useEffect, useState, type FC } from "react";
 
 interface certificateViewerProps {
   student_name: string;
-  stamp: string;
+  stamp: string | null;
   courseName: string;
 }
 
@@ -14,10 +14,18 @@ const CertificateViewer: FC<certificateViewerProps> = ({
   stamp,
 }) => {
   const { firstName, lastName } = splitName(student_name);
+  const [isStampVisible, setIsStampVisible] = useState(Boolean(stamp));
+
+  useEffect(() => {
+    setIsStampVisible(Boolean(stamp));
+  }, [stamp]);
 
   return (
     <div className="w-full overflow-x-auto">
-      <main className="w-[700px] min-w-[320px] max-w-full h-[500px] min-h-[400px] mx-auto relative rounded-lg shadow-inner border border-border overflow-hidden bg-white">
+      <main
+        data-certificate-capture="true"
+        className="w-[700px] min-w-[320px] max-w-full h-[500px] min-h-[400px] mx-auto relative rounded-lg shadow-inner border border-border overflow-hidden bg-white"
+      >
         <img
           src="/certificate/design-03/template.png"
           alt="Professional Blue template"
@@ -42,10 +50,11 @@ const CertificateViewer: FC<certificateViewerProps> = ({
           </span>
         </div>
 
-        {stamp && (
+        {stamp && isStampVisible && (
           <img
             src={stamp}
             alt="Stamp"
+            onError={() => setIsStampVisible(false)}
             className="w-[100px] h-[100px] sm:w-[150px] sm:h-[150px] absolute left-8 sm:left-[100px] bottom-8 sm:bottom-[100px] z-[100] pointer-events-none"
           />
         )}

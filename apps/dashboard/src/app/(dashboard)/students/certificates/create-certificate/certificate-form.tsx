@@ -33,8 +33,9 @@ import DeerCertificateViewer from "./deer-certificate-viewer";
 import { Check, ChevronsUpDown, Hammer } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { computeSHA256 } from "@/src/lib/utils";
-import { generateCertificatePdfFromElement } from "@/src/lib/certificate-pdf";
+import { generateCertificatePdfFromData } from "@/src/lib/certificate-pdf";
 import { recordStorageUsed } from "@/src/actions/storage.actions";
+import { Progress } from "@ui/components/ui/progress";
 
 const FormSchema = z.object({
   studentName: z.string().min(1),
@@ -52,6 +53,12 @@ type CertificateThemeCode =
   | "DEAD_DEER"
   | "PARTY_UNDER_SUN"
   | "COLD_CERTIFICATE";
+type CertificateGenerationStage =
+  | "idle"
+  | "preparing_preview"
+  | "generating_pdf"
+  | "uploading_pdf"
+  | "issuing_certificate";
 
 export default function CertificateForm({ students, stamp }: CertificateProps) {
   const router = useRouter();
@@ -68,7 +75,8 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
   const [studentPickerOpen, setStudentPickerOpen] = React.useState(false);
   const [studentSearch, setStudentSearch] = React.useState("");
   const [studentPage, setStudentPage] = React.useState(1);
-  const previewContainerRef = React.useRef<HTMLDivElement | null>(null);
+  const [stage, setStage] = React.useState<CertificateGenerationStage>("idle");
+  const [progressValue, setProgressValue] = React.useState(0);
 
   React.useEffect(() => {
     CERTIFICATE_VARIANTS.forEach((variant) => {
@@ -83,7 +91,6 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
       router.push(`/students/certificates`);
     },
     onError: (err) => {
-      maketoast.error();
       console.error(err);
     },
   });
@@ -95,18 +102,30 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
   });
 
   async function onSubmit(values: z.infer<typeof FormSchema>) {
-    try {
-      const previewElement = previewContainerRef.current?.querySelector("main");
-      if (!(previewElement instanceof HTMLElement)) {
-        throw new Error("Certificate preview is not ready yet.");
-      }
+    const startedAt = performance.now();
+    const startStage = (
+      nextStage: Exclude<CertificateGenerationStage, "idle">,
+      nextProgress: number
+    ) => {
+      setStage(nextStage);
+      setProgressValue(nextProgress);
+      console.log(`[certificate] stage=${nextStage} progress=${nextProgress}`);
+    };
 
+    try {
+      startStage("preparing_preview", 20);
+
+      startStage("generating_pdf", 55);
       const fileName = `certificate-${values.studentId}-${Date.now()}.pdf`;
-      const generatedPdf = await generateCertificatePdfFromElement({
-        element: previewElement,
+      const generatedPdf = await generateCertificatePdfFromData({
         fileName,
+        studentName: values.studentName,
+        courseName: values.courseName,
+        certificateName: values.certificateName,
+        theme: certificateTheme,
       });
 
+      startStage("uploading_pdf", 70);
       const checksum = await computeSHA256(generatedPdf);
       const signedUrlResponse = await getSignedUrlMutation.mutateAsync({
         fileType: generatedPdf.type,
@@ -133,6 +152,7 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
       const fileUrl = `${signedUrlObj.origin}${signedUrlObj.pathname}`;
       await recordStorageUsed({ fileSizeInBytes: generatedPdf.size });
 
+      startStage("issuing_certificate", 90);
       await mutation.mutateAsync({
         certificateName: values.certificateName,
         courseName: values.courseName,
@@ -141,16 +161,25 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
         code: certificateTheme,
         fileUrl,
       });
+      setProgressValue(100);
+      console.log(
+        `[certificate] done in ${Math.round(performance.now() - startedAt)}ms`
+      );
     } catch (err) {
-      const message =
+      const errorMessage =
         err instanceof Error ? err.message : "Failed to issue certificate.";
+      const message = resolveStageErrorMessage(stage, errorMessage);
       maketoast.errorWithText({ text: message });
       console.error(err);
+    } finally {
+      setTimeout(() => {
+        setStage("idle");
+        setProgressValue(0);
+      }, 250);
     }
   }
 
-  const isSubmitting =
-    mutation.isLoading || getSignedUrlMutation.isLoading;
+  const isSubmitting = stage !== "idle" || mutation.isLoading || getSignedUrlMutation.isLoading;
 
   const studentName = form.watch("studentName");
 
@@ -429,18 +458,31 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
                     )}
                   />
                   <div className="w-full min-h-[72px] flex items-center justify-end pt-4 mt-4 border-t border-border">
-                    <Button
-                      disabled={isSubmitting}
-                      type="submit"
-                      className="flex items-center gap-x-2 rounded-xl"
-                    >
-                      {isSubmitting ? (
-                        <LoadingSpinner />
-                      ) : (
-                        <Hammer className="w-4 h-4" />
+                    <div className="w-full flex flex-col gap-3">
+                      {isSubmitting && (
+                        <div className="w-full rounded-lg border border-border bg-muted/20 p-3">
+                          <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
+                            <span>{getStageLabel(stage)}</span>
+                            <span>{progressValue}%</span>
+                          </div>
+                          <Progress value={progressValue} className="h-1.5 w-full bg-muted" />
+                        </div>
                       )}
-                      {t("form.buildCertificate")}
-                    </Button>
+                      <div className="w-full flex items-center justify-end">
+                        <Button
+                          disabled={isSubmitting}
+                          type="submit"
+                          className="flex items-center gap-x-2 rounded-xl"
+                        >
+                          {isSubmitting ? (
+                            <LoadingSpinner />
+                          ) : (
+                            <Hammer className="w-4 h-4" />
+                          )}
+                          {t("form.buildCertificate")}
+                        </Button>
+                      </div>
+                    </div>
                   </div>
                 </form>
               </Form>
@@ -449,10 +491,7 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
           </div>
         </div>
       </div>
-      <div
-        ref={previewContainerRef}
-        className="lg:col-span-2 w-full h-full order-1 lg:order-2 min-w-0 overflow-x-auto"
-      >
+      <div className="lg:col-span-2 w-full h-full order-1 lg:order-2 min-w-0 overflow-x-auto">
         {certificateTheme === "COLD_CERTIFICATE" ? (
           <CertificateViewer
             courseName={courseName}
@@ -475,6 +514,34 @@ export default function CertificateForm({ students, stamp }: CertificateProps) {
       </div>
     </div>
   );
+}
+
+function getStageLabel(stage: CertificateGenerationStage) {
+  switch (stage) {
+    case "preparing_preview":
+      return "Preparing certificate preview...";
+    case "generating_pdf":
+      return "Generating PDF...";
+    case "uploading_pdf":
+      return "Uploading certificate...";
+    case "issuing_certificate":
+      return "Issuing certificate...";
+    default:
+      return "Ready";
+  }
+}
+
+function resolveStageErrorMessage(stage: CertificateGenerationStage, errorMessage: string) {
+  if (stage === "preparing_preview" || stage === "generating_pdf") {
+    return `PDF generation failed: ${errorMessage}`;
+  }
+  if (stage === "uploading_pdf") {
+    return `PDF upload failed: ${errorMessage}`;
+  }
+  if (stage === "issuing_certificate") {
+    return `Certificate issuing failed: ${errorMessage}`;
+  }
+  return errorMessage;
 }
 
 
